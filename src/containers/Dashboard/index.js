@@ -289,6 +289,10 @@ const Dashboard = ({lang, isDarkMode}) => {
           <div className="commodo-card">
             <div className="bottom-chart">
               <div className="bottom-chart-left">
+                <div className="legend-custom">
+                  <div className="legend-deposit"><SvgIcon name="rectangle" /> Deposited</div>
+                  <div className="legend-borrow"><SvgIcon name="rectangle" /> Borrowed</div>
+                </div>
                 <HighchartsReact highcharts={Highcharts} options={DepositBorrowChart} />
               </div>
               <div className="bottom-chart-right">

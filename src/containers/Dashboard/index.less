@@ -122,6 +122,35 @@
             width: 100%;
             .bottom-chart-left{
                 width: 60%;
+                .legend-custom{
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    .legend-deposit{
+                        display: flex;
+                        align-items: center;
+                        color: @bg-light;
+                        font-weight: lighter;
+                        margin-right: 20px;
+                        .icon{
+                            fill: @success-color;
+                            width: 10px;
+                            height: 10px;
+                            margin-right: 5px;
+                        }
+                    }
+                    .legend-borrow{
+                        display: flex;
+                        align-items: center;
+                        color: @bg-light;
+                        .icon{
+                            fill: @bg-light;
+                            width: 10px;
+                            height: 10px;
+                            margin-right: 5px;
+                        }
+                    }
+                }
             }
             .bottom-chart-right{
                 width: 40%;
