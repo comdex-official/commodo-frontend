@@ -684,8 +684,6 @@ button.ant-switch {
               width: 40px;
               height: 40px;
               border-radius: 40px;
-              background: @primary-gradient;
-              padding: 1px;
               margin-right: 15px;
 
               .svg-icon-inner {
@@ -695,11 +693,9 @@ button.ant-switch {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 6px;
+                padding: 1px;
                 background: @white;
-                .dark-mode & {
-                  background: @background-dark1;
-                }
+
                 .icon {
                   width: 100%;
                   height: 100%;
@@ -747,7 +743,7 @@ button.ant-switch {
     border-radius: 4px;
 
     .dark-mode & {
-      background: @background-dark2;
+      background: @background-dark1;
     }
 
     .ant-select-item {
@@ -767,22 +763,15 @@ button.ant-switch {
           height: 32px;
           min-width: 32px;
           border-radius: 32px;
-          background: @primary-gradient;
-          padding: 1px;
           margin-right: 15px;
 
           .svg-icon-inner {
             width: 100%;
             height: 100%;
-            background: @background-light2;
             border-radius: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-
-            .dark-mode & {
-              background: @background-dark1;
-            }
 
             .icon {
               width: 22px;
@@ -805,7 +794,7 @@ button.ant-switch {
         font-weight: normal;
 
         .dark-mode & {
-          background: @background-select-hover-dark;
+          background: @background-dark1;
         }
       }
     }
@@ -813,10 +802,9 @@ button.ant-switch {
 }
 
 .assets-select-card {
-  background: @assets-bg-light;
+  background: #F0FAF2;
   padding: 10px 25px;
   border-radius: @base-border-radius;
-  box-shadow: @box-shadow-inner-light;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -827,8 +815,7 @@ button.ant-switch {
   }
 
   .dark-mode & {
-    background: @background-dark2;
-    box-shadow: @box-shadow-inner-dark;
+    background: #1D3129;
   }
 
   .assets-left {
@@ -839,9 +826,10 @@ button.ant-switch {
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
+      font-size: @font-size-base;
 
       .dark-mode & {
-        color: @text-color-label-dark;
+        color: @white;
       }
     }
   }
@@ -913,8 +901,12 @@ button.ant-switch {
       justify-content: flex-end;
       font-size: @font-size-sm;
 
+      .dark-mode & {
+        color: @white;
+      }
+
       span {
-        color: @secondary-color;
+        color: @success-color;
         margin: 0;
       }
 
@@ -941,12 +933,12 @@ button.ant-switch {
 
           &.active {
             .dark-mode & {
-              background: @secondary-color;
+              background: @white;
             }
 
             span {
               .dark-mode & {
-                color: @white;
+                color: #032517;
               }
             }
           }
@@ -1091,6 +1083,21 @@ button.ant-switch {
       a{
         color: @white;
       }
+    }
+  }
+}
+
+.card-bottom-details {
+  font-size: @font-size-lg;
+  font-weight: 500;
+  .dark-mode & {
+    color: @white;
+  }
+
+  label {
+    font-weight: normal;
+    .dark-mode & {
+      color: @white;
     }
   }
 }
