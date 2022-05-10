@@ -2,12 +2,12 @@ import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import { connect } from "react-redux";
 import variables from "../../../utils/variables";
-import { Button, List, Select, Input } from "antd";
+import { Button, List, Select, Input, Progress, Switch } from "antd";
 import "./index.less";
 
 const { Option } = Select;
 
-const BorrowTab = (lang) => {
+const DepositTab = (lang) => {
   const data = [
     {
       title: "Total Borrowed",
@@ -29,7 +29,28 @@ const BorrowTab = (lang) => {
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <div className="assets-select-card mb-4">
+        <div className="deposit-head">
+          <div className="deposit-head-left">
+            <div className="assets-col">
+              <div className="assets-icon">
+                <SvgIcon name="atom-icon" />
+              </div>
+              USCX
+            </div>
+            <span className="hyphen-icon">-</span>
+            <div className="assets-col">
+              <div className="assets-icon">
+                <SvgIcon name="atom-icon" />
+              </div>
+              USCX
+            </div>
+          </div>
+          <div className="deposit-head-right">
+            Use as Collateral
+            <Switch size="small" />
+          </div>
+        </div>
+        <div className="assets-select-card mb-0">
           <div className="assets-left">
             <label className="leftlabel">
               Collateral Asset
@@ -85,54 +106,38 @@ const BorrowTab = (lang) => {
             </div>
           </div>
         </div>
-        <div className="assets-select-card mb-4">
-          <div className="assets-left">
-            <label className="leftlabel">
-              Borrow Asset
-            </label>
-            <div className="assets-select-wrapper">
-              <Select
-                className="assets-select"
-                dropdownClassName="asset-select-dropdown"
-                placeholder={
-                  <div className="select-placeholder">
-                    <div className="circle-icon">
-                      <div className="circle-icon-inner" />
-                    </div>
-                    Select
-                  </div>
-                }
-                defaultActiveFirstOption={true}
-                suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />}
-              >
-                <Option key="1">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="atom-icon" />
-                      </div>
-                    </div>
-                    <div className="name">Atom</div>
-                  </div>
-                </Option>
-              </Select>
-            </div>
-          </div>
-          <div className="assets-right">
-            <div>
-              <div className="input-select">
-                <Input
-                  placeholder=""
-                  value="23.00"
-                />
-              </div>
-              <small>$120.00</small>
-            </div>
-          </div>
-        </div>
         <Row>
           <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-            <Row className="mt-1">
+            <Row className="pb-2">
+              <Col sm="12" className="bond-row">
+                <span className="mr-2">Bond</span> <Switch defaultChecked size="small" />
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <label>Max LTV</label>
+              </Col>
+              <Col className="text-right">
+                85%
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <label>Liquidation Threshold</label>
+              </Col>
+              <Col className="text-right">
+                80%
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <label>Liquidation Penalty</label>
+              </Col>
+              <Col className="text-right">
+                5%
+              </Col>
+            </Row>
+            <Row className="mt-2">
               <Col>
                 <label>Current LTV</label>
               </Col>
@@ -140,17 +145,9 @@ const BorrowTab = (lang) => {
                 35%
               </Col>
             </Row>
-            <Row className="mt-1">
+            <Row className="mt-2">
               <Col>
-                <label>Liquidation Percentage</label>
-              </Col>
-              <Col className="text-right">
-                10%
-              </Col>
-            </Row>
-            <Row className="mt-1">
-              <Col>
-                <label>Borrow APY</label>
+                <label>Deposit APY</label>
               </Col>
               <Col className="text-right">
                 3.80%
@@ -163,7 +160,7 @@ const BorrowTab = (lang) => {
             type="primary"
             className="btn-filled"
           >
-            Borrow
+            Deposit
           </Button>
         </div>
       </div>
@@ -177,6 +174,9 @@ const BorrowTab = (lang) => {
                 </div>
                 USCX
               </div>
+              <span className="percent-badge">
+                +6.18 <SvgIcon name="commodo-icon" />
+              </span>
             </div>
             <div className="head-right">
               <span>Oracle Price</span> : $123.45
@@ -212,6 +212,9 @@ const BorrowTab = (lang) => {
                 </div>
                 USCX
               </div>
+              <span className="percent-badge">
+                +6.18 <SvgIcon name="commodo-icon" />
+              </span>
             </div>
             <div className="head-right">
               <span>Oracle Price</span> : $123.45
@@ -243,7 +246,7 @@ const BorrowTab = (lang) => {
   );
 };
 
-BorrowTab.propTypes = {
+DepositTab.propTypes = {
   lang: PropTypes.string.isRequired,
 };
 
@@ -256,4 +259,4 @@ const stateToProps = (state) => {
 const actionsToProps = {
 };
 
-export default connect(stateToProps, actionsToProps)(BorrowTab);
+export default connect(stateToProps, actionsToProps)(DepositTab);

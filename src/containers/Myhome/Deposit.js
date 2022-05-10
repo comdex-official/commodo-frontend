@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import variables from "../../utils/variables";
 import { Button, Table, Switch } from "antd";
 import "./index.less";
+import { Link } from "react-router-dom";
 
 function onChange(checked) {
   console.log(`switch to ${checked}`);
@@ -49,13 +50,15 @@ const Deposit = (lang) => {
       width: 200,
       render: () => (
         <>
-          <Button
-            type="primary"
-            className="btn-filled"
-            size="small"
-          >
-            Diposit
-          </Button>
+          <Link to="/deposit">
+            <Button
+              type="primary"
+              className="btn-filled"
+              size="small"
+            >
+              Diposit
+            </Button>
+          </Link>
           <Button
             type="primary"
             size="small"

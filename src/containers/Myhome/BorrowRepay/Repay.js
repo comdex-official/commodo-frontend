@@ -2,12 +2,12 @@ import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import { connect } from "react-redux";
 import variables from "../../../utils/variables";
-import { Button, List, Select, Input } from "antd";
+import { Button, List, Select, Input, Progress } from "antd";
 import "./index.less";
 
 const { Option } = Select;
 
-const BorrowTab = (lang) => {
+const RepayTab = (lang) => {
   const data = [
     {
       title: "Total Borrowed",
@@ -85,54 +85,32 @@ const BorrowTab = (lang) => {
             </div>
           </div>
         </div>
-        <div className="assets-select-card mb-4">
-          <div className="assets-left">
-            <label className="leftlabel">
-              Borrow Asset
-            </label>
-            <div className="assets-select-wrapper">
-              <Select
-                className="assets-select"
-                dropdownClassName="asset-select-dropdown"
-                placeholder={
-                  <div className="select-placeholder">
-                    <div className="circle-icon">
-                      <div className="circle-icon-inner" />
-                    </div>
-                    Select
-                  </div>
-                }
-                defaultActiveFirstOption={true}
-                suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />}
-              >
-                <Option key="1">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="atom-icon" />
-                      </div>
-                    </div>
-                    <div className="name">Atom</div>
-                  </div>
-                </Option>
-              </Select>
-            </div>
-          </div>
-          <div className="assets-right">
-            <div>
-              <div className="input-select">
-                <Input
-                  placeholder=""
-                  value="23.00"
-                />
-              </div>
-              <small>$120.00</small>
-            </div>
-          </div>
-        </div>
         <Row>
           <Col sm="12" className="mt-3 mx-auto card-bottom-details">
             <Row className="mt-1">
+              <Col>
+                <label>Remaining to Repay</label>
+                <p className="remaining-infotext mt-1">You don’t have enough funds to repay the full amount</p>
+              </Col>
+              <Col className="text-right">
+                <div>123.45 USCX</div>
+                <small className="font-weight-light">$420.00</small>
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <label>Current Health Factor</label>
+              </Col>
+              <Col className="text-right">
+                90%
+              </Col>
+            </Row>
+            <Row className="py-2">
+              <Col>
+                <Progress className="commodo-progress" percent={30} />
+              </Col>
+            </Row>
+            <Row className="mt-2">
               <Col>
                 <label>Current LTV</label>
               </Col>
@@ -140,7 +118,7 @@ const BorrowTab = (lang) => {
                 35%
               </Col>
             </Row>
-            <Row className="mt-1">
+            <Row className="mt-2">
               <Col>
                 <label>Liquidation Percentage</label>
               </Col>
@@ -148,7 +126,7 @@ const BorrowTab = (lang) => {
                 10%
               </Col>
             </Row>
-            <Row className="mt-1">
+            <Row className="mt-2">
               <Col>
                 <label>Borrow APY</label>
               </Col>
@@ -163,7 +141,7 @@ const BorrowTab = (lang) => {
             type="primary"
             className="btn-filled"
           >
-            Borrow
+            Repay
           </Button>
         </div>
       </div>
@@ -239,11 +217,11 @@ const BorrowTab = (lang) => {
           />
         </div>
       </div>
-    </div>
+  </div>
   );
 };
 
-BorrowTab.propTypes = {
+RepayTab.propTypes = {
   lang: PropTypes.string.isRequired,
 };
 
@@ -256,4 +234,4 @@ const stateToProps = (state) => {
 const actionsToProps = {
 };
 
-export default connect(stateToProps, actionsToProps)(BorrowTab);
+export default connect(stateToProps, actionsToProps)(RepayTab);

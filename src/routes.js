@@ -5,7 +5,8 @@ import Liquidation from "./containers/Liquidation";
 import Airdrop from "./containers/Airdrop";
 import Govern from "./containers/Govern"; 
 import GovernDetails from "./containers/Govern/Details"; 
-import DetailsView from "./containers/Market/Details";
+import BorrowRepay from "./containers/Myhome/BorrowRepay";
+import Deposit from "./containers/Myhome/Depositwithdraw";
 
 const routes = [
   {
@@ -17,12 +18,16 @@ const routes = [
     element: <MyHome />,
   },
   {
-    path: "/market",
-    element: <Market />,
+    path: "/borrow",
+    element: <BorrowRepay />,
   },
   {
-    path: "/details",
-    element: <DetailsView />,
+    path: "/deposit",
+    element: <Deposit />,
+  },
+  {
+    path: "/market",
+    element: <Market />,
   },
   {
     path: "/liquidation",

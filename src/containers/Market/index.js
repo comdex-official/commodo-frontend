@@ -59,7 +59,70 @@ const Market = (lang) => {
       width: 140,
       render: () => (
         <>
-          <Link to='/details'><Button
+          <Link to='/deposit'><Button
+            type="primary"
+            size="small"
+          >
+            Details
+          </Button></Link>
+        </>
+      ),
+    },
+  ];
+
+  const Borrowcolumns = [
+    {
+      title: "Asset",
+      dataIndex: "asset",
+      key: "asset",
+      width: 180
+    },
+    {
+      title: "Bridge Asset",
+      dataIndex: "bridge_asset",
+      key: "bridge_asset",
+      width: 180
+    },
+    {
+      title: "Total Deposited",
+      dataIndex: "total_deposited",
+      key: "total_deposited",
+      width: 150,
+      render: (total_deposited) => (
+        <>$ {total_deposited}</>
+      ),
+    },
+    {
+      title: "Asset APY",
+      dataIndex: "asset_apy",
+      key: "asset_apy",
+      width: 150,
+      render: (asset_apy) => (
+        <>
+          <div>{asset_apy}% <div className="apy-percents">+6.18% <SvgIcon name="commodo-icon" viewbox="commodo-icon" /></div></div>
+        </>
+      ),
+    },
+    {
+      title: "Bridge APY",
+      dataIndex: "bridge_apy",
+      key: "bridge_apy",
+      width: 150,
+      render: (bridge_apy) => (
+        <>
+          <div>{bridge_apy}% <div className="apy-percents">+6.18% <SvgIcon name="commodo-icon" viewbox="commodo-icon" /></div></div>
+        </>
+      ),
+    },
+    {
+      title: "",
+      dataIndex: "action",
+      key: "action",
+      align: "right",
+      width: 140,
+      render: () => (
+        <>
+          <Link to='/borrow'><Button
             type="primary"
             size="small"
           >
@@ -198,7 +261,7 @@ const Market = (lang) => {
                 <Table
                   className="custom-table market-table2"
                   dataSource={tableData}
-                  columns={columns}
+                  columns={Borrowcolumns}
                   pagination={false}
                   scroll={{ x: "100%", y: "30vh" }}
                 />
