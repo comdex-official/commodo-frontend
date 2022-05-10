@@ -93,7 +93,7 @@ const DisConnectModal = ({
       <Dropdown overlay={WalletConnectedDropdown} trigger={["click"]}>
         <div className="connected_button">
           {" "}
-          <SvgIcon name="user-icon" />{" "}
+          <SvgIcon name="wallet" /> qwddf..12f234
         </div>
       </Dropdown>
 
