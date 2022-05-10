@@ -2,8 +2,10 @@ import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import { connect } from "react-redux";
 import variables from "../../../utils/variables";
-import { Button, List } from "antd";
+import { Button, List, Select, Input } from "antd";
 import "./index.less";
+
+const { Option } = Select;
 
 const BorrowTab = (lang) => {
   const data = [
