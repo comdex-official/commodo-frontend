@@ -8,7 +8,7 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import "./index.less";
 
-const Dashboard = ({lang, isDarkMode}) => {
+const Dashboard = ({ lang, isDarkMode }) => {
   const Options = {
     chart: {
       type: "pie",

@@ -211,10 +211,10 @@ const BorrowTab = (lang) => {
             dataSource={data}
             renderItem={item => (
               <List.Item>
-                  <div>
-                    <p>{item.title}</p>
-                    <h3>{item.counts}</h3>
-                  </div>
+                <div>
+                  <p>{item.title}</p>
+                  <h3>{item.counts}</h3>
+                </div>
               </List.Item>
             )}
           />
@@ -249,16 +249,16 @@ const BorrowTab = (lang) => {
             dataSource={data}
             renderItem={item => (
               <List.Item>
-                  <div>
-                    <p>{item.title}</p>
-                    <h3>{item.counts}</h3>
-                  </div>
+                <div>
+                  <p>{item.title}</p>
+                  <h3>{item.counts}</h3>
+                </div>
               </List.Item>
             )}
           />
         </div>
       </div>
-  </div>
+    </div>
   );
 };
 

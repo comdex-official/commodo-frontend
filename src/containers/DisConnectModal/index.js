@@ -96,7 +96,6 @@ const DisConnectModal = ({
           <SvgIcon name="wallet" /> qwddf..12f234
         </div>
       </Dropdown>
-
       <Modal
         centered={true}
         className="connect-modal"

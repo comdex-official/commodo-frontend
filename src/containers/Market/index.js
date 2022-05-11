@@ -134,7 +134,7 @@ const Market = (lang) => {
   ];
 
   const tableData = [
-    { 
+    {
       key: 1,
       asset: (
         <>
@@ -166,7 +166,7 @@ const Market = (lang) => {
       asset_apy: "4.9",
       bridge_apy: "4.99"
     },
-    { 
+    {
       key: 2,
       asset: (
         <>
@@ -198,7 +198,7 @@ const Market = (lang) => {
       asset_apy: "4.9",
       bridge_apy: "4.99"
     },
-    { 
+    {
       key: 3,
       asset: (
         <>
@@ -236,37 +236,37 @@ const Market = (lang) => {
       <Row>
         <Col>
           <div className="commodo-card">
-              <div className="card-header">
-                AssetS to supply
-              </div>
-              <div className="card-content">
-                <Table
-                  className="custom-table market-table1"
-                  dataSource={tableData}
-                  columns={columns}
-                  pagination={false}
-                  scroll={{ x: "100%", y: "30vh" }}
-                />
-              </div>
+            <div className="card-header">
+              AssetS to supply
             </div>
+            <div className="card-content">
+              <Table
+                className="custom-table market-table1"
+                dataSource={tableData}
+                columns={columns}
+                pagination={false}
+                scroll={{ x: "100%", y: "30vh" }}
+              />
+            </div>
+          </div>
         </Col>
       </Row>
       <Row className="mt-3">
         <Col>
           <div className="commodo-card">
-              <div className="card-header">
-                AssetS to BORROW
-              </div>
-              <div className="card-content">
-                <Table
-                  className="custom-table market-table2"
-                  dataSource={tableData}
-                  columns={Borrowcolumns}
-                  pagination={false}
-                  scroll={{ x: "100%", y: "30vh" }}
-                />
-              </div>
+            <div className="card-header">
+              AssetS to BORROW
             </div>
+            <div className="card-content">
+              <Table
+                className="custom-table market-table2"
+                dataSource={tableData}
+                columns={Borrowcolumns}
+                pagination={false}
+                scroll={{ x: "100%", y: "30vh" }}
+              />
+            </div>
+          </div>
         </Col>
       </Row>
     </div>

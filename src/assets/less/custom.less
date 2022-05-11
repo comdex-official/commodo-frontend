@@ -16,39 +16,43 @@ body {
   color: @text-color-dark;
   font-feature-settings: normal !important;
   font-variant: normal !important;
-  font-weight: 300;
-  background: @body-background-light !important;
+  font-weight: 400;
+  background: @body-background-light  !important;
   height: auto !important;
 
   &.dark-mode {
-    background: @body-background-dark !important;
+    background: @body-background-dark  !important;
     color: @white;
 
   }
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   width: 4.2px;
   height: 4.2px;
 }
-::-webkit-scrollbar-thumb{
+
+::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background-color: @bg-dark;
 }
-::-webkit-scrollbar-track{
+
+::-webkit-scrollbar-track {
   border-radius: 10px;
   background-color: @bg-progress;
 }
 
-body.dark-mode ::-webkit-scrollbar{
+body.dark-mode ::-webkit-scrollbar {
   width: 4.2px;
   height: 4.2px;
 }
-body.dark-mode ::-webkit-scrollbar-thumb{
+
+body.dark-mode ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background-color: @success-color;
 }
-body.dark-mode ::-webkit-scrollbar-track{
+
+body.dark-mode ::-webkit-scrollbar-track {
   border-radius: 10px;
   background-color: @text-color-light;
 }
@@ -56,9 +60,12 @@ body.dark-mode ::-webkit-scrollbar-track{
 body.sidebar-open {
   overflow: hidden;
 }
-label, button{
+
+label,
+button {
   user-select: none;
 }
+
 .icon {
   width: 16px;
   height: auto;
@@ -93,7 +100,7 @@ label, button{
   flex-direction: row;
   align-items: flex-start;
 
-  .body-bg{
+  .body-bg {
     position: fixed;
     opacity: 0.35;
   }
@@ -108,7 +115,7 @@ label, button{
     z-index: 1;
 
     .sidebar-open {
-      & ~ .content {
+      &~.content {
         max-width: calc(100% - 270px);
 
         @media screen and (max-width: 991px) {
@@ -170,7 +177,7 @@ label, button{
   }
 
   .ant-tooltip-inner {
-    background-color: @tooltip-bg-light !important;
+    background-color: @tooltip-bg-light  !important;
     color: @tooltip-color-dark;
     font-size: @font-size-sm - 2;
     min-height: 20px;
@@ -201,9 +208,10 @@ label, button{
     background-color: @bg-dark-hover;
     color: @white;
     border-color: @bg-dark-hover;
+
     .dark-mode & {
       color: @border-light;
-      border-color: @border-light !important;
+      border-color: @border-light  !important;
     }
   }
 
@@ -275,7 +283,8 @@ label, button{
         cursor: not-allowed;
       }
     }
-    &.back-btn{
+
+    &.back-btn {
       padding-left: 22px;
       padding-right: 22px;
     }
@@ -300,6 +309,7 @@ label, button{
     border-color: @success-color;
     color: @white;
     padding: 0 15px;
+
     &:hover,
     &:focus {
       background: @success-color;
@@ -313,6 +323,7 @@ label, button{
     background: #232726;
     color: @white;
     border-color: #232726;
+
     &:hover,
     &:focus {
       background: #232726;
@@ -358,6 +369,7 @@ label, button{
           border-radius: 20px;
           background: none;
           border: 0;
+
           .ant-tabs-tab-btn {
             width: 100%;
             color: @text-color-dark2;
@@ -369,6 +381,7 @@ label, button{
 
           &:hover {
             background: rgba(@bg-dark, 0.15);
+
             .dark-mode & {
               background: rgba(@bg-light, 0.15);
             }
@@ -389,7 +402,7 @@ label, button{
               .dark-mode & {
                 color: @text-color-dark;
               }
-              
+
             }
           }
         }
@@ -413,6 +426,7 @@ button.ant-switch {
     height: 16px;
     width: 16px;
     top: 1px;
+
     &:before {
       background: #1B4332;
     }
@@ -421,6 +435,7 @@ button.ant-switch {
   &.ant-switch-checked {
     background: @success-color;
     border-color: @success-color;
+
     .ant-switch-handle {
       left: calc(100% - 16px - 2px);
     }
@@ -452,7 +467,7 @@ button.ant-switch {
     .ant-table-container {
       table {
 
-        .ant-table-cell-scrollbar{
+        .ant-table-cell-scrollbar {
           box-shadow: none;
         }
 
@@ -465,6 +480,7 @@ button.ant-switch {
               font-size: @font-size-base - 1;
               color: @bg-dark;
               border: 0;
+
               .dark-mode & {
                 color: @text-color-light;
               }
@@ -473,13 +489,14 @@ button.ant-switch {
         }
 
         .ant-table-tbody {
-          .ant-table-placeholder{
-            .ant-empty{
+          .ant-table-placeholder {
+            .ant-empty {
               .dark-mode & {
                 color: @text-color-light;
               }
             }
           }
+
           tr {
             border-radius: 15px;
 
@@ -610,9 +627,10 @@ button.ant-switch {
 }
 
 .ant-select {
-  &.select-primary:not(.ant-select-customize-input){
+  &.select-primary:not(.ant-select-customize-input) {
     cursor: pointer;
-    .ant-select-selector{
+
+    .ant-select-selector {
       margin: 0 auto;
       border-radius: 20px;
       border: 1px solid @bg-dark;
@@ -620,14 +638,16 @@ button.ant-switch {
       font-weight: bold;
       background-color: transparent;
       color: @bg-dark;
+
       .dark-mode & {
         background-color: none;
         color: @white;
         border-color: @bg-light;
       }
     }
-    .ant-select-arrow{
-      .icon{
+
+    .ant-select-arrow {
+      .icon {
         .dark-mode & {
           fill: @white;
           width: 13px;
@@ -667,6 +687,7 @@ button.ant-switch {
               width: 100%;
               height: 100%;
               border-radius: 100%;
+
               .dark-mode & {
                 background: @background-dark1;
               }
@@ -716,6 +737,7 @@ button.ant-switch {
                   width: 100%;
                   height: 100%;
                   fill: @background-dark1;
+
                   .dark-mode & {
                     fill: @white;
                   }
@@ -744,8 +766,8 @@ button.ant-switch {
       }
     }
 
-    &.center-select-text{
-      .ant-select-selection-item{
+    &.center-select-text {
+      .ant-select-selection-item {
         justify-content: center;
       }
     }
@@ -764,7 +786,7 @@ button.ant-switch {
 
     .ant-select-item {
 
-      .ant-select-item-option-content{
+      .ant-select-item-option-content {
         .dark-mode & {
           color: @white;
         }
@@ -818,7 +840,7 @@ button.ant-switch {
 }
 
 .ant-input {
-  &.input-primary{
+  &.input-primary {
     border: 0;
     background: #1D3129;
     font-size: 2rem;
@@ -975,6 +997,7 @@ button.ant-switch {
           border: 0;
           cursor: pointer;
           border-radius: 2px;
+
           .dark-mode & {
             background: #132239;
             color: @white;
@@ -1062,11 +1085,13 @@ button.ant-switch {
     justify-content: center;
     font-size: @font-size-sm;
     margin-bottom: 10px;
+
     .text-center {
       .dark-mode & {
         color: @white;
       }
     }
+
     span {
       width: 10px;
       height: 10px;
@@ -1094,10 +1119,12 @@ button.ant-switch {
   border-radius: 15px;
   padding: 10px 0;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
   .dark-mode & {
     background: @card-bg-dark;
     box-shadow: none;
   }
+
   .card-header {
     text-align: center;
     color: @text-color-dark;
@@ -1105,31 +1132,36 @@ button.ant-switch {
     font-size: 19px;
     font-weight: 500;
     padding: 10px 0;
+
     .dark-mode & {
       color: @white;
     }
   }
 }
 
-.ant-pagination{
-  li{
+.ant-pagination {
+  li {
     background: none;
-    border: 0;  
+    border: 0;
     font-size: 19px;
-    .ant-pagination-item-link{
+
+    .ant-pagination-item-link {
       background: none;
       border: 0;
       color: #606060;
     }
-    a{
+
+    a {
       background: none;
       border: 0;
+
       .dark-mode & {
         color: #606060;
       }
     }
-    &.ant-pagination-item-active{
-      a{
+
+    &.ant-pagination-item-active {
+      a {
         color: @white;
       }
     }
@@ -1139,26 +1171,29 @@ button.ant-switch {
 .card-bottom-details {
   font-size: @font-size-lg;
   font-weight: 500;
+
   .dark-mode & {
     color: @white;
   }
 
-  .bond-row{
+  .bond-row {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    span{
+
+    span {
       font-size: @font-size-base - 1;
       font-weight: normal;
     }
   }
 
-  .remaining-infotext{
+  .remaining-infotext {
     color: @error-color;
     font-size: @font-size-sm;
     line-height: 1.4;
     font-weight: normal;
     max-width: 210px;
+
     .dark-mode & {
       color: #FAFF0599;
     }
@@ -1166,22 +1201,25 @@ button.ant-switch {
 
   label {
     font-weight: normal;
+
     .dark-mode & {
       color: @white;
     }
   }
 }
 
-.commodo-progress{
-  &.ant-progress{
-    .ant-progress-outer{
+.commodo-progress {
+  &.ant-progress {
+    .ant-progress-outer {
       padding: 0;
     }
-    .ant-progress-inner{
+
+    .ant-progress-inner {
       background: @bg-progress;
       height: 15px;
       overflow: inherit;
-      .ant-progress-bg{
+
+      .ant-progress-bg {
         background: @success-color;
         min-height: 100%;
         position: relative;
@@ -1190,97 +1228,119 @@ button.ant-switch {
   }
 }
 
-.details-wrapper{
+.details-wrapper {
   display: flex;
-  .details-left{
+
+  .details-left {
     width: 50%;
     margin-right: 25px;
     padding: 35px 40px;
-    .deposit-head{
+
+    .deposit-head {
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
       width: 100%;
-      .deposit-head-left{
+
+      .deposit-head-left {
         display: flex;
         align-items: center;
         padding-bottom: 20px;
-        .hyphen-icon{
+
+        .hyphen-icon {
           font-size: 20px;
           font-weight: 500;
           padding: 0 10px;
+
           .dark-mode & {
             color: @white;
           }
         }
-        .assets-col{
+
+        .assets-col {
           display: flex;
           align-items: center;
+
           .dark-mode & {
             color: @white;
             font-weight: 500;
             font-size: 17px;
           }
-          .assets-icon{
+
+          .assets-icon {
             width: 38px;
             height: 38px;
             border-radius: 38px;
             margin-right: 10px;
-            .icon{
+
+            .icon {
               width: 100%;
               height: 38px;
             }
           }
         }
       }
-      .deposit-head-right{
+
+      .deposit-head-right {
         padding-bottom: 20px;
-        .ant-switch{
+
+        .ant-switch {
           margin-left: 10px;
         }
+
         .dark-mode & {
           color: @white;
         }
       }
     }
   }
-  .details-right{
+
+  .details-right {
     width: 50%;
     padding-left: 25px;
-    .commodo-card{
+
+    .commodo-card {
       padding: 20px 25px;
       margin-bottom: 35px;
+
       &:last-child {
         margin-bottom: 0;
       }
-      .card-head{
+
+      .card-head {
         display: flex;
         align-items: center;
         justify-content: space-between;
         margin-bottom: 15px;
-        .head-left{
+
+        .head-left {
           display: flex;
           align-items: center;
-          .assets-col{
+
+          .assets-col {
             display: flex;
             align-items: center;
+
             .dark-mode & {
               color: @white;
               font-weight: 500;
               font-size: 17px;
             }
-            .assets-icon{
+
+            .assets-icon {
               width: 38px;
               height: 38px;
               border-radius: 38px;
               margin-right: 10px;
-              .icon{
+
+              .icon {
                 width: 100%;
                 height: 38px;
               }
             }
           }
-          .percent-badge{
+
+          .percent-badge {
             border: 1px solid @bg-light;
             display: flex;
             align-items: center;
@@ -1290,49 +1350,59 @@ button.ant-switch {
             padding: 2px 6px;
             font-size: @font-size-base + 1;
             font-weight: 500;
-            .icon{
+
+            .icon {
               width: 18px;
               height: 18px;
               border-radius: 18px;
               padding: 2px;
               border: 1px solid @bg-light;
               margin-left: 6px;
+
               .dark-mode & {
                 fill: @white;
               }
             }
           }
         }
-        .head-right{
+
+        .head-right {
           font-weight: 500;
           font-size: 16px;
+
           .dark-mode & {
             color: @white;
           }
-          span{
+
+          span {
             font-weight: 300;
           }
         }
       }
+
       .ant-list {
-        .ant-list-item{
+        .ant-list-item {
           margin: 15px 0;
           color: @text-color-dark2;
           border-left: 1px solid @success-color;
           padding-left: 15px;
+
           .dark-mode & {
             color: @white;
           }
-          p{
+
+          p {
             margin-bottom: 0;
             font-size: @font-size-base;
           }
-          h3{
+
+          h3 {
             margin-bottom: 0;
             font-size: 1.5rem;
             font-weight: 600;
             line-height: 1;
             margin-top: 8px;
+
             .dark-mode & {
               color: @white;
             }
@@ -1343,16 +1413,19 @@ button.ant-switch {
   }
 }
 
-.ant-radio{
+.ant-radio {
   font-size: @font-size-lg + 1;
-  .ant-radio-inner{
+
+  .ant-radio-inner {
     width: 20px;
     height: 20px;
   }
-  &.ant-radio-checked{
-    .ant-radio-inner{
+
+  &.ant-radio-checked {
+    .ant-radio-inner {
       border-color: @success-color;
-      &::after{
+
+      &::after {
         background-color: @success-color;
       }
     }

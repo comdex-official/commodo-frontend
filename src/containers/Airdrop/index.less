@@ -108,19 +108,21 @@
     }
   }
 
-  .dot-icon{
-    .icon{
+  .dot-icon {
+    .icon {
       fill: #2F815F
     }
   }
 
   ul>li>span>span[data-fill="true"] {
     background: @success-color;
-    .dot-icon{
-      .icon{
+
+    .dot-icon {
+      .icon {
         fill: #2F815F;
       }
-      &::after{
+
+      &::after {
         content: "00";
         width: 34px;
         height: 34px;
@@ -138,8 +140,8 @@
 
   ul>li>span>span[data-fill="active"] {
     .dot-icon {
-      .icon{
-        fill:  @white;
+      .icon {
+        fill: @white;
         stroke: #2F815F;
         stroke-width: 9px;
         width: 34px;
@@ -161,32 +163,37 @@
   }
 }
 
-.airdrop-progresslist{
+.airdrop-progresslist {
   list-style-type: none;
   padding-left: 0;
   margin-bottom: 0;
-  li{
+
+  li {
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid rgba(@white, 0.2);
     padding: 15px 20px;
-    &:last-child{
+
+    &:last-child {
       border-bottom: 0;
     }
-    .progresslist-left{
-      small{
+
+    .progresslist-left {
+      small {
         font-size: 17px;
       }
-      p{
+
+      p {
         margin-bottom: 0;
         color: @white;
         font-size: 22px;
         font-weight: bold;
       }
     }
-    .progresslist-right{
-      p{
+
+    .progresslist-right {
+      p {
         margin-bottom: 0;
         font-size: 20px;
         color: @white;

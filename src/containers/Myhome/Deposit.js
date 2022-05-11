@@ -72,7 +72,7 @@ const Deposit = (lang) => {
   ];
 
   const tableData = [
-    { 
+    {
       key: 1,
       asset: (
         <>
@@ -90,7 +90,7 @@ const Deposit = (lang) => {
       balance: "142",
       apy: "20",
     },
-    { 
+    {
       key: 2,
       asset: (
         <>

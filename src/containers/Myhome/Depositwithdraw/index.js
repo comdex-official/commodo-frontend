@@ -17,18 +17,18 @@ const BackButton = {
 const Deposit = (lang) => {
   return (
     <div className="app-content-wrapper">
-        <Row>
-            <Col>
-                <Tabs className="commodo-tabs" defaultActiveKey="1" tabBarExtraContent={BackButton}>
-                    <TabPane tab="Deposit" key="1">
-                      <DepositTab />
-                    </TabPane>
-                    <TabPane tab="Withdraw" key="2">
-                      <WithdrawTab />
-                    </TabPane>
-                </Tabs>
-            </Col>
-        </Row>
+      <Row>
+        <Col>
+          <Tabs className="commodo-tabs" defaultActiveKey="1" tabBarExtraContent={BackButton}>
+            <TabPane tab="Deposit" key="1">
+              <DepositTab />
+            </TabPane>
+            <TabPane tab="Withdraw" key="2">
+              <WithdrawTab />
+            </TabPane>
+          </Tabs>
+        </Col>
+      </Row>
     </div>
   );
 };

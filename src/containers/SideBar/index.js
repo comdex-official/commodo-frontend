@@ -26,7 +26,7 @@ const SideBar = () => {
     }
   };
 
-  const onTabClick = () =>{
+  const onTabClick = () => {
     setIsOpen(true);
   }
 

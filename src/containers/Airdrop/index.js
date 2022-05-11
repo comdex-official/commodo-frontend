@@ -47,10 +47,10 @@ const Airdrop = (lang) => {
                 dataSource={data}
                 renderItem={item => (
                   <List.Item>
-                      <div>
-                        <p>{item.title}</p>
-                        <h3>{item.counts}</h3>
-                      </div>
+                    <div>
+                      <p>{item.title}</p>
+                      <h3>{item.counts}</h3>
+                    </div>
                   </List.Item>
                 )}
               />
@@ -62,7 +62,7 @@ const Airdrop = (lang) => {
         <Col>
           <div className="commodo-card">
             <div className="card-header">
-                MY PROGRESS
+              MY PROGRESS
             </div>
             <div className="card-content mt-4">
               <div className="airdrop-progress">
@@ -127,47 +127,47 @@ const Airdrop = (lang) => {
       </Row>
       <Row className="mt-2">
         <Col>
-            <div className="commodo-card">
-                <ul className="airdrop-progresslist">
-                  <li>
-                    <div className="progresslist-left">
-                      <small>Mission #1</small>
-                      <p>Lorem Ipsum Dolar amet</p>
-                    </div>
-                    <div className="progresslist-right">
-                      <p>Complete</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="progresslist-left">
-                      <small>Mission #2</small>
-                      <p>Lorem Ipsum Dolar amet</p>
-                    </div>
-                    <div className="progresslist-right">
-                      <p>Ineligible</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="progresslist-left">
-                      <small>Mission #3</small>
-                      <p>Lorem Ipsum Dolar amet</p>
-                    </div>
-                    <div className="progresslist-right">
-                      <p>Ineligible</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="progresslist-left">
-                      <small>Mission #4</small>
-                      <p>Lorem Ipsum Dolar amet</p>
-                    </div>
-                    <div className="progresslist-right">
-                      <p>Ineligible</p>
-                    </div>
-                  </li>
-                </ul>
-            </div>
-          </Col>
+          <div className="commodo-card">
+            <ul className="airdrop-progresslist">
+              <li>
+                <div className="progresslist-left">
+                  <small>Mission #1</small>
+                  <p>Lorem Ipsum Dolar amet</p>
+                </div>
+                <div className="progresslist-right">
+                  <p>Complete</p>
+                </div>
+              </li>
+              <li>
+                <div className="progresslist-left">
+                  <small>Mission #2</small>
+                  <p>Lorem Ipsum Dolar amet</p>
+                </div>
+                <div className="progresslist-right">
+                  <p>Ineligible</p>
+                </div>
+              </li>
+              <li>
+                <div className="progresslist-left">
+                  <small>Mission #3</small>
+                  <p>Lorem Ipsum Dolar amet</p>
+                </div>
+                <div className="progresslist-right">
+                  <p>Ineligible</p>
+                </div>
+              </li>
+              <li>
+                <div className="progresslist-left">
+                  <small>Mission #4</small>
+                  <p>Lorem Ipsum Dolar amet</p>
+                </div>
+                <div className="progresslist-right">
+                  <p>Ineligible</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </Col>
       </Row>
     </div>
   );

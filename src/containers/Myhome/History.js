@@ -41,14 +41,14 @@ const History = (lang) => {
   ];
 
   const tableData = [
-    { 
+    {
       key: 1,
       type: "Deposit",
       date: "30 Jul 2022",
       block_height: "1234",
       tnx_hash: "0x6696672B38cF38e5521c8C6e3A902EF4e2F78736",
     },
-    { 
+    {
       key: 2,
       type: "Repay",
       date: "30 Jul 2022",

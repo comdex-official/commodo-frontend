@@ -44,10 +44,10 @@ const Govern = (lang) => {
                 dataSource={data}
                 renderItem={item => (
                   <List.Item>
-                      <div>
-                        <p>{item.title}</p>
-                        <h3>{item.counts}</h3>
-                      </div>
+                    <div>
+                      <p>{item.title}</p>
+                      <h3>{item.counts}</h3>
+                    </div>
                   </List.Item>
                 )}
               />
@@ -57,74 +57,74 @@ const Govern = (lang) => {
       </Row>
       <Row className="mt-3">
         <Col>
-            <div className="commodo-card govern-card">
-              <div className="governcard-head">
-                <Button type="primary" className="btn-filled">New Proposal</Button>
-                <Button type="primary" className="btn-filled">Forum</Button>
-                <Select defaultValue="lucy" className="select-primary ml-2" suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />} style={{ width: 120 }}>
-                  <Option value="jack">Jack</Option>
-                  <Option value="lucy">Lucy</Option>
-                  <Option value="Yiminghe">yiminghe</Option>
-                </Select>
-              </div>
-              <div className="govern-card-content">
-                <div className="governlist-row" onClick={() => navigate("/govern-details")}>
-                  <div className="left-section">
-                    <h3>Increasing MaxValidator to 100</h3>
-                    <p>adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, </p>
-                  </div>
-                  <div className="right-section">
-                      <Row>
-                        <Col sm="6">
-                          <label>Vote Starts :</label>
-                          <p>24th April, 2022</p>
-                        </Col>
-                        <Col sm="6">
-                          <label>Voting Ends :</label>
-                          <p>26th April, 2022</p>
-                        </Col>
-                        <Col sm="6">
-                          <label>Duration : </label>
-                          <p>3 days</p>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                          <Progress percent={30} size="small" />
-                        </Col>
-                      </Row>
-                  </div>
+          <div className="commodo-card govern-card">
+            <div className="governcard-head">
+              <Button type="primary" className="btn-filled">New Proposal</Button>
+              <Button type="primary" className="btn-filled">Forum</Button>
+              <Select defaultValue="lucy" className="select-primary ml-2" suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />} style={{ width: 120 }}>
+                <Option value="jack">Jack</Option>
+                <Option value="lucy">Lucy</Option>
+                <Option value="Yiminghe">yiminghe</Option>
+              </Select>
+            </div>
+            <div className="govern-card-content">
+              <div className="governlist-row" onClick={() => navigate("/govern-details")}>
+                <div className="left-section">
+                  <h3>Increasing MaxValidator to 100</h3>
+                  <p>adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, </p>
                 </div>
-                <div className="governlist-row" onClick={() => navigate("/govern-details")}> 
-                  <div className="left-section">
-                    <h3>Increasing MaxValidator to 100</h3>
-                    <p>adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, </p>
-                  </div>
-                  <div className="right-section">
-                      <Row>
-                        <Col sm="6">
-                          <label>Vote Starts :</label>
-                          <p>24th April, 2022</p>
-                        </Col>
-                        <Col sm="6">
-                          <label>Voting Ends :</label>
-                          <p>26th April, 2022</p>
-                        </Col>
-                        <Col sm="6">
-                          <label>Duration : </label>
-                          <p>3 days</p>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                          <Progress percent={30} size="small" />
-                        </Col>
-                      </Row>
-                  </div>
+                <div className="right-section">
+                  <Row>
+                    <Col sm="6">
+                      <label>Vote Starts :</label>
+                      <p>24th April, 2022</p>
+                    </Col>
+                    <Col sm="6">
+                      <label>Voting Ends :</label>
+                      <p>26th April, 2022</p>
+                    </Col>
+                    <Col sm="6">
+                      <label>Duration : </label>
+                      <p>3 days</p>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Progress percent={30} size="small" />
+                    </Col>
+                  </Row>
+                </div>
+              </div>
+              <div className="governlist-row" onClick={() => navigate("/govern-details")}>
+                <div className="left-section">
+                  <h3>Increasing MaxValidator to 100</h3>
+                  <p>adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, </p>
+                </div>
+                <div className="right-section">
+                  <Row>
+                    <Col sm="6">
+                      <label>Vote Starts :</label>
+                      <p>24th April, 2022</p>
+                    </Col>
+                    <Col sm="6">
+                      <label>Voting Ends :</label>
+                      <p>26th April, 2022</p>
+                    </Col>
+                    <Col sm="6">
+                      <label>Duration : </label>
+                      <p>3 days</p>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Progress percent={30} size="small" />
+                    </Col>
+                  </Row>
                 </div>
               </div>
             </div>
-          </Col>
+          </div>
+        </Col>
       </Row>
     </div>
   );

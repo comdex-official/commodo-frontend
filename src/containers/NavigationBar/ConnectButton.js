@@ -59,7 +59,7 @@ const ConnectButton = ({
     if (userAddress) {
       setAccountAddress(userAddress);
 
-      fetchKeplrAccountName().then((name)=>{
+      fetchKeplrAccountName().then((name) => {
         setAccountName(name);
       })
 

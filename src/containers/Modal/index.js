@@ -5,7 +5,6 @@ import { Button, Spin, message } from "antd";
 import { connect } from "react-redux";
 import { encode } from "js-base64";
 import { fetchKeplrAccountName, initializeChain } from "../../services/keplr";
-
 import {
   setAccountAddress,
   setAccountName,
@@ -33,7 +32,7 @@ const ConnectModal = ({
       }
 
       setAccountAddress(account.address);
-      fetchKeplrAccountName().then((name)=>{
+      fetchKeplrAccountName().then((name) => {
         setAccountName(name);
       })
 

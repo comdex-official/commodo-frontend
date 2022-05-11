@@ -19,13 +19,13 @@
       left: 0;
       background: none;
 
-      & ~ .content {
+      &~.content {
         filter: blur(3px);
       }
     }
   }
 
-  & > .ant-layout-sider:not(.ant-layout-sider-collapsed) {
+  &>.ant-layout-sider:not(.ant-layout-sider-collapsed) {
     @media screen and (max-width: 991px) {
       min-width: 200px !important;
     }
@@ -46,7 +46,7 @@
     z-index: 2;
     visibility: hidden;
 
-    & > svg {
+    &>svg {
       fill: @text-color-dark;
       width: 20px;
       height: 19px;
@@ -95,12 +95,12 @@
       padding: 30px 25px 10px 25px;
       min-height: 78px;
 
-      img{
+      img {
         width: 40px;
         height: auto;
       }
 
-      span{
+      span {
         color: @text-color-dark;
         font-weight: 500;
         margin-left: 10px;
@@ -208,6 +208,7 @@
                 width: 21px;
                 margin-bottom: 5px;
                 max-height: 22px;
+
                 .dark-mode & {
                   fill: @text-color-light;
                 }
@@ -219,6 +220,7 @@
 
               .tab-inner {
                 background: @menu-active-light;
+
                 .dark-mode & {
                   background: @menu-active-dark;
                   color: @text-color-light;
@@ -227,6 +229,7 @@
 
               .icon {
                 fill: @text-color-dark;
+
                 .dark-mode & {
                   fill: @text-color-light;
                 }
@@ -235,8 +238,10 @@
 
             &:hover {
               color: @text-color-dark;
+
               .tab-inner {
                 background: @menu-active-light;
+
                 .dark-mode & {
                   background: @menu-active-dark;
                 }
@@ -244,6 +249,7 @@
 
               .icon {
                 fill: @text-color-dark;
+
                 .dark-mode & {
                   fill: @text-color-light;
                 }

@@ -17,18 +17,18 @@ const BackButton = {
 const BorrowRepay = (lang) => {
   return (
     <div className="app-content-wrapper">
-        <Row>
-            <Col>
-                <Tabs className="commodo-tabs" defaultActiveKey="1" tabBarExtraContent={BackButton}>
-                    <TabPane tab="Borrow" key="1">
-                        <BorrowTab />
-                    </TabPane>
-                    <TabPane tab="Repay" key="2">
-                        <RepayTab />
-                    </TabPane>
-                </Tabs>
-            </Col>
-        </Row>
+      <Row>
+        <Col>
+          <Tabs className="commodo-tabs" defaultActiveKey="1" tabBarExtraContent={BackButton}>
+            <TabPane tab="Borrow" key="1">
+              <BorrowTab />
+            </TabPane>
+            <TabPane tab="Repay" key="2">
+              <RepayTab />
+            </TabPane>
+          </Tabs>
+        </Col>
+      </Row>
     </div>
   );
 };

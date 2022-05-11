@@ -66,7 +66,7 @@ const Borrow = (lang) => {
   ];
 
   const tableData = [
-    { 
+    {
       key: 1,
       asset: (
         <>
@@ -84,7 +84,7 @@ const Borrow = (lang) => {
       balance: "142",
       apy: "20",
     },
-    { 
+    {
       key: 1,
       asset: (
         <>

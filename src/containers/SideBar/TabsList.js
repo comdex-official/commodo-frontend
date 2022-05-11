@@ -23,14 +23,12 @@ export const tabsList = [
     langKey: "govern",
     index: 3,
   },
-  ,
   {
     name: "Liquidation",
     value: "liquidation",
     langKey: "liquidation",
     index: 4,
   },
-  ,
   {
     name: "Airdrop",
     value: "airdrop",

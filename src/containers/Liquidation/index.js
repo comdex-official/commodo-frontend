@@ -61,7 +61,7 @@ const Liquidation = (lang) => {
   ];
 
   const tableData = [
-    { 
+    {
       key: 1,
       auctioned_asset: (
         <>
@@ -93,7 +93,7 @@ const Liquidation = (lang) => {
       end_time: "01D : 08H : 32M",
       top_bid: "11"
     },
-    { 
+    {
       key: 2,
       auctioned_asset: (
         <>
@@ -125,7 +125,7 @@ const Liquidation = (lang) => {
       end_time: "01D : 08H : 32M",
       top_bid: "11"
     },
-    { 
+    {
       key: 3,
       auctioned_asset: (
         <>
@@ -157,7 +157,7 @@ const Liquidation = (lang) => {
       end_time: "01D : 08H : 32M",
       top_bid: "11"
     },
-    { 
+    {
       key: 4,
       auctioned_asset: (
         <>
@@ -189,7 +189,7 @@ const Liquidation = (lang) => {
       end_time: "01D : 08H : 32M",
       top_bid: "11"
     },
-    { 
+    {
       key: 5,
       auctioned_asset: (
         <>
@@ -221,7 +221,7 @@ const Liquidation = (lang) => {
       end_time: "01D : 08H : 32M",
       top_bid: "11"
     },
-    { 
+    {
       key: 6,
       auctioned_asset: (
         <>
@@ -253,7 +253,7 @@ const Liquidation = (lang) => {
       end_time: "01D : 08H : 32M",
       top_bid: "11"
     },
-    { 
+    {
       key: 7,
       auctioned_asset: (
         <>
@@ -285,7 +285,7 @@ const Liquidation = (lang) => {
       end_time: "01D : 08H : 32M",
       top_bid: "11"
     },
-    { 
+    {
       key: 8,
       auctioned_asset: (
         <>
@@ -323,16 +323,16 @@ const Liquidation = (lang) => {
       <Row>
         <Col>
           <div className="commodo-card py-3">
-              <div className="card-content">
-                <Table
-                  className="custom-table liquidation-table"
-                  dataSource={tableData}
-                  columns={columns}
-                  pagination={{ defaultPageSize: 10 }}
-                  scroll={{ x: "100%" }}
-                />
-              </div>
+            <div className="card-content">
+              <Table
+                className="custom-table liquidation-table"
+                dataSource={tableData}
+                columns={columns}
+                pagination={{ defaultPageSize: 10 }}
+                scroll={{ x: "100%" }}
+              />
             </div>
+          </div>
         </Col>
       </Row>
     </div>
