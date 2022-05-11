@@ -783,6 +783,27 @@ button.ant-switch {
 }
 
 .ant-select-dropdown {
+  .dark-mode & {
+    background: @background-dark1;
+  }
+
+  .ant-select-item {
+    .ant-select-item-option-content {
+      .dark-mode & {
+        color: @white;
+      }
+    }
+    &.ant-select-item-option-selected,
+      &.ant-select-item-option-active {
+        background: @background-light;
+        font-weight: normal;
+
+        .dark-mode & {
+          background: @bg-dark;
+        }
+      }
+  }
+
   &.asset-select-dropdown {
     background: @background-light2;
     border-radius: 4px;
@@ -849,10 +870,13 @@ button.ant-switch {
 .ant-input {
   &.input-primary {
     border: 0;
-    background: #1D3129;
-    font-size: 2rem;
+    background: #F0FAF2;
+    box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.25);
+    font-size: @font-size-base + 1;
     line-height: 1;
     margin-top: 8px;
+    border-radius: 3px;
+    height: 45px;
     text-align: right;
     max-width: 200px;
     margin-bottom: 0;
@@ -865,6 +889,8 @@ button.ant-switch {
 
     .dark-mode & {
       color: @white;
+      background: #1D3129;
+      box-shadow: none;
 
       &::-webkit-placeholder {
         color: @white;

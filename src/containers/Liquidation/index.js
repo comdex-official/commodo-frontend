@@ -81,7 +81,7 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
+                name="uscx-icon"
                 viewBox="0 0 30 30"
               />
             </div>
@@ -113,7 +113,7 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
+                name="uscx-icon"
                 viewBox="0 0 30 30"
               />
             </div>
@@ -145,7 +145,7 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
+                name="uscx-icon"
                 viewBox="0 0 30 30"
               />
             </div>
@@ -164,7 +164,7 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="atom-icon"
+                name="cmdx-icon"
                 viewBox="0 0 30 30"
               />
             </div>
@@ -177,7 +177,7 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
+                name="uscx-icon"
                 viewBox="0 0 30 30"
               />
             </div>
@@ -196,11 +196,11 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="atom-icon"
+                name="cmdx-icon"
                 viewBox="0 0 30 30"
               />
             </div>
-            ATOM
+            CMDX
           </div>
         </>
       ),
@@ -209,7 +209,7 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
+                name="uscx-icon"
                 viewBox="0 0 30 30"
               />
             </div>
@@ -228,11 +228,11 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="atom-icon"
+                name="cmdx-icon"
                 viewBox="0 0 30 30"
               />
             </div>
-            ATOM
+            CMDX
           </div>
         </>
       ),
@@ -241,7 +241,7 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
+                name="uscx-icon"
                 viewBox="0 0 30 30"
               />
             </div>
@@ -260,11 +260,11 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="atom-icon"
+                name="cmdx-icon"
                 viewBox="0 0 30 30"
               />
             </div>
-            ATOM
+            CMDX
           </div>
         </>
       ),
@@ -273,7 +273,7 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
+                name="uscx-icon"
                 viewBox="0 0 30 30"
               />
             </div>
@@ -305,7 +305,7 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
+                name="uscx-icon"
                 viewBox="0 0 30 30"
               />
             </div>

@@ -4,7 +4,11 @@
   .governcard-head {
     padding: 18px;
     text-align: center;
-    border-bottom: 1px solid rgba(@white, 0.5);
+    border-bottom: 1px solid rgba(@border-dark, 0.5);
+
+    .dark-mode & {
+      border-bottom: 1px solid rgba(@white, 0.5);
+    }
 
     .ant-btn {
       margin: 5px 10px;
@@ -15,8 +19,16 @@
     .governlist-row {
       display: flex;
       padding: 20px 40px 20px;
-      border-bottom: 1px solid rgba(@white, 0.2);
+      border-bottom: 1px solid rgba(@border-dark, 0.5);
       cursor: pointer;
+
+      &:last-child {
+        border: 0;
+      }
+
+      .dark-mode & {
+        border-bottom: 1px solid rgba(@white, 0.2);
+      }
 
       .left-section {
         width: 55%;
