@@ -195,6 +195,18 @@ label, button{
   cursor: pointer;
   transition: all 300ms ease-in-out;
 
+  &:hover:not(&[disabled]),
+  &:active,
+  &:focus {
+    background-color: @bg-dark-hover;
+    color: @white;
+    border-color: @bg-dark-hover;
+    .dark-mode & {
+      color: @border-light;
+      border-color: @border-light !important;
+    }
+  }
+
   .dark-mode & {
     border-color: @bg-light;
     color: @bg-dark;
@@ -1326,6 +1338,22 @@ button.ant-switch {
             }
           }
         }
+      }
+    }
+  }
+}
+
+.ant-radio{
+  font-size: @font-size-lg + 1;
+  .ant-radio-inner{
+    width: 20px;
+    height: 20px;
+  }
+  &.ant-radio-checked{
+    .ant-radio-inner{
+      border-color: @success-color;
+      &::after{
+        background-color: @success-color;
       }
     }
   }

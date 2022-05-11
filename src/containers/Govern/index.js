@@ -1,6 +1,7 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon } from "../../components/common";
 import { connect } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 import variables from "../../utils/variables";
 import { Button, List, Select, Progress } from "antd";
 import "./index.less";
@@ -23,6 +24,7 @@ const data = [
 ];
 
 const Govern = (lang) => {
+  const navigate = useNavigate();
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -66,7 +68,7 @@ const Govern = (lang) => {
                 </Select>
               </div>
               <div className="govern-card-content">
-                <div className="governlist-row">
+                <div className="governlist-row" onClick={() => navigate("/govern-details")}>
                   <div className="left-section">
                     <h3>Increasing MaxValidator to 100</h3>
                     <p>adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, </p>
@@ -93,7 +95,7 @@ const Govern = (lang) => {
                       </Row>
                   </div>
                 </div>
-                <div className="governlist-row">
+                <div className="governlist-row" onClick={() => navigate("/govern-details")}> 
                   <div className="left-section">
                     <h3>Increasing MaxValidator to 100</h3>
                     <p>adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, </p>

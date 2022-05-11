@@ -6,6 +6,8 @@ import { connect } from "react-redux";
 import variables from "../../../utils/variables";
 import { Button, List, Select, Progress } from "antd";
 import "./index.less";
+import VoteNowModal from "../VoteNowModal";
+import { Link } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -110,6 +112,11 @@ const GovernDetails = (lang) => {
   return (
     <div className="app-content-wrapper">
       <Row>
+        <Col className="text-right mb-3">
+          <Link to="/govern"><Button className="back-btn" type="primary">Back</Button></Link>
+        </Col>
+      </Row>
+      <Row>
         <Col>
           <div className="commodo-card myhome-upper d-block">
             <div className="card-header">
@@ -163,7 +170,7 @@ const GovernDetails = (lang) => {
           <div className="commodo-card govern-card2">
             <Row>
               <Col className="text-right">
-                <Button type="primary" className="btn-filled mb-n4">Vote Now</Button>
+                <VoteNowModal />
               </Col>
             </Row>
             <Row>
