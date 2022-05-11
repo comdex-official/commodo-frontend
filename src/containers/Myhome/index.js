@@ -22,10 +22,6 @@ const data = [
   {
     title: "Total Borrowed",
     counts: "2,345.00"
-  },
-  {
-    title: "Your Net APY",
-    counts: "0.00%"
   }
 ];
 
@@ -41,10 +37,10 @@ const Myhome = (lang) => {
                   gutter: 16,
                   xs: 1,
                   sm: 2,
-                  md: 3,
-                  lg: 3,
-                  xl: 3,
-                  xxl: 3,
+                  md: 2,
+                  lg: 2,
+                  xl: 2,
+                  xxl: 2,
                 }}
                 dataSource={data}
                 renderItem={item => (

@@ -33,7 +33,7 @@ const WithdrawTab = (lang) => {
           <div className="deposit-head-left">
             <div className="assets-col">
               <div className="assets-icon">
-                <SvgIcon name="atom-icon" />
+                <SvgIcon name="uscx-icon" />
               </div>
               USCX
             </div>
@@ -161,7 +161,7 @@ const WithdrawTab = (lang) => {
             <div className="head-left">
               <div className="assets-col">
                 <div className="assets-icon">
-                  <SvgIcon name="atom-icon" />
+                  <SvgIcon name="uscx-icon" />
                 </div>
                 USCX
               </div>
@@ -198,7 +198,7 @@ const WithdrawTab = (lang) => {
                 <div className="assets-icon">
                   <SvgIcon name="atom-icon" />
                 </div>
-                USCX
+                ATOM
               </div>
             </div>
             <div className="head-right">

@@ -86,8 +86,8 @@ const RepayTab = (lang) => {
           </div>
         </div>
         <Row>
-          <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-            <Row className="mt-1">
+          <Col sm="12" className="mt-2 mx-auto card-bottom-details">
+            <Row>
               <Col>
                 <label>Remaining to Repay</label>
                 <p className="remaining-infotext mt-1">You don’t have enough funds to repay the full amount</p>
@@ -105,33 +105,33 @@ const RepayTab = (lang) => {
                 90%
               </Col>
             </Row>
-            <Row className="py-2">
+            <Row className="pb-2">
               <Col>
                 <Progress className="commodo-progress" percent={30} />
               </Col>
             </Row>
             <Row className="mt-2">
               <Col>
-                <label>Current LTV</label>
+                <label>Max LTV</label>
               </Col>
               <Col className="text-right">
-                35%
+                85%
               </Col>
             </Row>
             <Row className="mt-2">
               <Col>
-                <label>Liquidation Percentage</label>
+                <label>Liquidation Threshold</label>
               </Col>
               <Col className="text-right">
-                10%
+                80%
               </Col>
             </Row>
             <Row className="mt-2">
               <Col>
-                <label>Borrow APY</label>
+                <label>Liquidation Penalty</label>
               </Col>
               <Col className="text-right">
-                3.80%
+                5%
               </Col>
             </Row>
           </Col>
@@ -151,7 +151,7 @@ const RepayTab = (lang) => {
             <div className="head-left">
               <div className="assets-col">
                 <div className="assets-icon">
-                  <SvgIcon name="atom-icon" />
+                  <SvgIcon name="uscx-icon" />
                 </div>
                 USCX
               </div>
@@ -188,7 +188,7 @@ const RepayTab = (lang) => {
                 <div className="assets-icon">
                   <SvgIcon name="atom-icon" />
                 </div>
-                USCX
+                ATOM
               </div>
             </div>
             <div className="head-right">

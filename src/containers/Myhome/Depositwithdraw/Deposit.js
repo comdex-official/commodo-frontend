@@ -33,7 +33,7 @@ const DepositTab = (lang) => {
           <div className="deposit-head-left">
             <div className="assets-col">
               <div className="assets-icon">
-                <SvgIcon name="atom-icon" />
+                <SvgIcon name="uscx-icon" />
               </div>
               USCX
             </div>
@@ -170,7 +170,7 @@ const DepositTab = (lang) => {
             <div className="head-left">
               <div className="assets-col">
                 <div className="assets-icon">
-                  <SvgIcon name="atom-icon" />
+                  <SvgIcon name="uscx-icon" />
                 </div>
                 USCX
               </div>
@@ -210,7 +210,7 @@ const DepositTab = (lang) => {
                 <div className="assets-icon">
                   <SvgIcon name="atom-icon" />
                 </div>
-                USCX
+                ATOM
               </div>
               <span className="percent-badge">
                 +6.18 <SvgIcon name="commodo-icon" />

@@ -3,6 +3,7 @@ import { Col, Row, SvgIcon } from "../../components/common";
 import { connect } from "react-redux";
 import variables from "../../utils/variables";
 import { Button, Table, Progress } from "antd";
+import { Link } from "react-router-dom";
 import "./index.less";
 
 const Borrow = (lang) => {
@@ -46,13 +47,15 @@ const Borrow = (lang) => {
       width: 200,
       render: () => (
         <>
-          <Button
-            type="primary"
-            className="btn-filled"
-            size="small"
-          >
-            Borrow
-          </Button>
+          <Link to="/borrow">
+            <Button
+              type="primary"
+              className="btn-filled"
+              size="small"
+            >
+              Borrow
+            </Button>
+          </Link>
           <Button
             type="primary"
             size="small"

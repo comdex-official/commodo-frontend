@@ -29,7 +29,7 @@ const BorrowTab = (lang) => {
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <div className="assets-select-card mb-4">
+        <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="leftlabel">
               Collateral Asset
@@ -140,7 +140,7 @@ const BorrowTab = (lang) => {
                 390%
               </Col>
             </Row>
-            <Row className="py-2">
+            <Row className="pb-2">
               <Col>
                 <Progress className="commodo-progress" percent={30} />
               </Col>
@@ -186,7 +186,7 @@ const BorrowTab = (lang) => {
             <div className="head-left">
               <div className="assets-col">
                 <div className="assets-icon">
-                  <SvgIcon name="atom-icon" />
+                  <SvgIcon name="uscx-icon" />
                 </div>
                 USCX
               </div>
@@ -226,7 +226,7 @@ const BorrowTab = (lang) => {
                 <div className="assets-icon">
                   <SvgIcon name="atom-icon" />
                 </div>
-                USCX
+                ATOM
               </div>
               <span className="percent-badge">
                 +6.18 <SvgIcon name="commodo-icon" />

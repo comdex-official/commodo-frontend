@@ -36,7 +36,7 @@ const Market = (lang) => {
       width: 150,
       render: (asset_apy) => (
         <>
-          <div>{asset_apy}% <div className="apy-percents">+6.18% <SvgIcon name="commodo-icon" viewbox="commodo-icon" /></div></div>
+          <div>{asset_apy}% <div className="apy-percents">+6.18% <SvgIcon name="commodo-icon" /></div></div>
         </>
       ),
     },
@@ -47,7 +47,7 @@ const Market = (lang) => {
       width: 150,
       render: (bridge_apy) => (
         <>
-          <div>{bridge_apy}% <div className="apy-percents">+6.18% <SvgIcon name="commodo-icon" viewbox="commodo-icon" /></div></div>
+          <div>{bridge_apy}% <div className="apy-percents">+6.18% <SvgIcon name="commodo-icon" /></div></div>
         </>
       ),
     },
@@ -141,11 +141,10 @@ const Market = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
-                viewBox="0 0 30 30"
+                name="atom-icon"
               />
             </div>
-            USCX
+            ATOM
           </div>
         </>
       ),
@@ -154,11 +153,10 @@ const Market = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="atom-icon"
-                viewBox="0 0 30 30"
+                name="uscx-icon"
               />
             </div>
-            ATOM
+            USCX
           </div>
         </>
       ),
@@ -173,11 +171,10 @@ const Market = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
-                viewBox="0 0 30 30"
+                name="osmosis-icon"
               />
             </div>
-            USCX
+            OSMO
           </div>
         </>
       ),
@@ -186,11 +183,10 @@ const Market = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="atom-icon"
-                viewBox="0 0 30 30"
+                name="uscx-icon"
               />
             </div>
-            ATOM
+            USCX
           </div>
         </>
       ),
@@ -218,11 +214,10 @@ const Market = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="atom-icon"
-                viewBox="0 0 30 30"
+                name="uscx-icon"
               />
             </div>
-            ATOM
+            USCX
           </div>
         </>
       ),

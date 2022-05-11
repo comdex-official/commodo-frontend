@@ -81,7 +81,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
       labels: {
         enabled: true,
         style: {
-          color: "#E2F7E5",
+          color: isDarkMode ? "#E2F7E5" : "#032517",
         }
       },
     },
@@ -90,12 +90,12 @@ const Dashboard = ({ lang, isDarkMode }) => {
       labels: {
         style: {
           fontSize: 10,
-          color: "#E2F7E5",
+          color: isDarkMode ? "#E2F7E5" : "#032517",
           fontWeight: 300,
         },
       },
       gridLineWidth: 1,
-      gridLineColor: isDarkMode ? "#E2F7E5" : "#E2F7E5",
+      gridLineColor: isDarkMode ? "#E2F7E5" : "#041C12",
       categories: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "JAN", "FEB", "MAR"],
     },
     series: [
@@ -129,7 +129,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
       labels: {
         enabled: true,
         style: {
-          color: "#E2F7E5",
+          color: isDarkMode ? "#E2F7E5" : "#032517",
         }
       },
     },
@@ -138,12 +138,12 @@ const Dashboard = ({ lang, isDarkMode }) => {
       labels: {
         style: {
           fontSize: 10,
-          color: "#E2F7E5",
+          color: isDarkMode ? "#E2F7E5" : "#032517",
           fontWeight: 300,
         },
       },
       gridLineWidth: 1,
-      gridLineColor: isDarkMode ? "#E2F7E5" : "#E2F7E5",
+      gridLineColor: isDarkMode ? "#E2F7E5" : "#032517",
       categories: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
     },
     series: [
@@ -180,11 +180,11 @@ const Dashboard = ({ lang, isDarkMode }) => {
                   <HighchartsReact highcharts={Highcharts} options={Options} />
                 </div>
                 <div className="totalvalues-right">
-                  <div className="dashboard-statics mb-5">
+                  <div className="dashboard-statics mb-5" style={{ borderColor: "#52B788" }}>
                     <p>Total Deposited</p>
                     <h3>$12,345.00</h3>
                   </div>
-                  <div className="dashboard-statics mb-0">
+                  <div className="dashboard-statics mb-0" style={{ borderColor: "#E2F7E5" }}>
                     <p>Total Collateral</p>
                     <h3>$2,345.00</h3>
                   </div>
