@@ -2,6 +2,6 @@ import Col from "./grid/Col";
 import Container from "./grid/Container";
 import Row from "./grid/Row";
 import SvgIcon from "./svg-icon/svg-icon";
-import CautionNotice from "./CautionNotice";
+import Disclaimer from "./Disclaimer";
 
-export { SvgIcon, Container, Row, Col, CautionNotice };
+export { SvgIcon, Container, Row, Col, Disclaimer };

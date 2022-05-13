@@ -7,7 +7,7 @@ import App from "./App";
 import React from "react";
 import reducer from "./reducers";
 import thunk from "redux-thunk";
-import { CautionNotice } from "./components/common";
+import { Disclaimer } from "./components/common";
 import { createRoot } from 'react-dom/client';
 
 const store = createStore(
@@ -20,7 +20,7 @@ const store = createStore(
 const app = (
   <Provider store={store}>
     <BrowserRouter>
-      <CautionNotice />
+      <Disclaimer />
       <App />
     </BrowserRouter>
   </Provider>
