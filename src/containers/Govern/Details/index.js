@@ -33,7 +33,7 @@ const data = [
 const dataVote = [
   {
     title: "Total Value",
-    counts: '24,901.25 USCX'
+    counts: '24,901.25 CMST'
   }
 ];
 

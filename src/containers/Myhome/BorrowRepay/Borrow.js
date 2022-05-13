@@ -66,7 +66,7 @@ const BorrowTab = (lang) => {
             <div className="label-right">
               Available
               <span className="ml-1">
-                142 USCX
+                142 CMST
               </span>
               <div className="maxhalf">
                 <Button className="active">
@@ -186,9 +186,9 @@ const BorrowTab = (lang) => {
             <div className="head-left">
               <div className="assets-col">
                 <div className="assets-icon">
-                  <SvgIcon name="uscx-icon" />
+                  <SvgIcon name="cmst-icon" />
                 </div>
-                USCX
+                CMST
               </div>
               <span className="percent-badge">
                 +6.18 <SvgIcon name="commodo-icon" />

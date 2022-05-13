@@ -64,7 +64,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
     chart: {
       type: "spline",
       backgroundColor: null,
-      height: 130,
+      height: 110,
       marginBottom: 30,
     },
     credits: {
@@ -81,7 +81,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
       labels: {
         enabled: true,
         style: {
-          color: isDarkMode ? "#E2F7E5" : "#032517",
+          color: isDarkMode ? "#E2F7E5" : "#999",
         }
       },
     },
@@ -90,12 +90,12 @@ const Dashboard = ({ lang, isDarkMode }) => {
       labels: {
         style: {
           fontSize: 10,
-          color: isDarkMode ? "#E2F7E5" : "#032517",
+          color: isDarkMode ? "#E2F7E5" : "#999",
           fontWeight: 300,
         },
       },
       gridLineWidth: 1,
-      gridLineColor: isDarkMode ? "#E2F7E5" : "#041C12",
+      gridLineColor: isDarkMode ? "#E2F7E5" : "#999",
       categories: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "JAN", "FEB", "MAR"],
     },
     series: [
@@ -112,7 +112,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
     chart: {
       type: "spline",
       backgroundColor: null,
-      height: 180,
+      height: 150,
       marginBottom: 30,
     },
     credits: {
@@ -129,7 +129,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
       labels: {
         enabled: true,
         style: {
-          color: isDarkMode ? "#E2F7E5" : "#032517",
+          color: isDarkMode ? "#E2F7E5" : "#999",
         }
       },
     },
@@ -138,12 +138,12 @@ const Dashboard = ({ lang, isDarkMode }) => {
       labels: {
         style: {
           fontSize: 10,
-          color: isDarkMode ? "#E2F7E5" : "#032517",
+          color: isDarkMode ? "#E2F7E5" : "#999",
           fontWeight: 300,
         },
       },
       gridLineWidth: 1,
-      gridLineColor: isDarkMode ? "#E2F7E5" : "#032517",
+      gridLineColor: isDarkMode ? "#E2F7E5" : "#999",
       categories: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
     },
     series: [
@@ -171,7 +171,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
         <Col className="dashboard-upper">
           <div className="dashboard-upper-left">
             <div className="commodo-card h-100">
-              <div className="dashboard-statics">
+              <div className="dashboard-statics ml-4">
                 <p>Total Value Locked</p>
                 <h2>$15,690.00</h2>
               </div>
@@ -223,7 +223,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
                         <div className="assets-icon">
                           <SvgIcon name="atom-icon" />
                         </div>
-                        USCX
+                        CMST
                       </div>
                       <b>24.32%</b>
                     </li>
@@ -232,7 +232,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
                         <div className="assets-icon">
                           <SvgIcon name="cmdx-icon" />
                         </div>
-                        USCX
+                        CMDX
                       </div>
                       <b>18.32%</b>
                     </li>
@@ -241,7 +241,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
                         <div className="assets-icon">
                           <SvgIcon name="atom-icon" />
                         </div>
-                        USCX
+                        ATOM
                       </div>
                       <b>14.32%</b>
                     </li>
@@ -253,18 +253,18 @@ const Dashboard = ({ lang, isDarkMode }) => {
                     <li>
                       <div className="assets-col">
                         <div className="assets-icon">
-                          <SvgIcon name="atom-icon" />
+                          <SvgIcon name="cmst-icon" />
                         </div>
-                        USCX
+                        CMST
                       </div>
                       <b>24.32%</b>
                     </li>
                     <li>
                       <div className="assets-col">
                         <div className="assets-icon">
-                          <SvgIcon name="atom-icon" />
+                          <SvgIcon name="cmdx-icon" />
                         </div>
-                        USCX
+                        CMDX
                       </div>
                       <b>18.32%</b>
                     </li>
@@ -273,7 +273,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
                         <div className="assets-icon">
                           <SvgIcon name="atom-icon" />
                         </div>
-                        USCX
+                        ATOM
                       </div>
                       <b>14.32%</b>
                     </li>
@@ -296,11 +296,11 @@ const Dashboard = ({ lang, isDarkMode }) => {
                 <HighchartsReact highcharts={Highcharts} options={DepositBorrowChart} />
               </div>
               <div className="bottom-chart-right">
-                <div className="dashboard-statics">
+                <div className="dashboard-statics" style={{ borderColor: "#52B788" }}>
                   <p>Total Deposited</p>
                   <h2>$30,000,000</h2>
                 </div>
-                <div className="dashboard-statics">
+                <div className="dashboard-statics" style={{ borderColor: "#E2F7E5" }}>
                   <p>Total Borrowed</p>
                   <h2>$21,000,000</h2>
                 </div>

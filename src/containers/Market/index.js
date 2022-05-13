@@ -153,10 +153,10 @@ const Market = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="uscx-icon"
+                name="cmst-icon"
               />
             </div>
-            USCX
+            CMST
           </div>
         </>
       ),
@@ -183,10 +183,10 @@ const Market = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="uscx-icon"
+                name="cmst-icon"
               />
             </div>
-            USCX
+            CMST
           </div>
         </>
       ),
@@ -205,7 +205,7 @@ const Market = (lang) => {
                 viewBox="0 0 30 30"
               />
             </div>
-            USCX
+            CMST
           </div>
         </>
       ),
@@ -214,10 +214,10 @@ const Market = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="uscx-icon"
+                name="cmst-icon"
               />
             </div>
-            USCX
+            CMST
           </div>
         </>
       ),

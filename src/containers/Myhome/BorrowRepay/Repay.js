@@ -66,7 +66,7 @@ const RepayTab = (lang) => {
             <div className="label-right">
               Available
               <span className="ml-1">
-                142 USCX
+                142 CMST
               </span>
               <div className="maxhalf">
                 <Button className="active">
@@ -93,7 +93,7 @@ const RepayTab = (lang) => {
                 <p className="remaining-infotext mt-1">You don’t have enough funds to repay the full amount</p>
               </Col>
               <Col className="text-right">
-                <div>123.45 USCX</div>
+                <div>123.45 CMST</div>
                 <small className="font-weight-light">$420.00</small>
               </Col>
             </Row>
@@ -151,9 +151,9 @@ const RepayTab = (lang) => {
             <div className="head-left">
               <div className="assets-col">
                 <div className="assets-icon">
-                  <SvgIcon name="uscx-icon" />
+                  <SvgIcon name="cmst-icon" />
                 </div>
-                USCX
+                CMST
               </div>
             </div>
             <div className="head-right">

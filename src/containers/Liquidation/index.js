@@ -42,7 +42,7 @@ const Liquidation = (lang) => {
       width: 150,
       render: (asset_apy) => (
         <>
-          {asset_apy} USCX
+          {asset_apy} CMST
         </>
       ),
     },
@@ -81,11 +81,11 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="uscx-icon"
+                name="cmst-icon"
                 viewBox="0 0 30 30"
               />
             </div>
-            USCX
+            CMST
           </div>
         </>
       ),
@@ -113,11 +113,11 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="uscx-icon"
+                name="cmst-icon"
                 viewBox="0 0 30 30"
               />
             </div>
-            USCX
+            CMST
           </div>
         </>
       ),
@@ -145,11 +145,11 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="uscx-icon"
+                name="cmst-icon"
                 viewBox="0 0 30 30"
               />
             </div>
-            USCX
+            CMST
           </div>
         </>
       ),
@@ -177,11 +177,11 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="uscx-icon"
+                name="cmst-icon"
                 viewBox="0 0 30 30"
               />
             </div>
-            USCX
+            CMST
           </div>
         </>
       ),
@@ -209,11 +209,11 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="uscx-icon"
+                name="cmst-icon"
                 viewBox="0 0 30 30"
               />
             </div>
-            USCX
+            CMST
           </div>
         </>
       ),
@@ -241,11 +241,11 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="uscx-icon"
+                name="cmst-icon"
                 viewBox="0 0 30 30"
               />
             </div>
-            USCX
+            CMST
           </div>
         </>
       ),
@@ -273,11 +273,11 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="uscx-icon"
+                name="cmst-icon"
                 viewBox="0 0 30 30"
               />
             </div>
-            USCX
+            CMST
           </div>
         </>
       ),
@@ -305,11 +305,11 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="uscx-icon"
+                name="cmst-icon"
                 viewBox="0 0 30 30"
               />
             </div>
-            USCX
+            CMST
           </div>
         </>
       ),

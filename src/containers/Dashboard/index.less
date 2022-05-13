@@ -1,14 +1,80 @@
 @import "../../assets/less/variables.less";
 
+.dashboard-statics {
+    border-left: 2px solid @success-color;
+    line-height: 1;
+    margin: 0 0 30px;
+    color: @text-color-dark2;
+    padding: 5px 0 5px 15px;
+
+    .dark-mode & {
+        color: @white;
+    }
+
+    p {
+        margin-bottom: 0;
+        font-size: @font-size-base;
+
+        @media screen and (max-width:420px) {
+            font-size: @font-size-sm;
+        }
+
+    }
+
+    h3 {
+        margin-bottom: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+        line-height: 1;
+        margin-top: 8px;
+
+        @media screen and (max-width:420px) {
+            font-size: 1.2rem;
+        }
+
+        .dark-mode & {
+            color: @white;
+        }
+    }
+
+    h2 {
+        margin-bottom: 0;
+        font-size: 1.9rem;
+        font-weight: bold;
+        line-height: 1;
+        margin-top: 8px;
+
+        .dark-mode & {
+            color: @white;
+        }
+    }
+}
+
 .dashboard-upper {
     display: flex;
+
+    @media screen and (max-width:840px) {
+        display: block;
+    }
 
     .dashboard-upper-left {
         width: 50%;
         padding-right: 20px;
 
+        @media screen and (max-width:991px) {
+            padding-right: 10px;
+        }
+
+        @media screen and (max-width:840px) {
+            width: 100%;
+            padding-right: 0;
+        }
+
         .commodo-card {
             padding: 32px 40px;
+            @media screen and (max-width:576px) {
+                padding: 20px 18px;
+            }
         }
 
         .totalvalues {
@@ -30,13 +96,23 @@
         width: 50%;
         padding-left: 20px;
 
+        @media screen and (max-width:840px) {
+            width: 100%;
+            padding-left: 0;
+            margin-top: 15px;
+        }
+
         .dashboardupper-chart {
-            padding: 20px 25px;
-            margin-bottom: 20px;
+            padding: 12px 20px;
+            margin-bottom: 16px;
 
             .dashboardupperchart-head {
                 display: flex;
                 justify-content: space-between;
+
+                @media screen and (max-width:420px) {
+                    display: block;
+                }
 
                 small {
                     font-size: @font-size-base;
@@ -71,21 +147,31 @@
         }
 
         .topthree-assets {
-            padding: 20px;
+            padding: 15px 20px 10px 20px;
 
             .card-head {
                 font-size: 20px;
                 text-align: center;
-                padding-bottom: 15px;
+                padding-bottom: 8px;
                 font-weight: 500;
             }
 
             .card-content {
                 display: flex;
 
+                @media screen and (max-width:480px) {
+                    display: block;
+                }
+
                 .deposited-list {
                     width: 50%;
                     padding-right: 10%;
+
+                    @media screen and (max-width:480px) {
+                        width: 100%;
+                        padding-right: 0;
+                        margin-bottom: 10px;
+                    }
 
                     p {
                         margin-bottom: 5px;
@@ -115,15 +201,15 @@
                                 }
 
                                 .assets-icon {
-                                    width: 30px;
-                                    height: 30px;
-                                    min-width: 30px;
-                                    border-radius: 30px;
+                                    width: 25px;
+                                    height: 25px;
+                                    min-width: 25px;
+                                    border-radius: 25px;
                                     margin-right: 10px;
 
                                     .icon {
                                         width: 100%;
-                                        height: 30px;
+                                        height: 25px;
                                     }
                                 }
                             }
@@ -144,18 +230,26 @@
 }
 
 .dashboard-bottom {
-    margin-top: 20px;
+    margin-top: 16px;
 
     .commodo-card {
-        padding: 15px 20px;
+        padding: 15px 20px 10px;
 
         .bottom-chart {
             display: flex;
             justify-content: space-around;
             width: 100%;
 
+            @media screen and (max-width:576px) {
+                display: block;
+            }
+
             .bottom-chart-left {
                 width: 60%;
+
+                @media screen and (max-width:576px) {
+                    width: 100%;
+                }
 
                 .legend-custom {
                     display: flex;
@@ -209,51 +303,17 @@
                 justify-content: center;
                 align-items: center;
 
+                @media screen and (max-width:576px) {
+                    width: 100%;
+                }
+
                 .dashboard-statics {
                     margin: 15px 0 15px;
+                    h2{
+                        font-size: 1.6rem;
+                    }
                 }
             }
-        }
-    }
-}
-
-.dashboard-statics {
-    border-left: 2px solid @success-color;
-    line-height: 1;
-    margin: 0 0 30px;
-    color: @text-color-dark2;
-    padding: 5px 0 5px 15px;
-
-    .dark-mode & {
-        color: @white;
-    }
-
-    p {
-        margin-bottom: 0;
-        font-size: @font-size-base;
-    }
-
-    h3 {
-        margin-bottom: 0;
-        font-size: 1.5rem;
-        font-weight: 600;
-        line-height: 1;
-        margin-top: 8px;
-
-        .dark-mode & {
-            color: @white;
-        }
-    }
-
-    h2 {
-        margin-bottom: 0;
-        font-size: 1.9rem;
-        font-weight: bold;
-        line-height: 1;
-        margin-top: 8px;
-
-        .dark-mode & {
-            color: @white;
         }
     }
 }
