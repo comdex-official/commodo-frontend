@@ -12,27 +12,33 @@ export const tabsList = [
     index: 1,
   },
   {
+    name: "Asset",
+    value: "asset",
+    langKey: "asset",
+    index: 2,
+  },
+  {
     name: "Market",
     value: "market",
     langKey: "market",
-    index: 2,
+    index: 3,
   },
   {
     name: "Govern",
     value: "govern",
     langKey: "govern",
-    index: 3,
+    index: 4,
   },
   {
     name: "Liquidation",
     value: "liquidation",
     langKey: "liquidation",
-    index: 4,
+    index: 5,
   },
   {
     name: "Airdrop",
     value: "airdrop",
     langKey: "airdrop",
-    index: 5,
+    index: 6,
   }
 ];
