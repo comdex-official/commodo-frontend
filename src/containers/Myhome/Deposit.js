@@ -1,5 +1,5 @@
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../components/common";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
 import variables from "../../utils/variables";
 import { Button, Table, Switch } from "antd";
@@ -19,7 +19,7 @@ const Deposit = (lang) => {
       width: 180
     },
     {
-      title: "Balance",
+      title: <>Balance <TooltipIcon text="Balance after transaction" /></>,
       dataIndex: "balance",
       key: "balance",
       width: 150

@@ -165,29 +165,38 @@ button {
   }
 }
 
-.comdex-tooltip {
-  .ant-tooltip-arrow {
-    .ant-tooltip-arrow-content {
-      background: @tooltip-bg-light;
-
-      .dark-mode & {
-        background: @tooltip-bg-light;
+.ant-tooltip{
+  &.commodo-tooltip {
+    .ant-tooltip-arrow {
+      .ant-tooltip-arrow-content {
+        background: @background-dark1;
+  
+        .dark-mode & {
+          background: @white;
+        }
+  
+        &::before {
+          .dark-mode & {
+            background: @white;
+          }
+        }
+  
       }
     }
-  }
-
-  .ant-tooltip-inner {
-    background-color: @tooltip-bg-light  !important;
-    color: @tooltip-color-dark;
-    font-size: @font-size-sm - 2;
-    min-height: 20px;
-    padding: 2px 3px;
-    line-height: 12px;
-    border-radius: 3px !important;
-
-    .dark-mode & {
-      background-color: @tooltip-bg-light;
+  
+    .ant-tooltip-inner {
+      background-color: @background-dark1;
       color: @tooltip-color-dark;
+      font-size: @font-size-sm - 2;
+      min-height: 20px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      color: @white;
+  
+      .dark-mode & {
+        background-color: @white;
+        color: @black;
+      }
     }
   }
 }
@@ -284,7 +293,7 @@ button {
       }
     }
 
-    &.ant-btn-primary[disabled]{
+    &.ant-btn-primary[disabled] {
       border-color: @bg-dark;
     }
 
@@ -449,6 +458,11 @@ button.ant-switch {
 .tooltip-icon {
   width: 10px;
   height: 10px;
+  margin-left: 3px;
+
+  .dark-mode & {
+    fill: @bg-light;
+  }
 }
 
 .ant-tooltip {
@@ -770,6 +784,7 @@ button.ant-switch {
           fill: @text-color-dark;
           width: 13px;
           height: 16px;
+
           .dark-mode & {
             fill: @white;
           }
@@ -797,15 +812,16 @@ button.ant-switch {
         color: @white;
       }
     }
-    &.ant-select-item-option-selected,
-      &.ant-select-item-option-active {
-        background: @background-light;
-        font-weight: normal;
 
-        .dark-mode & {
-          background: @bg-dark;
-        }
+    &.ant-select-item-option-selected,
+    &.ant-select-item-option-active {
+      background: @background-light;
+      font-weight: normal;
+
+      .dark-mode & {
+        background: @bg-dark;
       }
+    }
   }
 
   &.asset-select-dropdown {
@@ -1041,7 +1057,8 @@ button.ant-switch {
           background: #001E11;
           font-weight: lighter;
           text-transform: uppercase;
-          span{
+
+          span {
             color: @white;
           }
 
