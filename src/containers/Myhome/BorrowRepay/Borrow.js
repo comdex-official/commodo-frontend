@@ -1,5 +1,5 @@
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../../components/common";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import { connect } from "react-redux";
 import variables from "../../../utils/variables";
 import { Button, List, Select, Input, Progress } from "antd";
@@ -32,7 +32,7 @@ const BorrowTab = (lang) => {
         <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="leftlabel">
-              Collateral Asset
+              Collateral Asset <TooltipIcon text="" />
             </label>
             <div className="assets-select-wrapper">
               <Select
@@ -88,7 +88,7 @@ const BorrowTab = (lang) => {
         <div className="assets-select-card mb-2">
           <div className="assets-left">
             <label className="leftlabel">
-              Borrow Asset
+              Borrow Asset <TooltipIcon text="" />
             </label>
             <div className="assets-select-wrapper">
               <Select
