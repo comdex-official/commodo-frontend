@@ -6,6 +6,8 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import "./index.less";
 
+import LaunchImage from "../../assets/images/launch-bg.jpg";
+
 const Dashboard = ({ lang, isDarkMode }) => {
   const Options = {
     chart: {
@@ -191,23 +193,20 @@ const Dashboard = ({ lang, isDarkMode }) => {
             </div>
           </div>
           <div className="dashboard-upper-right">
-            <div className="commodo-card dashboardupper-chart">
-              <div className="dashboardupperchart-head">
-                <div className="col1">
-                  <small>CMDO Price</small>
-                  <h4>$12.20 <span>2.41%</span></h4>
+            <div className="commodo-card commodo-launchcard">
+              <div className="commodo-launchcard-inner">
+                <img className="launch-bg" alt={"CMDO Token Launch"} src={LaunchImage} />
+                <div>
+                  <h3>CMDO Token Launch</h3>
+                  <p>Live on Commmodo Universe</p>
+                  <div className="mt-3">
+                    <p>apr</p>
+                    <h3>300%</h3>
+                  </div>
                 </div>
-                <div className="col2">
-                  <small>Circulating Supply</small>
-                  <p>12,500,000 <span>CMDO</span></p>
+                <div>
+
                 </div>
-                <div className="col3">
-                  <small>Market Cap</small>
-                  <p>$72,125,000</p>
-                </div>
-              </div>
-              <div className="right-chart">
-                <HighchartsReact highcharts={Highcharts} options={PriceChart} />
               </div>
             </div>
             <div className="commodo-card topthree-assets">
