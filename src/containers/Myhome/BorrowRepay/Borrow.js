@@ -190,9 +190,9 @@ const BorrowTab = (lang) => {
                 </div>
                 CMST
               </div>
-              <span className="percent-badge">
+              {/* <span className="percent-badge">
                 +6.18 <SvgIcon name="commodo-icon" />
-              </span>
+              </span> */}
             </div>
             <div className="head-right">
               <span>Oracle Price</span> : $123.45
@@ -203,16 +203,52 @@ const BorrowTab = (lang) => {
               gutter: 16,
               xs: 2,
               sm: 2,
-              md: 3,
-              lg: 2,
-              xl: 2,
-              xxl: 2,
+              md: 2,
+              lg: 4,
+              xl: 4,
+              xxl: 4,
             }}
             dataSource={data}
             renderItem={item => (
               <List.Item>
                 <div>
-                  <p>{item.title}</p>
+                  <p>{item.title} <TooltipIcon /></p>
+                  <h3>{item.counts}</h3>
+                </div>
+              </List.Item>
+            )}
+          />
+          <div className="card-head mt-5">
+            <div className="head-left">
+              <div className="assets-col">
+                <div className="assets-icon">
+                  <SvgIcon name="atom-icon" />
+                </div>
+                ATOM
+              </div>
+              {/* <span className="percent-badge">
+                +6.18 <SvgIcon name="commodo-icon" />
+              </span> */}
+            </div>
+            <div className="head-right">
+              <span>Oracle Price</span> : $123.45
+            </div>
+          </div>
+          <List
+            grid={{
+              gutter: 16,
+              xs: 2,
+              sm: 2,
+              md: 2,
+              lg: 4,
+              xl: 4,
+              xxl: 4,
+            }}
+            dataSource={data}
+            renderItem={item => (
+              <List.Item>
+                <div>
+                  <p>{item.title} <TooltipIcon /></p>
                   <h3>{item.counts}</h3>
                 </div>
               </List.Item>
@@ -224,13 +260,13 @@ const BorrowTab = (lang) => {
             <div className="head-left">
               <div className="assets-col">
                 <div className="assets-icon">
-                  <SvgIcon name="atom-icon" />
+                  <SvgIcon name="cmdx-icon" />
                 </div>
-                ATOM
+                CMDX
               </div>
-              <span className="percent-badge">
+              {/* <span className="percent-badge">
                 +6.18 <SvgIcon name="commodo-icon" />
-              </span>
+              </span> */}
             </div>
             <div className="head-right">
               <span>Oracle Price</span> : $123.45
@@ -241,16 +277,16 @@ const BorrowTab = (lang) => {
               gutter: 16,
               xs: 2,
               sm: 2,
-              md: 3,
-              lg: 2,
-              xl: 2,
-              xxl: 2,
+              md: 2,
+              lg: 4,
+              xl: 4,
+              xxl: 4,
             }}
             dataSource={data}
             renderItem={item => (
               <List.Item>
                 <div>
-                  <p>{item.title}</p>
+                  <p>{item.title} <TooltipIcon /> </p>
                   <h3>{item.counts}</h3>
                 </div>
               </List.Item>
