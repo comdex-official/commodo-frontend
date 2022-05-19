@@ -505,6 +505,9 @@ button.ant-switch {
                 color: @text-color-light;
               }
             }
+            th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before{
+              display: none;
+            }
           }
         }
 
@@ -519,6 +522,12 @@ button.ant-switch {
 
           tr {
             border-radius: 15px;
+
+            &:nth-child(1) {
+              td{
+                border-top: 0 !important;
+              }
+            }
 
             td {
               .ant-btn-sm {
@@ -1593,7 +1602,7 @@ button.ant-switch {
 }
 
 .ant-modal{
-  &.ant-modal-confirm-confirm{
+  &.ant-modal-confirm{
     .ant-modal-content{
       .ant-modal-body{
         padding: 0;
@@ -1649,6 +1658,10 @@ button.ant-switch {
               fill: @white;
             }
           }
+        }
+        .ant-modal-confirm-btns{
+          float: none;
+          text-align: center;
         }
       }
     }
