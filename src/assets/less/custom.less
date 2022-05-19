@@ -17,11 +17,11 @@ body {
   font-feature-settings: normal !important;
   font-variant: normal !important;
   font-weight: 400;
-  background: @body-background-light  !important;
+  background: @body-background-light !important;
   height: auto !important;
 
   &.dark-mode {
-    background: @body-background-dark  !important;
+    background: #000C07 !important;
     color: @white;
 
   }
@@ -102,7 +102,7 @@ button {
 
   .body-bg {
     position: fixed;
-    opacity: 0.35;
+    opacity: 0.25;
   }
 
   .main-container {
@@ -165,29 +165,38 @@ button {
   }
 }
 
-.comdex-tooltip {
-  .ant-tooltip-arrow {
-    .ant-tooltip-arrow-content {
-      background: @tooltip-bg-light;
-
-      .dark-mode & {
-        background: @tooltip-bg-light;
+.ant-tooltip{
+  &.commodo-tooltip {
+    .ant-tooltip-arrow {
+      .ant-tooltip-arrow-content {
+        background: @background-dark1;
+  
+        .dark-mode & {
+          background: @white;
+        }
+  
+        &::before {
+          .dark-mode & {
+            background: @white;
+          }
+        }
+  
       }
     }
-  }
-
-  .ant-tooltip-inner {
-    background-color: @tooltip-bg-light  !important;
-    color: @tooltip-color-dark;
-    font-size: @font-size-sm - 2;
-    min-height: 20px;
-    padding: 2px 3px;
-    line-height: 12px;
-    border-radius: 3px !important;
-
-    .dark-mode & {
-      background-color: @tooltip-bg-light;
+  
+    .ant-tooltip-inner {
+      background-color: @background-dark1;
       color: @tooltip-color-dark;
+      font-size: @font-size-sm - 2;
+      min-height: 20px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      color: @white;
+  
+      .dark-mode & {
+        background-color: @white;
+        color: @black;
+      }
     }
   }
 }
@@ -284,13 +293,15 @@ button {
       }
     }
 
-    &.ant-btn-primary[disabled]{
+    &.ant-btn-primary[disabled] {
       border-color: @bg-dark;
     }
 
     &.back-btn {
       padding-left: 22px;
       padding-right: 22px;
+      font-weight: normal;
+      font-size: @font-size-base - 1;
     }
   }
 
@@ -449,6 +460,11 @@ button.ant-switch {
 .tooltip-icon {
   width: 10px;
   height: 10px;
+  margin-left: 3px;
+
+  .dark-mode & {
+    fill: @bg-light;
+  }
 }
 
 .ant-tooltip {
@@ -489,6 +505,9 @@ button.ant-switch {
                 color: @text-color-light;
               }
             }
+            th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before{
+              display: none;
+            }
           }
         }
 
@@ -503,6 +522,12 @@ button.ant-switch {
 
           tr {
             border-radius: 15px;
+
+            &:nth-child(1) {
+              td{
+                border-top: 0 !important;
+              }
+            }
 
             td {
               .ant-btn-sm {
@@ -540,6 +565,13 @@ button.ant-switch {
                 color: @text-color-light;
               }
             }
+
+            &:last-child {
+              td{
+                border: 0;
+              }
+            }
+
           }
         }
       }
@@ -560,18 +592,24 @@ button.ant-switch {
     }
 
     .icon {
-      fill: @secondary-color;
+      fill: @bg-dark;
       width: 12px;
+
+      .dark-mode & {
+        fill: @white;
+      }
+
     }
   }
 
   .ant-modal-header {
     background: none;
     border: 0;
+    padding: 24px;
 
     .ant-modal-title {
       font-size: 1.3rem;
-      font-weight: 300;
+      font-weight: 700;
 
       .dark-mode & {
         color: @white;
@@ -582,7 +620,7 @@ button.ant-switch {
   .ant-modal-content {
     border-radius: 15px;
     padding: 30px;
-    background: @background-light;
+    background: @white;
 
     .dark-mode & {
       background: @background-dark1;
@@ -609,7 +647,7 @@ button.ant-switch {
 
       label {
         .dark-mode & {
-          color: @text-color-label-dark;
+          color: @white;
         }
       }
     }
@@ -617,11 +655,12 @@ button.ant-switch {
     .ant-form-item-control {
       .ant-input {
         height: 50px;
-        border-radius: 15px;
+        border-radius: 10px;
         border: 0;
+        background: @bg-light;
 
         .dark-mode & {
-          background: @background-dark2;
+          background: @menu-active-dark;
           color: @white;
           box-shadow: @box-shadow-input-dark;
         }
@@ -770,6 +809,7 @@ button.ant-switch {
           fill: @text-color-dark;
           width: 13px;
           height: 16px;
+
           .dark-mode & {
             fill: @white;
           }
@@ -797,15 +837,16 @@ button.ant-switch {
         color: @white;
       }
     }
-    &.ant-select-item-option-selected,
-      &.ant-select-item-option-active {
-        background: @background-light;
-        font-weight: normal;
 
-        .dark-mode & {
-          background: @bg-dark;
-        }
+    &.ant-select-item-option-selected,
+    &.ant-select-item-option-active {
+      background: @background-light;
+      font-weight: normal;
+
+      .dark-mode & {
+        background: @bg-dark;
       }
+    }
   }
 
   &.asset-select-dropdown {
@@ -1041,7 +1082,8 @@ button.ant-switch {
           background: #001E11;
           font-weight: lighter;
           text-transform: uppercase;
-          span{
+
+          span {
             color: @white;
           }
 
@@ -1152,6 +1194,7 @@ button.ant-switch {
   .wallet-address {
     display: flex;
     align-items: center;
+    font-weight: 300;
 
     .address-wallet-address {
       .icon {
@@ -1315,14 +1358,14 @@ button.ant-switch {
           }
 
           .assets-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 38px;
+            width: 32px;
+            height: 32px;
+            border-radius: 32px;
             margin-right: 10px;
 
             .icon {
               width: 100%;
-              height: 38px;
+              height: 32px;
             }
           }
         }
@@ -1375,14 +1418,14 @@ button.ant-switch {
             }
 
             .assets-icon {
-              width: 38px;
-              height: 38px;
+              width: 32px;
+              height: 32px;
               border-radius: 38px;
               margin-right: 10px;
 
               .icon {
                 width: 100%;
-                height: 38px;
+                height: 32px;
               }
             }
           }
@@ -1445,13 +1488,13 @@ button.ant-switch {
 
           p {
             margin-bottom: 0;
-            font-size: @font-size-base;
+            font-size: @font-size-sm;
           }
 
           h3 {
             margin-bottom: 0;
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 1.1rem;
+            font-weight: 600;
             line-height: 1;
             margin-top: 8px;
             color: @text-color-dark;
@@ -1480,6 +1523,147 @@ button.ant-switch {
 
       &::after {
         background-color: @success-color;
+      }
+    }
+  }
+}
+
+.ant-slider{
+  &.commodo-slider{
+    .ant-slider-rail{
+      height: 6px;
+      background: #DDDDDD;
+      border-radius: 6px;
+    }
+    .ant-slider-step{
+      display: none;
+    }
+    .ant-slider-mark{
+      font-size: @font-size-sm;
+      width: calc(100% - 54px);
+      left: 22px;
+      .ant-slider-mark-text{
+        font-weight: 400;
+        .dark-mode & {
+          color: @white;
+        }
+      }
+    }
+    .ant-slider-track{
+      background: @success-color;
+      height: 6px;
+      border-radius: 6px;
+    }
+    .ant-slider-handle{
+      border-color: #246C4E;
+      background-color: @success-color;
+      width: 18px;
+      height: 18px;
+      margin-top: -6px;
+    }
+    &:hover{
+      .ant-slider-track{
+        background: @success-color;
+      }
+      .ant-slider-handle{
+        border-color: rgba(#246C4E, 0.8) !important;
+      }
+    }
+  }
+}
+
+.ant-checkbox-wrapper {
+  font-size: @font-size-base;
+  .dark-mode & {
+    color: @white;
+  }
+  .ant-checkbox {
+    &::after {
+      border: 0;
+    }
+    .ant-checkbox-inner {
+      margin-top: -15px;
+      background: none;
+      width: 15px;
+      height: 15px;
+      border-radius: 1px;
+      &::after {
+        border-width: 1px;
+        width: 4.5px;
+        height: 7.2px;
+      }
+    }
+    &.ant-checkbox-checked {
+      .ant-checkbox-inner {
+        background: @success-color;
+        border-color: @success-color;
+      }
+    }
+  }
+}
+
+.ant-modal{
+  &.ant-modal-confirm{
+    .ant-modal-content{
+      .ant-modal-body{
+        padding: 0;
+        .ant-btn-default{
+          background-color: @bg-dark;
+          color: @white;
+          border-radius: 15px;
+          border-color: @bg-dark;
+          font-weight: 600;
+
+          .dark-mode & {
+            background-color: @bg-light;
+            color: @bg-dark;
+            border-color: @bg-light;
+          }
+
+          &:hover:not(&[disabled]),
+          &:active,
+          &:focus {
+            background-color: @bg-dark-hover;
+            color: @white;
+            border-color: @bg-dark-hover;
+
+            .dark-mode & {
+              background-color: @bg-light-hover;
+              color: @bg-dark;
+              border-color: @bg-light-hover;
+            }
+
+          }
+
+          &[disabled] {
+            opacity: 0.6;
+            cursor: not-allowed;
+          }
+        }
+        .ant-modal-confirm-body{
+          text-align: center;
+          .ant-modal-confirm-title{
+            .dark-mode & {
+              color: @white;
+            }
+          }
+          .ant-modal-confirm-content  {
+            .dark-mode & {
+              color: @white;
+            }
+          }
+          .icon{
+            width: 60px;
+            margin-bottom: 15px;
+            .dark-mode & {
+              fill: @white;
+            }
+          }
+        }
+        .ant-modal-confirm-btns{
+          float: none;
+          text-align: center;
+        }
       }
     }
   }

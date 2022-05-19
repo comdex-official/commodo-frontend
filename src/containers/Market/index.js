@@ -12,13 +12,19 @@ const Market = (lang) => {
       title: "Asset",
       dataIndex: "asset",
       key: "asset",
-      width: 180
+      width: 150
     },
     {
       title: "Bridge Asset",
       dataIndex: "bridge_asset",
       key: "bridge_asset",
-      width: 180
+      width: 150
+    },
+    {
+      title: "Bridge Asset2",
+      dataIndex: "bridge_asset2",
+      key: "bridge_asset2",
+      width: 160
     },
     {
       title: "Total Deposited",
@@ -36,18 +42,29 @@ const Market = (lang) => {
       width: 150,
       render: (asset_apy) => (
         <>
-          <div>{asset_apy}% <div className="apy-percents">+6.18% <SvgIcon name="commodo-icon" /></div></div>
+          <div>{asset_apy}%</div>
         </>
       ),
     },
     {
-      title: "Bridge APY",
+      title: "Bridge Asset 1 APY",
       dataIndex: "bridge_apy",
       key: "bridge_apy",
       width: 150,
       render: (bridge_apy) => (
         <>
-          <div>{bridge_apy}% <div className="apy-percents">+6.18% <SvgIcon name="commodo-icon" /></div></div>
+          <div>{bridge_apy}%</div>
+        </>
+      ),
+    },
+    {
+      title: "Bridge Asset 2 APY",
+      dataIndex: "bridge_apy2",
+      key: "bridge_apy2",
+      width: 150,
+      render: (bridge_apy) => (
+        <>
+          <div>{bridge_apy}%</div>
         </>
       ),
     },
@@ -75,13 +92,19 @@ const Market = (lang) => {
       title: "Asset",
       dataIndex: "asset",
       key: "asset",
-      width: 180
+      width: 150
     },
     {
       title: "Bridge Asset",
       dataIndex: "bridge_asset",
       key: "bridge_asset",
-      width: 180
+      width: 150
+    },
+    {
+      title: "Bridge Asset2",
+      dataIndex: "bridge_asset2",
+      key: "bridge_asset2",
+      width: 160
     },
     {
       title: "Total Deposited",
@@ -99,18 +122,29 @@ const Market = (lang) => {
       width: 150,
       render: (asset_apy) => (
         <>
-          <div>{asset_apy}% <div className="apy-percents">+6.18% <SvgIcon name="commodo-icon" viewbox="commodo-icon" /></div></div>
+          <div>{asset_apy}% </div>
         </>
       ),
     },
     {
-      title: "Bridge APY",
+      title: "Bridge Asset 1 APY",
       dataIndex: "bridge_apy",
       key: "bridge_apy",
+      width: 180,
+      render: (bridge_apy) => (
+        <>
+          <div className="d-flex align-items-center">{bridge_apy}% <div className="apy-percents">+6.18% <SvgIcon name="cmdx-icon" /></div></div>
+        </>
+      ),
+    },
+    {
+      title: "Bridge Asset 2 APY",
+      dataIndex: "bridge_apy2",
+      key: "bridge_apy2",
       width: 150,
       render: (bridge_apy) => (
         <>
-          <div>{bridge_apy}% <div className="apy-percents">+6.18% <SvgIcon name="commodo-icon" viewbox="commodo-icon" /></div></div>
+          <div>{bridge_apy}% </div>
         </>
       ),
     },
@@ -160,9 +194,22 @@ const Market = (lang) => {
           </div>
         </>
       ),
+      bridge_asset2: (
+        <>
+          <div className="assets-withicon">
+            <div className="assets-icon">
+              <SvgIcon
+                name="atom-icon"
+              />
+            </div>
+            Atom
+          </div>
+        </>
+      ),
       total_deposited: "1,234.67",
       asset_apy: "4.9",
-      bridge_apy: "4.99"
+      bridge_apy: "4.99",
+      bridge_apy2: "4.99",
     },
     {
       key: 2,
@@ -190,40 +237,22 @@ const Market = (lang) => {
           </div>
         </>
       ),
-      total_deposited: "1,234.67",
-      asset_apy: "4.9",
-      bridge_apy: "4.99"
-    },
-    {
-      key: 3,
-      asset: (
+      bridge_asset2: (
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
-                viewBox="0 0 30 30"
+                name="atom-icon"
               />
             </div>
-            CMST
-          </div>
-        </>
-      ),
-      bridge_asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <SvgIcon
-                name="cmst-icon"
-              />
-            </div>
-            CMST
+            Atom
           </div>
         </>
       ),
       total_deposited: "1,234.67",
       asset_apy: "4.9",
-      bridge_apy: "4.99"
+      bridge_apy: "4.99",
+      bridge_apy2: "4.99",
     },
   ]
   return (

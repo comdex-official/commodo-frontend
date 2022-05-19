@@ -1,0 +1,57 @@
+@import "../../../assets/less/variables.less";
+
+.ant-modal{
+  &.assets-modal {
+
+    .ant-modal-close{
+      top: 30px;
+      right: 24px;
+    }
+  
+    .ant-modal-content {
+      padding: 15px 0 !important;
+  
+      .ant-modal-body {
+        padding: 24px;
+  
+        .assets-modal-inner {
+          .dark-mode & {
+            color: @white;
+          }
+  
+          .availabe-balance{
+            display: flex;
+            align-items: center;
+            position: absolute;
+            right: 15px;
+            font-size: @font-size-base - 1;
+            font-weight: 400;
+            .dark-mode & {
+              color: @white;
+            }
+            span{
+              font-weight: 700;
+              color: @success-color;
+            }
+          }
+  
+          h3 {
+            font-size: 25px;
+  
+            .dark-mode & {
+              color: @white;
+            }
+          }
+  
+          .ant-radio-wrapper {
+            font-size: 21px;
+  
+            .dark-mode & {
+              color: @white;
+            }
+          }
+        }
+      }
+    }
+  }
+}

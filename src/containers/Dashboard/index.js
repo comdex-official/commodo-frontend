@@ -1,12 +1,12 @@
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../components/common";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
 import variables from "../../utils/variables";
-import { Button, Table } from "antd";
-import TooltipIcon from "../../components/TooltipIcon";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import "./index.less";
+
+import LaunchImage from "../../assets/images/launch-bg.jpg";
 
 const Dashboard = ({ lang, isDarkMode }) => {
   const Options = {
@@ -172,7 +172,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
           <div className="dashboard-upper-left">
             <div className="commodo-card h-100">
               <div className="dashboard-statics ml-4">
-                <p>Total Value Locked</p>
+                <p>Total Value Locked <TooltipIcon text="Value of Assets Locked" /></p>
                 <h2>$15,690.00</h2>
               </div>
               <div className="totalvalues">
@@ -181,11 +181,11 @@ const Dashboard = ({ lang, isDarkMode }) => {
                 </div>
                 <div className="totalvalues-right">
                   <div className="dashboard-statics mb-5" style={{ borderColor: "#52B788" }}>
-                    <p>Total Deposited</p>
+                    <p>Total Deposited <TooltipIcon text="Value of Assets Depositedon platfrom" /></p>
                     <h3>$12,345.00</h3>
                   </div>
                   <div className="dashboard-statics mb-0" style={{ borderColor: "#E2F7E5" }}>
-                    <p>Total Collateral</p>
+                    <p>Total Collateral <TooltipIcon text="Value of Assets Deposited" /></p>
                     <h3>$2,345.00</h3>
                   </div>
                 </div>
@@ -193,23 +193,24 @@ const Dashboard = ({ lang, isDarkMode }) => {
             </div>
           </div>
           <div className="dashboard-upper-right">
-            <div className="commodo-card dashboardupper-chart">
-              <div className="dashboardupperchart-head">
-                <div className="col1">
-                  <small>CMDO Price</small>
-                  <h4>$12.20 <span>2.41%</span></h4>
+            <div className="commodo-card commodo-launchcard">
+              <div className="commodo-launchcard-inner">
+                <img className="launch-bg" alt={"CMDO Token Launch"} src={LaunchImage} />
+                <div>
+                  <h3>CMDO Token Launch</h3>
+                  <p className="font-weight-light">Live on Commmodo Universe</p>
+                  <div className="mt-3">
+                    <div className="small-icons">
+                      <SvgIcon name="cmst-icon" />
+                      <SvgIcon name="cmdx-icon" />
+                    </div>
+                    <p className="mb-0">CMST/CMDX APR</p>
+                    <h3 className="h3-botttom">300%</h3>
+                  </div>
                 </div>
-                <div className="col2">
-                  <small>Circulating Supply</small>
-                  <p>12,500,000 <span>CMDO</span></p>
+                <div>
+
                 </div>
-                <div className="col3">
-                  <small>Market Cap</small>
-                  <p>$72,125,000</p>
-                </div>
-              </div>
-              <div className="right-chart">
-                <HighchartsReact highcharts={Highcharts} options={PriceChart} />
               </div>
             </div>
             <div className="commodo-card topthree-assets">

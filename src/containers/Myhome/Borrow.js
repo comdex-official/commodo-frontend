@@ -1,5 +1,5 @@
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../components/common";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
 import variables from "../../utils/variables";
 import { Button, Table, Progress } from "antd";
@@ -15,9 +15,9 @@ const Borrow = (lang) => {
       width: 180
     },
     {
-      title: "Balance",
-      dataIndex: "balance",
-      key: "balance",
+      title: <>Debt <TooltipIcon text="Current Outstanding Debt" /></>,
+      dataIndex: "debt",
+      key: "debt",
       width: 150
     },
     {
@@ -76,7 +76,7 @@ const Borrow = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
+                name="cmst-icon"
                 viewBox="0 0 30 30"
               />
             </div>
@@ -84,7 +84,7 @@ const Borrow = (lang) => {
           </div>
         </>
       ),
-      balance: "142",
+      debt: "142 CMST",
       apy: "20",
     },
     {
@@ -94,7 +94,7 @@ const Borrow = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
+                name="osmosis-icon"
                 viewBox="0 0 30 30"
               />
             </div>
@@ -102,7 +102,7 @@ const Borrow = (lang) => {
           </div>
         </>
       ),
-      balance: "142",
+      debt: "142 OSMO",
       apy: "20",
     },
   ]

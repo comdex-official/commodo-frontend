@@ -1,5 +1,5 @@
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../../components/common";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import { connect } from "react-redux";
 import variables from "../../../utils/variables";
 import { Button, List, Select, Input, Switch } from "antd";
@@ -33,6 +33,13 @@ const WithdrawTab = (lang) => {
           <div className="deposit-head-left">
             <div className="assets-col">
               <div className="assets-icon">
+                <SvgIcon name="cmdx-icon" />
+              </div>
+              CMDX
+            </div>
+            <span className="hyphen-icon">-</span>
+            <div className="assets-col">
+              <div className="assets-icon">
                 <SvgIcon name="cmst-icon" />
               </div>
               CMST
@@ -49,7 +56,7 @@ const WithdrawTab = (lang) => {
         <div className="assets-select-card mb-4">
           <div className="assets-left">
             <label className="leftlabel">
-              Collateral Asset
+              Withdraw <TooltipIcon text="" />
             </label>
             <div className="assets-select-wrapper">
               <Select
@@ -103,7 +110,7 @@ const WithdrawTab = (lang) => {
           </div>
         </div>
         <Row>
-          <Col sm="12" className="mt-3 mx-auto card-bottom-details">
+          <Col sm="12" className="mx-auto card-bottom-details">
             <Row className="mt-2">
               <Col>
                 <label>Max LTV</label>
@@ -165,6 +172,9 @@ const WithdrawTab = (lang) => {
                 </div>
                 CMST
               </div>
+              {/* <span className="percent-badge">
+                +6.18 <SvgIcon name="commodo-icon" />
+              </span> */}
             </div>
             <div className="head-right">
               <span>Oracle Price</span> : $123.45
@@ -175,16 +185,52 @@ const WithdrawTab = (lang) => {
               gutter: 16,
               xs: 2,
               sm: 2,
-              md: 3,
-              lg: 2,
-              xl: 2,
-              xxl: 2,
+              md: 2,
+              lg: 4,
+              xl: 4,
+              xxl: 4,
             }}
             dataSource={data}
             renderItem={item => (
               <List.Item>
                 <div>
-                  <p>{item.title}</p>
+                  <p>{item.title} <TooltipIcon /></p>
+                  <h3>{item.counts}</h3>
+                </div>
+              </List.Item>
+            )}
+          />
+          <div className="card-head mt-5">
+            <div className="head-left">
+              <div className="assets-col">
+                <div className="assets-icon">
+                  <SvgIcon name="cmst-icon" />
+                </div>
+                CMST
+              </div>
+              {/* <span className="percent-badge">
+                +6.18 <SvgIcon name="commodo-icon" />
+              </span> */}
+            </div>
+            <div className="head-right">
+              <span>Oracle Price</span> : $123.45
+            </div>
+          </div>
+          <List
+            grid={{
+              gutter: 16,
+              xs: 2,
+              sm: 2,
+              md: 2,
+              lg: 4,
+              xl: 4,
+              xxl: 4,
+            }}
+            dataSource={data}
+            renderItem={item => (
+              <List.Item>
+                <div>
+                  <p>{item.title} <TooltipIcon /></p>
                   <h3>{item.counts}</h3>
                 </div>
               </List.Item>
@@ -196,10 +242,13 @@ const WithdrawTab = (lang) => {
             <div className="head-left">
               <div className="assets-col">
                 <div className="assets-icon">
-                  <SvgIcon name="atom-icon" />
+                  <SvgIcon name="cmdx-icon" />
                 </div>
-                ATOM
+                CMDX
               </div>
+              {/* <span className="percent-badge">
+                +6.18 <SvgIcon name="commodo-icon" />
+              </span> */}
             </div>
             <div className="head-right">
               <span>Oracle Price</span> : $123.45
@@ -210,16 +259,16 @@ const WithdrawTab = (lang) => {
               gutter: 16,
               xs: 2,
               sm: 2,
-              md: 3,
-              lg: 2,
-              xl: 2,
-              xxl: 2,
+              md: 2,
+              lg: 4,
+              xl: 4,
+              xxl: 4,
             }}
             dataSource={data}
             renderItem={item => (
               <List.Item>
                 <div>
-                  <p>{item.title}</p>
+                  <p>{item.title} <TooltipIcon /> </p>
                   <h3>{item.counts}</h3>
                 </div>
               </List.Item>

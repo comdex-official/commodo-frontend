@@ -1,33 +1,34 @@
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../components/common";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
 import variables from "../../utils/variables";
 import { Button, Table } from "antd";
 import PlaceBidModal from "./PlaceBidModal";
 import "./index.less";
+import FilterModal from "./FilterModal";
 
 const Liquidation = (lang) => {
   const columns = [
     {
-      title: "Auctioned Asset",
+      title: <>Auctioned Asset <TooltipIcon text="" /></>,
       dataIndex: "auctioned_asset",
       key: "auctioned_asset",
       width: 180
     },
     {
-      title: "Bridge Asset",
+      title: <>Bridge Asset <TooltipIcon text="" /></>,
       dataIndex: "bridge_asset",
       key: "bridge_asset",
       width: 180
     },
     {
-      title: "Quantity",
+      title: <>Quantity <TooltipIcon text="" /></>,
       dataIndex: "quantity",
       key: "quantity",
       width: 180
     },
     {
-      title: "End Time",
+      title: <>End Time <TooltipIcon text="" /></>,
       dataIndex: "end_time",
       key: "end_time",
       width: 200,
@@ -36,7 +37,7 @@ const Liquidation = (lang) => {
       ),
     },
     {
-      title: "Top Bid",
+      title: <>Top Bid <TooltipIcon text="" /></>,
       dataIndex: "top_bid",
       key: "top_bid",
       width: 150,
@@ -47,11 +48,12 @@ const Liquidation = (lang) => {
       ),
     },
     {
-      title: "",
+      title: <FilterModal />,
       dataIndex: "action",
       key: "action",
       align: "right",
       width: 140,
+      align: "center",
       render: () => (
         <>
           <PlaceBidModal />

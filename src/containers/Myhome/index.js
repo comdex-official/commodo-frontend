@@ -1,5 +1,5 @@
 import * as PropTypes from "prop-types";
-import { Col, Row } from "../../components/common";
+import { Col, Row, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
 import variables from "../../utils/variables";
 import { Progress, Tabs, List } from "antd";
@@ -16,11 +16,11 @@ function callback(key) {
 
 const data = [
   {
-    title: "Total Deposited",
+    title: <>Total Deposited <TooltipIcon text="Value of total Asset Deposited by User" /></>,
     counts: '12,345.00'
   },
   {
-    title: "Total Borrowed",
+    title: <>Total Borrowed <TooltipIcon text="Value of total Asset Borrowed by User" /></>,
     counts: "2,345.00"
   }
 ];
@@ -54,7 +54,7 @@ const Myhome = (lang) => {
               />
             </div>
             <div className="myhome-upper-right">
-              <div className="mb-3">Your  Borrow Limit</div>
+              <div className="mb-3">Your Borrow Limit <TooltipIcon text="Borrow limit of User" /></div>
               <div className="borrow-limit-bar">
                 <div className="borrow-limit-upper">
                   <div><h4>0.00%</h4></div>
