@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import variables from "../../utils/variables";
 import { Button, Table } from "antd";
 import "./index.less";
+import DepostiModal from "./DepostiModal";
+import WithdrawModal from "./WithdrawModal";
 
 const Assets = (lang) => {
   const columns = [
@@ -33,9 +35,7 @@ const Assets = (lang) => {
       width: 150,
       align: "center",
       render: () => (
-        <Button type="primary" size="small">
-          Deposit
-        </Button>
+        <DepostiModal />
       ),
     },
     {
@@ -45,9 +45,7 @@ const Assets = (lang) => {
       width: 150,
       align: "center",
       render: () => (
-        <Button type="primary" size="small">
-          Withdraw
-        </Button>
+        <WithdrawModal />
       ),
     }
   ];

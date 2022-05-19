@@ -5,6 +5,7 @@ import variables from "../../utils/variables";
 import { Button, Table } from "antd";
 import PlaceBidModal from "./PlaceBidModal";
 import "./index.less";
+import FilterModal from "./FilterModal";
 
 const Liquidation = (lang) => {
   const columns = [
@@ -47,11 +48,12 @@ const Liquidation = (lang) => {
       ),
     },
     {
-      title: "",
+      title: <FilterModal />,
       dataIndex: "action",
       key: "action",
       align: "right",
       width: 140,
+      align: "center",
       render: () => (
         <>
           <PlaceBidModal />
