@@ -1591,3 +1591,66 @@ button.ant-switch {
     }
   }
 }
+
+.ant-modal{
+  &.ant-modal-confirm-confirm{
+    .ant-modal-content{
+      .ant-modal-body{
+        padding: 0;
+        .ant-btn-default{
+          background-color: @bg-dark;
+          color: @white;
+          border-radius: 15px;
+          border-color: @bg-dark;
+          font-weight: 600;
+
+          .dark-mode & {
+            background-color: @bg-light;
+            color: @bg-dark;
+            border-color: @bg-light;
+          }
+
+          &:hover:not(&[disabled]),
+          &:active,
+          &:focus {
+            background-color: @bg-dark-hover;
+            color: @white;
+            border-color: @bg-dark-hover;
+
+            .dark-mode & {
+              background-color: @bg-light-hover;
+              color: @bg-dark;
+              border-color: @bg-light-hover;
+            }
+
+          }
+
+          &[disabled] {
+            opacity: 0.6;
+            cursor: not-allowed;
+          }
+        }
+        .ant-modal-confirm-body{
+          text-align: center;
+          .ant-modal-confirm-title{
+            .dark-mode & {
+              color: @white;
+            }
+          }
+          .ant-modal-confirm-content  {
+            .dark-mode & {
+              color: @white;
+            }
+          }
+          .icon{
+            width: 60px;
+            margin-bottom: 15px;
+            .dark-mode & {
+              fill: @white;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -8,6 +8,7 @@ const variables = {
     govern: "Govern",
     liquidation: "Liquidation",
     airdrop: "Airdrop",
+    extra: "Extra",
 
     // Connect account
     connect: "Connect",

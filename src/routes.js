@@ -8,6 +8,7 @@ import GovernDetails from "./containers/Govern/Details";
 import BorrowRepay from "./containers/Myhome/BorrowRepay";
 import Deposit from "./containers/Myhome/Depositwithdraw";
 import Assets from "./containers/Assets";
+import Extra from "./containers/Extra";
 
 const routes = [
   {
@@ -49,6 +50,10 @@ const routes = [
   {
     path: "/asset",
     element: <Assets />,
+  },
+  {
+    path: "/extra",
+    element: <Extra />,
   }
 ];
 

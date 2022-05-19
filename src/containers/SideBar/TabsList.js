@@ -40,5 +40,11 @@ export const tabsList = [
     value: "airdrop",
     langKey: "airdrop",
     index: 6,
+  },
+  {
+    name: "Extra",
+    value: "extra",
+    langKey: "extra",
+    index: 7,
   }
 ];
