@@ -43,6 +43,19 @@ const Deposit = (lang) => {
       ),
     },
     {
+      title: "Rewards",
+      dataIndex: "rewards",
+      key: "rewards",
+      width: 200,
+      className: "rewards-column",
+      render: (rewards) => (
+          <div>
+            <p>{rewards}</p>
+            <small>$2,659</small>
+          </div>
+      ),
+    },
+    {
       title: "",
       dataIndex: "action",
       key: "action",
@@ -79,8 +92,7 @@ const Deposit = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
-                viewBox="0 0 30 30"
+                name="cmst-icon"
               />
             </div>
             20
@@ -89,6 +101,7 @@ const Deposit = (lang) => {
       ),
       balance: "142",
       apy: "20",
+      rewards: "1234 CMST"
     },
     {
       key: 2,
@@ -97,7 +110,7 @@ const Deposit = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
+                name="osmosis-icon"
                 viewBox="0 0 30 30"
               />
             </div>
@@ -105,8 +118,9 @@ const Deposit = (lang) => {
           </div>
         </>
       ),
-      balance: "142",
+      balance: "142 ",
       apy: "20",
+      rewards: "1234 OSMO"
     },
   ]
 

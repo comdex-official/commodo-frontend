@@ -33,6 +33,13 @@ const DepositTab = (lang) => {
           <div className="deposit-head-left">
             <div className="assets-col">
               <div className="assets-icon">
+                <SvgIcon name="cmdx-icon" />
+              </div>
+              CMDX
+            </div>
+            <span className="hyphen-icon">-</span>
+            <div className="assets-col">
+              <div className="assets-icon">
                 <SvgIcon name="cmst-icon" />
               </div>
               CMST
@@ -42,7 +49,7 @@ const DepositTab = (lang) => {
               <div className="assets-icon">
                 <SvgIcon name="atom-icon" />
               </div>
-              CMST
+              ATOM
             </div>
           </div>
           <div className="deposit-head-right">
@@ -108,11 +115,11 @@ const DepositTab = (lang) => {
         </div>
         <Row>
           <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-            <Row className="pb-2">
+            {/* <Row className="pb-2">
               <Col sm="12" className="bond-row">
                 <span className="mr-2">Bond</span> <Switch defaultChecked size="small" />
               </Col>
-            </Row>
+            </Row> */}
             <Row className="mt-2">
               <Col>
                 <label>Max LTV</label>
@@ -174,9 +181,9 @@ const DepositTab = (lang) => {
                 </div>
                 CMST
               </div>
-              <span className="percent-badge">
+              {/* <span className="percent-badge">
                 +6.18 <SvgIcon name="commodo-icon" />
-              </span>
+              </span> */}
             </div>
             <div className="head-right">
               <span>Oracle Price</span> : $123.45
@@ -187,16 +194,52 @@ const DepositTab = (lang) => {
               gutter: 16,
               xs: 2,
               sm: 2,
-              md: 3,
-              lg: 2,
-              xl: 2,
-              xxl: 2,
+              md: 2,
+              lg: 4,
+              xl: 4,
+              xxl: 4,
             }}
             dataSource={data}
             renderItem={item => (
               <List.Item>
                 <div>
-                  <p>{item.title}</p>
+                  <p>{item.title} <TooltipIcon /></p>
+                  <h3>{item.counts}</h3>
+                </div>
+              </List.Item>
+            )}
+          />
+          <div className="card-head mt-5">
+            <div className="head-left">
+              <div className="assets-col">
+                <div className="assets-icon">
+                  <SvgIcon name="cmst-icon" />
+                </div>
+                CMST
+              </div>
+              {/* <span className="percent-badge">
+                +6.18 <SvgIcon name="commodo-icon" />
+              </span> */}
+            </div>
+            <div className="head-right">
+              <span>Oracle Price</span> : $123.45
+            </div>
+          </div>
+          <List
+            grid={{
+              gutter: 16,
+              xs: 2,
+              sm: 2,
+              md: 2,
+              lg: 4,
+              xl: 4,
+              xxl: 4,
+            }}
+            dataSource={data}
+            renderItem={item => (
+              <List.Item>
+                <div>
+                  <p>{item.title} <TooltipIcon /></p>
                   <h3>{item.counts}</h3>
                 </div>
               </List.Item>
@@ -208,13 +251,13 @@ const DepositTab = (lang) => {
             <div className="head-left">
               <div className="assets-col">
                 <div className="assets-icon">
-                  <SvgIcon name="atom-icon" />
+                  <SvgIcon name="cmdx-icon" />
                 </div>
-                ATOM
+                CMDX
               </div>
-              <span className="percent-badge">
+              {/* <span className="percent-badge">
                 +6.18 <SvgIcon name="commodo-icon" />
-              </span>
+              </span> */}
             </div>
             <div className="head-right">
               <span>Oracle Price</span> : $123.45
@@ -225,16 +268,16 @@ const DepositTab = (lang) => {
               gutter: 16,
               xs: 2,
               sm: 2,
-              md: 3,
-              lg: 2,
-              xl: 2,
-              xxl: 2,
+              md: 2,
+              lg: 4,
+              xl: 4,
+              xxl: 4,
             }}
             dataSource={data}
             renderItem={item => (
               <List.Item>
                 <div>
-                  <p>{item.title}</p>
+                  <p>{item.title} <TooltipIcon /> </p>
                   <h3>{item.counts}</h3>
                 </div>
               </List.Item>

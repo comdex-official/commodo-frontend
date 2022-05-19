@@ -25,7 +25,7 @@ const Copy = ({ text }) => {
         e.stopPropagation();
       }}
     >
-      <Tooltip arrow visible={open} color="#FE4350" title="Copied!">
+      <Tooltip arrow visible={open} color="#032517" title="Copied!">
         <CopyToClipboard onCopy={onCopy} text={text}>
           <SvgIcon name="copy" viewbox="0 0 17.61 20.985" />
         </CopyToClipboard>

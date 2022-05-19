@@ -198,10 +198,14 @@ const Dashboard = ({ lang, isDarkMode }) => {
                 <img className="launch-bg" alt={"CMDO Token Launch"} src={LaunchImage} />
                 <div>
                   <h3>CMDO Token Launch</h3>
-                  <p>Live on Commmodo Universe</p>
+                  <p className="font-weight-light">Live on Commmodo Universe</p>
                   <div className="mt-3">
-                    <p>apr</p>
-                    <h3>300%</h3>
+                    <div className="small-icons">
+                      <SvgIcon name="cmst-icon" />
+                      <SvgIcon name="cmdx-icon" />
+                    </div>
+                    <p className="mb-0">CMST/CMDX APR</p>
+                    <h3 className="h3-botttom">300%</h3>
                   </div>
                 </div>
                 <div>

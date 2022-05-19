@@ -76,7 +76,7 @@ const Borrow = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
+                name="cmst-icon"
                 viewBox="0 0 30 30"
               />
             </div>
@@ -84,7 +84,7 @@ const Borrow = (lang) => {
           </div>
         </>
       ),
-      debt: "142",
+      debt: "142 CMST",
       apy: "20",
     },
     {
@@ -94,7 +94,7 @@ const Borrow = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="ust-icon"
+                name="osmosis-icon"
                 viewBox="0 0 30 30"
               />
             </div>
@@ -102,7 +102,7 @@ const Borrow = (lang) => {
           </div>
         </>
       ),
-      debt: "142",
+      debt: "142 OSMO",
       apy: "20",
     },
   ]
