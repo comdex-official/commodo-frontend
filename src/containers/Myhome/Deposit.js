@@ -19,9 +19,9 @@ const Deposit = (lang) => {
       width: 180
     },
     {
-      title: <>Balance <TooltipIcon text="Balance after transaction" /></>,
-      dataIndex: "balance",
-      key: "balance",
+      title: <>Available <TooltipIcon text="Balance after transaction" /></>,
+      dataIndex: "available",
+      key: "available",
       width: 150
     },
     {
@@ -51,7 +51,7 @@ const Deposit = (lang) => {
       render: (rewards) => (
           <div>
             <p>{rewards}</p>
-            <small>$2,659</small>
+            <small>$12.34</small>
           </div>
       ),
     },
@@ -66,7 +66,7 @@ const Deposit = (lang) => {
           <Link to="/deposit">
             <Button
               type="primary"
-              className="btn-filled"
+              className="btn-filled table-btn"
               size="small"
             >
               Diposit
@@ -75,7 +75,7 @@ const Deposit = (lang) => {
           <Button
             type="primary"
             size="small"
-            className="ml-2"
+            className="ml-2 table-btn"
           >
             Withdraw
           </Button>
@@ -95,13 +95,13 @@ const Deposit = (lang) => {
                 name="cmst-icon"
               />
             </div>
-            20
+            CMST
           </div>
         </>
       ),
-      balance: "142",
-      apy: "20",
-      rewards: "1234 CMST"
+      available: "142 CMST",
+      apy: "2.6",
+      rewards: "1,234 CMDX"
     },
     {
       key: 2,
@@ -114,13 +114,13 @@ const Deposit = (lang) => {
                 viewBox="0 0 30 30"
               />
             </div>
-            20
+            OSMO
           </div>
         </>
       ),
-      balance: "142 ",
-      apy: "20",
-      rewards: "1234 OSMO"
+      available: "149 OSMO",
+      apy: "3.1",
+      rewards: "1,234 CMDX"
     },
   ]
 

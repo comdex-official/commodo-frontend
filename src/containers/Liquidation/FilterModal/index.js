@@ -37,7 +37,8 @@ const FilterModal = (lang) => {
         visible={isModalVisible}
         width={530}
         onOk={handleOk}
-        closeIcon={<SvgIcon name="filter" viewbox="0 0 13.579 13.385" />}
+        onCancel={handleCancel}
+        closeIcon={<SvgIcon name="close" viewbox="0 0 19 19" />}
         title="Filter"
       >
         <div className="filter-modal-inner">

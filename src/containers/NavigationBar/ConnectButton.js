@@ -193,7 +193,7 @@ const ConnectButton = ({
         <div className="connected_div">
           <div className="connected_left">
             <div className="testnet-top">
-              <SvgIcon name="commodo-icon" /> $75.30
+              <SvgIcon name="cmdx-icon" /> $75.30
             </div>
           </div>
           <DisConnectModal />

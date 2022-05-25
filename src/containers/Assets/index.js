@@ -1,13 +1,19 @@
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../components/common";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
 import variables from "../../utils/variables";
-import { Button, Table } from "antd";
+import { List, Table } from "antd";
 import "./index.less";
 import DepostiModal from "./DepostiModal";
 import WithdrawModal from "./WithdrawModal";
 
 const Assets = (lang) => {
+  const data = [
+    {
+      title: <>Total Asset Balance <TooltipIcon text="Value of total Asset Deposited by User" /></>,
+      counts: '$1,234.55'
+    }
+  ];
   const columns = [
     {
       title: "Asset",
@@ -16,16 +22,24 @@ const Assets = (lang) => {
       width: 180,
     },
     {
-      title: "Balances",
-      dataIndex: "balances",
-      key: "balances",
+      title: "No. of Tokens",
+      dataIndex: "no_of_tokens",
+      key: "no_of_tokens",
       width: 150,
-      className: "balance-column",
-      render: (balances) => (
-          <div>
-            <p>{balances}</p>
-            <small>$2,659</small>
-          </div>
+    },
+    {
+      title: "Oracle Price",
+      dataIndex: "oracle_price",
+      key: "oracle_price",
+      width: 150,
+    },
+    {
+      title: "Amount",
+      dataIndex: "amount",
+      key: "amount",
+      width: 150,
+      render: (amount) => (
+        <>${amount}</>
       ),
     },
     {
@@ -65,7 +79,9 @@ const Assets = (lang) => {
           </div>
         </>
       ),
-      balances: "1,063.67",
+      no_of_tokens: "1,063",
+      oracle_price: "1",
+      amount: "1063.67",
     },
     {
       key: 2,
@@ -81,7 +97,9 @@ const Assets = (lang) => {
           </div>
         </>
       ),
-      balances: "1,063.67",
+      no_of_tokens: "1,063",
+      oracle_price: "1",
+      amount: "1063.67",
     },
     {
       key: 3,
@@ -97,7 +115,9 @@ const Assets = (lang) => {
           </div>
         </>
       ),
-      balances: "1,063.67",
+      no_of_tokens: "1,063",
+      oracle_price: "1",
+      amount: "1063.67",
     },
     {
       key: 4,
@@ -113,7 +133,9 @@ const Assets = (lang) => {
           </div>
         </>
       ),
-      balances: "1,063.67",
+      no_of_tokens: "1,063",
+      oracle_price: "1",
+      amount: "1063.67",
     },
     {
       key: 5,
@@ -129,7 +151,9 @@ const Assets = (lang) => {
           </div>
         </>
       ),
-      balances: "1,063.67",
+      no_of_tokens: "1,063",
+      oracle_price: "1",
+      amount: "1063.67",
     },
     {
       key: 6,
@@ -145,7 +169,9 @@ const Assets = (lang) => {
           </div>
         </>
       ),
-      balances: "1,063.67",
+      no_of_tokens: "1,063",
+      oracle_price: "1",
+      amount: "1063.67",
     },
     {
       key: 7,
@@ -161,7 +187,9 @@ const Assets = (lang) => {
           </div>
         </>
       ),
-      balances: "1,063.67",
+      no_of_tokens: "1,063",
+      oracle_price: "1",
+      amount: "1063.67",
     },
   ]
   return (
@@ -169,9 +197,29 @@ const Assets = (lang) => {
       <Row>
         <Col>
           <div className="asset-wrapper">
-            <div className="commodo-card mb-3 assetcard-head">
-              <h2>Commodo Assets</h2>
-              <p><span>Total Asset Balance</span> $123,456,789</p>
+            <div className="commodo-card myhome-upper d-block">
+              <div className="myhome-upper-left w-100">
+                <List
+                  grid={{
+                    gutter: 16,
+                    xs: 1,
+                    sm: 2,
+                    md: 1,
+                    lg: 1,
+                    xl: 1,
+                    xxl: 1,
+                  }}
+                  dataSource={data}
+                  renderItem={item => (
+                    <List.Item>
+                      <div>
+                        <p>{item.title}</p>
+                        <h3>{item.counts}</h3>
+                      </div>
+                    </List.Item>
+                  )}
+                />
+              </div>
             </div>
             <div className="commodo-card py-3">
               <div className="card-content">

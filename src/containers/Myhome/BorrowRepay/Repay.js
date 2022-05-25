@@ -32,7 +32,7 @@ const RepayTab = (lang) => {
         <div className="assets-select-card mb-4">
           <div className="assets-left">
             <label className="leftlabel">
-              Collateral Asset <TooltipIcon text="" />
+              Repay <TooltipIcon text="" />
             </label>
             <div className="assets-select-wrapper">
               <Select
@@ -124,6 +124,14 @@ const RepayTab = (lang) => {
               </Col>
               <Col className="text-right">
                 80%
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <label>Liquidation Price</label>
+              </Col>
+              <Col className="text-right">
+                35%
               </Col>
             </Row>
             <Row className="mt-2">

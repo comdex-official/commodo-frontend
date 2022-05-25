@@ -80,12 +80,12 @@ const Borrow = (lang) => {
                 viewBox="0 0 30 30"
               />
             </div>
-            20
+            CMST
           </div>
         </>
       ),
       debt: "142 CMST",
-      apy: "20",
+      apy: "3.60",
     },
     {
       key: 1,
@@ -98,12 +98,12 @@ const Borrow = (lang) => {
                 viewBox="0 0 30 30"
               />
             </div>
-            20
+            OSMO
           </div>
         </>
       ),
-      debt: "142 OSMO",
-      apy: "20",
+      debt: "159 OSMO",
+      apy: "3.60",
     },
   ]
 

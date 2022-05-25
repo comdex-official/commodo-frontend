@@ -7,6 +7,8 @@ import HighchartsReact from "highcharts-react-official";
 import "./index.less";
 
 import LaunchImage from "../../assets/images/launch-bg.jpg";
+import AssetsIcon from "../../assets/images/assets-icon.png";
+import { Button } from "antd";
 
 const Dashboard = ({ lang, isDarkMode }) => {
   const Options = {
@@ -196,20 +198,21 @@ const Dashboard = ({ lang, isDarkMode }) => {
             <div className="commodo-card commodo-launchcard">
               <div className="commodo-launchcard-inner">
                 <img className="launch-bg" alt={"CMDO Token Launch"} src={LaunchImage} />
-                <div>
-                  <h3>CMDO Token Launch</h3>
-                  <p className="font-weight-light">Live on Commmodo Universe</p>
-                  <div className="mt-3">
-                    <div className="small-icons">
-                      <SvgIcon name="cmst-icon" />
-                      <SvgIcon name="cmdx-icon" />
+                <div className="assets-section">
+                  <div className="assets-left">
+                    <p>Provide liquidity on CMDX-CMST pool on CSWAP to earn external incentives on COMMODO</p>
+                    <div className="mt-3">
+                      <div className="small-icons mb-2">
+                        <div className="icon-col mr-2"><SvgIcon name="cmst-icon" />CMST</div> - 
+                        <div className="icon-col ml-2"><SvgIcon name="cmdx-icon" /> CMDX</div>
+                      </div>
+                      <h3 className="h3-botttom">300% <small>APR</small></h3>
                     </div>
-                    <p className="mb-0">CMST/CMDX APR</p>
-                    <h3 className="h3-botttom">300%</h3>
                   </div>
-                </div>
-                <div>
-
+                  <div className="assets-right">
+                    <img alt={AssetsIcon} src={AssetsIcon} />
+                    <Button type="primary" className="btn-filled">Take me there!</Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -222,7 +225,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
                     <li>
                       <div className="assets-col">
                         <div className="assets-icon">
-                          <SvgIcon name="atom-icon" />
+                          <SvgIcon name="cmst-icon" />
                         </div>
                         CMST
                       </div>
