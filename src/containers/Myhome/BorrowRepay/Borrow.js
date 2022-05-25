@@ -38,6 +38,7 @@ const BorrowTab = (lang) => {
               <Select
                 className="assets-select"
                 dropdownClassName="asset-select-dropdown"
+                defaultValue="1"
                 placeholder={
                   <div className="select-placeholder">
                     <div className="circle-icon">
@@ -50,6 +51,16 @@ const BorrowTab = (lang) => {
                 suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />}
               >
                 <Option key="1">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="cmst-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMST</div>
+                  </div>
+                </Option>
+                <Option key="2">
                   <div className="select-inner">
                     <div className="svg-icon">
                       <div className="svg-icon-inner">
@@ -94,6 +105,7 @@ const BorrowTab = (lang) => {
               <Select
                 className="assets-select"
                 dropdownClassName="asset-select-dropdown"
+                defaultValue="1"
                 placeholder={
                   <div className="select-placeholder">
                     <div className="circle-icon">
@@ -109,7 +121,17 @@ const BorrowTab = (lang) => {
                   <div className="select-inner">
                     <div className="svg-icon">
                       <div className="svg-icon-inner">
-                        <SvgIcon name="cmdx-icon" />
+                        <SvgIcon name="cmst-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMST</div>
+                  </div>
+                </Option>
+                <Option key="2">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="atom-icon" />
                       </div>
                     </div>
                     <div className="name">Atom</div>
@@ -167,6 +189,22 @@ const BorrowTab = (lang) => {
               </Col>
               <Col className="text-right">
                 3.80%
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <label>Liquidation Threshold</label>
+              </Col>
+              <Col className="text-right">
+                80%
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <label>Liquidation Price</label>
+              </Col>
+              <Col className="text-right">
+                5%
               </Col>
             </Row>
           </Col>

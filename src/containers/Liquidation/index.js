@@ -16,9 +16,9 @@ const Liquidation = (lang) => {
       width: 180
     },
     {
-      title: <>Bridge Asset <TooltipIcon text="" /></>,
-      dataIndex: "bridge_asset",
-      key: "bridge_asset",
+      title: <>Bidding Asset <TooltipIcon text="" /></>,
+      dataIndex: "bidding_asset",
+      key: "bidding_asset",
       width: 180
     },
     {
@@ -78,7 +78,7 @@ const Liquidation = (lang) => {
           </div>
         </>
       ),
-      bridge_asset: (
+      bidding_asset: (
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
@@ -110,7 +110,7 @@ const Liquidation = (lang) => {
           </div>
         </>
       ),
-      bridge_asset: (
+      bidding_asset: (
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
@@ -142,7 +142,7 @@ const Liquidation = (lang) => {
           </div>
         </>
       ),
-      bridge_asset: (
+      bidding_asset: (
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
@@ -174,7 +174,7 @@ const Liquidation = (lang) => {
           </div>
         </>
       ),
-      bridge_asset: (
+      bidding_asset: (
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
@@ -206,7 +206,7 @@ const Liquidation = (lang) => {
           </div>
         </>
       ),
-      bridge_asset: (
+      bidding_asset: (
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
@@ -238,7 +238,7 @@ const Liquidation = (lang) => {
           </div>
         </>
       ),
-      bridge_asset: (
+      bidding_asset: (
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
@@ -270,7 +270,7 @@ const Liquidation = (lang) => {
           </div>
         </>
       ),
-      bridge_asset: (
+      bidding_asset: (
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
@@ -302,7 +302,7 @@ const Liquidation = (lang) => {
           </div>
         </>
       ),
-      bridge_asset: (
+      bidding_asset: (
         <>
           <div className="assets-withicon">
             <div className="assets-icon">

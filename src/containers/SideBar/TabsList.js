@@ -24,27 +24,27 @@ export const tabsList = [
     index: 3,
   },
   {
-    name: "Govern",
-    value: "govern",
-    langKey: "govern",
-    index: 4,
-  },
-  {
     name: "Liquidation",
     value: "liquidation",
     langKey: "liquidation",
+    index: 4,
+  },
+  {
+    name: "Govern",
+    value: "govern",
+    langKey: "govern",
     index: 5,
-  },
-  {
-    name: "Airdrop",
-    value: "airdrop",
-    langKey: "airdrop",
-    index: 6,
-  },
-  {
-    name: "Extra",
-    value: "extra",
-    langKey: "extra",
-    index: 7,
   }
+  // {
+  //   name: "Airdrop",
+  //   value: "airdrop",
+  //   langKey: "airdrop",
+  //   index: 6,
+  // },
+  // {
+  //   name: "Extra",
+  //   value: "extra",
+  //   langKey: "extra",
+  //   index: 7,
+  // }
 ];

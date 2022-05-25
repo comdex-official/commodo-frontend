@@ -62,9 +62,10 @@ const Govern = (lang) => {
               <Button type="primary" className="btn-filled">New Proposal</Button>
               <Button type="primary" className="btn-filled">Forum</Button>
               <Select defaultValue="lucy" className="select-primary ml-2" suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />} style={{ width: 120 }}>
-                <Option value="jack">Jack</Option>
-                <Option value="lucy">Lucy</Option>
-                <Option value="Yiminghe">yiminghe</Option>
+                <Option value="f1">Passed</Option>
+                <Option value="f2">Rejected</Option>
+                <Option value="f3">Pending</Option>
+                <Option value="f4">Voting</Option>
               </Select>
             </div>
             <div className="govern-card-content">

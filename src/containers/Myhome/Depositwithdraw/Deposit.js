@@ -10,7 +10,43 @@ const { Option } = Select;
 const DepositTab = (lang) => {
   const data = [
     {
-      title: "Total Borrowed",
+      title: "Total Deposited",
+      counts: '$1,234.20'
+    },
+    {
+      title: "Available",
+      counts: "$1,234.20"
+    },
+    {
+      title: "Utilization",
+      counts: "30.45%"
+    },
+    {
+      title: "Borrow APY",
+      counts: "30.45%"
+    }
+  ];
+  const data2 = [
+    {
+      title: "Total Deposited",
+      counts: '$1,234.20'
+    },
+    {
+      title: "Available",
+      counts: "$1,234.20"
+    },
+    {
+      title: "Utilization",
+      counts: "30.45%"
+    },
+    {
+      title: "Borrow APY",
+      counts: "30.45%"
+    }
+  ];
+  const data3 = [
+    {
+      title: "Total Deposited",
       counts: '$1,234.20'
     },
     {
@@ -31,20 +67,18 @@ const DepositTab = (lang) => {
       <div className="details-left commodo-card">
         <div className="deposit-head">
           <div className="deposit-head-left">
-            <div className="assets-col">
+            <div className="assets-col mr-3">
               <div className="assets-icon">
                 <SvgIcon name="cmdx-icon" />
               </div>
               CMDX
             </div>
-            <span className="hyphen-icon">-</span>
-            <div className="assets-col">
+            <div className="assets-col mr-3">
               <div className="assets-icon">
                 <SvgIcon name="cmst-icon" />
               </div>
               CMST
             </div>
-            <span className="hyphen-icon">-</span>
             <div className="assets-col">
               <div className="assets-icon">
                 <SvgIcon name="atom-icon" />
@@ -53,7 +87,7 @@ const DepositTab = (lang) => {
             </div>
           </div>
           <div className="deposit-head-right">
-            Use as Collateral
+            <small>Use as Collateral</small>
             <Switch size="small" />
           </div>
         </div>
@@ -66,6 +100,7 @@ const DepositTab = (lang) => {
               <Select
                 className="assets-select"
                 dropdownClassName="asset-select-dropdown"
+                defaultValue="1"
                 placeholder={
                   <div className="select-placeholder">
                     <div className="circle-icon">
@@ -78,6 +113,16 @@ const DepositTab = (lang) => {
                 suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />}
               >
                 <Option key="1">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="cmst-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMST</div>
+                  </div>
+                </Option>
+                <Option key="2">
                   <div className="select-inner">
                     <div className="svg-icon">
                       <div className="svg-icon-inner">
@@ -134,6 +179,14 @@ const DepositTab = (lang) => {
               </Col>
               <Col className="text-right">
                 80%
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <label>Liquidation Price</label>
+              </Col>
+              <Col className="text-right">
+                5%
               </Col>
             </Row>
             <Row className="mt-2">
@@ -213,9 +266,9 @@ const DepositTab = (lang) => {
             <div className="head-left">
               <div className="assets-col">
                 <div className="assets-icon">
-                  <SvgIcon name="cmst-icon" />
+                  <SvgIcon name="atom-icon" />
                 </div>
-                CMST
+                ATOM
               </div>
               {/* <span className="percent-badge">
                 +6.18 <SvgIcon name="commodo-icon" />
@@ -235,7 +288,7 @@ const DepositTab = (lang) => {
               xl: 4,
               xxl: 4,
             }}
-            dataSource={data}
+            dataSource={data2}
             renderItem={item => (
               <List.Item>
                 <div>
@@ -273,7 +326,7 @@ const DepositTab = (lang) => {
               xl: 4,
               xxl: 4,
             }}
-            dataSource={data}
+            dataSource={data3}
             renderItem={item => (
               <List.Item>
                 <div>

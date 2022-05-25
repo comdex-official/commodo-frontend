@@ -12,34 +12,34 @@ const Market = (lang) => {
       title: "Asset",
       dataIndex: "asset",
       key: "asset",
-      width: 150
+      width: 120
     },
     {
-      title: "Bridge Asset",
+      title: <>Bridge <br /> Asset 1</>,
       dataIndex: "bridge_asset",
       key: "bridge_asset",
-      width: 150
+      width: 120
     },
     {
-      title: "Bridge Asset2",
+      title: <>Bridge <br /> Asset 2</>,
       dataIndex: "bridge_asset2",
       key: "bridge_asset2",
-      width: 160
+      width: 120
     },
     {
-      title: "Total Deposited",
+      title: <>Total <br /> Deposited</>,
       dataIndex: "total_deposited",
       key: "total_deposited",
-      width: 150,
+      width: 130,
       render: (total_deposited) => (
         <>$ {total_deposited}</>
       ),
     },
     {
-      title: "Asset APY",
+      title: <>Asset <br /> APY</>,
       dataIndex: "asset_apy",
       key: "asset_apy",
-      width: 150,
+      width: 110,
       render: (asset_apy) => (
         <>
           <div>{asset_apy}%</div>
@@ -47,10 +47,10 @@ const Market = (lang) => {
       ),
     },
     {
-      title: "Bridge Asset 1 APY",
+      title: <>Bridge Asset 1 <br /> APY</>,
       dataIndex: "bridge_apy",
       key: "bridge_apy",
-      width: 150,
+      width: 120,
       render: (bridge_apy) => (
         <>
           <div>{bridge_apy}%</div>
@@ -58,10 +58,10 @@ const Market = (lang) => {
       ),
     },
     {
-      title: "Bridge Asset 2 APY",
+      title: <>Bridge Asset 2 <br /> APY</>,
       dataIndex: "bridge_apy2",
       key: "bridge_apy2",
-      width: 150,
+      width: 110,
       render: (bridge_apy) => (
         <>
           <div>{bridge_apy}%</div>
@@ -73,7 +73,7 @@ const Market = (lang) => {
       dataIndex: "action",
       key: "action",
       align: "right",
-      width: 140,
+      width: 120,
       render: () => (
         <>
           <Link to='/deposit'><Button
@@ -92,34 +92,34 @@ const Market = (lang) => {
       title: "Asset",
       dataIndex: "asset",
       key: "asset",
-      width: 150
+      width: 120
     },
     {
-      title: "Bridge Asset",
+      title: <>Bridge <br /> Asset 1</>,
       dataIndex: "bridge_asset",
       key: "bridge_asset",
-      width: 150
+      width: 120
     },
     {
-      title: "Bridge Asset2",
+      title: <>Bridge <br />  Asset 2</>,
       dataIndex: "bridge_asset2",
       key: "bridge_asset2",
-      width: 160
+      width: 120
     },
     {
-      title: "Total Deposited",
+      title: <>Available to <br /> Borrow</>,
       dataIndex: "total_deposited",
       key: "total_deposited",
-      width: 150,
+      width: 130,
       render: (total_deposited) => (
         <>$ {total_deposited}</>
       ),
     },
     {
-      title: "Asset APY",
+      title: <>Asset <br /> APY</>,
       dataIndex: "asset_apy",
       key: "asset_apy",
-      width: 150,
+      width: 100,
       render: (asset_apy) => (
         <>
           <div>{asset_apy}% </div>
@@ -127,10 +127,10 @@ const Market = (lang) => {
       ),
     },
     {
-      title: "Bridge Asset 1 APY",
+      title: <>Bridge Asset 1 <br /> APY</>,
       dataIndex: "bridge_apy",
       key: "bridge_apy",
-      width: 180,
+      width: 140,
       render: (bridge_apy) => (
         <>
           <div className="d-flex align-items-center">{bridge_apy}% <div className="apy-percents">+6.18% <SvgIcon name="cmdx-icon" /></div></div>
@@ -138,10 +138,10 @@ const Market = (lang) => {
       ),
     },
     {
-      title: "Bridge Asset 2 APY",
+      title: <>Bridge Asset 2 <br /> APY</>,
       dataIndex: "bridge_apy2",
       key: "bridge_apy2",
-      width: 150,
+      width: 110,
       render: (bridge_apy) => (
         <>
           <div>{bridge_apy}% </div>
@@ -153,7 +153,7 @@ const Market = (lang) => {
       dataIndex: "action",
       key: "action",
       align: "right",
-      width: 140,
+      width: 120,
       render: () => (
         <>
           <Link to='/borrow'><Button
@@ -175,10 +175,10 @@ const Market = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="atom-icon"
+                name="cmdx-icon"
               />
             </div>
-            ATOM
+            CDMX
           </div>
         </>
       ),

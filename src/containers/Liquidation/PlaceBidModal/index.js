@@ -1,6 +1,6 @@
 import * as PropTypes from "prop-types";
 import { Button, Input, Modal, } from "antd";
-import { Row, Col } from "../../../components/common";
+import { Row, Col, SvgIcon } from "../../../components/common";
 import { connect } from "react-redux";
 import React, { useState } from "react";
 import variables from "../../../utils/variables";
@@ -31,9 +31,9 @@ const PlaceBidModal = () => {
         header={null}
         visible={isModalVisible}
         width={550}
-        closable={false}
         onOk={handleOk}
-        closeIcon={null}
+        onCancel={handleCancel}
+        closeIcon={<SvgIcon name="close" viewbox="0 0 19 19" />}
       >
         <div className="palcebid-modal-inner">
           <Row>
