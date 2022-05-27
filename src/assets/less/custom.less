@@ -103,6 +103,9 @@ button {
   .body-bg {
     position: fixed;
     opacity: 0.25;
+    min-width: 100vw;
+    width: auto;
+    height: 100vh;
   }
 
   .main-container {
@@ -460,6 +463,7 @@ button.ant-switch {
 .tooltip-icon {
   width: 10px;
   height: 10px;
+  min-width: 10px;
   margin-left: 3px;
 
   .dark-mode & {
@@ -1490,6 +1494,11 @@ button.ant-switch {
           p {
             margin-bottom: 0;
             font-size: @font-size-sm;
+            display: flex;
+            align-items: flex-start;
+            .icon{
+              margin-top: 4px;
+            }
           }
 
           h3 {

@@ -47,22 +47,24 @@ const Borrow = (lang) => {
       width: 200,
       render: () => (
         <>
-          <Link to="/borrow">
+          <div className="d-flex">
+            <Link to="/borrow">
+              <Button
+                type="primary"
+                className="btn-filled"
+                size="small"
+              >
+                Borrow
+              </Button>
+            </Link>
             <Button
               type="primary"
-              className="btn-filled"
               size="small"
+              className="ml-2"
             >
-              Borrow
+              Repay
             </Button>
-          </Link>
-          <Button
-            type="primary"
-            size="small"
-            className="ml-2"
-          >
-            Repay
-          </Button>
+          </div>
         </>
       ),
     },
