@@ -63,22 +63,24 @@ const Deposit = (lang) => {
       width: 200,
       render: () => (
         <>
-          <Link to="/deposit">
+          <div className="d-flex">
+            <Link to="/deposit">
+              <Button
+                type="primary"
+                className="btn-filled table-btn"
+                size="small"
+              >
+                Diposit
+              </Button>
+            </Link>
             <Button
               type="primary"
-              className="btn-filled table-btn"
               size="small"
+              className="ml-2 table-btn"
             >
-              Diposit
+              Withdraw
             </Button>
-          </Link>
-          <Button
-            type="primary"
-            size="small"
-            className="ml-2 table-btn"
-          >
-            Withdraw
-          </Button>
+          </div>
         </>
       ),
     },
@@ -130,7 +132,7 @@ const Deposit = (lang) => {
         <Col>
           <div className="commodo-card">
             <div className="card-header">
-              MY Deposited AssetS
+              MY Deposited Assets
             </div>
             <div className="card-content">
               <Table

@@ -72,17 +72,17 @@ const Govern = (lang) => {
               <div className="governlist-row" onClick={() => navigate("/govern-details")}>
                 <div className="left-section">
                   <h3>Increasing MaxValidator to 100</h3>
-                  <p>adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, </p>
+                  <p>Increasing MaxValidator from 75 to 100. This will allow for new validators to enter the set and further decentralise the network. With the current number of validators the barrier to becoming active is too high (40000 CMDX) so an increase to 100 validators would be optimal.</p>
                 </div>
                 <div className="right-section">
                   <Row>
                     <Col sm="6">
                       <label>Vote Starts :</label>
-                      <p>24th April, 2022</p>
+                      <p>2022-04-08 15:54:23</p>
                     </Col>
                     <Col sm="6">
                       <label>Voting Ends :</label>
-                      <p>26th April, 2022</p>
+                      <p>2022-04-10 15:54:23</p>
                     </Col>
                     <Col sm="6">
                       <label>Duration : </label>
@@ -99,17 +99,20 @@ const Govern = (lang) => {
               <div className="governlist-row" onClick={() => navigate("/govern-details")}>
                 <div className="left-section">
                   <h3>Increasing MaxValidator to 100</h3>
-                  <p>adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, </p>
+                  <p>Proposal 5 suggested to increase the validator seats to 100 and received more than half votes of Yes. Unfortunately the proposal did not reach quorum and is thus invalid.
+
+                    We believe with the gradual maturity of Comdex, it does make sense to increase the validator seats. The failure of proposal 5 is possibly due to 1. increase too many seats in one time; 2. lack of time to vote, some validators might not have aware of it.
+                    </p>
                 </div>
                 <div className="right-section">
                   <Row>
                     <Col sm="6">
                       <label>Vote Starts :</label>
-                      <p>24th April, 2022</p>
+                      <p>2022-05-17 12:10:35</p>
                     </Col>
                     <Col sm="6">
                       <label>Voting Ends :</label>
-                      <p>26th April, 2022</p>
+                      <p>2022-05-19 12:10:35</p>
                     </Col>
                     <Col sm="6">
                       <label>Duration : </label>

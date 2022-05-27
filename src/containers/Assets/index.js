@@ -47,20 +47,14 @@ const Assets = (lang) => {
       dataIndex: "ibc_deposit",
       key: "ibc_deposit",
       width: 150,
-      align: "center",
-      render: () => (
-        <DepostiModal />
-      ),
+      align: "center"
     },
     {
       title: "IBC Withdraw",
       dataIndex: "ibc_withdraw",
       key: "ibc_withdraw",
       width: 150,
-      align: "center",
-      render: () => (
-        <WithdrawModal />
-      ),
+      align: "center"
     }
   ];
 
@@ -102,6 +96,24 @@ const Assets = (lang) => {
       amount: "1063.67",
     },
     {
+      key: 2,
+      asset: (
+        <>
+          <div className="assets-withicon">
+            <div className="assets-icon">
+              <SvgIcon
+                name="harbor-icon"
+              />
+            </div>
+            HARBOR
+          </div>
+        </>
+      ),
+      no_of_tokens: "1,063",
+      oracle_price: "1",
+      amount: "1063.67",
+    },
+    {
       key: 3,
       asset: (
         <>
@@ -118,6 +130,8 @@ const Assets = (lang) => {
       no_of_tokens: "1,063",
       oracle_price: "1",
       amount: "1063.67",
+      ibc_deposit: <DepostiModal />,
+      ibc_withdraw: <WithdrawModal />
     },
     {
       key: 4,
@@ -136,24 +150,8 @@ const Assets = (lang) => {
       no_of_tokens: "1,063",
       oracle_price: "1",
       amount: "1063.67",
-    },
-    {
-      key: 5,
-      asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <SvgIcon
-                name="cmdx-icon"
-              />
-            </div>
-            CMDX
-          </div>
-        </>
-      ),
-      no_of_tokens: "1,063",
-      oracle_price: "1",
-      amount: "1063.67",
+      ibc_deposit: <DepostiModal />,
+      ibc_withdraw: <WithdrawModal />
     },
     {
       key: 6,
@@ -162,35 +160,19 @@ const Assets = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="atom-icon"
+                name="xprt-icon"
               />
             </div>
-            ATOM
+            XPRT
           </div>
         </>
       ),
       no_of_tokens: "1,063",
       oracle_price: "1",
       amount: "1063.67",
-    },
-    {
-      key: 7,
-      asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <SvgIcon
-                name="osmosis-icon"
-              />
-            </div>
-            OSMO
-          </div>
-        </>
-      ),
-      no_of_tokens: "1,063",
-      oracle_price: "1",
-      amount: "1063.67",
-    },
+      ibc_deposit: <DepostiModal />,
+      ibc_withdraw: <WithdrawModal />
+    }
   ]
   return (
     <div className="app-content-wrapper">
