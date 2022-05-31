@@ -203,7 +203,7 @@ const Assets = (lang) => {
                 />
               </div>
             </div>
-            <div className="commodo-card py-3">
+            <div className="commodo-card py-3 bg-none">
               <div className="card-content">
                 <Table
                   className="custom-table liquidation-table"

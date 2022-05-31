@@ -70,7 +70,7 @@ const Deposit = (lang) => {
                 className="btn-filled table-btn"
                 size="small"
               >
-                Diposit
+                Deposit
               </Button>
             </Link>
             <Button
@@ -130,7 +130,7 @@ const Deposit = (lang) => {
     <div className="app-content-wrapper">
       <Row>
         <Col>
-          <div className="commodo-card">
+          <div className="commodo-card bg-none">
             <div className="card-header">
               MY Deposited Assets
             </div>

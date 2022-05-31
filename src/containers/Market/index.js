@@ -76,7 +76,7 @@ const Market = (lang) => {
       width: 120,
       render: () => (
         <>
-          <Link to='/deposit'><Button
+          <Link to='/supply-details'><Button
             type="primary"
             size="small"
           >
@@ -156,7 +156,7 @@ const Market = (lang) => {
       width: 120,
       render: () => (
         <>
-          <Link to='/borrow'><Button
+          <Link to='/borrow-details'><Button
             type="primary"
             size="small"
           >
@@ -259,7 +259,7 @@ const Market = (lang) => {
     <div className="app-content-wrapper">
       <Row>
         <Col>
-          <div className="commodo-card">
+          <div className="commodo-card bg-none">
             <div className="card-header">
               AssetS to supply
             </div>
@@ -277,7 +277,7 @@ const Market = (lang) => {
       </Row>
       <Row className="mt-3">
         <Col>
-          <div className="commodo-card">
+          <div className="commodo-card bg-none">
             <div className="card-header">
               AssetS to BORROW
             </div>

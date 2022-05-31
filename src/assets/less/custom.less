@@ -39,7 +39,7 @@ body {
 
 ::-webkit-scrollbar-track {
   border-radius: 10px;
-  background-color: @bg-progress;
+  background-color: none;
 }
 
 body.dark-mode ::-webkit-scrollbar {
@@ -54,7 +54,7 @@ body.dark-mode ::-webkit-scrollbar-thumb {
 
 body.dark-mode ::-webkit-scrollbar-track {
   border-radius: 10px;
-  background-color: @text-color-light;
+  background-color: none;
 }
 
 body.sidebar-open {
@@ -466,6 +466,12 @@ button.ant-switch {
   min-width: 10px;
   margin-left: 3px;
 
+  @media screen and (max-width:1440px) {
+    width: 9px;
+    height: 9px;
+    min-width: 9px;
+  }
+
   .dark-mode & {
     fill: @bg-light;
   }
@@ -490,7 +496,8 @@ button.ant-switch {
 
     .ant-table-container {
       table {
-
+        border-collapse: separate;
+        border-spacing: 0 0.65em;
         .ant-table-cell-scrollbar {
           box-shadow: none;
         }
@@ -499,14 +506,15 @@ button.ant-switch {
           tr {
             th {
               background: none !important;
-              font-weight: 400;
-              padding: 10px 15px 10px 15px;
+              font-weight: 500;
+              padding: 2px 15px 0 15px;
               font-size: @font-size-base - 1;
               color: @bg-dark;
               border: 0;
 
               .dark-mode & {
                 color: @text-color-light;
+                font-weight: 400;
               }
             }
             th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before{
@@ -525,12 +533,11 @@ button.ant-switch {
           }
 
           tr {
+            border: 1px solid rgba(@bg-dark, 0.5);
+            background: @card-bg-light;
             border-radius: 15px;
-
-            &:nth-child(1) {
-              td{
-                border-top: 0 !important;
-              }
+            .dark-mode & {
+              background: @card-bg-dark;
             }
 
             td {
@@ -539,10 +546,16 @@ button.ant-switch {
                 min-width: 90px;
               }
 
+              &:first-child{
+                border-radius: 15px 0 0 15px;
+              }
+
+              &:last-child{
+                border-radius: 0 15px 15px 0;
+              }
+
               color: @text-color-dark;
-              border-top: 1px solid rgba(@bg-dark, 0.3);
-              border-left: 0;
-              border-right: 0;
+              border: 0;
               padding: 8px 15px;
               font-size: @font-size-lg - 1;
               font-weight: 600;
@@ -1214,6 +1227,11 @@ button.ant-switch {
   border-radius: 15px;
   padding: 10px 0;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+  &.bg-none{
+    background: none !important;
+    box-shadow: none;
+  }
 
   .dark-mode & {
     background: @card-bg-dark;
