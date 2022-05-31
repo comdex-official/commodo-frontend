@@ -536,8 +536,16 @@ button.ant-switch {
             border: 1px solid rgba(@bg-dark, 0.5);
             background: @card-bg-light;
             border-radius: 15px;
+
+            &:hover{
+              background: rgba(@card-bg-light, 0.8);
+            }
+
             .dark-mode & {
               background: @card-bg-dark;
+              &:hover{
+                background: rgba(@card-bg-dark, 0.8);
+              }
             }
 
             td {
@@ -947,7 +955,6 @@ button.ant-switch {
     -moz-appearance: none;
     appearance: none;
     color: @text-color-dark2;
-    padding-right: 0;
     font-weight: 500;
 
     .dark-mode & {
