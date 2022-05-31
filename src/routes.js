@@ -9,6 +9,8 @@ import BorrowRepay from "./containers/Myhome/BorrowRepay";
 import Deposit from "./containers/Myhome/Depositwithdraw";
 import Assets from "./containers/Assets";
 import Extra from "./containers/Extra";
+import SupplyDetails from "./containers/Market/SupplyDetails";
+import BorrowDetails from "./containers/Market/BorrowDetails";
 
 const routes = [
   {
@@ -30,6 +32,14 @@ const routes = [
   {
     path: "/market",
     element: <Market />,
+  },
+  {
+    path: "/supply-details",
+    element: <SupplyDetails /> ,
+  },
+  {
+    path: "/borrow-details",
+    element: <BorrowDetails /> ,
   },
   {
     path: "/liquidation",

@@ -1,7 +1,7 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon } from "../../components/common";
 import { connect } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import variables from "../../utils/variables";
 import { Button, List, Select, Progress } from "antd";
 import "./index.less";
@@ -60,8 +60,15 @@ const Govern = (lang) => {
           <div className="commodo-card govern-card">
             <div className="governcard-head">
               <Button type="primary" className="btn-filled">New Proposal</Button>
-              <Button type="primary" className="btn-filled">Forum</Button>
-              <Select defaultValue="lucy" className="select-primary ml-2" suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />} style={{ width: 120 }}>
+                <a
+                  aria-label="Twitter"
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://forum.comdex.one"
+                >
+                  <Button type="primary" className="btn-filled">Forum</Button>
+                </a>
+              <Select placeholder="Filter" className="select-primary ml-2" suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />} style={{ width: 120 }}>
                 <Option value="f1">Passed</Option>
                 <Option value="f2">Rejected</Option>
                 <Option value="f3">Pending</Option>

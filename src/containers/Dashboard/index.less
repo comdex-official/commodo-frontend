@@ -170,6 +170,7 @@
                 }
                 .assets-section{
                     display: flex;
+                    justify-content: space-between;
                     .assets-left{
                         max-width: 400px;
                         .small-icons{
@@ -203,6 +204,9 @@
                             font-size: 1.1rem;
                             font-weight: 700;
                             margin-bottom: 0;
+                            @media screen and (max-width:1367px) {
+                                font-size: 0.9rem;
+                            }
                         }
                     }
                     .assets-right{
@@ -210,6 +214,12 @@
                         img{
                             width: 120px;
                             margin-bottom: 0.5rem;
+                            margin-left: auto;
+                            margin-right: auto;
+                            display: block;
+                            @media screen and (max-width:1367px) {
+                                width: 100px;
+                            }
                         }
                     }
                 }

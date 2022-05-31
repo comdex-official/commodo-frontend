@@ -113,7 +113,7 @@ const Borrow = (lang) => {
     <div className="app-content-wrapper">
       <Row>
         <Col>
-          <div className="commodo-card">
+          <div className="commodo-card bg-none">
             <div className="card-header">
               MY Borrowed AssetS
             </div>
