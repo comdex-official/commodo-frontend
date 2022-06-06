@@ -106,6 +106,26 @@ const BorrowTab = (lang) => {
                     <div className="name">Atom</div>
                   </div>
                 </Option>
+                <Option key="3">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="osmosis-icon" />
+                      </div>
+                    </div>
+                    <div className="name">OSMO</div>
+                  </div>
+                </Option>
+                <Option key="4">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="cmdx-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMDX</div>
+                  </div>
+                </Option>
               </Select>
             </div>
           </div>
@@ -173,6 +193,26 @@ const BorrowTab = (lang) => {
                     <div className="name">Atom</div>
                   </div>
                 </Option>
+                <Option key="3">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="osmosis-icon" />
+                      </div>
+                    </div>
+                    <div className="name">OSMO</div>
+                  </div>
+                </Option>
+                <Option key="4">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="cmdx-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMDX</div>
+                  </div>
+                </Option>
               </Select>
             </div>
           </div>
@@ -235,14 +275,14 @@ const BorrowTab = (lang) => {
                 80%
               </Col>
             </Row>
-            <Row className="mt-2">
+            {/* <Row className="mt-2">
               <Col>
                 <label>Liquidation Price</label>
               </Col>
               <Col className="text-right">
                 5%
               </Col>
-            </Row>
+            </Row> */}
           </Col>
         </Row>
         <div className="assets-form-btn">

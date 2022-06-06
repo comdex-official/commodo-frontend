@@ -131,22 +131,12 @@ const Market = (lang) => {
       dataIndex: "bridge_apy",
       key: "bridge_apy",
       width: 140,
-      render: (bridge_apy) => (
-        <>
-          <div className="d-flex align-items-center">{bridge_apy}% <div className="apy-percents">+6.18% <SvgIcon name="cmdx-icon" /></div></div>
-        </>
-      ),
     },
     {
       title: <>Bridge Asset 2 <br /> APY</>,
       dataIndex: "bridge_apy2",
       key: "bridge_apy2",
       width: 110,
-      render: (bridge_apy) => (
-        <>
-          <div>{bridge_apy}% </div>
-        </>
-      ),
     },
     {
       title: "",
@@ -297,8 +287,8 @@ const Market = (lang) => {
       ),
       total_deposited: "8,256,335",
       asset_apy: "12.76",
-      bridge_apy: "12.33",
-      bridge_apy2: "13.33",
+      bridge_apy: <div className="d-flex align-items-center">12.33% <div className="apy-percents">+6.18% <SvgIcon name="cmdx-icon" /></div></div>,
+      bridge_apy2: "13.33%",
     },
     {
       key: 2,
@@ -340,8 +330,8 @@ const Market = (lang) => {
       ),
       total_deposited: "4,358,675",
       asset_apy: "11.56",
-      bridge_apy: "12.33",
-      bridge_apy2: "13.33",
+      bridge_apy: "12.33%",
+      bridge_apy2: <div className="d-flex align-items-center">13.33% <div className="apy-percents">+6.18% <SvgIcon name="cmdx-icon" /></div></div>,
     },
   ]
   return (

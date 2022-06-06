@@ -89,10 +89,40 @@ const RepayTab = (lang) => {
                   <div className="select-inner">
                     <div className="svg-icon">
                       <div className="svg-icon-inner">
+                        <SvgIcon name="cmst-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMST</div>
+                  </div>
+                </Option>
+                <Option key="2">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
                         <SvgIcon name="atom-icon" />
                       </div>
                     </div>
                     <div className="name">Atom</div>
+                  </div>
+                </Option>
+                <Option key="3">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="osmosis-icon" />
+                      </div>
+                    </div>
+                    <div className="name">OSMO</div>
+                  </div>
+                </Option>
+                <Option key="4">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="cmdx-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMDX</div>
                   </div>
                 </Option>
               </Select>
