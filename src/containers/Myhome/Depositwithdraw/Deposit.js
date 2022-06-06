@@ -22,7 +22,7 @@ const DepositTab = (lang) => {
       counts: "30.45%"
     },
     {
-      title: "Borrow APY",
+      title: "Deposit APY",
       counts: "8.92%"
     }
   ];
@@ -40,7 +40,7 @@ const DepositTab = (lang) => {
       counts: "30.45%"
     },
     {
-      title: "Borrow APY",
+      title: "Deposit APY",
       counts: "7.24%"
     }
   ];
@@ -58,7 +58,7 @@ const DepositTab = (lang) => {
       counts: "30.45%"
     },
     {
-      title: "Borrow APY",
+      title: "Deposit APY",
       counts: "7.88%"
     }
   ];

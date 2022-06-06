@@ -57,13 +57,15 @@ const Borrow = (lang) => {
                 Borrow
               </Button>
             </Link>
-            <Button
-              type="primary"
-              size="small"
-              className="ml-2"
-            >
-              Repay
-            </Button>
+            <Link to="/borrow">
+              <Button
+                type="primary"
+                size="small"
+                className="ml-2"
+              >
+                Repay
+              </Button>
+            </Link>
           </div>
         </>
       ),
@@ -87,7 +89,7 @@ const Borrow = (lang) => {
         </>
       ),
       debt: "142 CMST",
-      apy: "3.60",
+      apy: "13.33",
       health: "36"
     },
     {
@@ -106,7 +108,7 @@ const Borrow = (lang) => {
         </>
       ),
       debt: "159 OSMO",
-      apy: "3.60",
+      apy: "11.56",
       health: "20"
     },
   ]

@@ -73,13 +73,15 @@ const Deposit = (lang) => {
                 Deposit
               </Button>
             </Link>
-            <Button
-              type="primary"
-              size="small"
-              className="ml-2 table-btn"
-            >
-              Withdraw
-            </Button>
+            <Link to="/deposit">
+              <Button
+                type="primary"
+                size="small"
+                className="ml-2 table-btn"
+              >
+                Withdraw
+              </Button>
+            </Link>
           </div>
         </>
       ),
