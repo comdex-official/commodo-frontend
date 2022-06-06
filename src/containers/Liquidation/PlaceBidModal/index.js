@@ -71,7 +71,7 @@ const PlaceBidModal = () => {
           <Row className="p-0">
             <Col className="text-center mt-3">
               <Button type="primary" className="btn-filled px-5" size="large" onClick={handleCancel}>
-                Place BID
+                Place Bid
               </Button>
             </Col>
           </Row>
