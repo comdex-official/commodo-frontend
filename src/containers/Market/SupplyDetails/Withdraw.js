@@ -22,8 +22,8 @@ const WithdrawTab = (lang) => {
       counts: "30.45%"
     },
     {
-      title: "Borrow APY",
-      counts: "30.45%"
+      title: "Deposit APY",
+      counts: "8.92%"
     }
   ];
   const data2 = [
@@ -40,8 +40,8 @@ const WithdrawTab = (lang) => {
       counts: "30.45%"
     },
     {
-      title: "Borrow APY",
-      counts: "30.45%"
+      title: "Deposit APY",
+      counts: "7.24%"
     }
   ];
   const data3 = [
@@ -58,8 +58,8 @@ const WithdrawTab = (lang) => {
       counts: "30.45%"
     },
     {
-      title: "Borrow APY",
-      counts: "30.45%"
+      title: "Deposit APY",
+      counts: "6.38%"
     }
   ];
   return (
@@ -69,9 +69,9 @@ const WithdrawTab = (lang) => {
           <div className="deposit-head-left">
             <div className="assets-col mr-3">
               <div className="assets-icon">
-                <SvgIcon name="cmdx-icon" />
+                <SvgIcon name="osmosis-icon" />
               </div>
-              CMDX
+              OSMO
             </div>
             <div className="assets-col mr-3">
               <div className="assets-icon">
@@ -126,6 +126,26 @@ const WithdrawTab = (lang) => {
                       </div>
                     </div>
                     <div className="name">Atom</div>
+                  </div>
+                </Option>
+                <Option key="3">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="osmosis-icon" />
+                      </div>
+                    </div>
+                    <div className="name">OSMO</div>
+                  </div>
+                </Option>
+                <Option key="4">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="cmdx-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMDX</div>
                   </div>
                 </Option>
               </Select>
@@ -287,9 +307,9 @@ const WithdrawTab = (lang) => {
             <div className="head-left">
               <div className="assets-col">
                 <div className="assets-icon">
-                  <SvgIcon name="cmdx-icon" />
+                  <SvgIcon name="osmosis-icon" />
                 </div>
-                CMDX
+                OSMO
               </div>
               {/* <span className="percent-badge">
                 +6.18 <SvgIcon name="commodo-icon" />

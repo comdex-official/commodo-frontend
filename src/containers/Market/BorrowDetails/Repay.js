@@ -23,7 +23,43 @@ const RepayTab = (lang) => {
     },
     {
       title: "Borrow APY",
+      counts: "12.33%"
+    }
+  ];
+  const data2 = [
+    {
+      title: "Total Borrowed",
+      counts: '$1,234.20'
+    },
+    {
+      title: "Available",
+      counts: "$1,234.20"
+    },
+    {
+      title: "Utilization",
       counts: "30.45%"
+    },
+    {
+      title: "Borrow APY",
+      counts: "13.33%"
+    }
+  ];
+  const data3 = [
+    {
+      title: "Total Borrowed",
+      counts: '$1,234.20'
+    },
+    {
+      title: "Available",
+      counts: "$1,234.20"
+    },
+    {
+      title: "Utilization",
+      counts: "30.45%"
+    },
+    {
+      title: "Borrow APY",
+      counts: "12.76%"
     }
   ];
   return (
@@ -53,10 +89,20 @@ const RepayTab = (lang) => {
                   <div className="select-inner">
                     <div className="svg-icon">
                       <div className="svg-icon-inner">
-                        <SvgIcon name="atom-icon" />
+                        <SvgIcon name="cmst-icon" />
                       </div>
                     </div>
-                    <div className="name">Atom</div>
+                    <div className="name">CMST</div>
+                  </div>
+                </Option>
+                <Option key="2">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="osmosis-icon" />
+                      </div>
+                    </div>
+                    <div className="name">OSMO</div>
                   </div>
                 </Option>
               </Select>
@@ -90,7 +136,7 @@ const RepayTab = (lang) => {
             <Row>
               <Col>
                 <label>Remaining to Repay</label>
-                <p className="remaining-infotext mt-1">You don’t have enough funds to repay the full amount</p>
+                {/* <p className="remaining-infotext mt-1">You don’t have enough funds to repay the full amount</p> */}
               </Col>
               <Col className="text-right">
                 <div>123.45 CMST</div>
@@ -102,12 +148,12 @@ const RepayTab = (lang) => {
                 <label>Current Health Factor</label>
               </Col>
               <Col className="text-right">
-                90%
+                45%
               </Col>
             </Row>
             <Row className="pb-2">
               <Col>
-                <Progress className="commodo-progress" percent={30} />
+                <Progress className="commodo-progress" percent={45} />
               </Col>
             </Row>
             <Row className="mt-2">
@@ -217,7 +263,7 @@ const RepayTab = (lang) => {
               xl: 4,
               xxl: 4,
             }}
-            dataSource={data}
+            dataSource={data2}
             renderItem={item => (
               <List.Item>
                 <div>
@@ -255,7 +301,7 @@ const RepayTab = (lang) => {
               xl: 4,
               xxl: 4,
             }}
-            dataSource={data}
+            dataSource={data3}
             renderItem={item => (
               <List.Item>
                 <div>

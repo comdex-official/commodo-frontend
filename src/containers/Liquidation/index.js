@@ -43,7 +43,7 @@ const Liquidation = (lang) => {
       width: 150,
       render: (asset_apy) => (
         <>
-          {asset_apy} CMST
+          {asset_apy}
         </>
       ),
     },
@@ -70,11 +70,11 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="atom-icon"
+                name="cmdx-icon"
                 viewBox="0 0 30 30"
               />
             </div>
-            ATOM
+            CMDX
           </div>
         </>
       ),
@@ -91,9 +91,9 @@ const Liquidation = (lang) => {
           </div>
         </>
       ),
-      quantity: "1  ATOM",
-      end_time: "01D : 08H : 32M",
-      top_bid: "11"
+      quantity: "368 CMDX",
+      end_time: "07D : 08H : 32M",
+      top_bid: "11 CMST"
     },
     {
       key: 2,
@@ -102,11 +102,11 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="atom-icon"
+                name="osmosis-icon"
                 viewBox="0 0 30 30"
               />
             </div>
-            ATOM
+            OSMO
           </div>
         </>
       ),
@@ -123,9 +123,9 @@ const Liquidation = (lang) => {
           </div>
         </>
       ),
-      quantity: "1  ATOM",
+      quantity: "983 OSMO",
       end_time: "01D : 08H : 32M",
-      top_bid: "11"
+      top_bid: "1,285 CMST"
     },
     {
       key: 3,
@@ -134,19 +134,6 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="atom-icon"
-                viewBox="0 0 30 30"
-              />
-            </div>
-            ATOM
-          </div>
-        </>
-      ),
-      bidding_asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <SvgIcon
                 name="cmst-icon"
                 viewBox="0 0 30 30"
               />
@@ -155,9 +142,22 @@ const Liquidation = (lang) => {
           </div>
         </>
       ),
-      quantity: "1  ATOM",
-      end_time: "01D : 08H : 32M",
-      top_bid: "11"
+      bidding_asset: (
+        <>
+          <div className="assets-withicon">
+            <div className="assets-icon">
+              <SvgIcon
+                name="atom-icon"
+                viewBox="0 0 30 30"
+              />
+            </div>
+            ATOM
+          </div>
+        </>
+      ),
+      quantity: "1386 CMST",
+      end_time: "07D : 08H : 32M",
+      top_bid: "107 ATOM"
     },
     {
       key: 4,
@@ -166,134 +166,6 @@ const Liquidation = (lang) => {
           <div className="assets-withicon">
             <div className="assets-icon">
               <SvgIcon
-                name="cmdx-icon"
-                viewBox="0 0 30 30"
-              />
-            </div>
-            ATOM
-          </div>
-        </>
-      ),
-      bidding_asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <SvgIcon
-                name="cmst-icon"
-                viewBox="0 0 30 30"
-              />
-            </div>
-            CMST
-          </div>
-        </>
-      ),
-      quantity: "1  ATOM",
-      end_time: "01D : 08H : 32M",
-      top_bid: "11"
-    },
-    {
-      key: 5,
-      auctioned_asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <SvgIcon
-                name="cmdx-icon"
-                viewBox="0 0 30 30"
-              />
-            </div>
-            CMDX
-          </div>
-        </>
-      ),
-      bidding_asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <SvgIcon
-                name="cmst-icon"
-                viewBox="0 0 30 30"
-              />
-            </div>
-            CMST
-          </div>
-        </>
-      ),
-      quantity: "1  ATOM",
-      end_time: "01D : 08H : 32M",
-      top_bid: "11"
-    },
-    {
-      key: 6,
-      auctioned_asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <SvgIcon
-                name="cmdx-icon"
-                viewBox="0 0 30 30"
-              />
-            </div>
-            CMDX
-          </div>
-        </>
-      ),
-      bidding_asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <SvgIcon
-                name="cmst-icon"
-                viewBox="0 0 30 30"
-              />
-            </div>
-            CMST
-          </div>
-        </>
-      ),
-      quantity: "1  ATOM",
-      end_time: "01D : 08H : 32M",
-      top_bid: "11"
-    },
-    {
-      key: 7,
-      auctioned_asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <SvgIcon
-                name="cmdx-icon"
-                viewBox="0 0 30 30"
-              />
-            </div>
-            CMDX
-          </div>
-        </>
-      ),
-      bidding_asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <SvgIcon
-                name="cmst-icon"
-                viewBox="0 0 30 30"
-              />
-            </div>
-            CMST
-          </div>
-        </>
-      ),
-      quantity: "1  ATOM",
-      end_time: "01D : 08H : 32M",
-      top_bid: "11"
-    },
-    {
-      key: 8,
-      auctioned_asset: (
-        <>
-          <div className="assets-withicon">
-            <div className="assets-icon">
-              <SvgIcon
                 name="atom-icon"
                 viewBox="0 0 30 30"
               />
@@ -315,11 +187,11 @@ const Liquidation = (lang) => {
           </div>
         </>
       ),
-      quantity: "1  ATOM",
-      end_time: "01D : 08H : 32M",
-      top_bid: "11"
-    },
-  ]
+      quantity: "33 ATOM",
+      end_time: "02D : 08H : 32M",
+      top_bid: "325 CMST"
+    }
+  ];
   return (
     <div className="app-content-wrapper">
       <Row>

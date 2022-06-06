@@ -24,7 +24,7 @@ const Borrow = (lang) => {
       title: "APY",
       dataIndex: "apy",
       key: "apy",
-      width: 150,
+      width: 110,
       render: (apy) => (
         <>{apy}%</>
       ),
@@ -33,10 +33,10 @@ const Borrow = (lang) => {
       title: "Health",
       dataIndex: "health",
       key: "health",
-      width: 200,
+      width: 300,
       align: "center",
-      render: () => (
-        <Progress className="health-progress" style={{ width: 130 }} percent={30} size="small" />
+      render: (text) => (
+        <Progress className="health-progress" style={{ width: 150 }} percent={text} size="small" />
       ),
     },
     {
@@ -57,13 +57,15 @@ const Borrow = (lang) => {
                 Borrow
               </Button>
             </Link>
-            <Button
-              type="primary"
-              size="small"
-              className="ml-2"
-            >
-              Repay
-            </Button>
+            <Link to="/borrow">
+              <Button
+                type="primary"
+                size="small"
+                className="ml-2"
+              >
+                Repay
+              </Button>
+            </Link>
           </div>
         </>
       ),
@@ -87,7 +89,8 @@ const Borrow = (lang) => {
         </>
       ),
       debt: "142 CMST",
-      apy: "3.60",
+      apy: "13.33",
+      health: "36"
     },
     {
       key: 1,
@@ -105,7 +108,8 @@ const Borrow = (lang) => {
         </>
       ),
       debt: "159 OSMO",
-      apy: "3.60",
+      apy: "11.56",
+      health: "20"
     },
   ]
 

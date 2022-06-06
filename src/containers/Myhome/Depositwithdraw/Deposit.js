@@ -22,8 +22,8 @@ const DepositTab = (lang) => {
       counts: "30.45%"
     },
     {
-      title: "Borrow APY",
-      counts: "30.45%"
+      title: "Deposit APY",
+      counts: "8.92%"
     }
   ];
   const data2 = [
@@ -40,8 +40,8 @@ const DepositTab = (lang) => {
       counts: "30.45%"
     },
     {
-      title: "Borrow APY",
-      counts: "30.45%"
+      title: "Deposit APY",
+      counts: "7.24%"
     }
   ];
   const data3 = [
@@ -58,8 +58,8 @@ const DepositTab = (lang) => {
       counts: "30.45%"
     },
     {
-      title: "Borrow APY",
-      counts: "30.45%"
+      title: "Deposit APY",
+      counts: "7.88%"
     }
   ];
   return (

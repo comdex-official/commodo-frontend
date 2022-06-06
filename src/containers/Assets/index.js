@@ -73,9 +73,9 @@ const Assets = (lang) => {
           </div>
         </>
       ),
-      no_of_tokens: "1,063",
+      no_of_tokens: "310",
       oracle_price: "1",
-      amount: "1063.67",
+      amount: "200.18",
     },
     {
       key: 2,
@@ -91,9 +91,9 @@ const Assets = (lang) => {
           </div>
         </>
       ),
-      no_of_tokens: "1,063",
+      no_of_tokens: "120",
       oracle_price: "1",
-      amount: "1063.67",
+      amount: "40.67",
     },
     {
       key: 2,
@@ -109,9 +109,9 @@ const Assets = (lang) => {
           </div>
         </>
       ),
-      no_of_tokens: "1,063",
+      no_of_tokens: "400",
       oracle_price: "1",
-      amount: "1063.67",
+      amount: "1025.67",
     },
     {
       key: 3,
@@ -127,9 +127,9 @@ const Assets = (lang) => {
           </div>
         </>
       ),
-      no_of_tokens: "1,063",
+      no_of_tokens: "280",
       oracle_price: "1",
-      amount: "1063.67",
+      amount: "452.67",
       ibc_deposit: <DepostiModal />,
       ibc_withdraw: <WithdrawModal />
     },
@@ -147,9 +147,9 @@ const Assets = (lang) => {
           </div>
         </>
       ),
-      no_of_tokens: "1,063",
+      no_of_tokens: "130",
       oracle_price: "1",
-      amount: "1063.67",
+      amount: "201.67",
       ibc_deposit: <DepostiModal />,
       ibc_withdraw: <WithdrawModal />
     },
@@ -167,9 +167,9 @@ const Assets = (lang) => {
           </div>
         </>
       ),
-      no_of_tokens: "1,063",
+      no_of_tokens: "260",
       oracle_price: "1",
-      amount: "1063.67",
+      amount: "302.10",
       ibc_deposit: <DepostiModal />,
       ibc_withdraw: <WithdrawModal />
     }

@@ -73,13 +73,15 @@ const Deposit = (lang) => {
                 Deposit
               </Button>
             </Link>
-            <Button
-              type="primary"
-              size="small"
-              className="ml-2 table-btn"
-            >
-              Withdraw
-            </Button>
+            <Link to="/deposit">
+              <Button
+                type="primary"
+                size="small"
+                className="ml-2 table-btn"
+              >
+                Withdraw
+              </Button>
+            </Link>
           </div>
         </>
       ),
@@ -102,8 +104,8 @@ const Deposit = (lang) => {
         </>
       ),
       available: "142 CMST",
-      apy: "2.6",
-      rewards: "1,234 CMDX"
+      apy: "8.92",
+      rewards: "12.6664 CMST"
     },
     {
       key: 2,
@@ -121,8 +123,8 @@ const Deposit = (lang) => {
         </>
       ),
       available: "149 OSMO",
-      apy: "3.1",
-      rewards: "1,234 CMDX"
+      apy: "6.38",
+      rewards: "9.506 OSMO"
     },
   ]
 
