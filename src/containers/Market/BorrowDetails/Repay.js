@@ -99,30 +99,10 @@ const RepayTab = (lang) => {
                   <div className="select-inner">
                     <div className="svg-icon">
                       <div className="svg-icon-inner">
-                        <SvgIcon name="atom-icon" />
-                      </div>
-                    </div>
-                    <div className="name">Atom</div>
-                  </div>
-                </Option>
-                <Option key="3">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
                         <SvgIcon name="osmosis-icon" />
                       </div>
                     </div>
                     <div className="name">OSMO</div>
-                  </div>
-                </Option>
-                <Option key="4">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="cmdx-icon" />
-                      </div>
-                    </div>
-                    <div className="name">CMDX</div>
                   </div>
                 </Option>
               </Select>
@@ -156,7 +136,7 @@ const RepayTab = (lang) => {
             <Row>
               <Col>
                 <label>Remaining to Repay</label>
-                <p className="remaining-infotext mt-1">You don’t have enough funds to repay the full amount</p>
+                {/* <p className="remaining-infotext mt-1">You don’t have enough funds to repay the full amount</p> */}
               </Col>
               <Col className="text-right">
                 <div>123.45 CMST</div>
@@ -168,12 +148,12 @@ const RepayTab = (lang) => {
                 <label>Current Health Factor</label>
               </Col>
               <Col className="text-right">
-                90%
+                45%
               </Col>
             </Row>
             <Row className="pb-2">
               <Col>
-                <Progress className="commodo-progress" percent={30} />
+                <Progress className="commodo-progress" percent={45} />
               </Col>
             </Row>
             <Row className="mt-2">
