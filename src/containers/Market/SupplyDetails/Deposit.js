@@ -23,7 +23,7 @@ const DepositTab = (lang) => {
     },
     {
       title: "Deposit APY",
-      counts: "12.33%"
+      counts: "8.92%"
     }
   ];
   const data2 = [
@@ -41,7 +41,7 @@ const DepositTab = (lang) => {
     },
     {
       title: "Deposit APY",
-      counts: "13.33%"
+      counts: "7.24%"
     }
   ];
   const data3 = [
@@ -59,7 +59,7 @@ const DepositTab = (lang) => {
     },
     {
       title: "Deposit APY",
-      counts: "12.76%"
+      counts: "6.38%"
     }
   ];
   return (
@@ -69,9 +69,9 @@ const DepositTab = (lang) => {
           <div className="deposit-head-left">
             <div className="assets-col mr-3">
               <div className="assets-icon">
-                <SvgIcon name="cmdx-icon" />
+                <SvgIcon name="osmosis-icon" />
               </div>
-              CMDX
+              OSMO
             </div>
             <div className="assets-col mr-3">
               <div className="assets-icon">
@@ -132,6 +132,26 @@ const DepositTab = (lang) => {
                     <div className="name">Atom</div>
                   </div>
                 </Option>
+                <Option key="3">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="osmosis-icon" />
+                      </div>
+                    </div>
+                    <div className="name">OSMO</div>
+                  </div>
+                </Option>
+                <Option key="4">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="cmdx-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMDX</div>
+                  </div>
+                </Option>
               </Select>
             </div>
           </div>
@@ -181,14 +201,14 @@ const DepositTab = (lang) => {
                 80%
               </Col>
             </Row>
-            <Row className="mt-2">
+            {/* <Row className="mt-2">
               <Col>
                 <label>Liquidation Price</label>
               </Col>
               <Col className="text-right">
                 5%
               </Col>
-            </Row>
+            </Row> */}
             <Row className="mt-2">
               <Col>
                 <label>Liquidation Penalty</label>
@@ -304,9 +324,9 @@ const DepositTab = (lang) => {
             <div className="head-left">
               <div className="assets-col">
                 <div className="assets-icon">
-                  <SvgIcon name="cmdx-icon" />
+                  <SvgIcon name="osmosis-icon" />
                 </div>
-                CMDX
+                OSMO
               </div>
               {/* <span className="percent-badge">
                 +6.18 <SvgIcon name="commodo-icon" />
