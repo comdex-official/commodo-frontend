@@ -151,7 +151,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
     series: [
       {
         name: "Deposited",
-        data: [2, 2.5, 2.8, 3, 4, 4.5, 4.2, 4.0, 3.8, 3.2, 4, 2.9],
+        data: [1000, 1500, 500, 1200, 3000, 400, 5000, 3520, 6500, 7000, 4000, 8000],
         lineWidth: 2,
         lineColor: "#52B788",
         marker: false,
@@ -159,7 +159,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
       },
       {
         name: "Borrowed",
-        data: [1.9, 2.2, 2.4, 2.9, 3, 4.1, 3.9, 3, 3.2, 2.2, 3, 2.1],
+        data: [800, 1200, 360, 890, 2500, 4000, 8000, 654, 889, 500, 300, 650],
         lineWidth: 2,
         lineColor: "#D8F3DC",
         marker: false,
@@ -175,7 +175,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
             <div className="commodo-card h-100">
               <div className="dashboard-statics ml-4">
                 <p>Total Value Locked <TooltipIcon text="Value of Assets Locked" /></p>
-                <h2>$15,690.00</h2>
+                <h2>$57,156,855</h2>
               </div>
               <div className="totalvalues">
                 <div className="totalvalues-chart">
@@ -184,11 +184,11 @@ const Dashboard = ({ lang, isDarkMode }) => {
                 <div className="totalvalues-right">
                   <div className="dashboard-statics mb-5" style={{ borderColor: "#52B788" }}>
                     <p>Total Deposited <TooltipIcon text="Value of Assets Depositedon platfrom" /></p>
-                    <h3>$12,345.00</h3>
+                    <h3>$30,283,670</h3>
                   </div>
                   <div className="dashboard-statics mb-0" style={{ borderColor: "#E2F7E5" }}>
                     <p>Total Collateral <TooltipIcon text="Value of Assets Deposited" /></p>
-                    <h3>$2,345.00</h3>
+                    <h3>$26,873,185</h3>
                   </div>
                 </div>
               </div>
@@ -229,7 +229,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
                         </div>
                         CMST
                       </div>
-                      <b>24.32%</b>
+                      <b>8.92%</b>
                     </li>
                     <li>
                       <div className="assets-col">
@@ -238,7 +238,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
                         </div>
                         CMDX
                       </div>
-                      <b>18.32%</b>
+                      <b>7.88%</b>
                     </li>
                     <li>
                       <div className="assets-col">
@@ -247,7 +247,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
                         </div>
                         ATOM
                       </div>
-                      <b>14.32%</b>
+                      <b>7.24%</b>
                     </li>
                   </ul>
                 </div>
@@ -261,7 +261,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
                         </div>
                         CMST
                       </div>
-                      <b>24.32%</b>
+                      <b>12.33%</b>
                     </li>
                     <li>
                       <div className="assets-col">
@@ -270,7 +270,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
                         </div>
                         CMDX
                       </div>
-                      <b>18.32%</b>
+                      <b>14.76%</b>
                     </li>
                     <li>
                       <div className="assets-col">
@@ -279,7 +279,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
                         </div>
                         ATOM
                       </div>
-                      <b>14.32%</b>
+                      <b>13.33%</b>
                     </li>
                   </ul>
                 </div>
@@ -302,11 +302,11 @@ const Dashboard = ({ lang, isDarkMode }) => {
               <div className="bottom-chart-right">
                 <div className="dashboard-statics" style={{ borderColor: "#52B788" }}>
                   <p>Total Deposited</p>
-                  <h2>$30,000,000</h2>
+                  <h2>$30,283,670</h2>
                 </div>
                 <div className="dashboard-statics" style={{ borderColor: "#E2F7E5" }}>
                   <p>Total Borrowed</p>
-                  <h2>$21,000,000</h2>
+                  <h2>$14,323,970</h2>
                 </div>
               </div>
             </div>

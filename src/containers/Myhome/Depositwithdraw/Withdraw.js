@@ -23,7 +23,7 @@ const WithdrawTab = (lang) => {
     },
     {
       title: "Borrow APY",
-      counts: "30.45%"
+      counts: "12.33%"
     }
   ];
   const data2 = [
@@ -41,7 +41,7 @@ const WithdrawTab = (lang) => {
     },
     {
       title: "Borrow APY",
-      counts: "30.45%"
+      counts: "13.33%"
     }
   ];
   const data3 = [
@@ -59,7 +59,7 @@ const WithdrawTab = (lang) => {
     },
     {
       title: "Borrow APY",
-      counts: "30.45%"
+      counts: "12.76%"
     }
   ];
   return (

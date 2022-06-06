@@ -167,7 +167,7 @@ const Market = (lang) => {
     },
   ];
 
-  const tableData = [
+  const tableDataSupply = [
     {
       key: 1,
       asset: (
@@ -206,10 +206,10 @@ const Market = (lang) => {
           </div>
         </>
       ),
-      total_deposited: "1,234.67",
-      asset_apy: "4.9",
-      bridge_apy: "4.99",
-      bridge_apy2: "4.99",
+      total_deposited: "18,233,765",
+      asset_apy: "7.88",
+      bridge_apy: "8.92",
+      bridge_apy2: "7.24",
     },
     {
       key: 2,
@@ -249,10 +249,99 @@ const Market = (lang) => {
           </div>
         </>
       ),
-      total_deposited: "1,234.67",
-      asset_apy: "4.9",
-      bridge_apy: "4.99",
-      bridge_apy2: "4.99",
+      total_deposited: "11,975,385",
+      asset_apy: "6.38",
+      bridge_apy: "8.92",
+      bridge_apy2: "7.29",
+    },
+  ];
+
+  const tableDataBorrow = [
+    {
+      key: 1,
+      asset: (
+        <>
+          <div className="assets-withicon">
+            <div className="assets-icon">
+              <SvgIcon
+                name="cmdx-icon"
+              />
+            </div>
+            CDMX
+          </div>
+        </>
+      ),
+      bridge_asset: (
+        <>
+          <div className="assets-withicon">
+            <div className="assets-icon">
+              <SvgIcon
+                name="cmst-icon"
+              />
+            </div>
+            CMST
+          </div>
+        </>
+      ),
+      bridge_asset2: (
+        <>
+          <div className="assets-withicon">
+            <div className="assets-icon">
+              <SvgIcon
+                name="atom-icon"
+              />
+            </div>
+            Atom
+          </div>
+        </>
+      ),
+      total_deposited: "8,256,335",
+      asset_apy: "12.76",
+      bridge_apy: "12.33",
+      bridge_apy2: "13.33",
+    },
+    {
+      key: 2,
+      asset: (
+        <>
+          <div className="assets-withicon">
+            <div className="assets-icon">
+              <SvgIcon
+                name="osmosis-icon"
+              />
+            </div>
+            OSMO
+          </div>
+        </>
+      ),
+      bridge_asset: (
+        <>
+          <div className="assets-withicon">
+            <div className="assets-icon">
+              <SvgIcon
+                name="cmst-icon"
+              />
+            </div>
+            CMST
+          </div>
+        </>
+      ),
+      bridge_asset2: (
+        <>
+          <div className="assets-withicon">
+            <div className="assets-icon">
+              <SvgIcon
+                name="atom-icon"
+              />
+            </div>
+            Atom
+          </div>
+        </>
+      ),
+      total_deposited: "4,358,675",
+      asset_apy: "11.56",
+      bridge_apy: "12.33",
+      bridge_apy2: "13.33",
     },
   ]
   return (
@@ -266,7 +355,7 @@ const Market = (lang) => {
             <div className="card-content">
               <Table
                 className="custom-table market-table1"
-                dataSource={tableData}
+                dataSource={tableDataSupply}
                 columns={columns}
                 pagination={false}
                 scroll={{ x: "100%", y: "30vh" }}
@@ -284,7 +373,7 @@ const Market = (lang) => {
             <div className="card-content">
               <Table
                 className="custom-table market-table2"
-                dataSource={tableData}
+                dataSource={tableDataBorrow}
                 columns={Borrowcolumns}
                 pagination={false}
                 scroll={{ x: "100%", y: "30vh" }}

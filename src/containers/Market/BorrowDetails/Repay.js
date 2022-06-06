@@ -23,7 +23,43 @@ const RepayTab = (lang) => {
     },
     {
       title: "Borrow APY",
+      counts: "12.33%"
+    }
+  ];
+  const data2 = [
+    {
+      title: "Total Borrowed",
+      counts: '$1,234.20'
+    },
+    {
+      title: "Available",
+      counts: "$1,234.20"
+    },
+    {
+      title: "Utilization",
       counts: "30.45%"
+    },
+    {
+      title: "Borrow APY",
+      counts: "13.33%"
+    }
+  ];
+  const data3 = [
+    {
+      title: "Total Borrowed",
+      counts: '$1,234.20'
+    },
+    {
+      title: "Available",
+      counts: "$1,234.20"
+    },
+    {
+      title: "Utilization",
+      counts: "30.45%"
+    },
+    {
+      title: "Borrow APY",
+      counts: "12.76%"
     }
   ];
   return (
@@ -217,7 +253,7 @@ const RepayTab = (lang) => {
               xl: 4,
               xxl: 4,
             }}
-            dataSource={data}
+            dataSource={data2}
             renderItem={item => (
               <List.Item>
                 <div>
@@ -255,7 +291,7 @@ const RepayTab = (lang) => {
               xl: 4,
               xxl: 4,
             }}
-            dataSource={data}
+            dataSource={data3}
             renderItem={item => (
               <List.Item>
                 <div>
