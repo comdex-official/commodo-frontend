@@ -40,9 +40,6 @@ const ConnectButton = ({
   setcAssetBalance,
   setPoolBalance,
   markets,
-  setAccountVaults,
-  setCollateralBalance,
-  setDebtBalance,
   refreshBalance,
   setMarkets,
   poolBalances,
@@ -54,7 +51,6 @@ const ConnectButton = ({
     const userAddress = savedAddress ? decode(savedAddress) : address;
 
     fetchMarkets();
-    getVaults();
 
     if (userAddress) {
       setAccountAddress(userAddress);
@@ -75,11 +71,7 @@ const ConnectButton = ({
       true,
       false
     );
-  }, [markets]);
-
-  useEffect(() => {
-    getVaults();
-  }, [pools]);
+  }, [markets]);``
 
   const fetchBalances = (address) => {
     queryAllBalances(address, (error, result) => {
@@ -138,51 +130,6 @@ const ConnectButton = ({
     });
 
     setAssetBalance(Lodash.sum(value));
-  };
-
-  const getVaults = () => {
-    fetchVaults(
-      address,
-      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
-      DEFAULT_PAGE_SIZE,
-      true,
-      false
-    );
-  };
-
-  const fetchVaults = (address, offset, limit, isTotal, isReverse) => {
-    queryVaultList(
-      address,
-      offset,
-      limit,
-      isTotal,
-      isReverse,
-      (error, result) => {
-        if (error) {
-          message.error(error);
-          return;
-        }
-
-        setAccountVaults(result?.vaultsInfo, result?.pagination);
-
-        calculateMintBalance(result?.vaultsInfo);
-      }
-    );
-  };
-
-  const calculateMintBalance = (vaults) => {
-    const userVaults = vaults.filter((item) => item.owner === address);
-    const debtBalance = userVaults.map((item) => {
-      return marketPrice(markets, item.debt?.denom) * item.debt?.amount;
-    });
-
-    setDebtBalance(Lodash.sum(debtBalance));
-
-    const collateralBalance = userVaults.map((item) => {
-      return getPrice(item.collateral?.denom) * item.collateral?.amount;
-    });
-
-    setCollateralBalance(Lodash.sum(collateralBalance));
   };
 
   const WalletConnectedDropdown = <ConnectModal />;
