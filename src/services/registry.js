@@ -5,7 +5,7 @@ import {
   MsgDrawRequest,
   MsgRepayRequest,
   MsgWithdrawRequest,
-} from "comdex-codec/build/comdex/vault/v1beta1/msg";
+} from "comdex-codec/build/comdex/vault/v1beta1/tx";
 import {
   MsgCreatePool,
   MsgDepositWithinBatch,
@@ -14,7 +14,7 @@ import {
   MsgBondPoolTokens,
   MsgUnbondPoolTokens,
 } from "comdex-codec/build/comdex/liquidity/v1beta1/tx";
-import {MsgPlaceBidRequest} from "comdex-codec/build/comdex/auction/v1beta1/msg";
+import {MsgPlaceBidRequest} from "comdex-codec/build/comdex/auction/v1beta1/tx";
 
 import { Registry } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes } from "@cosmjs/stargate";
