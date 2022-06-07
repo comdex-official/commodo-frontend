@@ -1,4 +1,4 @@
-import { QueryServiceClientImpl } from "comdex-codec/build/comdex/market/v1beta1/querier";
+import { QueryServiceClientImpl } from "comdex-codec/build/comdex/market/v1beta1/query";
 import Long from "long";
 import { createQueryClient } from "../helper";
 
