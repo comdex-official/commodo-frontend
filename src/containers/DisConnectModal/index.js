@@ -17,11 +17,7 @@ const DisConnectModal = ({
   setAccountAddress,
   lang,
   address,
-  cAssetBalance,
   assetBalance,
-  poolBalance,
-  collateralBalance,
-  debtBalance,
   name,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -44,12 +40,7 @@ const DisConnectModal = ({
   };
 
   const getTotalValue = () => {
-    return (
-      cAssetBalance +
-      assetBalance +
-      poolBalance +
-      (collateralBalance - debtBalance)
-    );
+    return assetBalance;
   };
 
   const WalletConnectedDropdown = (
@@ -93,7 +84,7 @@ const DisConnectModal = ({
       <Dropdown overlay={WalletConnectedDropdown} trigger={["click"]}>
         <div className="connected_button">
           {" "}
-          <SvgIcon name="wallet" /> qwddf..12f234
+          <SvgIcon name="wallet" /> {truncateString(address, 6, 6)}
         </div>
       </Dropdown>
       <Modal
@@ -143,11 +134,7 @@ DisConnectModal.propTypes = {
   showAccountConnectModal: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetBalance: PropTypes.number,
-  cAssetBalance: PropTypes.number,
-  collateralBalance: PropTypes.number,
-  debtBalance: PropTypes.number,
   name: PropTypes.string,
-  poolBalance: PropTypes.number,
   show: PropTypes.bool,
 };
 
@@ -156,11 +143,7 @@ const stateToProps = (state) => {
     lang: state.language,
     address: state.account.address,
     show: state.account.showModal,
-    cAssetBalance: state.account.balances.cAsset,
     assetBalance: state.account.balances.asset,
-    poolBalance: state.account.balances.pool,
-    collateralBalance: state.account.balances.collateral,
-    debtBalance: state.account.balances.debt,
     name: state.account.name,
   };
 };
