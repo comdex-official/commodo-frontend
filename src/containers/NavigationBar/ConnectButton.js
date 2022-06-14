@@ -11,7 +11,11 @@ import {
 import DisConnectModal from "../DisConnectModal";
 import React, { useEffect } from "react";
 import variables from "../../utils/variables";
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
+import {
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  DOLLAR_DECIMALS,
+} from "../../constants/common";
 import {
   setAccountBalances,
   setPoolBalance,
@@ -30,6 +34,7 @@ import { queryMarketList } from "../../services/oracle/query";
 import { setMarkets } from "../../actions/oracle";
 import { fetchKeplrAccountName } from "../../services/keplr";
 import { comdex } from "../../config/network";
+import { amountConversionWithComma, getDenomBalance } from "../../utils/coin";
 
 const ConnectButton = ({
   setAccountAddress,
@@ -44,7 +49,7 @@ const ConnectButton = ({
   setMarkets,
   poolBalances,
   setAccountName,
-  pools,
+  balances,
 }) => {
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
@@ -57,7 +62,7 @@ const ConnectButton = ({
 
       fetchKeplrAccountName().then((name) => {
         setAccountName(name);
-      })
+      });
 
       fetchBalances(address);
     }
@@ -71,7 +76,8 @@ const ConnectButton = ({
       true,
       false
     );
-  }, [markets]);``
+  }, [markets]);
+  ``;
 
   const fetchBalances = (address) => {
     queryAllBalances(address, (error, result) => {
@@ -140,7 +146,7 @@ const ConnectButton = ({
         <div className="connected_div">
           <div className="connected_left">
             <div className="testnet-top">
-              <SvgIcon name="cmdx-icon" /> $75.30
+              <SvgIcon name="cmdx-icon" /> {amountConversionWithComma((getDenomBalance(balances, comdex.coinMinimalDenom) || 0), DOLLAR_DECIMALS)}
             </div>
           </div>
           <DisConnectModal />
@@ -177,6 +183,12 @@ ConnectButton.propTypes = {
   setMarkets: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
   address: PropTypes.string,
+  balances: PropTypes.arrayOf(
+    PropTypes.shape({
+      denom: PropTypes.string.isRequired,
+      amount: PropTypes.string,
+    })
+  ),
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
@@ -213,6 +225,7 @@ const stateToProps = (state) => {
     refreshBalance: state.account.refreshBalance,
     poolBalances: state.liquidity.poolBalances,
     pools: state.liquidity.pool.list,
+    balances: state.account.balances.list,
   };
 };
 
