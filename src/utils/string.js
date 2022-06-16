@@ -31,15 +31,15 @@ export const ibcDenomToDenom = (key) => {
 
 export const denomToSymbol = (key) => {
   switch (key) {
+    case "ucmst":
+      return "CMST";
+    case "uharbor":
+      return "HARBOR";
     case "uatom":
     case ibcDenoms["uatom"]:
       return "ATOM";
     case "udvpn":
       return "DVPN";
-    case "uusd":
-    case "uust":
-    case ibcDenoms["uusd"]:
-      return "USD";
     case "uxprt":
     case ibcDenoms["uxprt"]:
       return "XPRT";
@@ -51,14 +51,8 @@ export const denomToSymbol = (key) => {
       return "OSMO";
     case "ucmdx":
       return "CMDX";
-    case "ucgold":
-      return "XAU";
-    case "ucsilver":
-      return "XAG";
-    case "ucoil":
-      return "OIL";
     default:
-      return "cosmos";
+      return "";
   }
 };
 
@@ -75,17 +69,13 @@ export const iconNameFromDenom = (key) => {
       return "atom-icon";
     case "ucmdx":
       return "comdex-icon";
-    case "uust":
-    case ibcDenoms["uusd"]:
-      return "ust-icon";
-    case "uusd":
-      return "ust-icon";
+    case "ucmst":
+      return "cmst-icon";
+    case "uharbor":
+      return "harbor-icon";
     case "uxprt":
     case ibcDenoms["uxprt"]:
       return "xprt-icon";
-    case "uluna":
-    case ibcDenoms["uluna"]:
-      return "luna-icon";
     case "uosmo":
     case ibcDenoms["uosmo"]:
       return "osmosis-icon";

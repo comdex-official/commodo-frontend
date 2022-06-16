@@ -17,3 +17,15 @@ export const ibcDenoms = {
   uosmo: "ibc/05AC4BBA78C5951339A47DD1BC1E7FC922A9311DF81C85745B1C162F516FF2F1",
   uluna: "ibc/A1E1A20C1E4F2F76F301DA625CC476FBD0FCD8CA94DAF60814CA5257B6CD3E3E",
 }
+
+export const cmst = {
+  coinDenom: "CMST",
+  coinMinimalDenom: "ucmst",
+  coinDecimals: 6,
+};
+
+export const harbor = {
+  coinDenom: "HARBOR",
+  coinMinimalDenom: "uharbor",
+  coinDecimals: 6,
+};

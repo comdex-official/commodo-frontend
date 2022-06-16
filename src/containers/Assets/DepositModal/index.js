@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import variables from "../../../utils/variables";
 import "./index.less"
 
-const DepostiModal = (lang) => {
+const DepositModal = (lang) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
@@ -78,7 +78,7 @@ const DepostiModal = (lang) => {
   );
 };
 
-DepostiModal.propTypes = {
+DepositModal.propTypes = {
   lang: PropTypes.string.isRequired,
 };
 
@@ -91,4 +91,4 @@ const stateToProps = (state) => {
 const actionsToProps = {
 };
 
-export default connect(stateToProps, actionsToProps)(DepostiModal);
+export default connect(stateToProps, actionsToProps)(DepositModal);
