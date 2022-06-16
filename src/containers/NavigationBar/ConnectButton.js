@@ -11,7 +11,11 @@ import {
 import DisConnectModal from "../DisConnectModal";
 import React, { useEffect } from "react";
 import variables from "../../utils/variables";
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
+import {
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  DOLLAR_DECIMALS,
+} from "../../constants/common";
 import {
   setAccountBalances,
   setPoolBalance,
@@ -30,6 +34,7 @@ import { queryMarketList } from "../../services/oracle/query";
 import { setMarkets } from "../../actions/oracle";
 import { fetchKeplrAccountName } from "../../services/keplr";
 import { comdex } from "../../config/network";
+import { amountConversionWithComma, getDenomBalance } from "../../utils/coin";
 
 const ConnectButton = ({
   setAccountAddress,
@@ -40,28 +45,24 @@ const ConnectButton = ({
   setcAssetBalance,
   setPoolBalance,
   markets,
-  setAccountVaults,
-  setCollateralBalance,
-  setDebtBalance,
   refreshBalance,
   setMarkets,
   poolBalances,
   setAccountName,
-  pools,
+  balances,
 }) => {
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
     const userAddress = savedAddress ? decode(savedAddress) : address;
 
     fetchMarkets();
-    getVaults();
 
     if (userAddress) {
       setAccountAddress(userAddress);
 
       fetchKeplrAccountName().then((name) => {
         setAccountName(name);
-      })
+      });
 
       fetchBalances(address);
     }
@@ -76,10 +77,7 @@ const ConnectButton = ({
       false
     );
   }, [markets]);
-
-  useEffect(() => {
-    getVaults();
-  }, [pools]);
+  ``;
 
   const fetchBalances = (address) => {
     queryAllBalances(address, (error, result) => {
@@ -140,51 +138,6 @@ const ConnectButton = ({
     setAssetBalance(Lodash.sum(value));
   };
 
-  const getVaults = () => {
-    fetchVaults(
-      address,
-      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
-      DEFAULT_PAGE_SIZE,
-      true,
-      false
-    );
-  };
-
-  const fetchVaults = (address, offset, limit, isTotal, isReverse) => {
-    queryVaultList(
-      address,
-      offset,
-      limit,
-      isTotal,
-      isReverse,
-      (error, result) => {
-        if (error) {
-          message.error(error);
-          return;
-        }
-
-        setAccountVaults(result?.vaultsInfo, result?.pagination);
-
-        calculateMintBalance(result?.vaultsInfo);
-      }
-    );
-  };
-
-  const calculateMintBalance = (vaults) => {
-    const userVaults = vaults.filter((item) => item.owner === address);
-    const debtBalance = userVaults.map((item) => {
-      return marketPrice(markets, item.debt?.denom) * item.debt?.amount;
-    });
-
-    setDebtBalance(Lodash.sum(debtBalance));
-
-    const collateralBalance = userVaults.map((item) => {
-      return getPrice(item.collateral?.denom) * item.collateral?.amount;
-    });
-
-    setCollateralBalance(Lodash.sum(collateralBalance));
-  };
-
   const WalletConnectedDropdown = <ConnectModal />;
 
   return (
@@ -193,7 +146,7 @@ const ConnectButton = ({
         <div className="connected_div">
           <div className="connected_left">
             <div className="testnet-top">
-              <SvgIcon name="cmdx-icon" /> $75.30
+              <SvgIcon name="cmdx-icon" /> {amountConversionWithComma((getDenomBalance(balances, comdex.coinMinimalDenom) || 0), DOLLAR_DECIMALS)}
             </div>
           </div>
           <DisConnectModal />
@@ -230,6 +183,12 @@ ConnectButton.propTypes = {
   setMarkets: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
   address: PropTypes.string,
+  balances: PropTypes.arrayOf(
+    PropTypes.shape({
+      denom: PropTypes.string.isRequired,
+      amount: PropTypes.string,
+    })
+  ),
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
@@ -266,6 +225,7 @@ const stateToProps = (state) => {
     refreshBalance: state.account.refreshBalance,
     poolBalances: state.liquidity.poolBalances,
     pools: state.liquidity.pool.list,
+    balances: state.account.balances.list,
   };
 };
 

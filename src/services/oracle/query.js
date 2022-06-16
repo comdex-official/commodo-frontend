@@ -1,4 +1,4 @@
-import { QueryServiceClientImpl } from "comdex-codec/build/comdex/market/v1beta1/querier";
+import { QueryClientImpl } from "comdex-codec/build/comdex/market/v1beta1/query";
 import Long from "long";
 import { createQueryClient } from "../helper";
 
@@ -15,7 +15,7 @@ export const queryMarketList = (
       return;
     }
 
-    new QueryServiceClientImpl(rpcClient)
+    new QueryClientImpl(rpcClient)
       .QueryMarkets({
         pagination: {
           key: "",

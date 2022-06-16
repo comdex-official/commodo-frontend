@@ -1,4 +1,4 @@
-import { QueryServiceClientImpl } from "comdex-codec/build/comdex/asset/v1beta1/querier";
+import { QueryClientImpl } from "comdex-codec/build/comdex/asset/v1beta1/query";
 import Long from "long";
 import { createQueryClient } from "../helper";
 
@@ -9,7 +9,7 @@ export const queryPairs = (offset, limit, countTotal, reverse, callback) => {
       return;
     }
 
-    new QueryServiceClientImpl(rpcClient)
+    new QueryClientImpl(rpcClient)
       .QueryPairs({
         pagination: {
           key: "",
@@ -35,7 +35,7 @@ export const queryAssets = (offset, limit, countTotal, reverse, callback) => {
       return;
     }
 
-    new QueryServiceClientImpl(rpcClient)
+    new QueryClientImpl(rpcClient)
       .QueryAssets({
         pagination: {
           key: "",
@@ -61,7 +61,7 @@ export const queryPair = (pairId, callback) => {
       return;
     }
 
-    new QueryServiceClientImpl(rpcClient)
+    new QueryClientImpl(rpcClient)
       .QueryPair({
         id: Long.fromNumber(pairId),
       })

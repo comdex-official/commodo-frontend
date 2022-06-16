@@ -10,13 +10,6 @@ export const ibcAssetsInfo = [
     ibcDenomHash: ibcDenoms["uatom"],
   },
   {
-    counterpartyChainId: "bombay-12",
-    sourceChannelId: "channel-6",
-    destChannelId: "channel-134",
-    coinMinimalDenom: "uusd",
-    ibcDenomHash:ibcDenoms["uusd"],
-  },
-  {
     counterpartyChainId: "test-core-1",
     sourceChannelId: "channel-2",
     destChannelId: "channel-72",
@@ -29,12 +22,5 @@ export const ibcAssetsInfo = [
     destChannelId: "channel-241",
     coinMinimalDenom: "uosmo",
     ibcDenomHash: ibcDenoms["uosmo"]
-  },
-  {
-    counterpartyChainId: "bombay-12",
-    sourceChannelId: "channel-6",
-    destChannelId: "channel-134",
-    coinMinimalDenom: "uluna",
-    ibcDenomHash:ibcDenoms["uluna"]
   },
 ];

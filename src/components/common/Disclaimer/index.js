@@ -3,8 +3,11 @@ import React, { useState } from "react";
 import "./index.less";
 
 const Disclaimer = () => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(
+      localStorage.getItem("agreement_accepted") === null
+  );
   const [isChecked, setIsChecked] = useState(false);
+
   return (
     <>
       <Modal
