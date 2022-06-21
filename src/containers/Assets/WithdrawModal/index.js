@@ -172,7 +172,7 @@ const Withdraw = ({
           </Row>
           <Row>
             <Col className="position-relative">
-              <div className="availabe-balance">
+              <div className="available-balance">
                 {variables[lang].available}
                 <span className="ml-1">
                   {(chain && chain.ibc && amountConversion(chain.ibc.amount)) ||

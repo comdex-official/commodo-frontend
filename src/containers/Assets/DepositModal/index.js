@@ -184,7 +184,7 @@ const Deposit = ({
           </Row>
           <Row>
             <Col className="position-relative mt-3">
-              <div className="availabe-balance">
+              <div className="available-balance">
                 {balanceInProgress ? (
                   <Spin />
                 ) : (
