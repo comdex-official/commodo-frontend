@@ -30,12 +30,12 @@ const History = (lang) => {
       width: 150,
     },
     {
-      title: "Tnx Hash",
-      dataIndex: "tnx_hash",
-      key: "tnx_hash",
+      title: "Tx Hash",
+      dataIndex: "tx_hash",
+      key: "tx_hash",
       width: 300,
-      render: (tnx_hash) => (
-        <div className="tnxshash-col">{tnx_hash} <Copy /></div>
+      render: (tx_hash) => (
+        <div className="txhash-col">{tx_hash} <Copy /></div>
       ),
     }
   ];
@@ -46,14 +46,14 @@ const History = (lang) => {
       type: "Deposit",
       date: "30 Jul 2022",
       block_height: "1234",
-      tnx_hash: "0x6696672B38cF38e5521c8C6e3A902EF4e2F78736",
+      tx_hash: "0x6696672B38cF38e5521c8C6e3A902EF4e2F78736",
     },
     {
       key: 2,
       type: "Repay",
       date: "30 Jul 2022",
       block_height: "1234",
-      tnx_hash: "0x6696672B38cF38e5521c8C6e3A902EF4e2F78736",
+      tx_hash: "0x6696672B38cF38e5521c8C6e3A902EF4e2F78736",
     },
   ]
 
