@@ -8,31 +8,29 @@ import "./index.less";
 const data = [
   {
     title: "Total Airdrop",
-    counts: '24 CMDO'
+    counts: "24 CMDO",
   },
   {
     title: "Claimed Airdrop",
-    counts: "1 CMDO"
+    counts: "1 CMDO",
   },
   {
     title: "Unclaimed Airdrop",
-    counts: "0 CMDO"
+    counts: "0 CMDO",
   },
   {
     title: "Time to claim Airdrop",
-    counts: "01D : 08H : 32M"
-  }
+    counts: "01D : 08H : 32M",
+  },
 ];
 
-const Airdrop = (lang) => {
+const Airdrop = () => {
   return (
     <div className="app-content-wrapper">
       <Row>
         <Col>
           <div className="commodo-card myhome-upper d-block">
-            <div className="card-header w-100 mb-2">
-              CLAIM AIRDROP
-            </div>
+            <div className="card-header w-100 mb-2">CLAIM AIRDROP</div>
             <div className="myhome-upper-left w-100">
               <List
                 grid={{
@@ -45,7 +43,7 @@ const Airdrop = (lang) => {
                   xxl: 4,
                 }}
                 dataSource={data}
-                renderItem={item => (
+                renderItem={(item) => (
                   <List.Item>
                     <div>
                       <p>{item.title}</p>
@@ -61,9 +59,7 @@ const Airdrop = (lang) => {
       <Row>
         <Col>
           <div className="commodo-card">
-            <div className="card-header">
-              MY PROGRESS
-            </div>
+            <div className="card-header">MY PROGRESS</div>
             <div className="card-content mt-4">
               <div className="airdrop-progress">
                 <ul>
@@ -71,10 +67,7 @@ const Airdrop = (lang) => {
                     <span>
                       <span data-fill="true">
                         <div className="dot-icon">
-                          <SvgIcon
-                            name="circle"
-                            viewbox="0 0 30 30"
-                          />
+                          <SvgIcon name="circle" viewbox="0 0 30 30" />
                         </div>
                         <p>25%</p>
                       </span>
@@ -84,10 +77,7 @@ const Airdrop = (lang) => {
                     <span>
                       <span data-fill="active">
                         <div className="dot-icon">
-                          <SvgIcon
-                            name="circle"
-                            viewbox="0 0 30 30"
-                          />
+                          <SvgIcon name="circle" viewbox="0 0 30 30" />
                         </div>
                         <p>50%</p>
                       </span>
@@ -97,10 +87,7 @@ const Airdrop = (lang) => {
                     <span>
                       <span data-fill="false">
                         <div className="dot-icon">
-                          <SvgIcon
-                            name="circle"
-                            viewbox="0 0 30 30"
-                          />
+                          <SvgIcon name="circle" viewbox="0 0 30 30" />
                         </div>
                         <p>75%</p>
                       </span>
@@ -110,10 +97,7 @@ const Airdrop = (lang) => {
                     <span>
                       <span data-fill="false">
                         <div className="dot-icon">
-                          <SvgIcon
-                            name="circle"
-                            viewbox="0 0 30 30"
-                          />
+                          <SvgIcon name="circle" viewbox="0 0 30 30" />
                         </div>
                         <p>Complete</p>
                       </span>
@@ -183,7 +167,6 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {
-};
+const actionsToProps = {};
 
 export default connect(stateToProps, actionsToProps)(Airdrop);

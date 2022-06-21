@@ -10,7 +10,7 @@ import LaunchImage from "../../assets/images/launch-bg.jpg";
 import AssetsIcon from "../../assets/images/assets-icon.png";
 import { Button } from "antd";
 
-const Dashboard = ({ lang, isDarkMode }) => {
+const Dashboard = ({ isDarkMode }) => {
   const Options = {
     chart: {
       type: "pie",
@@ -62,54 +62,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
       },
     ],
   };
-  const PriceChart = {
-    chart: {
-      type: "spline",
-      backgroundColor: null,
-      height: 110,
-      marginBottom: 30,
-    },
-    credits: {
-      enabled: false,
-    },
-    title: {
-      text: "",
-    },
-    yAxis: {
-      gridLineWidth: 0,
-      title: {
-        enabled: false,
-      },
-      labels: {
-        enabled: true,
-        style: {
-          color: isDarkMode ? "#E2F7E5" : "#999",
-        }
-      },
-    },
-    xAxis: {
-      lineColor: false,
-      labels: {
-        style: {
-          fontSize: 10,
-          color: isDarkMode ? "#E2F7E5" : "#999",
-          fontWeight: 300,
-        },
-      },
-      gridLineWidth: 1,
-      gridLineColor: isDarkMode ? "#E2F7E5" : "#999",
-      categories: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC", "JAN", "FEB", "MAR"],
-    },
-    series: [
-      {
-        showInLegend: false,
-        lineWidth: 2,
-        lineColor: "#52B788",
-        marker: false,
-        data: [2, 2.5, 2.8, 3, 4, 4.5, 4.2, 4.0, 3.8, 3.2, 4, 2.9, 3.1, 2.8, 2.7]
-      },
-    ],
-  };
+
   const DepositBorrowChart = {
     chart: {
       type: "spline",
@@ -132,7 +85,7 @@ const Dashboard = ({ lang, isDarkMode }) => {
         enabled: true,
         style: {
           color: isDarkMode ? "#E2F7E5" : "#999",
-        }
+        },
       },
     },
     xAxis: {
@@ -146,12 +99,27 @@ const Dashboard = ({ lang, isDarkMode }) => {
       },
       gridLineWidth: 1,
       gridLineColor: isDarkMode ? "#E2F7E5" : "#999",
-      categories: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+      categories: [
+        "JAN",
+        "FEB",
+        "MAR",
+        "APR",
+        "MAY",
+        "JUN",
+        "JUL",
+        "AUG",
+        "SEP",
+        "OCT",
+        "NOV",
+        "DEC",
+      ],
     },
     series: [
       {
         name: "Deposited",
-        data: [1000, 1500, 500, 1200, 3000, 400, 5000, 3520, 6500, 7000, 4000, 8000],
+        data: [
+          1000, 1500, 500, 1200, 3000, 400, 5000, 3520, 6500, 7000, 4000, 8000,
+        ],
         lineWidth: 2,
         lineColor: "#52B788",
         marker: false,
@@ -174,7 +142,10 @@ const Dashboard = ({ lang, isDarkMode }) => {
           <div className="dashboard-upper-left">
             <div className="commodo-card h-100">
               <div className="dashboard-statics ml-4">
-                <p>Total Value Locked <TooltipIcon text="Value of Assets Locked" /></p>
+                <p>
+                  Total Value Locked{" "}
+                  <TooltipIcon text="Value of Assets Locked" />
+                </p>
                 <h2>$57,156,855</h2>
               </div>
               <div className="totalvalues">
@@ -182,12 +153,24 @@ const Dashboard = ({ lang, isDarkMode }) => {
                   <HighchartsReact highcharts={Highcharts} options={Options} />
                 </div>
                 <div className="totalvalues-right">
-                  <div className="dashboard-statics mb-5" style={{ borderColor: "#52B788" }}>
-                    <p>Total Deposited <TooltipIcon text="Value of Assets Depositedon platfrom" /></p>
+                  <div
+                    className="dashboard-statics mb-5"
+                    style={{ borderColor: "#52B788" }}
+                  >
+                    <p>
+                      Total Deposited{" "}
+                      <TooltipIcon text="Value of Assets Depositedon platfrom" />
+                    </p>
                     <h3>$30,283,670</h3>
                   </div>
-                  <div className="dashboard-statics mb-0" style={{ borderColor: "#E2F7E5" }}>
-                    <p>Total Collateral <TooltipIcon text="Value of Assets Deposited" /></p>
+                  <div
+                    className="dashboard-statics mb-0"
+                    style={{ borderColor: "#E2F7E5" }}
+                  >
+                    <p>
+                      Total Collateral{" "}
+                      <TooltipIcon text="Value of Assets Deposited" />
+                    </p>
                     <h3>$26,873,185</h3>
                   </div>
                 </div>
@@ -197,21 +180,38 @@ const Dashboard = ({ lang, isDarkMode }) => {
           <div className="dashboard-upper-right">
             <div className="commodo-card commodo-launchcard">
               <div className="commodo-launchcard-inner">
-                <img className="launch-bg" alt={"CMDO Token Launch"} src={LaunchImage} />
+                <img
+                  className="launch-bg"
+                  alt={"CMDO Token Launch"}
+                  src={LaunchImage}
+                />
                 <div className="assets-section">
                   <div className="assets-left">
-                    <p>Provide liquidity on CMDX-CMST pool on CSWAP to earn external incentives on COMMODO</p>
+                    <p>
+                      Provide liquidity on CMDX-CMST pool on CSWAP to earn
+                      external incentives on COMMODO
+                    </p>
                     <div className="mt-3">
                       <div className="small-icons mb-2">
-                        <div className="icon-col mr-2"><SvgIcon name="cmst-icon" />CMST</div> - 
-                        <div className="icon-col ml-2"><SvgIcon name="cmdx-icon" /> CMDX</div>
+                        <div className="icon-col mr-2">
+                          <SvgIcon name="cmst-icon" />
+                          CMST
+                        </div>{" "}
+                        -
+                        <div className="icon-col ml-2">
+                          <SvgIcon name="cmdx-icon" /> CMDX
+                        </div>
                       </div>
-                      <h3 className="h3-botttom">300% <small>APR</small></h3>
+                      <h3 className="h3-botttom">
+                        300% <small>APR</small>
+                      </h3>
                     </div>
                   </div>
                   <div className="assets-right">
                     <img alt={AssetsIcon} src={AssetsIcon} />
-                    <Button type="primary" className="btn-filled">Take me there!</Button>
+                    <Button type="primary" className="btn-filled">
+                      Take me there!
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -294,17 +294,30 @@ const Dashboard = ({ lang, isDarkMode }) => {
             <div className="bottom-chart">
               <div className="bottom-chart-left">
                 <div className="legend-custom">
-                  <div className="legend-deposit"><SvgIcon name="rectangle" /> Deposited</div>
-                  <div className="legend-borrow"><SvgIcon name="rectangle" /> Borrowed</div>
+                  <div className="legend-deposit">
+                    <SvgIcon name="rectangle" /> Deposited
+                  </div>
+                  <div className="legend-borrow">
+                    <SvgIcon name="rectangle" /> Borrowed
+                  </div>
                 </div>
-                <HighchartsReact highcharts={Highcharts} options={DepositBorrowChart} />
+                <HighchartsReact
+                  highcharts={Highcharts}
+                  options={DepositBorrowChart}
+                />
               </div>
               <div className="bottom-chart-right">
-                <div className="dashboard-statics" style={{ borderColor: "#52B788" }}>
+                <div
+                  className="dashboard-statics"
+                  style={{ borderColor: "#52B788" }}
+                >
                   <p>Total Deposited</p>
                   <h2>$30,283,670</h2>
                 </div>
-                <div className="dashboard-statics" style={{ borderColor: "#E2F7E5" }}>
+                <div
+                  className="dashboard-statics"
+                  style={{ borderColor: "#E2F7E5" }}
+                >
                   <p>Total Borrowed</p>
                   <h2>$14,323,970</h2>
                 </div>
@@ -328,7 +341,6 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {
-};
+const actionsToProps = {};
 
 export default connect(stateToProps, actionsToProps)(Dashboard);

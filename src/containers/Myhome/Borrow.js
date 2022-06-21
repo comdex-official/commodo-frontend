@@ -6,28 +6,30 @@ import { Button, Table, Progress } from "antd";
 import { Link } from "react-router-dom";
 import "./index.less";
 
-const Borrow = (lang) => {
+const Borrow = () => {
   const columns = [
     {
       title: "Asset",
       dataIndex: "asset",
       key: "asset",
-      width: 180
+      width: 180,
     },
     {
-      title: <>Debt <TooltipIcon text="Current Outstanding Debt" /></>,
+      title: (
+        <>
+          Debt <TooltipIcon text="Current Outstanding Debt" />
+        </>
+      ),
       dataIndex: "debt",
       key: "debt",
-      width: 150
+      width: 150,
     },
     {
       title: "APY",
       dataIndex: "apy",
       key: "apy",
       width: 110,
-      render: (apy) => (
-        <>{apy}%</>
-      ),
+      render: (apy) => <>{apy}%</>,
     },
     {
       title: "Health",
@@ -36,7 +38,12 @@ const Borrow = (lang) => {
       width: 300,
       align: "center",
       render: (text) => (
-        <Progress className="health-progress" style={{ width: 150 }} percent={text} size="small" />
+        <Progress
+          className="health-progress"
+          style={{ width: 150 }}
+          percent={text}
+          size="small"
+        />
       ),
     },
     {
@@ -49,20 +56,12 @@ const Borrow = (lang) => {
         <>
           <div className="d-flex">
             <Link to="/borrow">
-              <Button
-                type="primary"
-                className="btn-filled"
-                size="small"
-              >
+              <Button type="primary" className="btn-filled" size="small">
                 Borrow
               </Button>
             </Link>
             <Link to="/borrow">
-              <Button
-                type="primary"
-                size="small"
-                className="ml-2"
-              >
+              <Button type="primary" size="small" className="ml-2">
                 Repay
               </Button>
             </Link>
@@ -79,10 +78,7 @@ const Borrow = (lang) => {
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              <SvgIcon
-                name="cmst-icon"
-                viewBox="0 0 30 30"
-              />
+              <SvgIcon name="cmst-icon" viewBox="0 0 30 30" />
             </div>
             CMST
           </div>
@@ -90,7 +86,7 @@ const Borrow = (lang) => {
       ),
       debt: "142 CMST",
       apy: "13.33",
-      health: "36"
+      health: "36",
     },
     {
       key: 1,
@@ -98,10 +94,7 @@ const Borrow = (lang) => {
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              <SvgIcon
-                name="osmosis-icon"
-                viewBox="0 0 30 30"
-              />
+              <SvgIcon name="osmosis-icon" viewBox="0 0 30 30" />
             </div>
             OSMO
           </div>
@@ -109,18 +102,16 @@ const Borrow = (lang) => {
       ),
       debt: "159 OSMO",
       apy: "11.56",
-      health: "20"
+      health: "20",
     },
-  ]
+  ];
 
   return (
     <div className="app-content-wrapper">
       <Row>
         <Col>
           <div className="commodo-card bg-none">
-            <div className="card-header">
-              MY Borrowed AssetS
-            </div>
+            <div className="card-header">MY Borrowed AssetS</div>
             <div className="card-content">
               <Table
                 className="custom-table"
@@ -147,7 +138,6 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {
-};
+const actionsToProps = {};
 
 export default connect(stateToProps, actionsToProps)(Borrow);

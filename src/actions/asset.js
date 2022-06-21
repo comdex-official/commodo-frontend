@@ -5,9 +5,7 @@ import {
   ASSETS_SET,
   OUT_ASSET_SET,
   IN_ASSET_SET,
-  IN_AMOUNT_SET,
   OUT_AMOUNT_SET,
-  COLLATERAL_RATIO_SET,
 } from "../constants/asset";
 import { message } from "antd";
 import axios from "axios";
@@ -48,23 +46,9 @@ export const setAssetOut = (value) => {
   };
 };
 
-export const setAmountIn = (value) => {
-  return {
-    type: IN_AMOUNT_SET,
-    value,
-  };
-};
-
 export const setAmountOut = (value) => {
   return {
     type: OUT_AMOUNT_SET,
-    value,
-  };
-};
-
-export const setCollateralRatio = (value) => {
-  return {
-    type: COLLATERAL_RATIO_SET,
     value,
   };
 };

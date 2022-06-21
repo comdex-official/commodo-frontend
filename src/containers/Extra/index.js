@@ -7,34 +7,42 @@ import "./index.less";
 
 const { confirm } = Modal;
 
-const Extra = (lang) => {
+const Extra = () => {
   function showConfirm() {
     confirm({
-      title: 'Do you Want to delete these items?',
-      icon: <SvgIcon name='info-icon' viewbox='0 0 9 9' />,
-      content: 'Some descriptions',
+      title: "Do you Want to delete these items?",
+      icon: <SvgIcon name="info-icon" viewbox="0 0 9 9" />,
+      content: "Some descriptions",
       onOk() {
-        console.log('OK');
+        console.log("OK");
       },
       onCancel() {
-        console.log('Cancel');
+        console.log("Cancel");
       },
     });
   }
 
   function success() {
     Modal.success({
-      title: 'Success',
-      icon: <SvgIcon fill='#52B788' name='success-icon' viewbox='0 0 129 129' />,
-      content: 'Successfully message here..',
+      title: "Success",
+      icon: (
+        <SvgIcon fill="#52B788" name="success-icon" viewbox="0 0 129 129" />
+      ),
+      content: "Successfully message here..",
     });
   }
 
   function error() {
     Modal.error({
-      title: 'error',
-      icon: <SvgIcon fill='#f5222d' name='error-icon' viewbox='0 0 103.096 103.096' />,
-      content: 'Error message here...',
+      title: "error",
+      icon: (
+        <SvgIcon
+          fill="#f5222d"
+          name="error-icon"
+          viewbox="0 0 103.096 103.096"
+        />
+      ),
+      content: "Error message here...",
     });
   }
 
@@ -61,7 +69,6 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {
-};
+const actionsToProps = {};
 
 export default connect(stateToProps, actionsToProps)(Extra);

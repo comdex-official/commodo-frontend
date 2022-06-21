@@ -3,41 +3,38 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import { connect } from "react-redux";
-import variables from "../../../utils/variables";
-import { Button, List, Select, Progress } from "antd";
+import { Button, List } from "antd";
 import "./index.less";
 import VoteNowModal from "../VoteNowModal";
 import { Link } from "react-router-dom";
 
-const { Option } = Select;
-
 const data = [
   {
     title: "Voting Starts",
-    counts: '2022-04-08 15:54:23'
+    counts: "2022-04-08 15:54:23",
   },
   {
     title: "Voting Ends",
-    counts: "2022-04-10 15:54:23"
+    counts: "2022-04-10 15:54:23",
   },
   {
     title: "Duration",
-    counts: "3 Days"
+    counts: "3 Days",
   },
   {
     title: "Proposer",
-    counts: "comdex@123t7...123"
-  }
+    counts: "comdex@123t7...123",
+  },
 ];
 
 const dataVote = [
   {
     title: "Total Value",
-    counts: '24,901.25 CMST'
-  }
+    counts: "24,901.25 CMST",
+  },
 ];
 
-const GovernDetails = (lang) => {
+const GovernDetails = () => {
   const Options = {
     chart: {
       type: "pie",
@@ -113,15 +110,17 @@ const GovernDetails = (lang) => {
     <div className="app-content-wrapper">
       <Row>
         <Col className="text-right mb-3">
-          <Link to="/govern"><Button className="back-btn" type="primary">Back</Button></Link>
+          <Link to="/govern">
+            <Button className="back-btn" type="primary">
+              Back
+            </Button>
+          </Link>
         </Col>
       </Row>
       <Row>
         <Col>
           <div className="commodo-card myhome-upper d-block">
-            <div className="card-header">
-              PROPOSAL DETAILS
-            </div>
+            <div className="card-header">PROPOSAL DETAILS</div>
             <div className="myhome-upper-left w-100">
               <List
                 grid={{
@@ -134,7 +133,7 @@ const GovernDetails = (lang) => {
                   xxl: 4,
                 }}
                 dataSource={data}
-                renderItem={item => (
+                renderItem={(item) => (
                   <List.Item>
                     <div>
                       <p>{item.title}</p>
@@ -155,13 +154,20 @@ const GovernDetails = (lang) => {
                 <h3>#2</h3>
               </Col>
               <Col className="text-right">
-                <Button type="primary" className="btn-filled">Passed</Button>
+                <Button type="primary" className="btn-filled">
+                  Passed
+                </Button>
               </Col>
             </Row>
             <Row>
               <Col>
                 <h2>Increasing MaxValidator to 100</h2>
-                <p>adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, </p>
+                <p>
+                  adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                  dolore magna aliqua. Ut enim ad minim veniam, adipiscing elit,
+                  sed do eiusmod tempor incididunt ut labore et dolore magna
+                  aliqua. Ut enim ad minim veniam,{" "}
+                </p>
               </Col>
             </Row>
           </div>
@@ -177,7 +183,10 @@ const GovernDetails = (lang) => {
               <Col>
                 <div className="govern-dlt-card">
                   <div className="govern-dlt-chart">
-                    <HighchartsReact highcharts={Highcharts} options={Options} />
+                    <HighchartsReact
+                      highcharts={Highcharts}
+                      options={Options}
+                    />
                   </div>
                   <div className="govern-dlt-right">
                     <List
@@ -186,7 +195,7 @@ const GovernDetails = (lang) => {
                         xs: 1,
                       }}
                       dataSource={dataVote}
-                      renderItem={item => (
+                      renderItem={(item) => (
                         <List.Item>
                           <div>
                             <p>{item.title}</p>
@@ -246,7 +255,6 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {
-};
+const actionsToProps = {};
 
 export default connect(stateToProps, actionsToProps)(GovernDetails);

@@ -10,37 +10,37 @@ function onChange(checked) {
   console.log(`switch to ${checked}`);
 }
 
-const Deposit = (lang) => {
+const Deposit = () => {
   const columns = [
     {
       title: "Asset",
       dataIndex: "asset",
       key: "asset",
-      width: 180
+      width: 180,
     },
     {
-      title: <>Available <TooltipIcon text="Balance after transaction" /></>,
+      title: (
+        <>
+          Available <TooltipIcon text="Balance after transaction" />
+        </>
+      ),
       dataIndex: "available",
       key: "available",
-      width: 150
+      width: 150,
     },
     {
       title: "APY",
       dataIndex: "apy",
       key: "apy",
       width: 150,
-      render: (apy) => (
-        <>{apy}%</>
-      ),
+      render: (apy) => <>{apy}%</>,
     },
     {
       title: "Use as Collateral",
       dataIndex: "useas_collateral",
       key: "useas_collateral",
       width: 200,
-      render: (item) => (
-        <Switch onChange={() => onChange(item)} />
-      ),
+      render: (item) => <Switch onChange={() => onChange(item)} />,
     },
     {
       title: "Rewards",
@@ -49,10 +49,10 @@ const Deposit = (lang) => {
       width: 200,
       className: "rewards-column",
       render: (rewards) => (
-          <div>
-            <p>{rewards}</p>
-            <small>$12.34</small>
-          </div>
+        <div>
+          <p>{rewards}</p>
+          <small>$12.34</small>
+        </div>
       ),
     },
     {
@@ -74,11 +74,7 @@ const Deposit = (lang) => {
               </Button>
             </Link>
             <Link to="/deposit">
-              <Button
-                type="primary"
-                size="small"
-                className="ml-2 table-btn"
-              >
+              <Button type="primary" size="small" className="ml-2 table-btn">
                 Withdraw
               </Button>
             </Link>
@@ -95,9 +91,7 @@ const Deposit = (lang) => {
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              <SvgIcon
-                name="cmst-icon"
-              />
+              <SvgIcon name="cmst-icon" />
             </div>
             CMST
           </div>
@@ -105,7 +99,7 @@ const Deposit = (lang) => {
       ),
       available: "142 CMST",
       apy: "8.92",
-      rewards: "12.6664 CMST"
+      rewards: "12.6664 CMST",
     },
     {
       key: 2,
@@ -113,10 +107,7 @@ const Deposit = (lang) => {
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              <SvgIcon
-                name="osmosis-icon"
-                viewBox="0 0 30 30"
-              />
+              <SvgIcon name="osmosis-icon" viewBox="0 0 30 30" />
             </div>
             OSMO
           </div>
@@ -124,18 +115,16 @@ const Deposit = (lang) => {
       ),
       available: "149 OSMO",
       apy: "6.38",
-      rewards: "9.506 OSMO"
+      rewards: "9.506 OSMO",
     },
-  ]
+  ];
 
   return (
     <div className="app-content-wrapper">
       <Row>
         <Col>
           <div className="commodo-card bg-none">
-            <div className="card-header">
-              MY Deposited Assets
-            </div>
+            <div className="card-header">MY Deposited Assets</div>
             <div className="card-content">
               <Table
                 className="custom-table"
@@ -162,7 +151,6 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {
-};
+const actionsToProps = {};
 
 export default connect(stateToProps, actionsToProps)(Deposit);

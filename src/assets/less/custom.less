@@ -21,9 +21,8 @@ body {
   height: auto !important;
 
   &.dark-mode {
-    background: #000C07 !important;
+    background: #000c07 !important;
     color: @white;
-
   }
 }
 
@@ -118,7 +117,7 @@ button {
     z-index: 1;
 
     .sidebar-open {
-      &~.content {
+      & ~ .content {
         max-width: calc(100% - 270px);
 
         @media screen and (max-width: 991px) {
@@ -168,25 +167,24 @@ button {
   }
 }
 
-.ant-tooltip{
+.ant-tooltip {
   &.commodo-tooltip {
     .ant-tooltip-arrow {
       .ant-tooltip-arrow-content {
         background: @background-dark1;
-  
+
         .dark-mode & {
           background: @white;
         }
-  
+
         &::before {
           .dark-mode & {
             background: @white;
           }
         }
-  
       }
     }
-  
+
     .ant-tooltip-inner {
       background-color: @background-dark1;
       color: @tooltip-color-dark;
@@ -195,7 +193,7 @@ button {
       padding: 2px 7px;
       border-radius: 3px;
       color: @white;
-  
+
       .dark-mode & {
         background-color: @white;
         color: @black;
@@ -223,7 +221,7 @@ button {
 
     .dark-mode & {
       color: @border-light;
-      border-color: @border-light  !important;
+      border-color: @border-light !important;
     }
   }
 
@@ -287,7 +285,6 @@ button {
           color: @bg-dark;
           border-color: @bg-light-hover;
         }
-
       }
 
       &[disabled] {
@@ -420,7 +417,6 @@ button {
               .dark-mode & {
                 color: @text-color-dark;
               }
-
             }
           }
         }
@@ -446,7 +442,7 @@ button.ant-switch {
     top: 1px;
 
     &:before {
-      background: #1B4332;
+      background: #1b4332;
     }
   }
 
@@ -466,7 +462,7 @@ button.ant-switch {
   min-width: 10px;
   margin-left: 3px;
 
-  @media screen and (max-width:1440px) {
+  @media screen and (max-width: 1440px) {
     width: 9px;
     height: 9px;
     min-width: 9px;
@@ -517,7 +513,7 @@ button.ant-switch {
                 font-weight: 400;
               }
             }
-            th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before{
+            th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
               display: none;
             }
           }
@@ -537,13 +533,13 @@ button.ant-switch {
             background: @card-bg-light;
             border-radius: 15px;
 
-            &:hover{
+            &:hover {
               background: rgba(@card-bg-light, 0.8);
             }
 
             .dark-mode & {
               background: @card-bg-dark;
-              &:hover{
+              &:hover {
                 background: rgba(@card-bg-dark, 0.8);
               }
             }
@@ -554,11 +550,11 @@ button.ant-switch {
                 min-width: 90px;
               }
 
-              &:first-child{
+              &:first-child {
                 border-radius: 15px 0 0 15px;
               }
 
-              &:last-child{
+              &:last-child {
                 border-radius: 0 15px 15px 0;
               }
 
@@ -593,11 +589,10 @@ button.ant-switch {
             }
 
             &:last-child {
-              td{
+              td {
                 border: 0;
               }
             }
-
           }
         }
       }
@@ -624,7 +619,6 @@ button.ant-switch {
       .dark-mode & {
         fill: @white;
       }
-
     }
   }
 
@@ -848,7 +842,6 @@ button.ant-switch {
         justify-content: center;
       }
     }
-
   }
 }
 
@@ -884,7 +877,6 @@ button.ant-switch {
     }
 
     .ant-select-item {
-
       .ant-select-item-option-content {
         .dark-mode & {
           color: @white;
@@ -941,8 +933,8 @@ button.ant-switch {
 .ant-input {
   &.input-primary {
     border: 0;
-    background: #F0FAF2;
-    box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.25);
+    background: #f0faf2;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
     font-size: @font-size-base + 1;
     line-height: 1;
     margin-top: 8px;
@@ -959,7 +951,7 @@ button.ant-switch {
 
     .dark-mode & {
       color: @white;
-      background: #1D3129;
+      background: #1d3129;
       box-shadow: none;
 
       &::-webkit-placeholder {
@@ -974,21 +966,21 @@ button.ant-switch {
 }
 
 .assets-select-card {
-  background: #F0FAF2;
+  background: #f0faf2;
   padding: 20px 32px;
   border-radius: @base-border-radius;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   min-height: 110px;
-  box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
 
   @media screen and (max-width: 480px) {
     display: block;
   }
 
   .dark-mode & {
-    background: #1D3129;
+    background: #1d3129;
     box-shadow: none;
   }
 
@@ -1104,7 +1096,7 @@ button.ant-switch {
           border: 0;
           cursor: pointer;
           border-radius: 3px;
-          background: #001E11;
+          background: #001e11;
           font-weight: lighter;
           text-transform: uppercase;
 
@@ -1184,11 +1176,11 @@ button.ant-switch {
   width: 100%;
   background: @background-light;
   border-radius: @base-border-radius - 5;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 
   .dark-mode & {
     background: @background-dark1;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     border-color: @border-dark;
     color: @white;
   }
@@ -1233,9 +1225,9 @@ button.ant-switch {
   background: @card-bg-light;
   border-radius: 15px;
   padding: 10px 0;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 
-  &.bg-none{
+  &.bg-none {
     background: none !important;
     box-shadow: none;
   }
@@ -1315,7 +1307,7 @@ button.ant-switch {
     max-width: 210px;
 
     .dark-mode & {
-      color: #FAFF0599;
+      color: #faff0599;
     }
   }
 
@@ -1522,7 +1514,7 @@ button.ant-switch {
             font-size: @font-size-sm;
             display: flex;
             align-items: flex-start;
-            .icon{
+            .icon {
               margin-top: 4px;
             }
           }
@@ -1564,45 +1556,45 @@ button.ant-switch {
   }
 }
 
-.ant-slider{
-  &.commodo-slider{
-    .ant-slider-rail{
+.ant-slider {
+  &.commodo-slider {
+    .ant-slider-rail {
       height: 6px;
-      background: #DDDDDD;
+      background: #dddddd;
       border-radius: 6px;
     }
-    .ant-slider-step{
+    .ant-slider-step {
       display: none;
     }
-    .ant-slider-mark{
+    .ant-slider-mark {
       font-size: @font-size-sm;
       width: calc(100% - 54px);
       left: 22px;
-      .ant-slider-mark-text{
+      .ant-slider-mark-text {
         font-weight: 400;
         .dark-mode & {
           color: @white;
         }
       }
     }
-    .ant-slider-track{
+    .ant-slider-track {
       background: @success-color;
       height: 6px;
       border-radius: 6px;
     }
-    .ant-slider-handle{
-      border-color: #246C4E;
+    .ant-slider-handle {
+      border-color: #246c4e;
       background-color: @success-color;
       width: 18px;
       height: 18px;
       margin-top: -6px;
     }
-    &:hover{
-      .ant-slider-track{
+    &:hover {
+      .ant-slider-track {
         background: @success-color;
       }
-      .ant-slider-handle{
-        border-color: rgba(#246C4E, 0.8) !important;
+      .ant-slider-handle {
+        border-color: rgba(#246c4e, 0.8) !important;
       }
     }
   }
@@ -1638,12 +1630,12 @@ button.ant-switch {
   }
 }
 
-.ant-modal{
-  &.ant-modal-confirm{
-    .ant-modal-content{
-      .ant-modal-body{
+.ant-modal {
+  &.ant-modal-confirm {
+    .ant-modal-content {
+      .ant-modal-body {
         padding: 0;
-        .ant-btn-default{
+        .ant-btn-default {
           background-color: @bg-dark;
           color: @white;
           border-radius: 15px;
@@ -1668,7 +1660,6 @@ button.ant-switch {
               color: @bg-dark;
               border-color: @bg-light-hover;
             }
-
           }
 
           &[disabled] {
@@ -1676,19 +1667,19 @@ button.ant-switch {
             cursor: not-allowed;
           }
         }
-        .ant-modal-confirm-body{
+        .ant-modal-confirm-body {
           text-align: center;
-          .ant-modal-confirm-title{
+          .ant-modal-confirm-title {
             .dark-mode & {
               color: @white;
             }
           }
-          .ant-modal-confirm-content  {
+          .ant-modal-confirm-content {
             .dark-mode & {
               color: @white;
             }
           }
-          .icon{
+          .icon {
             width: 60px;
             margin-bottom: 15px;
             .dark-mode & {
@@ -1696,7 +1687,7 @@ button.ant-switch {
             }
           }
         }
-        .ant-modal-confirm-btns{
+        .ant-modal-confirm-btns {
           float: none;
           text-align: center;
         }

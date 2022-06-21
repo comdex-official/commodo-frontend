@@ -7,60 +7,60 @@ import "./index.less";
 
 const { Option } = Select;
 
-const RepayTab = (lang) => {
+const RepayTab = () => {
   const data = [
     {
       title: "Total Borrowed",
-      counts: '$1,234.20'
+      counts: "$1,234.20",
     },
     {
       title: "Available",
-      counts: "$1,234.20"
+      counts: "$1,234.20",
     },
     {
       title: "Utilization",
-      counts: "30.45%"
+      counts: "30.45%",
     },
     {
       title: "Borrow APY",
-      counts: "12.33%"
-    }
+      counts: "12.33%",
+    },
   ];
   const data2 = [
     {
       title: "Total Borrowed",
-      counts: '$1,234.20'
+      counts: "$1,234.20",
     },
     {
       title: "Available",
-      counts: "$1,234.20"
+      counts: "$1,234.20",
     },
     {
       title: "Utilization",
-      counts: "30.45%"
+      counts: "30.45%",
     },
     {
       title: "Borrow APY",
-      counts: "13.33%"
-    }
+      counts: "13.33%",
+    },
   ];
   const data3 = [
     {
       title: "Total Borrowed",
-      counts: '$1,234.20'
+      counts: "$1,234.20",
     },
     {
       title: "Available",
-      counts: "$1,234.20"
+      counts: "$1,234.20",
     },
     {
       title: "Utilization",
-      counts: "30.45%"
+      counts: "30.45%",
     },
     {
       title: "Borrow APY",
-      counts: "12.76%"
-    }
+      counts: "12.76%",
+    },
   ];
   return (
     <div className="details-wrapper">
@@ -83,7 +83,9 @@ const RepayTab = (lang) => {
                   </div>
                 }
                 defaultActiveFirstOption={true}
-                suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />}
+                suffixIcon={
+                  <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
+                }
               >
                 <Option key="1">
                   <div className="select-inner">
@@ -111,21 +113,14 @@ const RepayTab = (lang) => {
           <div className="assets-right">
             <div className="label-right">
               Available
-              <span className="ml-1">
-                142 CMST
-              </span>
+              <span className="ml-1">142 CMST</span>
               <div className="maxhalf">
-                <Button className="active">
-                  Max
-                </Button>
+                <Button className="active">Max</Button>
               </div>
             </div>
             <div>
               <div className="input-select">
-                <Input
-                  placeholder=""
-                  value="23.00"
-                />
+                <Input placeholder="" value="23.00" />
               </div>
               <small>$120.00</small>
             </div>
@@ -147,9 +142,7 @@ const RepayTab = (lang) => {
               <Col>
                 <label>Current Health Factor</label>
               </Col>
-              <Col className="text-right">
-                45%
-              </Col>
+              <Col className="text-right">45%</Col>
             </Row>
             <Row className="pb-2">
               <Col>
@@ -160,41 +153,30 @@ const RepayTab = (lang) => {
               <Col>
                 <label>Max LTV</label>
               </Col>
-              <Col className="text-right">
-                85%
-              </Col>
+              <Col className="text-right">85%</Col>
             </Row>
             <Row className="mt-2">
               <Col>
                 <label>Liquidation Threshold</label>
               </Col>
-              <Col className="text-right">
-                80%
-              </Col>
+              <Col className="text-right">80%</Col>
             </Row>
             <Row className="mt-2">
               <Col>
                 <label>Liquidation Price</label>
               </Col>
-              <Col className="text-right">
-                35%
-              </Col>
+              <Col className="text-right">35%</Col>
             </Row>
             <Row className="mt-2">
               <Col>
                 <label>Liquidation Penalty</label>
               </Col>
-              <Col className="text-right">
-                5%
-              </Col>
+              <Col className="text-right">5%</Col>
             </Row>
           </Col>
         </Row>
         <div className="assets-form-btn">
-          <Button
-            type="primary"
-            className="btn-filled"
-          >
+          <Button type="primary" className="btn-filled">
             Repay
           </Button>
         </div>
@@ -228,10 +210,12 @@ const RepayTab = (lang) => {
               xxl: 4,
             }}
             dataSource={data}
-            renderItem={item => (
+            renderItem={(item) => (
               <List.Item>
                 <div>
-                  <p>{item.title} <TooltipIcon /></p>
+                  <p>
+                    {item.title} <TooltipIcon />
+                  </p>
                   <h3>{item.counts}</h3>
                 </div>
               </List.Item>
@@ -264,10 +248,12 @@ const RepayTab = (lang) => {
               xxl: 4,
             }}
             dataSource={data2}
-            renderItem={item => (
+            renderItem={(item) => (
               <List.Item>
                 <div>
-                  <p>{item.title} <TooltipIcon /></p>
+                  <p>
+                    {item.title} <TooltipIcon />
+                  </p>
                   <h3>{item.counts}</h3>
                 </div>
               </List.Item>
@@ -302,10 +288,12 @@ const RepayTab = (lang) => {
               xxl: 4,
             }}
             dataSource={data3}
-            renderItem={item => (
+            renderItem={(item) => (
               <List.Item>
                 <div>
-                  <p>{item.title} <TooltipIcon /> </p>
+                  <p>
+                    {item.title} <TooltipIcon />{" "}
+                  </p>
                   <h3>{item.counts}</h3>
                 </div>
               </List.Item>
@@ -327,7 +315,6 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {
-};
+const actionsToProps = {};
 
 export default connect(stateToProps, actionsToProps)(RepayTab);

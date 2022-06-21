@@ -103,16 +103,6 @@ export const toDecimals = (value, decimal = comdex.coinDecimals) =>
       value.substr(value.indexOf("."), decimal + 1)
     : value;
 
-export const showTotalAssetCount = (asset) => {
-  return `${(asset && calculatePoolShare(asset)) || 0} ${denomConversion(
-    asset?.denom || ""
-  )}`;
-};
-
-export const showUserAssetCount = (assetShare, denom) => {
-  return `${assetShare} ${denomConversion(denom) || ""}`;
-};
-
 export const uniqueDenoms = (list, type) => {
   return [
     ...new Set(

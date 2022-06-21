@@ -7,51 +7,64 @@ import PlaceBidModal from "./PlaceBidModal";
 import "./index.less";
 import FilterModal from "./FilterModal";
 
-const Liquidation = (lang) => {
+const Liquidation = () => {
   const columns = [
     {
-      title: <>Auctioned Asset <TooltipIcon text="" /></>,
+      title: (
+        <>
+          Auctioned Asset <TooltipIcon text="" />
+        </>
+      ),
       dataIndex: "auctioned_asset",
       key: "auctioned_asset",
-      width: 180
+      width: 180,
     },
     {
-      title: <>Bidding Asset <TooltipIcon text="" /></>,
+      title: (
+        <>
+          Bidding Asset <TooltipIcon text="" />
+        </>
+      ),
       dataIndex: "bidding_asset",
       key: "bidding_asset",
-      width: 180
+      width: 180,
     },
     {
-      title: <>Quantity <TooltipIcon text="" /></>,
+      title: (
+        <>
+          Quantity <TooltipIcon text="" />
+        </>
+      ),
       dataIndex: "quantity",
       key: "quantity",
-      width: 180
+      width: 180,
     },
     {
-      title: <>End Time <TooltipIcon text="" /></>,
+      title: (
+        <>
+          End Time <TooltipIcon text="" />
+        </>
+      ),
       dataIndex: "end_time",
       key: "end_time",
       width: 200,
-      render: (end_time) => (
-        <div className="endtime-badge">{end_time}</div>
-      ),
+      render: (end_time) => <div className="endtime-badge">{end_time}</div>,
     },
     {
-      title: <>Top Bid <TooltipIcon text="" /></>,
+      title: (
+        <>
+          Top Bid <TooltipIcon text="" />
+        </>
+      ),
       dataIndex: "top_bid",
       key: "top_bid",
       width: 150,
-      render: (asset_apy) => (
-        <>
-          {asset_apy}
-        </>
-      ),
+      render: (asset_apy) => <>{asset_apy}</>,
     },
     {
       title: <FilterModal />,
       dataIndex: "action",
       key: "action",
-      align: "right",
       width: 140,
       align: "center",
       render: () => (
@@ -69,10 +82,7 @@ const Liquidation = (lang) => {
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              <SvgIcon
-                name="cmdx-icon"
-                viewBox="0 0 30 30"
-              />
+              <SvgIcon name="cmdx-icon" viewBox="0 0 30 30" />
             </div>
             CMDX
           </div>
@@ -82,10 +92,7 @@ const Liquidation = (lang) => {
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              <SvgIcon
-                name="cmst-icon"
-                viewBox="0 0 30 30"
-              />
+              <SvgIcon name="cmst-icon" viewBox="0 0 30 30" />
             </div>
             CMST
           </div>
@@ -93,7 +100,7 @@ const Liquidation = (lang) => {
       ),
       quantity: "368 CMDX",
       end_time: "07D : 08H : 32M",
-      top_bid: "11 CMST"
+      top_bid: "11 CMST",
     },
     {
       key: 2,
@@ -101,10 +108,7 @@ const Liquidation = (lang) => {
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              <SvgIcon
-                name="osmosis-icon"
-                viewBox="0 0 30 30"
-              />
+              <SvgIcon name="osmosis-icon" viewBox="0 0 30 30" />
             </div>
             OSMO
           </div>
@@ -114,10 +118,7 @@ const Liquidation = (lang) => {
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              <SvgIcon
-                name="cmst-icon"
-                viewBox="0 0 30 30"
-              />
+              <SvgIcon name="cmst-icon" viewBox="0 0 30 30" />
             </div>
             CMST
           </div>
@@ -125,7 +126,7 @@ const Liquidation = (lang) => {
       ),
       quantity: "983 OSMO",
       end_time: "01D : 08H : 32M",
-      top_bid: "1,285 CMST"
+      top_bid: "1,285 CMST",
     },
     {
       key: 3,
@@ -133,10 +134,7 @@ const Liquidation = (lang) => {
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              <SvgIcon
-                name="cmst-icon"
-                viewBox="0 0 30 30"
-              />
+              <SvgIcon name="cmst-icon" viewBox="0 0 30 30" />
             </div>
             CMST
           </div>
@@ -146,10 +144,7 @@ const Liquidation = (lang) => {
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              <SvgIcon
-                name="atom-icon"
-                viewBox="0 0 30 30"
-              />
+              <SvgIcon name="atom-icon" viewBox="0 0 30 30" />
             </div>
             ATOM
           </div>
@@ -157,7 +152,7 @@ const Liquidation = (lang) => {
       ),
       quantity: "1386 CMST",
       end_time: "07D : 08H : 32M",
-      top_bid: "107 ATOM"
+      top_bid: "107 ATOM",
     },
     {
       key: 4,
@@ -165,10 +160,7 @@ const Liquidation = (lang) => {
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              <SvgIcon
-                name="atom-icon"
-                viewBox="0 0 30 30"
-              />
+              <SvgIcon name="atom-icon" viewBox="0 0 30 30" />
             </div>
             ATOM
           </div>
@@ -178,10 +170,7 @@ const Liquidation = (lang) => {
         <>
           <div className="assets-withicon">
             <div className="assets-icon">
-              <SvgIcon
-                name="cmst-icon"
-                viewBox="0 0 30 30"
-              />
+              <SvgIcon name="cmst-icon" viewBox="0 0 30 30" />
             </div>
             CMST
           </div>
@@ -189,8 +178,8 @@ const Liquidation = (lang) => {
       ),
       quantity: "33 ATOM",
       end_time: "02D : 08H : 32M",
-      top_bid: "325 CMST"
-    }
+      top_bid: "325 CMST",
+    },
   ];
   return (
     <div className="app-content-wrapper">
@@ -223,7 +212,6 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {
-};
+const actionsToProps = {};
 
 export default connect(stateToProps, actionsToProps)(Liquidation);

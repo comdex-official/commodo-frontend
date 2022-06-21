@@ -1,8 +1,6 @@
 import {
   CAUTION_NOTICE_VALUES_SET,
   DEMAND_COIN_DENOM_SET,
-  DEMAND_COIN_AMOUNT_SET,
-  OFFER_COIN_DENOM_SET,
   OFFER_COIN_AMOUNT_SET,
   REVERSE_SET,
   COMPLETE_SET,
@@ -33,13 +31,6 @@ const offerCoin = (
   action
 ) => {
   switch (action.type) {
-    case OFFER_COIN_DENOM_SET: {
-      return {
-        ...state,
-        denom: action.value,
-      };
-    }
-
     case OFFER_COIN_AMOUNT_SET:
       return {
         ...state,
@@ -66,12 +57,6 @@ const demandCoin = (
         denom: action.value,
       };
     }
-
-    case DEMAND_COIN_AMOUNT_SET:
-      return {
-        ...state,
-        amount: action.value,
-      };
 
     default:
       return state;
