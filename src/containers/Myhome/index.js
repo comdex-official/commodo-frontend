@@ -17,11 +17,11 @@ function callback(key) {
 const data = [
   {
     title: <>Total Deposited <TooltipIcon text="Value of total Asset Deposited by User" /></>,
-    counts: '$30,283,670'
+    counts: '$12,350'
   },
   {
     title: <>Total Borrowed <TooltipIcon text="Value of total Asset Borrowed by User" /></>,
-    counts: "$14,323,970"
+    counts: "$2,345"
   }
 ];
 
@@ -57,15 +57,15 @@ const Myhome = (lang) => {
               <div className="mb-3">Your Borrow Limit <TooltipIcon text="Borrow limit of User" /></div>
               <div className="borrow-limit-bar">
                 <div className="borrow-limit-upper">
-                  <div><h4>45.00%</h4></div>
-                  <div className="small-text">Borrow Limit :$28,323,970</div>
+                  <div><h4>25%</h4></div>
+                  <div className="small-text">Borrow Limit :$7255</div>
                 </div>
                 <div className="borrow-limit-middle">
-                  <Progress percent={45} size="small" />
+                  <Progress percent={25} size="small" />
                 </div>
                 <div className="borrow-limit-bottom">
-                  <div className="small-text">Collateral :$26,873,185</div>
-                  <div className="small-text">Borrowed :$14,323,970</div>
+                  <div className="small-text">Collateral :$12,150</div>
+                  <div className="small-text">Borrowed :$2345</div>
                 </div>
               </div>
             </div>

@@ -14,9 +14,49 @@
       .ant-modal-body {
         padding: 24px;
   
-        .assets-modal-inner {
           .dark-mode & {
             color: @white;
+          }
+
+          .assets-maxhalf {
+            display: flex;
+            align-items: center;
+            margin-left: 4px;
+    
+            .ant-btn {
+              font-size: @font-size-sm - 1;
+              padding: 1px 0;
+              margin-left: 4px;
+              line-height: 1;
+              text-align: center;
+              width: 30px;
+              height: 15px;
+              border: 0;
+              cursor: pointer;
+              border-radius: 2px;
+              background: @dark-color;
+              .dark-mode & {
+                background: #132239;
+                color: @white;
+              }
+
+              span{
+                font-weight: 600;
+              }
+    
+              &.active {
+                .dark-mode & {
+                  background: @white;
+                }
+    
+                span {
+                  color: @white;
+                  .dark-mode & {
+                    color: @dark-color;
+                  }
+                }
+              }
+            }
           }
   
           .availabe-balance{
@@ -50,7 +90,6 @@
               color: @white;
             }
           }
-        }
       }
     }
   }
