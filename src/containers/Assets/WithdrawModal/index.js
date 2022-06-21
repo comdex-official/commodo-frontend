@@ -182,7 +182,7 @@ const Withdraw = ({
                     denomConversion(chain.currency.coinDenom)) ||
                     ""}
                 </span>
-                <span className="assets-maxhalf">
+                <span className="assets-max-half">
                   <Button
                     className=" active"
                     onClick={() => {

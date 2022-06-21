@@ -1,8 +1,7 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
-import variables from "../../utils/variables";
-import { Button, Table } from "antd";
+import { Table } from "antd";
 import PlaceBidModal from "./PlaceBidModal";
 import "./index.less";
 import FilterModal from "./FilterModal";
@@ -80,7 +79,7 @@ const Liquidation = () => {
       key: 1,
       auctioned_asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="cmdx-icon" viewBox="0 0 30 30" />
             </div>
@@ -90,7 +89,7 @@ const Liquidation = () => {
       ),
       bidding_asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="cmst-icon" viewBox="0 0 30 30" />
             </div>
@@ -106,7 +105,7 @@ const Liquidation = () => {
       key: 2,
       auctioned_asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="osmosis-icon" viewBox="0 0 30 30" />
             </div>
@@ -116,7 +115,7 @@ const Liquidation = () => {
       ),
       bidding_asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="cmst-icon" viewBox="0 0 30 30" />
             </div>
@@ -132,7 +131,7 @@ const Liquidation = () => {
       key: 3,
       auctioned_asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="cmst-icon" viewBox="0 0 30 30" />
             </div>
@@ -142,7 +141,7 @@ const Liquidation = () => {
       ),
       bidding_asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="atom-icon" viewBox="0 0 30 30" />
             </div>
@@ -158,7 +157,7 @@ const Liquidation = () => {
       key: 4,
       auctioned_asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="atom-icon" viewBox="0 0 30 30" />
             </div>
@@ -168,7 +167,7 @@ const Liquidation = () => {
       ),
       bidding_asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="cmst-icon" viewBox="0 0 30 30" />
             </div>

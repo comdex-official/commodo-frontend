@@ -2,13 +2,13 @@ import { combineReducers } from "redux";
 
 import {
   COIN_STATS_FETCH_SUCCESS,
-  TOTA_COLLATERAL_LIST_SET,
+  TOTAL_COLLATERAL_LIST_SET,
   PRICE_CHART_DATA_SET,
   RANGE_SET,
   VOLUME_CHART_DATA_SET,
   PRICE_CHART_DATA_FETCH_IN_PROGRESS,
   PRICE_CHART_DATA_FETCH_ERROR,
-  VOLUME_CHART_DATA_FETCH_IN_PROGRGESS,
+  VOLUME_CHART_DATA_FETCH_IN_PROGRESS,
   VOLUME_CHART_DATA_FETCH_ERROR,
 } from "../constants/dashboard";
 
@@ -30,7 +30,7 @@ const volumeChart = (state = [], action) => {
 
 const volumeChartInProgress = (state = false, action) => {
   switch (action.type) {
-    case VOLUME_CHART_DATA_FETCH_IN_PROGRGESS:
+    case VOLUME_CHART_DATA_FETCH_IN_PROGRESS:
       return action.value;
     case VOLUME_CHART_DATA_SET:
     case VOLUME_CHART_DATA_FETCH_ERROR:
@@ -69,7 +69,7 @@ const range = (state = "d", action) => {
 };
 
 const totalCollateralList = (state = [], action) => {
-  if (action.type === TOTA_COLLATERAL_LIST_SET) {
+  if (action.type === TOTAL_COLLATERAL_LIST_SET) {
     return action.data;
   }
 

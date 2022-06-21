@@ -1,12 +1,11 @@
 @import "../../assets/less/variables.less";
 
-
 .airdrop-progress {
   margin-bottom: 70px;
   padding-right: 70px;
   padding-left: 50px;
 
-  @media screen and (max-width:640px) {
+  @media screen and (max-width: 640px) {
     margin-bottom: 50px;
   }
 
@@ -22,7 +21,7 @@
     font-size: 0;
   }
 
-  ul>li {
+  ul > li {
     display: table-cell;
     text-align: center;
     height: 14px;
@@ -31,30 +30,30 @@
     width: 100%;
   }
 
-  ul>li:first-child>span>span:first-child {
+  ul > li:first-child > span > span:first-child {
     border-radius: 10px 0 0 10px;
   }
 
-  ul>li:last-child>span>span:last-child {
+  ul > li:last-child > span > span:last-child {
     border-radius: 0 10px 10px 0;
   }
 
-  ul>li>span {
+  ul > li > span {
     display: table;
     width: 100%;
     table-layout: fixed;
     position: relative;
   }
 
-  ul>li>span>span {
+  ul > li > span > span {
     display: table-cell;
     width: 100%;
-    background: #33513C80;
+    background: #33513c80;
     height: 13px;
     line-height: 13px;
     text-align: right;
 
-    @media screen and (max-width:640px) {
+    @media screen and (max-width: 640px) {
       height: 7px;
       line-height: 7px;
     }
@@ -65,7 +64,7 @@
       right: -20px;
       top: -12px;
 
-      @media screen and (max-width:640px) {
+      @media screen and (max-width: 640px) {
         top: -9px;
       }
 
@@ -73,7 +72,7 @@
         width: 34px;
         height: 34px;
 
-        @media screen and (max-width:640px) {
+        @media screen and (max-width: 640px) {
           width: 25px;
           height: 25px;
         }
@@ -86,12 +85,12 @@
       bottom: -54px;
       right: -30px;
 
-      @media screen and (max-width:640px) {
+      @media screen and (max-width: 640px) {
         font-size: 12px;
         bottom: -42px;
       }
 
-      @media screen and (max-width:500px) {
+      @media screen and (max-width: 500px) {
         font-size: 9px;
         right: -22px;
       }
@@ -102,7 +101,7 @@
     }
   }
 
-  ul>li:last-child>span>span {
+  ul > li:last-child > span > span {
     p {
       right: -20px;
     }
@@ -110,16 +109,16 @@
 
   .dot-icon {
     .icon {
-      fill: #2F815F
+      fill: #2f815f;
     }
   }
 
-  ul>li>span>span[data-fill="true"] {
+  ul > li > span > span[data-fill="true"] {
     background: @success-color;
 
     .dot-icon {
       .icon {
-        fill: #2F815F;
+        fill: #2f815f;
       }
 
       &::after {
@@ -138,11 +137,11 @@
     }
   }
 
-  ul>li>span>span[data-fill="active"] {
+  ul > li > span > span[data-fill="active"] {
     .dot-icon {
       .icon {
         fill: @white;
-        stroke: #2F815F;
+        stroke: #2f815f;
         stroke-width: 9px;
         width: 34px;
         border-radius: 34px;
@@ -150,20 +149,20 @@
     }
   }
 
-  ul>li:last-child>span {
+  ul > li:last-child > span {
     padding: 0;
   }
 
-  ul>li:last-child>span>span:after {
+  ul > li:last-child > span > span:after {
     display: none;
   }
 
-  ul>li:first-child>span>span:before {
+  ul > li:first-child > span > span:before {
     display: none;
   }
 }
 
-.airdrop-progresslist {
+.airdrop-progress-list {
   list-style-type: none;
   padding-left: 0;
   margin-bottom: 0;
@@ -183,7 +182,7 @@
       border-bottom: 0;
     }
 
-    .progresslist-left {
+    .progress-list-left {
       small {
         font-size: 17px;
       }

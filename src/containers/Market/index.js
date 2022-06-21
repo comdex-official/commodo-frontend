@@ -1,7 +1,6 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon } from "../../components/common";
 import { connect } from "react-redux";
-import variables from "../../utils/variables";
 import { Button, Table } from "antd";
 import "./index.less";
 import { Link } from "react-router-dom";
@@ -204,7 +203,7 @@ const Market = () => {
       key: 1,
       asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="cmdx-icon" />
             </div>
@@ -214,7 +213,7 @@ const Market = () => {
       ),
       bridge_asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="cmst-icon" />
             </div>
@@ -224,7 +223,7 @@ const Market = () => {
       ),
       bridge_asset2: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="atom-icon" />
             </div>
@@ -241,7 +240,7 @@ const Market = () => {
       key: 2,
       asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="osmosis-icon" />
             </div>
@@ -251,7 +250,7 @@ const Market = () => {
       ),
       bridge_asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="cmst-icon" />
             </div>
@@ -261,7 +260,7 @@ const Market = () => {
       ),
       bridge_asset2: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="atom-icon" />
             </div>
@@ -281,7 +280,7 @@ const Market = () => {
       key: 1,
       asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="cmdx-icon" />
             </div>
@@ -291,7 +290,7 @@ const Market = () => {
       ),
       bridge_asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="cmst-icon" />
             </div>
@@ -301,7 +300,7 @@ const Market = () => {
       ),
       bridge_asset2: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="atom-icon" />
             </div>
@@ -325,7 +324,7 @@ const Market = () => {
       key: 2,
       asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="osmosis-icon" />
             </div>
@@ -335,7 +334,7 @@ const Market = () => {
       ),
       bridge_asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="cmst-icon" />
             </div>
@@ -345,7 +344,7 @@ const Market = () => {
       ),
       bridge_asset2: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="atom-icon" />
             </div>

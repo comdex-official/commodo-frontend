@@ -7,9 +7,9 @@ import {
   PRICE_CHART_DATA_FETCH_ERROR,
   PRICE_CHART_DATA_SET,
   RANGE_SET,
-  TOTA_COLLATERAL_LIST_SET,
+  TOTAL_COLLATERAL_LIST_SET,
   PRICE_CHART_DATA_FETCH_IN_PROGRESS,
-  VOLUME_CHART_DATA_FETCH_IN_PROGRGESS,
+  VOLUME_CHART_DATA_FETCH_IN_PROGRESS,
 } from "../constants/dashboard";
 import CoinGecko from "coingecko-api";
 import { message } from "antd";
@@ -78,7 +78,7 @@ export const setVolumeChartDataError = (message) => {
 
 export const setVolumeChartDataFetchInProgress = (value) => {
   return {
-    type: VOLUME_CHART_DATA_FETCH_IN_PROGRGESS,
+    type: VOLUME_CHART_DATA_FETCH_IN_PROGRESS,
     value,
   };
 };
@@ -148,7 +148,7 @@ export const setRange = (value) => {
 
 export const setTotalCollateralList = (data) => {
   return {
-    type: TOTA_COLLATERAL_LIST_SET,
+    type: TOTAL_COLLATERAL_LIST_SET,
     data,
   };
 };

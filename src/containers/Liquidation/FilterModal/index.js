@@ -3,7 +3,6 @@ import { Button, Modal, Checkbox, Form, Slider, Divider } from "antd";
 import { Row, Col, SvgIcon } from "../../../components/common";
 import { connect } from "react-redux";
 import React, { useState } from "react";
-import variables from "../../../utils/variables";
 import "./index.less";
 
 const marks = {

@@ -83,7 +83,7 @@ const History = ({ address, setTransactionHistory, history }) => {
       key: "tx_hash",
       width: 300,
       render: (hash) => (
-        <div className="txhash-col">
+        <div className="tx-hash-col">
           <span>
             {" "}
             {
