@@ -3,8 +3,7 @@ import { Button, Radio, Modal, Space } from "antd";
 import { Row, Col, SvgIcon } from "../../../components/common";
 import { connect } from "react-redux";
 import React, { useState } from "react";
-import variables from "../../../utils/variables";
-import "./index.less"
+import "./index.less";
 
 const VoteNowModal = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -23,10 +22,12 @@ const VoteNowModal = () => {
 
   return (
     <>
-      <Button type="primary" className="btn-filled mb-n4" onClick={showModal}>Vote Now</Button>
+      <Button type="primary" className="btn-filled mb-n4" onClick={showModal}>
+        Vote Now
+      </Button>
       <Modal
         centered={true}
-        className="votenow-modal"
+        className="vote-now-modal"
         footer={null}
         header={null}
         visible={isModalVisible}
@@ -35,7 +36,7 @@ const VoteNowModal = () => {
         onCancel={handleCancel}
         closeIcon={<SvgIcon name="close" viewbox="0 0 19 19" />}
       >
-        <div className="votenow-modal-inner">
+        <div className="vote-now-modal-inner">
           <Row>
             <Col sm="12">
               <h3>Your Vote</h3>
@@ -52,10 +53,20 @@ const VoteNowModal = () => {
           </Row>
           <Row className="p-0">
             <Col className="text-right mt-3">
-              <Button type="primary" className="px-5 mr-3" size="large" onClick={handleCancel}>
+              <Button
+                type="primary"
+                className="px-5 mr-3"
+                size="large"
+                onClick={handleCancel}
+              >
                 Delete
               </Button>
-              <Button type="primary" className="btn-filled px-5" size="large" onClick={handleCancel}>
+              <Button
+                type="primary"
+                className="btn-filled px-5"
+                size="large"
+                onClick={handleCancel}
+              >
                 Confirm
               </Button>
             </Col>
@@ -76,7 +87,6 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {
-};
+const actionsToProps = {};
 
 export default connect(stateToProps, actionsToProps)(VoteNowModal);

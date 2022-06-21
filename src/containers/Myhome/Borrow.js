@@ -1,7 +1,6 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
-import variables from "../../utils/variables";
 import { Button, Table, Progress } from "antd";
 import { Link } from "react-router-dom";
 import "./index.less";
@@ -76,7 +75,7 @@ const Borrow = () => {
       key: 1,
       asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="cmst-icon" viewBox="0 0 30 30" />
             </div>
@@ -92,7 +91,7 @@ const Borrow = () => {
       key: 1,
       asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="osmosis-icon" viewBox="0 0 30 30" />
             </div>

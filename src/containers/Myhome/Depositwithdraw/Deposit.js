@@ -1,8 +1,7 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import { connect } from "react-redux";
-import variables from "../../../utils/variables";
-import { Button, List, Select, Input, Progress, Switch } from "antd";
+import { Button, List, Select, Input, Switch } from "antd";
 import "./index.less";
 
 const { Option } = Select;
@@ -93,7 +92,7 @@ const DepositTab = () => {
         </div>
         <div className="assets-select-card mb-0">
           <div className="assets-left">
-            <label className="leftlabel">
+            <label className="left-label">
               Deposit <TooltipIcon text="" />
             </label>
             <div className="assets-select-wrapper">
@@ -141,7 +140,7 @@ const DepositTab = () => {
             <div className="label-right">
               Available
               <span className="ml-1">142 CMST</span>
-              <div className="maxhalf">
+              <div className="max-half">
                 <Button className="active">Max</Button>
               </div>
             </div>

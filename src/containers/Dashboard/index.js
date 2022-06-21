@@ -1,11 +1,9 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
-import variables from "../../utils/variables";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import "./index.less";
-
 import LaunchImage from "../../assets/images/launch-bg.jpg";
 import AssetsIcon from "../../assets/images/assets-icon.png";
 import { Button } from "antd";
@@ -148,11 +146,11 @@ const Dashboard = ({ isDarkMode }) => {
                 </p>
                 <h2>$57,156,855</h2>
               </div>
-              <div className="totalvalues">
-                <div className="totalvalues-chart">
+              <div className="total-values">
+                <div className="total-values-chart">
                   <HighchartsReact highcharts={Highcharts} options={Options} />
                 </div>
-                <div className="totalvalues-right">
+                <div className="total-values-right">
                   <div
                     className="dashboard-statics mb-5"
                     style={{ borderColor: "#52B788" }}
@@ -178,8 +176,8 @@ const Dashboard = ({ isDarkMode }) => {
             </div>
           </div>
           <div className="dashboard-upper-right">
-            <div className="commodo-card commodo-launchcard">
-              <div className="commodo-launchcard-inner">
+            <div className="commodo-card commodo-launch-card">
+              <div className="commodo-launch-card-inner">
                 <img
                   className="launch-bg"
                   alt={"CMDO Token Launch"}
@@ -216,7 +214,7 @@ const Dashboard = ({ isDarkMode }) => {
                 </div>
               </div>
             </div>
-            <div className="commodo-card topthree-assets">
+            <div className="commodo-card top-three-assets">
               <div className="card-head">Top 3 Assets</div>
               <div className="card-content">
                 <div className="deposited-list">

@@ -1,7 +1,6 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon } from "../../components/common";
 import { connect } from "react-redux";
-import variables from "../../utils/variables";
 import { List } from "antd";
 import "./index.less";
 
@@ -112,9 +111,9 @@ const Airdrop = () => {
       <Row className="mt-2">
         <Col>
           <div className="commodo-card">
-            <ul className="airdrop-progresslist">
+            <ul className="airdrop-progress-list">
               <li>
-                <div className="progresslist-left">
+                <div className="progress-list-left">
                   <small>Mission #1</small>
                   <p>Lorem Ipsum Dolar amet</p>
                 </div>
@@ -123,7 +122,7 @@ const Airdrop = () => {
                 </div>
               </li>
               <li>
-                <div className="progresslist-left">
+                <div className="progress-list-left">
                   <small>Mission #2</small>
                   <p>Lorem Ipsum Dolar amet</p>
                 </div>
@@ -132,7 +131,7 @@ const Airdrop = () => {
                 </div>
               </li>
               <li>
-                <div className="progresslist-left">
+                <div className="progress-list-left">
                   <small>Mission #3</small>
                   <p>Lorem Ipsum Dolar amet</p>
                 </div>
@@ -141,7 +140,7 @@ const Airdrop = () => {
                 </div>
               </li>
               <li>
-                <div className="progresslist-left">
+                <div className="progress-list-left">
                   <small>Mission #4</small>
                   <p>Lorem Ipsum Dolar amet</p>
                 </div>

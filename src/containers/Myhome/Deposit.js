@@ -1,7 +1,6 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
-import variables from "../../utils/variables";
 import { Button, Table, Switch } from "antd";
 import "./index.less";
 import { Link } from "react-router-dom";
@@ -37,8 +36,8 @@ const Deposit = () => {
     },
     {
       title: "Use as Collateral",
-      dataIndex: "useas_collateral",
-      key: "useas_collateral",
+      dataIndex: "use_as_collateral",
+      key: "use_as_collateral",
       width: 200,
       render: (item) => <Switch onChange={() => onChange(item)} />,
     },
@@ -89,7 +88,7 @@ const Deposit = () => {
       key: 1,
       asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="cmst-icon" />
             </div>
@@ -105,7 +104,7 @@ const Deposit = () => {
       key: 2,
       asset: (
         <>
-          <div className="assets-withicon">
+          <div className="assets-with-icon">
             <div className="assets-icon">
               <SvgIcon name="osmosis-icon" viewBox="0 0 30 30" />
             </div>

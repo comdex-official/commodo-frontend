@@ -1,7 +1,6 @@
 @import "../../assets/less/variables.less";
 
-
-.assets-withicon {
+.assets-with-icon {
   display: flex;
   align-items: center;
   .assets-icon-2 {
@@ -25,17 +24,17 @@
   }
 }
 
-.ant-progress{
-  &.health-progress{
-    .ant-progress-inner{
+.ant-progress {
+  &.health-progress {
+    .ant-progress-inner {
       background: @bg-progress;
       height: 7px;
       overflow: inherit;
-      .ant-progress-bg{
+      .ant-progress-bg {
         background: @warning-color;
         min-height: 100%;
         position: relative;
-        &::after{
+        &::after {
           content: " ";
           width: 0;
           height: 0;
@@ -51,10 +50,10 @@
         }
       }
     }
-    .ant-progress-outer{
+    .ant-progress-outer {
       padding: 0;
     }
-    .ant-progress-text{
+    .ant-progress-text {
       width: 100%;
       margin-top: -7px;
       text-align: center;
@@ -67,12 +66,12 @@
   }
 }
 
-.txhash-col{
+.tx-hash-col {
   display: flex;
   align-items: center;
-  .icon{
+  .icon {
     fill: @bg-dark;
-    margin-left:8px;
+    margin-left: 8px;
     width: 12px;
     .dark-mode & {
       fill: @bg-light;
@@ -80,22 +79,22 @@
   }
 }
 
-.custom-table{
-  .dates-col{
-    small{
+.custom-table {
+  .dates-col {
+    small {
       font-size: @font-size-sm - 2;
       font-weight: normal;
     }
-  } 
+  }
 }
 
-.commodo-card.myhome-upper{
+.commodo-card.myhome-upper {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px 20px 25px;
   margin-bottom: 1.5rem;
-  .myhome-upper-left{
+  .myhome-upper-left {
     width: 60%;
     .ant-list {
       .ant-list-item {
@@ -103,23 +102,23 @@
         color: @text-color-dark2;
         border-left: 1px solid @success-color;
         padding-left: 15px;
-    
+
         .dark-mode & {
           color: @white;
         }
-    
+
         p {
           margin-bottom: 0;
           font-size: @font-size-base;
         }
-    
+
         h3 {
           margin-bottom: 0;
           font-size: 1.5rem;
           font-weight: bold;
           line-height: 1;
           margin-top: 8px;
-    
+
           .dark-mode & {
             color: @white;
           }
@@ -127,19 +126,19 @@
       }
     }
   }
-  .myhome-upper-right{
+  .myhome-upper-right {
     width: 40%;
-    .borrow-limit-bar{
-      .small-text{
+    .borrow-limit-bar {
+      .small-text {
         font-size: @font-size-base - 1;
       }
-      .borrow-limit-upper{
+      .borrow-limit-upper {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
         line-height: 1;
         margin-bottom: 4px;
-        h4{
+        h4 {
           font-size: @font-size-lg + 3;
           font-weight: bold;
           margin-bottom: 0;
@@ -149,16 +148,16 @@
           }
         }
       }
-      .borrow-limit-middle{
-        .ant-progress{
-          .ant-progress-outer{
+      .borrow-limit-middle {
+        .ant-progress {
+          .ant-progress-outer {
             padding: 0;
           }
-          .ant-progress-inner{
+          .ant-progress-inner {
             background: @bg-progress;
             height: 20px;
             overflow: inherit;
-            .ant-progress-bg{
+            .ant-progress-bg {
               background: @warning-color;
               min-height: 100%;
               position: relative;
@@ -166,7 +165,7 @@
           }
         }
       }
-      .borrow-limit-bottom{
+      .borrow-limit-bottom {
         margin-top: 6px;
         display: flex;
         justify-content: space-between;
@@ -177,13 +176,13 @@
   }
 }
 
-.rewards-column{
-  p{
+.rewards-column {
+  p {
     font-weight: normal;
     margin-bottom: 2px !important;
     display: block;
   }
-  small{
+  small {
     font-weight: lighter;
     color: @success-color !important;
   }
