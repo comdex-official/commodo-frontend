@@ -40,7 +40,7 @@ const Withdraw = ({
 
     setAmount(value);
     setValidationError(
-      ValidateInputNumber(getAmount(value), chain?.ibc?.amount)
+      ValidateInputNumber(getAmount(value), chain?.ibc?.amount || 0)
     );
   };
 

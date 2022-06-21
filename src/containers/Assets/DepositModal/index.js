@@ -40,7 +40,7 @@ const Deposit = ({
 
     setAmount(value);
     setValidationError(
-      ValidateInputNumber(getAmount(value), availableBalance?.amount)
+      ValidateInputNumber(getAmount(value), availableBalance?.amount || 0)
     );
   };
 

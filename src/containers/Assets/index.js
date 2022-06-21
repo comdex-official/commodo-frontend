@@ -94,7 +94,6 @@ const Assets = ({ assetBalance, balances, markets }) => {
   ];
 
   const getPrice = (denom) => {
-    console.log('the price', denom, marketPrice(markets, denom) || 0)
     return marketPrice(markets, denom) || 0;
   };
 
