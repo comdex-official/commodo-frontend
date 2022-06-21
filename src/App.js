@@ -14,7 +14,7 @@ const App = () => {
     <>
       <SvgSprite url={svgFile} />
       <div className="main_wrapper">
-        <img className="body-bg" src={BodyBg} />
+        <img className="body-bg" src={BodyBg} alt="background image"/>
         <SideBar />
         <div className="main-container">
           <NavigationBar />

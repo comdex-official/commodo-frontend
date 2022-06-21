@@ -68,7 +68,7 @@ const SideBar = () => {
                 })
               }
             >
-              <img src={LogoIcon} />
+              <img src={LogoIcon} alt="logo icon" />
               <span>COMMODO</span>
             </div>
             <Scrollbars>

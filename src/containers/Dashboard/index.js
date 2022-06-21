@@ -180,7 +180,7 @@ const Dashboard = ({ isDarkMode }) => {
               <div className="commodo-launch-card-inner">
                 <img
                   className="launch-bg"
-                  alt={"CMDO Token Launch"}
+                  alt="CMDO Token Launch"
                   src={LaunchImage}
                 />
                 <div className="assets-section">
