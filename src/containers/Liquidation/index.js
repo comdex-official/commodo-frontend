@@ -7,7 +7,7 @@ import PlaceBidModal from "./PlaceBidModal";
 import "./index.less";
 import FilterModal from "./FilterModal";
 
-const Liquidation = (lang) => {
+const Liquidation = () => {
   const columns = [
     {
       title: (

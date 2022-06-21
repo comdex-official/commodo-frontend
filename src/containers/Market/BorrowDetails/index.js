@@ -11,15 +11,25 @@ import { Link } from "react-router-dom";
 const { TabPane } = Tabs;
 
 const BackButton = {
-  right: <Link to="/market"><Button className="back-btn" type="primary">Back</Button></Link>
-}
+  right: (
+    <Link to="/market">
+      <Button className="back-btn" type="primary">
+        Back
+      </Button>
+    </Link>
+  ),
+};
 
-const BorrowDetails = (lang) => {
+const BorrowDetails = () => {
   return (
     <div className="app-content-wrapper">
       <Row>
         <Col>
-          <Tabs className="commodo-tabs" defaultActiveKey="1" tabBarExtraContent={BackButton}>
+          <Tabs
+            className="commodo-tabs"
+            defaultActiveKey="1"
+            tabBarExtraContent={BackButton}
+          >
             <TabPane tab="Borrow" key="1">
               <BorrowTab />
             </TabPane>
@@ -43,7 +53,6 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {
-};
+const actionsToProps = {};
 
 export default connect(stateToProps, actionsToProps)(BorrowDetails);

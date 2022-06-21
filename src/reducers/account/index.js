@@ -4,9 +4,7 @@ import {
   ACCOUNT_CONNECT_MODAL_SHOW,
   ACCOUNT_VAULTS_SET,
   FORM_MODAL_SHOW,
-  TOTAL_VALUE_SET,
   TRANSACTION_HISTORY_SET,
-  VAULT_SET,
   ASSET_BALANCE_SET,
   cASSET_BALANCE_SET,
   ACCOUNT_POOL_BALANCE_SET,
@@ -51,14 +49,6 @@ const vaults = (
   return state;
 };
 
-const totalValue = (state = 0, action) => {
-  if (action.type === TOTAL_VALUE_SET) {
-    return action.value;
-  }
-
-  return state;
-};
-
 const history = (
   state = {
     list: [],
@@ -90,14 +80,6 @@ const showFormModal = (
       key: action.key,
       show: action.show,
     };
-  }
-
-  return state;
-};
-
-const vault = (state = {}, action) => {
-  if (action.type === VAULT_SET) {
-    return action.value || {};
   }
 
   return state;
@@ -172,10 +154,8 @@ export default combineReducers({
   address,
   showModal,
   vaults,
-  totalValue,
   history,
   showFormModal,
-  vault,
   balances,
   refreshBalance,
   name,

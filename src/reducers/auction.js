@@ -3,7 +3,6 @@ import {
   AUCTION_LIST_SET,
   BIDDING_LIST_SET,
   BID_AMOUNT_SET,
-  CURRENT_AUCTION_SET,
 } from "../constants/auction";
 
 const data = (
@@ -19,14 +18,6 @@ const data = (
       list: action.list,
       pagination: action.pagination,
     };
-  }
-
-  return state;
-};
-
-const _ = (state = {}, action) => {
-  if (action.type === CURRENT_AUCTION_SET) {
-    return action.value || state;
   }
 
   return state;
@@ -62,7 +53,6 @@ const bidding = (
 
 export default combineReducers({
   data,
-  _,
   bidAmount,
   bidding,
 });

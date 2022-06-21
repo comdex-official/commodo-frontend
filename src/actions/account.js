@@ -5,7 +5,6 @@ import {
   ACCOUNT_VAULTS_SET,
   FORM_MODAL_SHOW,
   TRANSACTION_HISTORY_SET,
-  VAULT_SET,
   TOTAL_VALUE_SET,
   ASSET_BALANCE_SET,
   cASSET_BALANCE_SET,
@@ -53,13 +52,6 @@ export const showFormModal = (show, key) => {
   };
 };
 
-export const setVault = (value) => {
-  return {
-    type: VAULT_SET,
-    value,
-  };
-};
-
 export const setTransactionHistory = (list, count) => {
   return {
     type: TRANSACTION_HISTORY_SET,
@@ -73,13 +65,6 @@ export const setAccountBalances = (list, pagination) => {
     type: ACCOUNT_BALANCES_SET,
     list,
     pagination,
-  };
-};
-
-export const setTotalValue = (value) => {
-  return {
-    type: TOTAL_VALUE_SET,
-    value,
   };
 };
 

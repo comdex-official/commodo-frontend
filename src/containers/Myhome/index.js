@@ -16,16 +16,26 @@ function callback(key) {
 
 const data = [
   {
-    title: <>Total Deposited <TooltipIcon text="Value of total Asset Deposited by User" /></>,
-    counts: '$12,350'
+    title: (
+      <>
+        Total Deposited{" "}
+        <TooltipIcon text="Value of total Asset Deposited by User" />
+      </>
+    ),
+    counts: "$12,350",
   },
   {
-    title: <>Total Borrowed <TooltipIcon text="Value of total Asset Borrowed by User" /></>,
-    counts: "$2,345"
-  }
+    title: (
+      <>
+        Total Borrowed{" "}
+        <TooltipIcon text="Value of total Asset Borrowed by User" />
+      </>
+    ),
+    counts: "$2,345",
+  },
 ];
 
-const Myhome = (lang) => {
+const Myhome = () => {
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -43,7 +53,7 @@ const Myhome = (lang) => {
                   xxl: 2,
                 }}
                 dataSource={data}
-                renderItem={item => (
+                renderItem={(item) => (
                   <List.Item>
                     <div>
                       <p>{item.title}</p>
@@ -54,10 +64,14 @@ const Myhome = (lang) => {
               />
             </div>
             <div className="myhome-upper-right">
-              <div className="mb-3">Your Borrow Limit <TooltipIcon text="Borrow limit of User" /></div>
+              <div className="mb-3">
+                Your Borrow Limit <TooltipIcon text="Borrow limit of User" />
+              </div>
               <div className="borrow-limit-bar">
                 <div className="borrow-limit-upper">
-                  <div><h4>25%</h4></div>
+                  <div>
+                    <h4>25%</h4>
+                  </div>
                   <div className="small-text">Borrow Limit :$7255</div>
                 </div>
                 <div className="borrow-limit-middle">
@@ -74,7 +88,11 @@ const Myhome = (lang) => {
       </Row>
       <Row>
         <Col>
-          <Tabs className="commodo-tabs" defaultActiveKey="1" onChange={callback}>
+          <Tabs
+            className="commodo-tabs"
+            defaultActiveKey="1"
+            onChange={callback}
+          >
             <TabPane tab="Deposit" key="1">
               <Deposit />
             </TabPane>
@@ -101,7 +119,6 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {
-};
+const actionsToProps = {};
 
 export default connect(stateToProps, actionsToProps)(Myhome);

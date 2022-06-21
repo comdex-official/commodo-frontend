@@ -1,9 +1,6 @@
 import {
-  CAUTION_NOTICE_VALUES_SET,
   DEMAND_COIN_DENOM_SET,
-  DEMAND_COIN_AMOUNT_SET,
   OFFER_COIN_AMOUNT_SET,
-  OFFER_COIN_DENOM_SET,
   REVERSE_SET,
   COMPLETE_SET,
   SLIPPAGE_SET,
@@ -14,20 +11,6 @@ import {
 export const setDemandCoinDenom = (value) => {
   return {
     type: DEMAND_COIN_DENOM_SET,
-    value,
-  };
-};
-
-export const setDemandCoinAmount = (value) => {
-  return {
-    type: DEMAND_COIN_AMOUNT_SET,
-    value,
-  };
-};
-
-export const setOfferCoinDenom = (value) => {
-  return {
-    type: OFFER_COIN_DENOM_SET,
     value,
   };
 };

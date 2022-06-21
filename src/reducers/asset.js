@@ -5,8 +5,6 @@ import {
   PAIR_ID_SET,
   OUT_ASSET_SET,
   IN_ASSET_SET,
-  COLLATERAL_RATIO_SET,
-  IN_AMOUNT_SET,
   OUT_AMOUNT_SET,
 } from "../constants/asset";
 import { combineReducers } from "redux";
@@ -81,24 +79,8 @@ const outAsset = (state = "", action) => {
   return state;
 };
 
-const inAmount = (state = 0, action) => {
-  if (action.type === IN_AMOUNT_SET) {
-    return action.value || 0;
-  }
-
-  return state;
-};
-
 const outAmount = (state = 0, action) => {
   if (action.type === OUT_AMOUNT_SET) {
-    return action.value || 0;
-  }
-
-  return state;
-};
-
-const collateralRatio = (state = 150, action) => {
-  if (action.type === COLLATERAL_RATIO_SET) {
     return action.value || 0;
   }
 
@@ -112,7 +94,5 @@ export default combineReducers({
   _,
   outAsset,
   inAsset,
-  inAmount,
   outAmount,
-  collateralRatio,
 });
