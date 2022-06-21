@@ -2,23 +2,23 @@ import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
 import {List, message, Table} from "antd";
-import "./index.less";
 import Deposit from "./DepositModal";
 import Withdraw from "./WithdrawModal";
 import {ibcAssetsInfo} from "../../config/ibc";
 import {commaSeparator, marketPrice} from "../../utils/number";
 import {embedChainInfo} from "../../config/chain";
-import {amountConversion, denomConversion} from "../../utils/coin";
+import {amountConversion, amountConversionWithComma, denomConversion} from "../../utils/coin";
 import {cmst, comdex, harbor} from "../../config/network";
 import {iconNameFromDenom} from "../../utils/string";
 import Lodash from "lodash";
 import {DOLLAR_DECIMALS} from "../../constants/common";
+import "./index.less";
 
-const Assets = ({lang, assetBalance, balances, markets,}) => {
+const Assets = ({ assetBalance, balances, markets }) => {
   const data = [
     {
       title: <>Total Asset Balance <TooltipIcon text="Value of total Asset" /></>,
-      counts: '$1,234.55'
+      counts: `$${amountConversionWithComma(assetBalance, DOLLAR_DECIMALS)}`
     }
   ];
 
