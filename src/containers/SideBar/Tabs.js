@@ -10,6 +10,8 @@ import { initializeChain } from "../../services/keplr";
 import { message } from "antd";
 import { encode } from "js-base64";
 import { fetchKeplrAccountName } from "../../services/keplr";
+import { setAccountAddress, setAccountName } from "../../actions/account";
+
 
 const NavTabs = ({ setAccountAddress, lang, setAccountName, onClick }) => {
   const location = useLocation();
@@ -19,6 +21,22 @@ const NavTabs = ({ setAccountAddress, lang, setAccountName, onClick }) => {
   window.addEventListener("keplr_keystorechange", () => {
     handleConnectToKeplr();
   });
+
+  const handleConnectToKeplr = () => {
+    initializeChain((error, account) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      fetchKeplrAccountName().then((name)=>{
+        setAccountName(name);
+      })
+
+      setAccountAddress(account.address);
+      localStorage.setItem("ac", encode(account.address));
+    });
+  };
 
   const a11yProps = (index) => {
     return {
@@ -64,6 +82,8 @@ const NavTabs = ({ setAccountAddress, lang, setAccountName, onClick }) => {
 
 NavTabs.propTypes = {
   lang: PropTypes.string.isRequired,
+  setAccountAddress: PropTypes.func.isRequired,
+  setAccountName: PropTypes.func.isRequired,
 };
 
 const stateToProps = (state) => {
@@ -72,4 +92,10 @@ const stateToProps = (state) => {
   };
 };
 
-export default connect(stateToProps)(NavTabs);
+
+const actionToProps = {
+  setAccountAddress,
+  setAccountName,
+};
+
+export default connect(stateToProps, actionToProps)(NavTabs);

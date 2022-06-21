@@ -292,11 +292,7 @@ Assets.propTypes = {lang: PropTypes.string.isRequired,
   ),
   markets: PropTypes.arrayOf(
       PropTypes.shape({
-        rates: PropTypes.shape({
-          high: PropTypes.number,
-          low: PropTypes.number,
-          unsigned: PropTypes.bool,
-        }),
+        rates: PropTypes.string,
         symbol: PropTypes.string,
         script_id: PropTypes.string,
       })

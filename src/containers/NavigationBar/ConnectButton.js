@@ -146,7 +146,11 @@ const ConnectButton = ({
         <div className="connected_div">
           <div className="connected_left">
             <div className="testnet-top">
-              <SvgIcon name="cmdx-icon" /> {amountConversionWithComma((getDenomBalance(balances, comdex.coinMinimalDenom) || 0), DOLLAR_DECIMALS)}
+              <SvgIcon name="cmdx-icon" />{" "}
+              {amountConversionWithComma(
+                getDenomBalance(balances, comdex.coinMinimalDenom) || 0,
+                DOLLAR_DECIMALS
+              )}
             </div>
           </div>
           <DisConnectModal />
@@ -191,13 +195,7 @@ ConnectButton.propTypes = {
   ),
   markets: PropTypes.arrayOf(
     PropTypes.shape({
-      rates: PropTypes.shape({
-        high: PropTypes.number,
-        low: PropTypes.number,
-        unsigned: PropTypes.bool,
-      }),
-      symbol: PropTypes.string,
-      script_id: PropTypes.string,
+      rates: PropTypes.string,
     })
   ),
   poolBalances: PropTypes.array,
