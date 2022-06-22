@@ -6,7 +6,7 @@ import WithdrawTab from "./Withdraw";
 import DepositTab from "./Deposit";
 import "./index.less";
 import { Link } from "react-router-dom";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {queryLendPool} from "../../../../services/lend/query";
 import {useParams} from "react-router";
 import {setPool} from "../../../../actions/lend";
@@ -24,11 +24,16 @@ const BackButton = {
 };
 
 const SupplyDetails = ({setPool}) => {
+  const [inProgress, setInProgress] = useState(false);
+
   let { id } = useParams();
 
   useEffect(()=>{
     if(id){
+      setInProgress(true);
+
       queryLendPool(id, (error, result)=>{
+        setInProgress(false);
         if(error){
           message.error(error);
           return;
@@ -48,7 +53,7 @@ const SupplyDetails = ({setPool}) => {
             tabBarExtraContent={BackButton}
           >
             <TabPane tab="Deposit" key="1">
-              <DepositTab />
+              <DepositTab dataInProgress={inProgress}/>
             </TabPane>
             <TabPane tab="Withdraw" key="2">
               <WithdrawTab />
