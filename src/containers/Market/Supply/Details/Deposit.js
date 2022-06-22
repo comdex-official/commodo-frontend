@@ -3,12 +3,25 @@ import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import { connect } from "react-redux";
 import { Button, List, Select, Input, Progress, Switch } from "antd";
 import "./index.less";
-import {denomConversion} from "../../../../utils/coin";
-import {iconNameFromDenom} from "../../../../utils/string";
+import {denomConversion, getDenomBalance} from "../../../../utils/coin";
+import { iconNameFromDenom } from "../../../../utils/string";
+import { useEffect, useState } from "react";
 
 const { Option } = Select;
 
-const DepositTab = ({pool, assetMap}) => {
+const DepositTab = ({ pool, assetMap,balances }) => {
+  const [assetList, setAssetList] = useState();
+  const [selectedAssetId, setSelectedAssetId] = useState();
+
+  useEffect(() => {
+    if (pool?.poolId) {
+      setAssetList([
+        assetMap[pool?.firstBridgedAssetId?.toNumber()],
+        assetMap[pool?.secondBridgedAssetId?.toNumber()],
+      ]);
+    }
+  }, [pool]);
+
   const data = [
     {
       title: "Total Deposited",
@@ -64,37 +77,24 @@ const DepositTab = ({pool, assetMap}) => {
     },
   ];
 
+  const handleAssetChange = (value) => {
+    setSelectedAssetId(value);
+  };
+
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
         <div className="deposit-head">
           <div className="deposit-head-left">
-            <div className="assets-col mr-3">
-              <div className="assets-icon">
-                <SvgIcon name="osmosis-icon" />
-              </div>
-              OSMO
-            </div>
-            <div className="assets-col mr-3">
-              <div className="assets-icon">
-                <SvgIcon name={iconNameFromDenom(
-                    assetMap[pool?.firstBridgedAssetId?.toNumber()]?.denom
-                )} />
-              </div>
-              {denomConversion(
-                  assetMap[pool?.firstBridgedAssetId?.toNumber()]?.denom
-              )}
-            </div>
-            <div className="assets-col">
-              <div className="assets-icon">
-                <SvgIcon name={iconNameFromDenom(
-                    assetMap[pool?.secondBridgedAssetId?.toNumber()]?.denom
-                )} />
-              </div>
-              {denomConversion(
-                  assetMap[pool?.secondBridgedAssetId?.toNumber()]?.denom
-              )}
-            </div>
+            {assetList?.length > 0 &&
+              assetList?.map((item) => (
+                <div className="assets-col mr-3" key={item?.denom}>
+                  <div className="assets-icon">
+                    <SvgIcon name={iconNameFromDenom(item?.denom)} />
+                  </div>
+                  {denomConversion(item?.denom)}
+                </div>
+              ))}
           </div>
           <div className="deposit-head-right">
             <small>Use as Collateral</small>
@@ -110,7 +110,7 @@ const DepositTab = ({pool, assetMap}) => {
               <Select
                 className="assets-select"
                 dropdownClassName="asset-select-dropdown"
-                defaultValue="1"
+                onChange={handleAssetChange}
                 placeholder={
                   <div className="select-placeholder">
                     <div className="circle-icon">
@@ -124,53 +124,30 @@ const DepositTab = ({pool, assetMap}) => {
                   <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                 }
               >
-                <Option key="1">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="cmst-icon" />
-                      </div>
-                    </div>
-                    <div className="name">CMST</div>
-                  </div>
-                </Option>
-                <Option key="2">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="atom-icon" />
-                      </div>
-                    </div>
-                    <div className="name">Atom</div>
-                  </div>
-                </Option>
-                <Option key="3">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="osmosis-icon" />
-                      </div>
-                    </div>
-                    <div className="name">OSMO</div>
-                  </div>
-                </Option>
-                <Option key="4">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="cmdx-icon" />
-                      </div>
-                    </div>
-                    <div className="name">CMDX</div>
-                  </div>
-                </Option>
+                {assetList?.length > 0 &&
+                  assetList?.map((record) => {
+                    const item = record?.denom ? record?.denom : record;
+
+                    return (
+                      <Option key={item} value={record?.id?.toNumber()}>
+                        <div className="select-inner">
+                          <div className="svg-icon">
+                            <div className="svg-icon-inner">
+                              <SvgIcon name={iconNameFromDenom(item)} />
+                            </div>
+                          </div>
+                          <div className="name">{denomConversion(item)}</div>
+                        </div>
+                      </Option>
+                    );
+                  })}
               </Select>
             </div>
           </div>
           <div className="assets-right">
             <div className="label-right">
               Available
-              <span className="ml-1">142 CMST</span>
+              <span className="ml-1">{getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0} {denomConversion(assetMap[selectedAssetId]?.denom)}</span>
               <div className="max-half">
                 <Button className="active">Max</Button>
               </div>
@@ -340,6 +317,12 @@ const DepositTab = ({pool, assetMap}) => {
 
 DepositTab.propTypes = {
   assetMap: PropTypes.object,
+  balances: PropTypes.arrayOf(
+      PropTypes.shape({
+        denom: PropTypes.string.isRequired,
+        amount: PropTypes.string,
+      })
+  ),
   pool: PropTypes.shape({
     poolId: PropTypes.shape({
       low: PropTypes.number,
@@ -349,13 +332,15 @@ DepositTab.propTypes = {
     }),
     secondBridgedAssetId: PropTypes.shape({
       low: PropTypes.number,
-    })
-  })};
+    }),
+  }),
+};
 
 const stateToProps = (state) => {
   return {
     pool: state.lend.pool._,
     assetMap: state.asset._.map,
+    balances: state.account.balances.list,
   };
 };
 
