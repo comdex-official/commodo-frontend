@@ -1,15 +1,15 @@
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import { connect } from "react-redux";
-import { Button, List, Select, Input } from "antd";
+import { Button, List, Select, Input, Progress } from "antd";
 import "./index.less";
 
 const { Option } = Select;
 
-const WithdrawTab = () => {
+const BorrowTab = () => {
   const data = [
     {
-      title: "Total Deposited",
+      title: "Total Borrowed",
       counts: "$1,234.20",
     },
     {
@@ -21,13 +21,13 @@ const WithdrawTab = () => {
       counts: "30.45%",
     },
     {
-      title: "Deposit APY",
-      counts: "8.92%",
+      title: "Borrow APY",
+      counts: "12.33%",
     },
   ];
   const data2 = [
     {
-      title: "Total Deposited",
+      title: "Total Borrowed",
       counts: "$1,234.20",
     },
     {
@@ -39,13 +39,13 @@ const WithdrawTab = () => {
       counts: "30.45%",
     },
     {
-      title: "Deposit APY",
-      counts: "7.24%",
+      title: "Borrow APY",
+      counts: "13.33%",
     },
   ];
   const data3 = [
     {
-      title: "Total Deposited",
+      title: "Total Borrowed",
       counts: "$1,234.20",
     },
     {
@@ -57,39 +57,17 @@ const WithdrawTab = () => {
       counts: "30.45%",
     },
     {
-      title: "Deposit APY",
-      counts: "6.38%",
+      title: "Borrow APY",
+      counts: "12.76%",
     },
   ];
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <div className="deposit-head">
-          <div className="deposit-head-left">
-            <div className="assets-col mr-3">
-              <div className="assets-icon">
-                <SvgIcon name="osmosis-icon" />
-              </div>
-              OSMO
-            </div>
-            <div className="assets-col mr-3">
-              <div className="assets-icon">
-                <SvgIcon name="cmst-icon" />
-              </div>
-              CMST
-            </div>
-            <div className="assets-col">
-              <div className="assets-icon">
-                <SvgIcon name="atom-icon" />
-              </div>
-              ATOM
-            </div>
-          </div>
-        </div>
-        <div className="assets-select-card mb-4">
+        <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="left-label">
-              Withdraw <TooltipIcon text="" />
+              Collateral Asset <TooltipIcon text="" />
             </label>
             <div className="assets-select-wrapper">
               <Select
@@ -168,25 +146,93 @@ const WithdrawTab = () => {
             </div>
           </div>
         </div>
+        <div className="assets-select-card mb-2">
+          <div className="assets-left">
+            <label className="left-label">
+              Borrow Asset <TooltipIcon text="" />
+            </label>
+            <div className="assets-select-wrapper">
+              <Select
+                className="assets-select"
+                dropdownClassName="asset-select-dropdown"
+                defaultValue="1"
+                placeholder={
+                  <div className="select-placeholder">
+                    <div className="circle-icon">
+                      <div className="circle-icon-inner" />
+                    </div>
+                    Select
+                  </div>
+                }
+                defaultActiveFirstOption={true}
+                suffixIcon={
+                  <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
+                }
+              >
+                <Option key="1">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="cmst-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMST</div>
+                  </div>
+                </Option>
+                <Option key="2">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="atom-icon" />
+                      </div>
+                    </div>
+                    <div className="name">Atom</div>
+                  </div>
+                </Option>
+                <Option key="3">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="osmosis-icon" />
+                      </div>
+                    </div>
+                    <div className="name">OSMO</div>
+                  </div>
+                </Option>
+                <Option key="4">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="cmdx-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMDX</div>
+                  </div>
+                </Option>
+              </Select>
+            </div>
+          </div>
+          <div className="assets-right">
+            <div>
+              <div className="input-select">
+                <Input placeholder="" value="23.00" />
+              </div>
+              <small>$120.00</small>
+            </div>
+          </div>
+        </div>
         <Row>
-          <Col sm="12" className="mx-auto card-bottom-details">
-            <Row className="mt-2">
+          <Col sm="12" className="mt-3 mx-auto card-bottom-details">
+            <Row className="mt-1">
               <Col>
-                <label>Max LTV</label>
+                <label>Health Factor</label>
               </Col>
-              <Col className="text-right">85%</Col>
+              <Col className="text-right">390%</Col>
             </Row>
-            <Row className="mt-2">
+            <Row className="pb-2">
               <Col>
-                <label>Liquidation Threshold</label>
+                <Progress className="commodo-progress" percent={30} />
               </Col>
-              <Col className="text-right">80%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Penalty</label>
-              </Col>
-              <Col className="text-right">5%</Col>
             </Row>
             <Row className="mt-2">
               <Col>
@@ -196,15 +242,35 @@ const WithdrawTab = () => {
             </Row>
             <Row className="mt-2">
               <Col>
-                <label>Deposit APY</label>
+                <label>Liquidation Percentage</label>
+              </Col>
+              <Col className="text-right">10%</Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <label>Borrow APY</label>
               </Col>
               <Col className="text-right">3.80%</Col>
             </Row>
+            <Row className="mt-2">
+              <Col>
+                <label>Liquidation Threshold</label>
+              </Col>
+              <Col className="text-right">80%</Col>
+            </Row>
+            {/* <Row className="mt-2">
+              <Col>
+                <label>Liquidation Price</label>
+              </Col>
+              <Col className="text-right">
+                5%
+              </Col>
+            </Row> */}
           </Col>
         </Row>
         <div className="assets-form-btn">
           <Button type="primary" className="btn-filled">
-            Withdraw
+            Borrow
           </Button>
         </div>
       </div>
@@ -292,9 +358,9 @@ const WithdrawTab = () => {
             <div className="head-left">
               <div className="assets-col">
                 <div className="assets-icon">
-                  <SvgIcon name="osmosis-icon" />
+                  <SvgIcon name="cmdx-icon" />
                 </div>
-                OSMO
+                CMDX
               </div>
               {/* <span className="percent-badge">
                 +6.18 <SvgIcon name="commodo-icon" />
@@ -332,7 +398,7 @@ const WithdrawTab = () => {
   );
 };
 
-WithdrawTab.propTypes = {
+BorrowTab.propTypes = {
   lang: PropTypes.string.isRequired,
 };
 
@@ -344,4 +410,4 @@ const stateToProps = (state) => {
 
 const actionsToProps = {};
 
-export default connect(stateToProps, actionsToProps)(WithdrawTab);
+export default connect(stateToProps, actionsToProps)(BorrowTab);

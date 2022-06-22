@@ -9,8 +9,8 @@ import BorrowRepay from "./containers/Myhome/BorrowRepay";
 import Deposit from "./containers/Myhome/Depositwithdraw";
 import Assets from "./containers/Assets";
 import Extra from "./containers/Extra";
-import SupplyDetails from "./containers/Market/SupplyDetails";
-import BorrowDetails from "./containers/Market/BorrowDetails";
+import SupplyDetails from "./containers/Market/Supply/Details";
+import BorrowDetails from "./containers/Market/Borrow/Details";
 
 const routes = [
   {

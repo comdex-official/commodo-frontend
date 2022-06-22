@@ -1,15 +1,15 @@
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import { connect } from "react-redux";
-import { Button, List, Select, Input, Progress } from "antd";
+import { Button, List, Select, Input } from "antd";
 import "./index.less";
 
 const { Option } = Select;
 
-const RepayTab = () => {
+const WithdrawTab = () => {
   const data = [
     {
-      title: "Total Borrowed",
+      title: "Total Deposited",
       counts: "$1,234.20",
     },
     {
@@ -21,13 +21,13 @@ const RepayTab = () => {
       counts: "30.45%",
     },
     {
-      title: "Borrow APY",
-      counts: "12.33%",
+      title: "Deposit APY",
+      counts: "8.92%",
     },
   ];
   const data2 = [
     {
-      title: "Total Borrowed",
+      title: "Total Deposited",
       counts: "$1,234.20",
     },
     {
@@ -39,13 +39,13 @@ const RepayTab = () => {
       counts: "30.45%",
     },
     {
-      title: "Borrow APY",
-      counts: "13.33%",
+      title: "Deposit APY",
+      counts: "7.24%",
     },
   ];
   const data3 = [
     {
-      title: "Total Borrowed",
+      title: "Total Deposited",
       counts: "$1,234.20",
     },
     {
@@ -57,22 +57,45 @@ const RepayTab = () => {
       counts: "30.45%",
     },
     {
-      title: "Borrow APY",
-      counts: "12.76%",
+      title: "Deposit APY",
+      counts: "6.38%",
     },
   ];
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
+        <div className="deposit-head">
+          <div className="deposit-head-left">
+            <div className="assets-col mr-3">
+              <div className="assets-icon">
+                <SvgIcon name="osmosis-icon" />
+              </div>
+              OSMO
+            </div>
+            <div className="assets-col mr-3">
+              <div className="assets-icon">
+                <SvgIcon name="cmst-icon" />
+              </div>
+              CMST
+            </div>
+            <div className="assets-col">
+              <div className="assets-icon">
+                <SvgIcon name="atom-icon" />
+              </div>
+              ATOM
+            </div>
+          </div>
+        </div>
         <div className="assets-select-card mb-4">
           <div className="assets-left">
             <label className="left-label">
-              Repay <TooltipIcon text="" />
+              Withdraw <TooltipIcon text="" />
             </label>
             <div className="assets-select-wrapper">
               <Select
                 className="assets-select"
                 dropdownClassName="asset-select-dropdown"
+                defaultValue="1"
                 placeholder={
                   <div className="select-placeholder">
                     <div className="circle-icon">
@@ -100,10 +123,30 @@ const RepayTab = () => {
                   <div className="select-inner">
                     <div className="svg-icon">
                       <div className="svg-icon-inner">
+                        <SvgIcon name="atom-icon" />
+                      </div>
+                    </div>
+                    <div className="name">Atom</div>
+                  </div>
+                </Option>
+                <Option key="3">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
                         <SvgIcon name="osmosis-icon" />
                       </div>
                     </div>
                     <div className="name">OSMO</div>
+                  </div>
+                </Option>
+                <Option key="4">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="cmdx-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMDX</div>
                   </div>
                 </Option>
               </Select>
@@ -126,28 +169,7 @@ const RepayTab = () => {
           </div>
         </div>
         <Row>
-          <Col sm="12" className="mt-2 mx-auto card-bottom-details">
-            <Row>
-              <Col>
-                <label>Remaining to Repay</label>
-                {/* <p className="remaining-infotext mt-1">You don’t have enough funds to repay the full amount</p> */}
-              </Col>
-              <Col className="text-right">
-                <div>123.45 CMST</div>
-                <small className="font-weight-light">$420.00</small>
-              </Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Current Health Factor</label>
-              </Col>
-              <Col className="text-right">45%</Col>
-            </Row>
-            <Row className="pb-2">
-              <Col>
-                <Progress className="commodo-progress" percent={45} />
-              </Col>
-            </Row>
+          <Col sm="12" className="mx-auto card-bottom-details">
             <Row className="mt-2">
               <Col>
                 <label>Max LTV</label>
@@ -162,21 +184,27 @@ const RepayTab = () => {
             </Row>
             <Row className="mt-2">
               <Col>
-                <label>Liquidation Price</label>
+                <label>Liquidation Penalty</label>
+              </Col>
+              <Col className="text-right">5%</Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <label>Current LTV</label>
               </Col>
               <Col className="text-right">35%</Col>
             </Row>
             <Row className="mt-2">
               <Col>
-                <label>Liquidation Penalty</label>
+                <label>Deposit APY</label>
               </Col>
-              <Col className="text-right">5%</Col>
+              <Col className="text-right">3.80%</Col>
             </Row>
           </Col>
         </Row>
         <div className="assets-form-btn">
           <Button type="primary" className="btn-filled">
-            Repay
+            Withdraw
           </Button>
         </div>
       </div>
@@ -264,9 +292,9 @@ const RepayTab = () => {
             <div className="head-left">
               <div className="assets-col">
                 <div className="assets-icon">
-                  <SvgIcon name="cmdx-icon" />
+                  <SvgIcon name="osmosis-icon" />
                 </div>
-                CMDX
+                OSMO
               </div>
               {/* <span className="percent-badge">
                 +6.18 <SvgIcon name="commodo-icon" />
@@ -304,7 +332,7 @@ const RepayTab = () => {
   );
 };
 
-RepayTab.propTypes = {
+WithdrawTab.propTypes = {
   lang: PropTypes.string.isRequired,
 };
 
@@ -316,4 +344,4 @@ const stateToProps = (state) => {
 
 const actionsToProps = {};
 
-export default connect(stateToProps, actionsToProps)(RepayTab);
+export default connect(stateToProps, actionsToProps)(WithdrawTab);

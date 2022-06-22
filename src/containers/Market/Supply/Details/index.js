@@ -1,7 +1,7 @@
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../../components/common";
+import { Col, Row, SvgIcon } from "../../../../components/common";
 import { connect } from "react-redux";
-import variables from "../../../utils/variables";
+import variables from "../../../../utils/variables";
 import { Button, Tabs } from "antd";
 import WithdrawTab from "./Withdraw";
 import DepositTab from "./Deposit";

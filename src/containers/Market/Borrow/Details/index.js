@@ -1,5 +1,5 @@
 import * as PropTypes from "prop-types";
-import { Col, Row } from "../../../components/common";
+import { Col, Row } from "../../../../components/common";
 import { connect } from "react-redux";
 import { Button, Tabs } from "antd";
 import BorrowTab from "./Borrow";

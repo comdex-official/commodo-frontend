@@ -5,8 +5,8 @@ export const comdex = {
   coinMinimalDenom: "ucmdx",
   coinDecimals: 6,
   prefix: "comdex",
-  rpc: "https://test-rpc.comdex.one",
-  rest: "https://test-rest.comdex.one",
+  rpc: "http://65.108.93.142:26657",
+  rest: "http://65.108.93.142:26657",
   explorerUrlToTx: `https://dev-explorer.comdex.one/transactions/{txHash}`
 };
 
