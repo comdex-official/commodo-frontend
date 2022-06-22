@@ -61,9 +61,15 @@ const Supply = ({ assetMap }) => {
               <>
                 <div className="assets-with-icon">
                   <div className="assets-icon">
-                    <SvgIcon name="cmdx-icon" />
+                    <SvgIcon
+                        name={iconNameFromDenom(
+                            assetMap[item?.mainAssetId?.toNumber()]?.denom
+                        )}
+                    />
                   </div>
-                  CMDX
+                  {denomConversion(
+                      assetMap[item?.mainAssetId?.toNumber()]?.denom
+                  )}
                 </div>
               </>
             ),

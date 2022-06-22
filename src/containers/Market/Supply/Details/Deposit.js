@@ -1,21 +1,32 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import { connect } from "react-redux";
-import { Button, List, Select, Input, Progress, Switch } from "antd";
+import {Button, List, Select, Input, Progress, Switch, message} from "antd";
 import "./index.less";
-import {denomConversion, getDenomBalance} from "../../../../utils/coin";
-import { iconNameFromDenom } from "../../../../utils/string";
+import {amountConversion, denomConversion, getAmount, getDenomBalance} from "../../../../utils/coin";
+import {iconNameFromDenom, toDecimals} from "../../../../utils/string";
 import { useEffect, useState } from "react";
+import CustomInput from "../../../../components/CustomInput";
+import {ValidateInputNumber} from "../../../../config/_validation";
+import {signAndBroadcastTransaction} from "../../../../services/helper";
+import variables from "../../../../utils/variables";
+import Snack from "../../../../components/common/Snack";
+import {defaultFee} from "../../../../services/transaction";
+import Long from "long";
 
 const { Option } = Select;
 
-const DepositTab = ({ pool, assetMap,balances }) => {
+const DepositTab = ({ lang, pool, assetMap,balances, address }) => {
   const [assetList, setAssetList] = useState();
   const [selectedAssetId, setSelectedAssetId] = useState();
+  const [amount, setAmount] = useState();
+  const [validationError, setValidationError] = useState();
+  const [inProgress, setInProgress] = useState(false);
 
   useEffect(() => {
     if (pool?.poolId) {
       setAssetList([
+        assetMap[pool?.mainAssetId?.toNumber()],
         assetMap[pool?.firstBridgedAssetId?.toNumber()],
         assetMap[pool?.secondBridgedAssetId?.toNumber()],
       ]);
@@ -79,6 +90,60 @@ const DepositTab = ({ pool, assetMap,balances }) => {
 
   const handleAssetChange = (value) => {
     setSelectedAssetId(value);
+  };
+
+  const onChange = (value) => {
+    value = toDecimals(value).toString().trim();
+
+    setAmount(value);
+    setValidationError(
+        ValidateInputNumber(getAmount(value), amountConversion(getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0))
+    );
+  };
+
+  const handleClick = () => {
+    setInProgress(true);
+
+    signAndBroadcastTransaction(
+        {
+          message: {
+            typeUrl: "/comdex.lend.v1beta1.MsgLend",
+            value: {
+              lender: address,
+              poolId: pool?.id,
+              assetId: Long.fromNumber(selectedAssetId),
+              amount: {
+                amount: getAmount(amount),
+                denom: assetMap[selectedAssetId]?.denom,
+              }
+            },
+          },
+          fee: defaultFee(),
+          memo: "",
+        },
+        address,
+        (error, result) => {
+          setInProgress(false);
+          setAmount(0);
+          if (error) {
+            message.error(error);
+            return;
+          }
+
+          if (result?.code) {
+            message.info(result?.rawLog);
+            return;
+          }
+
+
+          message.success(
+              <Snack
+                  message={variables[lang].tx_success}
+                  hash={result?.transactionHash}
+              />
+          );
+        }
+    );
   };
 
   return (
@@ -147,14 +212,18 @@ const DepositTab = ({ pool, assetMap,balances }) => {
           <div className="assets-right">
             <div className="label-right">
               Available
-              <span className="ml-1">{getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0} {denomConversion(assetMap[selectedAssetId]?.denom)}</span>
+              <span className="ml-1">{amountConversion(getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0)} {denomConversion(assetMap[selectedAssetId]?.denom)}</span>
               <div className="max-half">
                 <Button className="active">Max</Button>
               </div>
             </div>
             <div>
               <div className="input-select">
-                <Input placeholder="" value="23.00" />
+                <CustomInput
+                    value={amount}
+                    onChange={(event) => onChange(event.target.value)}
+                    validationError={validationError}
+                />
               </div>
               <small>$120.00</small>
             </div>
@@ -195,7 +264,9 @@ const DepositTab = ({ pool, assetMap,balances }) => {
           </Col>
         </Row>
         <div className="assets-form-btn">
-          <Button type="primary" className="btn-filled">
+          <Button type="primary" className="btn-filled"
+                  loading={inProgress}
+                  onClick={handleClick}>
             Deposit
           </Button>
         </div>
@@ -316,6 +387,8 @@ const DepositTab = ({ pool, assetMap,balances }) => {
 };
 
 DepositTab.propTypes = {
+  lang: PropTypes.string.isRequired,
+  address: PropTypes.string,
   assetMap: PropTypes.object,
   balances: PropTypes.arrayOf(
       PropTypes.shape({
@@ -338,9 +411,11 @@ DepositTab.propTypes = {
 
 const stateToProps = (state) => {
   return {
+    address: state.account.address,
     pool: state.lend.pool._,
     assetMap: state.asset._.map,
     balances: state.account.balances.list,
+    lang: state.language,
   };
 };
 

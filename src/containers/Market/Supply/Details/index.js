@@ -33,7 +33,7 @@ const SupplyDetails = ({setPool}) => {
           message.error(error);
           return;
         }
-        setPool(result?.Pool)
+        setPool(result?.pool)
       })
     }
   },[id])
