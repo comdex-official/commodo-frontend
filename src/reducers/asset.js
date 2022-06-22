@@ -32,6 +32,7 @@ const _ = (
     pagination: {},
     cAssets: [],
     inProgress: false,
+    map: {},
   },
   action
 ) => {
@@ -41,6 +42,8 @@ const _ = (
       list: action.list,
       cAssets: action.cAssets,
       pagination: action.pagination,
+      map: action.map,
+
     };
   }
 

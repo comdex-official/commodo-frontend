@@ -35,6 +35,8 @@ import { setMarkets } from "../../actions/oracle";
 import { fetchKeplrAccountName } from "../../services/keplr";
 import { comdex } from "../../config/network";
 import { amountConversionWithComma, getDenomBalance } from "../../utils/coin";
+import {queryAssets} from "../../services/asset/query";
+import {setAssets} from "../../actions/asset";
 
 const ConnectButton = ({
   setAccountAddress,
@@ -50,6 +52,7 @@ const ConnectButton = ({
   poolBalances,
   setAccountName,
   balances,
+                         setAssets,
 }) => {
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
@@ -78,6 +81,22 @@ const ConnectButton = ({
     );
   }, [markets]);
   ``;
+
+  useEffect(()=>{
+    queryAssets((DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
+        DEFAULT_PAGE_SIZE,
+        true,
+        false, (error, result)=>{
+      if(error){
+        message.error(error);
+        return;
+      }
+
+      if(result?.assets?.length>0){
+        setAssets(result?.assets)
+      }
+    })
+  },[])
 
   const fetchBalances = (address) => {
     queryAllBalances(address, (error, result) => {
@@ -239,6 +258,7 @@ const actionsToProps = {
   setCollateralBalance,
   setMarkets,
   setAccountName,
+  setAssets,
 };
 
 export default connect(stateToProps, actionsToProps)(ConnectButton);
