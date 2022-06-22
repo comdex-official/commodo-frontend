@@ -1,12 +1,15 @@
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../../../components/common";
+import { Col, Row } from "../../../../components/common";
 import { connect } from "react-redux";
-import variables from "../../../../utils/variables";
-import { Button, Tabs } from "antd";
+import {Button, message, Tabs} from "antd";
 import WithdrawTab from "./Withdraw";
 import DepositTab from "./Deposit";
 import "./index.less";
 import { Link } from "react-router-dom";
+import {useEffect} from "react";
+import {queryLendPool} from "../../../../services/lend/query";
+import {useParams} from "react-router";
+import {setPool} from "../../../../actions/lend";
 
 const { TabPane } = Tabs;
 
@@ -20,7 +23,21 @@ const BackButton = {
   ),
 };
 
-const SupplyDetails = () => {
+const SupplyDetails = ({setPool}) => {
+  let { id } = useParams();
+
+  useEffect(()=>{
+    if(id){
+      queryLendPool(id, (error, result)=>{
+        if(error){
+          message.error(error);
+          return;
+        }
+        setPool(result?.Pool)
+      })
+    }
+  },[id])
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -44,15 +61,11 @@ const SupplyDetails = () => {
 };
 
 SupplyDetails.propTypes = {
-  lang: PropTypes.string.isRequired,
+  setPool: PropTypes.func.isRequired,
 };
 
-const stateToProps = (state) => {
-  return {
-    lang: state.language,
-  };
+const actionsToProps = {
+  setPool
 };
 
-const actionsToProps = {};
-
-export default connect(stateToProps, actionsToProps)(SupplyDetails);
+export default connect(null, actionsToProps)(SupplyDetails);

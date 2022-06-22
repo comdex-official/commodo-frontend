@@ -49,7 +49,6 @@ const ConnectButton = ({
   markets,
   refreshBalance,
   setMarkets,
-  poolBalances,
   setAccountName,
   balances,
                          setAssets,
@@ -107,7 +106,6 @@ const ConnectButton = ({
       setAccountBalances(result.balances, result.pagination);
       calculateAssetBalance(result.balances);
       calculatecAssetBalance(result.balances);
-      calculatePoolBalance(result.balances);
     });
   };
 
@@ -131,12 +129,6 @@ const ConnectButton = ({
     });
 
     setcAssetBalance(Lodash.sum(value));
-  };
-
-  const calculatePoolBalance = () => {
-    const sum = Lodash.sumBy(poolBalances);
-
-    setPoolBalance(Number(sum * 10 ** 6));
   };
 
   const getPrice = (denom) => {
@@ -217,19 +209,6 @@ ConnectButton.propTypes = {
       rates: PropTypes.string,
     })
   ),
-  poolBalances: PropTypes.array,
-  pools: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.shape({
-        high: PropTypes.number,
-        low: PropTypes.number,
-        unsigned: PropTypes.bool,
-      }),
-      reserveAccountAddress: PropTypes.string,
-      poolCoinDenom: PropTypes.string,
-      reserveCoinDenoms: PropTypes.array,
-    })
-  ),
   show: PropTypes.bool,
 };
 
@@ -240,8 +219,6 @@ const stateToProps = (state) => {
     show: state.account.showModal,
     markets: state.oracle.market.list,
     refreshBalance: state.account.refreshBalance,
-    poolBalances: state.liquidity.poolBalances,
-    pools: state.liquidity.pool.list,
     balances: state.account.balances.list,
   };
 };

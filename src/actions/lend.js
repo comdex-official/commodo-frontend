@@ -4,14 +4,21 @@ import {
   POOL_BALANCE_FETCH_IN_PROGRESS,
   SECOND_RESERVE_COIN_DENOM_SET,
   POOL_TOKEN_SUPPLY_SET,
-  POOLS_LIQUIDITY_LIST_SET,
-} from "../constants/liquidity";
+  POOLS_LIQUIDITY_LIST_SET, POOL_SET,
+} from "../constants/lend";
 
 export const setPools = (list, pagination) => {
   return {
     type: POOLS_SET,
     list,
     pagination,
+  };
+};
+
+export const setPool = (value) => {
+  return {
+    type: POOL_SET,
+    value,
   };
 };
 

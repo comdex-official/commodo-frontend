@@ -5,7 +5,7 @@ import dashboard from "./dashboard";
 import farm from "./farm";
 import language from "./language";
 import swap from "./swap";
-import liquidity from "./liquidity";
+import lend from "./lend";
 import auction from "./auction";
 import theme from "./theme";
 import oracle from "./oracle";
@@ -17,7 +17,7 @@ const app = combineReducers({
   dashboard,
   farm,
   swap,
-  liquidity,
+  lend,
   auction,
   theme,
   oracle,

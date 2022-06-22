@@ -3,10 +3,12 @@ import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import { connect } from "react-redux";
 import { Button, List, Select, Input, Progress, Switch } from "antd";
 import "./index.less";
+import {denomConversion} from "../../../../utils/coin";
+import {iconNameFromDenom} from "../../../../utils/string";
 
 const { Option } = Select;
 
-const DepositTab = () => {
+const DepositTab = ({pool, assetMap}) => {
   const data = [
     {
       title: "Total Deposited",
@@ -61,6 +63,7 @@ const DepositTab = () => {
       counts: "6.38%",
     },
   ];
+
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
@@ -74,15 +77,23 @@ const DepositTab = () => {
             </div>
             <div className="assets-col mr-3">
               <div className="assets-icon">
-                <SvgIcon name="cmst-icon" />
+                <SvgIcon name={iconNameFromDenom(
+                    assetMap[pool?.firstBridgedAssetId?.toNumber()]?.denom
+                )} />
               </div>
-              CMST
+              {denomConversion(
+                  assetMap[pool?.firstBridgedAssetId?.toNumber()]?.denom
+              )}
             </div>
             <div className="assets-col">
               <div className="assets-icon">
-                <SvgIcon name="atom-icon" />
+                <SvgIcon name={iconNameFromDenom(
+                    assetMap[pool?.secondBridgedAssetId?.toNumber()]?.denom
+                )} />
               </div>
-              ATOM
+              {denomConversion(
+                  assetMap[pool?.secondBridgedAssetId?.toNumber()]?.denom
+              )}
             </div>
           </div>
           <div className="deposit-head-right">
@@ -174,11 +185,6 @@ const DepositTab = () => {
         </div>
         <Row>
           <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-            {/* <Row className="pb-2">
-              <Col sm="12" className="bond-row">
-                <span className="mr-2">Bond</span> <Switch defaultChecked size="small" />
-              </Col>
-            </Row> */}
             <Row className="mt-2">
               <Col>
                 <label>Max LTV</label>
@@ -191,14 +197,6 @@ const DepositTab = () => {
               </Col>
               <Col className="text-right">80%</Col>
             </Row>
-            {/* <Row className="mt-2">
-              <Col>
-                <label>Liquidation Price</label>
-              </Col>
-              <Col className="text-right">
-                5%
-              </Col>
-            </Row> */}
             <Row className="mt-2">
               <Col>
                 <label>Liquidation Penalty</label>
@@ -235,9 +233,6 @@ const DepositTab = () => {
                 </div>
                 CMST
               </div>
-              {/* <span className="percent-badge">
-                +6.18 <SvgIcon name="commodo-icon" />
-              </span> */}
             </div>
             <div className="head-right">
               <span>Oracle Price</span> : $123.45
@@ -273,9 +268,6 @@ const DepositTab = () => {
                 </div>
                 ATOM
               </div>
-              {/* <span className="percent-badge">
-                +6.18 <SvgIcon name="commodo-icon" />
-              </span> */}
             </div>
             <div className="head-right">
               <span>Oracle Price</span> : $123.45
@@ -313,9 +305,6 @@ const DepositTab = () => {
                 </div>
                 OSMO
               </div>
-              {/* <span className="percent-badge">
-                +6.18 <SvgIcon name="commodo-icon" />
-              </span> */}
             </div>
             <div className="head-right">
               <span>Oracle Price</span> : $123.45
@@ -350,12 +339,23 @@ const DepositTab = () => {
 };
 
 DepositTab.propTypes = {
-  lang: PropTypes.string.isRequired,
-};
+  assetMap: PropTypes.object,
+  pool: PropTypes.shape({
+    poolId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    firstBridgedAssetId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    secondBridgedAssetId: PropTypes.shape({
+      low: PropTypes.number,
+    })
+  })};
 
 const stateToProps = (state) => {
   return {
-    lang: state.language,
+    pool: state.lend.pool._,
+    assetMap: state.asset._.map,
   };
 };
 

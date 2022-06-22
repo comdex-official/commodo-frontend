@@ -34,6 +34,27 @@ export const queryLendPools = (
     });
 };
 
+export const queryLendPool = (
+    poolId,
+    callback
+) => {
+    createQueryClient((error, rpcClient) => {
+        if (error) {
+            callback(error);
+            return;
+        }
+
+        new QueryClientImpl(rpcClient)
+            .QueryPool({id: Long.fromNumber(poolId)})
+            .then((result) => {
+                callback(null, result);
+            })
+            .catch((error) => {
+                callback(error?.message);
+            });
+    });
+};
+
 export const queryAssetRatesStats = (callback) => {
     createQueryClient((error, rpcClient) => {
         if (error) {
