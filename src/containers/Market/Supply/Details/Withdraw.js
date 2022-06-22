@@ -1,12 +1,12 @@
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import { connect } from "react-redux";
-import { Button, List, Select, Input, Progress, Switch } from "antd";
+import { Button, List, Select, Input } from "antd";
 import "./index.less";
 
 const { Option } = Select;
 
-const DepositTab = () => {
+const WithdrawTab = () => {
   const data = [
     {
       title: "Total Deposited",
@@ -85,15 +85,11 @@ const DepositTab = () => {
               ATOM
             </div>
           </div>
-          <div className="deposit-head-right">
-            <small>Use as Collateral</small>
-            <Switch size="small" />
-          </div>
         </div>
-        <div className="assets-select-card mb-0">
+        <div className="assets-select-card mb-4">
           <div className="assets-left">
             <label className="left-label">
-              Deposit <TooltipIcon text="" />
+              Withdraw <TooltipIcon text="" />
             </label>
             <div className="assets-select-wrapper">
               <Select
@@ -173,12 +169,7 @@ const DepositTab = () => {
           </div>
         </div>
         <Row>
-          <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-            {/* <Row className="pb-2">
-              <Col sm="12" className="bond-row">
-                <span className="mr-2">Bond</span> <Switch defaultChecked size="small" />
-              </Col>
-            </Row> */}
+          <Col sm="12" className="mx-auto card-bottom-details">
             <Row className="mt-2">
               <Col>
                 <label>Max LTV</label>
@@ -191,14 +182,6 @@ const DepositTab = () => {
               </Col>
               <Col className="text-right">80%</Col>
             </Row>
-            {/* <Row className="mt-2">
-              <Col>
-                <label>Liquidation Price</label>
-              </Col>
-              <Col className="text-right">
-                5%
-              </Col>
-            </Row> */}
             <Row className="mt-2">
               <Col>
                 <label>Liquidation Penalty</label>
@@ -221,7 +204,7 @@ const DepositTab = () => {
         </Row>
         <div className="assets-form-btn">
           <Button type="primary" className="btn-filled">
-            Deposit
+            Withdraw
           </Button>
         </div>
       </div>
@@ -349,7 +332,7 @@ const DepositTab = () => {
   );
 };
 
-DepositTab.propTypes = {
+WithdrawTab.propTypes = {
   lang: PropTypes.string.isRequired,
 };
 
@@ -361,4 +344,4 @@ const stateToProps = (state) => {
 
 const actionsToProps = {};
 
-export default connect(stateToProps, actionsToProps)(DepositTab);
+export default connect(stateToProps, actionsToProps)(WithdrawTab);

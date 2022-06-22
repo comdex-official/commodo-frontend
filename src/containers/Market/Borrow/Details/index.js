@@ -1,10 +1,9 @@
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../../components/common";
+import { Col, Row } from "../../../../components/common";
 import { connect } from "react-redux";
-import variables from "../../../utils/variables";
 import { Button, Tabs } from "antd";
-import WithdrawTab from "./Withdraw";
-import DepositTab from "./Deposit";
+import BorrowTab from "./Borrow";
+import RepayTab from "./Repay";
 import "./index.less";
 import { Link } from "react-router-dom";
 
@@ -20,7 +19,7 @@ const BackButton = {
   ),
 };
 
-const SupplyDetails = () => {
+const BorrowDetails = () => {
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -30,11 +29,11 @@ const SupplyDetails = () => {
             defaultActiveKey="1"
             tabBarExtraContent={BackButton}
           >
-            <TabPane tab="Deposit" key="1">
-              <DepositTab />
+            <TabPane tab="Borrow" key="1">
+              <BorrowTab />
             </TabPane>
-            <TabPane tab="Withdraw" key="2">
-              <WithdrawTab />
+            <TabPane tab="Repay" key="2">
+              <RepayTab />
             </TabPane>
           </Tabs>
         </Col>
@@ -43,7 +42,7 @@ const SupplyDetails = () => {
   );
 };
 
-SupplyDetails.propTypes = {
+BorrowDetails.propTypes = {
   lang: PropTypes.string.isRequired,
 };
 
@@ -55,4 +54,4 @@ const stateToProps = (state) => {
 
 const actionsToProps = {};
 
-export default connect(stateToProps, actionsToProps)(SupplyDetails);
+export default connect(stateToProps, actionsToProps)(BorrowDetails);

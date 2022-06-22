@@ -35,6 +35,8 @@ import { setMarkets } from "../../actions/oracle";
 import { fetchKeplrAccountName } from "../../services/keplr";
 import { comdex } from "../../config/network";
 import { amountConversionWithComma, getDenomBalance } from "../../utils/coin";
+import {queryAssets} from "../../services/asset/query";
+import {setAssets} from "../../actions/asset";
 
 const ConnectButton = ({
   setAccountAddress,
@@ -47,9 +49,9 @@ const ConnectButton = ({
   markets,
   refreshBalance,
   setMarkets,
-  poolBalances,
   setAccountName,
   balances,
+                         setAssets,
 }) => {
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
@@ -79,6 +81,22 @@ const ConnectButton = ({
   }, [markets]);
   ``;
 
+  useEffect(()=>{
+    queryAssets((DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
+        DEFAULT_PAGE_SIZE,
+        true,
+        false, (error, result)=>{
+      if(error){
+        message.error(error);
+        return;
+      }
+
+      if(result?.assets?.length>0){
+        setAssets(result?.assets)
+      }
+    })
+  },[])
+
   const fetchBalances = (address) => {
     queryAllBalances(address, (error, result) => {
       if (error) {
@@ -88,7 +106,6 @@ const ConnectButton = ({
       setAccountBalances(result.balances, result.pagination);
       calculateAssetBalance(result.balances);
       calculatecAssetBalance(result.balances);
-      calculatePoolBalance(result.balances);
     });
   };
 
@@ -112,12 +129,6 @@ const ConnectButton = ({
     });
 
     setcAssetBalance(Lodash.sum(value));
-  };
-
-  const calculatePoolBalance = () => {
-    const sum = Lodash.sumBy(poolBalances);
-
-    setPoolBalance(Number(sum * 10 ** 6));
   };
 
   const getPrice = (denom) => {
@@ -198,19 +209,6 @@ ConnectButton.propTypes = {
       rates: PropTypes.string,
     })
   ),
-  poolBalances: PropTypes.array,
-  pools: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.shape({
-        high: PropTypes.number,
-        low: PropTypes.number,
-        unsigned: PropTypes.bool,
-      }),
-      reserveAccountAddress: PropTypes.string,
-      poolCoinDenom: PropTypes.string,
-      reserveCoinDenoms: PropTypes.array,
-    })
-  ),
   show: PropTypes.bool,
 };
 
@@ -221,8 +219,6 @@ const stateToProps = (state) => {
     show: state.account.showModal,
     markets: state.oracle.market.list,
     refreshBalance: state.account.refreshBalance,
-    poolBalances: state.liquidity.poolBalances,
-    pools: state.liquidity.pool.list,
     balances: state.account.balances.list,
   };
 };
@@ -239,6 +235,7 @@ const actionsToProps = {
   setCollateralBalance,
   setMarkets,
   setAccountName,
+  setAssets,
 };
 
 export default connect(stateToProps, actionsToProps)(ConnectButton);

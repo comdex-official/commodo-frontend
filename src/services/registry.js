@@ -15,6 +15,7 @@ import {
   MsgUnbondPoolTokens,
 } from "comdex-codec/build/comdex/liquidity/v1beta1/tx";
 import {MsgPlaceBidRequest} from "comdex-codec/build/comdex/auction/v1beta1/tx";
+import {MsgLend} from "comdex-codec/build/comdex/lend/v1beta1/tx";
 
 import { Registry } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes } from "@cosmjs/stargate";
@@ -39,5 +40,6 @@ export const myRegistry = new Registry([
   ],
   ["/comdex.liquidity.v1beta1.MsgBondPoolTokens", MsgBondPoolTokens],
   ["/comdex.liquidity.v1beta1.MsgUnbondPoolTokens", MsgUnbondPoolTokens],
-  ["/comdex.auction.v1beta1.MsgPlaceBidRequest", MsgPlaceBidRequest]
+  ["/comdex.auction.v1beta1.MsgPlaceBidRequest", MsgPlaceBidRequest],
+  ["/comdex.lend.v1beta1.MsgLend", MsgLend]
 ]);

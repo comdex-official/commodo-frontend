@@ -1,13 +1,14 @@
 import { combineReducers } from "redux";
 import {
   POOLS_SET,
+  POOL_SET,
   POOL_DEPOSITS_SET,
   SPOT_PRICE_SET,
   POOL_BALANCE_FETCH_IN_PROGRESS,
   SECOND_RESERVE_COIN_DENOM_SET,
   POOL_TOKEN_SUPPLY_SET,
   POOLS_LIQUIDITY_LIST_SET,
-} from "../constants/liquidity";
+} from "../constants/lend";
 
 const pool = (
   state = {
@@ -25,6 +26,11 @@ const pool = (
         list: action.list,
         pagination: action.pagination,
       };
+    case POOL_SET:
+      return {
+        ...state,
+        _ : action.value,
+      }
     default:
       return state;
   }

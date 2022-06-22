@@ -1,12 +1,12 @@
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import { connect } from "react-redux";
 import { Button, List, Select, Input, Progress } from "antd";
 import "./index.less";
 
 const { Option } = Select;
 
-const BorrowTab = () => {
+const RepayTab = () => {
   const data = [
     {
       title: "Total Borrowed",
@@ -64,16 +64,15 @@ const BorrowTab = () => {
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <div className="assets-select-card mb-3">
+        <div className="assets-select-card mb-4">
           <div className="assets-left">
             <label className="left-label">
-              Collateral Asset <TooltipIcon text="" />
+              Repay <TooltipIcon text="" />
             </label>
             <div className="assets-select-wrapper">
               <Select
                 className="assets-select"
                 dropdownClassName="asset-select-dropdown"
-                defaultValue="1"
                 placeholder={
                   <div className="select-placeholder">
                     <div className="circle-icon">
@@ -101,30 +100,10 @@ const BorrowTab = () => {
                   <div className="select-inner">
                     <div className="svg-icon">
                       <div className="svg-icon-inner">
-                        <SvgIcon name="atom-icon" />
-                      </div>
-                    </div>
-                    <div className="name">Atom</div>
-                  </div>
-                </Option>
-                <Option key="3">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
                         <SvgIcon name="osmosis-icon" />
                       </div>
                     </div>
                     <div className="name">OSMO</div>
-                  </div>
-                </Option>
-                <Option key="4">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="cmdx-icon" />
-                      </div>
-                    </div>
-                    <div className="name">CMDX</div>
                   </div>
                 </Option>
               </Select>
@@ -146,111 +125,34 @@ const BorrowTab = () => {
             </div>
           </div>
         </div>
-        <div className="assets-select-card mb-2">
-          <div className="assets-left">
-            <label className="left-label">
-              Borrow Asset <TooltipIcon text="" />
-            </label>
-            <div className="assets-select-wrapper">
-              <Select
-                className="assets-select"
-                dropdownClassName="asset-select-dropdown"
-                defaultValue="1"
-                placeholder={
-                  <div className="select-placeholder">
-                    <div className="circle-icon">
-                      <div className="circle-icon-inner" />
-                    </div>
-                    Select
-                  </div>
-                }
-                defaultActiveFirstOption={true}
-                suffixIcon={
-                  <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
-                }
-              >
-                <Option key="1">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="cmst-icon" />
-                      </div>
-                    </div>
-                    <div className="name">CMST</div>
-                  </div>
-                </Option>
-                <Option key="2">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="atom-icon" />
-                      </div>
-                    </div>
-                    <div className="name">Atom</div>
-                  </div>
-                </Option>
-                <Option key="3">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="osmosis-icon" />
-                      </div>
-                    </div>
-                    <div className="name">OSMO</div>
-                  </div>
-                </Option>
-                <Option key="4">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="cmdx-icon" />
-                      </div>
-                    </div>
-                    <div className="name">CMDX</div>
-                  </div>
-                </Option>
-              </Select>
-            </div>
-          </div>
-          <div className="assets-right">
-            <div>
-              <div className="input-select">
-                <Input placeholder="" value="23.00" />
-              </div>
-              <small>$120.00</small>
-            </div>
-          </div>
-        </div>
         <Row>
-          <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-            <Row className="mt-1">
+          <Col sm="12" className="mt-2 mx-auto card-bottom-details">
+            <Row>
               <Col>
-                <label>Health Factor</label>
+                <label>Remaining to Repay</label>
+                {/* <p className="remaining-infotext mt-1">You don’t have enough funds to repay the full amount</p> */}
               </Col>
-              <Col className="text-right">390%</Col>
+              <Col className="text-right">
+                <div>123.45 CMST</div>
+                <small className="font-weight-light">$420.00</small>
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <label>Current Health Factor</label>
+              </Col>
+              <Col className="text-right">45%</Col>
             </Row>
             <Row className="pb-2">
               <Col>
-                <Progress className="commodo-progress" percent={30} />
+                <Progress className="commodo-progress" percent={45} />
               </Col>
             </Row>
             <Row className="mt-2">
               <Col>
-                <label>Current LTV</label>
+                <label>Max LTV</label>
               </Col>
-              <Col className="text-right">35%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Percentage</label>
-              </Col>
-              <Col className="text-right">10%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Borrow APY</label>
-              </Col>
-              <Col className="text-right">3.80%</Col>
+              <Col className="text-right">85%</Col>
             </Row>
             <Row className="mt-2">
               <Col>
@@ -258,19 +160,23 @@ const BorrowTab = () => {
               </Col>
               <Col className="text-right">80%</Col>
             </Row>
-            {/* <Row className="mt-2">
+            <Row className="mt-2">
               <Col>
                 <label>Liquidation Price</label>
               </Col>
-              <Col className="text-right">
-                5%
+              <Col className="text-right">35%</Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <label>Liquidation Penalty</label>
               </Col>
-            </Row> */}
+              <Col className="text-right">5%</Col>
+            </Row>
           </Col>
         </Row>
         <div className="assets-form-btn">
           <Button type="primary" className="btn-filled">
-            Borrow
+            Repay
           </Button>
         </div>
       </div>
@@ -398,7 +304,7 @@ const BorrowTab = () => {
   );
 };
 
-BorrowTab.propTypes = {
+RepayTab.propTypes = {
   lang: PropTypes.string.isRequired,
 };
 
@@ -410,4 +316,4 @@ const stateToProps = (state) => {
 
 const actionsToProps = {};
 
-export default connect(stateToProps, actionsToProps)(BorrowTab);
+export default connect(stateToProps, actionsToProps)(RepayTab);

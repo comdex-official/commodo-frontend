@@ -58,9 +58,16 @@ export const setAssets = (list, pagination) => {
     (item) =>
       item.denom.substr(0, 2) === "uc" && !(item.denom.substr(0, 3) === "ucm")
   );
+
+  const assetHashMap = list.reduce((map, obj) => {
+    map[obj?.id] = obj;
+    return map;
+  }, {});
+
   return {
     type: ASSETS_SET,
     list,
+    map: assetHashMap,
     pagination,
     cAssets,
   };
