@@ -3,8 +3,8 @@ import Dashboard from "./containers/Dashboard";
 import Market from "./containers/Market";
 import Liquidation from "./containers/Liquidation";
 import Airdrop from "./containers/Airdrop";
-import Govern from "./containers/Govern"; 
-import GovernDetails from "./containers/Govern/Details"; 
+import Govern from "./containers/Govern";
+import GovernDetails from "./containers/Govern/Details";
 import BorrowRepay from "./containers/Myhome/BorrowRepay";
 import Deposit from "./containers/Myhome/Depositwithdraw";
 import Assets from "./containers/Assets";
@@ -34,12 +34,12 @@ const routes = [
     element: <Market />,
   },
   {
-    path: "/supply-details",
-    element: <SupplyDetails /> ,
+    path: "/supply-details/:id",
+    element: <SupplyDetails />,
   },
   {
     path: "/borrow-details",
-    element: <BorrowDetails /> ,
+    element: <BorrowDetails />,
   },
   {
     path: "/liquidation",
@@ -64,7 +64,7 @@ const routes = [
   {
     path: "/extra",
     element: <Extra />,
-  }
+  },
 ];
 
 export default routes;
