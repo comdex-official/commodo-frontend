@@ -1,15 +1,35 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
-import { Button, Table, Switch } from "antd";
+import {Button, Table, Switch, message} from "antd";
 import "./index.less";
 import { Link } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {queryUserLends} from "../../services/lend/query";
+import {iconNameFromDenom} from "../../utils/string";
+import { amountConversionWithComma, denomConversion} from "../../utils/coin";
 
-function onChange(checked) {
-  console.log(`switch to ${checked}`);
-}
+const Deposit = ({address}) => {
+  const [inProgress, setInProgress] = useState(false);
+  const [lendList, setUserLendList] = useState();
 
-const Deposit = () => {
+  useEffect(()=>{
+    if(address){
+      setInProgress(true);
+      queryUserLends(address, (error, result) => {
+        setInProgress(false)
+        if(error){
+          message.error(error)
+        }
+
+    if(result?.lends?.length>0){
+      setUserLendList(result.lends)
+    }
+      })
+
+    }
+  },[address])
+
   const columns = [
     {
       title: "Asset",
@@ -25,7 +45,7 @@ const Deposit = () => {
       ),
       dataIndex: "available",
       key: "available",
-      width: 150,
+      width: 250,
     },
     {
       title: "APY",
@@ -35,24 +55,11 @@ const Deposit = () => {
       render: (apy) => <>{apy}%</>,
     },
     {
-      title: "Use as Collateral",
-      dataIndex: "use_as_collateral",
-      key: "use_as_collateral",
-      width: 200,
-      render: (item) => <Switch onChange={() => onChange(item)} />,
-    },
-    {
       title: "Rewards",
       dataIndex: "rewards",
       key: "rewards",
       width: 200,
       className: "rewards-column",
-      render: (rewards) => (
-        <div>
-          <p>{rewards}</p>
-          <small>$12.34</small>
-        </div>
-      ),
     },
     {
       title: "",
@@ -83,40 +90,30 @@ const Deposit = () => {
     },
   ];
 
-  const tableData = [
-    {
-      key: 1,
-      asset: (
-        <>
-          <div className="assets-with-icon">
-            <div className="assets-icon">
-              <SvgIcon name="cmst-icon" />
-            </div>
-            CMST
-          </div>
-        </>
-      ),
-      available: "142 CMST",
-      apy: "8.92",
-      rewards: "12.6664 CMST",
-    },
-    {
-      key: 2,
-      asset: (
-        <>
-          <div className="assets-with-icon">
-            <div className="assets-icon">
-              <SvgIcon name="osmosis-icon" viewBox="0 0 30 30" />
-            </div>
-            OSMO
-          </div>
-        </>
-      ),
-      available: "149 OSMO",
-      apy: "6.38",
-      rewards: "9.506 OSMO",
-    },
-  ];
+  const tableData =
+      lendList?.length > 0
+          ? lendList?.map((item, index) => {
+            return {
+              key: index,
+              asset: (
+                  <>
+                    <div className="assets-with-icon">
+                      <div className="assets-icon">
+                        <SvgIcon
+                            name={iconNameFromDenom(item?.amountIn?.denom)}
+                        />
+                      </div>
+                      {denomConversion(item?.amountIn?.denom)}
+                    </div>
+                  </>
+              ),
+              available:<> {amountConversionWithComma(item?.amountIn?.amount)} {denomConversion(item?.amountIn?.denom)}</>,
+              apy: "8.92",
+              rewards: <>{amountConversionWithComma(item?.rewardAccumulated)} {denomConversion(item?.amountIn?.denom)}</>,
+              action: item,
+            };
+          })
+          : [];
 
   return (
     <div className="app-content-wrapper">
@@ -128,6 +125,7 @@ const Deposit = () => {
               <Table
                 className="custom-table"
                 dataSource={tableData}
+                loading={inProgress}
                 columns={columns}
                 pagination={false}
                 scroll={{ x: "100%" }}
@@ -142,11 +140,13 @@ const Deposit = () => {
 
 Deposit.propTypes = {
   lang: PropTypes.string.isRequired,
+  address: PropTypes.string,
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
+    address: state.account.address,
   };
 };
 

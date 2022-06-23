@@ -5,13 +5,13 @@ import { ibcDenomToDenom, lowercaseFirstLetter } from "./string";
 export const getAmount = (selectedAmount) =>
   (selectedAmount * 10 ** comdex.coinDecimals).toFixed(0).toString();
 
-export const amountConversionWithComma = (amount, decimals) => {
+export const amountConversionWithComma = (amount = 0, decimals) => {
   const result = Number(amount) / 10 ** comdex.coinDecimals;
 
   return commaSeparator(result.toFixed(decimals || comdex.coinDecimals));
 };
 
-export const amountConversion = (amount, decimals) => {
+export const amountConversion = (amount = 0, decimals) => {
   const result = Number(amount) / 10 ** comdex.coinDecimals;
 
   return result.toFixed(decimals || comdex.coinDecimals);
