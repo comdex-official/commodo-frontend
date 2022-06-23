@@ -104,7 +104,7 @@ const CloseTab = () => {
                         <SvgIcon name="cmdx-icon" />
                       </div>
                     </div>
-                    <div className="name">CMXD</div>
+                    <div className="name">CMDX</div>
                   </div>
                 </Option>
                 <Option key="3">
