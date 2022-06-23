@@ -1,7 +1,6 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
-import variables from "../../utils/variables";
 import { Progress, Tabs, List } from "antd";
 import Deposit from "./Deposit";
 import Borrow from "./Borrow";
@@ -9,10 +8,6 @@ import History from "./History";
 import "./index.less";
 
 const { TabPane } = Tabs;
-
-function callback(key) {
-  console.log(key);
-}
 
 const data = [
   {
@@ -91,7 +86,6 @@ const Myhome = () => {
           <Tabs
             className="commodo-tabs"
             defaultActiveKey="1"
-            onChange={callback}
           >
             <TabPane tab="Deposit" key="1">
               <Deposit />
