@@ -161,33 +161,9 @@ const DepositTab = () => {
             </Row> */}
             <Row className="mt-2">
               <Col>
-                <label>Max LTV</label>
+                <label>LTV</label>
               </Col>
               <Col className="text-right">85%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Threshold</label>
-              </Col>
-              <Col className="text-right">80%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Price</label>
-              </Col>
-              <Col className="text-right">5%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Penalty</label>
-              </Col>
-              <Col className="text-right">5%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Current LTV</label>
-              </Col>
-              <Col className="text-right">35%</Col>
             </Row>
             <Row className="mt-2">
               <Col>

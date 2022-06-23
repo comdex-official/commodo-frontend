@@ -39,7 +39,7 @@ const Deposit = () => {
       dataIndex: "use_as_collateral",
       key: "use_as_collateral",
       width: 200,
-      render: (item) => <Switch onChange={() => onChange(item)} />,
+      render: (item) => <Switch className="readonlyswitch" onChange={() => onChange(item)} />,
     },
     {
       title: "Rewards",
