@@ -148,41 +148,7 @@ const WithdrawTab = () => {
             </div>
           </div>
         </div>
-        <Row>
-          <Col sm="12" className="mx-auto card-bottom-details">
-            <Row className="mt-2">
-              <Col>
-                <label>Max LTV</label>
-              </Col>
-              <Col className="text-right">85%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Threshold</label>
-              </Col>
-              <Col className="text-right">80%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Penalty</label>
-              </Col>
-              <Col className="text-right">5%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Current LTV</label>
-              </Col>
-              <Col className="text-right">35%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Deposit APY</label>
-              </Col>
-              <Col className="text-right">3.80%</Col>
-            </Row>
-          </Col>
-        </Row>
-        <div className="assets-form-btn">
+        <div className="assets-form-btn pt-4">
           <Button type="primary" className="btn-filled">
             Withdraw
           </Button>

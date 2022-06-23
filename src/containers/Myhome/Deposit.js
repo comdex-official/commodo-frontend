@@ -55,6 +55,13 @@ const Deposit = ({address}) => {
       render: (apy) => <>{apy}%</>,
     },
     {
+      title: "Use as Collateral",
+      dataIndex: "use_as_collateral",
+      key: "use_as_collateral",
+      width: 200,
+      render: (item) => <Switch className="readonlyswitch" onChange={() => onChange(item)} />,
+    },
+    {
       title: "Rewards",
       dataIndex: "rewards",
       key: "rewards",
