@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Button, Tabs } from "antd";
 import BorrowTab from "./Borrow";
 import RepayTab from "./Repay";
+import CloseTab from "./Close";
 import "./index.less";
 import { Link } from "react-router-dom";
 
@@ -34,6 +35,9 @@ const BorrowRepay = () => {
             </TabPane>
             <TabPane tab="Repay" key="2">
               <RepayTab />
+            </TabPane>
+            <TabPane tab="Close" key="3">
+              <CloseTab />
             </TabPane>
           </Tabs>
         </Col>
