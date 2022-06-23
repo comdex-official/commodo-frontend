@@ -110,7 +110,7 @@ const DepositTab = ({ lang, dataInProgress, pool, assetMap,balances, address }) 
             typeUrl: "/comdex.lend.v1beta1.MsgLend",
             value: {
               lender: address,
-              poolId: pool?.id,
+              poolId: pool?.poolId,
               assetId: Long.fromNumber(selectedAssetId),
               amount: {
                 amount: getAmount(amount),
