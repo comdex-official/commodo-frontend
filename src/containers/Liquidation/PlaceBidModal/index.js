@@ -77,7 +77,8 @@ const PlaceBidModal = () => {
                 <p>Quantity Bid For</p>
               </Col>
               <Col sm="6" className="text-right">
-                <Input defaultValue="0.00" className="input-primary" />
+                <Input defaultValue="0.00" className="input-primary inputbig" />
+                <span className="small-label">CMDX</span>
               </Col>
             </Row>
             <Row>
@@ -93,11 +94,13 @@ const PlaceBidModal = () => {
                 <p>Acceptable Max Price</p>
               </Col>
               <Col sm="6" className="text-right">
-                <Input defaultValue="0.00" className="input-primary" />
+                <Input defaultValue="0.00" className="input-primary inputbig" />
+                <span className="small-label">CMDX</span>
               </Col>
             </Row>
           </div>
-          <div>
+          {/* Please use below div onclick input */}
+          {/* <div>
             <Row>
               <Col sm="6">
                 <p>Opening Bid</p>
@@ -130,7 +133,7 @@ const PlaceBidModal = () => {
                 <label>5 %</label>
               </Col>
             </Row>
-          </div>
+          </div> */}
           <Row className="p-0">
             <Col className="text-center mt-3">
               <Button
