@@ -6,7 +6,7 @@ import "./index.less";
 
 const { Option } = Select;
 
-const RepayTab = () => {
+const CloseTab = () => {
   const data = [
     {
       title: "Total Borrowed",
@@ -73,6 +73,7 @@ const RepayTab = () => {
               <Select
                 className="assets-select"
                 dropdownClassName="asset-select-dropdown"
+                defaultValue="1"
                 placeholder={
                   <div className="select-placeholder">
                     <div className="circle-icon">
@@ -90,10 +91,40 @@ const RepayTab = () => {
                   <div className="select-inner">
                     <div className="svg-icon">
                       <div className="svg-icon-inner">
+                        <SvgIcon name="cmst-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMST</div>
+                  </div>
+                </Option>
+                <Option key="2">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="cmdx-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMDX</div>
+                  </div>
+                </Option>
+                <Option key="3">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
                         <SvgIcon name="atom-icon" />
                       </div>
                     </div>
                     <div className="name">Atom</div>
+                  </div>
+                </Option>
+                <Option key="4">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="osmosis-icon" />
+                      </div>
+                    </div>
+                    <div className="name">OSMO</div>
                   </div>
                 </Option>
               </Select>
@@ -156,135 +187,18 @@ const RepayTab = () => {
         </Row>
         <div className="assets-form-btn">
           <Button type="primary" className="btn-filled">
-            Repay
+            Close
           </Button>
         </div>
       </div>
       <div className="details-right">
-        <div className="commodo-card">
-          <div className="card-head">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="cmst-icon" />
-                </div>
-                CMST
-              </div>
-              {/* <span className="percent-badge">
-                +6.18 <SvgIcon name="commodo-icon" />
-              </span> */}
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
-          </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
-          <div className="card-head mt-5">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="atom-icon" />
-                </div>
-                ATOM
-              </div>
-              {/* <span className="percent-badge">
-                +6.18 <SvgIcon name="commodo-icon" />
-              </span> */}
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
-          </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data2}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
-        </div>
-        <div className="commodo-card">
-          <div className="card-head">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="cmdx-icon" />
-                </div>
-                CMDX
-              </div>
-              {/* <span className="percent-badge">
-                +6.18 <SvgIcon name="commodo-icon" />
-              </span> */}
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
-          </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data3}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />{" "}
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
-        </div>
+        
       </div>
     </div>
   );
 };
 
-RepayTab.propTypes = {
+CloseTab.propTypes = {
   lang: PropTypes.string.isRequired,
 };
 
@@ -296,4 +210,4 @@ const stateToProps = (state) => {
 
 const actionsToProps = {};
 
-export default connect(stateToProps, actionsToProps)(RepayTab);
+export default connect(stateToProps, actionsToProps)(CloseTab);

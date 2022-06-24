@@ -1,10 +1,46 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import { connect } from "react-redux";
-import { Button, List, Select, Input, Progress } from "antd";
+import { Button, List, Select, Input, Tooltip } from "antd";
 import "./index.less";
 
 const { Option } = Select;
+
+const TooltipContent = <div className="token-details">
+  <div className="tokencard-col">
+    <div className="tokencard">
+      <div className="tokencard-icon">
+        <SvgIcon name="cmdx-icon" />
+      </div>
+      <p>Deposit CMDX</p>
+    </div>
+    <div className="tokencard with-shadow">
+      <div className="tokencard-icon">
+        <SvgIcon name="cmst-icon" />
+      </div>
+      <p>Deposit CMST</p>
+    </div>
+    <label>Token A</label>
+  </div>
+  <div className="middle-arrow">
+    <SvgIcon name="token-arrow" viewbox="0 0 159 80.387" />
+  </div>
+  <div className="tokencard-col">
+    <div className="tokencard with-shadow">
+      <div className="tokencard-icon">
+        <SvgIcon name="cmst-icon" />
+      </div>
+      <p>Borrow CMST</p>
+    </div>
+    <div className="tokencard">
+      <div className="tokencard-icon">
+        <SvgIcon name="osmosis-icon" />
+      </div>
+      <p>Borrow Osmo</p>
+    </div>
+    <label>Token B</label>
+  </div>
+</div>;
 
 const BorrowTab = () => {
   const data = [
@@ -73,7 +109,7 @@ const BorrowTab = () => {
               <Select
                 className="assets-select"
                 dropdownClassName="asset-select-dropdown"
-                defaultValue="1"
+                defaultValue="2"
                 placeholder={
                   <div className="select-placeholder">
                     <div className="circle-icon">
@@ -101,10 +137,30 @@ const BorrowTab = () => {
                   <div className="select-inner">
                     <div className="svg-icon">
                       <div className="svg-icon-inner">
+                        <SvgIcon name="cmdx-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMDX</div>
+                  </div>
+                </Option>
+                <Option key="3">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
                         <SvgIcon name="atom-icon" />
                       </div>
                     </div>
                     <div className="name">Atom</div>
+                  </div>
+                </Option>
+                <Option key="4">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="osmosis-icon" />
+                      </div>
+                    </div>
+                    <div className="name">OSMO</div>
                   </div>
                 </Option>
               </Select>
@@ -135,7 +191,7 @@ const BorrowTab = () => {
               <Select
                 className="assets-select"
                 dropdownClassName="asset-select-dropdown"
-                defaultValue="1"
+                defaultValue="4"
                 placeholder={
                   <div className="select-placeholder">
                     <div className="circle-icon">
@@ -163,10 +219,30 @@ const BorrowTab = () => {
                   <div className="select-inner">
                     <div className="svg-icon">
                       <div className="svg-icon-inner">
+                        <SvgIcon name="cmdx-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMDX</div>
+                  </div>
+                </Option>
+                <Option key="3">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
                         <SvgIcon name="atom-icon" />
                       </div>
                     </div>
                     <div className="name">Atom</div>
+                  </div>
+                </Option>
+                <Option key="4">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="osmosis-icon" />
+                      </div>
+                    </div>
+                    <div className="name">OSMO</div>
                   </div>
                 </Option>
               </Select>
@@ -182,18 +258,42 @@ const BorrowTab = () => {
           </div>
         </div>
         <Row>
+          <Col>
+            <Tooltip placement="right" color="#173629" title={TooltipContent} overlayClassName="token-overlay">
+              <div className="borrowbottom-cards">
+                <div className="cards">
+                  <div className="cards-inner">
+                    <div className="cards-colum">
+                      <div className="inner-icon"><SvgIcon name="osmosis-icon" /></div>
+                      <p>CMDX</p>
+                    </div>
+                    <SvgIcon className="longarrow-icon" name="long-arrow" viewbox="0 0 64 5.774" />
+                    <div className="cards-colum">
+                      <div className="inner-icon"><SvgIcon name="cmst-icon" /></div>
+                      <p>CMST</p>
+                    </div>
+                  </div>
+                </div>
+                <SvgIcon className="longarrow-icon-middle" name="long-arrow" viewbox="0 0 64 5.774" />
+                <div className="cards">
+                  <div className="cards-inner">
+                    <div className="cards-colum">
+                      <div className="inner-icon"><SvgIcon name="cmst-icon" /></div>
+                      <p>CMST</p>
+                    </div>
+                    <SvgIcon className="longarrow-icon" name="long-arrow"  viewbox="0 0 64 5.774" />
+                    <div className="cards-colum">
+                      <div className="inner-icon"><SvgIcon name="osmosis-icon" /></div>
+                      <p>OSMO</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Tooltip>
+          </Col>
+        </Row>
+        <Row>
           <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-            <Row className="mt-1">
-              <Col>
-                <label>Health Factor</label>
-              </Col>
-              <Col className="text-right">390%</Col>
-            </Row>
-            <Row className="pb-2">
-              <Col>
-                <Progress className="commodo-progress" percent={30} />
-              </Col>
-            </Row>
             <Row className="mt-2">
               <Col>
                 <label>Current LTV</label>
@@ -202,13 +302,13 @@ const BorrowTab = () => {
             </Row>
             <Row className="mt-2">
               <Col>
-                <label>Liquidation Percentage</label>
+                <label>MAx LTV</label>
               </Col>
-              <Col className="text-right">10%</Col>
+              <Col className="text-right">40%</Col>
             </Row>
             <Row className="mt-2">
               <Col>
-                <label>Borrow APY</label>
+                <label>Borrow </label>
               </Col>
               <Col className="text-right">3.80%</Col>
             </Row>
@@ -216,13 +316,7 @@ const BorrowTab = () => {
               <Col>
                 <label>Liquidation Threshold</label>
               </Col>
-              <Col className="text-right">80%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Price</label>
-              </Col>
-              <Col className="text-right">5%</Col>
+              <Col className="text-right">10%</Col>
             </Row>
           </Col>
         </Row>
