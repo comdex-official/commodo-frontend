@@ -1,12 +1,15 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import { connect } from "react-redux";
-import variables from "../../../utils/variables";
-import { Button, Tabs } from "antd";
+import { Button, message, Spin, Tabs } from "antd";
 import WithdrawTab from "./Withdraw";
 import DepositTab from "./Deposit";
 import "./index.less";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { queryLendPool, queryLendPosition } from "../../../services/lend/query";
+import { setPool } from "../../../actions/lend";
 
 const { TabPane } = Tabs;
 
@@ -20,7 +23,51 @@ const BackButton = {
   ),
 };
 
-const Deposit = () => {
+const Deposit = ({ setPool }) => {
+  const [inProgress, setInProgress] = useState(false);
+  const [lendPosition, setLendPosition] = useState();
+
+  let { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      setInProgress(true);
+
+      queryLendPosition(id, (error, result) => {
+        setInProgress(false);
+        if (error) {
+          message.error(error);
+          return;
+        }
+        if (result?.lend?.poolId) {
+          setLendPosition(result?.lend);
+
+          queryLendPool(result?.lend?.poolId, (error, result) => {
+            setInProgress(false);
+            if (error) {
+              message.error(error);
+              return;
+            }
+            setPool(result?.pool);
+          });
+        }
+      });
+    }
+  }, [id]);
+
+  const refreshLendPosition = ()=> {
+    queryLendPosition(id, (error, result) => {
+      setInProgress(false);
+      if (error) {
+        message.error(error);
+        return;
+      }
+      if (result?.lend?.poolId) {
+        setLendPosition(result?.lend);
+      }
+    });
+  }
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -31,10 +78,29 @@ const Deposit = () => {
             tabBarExtraContent={BackButton}
           >
             <TabPane tab="Deposit" key="1">
-              <DepositTab />
+              {inProgress ? (
+                <div className="loader">
+                  <Spin />
+                </div>
+              ) : (
+                <DepositTab
+                  lendPosition={lendPosition}
+                  dataInProgress={inProgress}
+                />
+              )}
             </TabPane>
             <TabPane tab="Withdraw" key="2">
-              <WithdrawTab />
+              {inProgress ? (
+                <div className="loader">
+                  <Spin />
+                </div>
+              ) : (
+                <WithdrawTab
+                  lendPosition={lendPosition}
+                  dataInProgress={inProgress}
+                  refreshLendPosition={refreshLendPosition}
+                />
+              )}
             </TabPane>
           </Tabs>
         </Col>
@@ -45,6 +111,7 @@ const Deposit = () => {
 
 Deposit.propTypes = {
   lang: PropTypes.string.isRequired,
+  setPool: PropTypes.func.isRequired,
 };
 
 const stateToProps = (state) => {
@@ -53,6 +120,8 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {};
+const actionsToProps = {
+  setPool,
+};
 
 export default connect(stateToProps, actionsToProps)(Deposit);

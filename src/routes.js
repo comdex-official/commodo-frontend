@@ -26,7 +26,7 @@ const routes = [
     element: <BorrowRepay />,
   },
   {
-    path: "/deposit",
+    path: "/deposit/:id",
     element: <Deposit />,
   },
   {
