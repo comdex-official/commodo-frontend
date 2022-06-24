@@ -1,34 +1,36 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
-import {Button, Table, Switch, message} from "antd";
+import { Button, Table, Switch, message } from "antd";
 import "./index.less";
 import { Link } from "react-router-dom";
-import {useEffect, useState} from "react";
-import {queryUserLends} from "../../services/lend/query";
-import {iconNameFromDenom} from "../../utils/string";
-import { amountConversionWithComma, denomConversion} from "../../utils/coin";
+import { useEffect, useState } from "react";
+import { queryUserLends } from "../../services/lend/query";
+import { iconNameFromDenom } from "../../utils/string";
+import { amountConversionWithComma, denomConversion } from "../../utils/coin";
+import { useNavigate } from "react-router";
 
-const Deposit = ({address}) => {
+const Deposit = ({ address }) => {
   const [inProgress, setInProgress] = useState(false);
   const [lendList, setUserLendList] = useState();
 
-  useEffect(()=>{
-    if(address){
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (address) {
       setInProgress(true);
       queryUserLends(address, (error, result) => {
-        setInProgress(false)
-        if(error){
-          message.error(error)
+        setInProgress(false);
+        if (error) {
+          message.error(error);
         }
 
-    if(result?.lends?.length>0){
-      setUserLendList(result.lends)
+        if (result?.lends?.length > 0) {
+          setUserLendList(result.lends);
+        }
+      });
     }
-      })
-
-    }
-  },[address])
+  }, [address]);
 
   const columns = [
     {
@@ -59,7 +61,9 @@ const Deposit = ({address}) => {
       dataIndex: "use_as_collateral",
       key: "use_as_collateral",
       width: 200,
-      render: (item) => <Switch className="readonlyswitch" onChange={() => onChange(item)} />,
+      render: (item) => (
+        <Switch className="readonlyswitch" onChange={() => onChange(item)} />
+      ),
     },
     {
       title: "Rewards",
@@ -74,23 +78,29 @@ const Deposit = ({address}) => {
       key: "action",
       align: "right",
       width: 200,
-      render: () => (
+      render: (item) => (
         <>
           <div className="d-flex">
-            <Link to="/deposit">
-              <Button
-                type="primary"
-                className="btn-filled table-btn"
-                size="small"
-              >
-                Deposit
-              </Button>
-            </Link>
-            <Link to="/deposit">
-              <Button type="primary" size="small" className="ml-2 table-btn">
-                Withdraw
-              </Button>
-            </Link>
+            <Button
+              onClick={() =>
+                navigate(`/deposit/${item?.lendingId?.toNumber()}`)
+              }
+              type="primary"
+              className="btn-filled table-btn"
+              size="small"
+            >
+              Deposit
+            </Button>
+            <Button
+              type="primary"
+              size="small"
+              onClick={() =>
+                navigate(`/deposit/${item?.lendingId?.toNumber()}`)
+              }
+              className="ml-2 table-btn"
+            >
+              Withdraw
+            </Button>
           </div>
         </>
       ),
@@ -98,29 +108,38 @@ const Deposit = ({address}) => {
   ];
 
   const tableData =
-      lendList?.length > 0
-          ? lendList?.map((item, index) => {
-            return {
-              key: index,
-              asset: (
-                  <>
-                    <div className="assets-with-icon">
-                      <div className="assets-icon">
-                        <SvgIcon
-                            name={iconNameFromDenom(item?.amountIn?.denom)}
-                        />
-                      </div>
-                      {denomConversion(item?.amountIn?.denom)}
-                    </div>
-                  </>
-              ),
-              available:<> {amountConversionWithComma(item?.amountIn?.amount)} {denomConversion(item?.amountIn?.denom)}</>,
-              apy: "8.92",
-              rewards: <>{amountConversionWithComma(item?.rewardAccumulated)} {denomConversion(item?.amountIn?.denom)}</>,
-              action: item,
-            };
-          })
-          : [];
+    lendList?.length > 0
+      ? lendList?.map((item, index) => {
+          return {
+            key: index,
+            asset: (
+              <>
+                <div className="assets-with-icon">
+                  <div className="assets-icon">
+                    <SvgIcon name={iconNameFromDenom(item?.amountIn?.denom)} />
+                  </div>
+                  {denomConversion(item?.amountIn?.denom)}
+                </div>
+              </>
+            ),
+            available: (
+              <>
+                {" "}
+                {amountConversionWithComma(item?.amountIn?.amount)}{" "}
+                {denomConversion(item?.amountIn?.denom)}
+              </>
+            ),
+            apy: "8.92",
+            rewards: (
+              <>
+                {amountConversionWithComma(item?.rewardAccumulated)}{" "}
+                {denomConversion(item?.amountIn?.denom)}
+              </>
+            ),
+            action: item,
+          };
+        })
+      : [];
 
   return (
     <div className="app-content-wrapper">

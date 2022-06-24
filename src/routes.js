@@ -6,7 +6,7 @@ import Airdrop from "./containers/Airdrop";
 import Govern from "./containers/Govern";
 import GovernDetails from "./containers/Govern/Details";
 import BorrowRepay from "./containers/Myhome/BorrowRepay";
-import Deposit from "./containers/Myhome/Depositwithdraw";
+import Deposit from "./containers/Myhome/DepositWithdraw";
 import Assets from "./containers/Assets";
 import Extra from "./containers/Extra";
 import SupplyDetails from "./containers/Market/Supply/Details";
@@ -26,7 +26,7 @@ const routes = [
     element: <BorrowRepay />,
   },
   {
-    path: "/deposit",
+    path: "/deposit/:id",
     element: <Deposit />,
   },
   {

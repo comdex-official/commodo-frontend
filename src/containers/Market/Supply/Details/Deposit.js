@@ -1,22 +1,34 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import { connect } from "react-redux";
-import {Button, List, Select, Input, Progress, Switch, message, Spin} from "antd";
+import { Button, List, Select, message, Spin } from "antd";
 import "./index.less";
-import {amountConversion, denomConversion, getAmount, getDenomBalance} from "../../../../utils/coin";
-import {iconNameFromDenom, toDecimals} from "../../../../utils/string";
+import {
+  amountConversionWithComma,
+  denomConversion,
+  getAmount,
+  getDenomBalance,
+} from "../../../../utils/coin";
+import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import { useEffect, useState } from "react";
 import CustomInput from "../../../../components/CustomInput";
-import {ValidateInputNumber} from "../../../../config/_validation";
-import {signAndBroadcastTransaction} from "../../../../services/helper";
+import { ValidateInputNumber } from "../../../../config/_validation";
+import { signAndBroadcastTransaction } from "../../../../services/helper";
 import variables from "../../../../utils/variables";
 import Snack from "../../../../components/common/Snack";
-import {defaultFee} from "../../../../services/transaction";
+import { defaultFee } from "../../../../services/transaction";
 import Long from "long";
 
 const { Option } = Select;
 
-const DepositTab = ({ lang, dataInProgress, pool, assetMap,balances, address }) => {
+const DepositTab = ({
+  lang,
+  dataInProgress,
+  pool,
+  assetMap,
+  balances,
+  address,
+}) => {
   const [assetList, setAssetList] = useState();
   const [selectedAssetId, setSelectedAssetId] = useState();
   const [amount, setAmount] = useState();
@@ -97,7 +109,10 @@ const DepositTab = ({ lang, dataInProgress, pool, assetMap,balances, address }) 
 
     setAmount(value);
     setValidationError(
-        ValidateInputNumber(getAmount(value), (getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0))
+      ValidateInputNumber(
+        getAmount(value),
+        getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0
+      )
     );
   };
 
@@ -105,63 +120,62 @@ const DepositTab = ({ lang, dataInProgress, pool, assetMap,balances, address }) 
     setInProgress(true);
 
     signAndBroadcastTransaction(
-        {
-          message: {
-            typeUrl: "/comdex.lend.v1beta1.MsgLend",
-            value: {
-              lender: address,
-              poolId: pool?.poolId,
-              assetId: Long.fromNumber(selectedAssetId),
-              amount: {
-                amount: getAmount(amount),
-                denom: assetMap[selectedAssetId]?.denom,
-              }
+      {
+        message: {
+          typeUrl: "/comdex.lend.v1beta1.MsgLend",
+          value: {
+            lender: address,
+            poolId: pool?.poolId,
+            assetId: Long.fromNumber(selectedAssetId),
+            amount: {
+              amount: getAmount(amount),
+              denom: assetMap[selectedAssetId]?.denom,
             },
           },
-          fee: defaultFee(),
-          memo: "",
         },
-        address,
-        (error, result) => {
-          setInProgress(false);
-          setAmount(0);
-          if (error) {
-            message.error(error);
-            return;
-          }
-
-          if (result?.code) {
-            message.info(result?.rawLog);
-            return;
-          }
-
-
-          message.success(
-              <Snack
-                  message={variables[lang].tx_success}
-                  hash={result?.transactionHash}
-              />
-          );
+        fee: defaultFee(),
+        memo: "",
+      },
+      address,
+      (error, result) => {
+        setInProgress(false);
+        setAmount(0);
+        if (error) {
+          message.error(error);
+          return;
         }
+
+        if (result?.code) {
+          message.info(result?.rawLog);
+          return;
+        }
+
+        message.success(
+          <Snack
+            message={variables[lang].tx_success}
+            hash={result?.transactionHash}
+          />
+        );
+      }
     );
   };
 
   return (
     <div className="details-wrapper">
-      {!dataInProgress ?
-          <>
+      {!dataInProgress ? (
+        <>
           <div className="details-left commodo-card">
             <div className="deposit-head">
               <div className="deposit-head-left">
                 {assetList?.length > 0 &&
-                assetList?.map((item) => (
+                  assetList?.map((item) => (
                     <div className="assets-col mr-3" key={item?.denom}>
                       <div className="assets-icon">
                         <SvgIcon name={iconNameFromDenom(item?.denom)} />
                       </div>
                       {denomConversion(item?.denom)}
                     </div>
-                ))}
+                  ))}
               </div>
             </div>
             <div className="assets-select-card mb-0">
@@ -171,27 +185,27 @@ const DepositTab = ({ lang, dataInProgress, pool, assetMap,balances, address }) 
                 </label>
                 <div className="assets-select-wrapper">
                   <Select
-                      className="assets-select"
-                      dropdownClassName="asset-select-dropdown"
-                      onChange={handleAssetChange}
-                      placeholder={
-                        <div className="select-placeholder">
-                          <div className="circle-icon">
-                            <div className="circle-icon-inner" />
-                          </div>
-                          Select
+                    className="assets-select"
+                    dropdownClassName="asset-select-dropdown"
+                    onChange={handleAssetChange}
+                    placeholder={
+                      <div className="select-placeholder">
+                        <div className="circle-icon">
+                          <div className="circle-icon-inner" />
                         </div>
-                      }
-                      defaultActiveFirstOption={true}
-                      suffixIcon={
-                        <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
-                      }
+                        Select
+                      </div>
+                    }
+                    defaultActiveFirstOption={true}
+                    suffixIcon={
+                      <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
+                    }
                   >
                     {assetList?.length > 0 &&
-                    assetList?.map((record) => {
-                      const item = record?.denom ? record?.denom : record;
+                      assetList?.map((record) => {
+                        const item = record?.denom ? record?.denom : record;
 
-                      return (
+                        return (
                           <Option key={item} value={record?.id?.toNumber()}>
                             <div className="select-inner">
                               <div className="svg-icon">
@@ -199,18 +213,28 @@ const DepositTab = ({ lang, dataInProgress, pool, assetMap,balances, address }) 
                                   <SvgIcon name={iconNameFromDenom(item)} />
                                 </div>
                               </div>
-                              <div className="name">{denomConversion(item)}</div>
+                              <div className="name">
+                                {denomConversion(item)}
+                              </div>
                             </div>
                           </Option>
-                      );
-                    })}
+                        );
+                      })}
                   </Select>
                 </div>
               </div>
               <div className="assets-right">
                 <div className="label-right">
                   Available
-                  <span className="ml-1">{amountConversion(getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0)} {denomConversion(assetMap[selectedAssetId]?.denom)}</span>
+                  <span className="ml-1">
+                    {amountConversionWithComma(
+                      getDenomBalance(
+                        balances,
+                        assetMap[selectedAssetId]?.denom
+                      ) || 0
+                    )}{" "}
+                    {denomConversion(assetMap[selectedAssetId]?.denom)}
+                  </span>
                   <div className="max-half">
                     <Button className="active">Max</Button>
                   </div>
@@ -218,9 +242,9 @@ const DepositTab = ({ lang, dataInProgress, pool, assetMap,balances, address }) 
                 <div>
                   <div className="input-select">
                     <CustomInput
-                        value={amount}
-                        onChange={(event) => onChange(event.target.value)}
-                        validationError={validationError}
+                      value={amount}
+                      onChange={(event) => onChange(event.target.value)}
+                      validationError={validationError}
                     />
                   </div>
                   <small>$120.00</small>
@@ -262,13 +286,13 @@ const DepositTab = ({ lang, dataInProgress, pool, assetMap,balances, address }) 
               </Col>
             </Row>
             <div className="assets-form-btn">
-              <Button type="primary" className="btn-filled"
-                      loading={inProgress}
-                      disabled={!Number(amount) ||
-                      inProgress ||
-                      !selectedAssetId
-                      }
-                      onClick={handleClick}>
+              <Button
+                type="primary"
+                className="btn-filled"
+                loading={inProgress}
+                disabled={!Number(amount) || inProgress || !selectedAssetId}
+                onClick={handleClick}
+              >
                 Deposit
               </Button>
             </div>
@@ -289,26 +313,26 @@ const DepositTab = ({ lang, dataInProgress, pool, assetMap,balances, address }) 
                 </div>
               </div>
               <List
-                  grid={{
-                    gutter: 16,
-                    xs: 2,
-                    sm: 2,
-                    md: 2,
-                    lg: 4,
-                    xl: 4,
-                    xxl: 4,
-                  }}
-                  dataSource={data}
-                  renderItem={(item) => (
-                      <List.Item>
-                        <div>
-                          <p>
-                            {item.title} <TooltipIcon />
-                          </p>
-                          <h3>{item.counts}</h3>
-                        </div>
-                      </List.Item>
-                  )}
+                grid={{
+                  gutter: 16,
+                  xs: 2,
+                  sm: 2,
+                  md: 2,
+                  lg: 4,
+                  xl: 4,
+                  xxl: 4,
+                }}
+                dataSource={data}
+                renderItem={(item) => (
+                  <List.Item>
+                    <div>
+                      <p>
+                        {item.title} <TooltipIcon />
+                      </p>
+                      <h3>{item.counts}</h3>
+                    </div>
+                  </List.Item>
+                )}
               />
               <div className="card-head mt-5">
                 <div className="head-left">
@@ -324,26 +348,26 @@ const DepositTab = ({ lang, dataInProgress, pool, assetMap,balances, address }) 
                 </div>
               </div>
               <List
-                  grid={{
-                    gutter: 16,
-                    xs: 2,
-                    sm: 2,
-                    md: 2,
-                    lg: 4,
-                    xl: 4,
-                    xxl: 4,
-                  }}
-                  dataSource={data2}
-                  renderItem={(item) => (
-                      <List.Item>
-                        <div>
-                          <p>
-                            {item.title} <TooltipIcon />
-                          </p>
-                          <h3>{item.counts}</h3>
-                        </div>
-                      </List.Item>
-                  )}
+                grid={{
+                  gutter: 16,
+                  xs: 2,
+                  sm: 2,
+                  md: 2,
+                  lg: 4,
+                  xl: 4,
+                  xxl: 4,
+                }}
+                dataSource={data2}
+                renderItem={(item) => (
+                  <List.Item>
+                    <div>
+                      <p>
+                        {item.title} <TooltipIcon />
+                      </p>
+                      <h3>{item.counts}</h3>
+                    </div>
+                  </List.Item>
+                )}
               />
             </div>
             <div className="commodo-card">
@@ -361,33 +385,35 @@ const DepositTab = ({ lang, dataInProgress, pool, assetMap,balances, address }) 
                 </div>
               </div>
               <List
-                  grid={{
-                    gutter: 16,
-                    xs: 2,
-                    sm: 2,
-                    md: 2,
-                    lg: 4,
-                    xl: 4,
-                    xxl: 4,
-                  }}
-                  dataSource={data3}
-                  renderItem={(item) => (
-                      <List.Item>
-                        <div>
-                          <p>
-                            {item.title} <TooltipIcon />{" "}
-                          </p>
-                          <h3>{item.counts}</h3>
-                        </div>
-                      </List.Item>
-                  )}
+                grid={{
+                  gutter: 16,
+                  xs: 2,
+                  sm: 2,
+                  md: 2,
+                  lg: 4,
+                  xl: 4,
+                  xxl: 4,
+                }}
+                dataSource={data3}
+                renderItem={(item) => (
+                  <List.Item>
+                    <div>
+                      <p>
+                        {item.title} <TooltipIcon />{" "}
+                      </p>
+                      <h3>{item.counts}</h3>
+                    </div>
+                  </List.Item>
+                )}
               />
             </div>
           </div>
-          </>
-      : <div className="loader">
-            <Spin />
-          </div>}
+        </>
+      ) : (
+        <div className="loader">
+          <Spin />
+        </div>
+      )}
     </div>
   );
 };
@@ -398,10 +424,10 @@ DepositTab.propTypes = {
   address: PropTypes.string,
   assetMap: PropTypes.object,
   balances: PropTypes.arrayOf(
-      PropTypes.shape({
-        denom: PropTypes.string.isRequired,
-        amount: PropTypes.string,
-      })
+    PropTypes.shape({
+      denom: PropTypes.string.isRequired,
+      amount: PropTypes.string,
+    })
   ),
   pool: PropTypes.shape({
     poolId: PropTypes.shape({

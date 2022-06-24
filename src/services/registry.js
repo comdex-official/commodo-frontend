@@ -14,8 +14,13 @@ import {
   MsgBondPoolTokens,
   MsgUnbondPoolTokens,
 } from "comdex-codec/build/comdex/liquidity/v1beta1/tx";
-import {MsgPlaceBidRequest} from "comdex-codec/build/comdex/auction/v1beta1/tx";
-import {MsgLend} from "comdex-codec/build/comdex/lend/v1beta1/tx";
+import { MsgPlaceBidRequest } from "comdex-codec/build/comdex/auction/v1beta1/tx";
+import {
+  MsgLend,
+  MsgDeposit,
+  MsgWithdraw,
+  MsgCloseLend,
+} from "comdex-codec/build/comdex/lend/v1beta1/tx";
 
 import { Registry } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes } from "@cosmjs/stargate";
@@ -30,16 +35,13 @@ export const myRegistry = new Registry([
   ["/comdex.vault.v1beta1.MsgCloseRequest", MsgCloseRequest],
   ["/comdex.liquidity.v1beta1.MsgSwapWithinBatch", MsgSwapWithinBatch],
   ["/comdex.liquidity.v1beta1.MsgCreatePool", MsgCreatePool],
-  [
-    "/comdex.liquidity.v1beta1.MsgDepositWithinBatch",
-    MsgDepositWithinBatch,
-  ],
-  [
-    "/comdex.liquidity.v1beta1.MsgWithdrawWithinBatch",
-    MsgWithdrawWithinBatch,
-  ],
+  ["/comdex.liquidity.v1beta1.MsgDepositWithinBatch", MsgDepositWithinBatch],
+  ["/comdex.liquidity.v1beta1.MsgWithdrawWithinBatch", MsgWithdrawWithinBatch],
   ["/comdex.liquidity.v1beta1.MsgBondPoolTokens", MsgBondPoolTokens],
   ["/comdex.liquidity.v1beta1.MsgUnbondPoolTokens", MsgUnbondPoolTokens],
   ["/comdex.auction.v1beta1.MsgPlaceBidRequest", MsgPlaceBidRequest],
-  ["/comdex.lend.v1beta1.MsgLend", MsgLend]
+  ["/comdex.lend.v1beta1.MsgLend", MsgLend],
+  ["/comdex.lend.v1beta1.MsgDeposit", MsgDeposit],
+  ["/comdex.lend.v1beta1.MsgWithdraw", MsgWithdraw],
+  ["/comdex.lend.v1beta1.MsgCloseLend", MsgCloseLend],
 ]);
