@@ -5,6 +5,7 @@ import { defaultFee } from "../../../services/transaction";
 import Snack from "../../../components/common/Snack";
 import variables from "../../../utils/variables";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 export const ActionButton = ({
   lang,
@@ -14,13 +15,15 @@ export const ActionButton = ({
   lendId,
   amount,
   denom,
-    refreshData,
+  refreshData,
 }) => {
   const [inProgress, setInProgress] = useState(false);
+  const navigate = useNavigate();
 
   const messageMap = {
     Deposit: "/comdex.lend.v1beta1.MsgDeposit",
     Withdraw: "/comdex.lend.v1beta1.MsgWithdraw",
+    Close: "/comdex.lend.v1beta1.MsgCloseLend",
   };
 
   const handleClick = () => {
@@ -45,6 +48,7 @@ export const ActionButton = ({
       address,
       (error, result) => {
         setInProgress(false);
+
         if (error) {
           message.error(error);
           return;
@@ -61,7 +65,11 @@ export const ActionButton = ({
             hash={result?.transactionHash}
           />
         );
-        refreshData();
+        if (name !== "close") {
+          refreshData();
+        } else {
+          navigate("/myhome");
+        }
       }
     );
   };
