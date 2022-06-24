@@ -17,7 +17,7 @@ import ActionButton from "./ActionButton";
 
 const { Option } = Select;
 
-const WithdrawTab = ({
+const CloseTab = ({
   lang,
   dataInProgress,
   lendPosition,
@@ -129,7 +129,8 @@ const WithdrawTab = ({
         <div className="assets-select-card mb-0">
           <div className="assets-left">
             <label className="left-label">
-              Withdraw <TooltipIcon text="" />
+              Close Position
+              <TooltipIcon text="" />
             </label>
             <div className="assets-select-wrapper">
               <Select
@@ -175,32 +176,17 @@ const WithdrawTab = ({
                 {amountConversionWithComma(lendPosition?.amountIn?.amount || 0)}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
               </span>
-              <div className="max-half">
-                <Button className="active">Max</Button>
-              </div>
-            </div>
-            <div>
-              <div className="input-select">
-                <CustomInput
-                  value={amount}
-                  onChange={(event) => onChange(event.target.value)}
-                  validationError={validationError}
-                />
-              </div>
-              <small>$120.00</small>
             </div>
           </div>
         </div>
         <div className="assets-form-btn">
           <ActionButton
-            name="Withdraw"
+            name="Close"
             lang={lang}
-            disabled={!Number(amount) || dataInProgress || !selectedAssetId}
             amount={amount}
             address={address}
             lendId={lendPosition?.lendingId}
             denom={lendPosition?.amountIn?.denom}
-            refreshData={() => refreshLendPosition()}
           />
         </div>
       </div>
@@ -319,7 +305,7 @@ const WithdrawTab = ({
   );
 };
 
-WithdrawTab.propTypes = {
+CloseTab.propTypes = {
   dataInProgress: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
   refreshLendPosition: PropTypes.func.isRequired,
@@ -365,4 +351,4 @@ const stateToProps = (state) => {
 
 const actionsToProps = {};
 
-export default connect(stateToProps, actionsToProps)(WithdrawTab);
+export default connect(stateToProps, actionsToProps)(CloseTab);

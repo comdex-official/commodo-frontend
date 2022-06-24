@@ -10,6 +10,7 @@ import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { queryLendPool, queryLendPosition } from "../../../services/lend/query";
 import { setPool } from "../../../actions/lend";
+import CloseTab from "./Close";
 
 const { TabPane } = Tabs;
 
@@ -55,7 +56,7 @@ const Deposit = ({ setPool }) => {
     }
   }, [id]);
 
-  const refreshLendPosition = ()=> {
+  const refreshLendPosition = () => {
     queryLendPosition(id, (error, result) => {
       setInProgress(false);
       if (error) {
@@ -66,7 +67,7 @@ const Deposit = ({ setPool }) => {
         setLendPosition(result?.lend);
       }
     });
-  }
+  };
 
   return (
     <div className="app-content-wrapper">
@@ -99,6 +100,18 @@ const Deposit = ({ setPool }) => {
                   lendPosition={lendPosition}
                   dataInProgress={inProgress}
                   refreshLendPosition={refreshLendPosition}
+                />
+              )}
+            </TabPane>
+            <TabPane tab="Close" key="3">
+              {inProgress ? (
+                <div className="loader">
+                  <Spin />
+                </div>
+              ) : (
+                <CloseTab
+                  lendPosition={lendPosition}
+                  dataInProgress={inProgress}
                 />
               )}
             </TabPane>
