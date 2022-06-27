@@ -49,61 +49,6 @@ const DepositTab = ({
     }
   }, [pool]);
 
-  const data = [
-    {
-      title: "Total Deposited",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Deposit APY",
-      counts: "8.92%",
-    },
-  ];
-  const data2 = [
-    {
-      title: "Total Deposited",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Deposit APY",
-      counts: "7.24%",
-    },
-  ];
-  const data3 = [
-    {
-      title: "Total Deposited",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Deposit APY",
-      counts: "7.88%",
-    },
-  ];
-
   const onChange = (value) => {
     value = toDecimals(value).toString().trim();
 
@@ -118,6 +63,7 @@ const DepositTab = ({
 
   const handleRefresh = () => {
     setBalanceRefresh(refreshBalance + 1);
+    setAmount()
   }
 
   return (

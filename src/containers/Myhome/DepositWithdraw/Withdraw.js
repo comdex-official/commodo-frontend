@@ -15,6 +15,7 @@ import CustomInput from "../../../components/CustomInput";
 import { ValidateInputNumber } from "../../../config/_validation";
 import ActionButton from "./ActionButton";
 import Details from "../../../components/common/Details";
+import {setBalanceRefresh} from "../../../actions/account";
 
 const { Option } = Select;
 
@@ -27,6 +28,8 @@ const WithdrawTab = ({
   assetMap,
   balances,
   address,
+                       refreshBalance,
+                       setBalanceRefresh
 }) => {
   const [assetList, setAssetList] = useState();
   const [amount, setAmount] = useState();
@@ -43,7 +46,16 @@ const WithdrawTab = ({
       ]);
     }
   }, [pool]);
-  
+
+  useEffect(()=>{
+    refreshLendPosition();
+  },[refreshBalance])
+
+  const refreshData = ()=>{
+    refreshLendPosition();
+    setAmount()
+    setBalanceRefresh(refreshBalance+1);
+  }
   const onChange = (value) => {
     value = toDecimals(value).toString().trim();
 
@@ -146,7 +158,7 @@ const WithdrawTab = ({
             address={address}
             lendId={lendPosition?.lendingId}
             denom={lendPosition?.amountIn?.denom}
-            refreshData={() => refreshLendPosition()}
+            refreshData={() => refreshData()}
           />
         </div>
       </div>
@@ -169,6 +181,8 @@ WithdrawTab.propTypes = {
   dataInProgress: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
   refreshLendPosition: PropTypes.func.isRequired,
+  refreshBalance: PropTypes.number.isRequired,
+  setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
   balances: PropTypes.arrayOf(
@@ -205,10 +219,13 @@ const stateToProps = (state) => {
     pool: state.lend.pool._,
     assetMap: state.asset._.map,
     balances: state.account.balances.list,
+    refreshBalance: state.account.refreshBalance,
     lang: state.language,
   };
 };
 
-const actionsToProps = {};
+const actionsToProps = {
+  setBalanceRefresh,
+};
 
 export default connect(stateToProps, actionsToProps)(WithdrawTab);
