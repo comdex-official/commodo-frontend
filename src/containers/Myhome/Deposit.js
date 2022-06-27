@@ -3,35 +3,54 @@ import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
 import { Button, Table, Switch, message } from "antd";
 import "./index.less";
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { queryUserLends } from "../../services/lend/query";
+import {queryLendPosition, queryUserLends} from "../../services/lend/query";
 import { iconNameFromDenom } from "../../utils/string";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { useNavigate } from "react-router";
 
 const Deposit = ({ address }) => {
   const [inProgress, setInProgress] = useState(false);
-  const [lendList, setUserLendList] = useState();
+  const [lendList, setUserLendList] = useState([]);
 
   const navigate = useNavigate();
 
+  useEffect(()=>{
+    setUserLendList([]);
+  },[]);
+
   useEffect(() => {
     if (address) {
-      setInProgress(true);
-      queryUserLends(address, (error, result) => {
-        setInProgress(false);
-        if (error) {
-          message.error(error);
-        }
-
-        if (result?.lends?.length > 0) {
-          setUserLendList(result.lends);
-        }
-      });
-    }
+      fetchUserLends();
+      }
   }, [address]);
 
+const fetchUserLends = () => {
+  setUserLendList([]);
+  setInProgress(true);
+  queryUserLends(address, (error, result) => {
+    if (error) {
+      message.error(error);
+      setInProgress(false);
+      return;
+    }
+
+    if(result?.lendIds?.length>0){
+      result?.lendIds?.forEach((id)=>{
+        queryLendPosition(id, (error, result)=>{
+          setInProgress(false);
+          if(error){
+            message.error(error);
+            return;
+          }
+          if (result?.lend?.lendingId) {
+            setUserLendList(state => [...state, result.lend])
+          }
+        })
+      })
+    }
+  })
+}
   const columns = [
     {
       title: "Asset",
@@ -55,15 +74,6 @@ const Deposit = ({ address }) => {
       key: "apy",
       width: 150,
       render: (apy) => <>{apy}%</>,
-    },
-    {
-      title: "Use as Collateral",
-      dataIndex: "use_as_collateral",
-      key: "use_as_collateral",
-      width: 200,
-      render: (item) => (
-        <Switch className="readonlyswitch" onChange={() => onChange(item)} />
-      ),
     },
     {
       title: "Rewards",

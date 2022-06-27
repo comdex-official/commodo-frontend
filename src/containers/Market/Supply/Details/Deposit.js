@@ -18,6 +18,7 @@ import variables from "../../../../utils/variables";
 import Snack from "../../../../components/common/Snack";
 import { defaultFee } from "../../../../services/transaction";
 import Long from "long";
+import Details from "../../../../components/common/Details";
 
 const { Option } = Select;
 
@@ -299,113 +300,17 @@ const DepositTab = ({
           </div>
           <div className="details-right">
             <div className="commodo-card">
-              <div className="card-head">
-                <div className="head-left">
-                  <div className="assets-col">
-                    <div className="assets-icon">
-                      <SvgIcon name="cmst-icon" />
-                    </div>
-                    CMST
-                  </div>
-                </div>
-                <div className="head-right">
-                  <span>Oracle Price</span> : $123.45
-                </div>
-              </div>
-              <List
-                grid={{
-                  gutter: 16,
-                  xs: 2,
-                  sm: 2,
-                  md: 2,
-                  lg: 4,
-                  xl: 4,
-                  xxl: 4,
-                }}
-                dataSource={data}
-                renderItem={(item) => (
-                  <List.Item>
-                    <div>
-                      <p>
-                        {item.title} <TooltipIcon />
-                      </p>
-                      <h3>{item.counts}</h3>
-                    </div>
-                  </List.Item>
-                )}
+              <Details
+                asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
               />
-              <div className="card-head mt-5">
-                <div className="head-left">
-                  <div className="assets-col">
-                    <div className="assets-icon">
-                      <SvgIcon name="atom-icon" />
-                    </div>
-                    ATOM
-                  </div>
-                </div>
-                <div className="head-right">
-                  <span>Oracle Price</span> : $123.45
-                </div>
+              <div className="mt-5">
+                <Details
+                  asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
+                />
               </div>
-              <List
-                grid={{
-                  gutter: 16,
-                  xs: 2,
-                  sm: 2,
-                  md: 2,
-                  lg: 4,
-                  xl: 4,
-                  xxl: 4,
-                }}
-                dataSource={data2}
-                renderItem={(item) => (
-                  <List.Item>
-                    <div>
-                      <p>
-                        {item.title} <TooltipIcon />
-                      </p>
-                      <h3>{item.counts}</h3>
-                    </div>
-                  </List.Item>
-                )}
-              />
             </div>
             <div className="commodo-card">
-              <div className="card-head">
-                <div className="head-left">
-                  <div className="assets-col">
-                    <div className="assets-icon">
-                      <SvgIcon name="osmosis-icon" />
-                    </div>
-                    OSMO
-                  </div>
-                </div>
-                <div className="head-right">
-                  <span>Oracle Price</span> : $123.45
-                </div>
-              </div>
-              <List
-                grid={{
-                  gutter: 16,
-                  xs: 2,
-                  sm: 2,
-                  md: 2,
-                  lg: 4,
-                  xl: 4,
-                  xxl: 4,
-                }}
-                dataSource={data3}
-                renderItem={(item) => (
-                  <List.Item>
-                    <div>
-                      <p>
-                        {item.title} <TooltipIcon />{" "}
-                      </p>
-                      <h3>{item.counts}</h3>
-                    </div>
-                  </List.Item>
-                )}
-              />
+              <Details asset={assetMap[pool?.mainAssetId?.toNumber()]} />
             </div>
           </div>
         </>
@@ -431,6 +336,9 @@ DepositTab.propTypes = {
   ),
   pool: PropTypes.shape({
     poolId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    mainAssetId: PropTypes.shape({
       low: PropTypes.number,
     }),
     firstBridgedAssetId: PropTypes.shape({

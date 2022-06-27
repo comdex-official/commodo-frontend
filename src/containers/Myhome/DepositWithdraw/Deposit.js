@@ -1,11 +1,12 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import { connect } from "react-redux";
-import { Button, List, Select, Input } from "antd";
+import { Button, Select } from "antd";
 import "./index.less";
 import { useEffect, useState } from "react";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import {
+  amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
@@ -14,7 +15,10 @@ import {
 import CustomInput from "../../../components/CustomInput";
 import { ValidateInputNumber } from "../../../config/_validation";
 import ActionButton from "./ActionButton";
-import {setBalanceRefresh} from "../../../actions/account";
+import { setBalanceRefresh } from "../../../actions/account";
+import Details from "../../../components/common/Details";
+import { comdex } from "../../../config/network";
+import { DEFAULT_FEE } from "../../../constants/common";
 
 const { Option } = Select;
 
@@ -26,16 +30,16 @@ const DepositTab = ({
   assetMap,
   balances,
   address,
-
-                      refreshBalance,
-                      setBalanceRefresh
-
-                    }) => {
+  refreshBalance,
+  setBalanceRefresh,
+}) => {
   const [assetList, setAssetList] = useState();
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
-
   const selectedAssetId = lendPosition?.assetId?.toNumber();
+
+  const availableBalance =
+    getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
 
   useEffect(() => {
     if (pool?.poolId) {
@@ -47,77 +51,27 @@ const DepositTab = ({
     }
   }, [pool]);
 
-  const data = [
-    {
-      title: "Total Deposited",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Deposit APY",
-      counts: "8.92%",
-    },
-  ];
-  const data2 = [
-    {
-      title: "Total Deposited",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Deposit APY",
-      counts: "7.24%",
-    },
-  ];
-  const data3 = [
-    {
-      title: "Total Deposited",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Deposit APY",
-      counts: "7.88%",
-    },
-  ];
-
-  const onChange = (value) => {
+  const handleInputChange = (value) => {
     value = toDecimals(value).toString().trim();
 
     setAmount(value);
-    setValidationError(
-      ValidateInputNumber(
-        getAmount(value),
-        getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0
-      )
-    );
+    setValidationError(ValidateInputNumber(getAmount(value), availableBalance));
   };
 
   const handleRefresh = () => {
     setBalanceRefresh(refreshBalance + 1);
-  }
+    setAmount();
+  };
 
+  const handleMaxClick = () => {
+    if (assetMap[selectedAssetId]?.denom === comdex.coinMinimalDenom) {
+      return Number(availableBalance) > DEFAULT_FEE
+        ? handleInputChange(amountConversion(availableBalance - DEFAULT_FEE))
+        : handleInputChange();
+    } else {
+      return handleInputChange(amountConversion(availableBalance));
+    }
+  };
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
@@ -187,14 +141,16 @@ const DepositTab = ({
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
               </span>
               <div className="max-half">
-                <Button className="active">Max</Button>
+                <Button className="active" onClick={handleMaxClick}>
+                  Max
+                </Button>
               </div>
             </div>
             <div>
               <div className="input-select">
                 <CustomInput
                   value={amount}
-                  onChange={(event) => onChange(event.target.value)}
+                  onChange={(event) => handleInputChange(event.target.value)}
                   validationError={validationError}
                 />
               </div>
@@ -233,113 +189,13 @@ const DepositTab = ({
       </div>
       <div className="details-right">
         <div className="commodo-card">
-          <div className="card-head">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="cmst-icon" />
-                </div>
-                CMST
-              </div>
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
+          <Details asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]} />
+          <div className="mt-5">
+            <Details asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]} />
           </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
-          <div className="card-head mt-5">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="atom-icon" />
-                </div>
-                ATOM
-              </div>
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
-          </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data2}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
         </div>
         <div className="commodo-card">
-          <div className="card-head">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="cmdx-icon" />
-                </div>
-                CMDX
-              </div>
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
-          </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data3}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />{" "}
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
+          <Details asset={assetMap[pool?.mainAssetId?.toNumber()]} />
         </div>
       </div>
     </div>
@@ -393,7 +249,7 @@ const stateToProps = (state) => {
 };
 
 const actionsToProps = {
-  setBalanceRefresh
+  setBalanceRefresh,
 };
 
 export default connect(stateToProps, actionsToProps)(DepositTab);

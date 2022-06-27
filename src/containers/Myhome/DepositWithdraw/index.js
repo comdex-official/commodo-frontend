@@ -57,16 +57,18 @@ const Deposit = ({ setPool }) => {
   }, [id]);
 
   const refreshLendPosition = () => {
-    queryLendPosition(id, (error, result) => {
-      setInProgress(false);
-      if (error) {
-        message.error(error);
-        return;
-      }
-      if (result?.lend?.poolId) {
-        setLendPosition(result?.lend);
-      }
-    });
+    if(id) {
+      queryLendPosition(id, (error, result) => {
+        setInProgress(false);
+        if (error) {
+          message.error(error);
+          return;
+        }
+        if (result?.lend?.poolId) {
+          setLendPosition(result?.lend);
+        }
+      });
+    }
   };
 
   return (
