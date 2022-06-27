@@ -1,14 +1,48 @@
 import { SvgIcon, TooltipIcon } from "../index";
-import { List } from "antd";
+import { List, message } from "antd";
 import * as PropTypes from "prop-types";
-import { denomConversion } from "../../../utils/coin";
+import {
+  amountConversionWithComma,
+  denomConversion,
+} from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
+import { useEffect, useState } from "react";
+import { queryAssetRatesStats } from "../../../services/lend/query";
+import { decimalConversion, marketPrice } from "../../../utils/number";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
+import { connect } from "react-redux";
 
-const Details = ({ asset }) => {
+const Details = ({ asset, poolId, markets }) => {
+  const [stats, setStats] = useState();
+
+  useEffect(() => {
+    if (asset?.id && poolId) {
+      queryAssetRatesStats(asset?.id, poolId, (error, result) => {
+        if (error) {
+          message.error(error);
+          console.log("the err", error);
+          return;
+        }
+        console.log("the result", result);
+        setStats(result?.AssetStats);
+      });
+    }
+  }, [asset, poolId]);
+
   const data = [
     {
       title: "Total Deposited",
-      counts: "$1,234.20",
+      counts: `$${amountConversionWithComma(
+        Number(stats?.totalLend || 0) * marketPrice(markets, asset?.denom),
+        DOLLAR_DECIMALS
+      )}`,
+    },
+    {
+      title: "Total Borrowed",
+      counts: `$${amountConversionWithComma(
+        Number(stats?.totalBorrowed || 0) * marketPrice(markets, asset?.denom),
+        DOLLAR_DECIMALS
+      )}`,
     },
     {
       title: "Available",
@@ -20,7 +54,11 @@ const Details = ({ asset }) => {
     },
     {
       title: "Deposit APY",
-      counts: "8.92%",
+      counts: <>{stats?.lendApr ? decimalConversion(stats?.lendApr) : 0}%</>,
+    },
+    {
+      title: "Borrow APY",
+      counts: <>{stats?.borrowApr ? decimalConversion(stats.borrowApr) : 0}%</>,
     },
   ];
 
@@ -36,7 +74,7 @@ const Details = ({ asset }) => {
           </div>
         </div>
         <div className="head-right">
-          <span>Oracle Price</span> : $123.45
+          <span>Oracle Price</span> : ${marketPrice(markets, asset?.denom)}
         </div>
       </div>
       <List
@@ -69,6 +107,20 @@ Details.propTypes = {
   asset: PropTypes.shape({
     denom: PropTypes.string,
   }),
+  markets: PropTypes.arrayOf(
+    PropTypes.shape({
+      rates: PropTypes.string,
+    })
+  ),
+  poolId: PropTypes.shape({
+    low: PropTypes.number,
+  }),
 };
 
-export default Details;
+const stateToProps = (state) => {
+  return {
+    markets: state.oracle.market.list,
+  };
+};
+
+export default connect(stateToProps)(Details);
