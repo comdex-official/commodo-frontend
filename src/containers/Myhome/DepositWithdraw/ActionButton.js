@@ -65,7 +65,7 @@ export const ActionButton = ({
             hash={result?.transactionHash}
           />
         );
-        if (name !== "close") {
+        if (name !== "Close") {
           refreshData();
         } else {
           navigate("/myhome");

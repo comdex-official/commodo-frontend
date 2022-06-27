@@ -61,6 +61,24 @@ export const messageTypeToText = (type) => {
       return "UnbondPoolTokens";
     case "/comdex.liquidity.v1beta1.MsgBondPoolTokens":
       return "MsgBondPoolTokens";
+    case "/comdex.lend.v1beta1.MsgLend":
+      return "Lend";
+    case "/comdex.lend.v1beta1.MsgCloseLend":
+      return "Close";
+    case "/comdex.lend.v1beta1.MsgWithdraw":
+      return "Withdraw";
+    case "/comdex.lend.v1beta1.MsgDeposit":
+      return "Deposit";
+    case "/comdex.lend.v1beta1.MsgBorrow":
+      return "Borrow";
+    case "/comdex.lend.v1beta1.MsgRepay":
+      return "Repay";
+    case "/comdex.lend.v1beta1.MsgDepositBorrow":
+      return "DepositBorrow";
+    case "/comdex.lend.v1beta1.MsgDraw":
+      return "Draw";
+    case "/comdex.lend.v1beta1.MsgCloseBorrow":
+      return "CloseBorrow";
     default:
       return type;
   }
