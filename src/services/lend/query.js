@@ -52,7 +52,7 @@ export const queryLendPool = (poolId, callback) => {
   });
 };
 
-export const queryAssetRatesStats = (callback) => {
+export const queryAssetRatesStats = (assetId, poolId, callback) => {
   createQueryClient((error, rpcClient) => {
     if (error) {
       callback(error);
@@ -60,7 +60,10 @@ export const queryAssetRatesStats = (callback) => {
     }
 
     new QueryClientImpl(rpcClient)
-      .QueryAssetRatesStat({ id: Long.fromNumber(1) })
+      .QueryAssetStats({
+        assetId: Long.fromNumber(assetId),
+        poolId: Long.fromNumber(poolId),
+      })
       .then((result) => {
         callback(null, result);
       })
