@@ -1,7 +1,7 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import { connect } from "react-redux";
-import { Button, List, Select, Input } from "antd";
+import { Button, List, Select } from "antd";
 import "./index.less";
 import { useEffect, useState } from "react";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
@@ -15,6 +15,7 @@ import CustomInput from "../../../components/CustomInput";
 import { ValidateInputNumber } from "../../../config/_validation";
 import ActionButton from "./ActionButton";
 import {setBalanceRefresh} from "../../../actions/account";
+import Details from "../../../components/common/Details";
 
 const { Option } = Select;
 
@@ -37,6 +38,7 @@ const DepositTab = ({
 
   const selectedAssetId = lendPosition?.assetId?.toNumber();
 
+  console.log('th asset', assetMap[pool?.mainAssetId?.toNumber()])
   useEffect(() => {
     if (pool?.poolId) {
       setAssetList([
@@ -233,113 +235,13 @@ const DepositTab = ({
       </div>
       <div className="details-right">
         <div className="commodo-card">
-          <div className="card-head">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="cmst-icon" />
-                </div>
-                CMST
-              </div>
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
+          <Details asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}/>
+          <div className="mt-5">
+            <Details asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}/>
           </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
-          <div className="card-head mt-5">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="atom-icon" />
-                </div>
-                ATOM
-              </div>
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
-          </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data2}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
         </div>
         <div className="commodo-card">
-          <div className="card-head">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="cmdx-icon" />
-                </div>
-                CMDX
-              </div>
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
-          </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data3}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />{" "}
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
+          <Details asset={assetMap[pool?.mainAssetId?.toNumber()]}/>
         </div>
       </div>
     </div>

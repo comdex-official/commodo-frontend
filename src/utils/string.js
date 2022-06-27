@@ -68,7 +68,7 @@ export const iconNameFromDenom = (key) => {
     case ibcDenoms["uatom"]:
       return "atom-icon";
     case "ucmdx":
-      return "comdex-icon";
+      return "cmdx-icon";
     case "ucmst":
       return "cmst-icon";
     case "uharbor":

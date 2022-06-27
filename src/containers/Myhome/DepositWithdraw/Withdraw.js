@@ -1,7 +1,7 @@
 import * as PropTypes from "prop-types";
 import { SvgIcon, TooltipIcon } from "../../../components/common";
 import { connect } from "react-redux";
-import { Button, List, Select } from "antd";
+import { Button, Select } from "antd";
 import "./index.less";
 import { useEffect, useState } from "react";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
@@ -14,6 +14,7 @@ import {
 import CustomInput from "../../../components/CustomInput";
 import { ValidateInputNumber } from "../../../config/_validation";
 import ActionButton from "./ActionButton";
+import Details from "../../../components/common/Details";
 
 const { Option } = Select;
 
@@ -42,62 +43,7 @@ const WithdrawTab = ({
       ]);
     }
   }, [pool]);
-
-  const data = [
-    {
-      title: "Total Deposited",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Deposit APY",
-      counts: "8.92%",
-    },
-  ];
-  const data2 = [
-    {
-      title: "Total Deposited",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Deposit APY",
-      counts: "7.24%",
-    },
-  ];
-  const data3 = [
-    {
-      title: "Total Deposited",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Deposit APY",
-      counts: "7.88%",
-    },
-  ];
-
+  
   const onChange = (value) => {
     value = toDecimals(value).toString().trim();
 
@@ -206,113 +152,13 @@ const WithdrawTab = ({
       </div>
       <div className="details-right">
         <div className="commodo-card">
-          <div className="card-head">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="cmst-icon" />
-                </div>
-                CMST
-              </div>
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
+          <Details asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}/>
+          <div className="mt-5">
+            <Details asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}/>
           </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
-          <div className="card-head mt-5">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="atom-icon" />
-                </div>
-                ATOM
-              </div>
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
-          </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data2}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
         </div>
         <div className="commodo-card">
-          <div className="card-head">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="cmdx-icon" />
-                </div>
-                CMDX
-              </div>
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
-          </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data3}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />{" "}
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
+          <Details asset={assetMap[pool?.mainAssetId?.toNumber()]}/>
         </div>
       </div>
     </div>
