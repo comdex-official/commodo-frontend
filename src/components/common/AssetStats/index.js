@@ -11,7 +11,9 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
           <label>Max LTV</label>
         </Col>
         <Col className="text-right">
-          {decimalConversion(assetRatesStatsMap[assetId]?.uOptimal)}%
+          {Number(decimalConversion(assetRatesStatsMap[assetId]?.uOptimal)) *
+            100}
+          %
         </Col>
       </Row>
       <Row className="mt-2">
@@ -19,7 +21,9 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
           <label>Liquidation Threshold</label>
         </Col>
         <Col className="text-right">
-          {decimalConversion(assetRatesStatsMap[assetId]?.liquidationThreshold)}
+          {Number(
+            decimalConversion(assetRatesStatsMap[assetId]?.liquidationThreshold)
+          ) * 100}
           %
         </Col>
       </Row>
@@ -28,7 +32,10 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
           <label>Liquidation Penalty</label>
         </Col>
         <Col className="text-right">
-          {decimalConversion(assetRatesStatsMap[assetId]?.liquidationPenalty)}%
+          {Number(
+            decimalConversion(assetRatesStatsMap[assetId]?.liquidationPenalty)
+          ) * 100}
+          %
         </Col>
       </Row>
       <Row className="mt-2">
@@ -36,7 +43,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
           <label>Current LTV</label>
         </Col>
         <Col className="text-right">
-          {decimalConversion(assetRatesStatsMap[assetId]?.ltv)}%
+          {Number(decimalConversion(assetRatesStatsMap[assetId]?.ltv)) * 100}%
         </Col>
       </Row>
     </>

@@ -1,46 +1,25 @@
 import * as PropTypes from "prop-types";
 import { Col, Row } from "../../../../components/common";
 import { connect } from "react-redux";
-import { Button, Tabs } from "antd";
-import BorrowTab from "./Borrow";
-import RepayTab from "./Repay";
-import CloseTab from "./Close";
+import { Button } from "antd";
+import Borrow from "./Borrow";
 import "./index.less";
 import { Link } from "react-router-dom";
-
-const { TabPane } = Tabs;
-
-const BackButton = {
-  right: (
-    <Link to="/market">
-      <Button className="back-btn" type="primary">
-        Back
-      </Button>
-    </Link>
-  ),
-};
 
 const BorrowDetails = () => {
   return (
     <div className="app-content-wrapper">
       <Row>
-        <Col>
-          <Tabs
-            className="commodo-tabs"
-            defaultActiveKey="1"
-            tabBarExtraContent={BackButton}
-          >
-            <TabPane tab="Borrow" key="1">
-              <BorrowTab />
-            </TabPane>
-            <TabPane tab="Repay" key="2">
-              <RepayTab />
-            </TabPane>
-            <TabPane tab="Close" key="3">
-              <CloseTab />
-            </TabPane>
-          </Tabs>
+        <Col className="text-right mb-3">
+          <Link to="/market">
+            <Button className="back-btn" type="primary">
+              Back
+            </Button>
+          </Link>
         </Col>
+      </Row>
+      <Row>
+        <Borrow />
       </Row>
     </div>
   );
