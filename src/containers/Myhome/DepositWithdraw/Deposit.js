@@ -33,7 +33,6 @@ const DepositTab = ({
   address,
   refreshBalance,
   setBalanceRefresh,
-  assetRatesStatsMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [amount, setAmount] = useState();

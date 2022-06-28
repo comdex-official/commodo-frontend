@@ -2,6 +2,7 @@ import { Col, Row } from "../index";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { decimalConversion } from "../../../utils/number";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
 
 const AssetStats = ({ assetId, assetRatesStatsMap }) => {
   return (
@@ -11,8 +12,9 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
           <label>Max LTV</label>
         </Col>
         <Col className="text-right">
-          {Number(decimalConversion(assetRatesStatsMap[assetId]?.uOptimal)) *
-            100}
+          {Number(
+            decimalConversion(assetRatesStatsMap[assetId]?.uOptimal) * 100
+          ).toFixed(DOLLAR_DECIMALS)}
           %
         </Col>
       </Row>
@@ -22,8 +24,10 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
         </Col>
         <Col className="text-right">
           {Number(
-            decimalConversion(assetRatesStatsMap[assetId]?.liquidationThreshold)
-          ) * 100}
+            decimalConversion(
+              assetRatesStatsMap[assetId]?.liquidationThreshold
+            ) * 100
+          ).toFixed(DOLLAR_DECIMALS)}
           %
         </Col>
       </Row>
@@ -33,8 +37,9 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
         </Col>
         <Col className="text-right">
           {Number(
-            decimalConversion(assetRatesStatsMap[assetId]?.liquidationPenalty)
-          ) * 100}
+            decimalConversion(assetRatesStatsMap[assetId]?.liquidationPenalty) *
+              100
+          ).toFixed(DOLLAR_DECIMALS)}
           %
         </Col>
       </Row>
@@ -43,7 +48,10 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
           <label>Current LTV</label>
         </Col>
         <Col className="text-right">
-          {Number(decimalConversion(assetRatesStatsMap[assetId]?.ltv)) * 100}%
+          {Number(
+            decimalConversion(assetRatesStatsMap[assetId]?.ltv) * 100
+          ).toFixed(DOLLAR_DECIMALS)}
+          %
         </Col>
       </Row>
     </>

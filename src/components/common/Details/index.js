@@ -12,7 +12,7 @@ import { decimalConversion, marketPrice } from "../../../utils/number";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { connect } from "react-redux";
 
-const Details = ({ asset, poolId, markets }) => {
+const Details = ({ asset, poolId, markets, refreshBalance }) => {
   const [stats, setStats] = useState();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const Details = ({ asset, poolId, markets }) => {
         setStats(result?.AssetStats);
       });
     }
-  }, [asset, poolId]);
+  }, [asset, poolId, refreshBalance]);
 
   const data = [
     {
@@ -53,11 +53,25 @@ const Details = ({ asset, poolId, markets }) => {
     },
     {
       title: "Deposit APY",
-      counts: <>{Number(decimalConversion(stats?.lendApr)) * 100}%</>,
+      counts: (
+        <>
+          {Number(decimalConversion(stats?.lendApr) * 100).toFixed(
+            DOLLAR_DECIMALS
+          )}
+          %
+        </>
+      ),
     },
     {
       title: "Borrow APY",
-      counts: <>{Number(decimalConversion(stats?.borrowApr)) * 100}%</>,
+      counts: (
+        <>
+          {Number(decimalConversion(stats?.borrowApr) * 100).toFixed(
+            DOLLAR_DECIMALS
+          )}
+          %
+        </>
+      ),
     },
   ];
 
@@ -103,6 +117,7 @@ const Details = ({ asset, poolId, markets }) => {
 };
 
 Details.propTypes = {
+  refreshBalance: PropTypes.number.isRequired,
   asset: PropTypes.shape({
     denom: PropTypes.string,
   }),
@@ -119,6 +134,7 @@ Details.propTypes = {
 const stateToProps = (state) => {
   return {
     markets: state.oracle.market.list,
+    refreshBalance: state.account.refreshBalance,
   };
 };
 
