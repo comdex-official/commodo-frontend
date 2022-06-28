@@ -19,6 +19,7 @@ import { setBalanceRefresh } from "../../../actions/account";
 import Details from "../../../components/common/Details";
 import { comdex } from "../../../config/network";
 import { DEFAULT_FEE } from "../../../constants/common";
+import AssetStats from "../../../components/common/AssetStats";
 
 const { Option } = Select;
 
@@ -32,6 +33,7 @@ const DepositTab = ({
   address,
   refreshBalance,
   setBalanceRefresh,
+  assetRatesStatsMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [amount, setAmount] = useState();
@@ -160,18 +162,7 @@ const DepositTab = ({
         </div>
         <Row>
           <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-            <Row className="mt-2">
-              <Col>
-                <label>LTV</label>
-              </Col>
-              <Col className="text-right">85%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Deposit APY</label>
-              </Col>
-              <Col className="text-right">3.80%</Col>
-            </Row>
+            <AssetStats assetId={selectedAssetId} />
           </Col>
         </Row>
         <div className="assets-form-btn">

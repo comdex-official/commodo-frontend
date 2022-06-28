@@ -4,7 +4,7 @@ import {
   POOL_BALANCE_FETCH_IN_PROGRESS,
   SECOND_RESERVE_COIN_DENOM_SET,
   POOL_TOKEN_SUPPLY_SET,
-  POOLS_LIQUIDITY_LIST_SET, POOL_SET,
+  POOLS_LIQUIDITY_LIST_SET, POOL_SET, ASSET_RATES_STATES_SET,
 } from "../constants/lend";
 
 export const setPools = (list, pagination) => {
@@ -55,5 +55,18 @@ export const setPoolLiquidityList = (value, index) => {
     type: POOLS_LIQUIDITY_LIST_SET,
     value,
     index,
+  };
+};
+
+export const setAssetRatesStats = (list, pagination) => {
+  const statsHashMap = list.reduce((map, obj) => {
+    map[obj?.assetId] = obj;
+    return map;
+  }, {});
+
+  return {
+    type: ASSET_RATES_STATES_SET,
+    map: statsHashMap,
+    pagination,
   };
 };

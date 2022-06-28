@@ -8,6 +8,7 @@ import {
   SECOND_RESERVE_COIN_DENOM_SET,
   POOL_TOKEN_SUPPLY_SET,
   POOLS_LIQUIDITY_LIST_SET,
+  ASSET_RATES_STATES_SET,
 } from "../constants/lend";
 
 const pool = (
@@ -29,8 +30,8 @@ const pool = (
     case POOL_SET:
       return {
         ...state,
-        _ : action.value,
-      }
+        _: action.value,
+      };
     default:
       return state;
   }
@@ -95,6 +96,23 @@ const list = (state = [], action) => {
   return state;
 };
 
+const assetRatesStats = (
+  state = {
+    map: {},
+    pagination: {},
+  },
+  action
+) => {
+  if (action.type === ASSET_RATES_STATES_SET) {
+    return {
+      map: action.map,
+      pagination: action.pagination,
+    };
+  }
+
+  return state;
+};
+
 export default combineReducers({
   pool,
   poolDeposit,
@@ -103,4 +121,5 @@ export default combineReducers({
   secondReserveCoinDenom,
   poolTokenSupply,
   list,
+  assetRatesStats,
 });
