@@ -24,7 +24,7 @@ import AssetStats from "../../../../components/common/Asset/Stats";
 import { comdex } from "../../../../config/network";
 import { DEFAULT_FEE } from "../../../../constants/common";
 import { useNavigate } from "react-router";
-import CustomList from '../../../../components/common/Asset/CustomList';
+import CustomRow from '../../../../components/common/Asset/CustomRow';
 
 const { Option } = Select;
 
@@ -128,7 +128,7 @@ const DepositTab = ({
       {!dataInProgress ? (
         <>
           <div className="details-left commodo-card">
-            <CustomList assetList={assetList}/>
+            <CustomRow assetList={assetList}/>
             <div className="assets-select-card mb-0">
               <div className="assets-left">
                 <label className="left-label">

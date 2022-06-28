@@ -18,7 +18,7 @@ import Details from "../../../components/common/Asset/Details";
 import { setBalanceRefresh } from "../../../actions/account";
 import { comdex } from "../../../config/network";
 import { DEFAULT_FEE } from "../../../constants/common";
-import CustomList from "../../../components/common/Asset/CustomList";
+import CustomRow from "../../../components/common/Asset/CustomRow";
 
 const { Option } = Select;
 
@@ -80,7 +80,7 @@ const WithdrawTab = ({
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <CustomList assetList={assetList}/>
+        <CustomRow assetList={assetList}/>
         <div className="assets-select-card mb-0">
           <div className="assets-left">
             <label className="left-label">
