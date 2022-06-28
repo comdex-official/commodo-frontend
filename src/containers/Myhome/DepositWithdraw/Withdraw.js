@@ -80,7 +80,7 @@ const WithdrawTab = ({
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <CustomRow assetList={assetList}/>
+        <CustomRow assetList={assetList} />
         <div className="assets-select-card mb-0">
           <div className="assets-left">
             <label className="left-label">
@@ -166,11 +166,13 @@ const WithdrawTab = ({
           <Details
             asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
             poolId={pool?.poolId}
+            parent="lend"
           />
           <div className="mt-5">
             <Details
               asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
               poolId={pool?.poolId}
+              parent="lend"
             />
           </div>
         </div>
@@ -178,6 +180,7 @@ const WithdrawTab = ({
           <Details
             asset={assetMap[pool?.mainAssetId?.toNumber()]}
             poolId={pool?.poolId}
+            parent="lend"
           />
         </div>
       </div>

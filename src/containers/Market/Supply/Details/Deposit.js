@@ -24,7 +24,7 @@ import AssetStats from "../../../../components/common/Asset/Stats";
 import { comdex } from "../../../../config/network";
 import { DEFAULT_FEE } from "../../../../constants/common";
 import { useNavigate } from "react-router";
-import CustomRow from '../../../../components/common/Asset/CustomRow';
+import CustomRow from "../../../../components/common/Asset/CustomRow";
 
 const { Option } = Select;
 
@@ -128,7 +128,7 @@ const DepositTab = ({
       {!dataInProgress ? (
         <>
           <div className="details-left commodo-card">
-            <CustomRow assetList={assetList}/>
+            <CustomRow assetList={assetList} />
             <div className="assets-select-card mb-0">
               <div className="assets-left">
                 <label className="left-label">
@@ -228,17 +228,22 @@ const DepositTab = ({
               <Details
                 asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
                 poolId={pool?.poolId}
+                parent="lend"
               />
               <div className="mt-5">
                 <Details
                   asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
                   poolId={pool?.poolId}
+                  parent="lend"
                 />
               </div>
             </div>
             <div className="commodo-card">
-              <Details asset={assetMap[pool?.mainAssetId?.toNumber()]}
-                       poolId={pool?.poolId}/>
+              <Details
+                asset={assetMap[pool?.mainAssetId?.toNumber()]}
+                poolId={pool?.poolId}
+                parent="lend"
+              />
             </div>
           </div>
         </>

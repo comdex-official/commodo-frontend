@@ -41,9 +41,7 @@ const SupplyDetails = ({ setPool }) => {
           </Link>
         </Col>
       </Row>
-      <Row>
-        <Deposit dataInProgress={inProgress} />
-      </Row>
+      <Deposit dataInProgress={inProgress} />
     </div>
   );
 };
