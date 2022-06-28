@@ -16,10 +16,11 @@ import CustomInput from "../../../components/CustomInput";
 import { ValidateInputNumber } from "../../../config/_validation";
 import ActionButton from "./ActionButton";
 import { setBalanceRefresh } from "../../../actions/account";
-import Details from "../../../components/common/Details";
+import Details from "../../../components/common/Asset/Details";
 import { comdex } from "../../../config/network";
 import { DEFAULT_FEE } from "../../../constants/common";
-import AssetStats from "../../../components/common/AssetStats";
+import AssetStats from "../../../components/common/Asset/Stats";
+import CustomRow from "../../../components/common/Asset/CustomRow";
 
 const { Option } = Select;
 
@@ -76,19 +77,7 @@ const DepositTab = ({
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <div className="deposit-head">
-          <div className="deposit-head-left">
-            {assetList?.length > 0 &&
-              assetList?.map((item) => (
-                <div className="assets-col mr-3" key={item?.denom}>
-                  <div className="assets-icon">
-                    <SvgIcon name={iconNameFromDenom(item?.denom)} />
-                  </div>
-                  {denomConversion(item?.denom)}
-                </div>
-              ))}
-          </div>
-        </div>
+        <CustomRow assetList={assetList}/>
         <div className="assets-select-card mb-0">
           <div className="assets-left">
             <label className="left-label">
@@ -108,9 +97,6 @@ const DepositTab = ({
                   </div>
                 }
                 defaultActiveFirstOption={true}
-                suffixIcon={
-                  <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
-                }
               >
                 <Option key="1">
                   <div className="select-inner">

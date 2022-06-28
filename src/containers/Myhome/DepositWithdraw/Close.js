@@ -4,16 +4,14 @@ import { connect } from "react-redux";
 import { Select } from "antd";
 import "./index.less";
 import { useEffect, useState } from "react";
-import { iconNameFromDenom, toDecimals } from "../../../utils/string";
+import { iconNameFromDenom } from "../../../utils/string";
 import {
   amountConversionWithComma,
   denomConversion,
-  getAmount,
-  getDenomBalance,
 } from "../../../utils/coin";
-import { ValidateInputNumber } from "../../../config/_validation";
 import ActionButton from "./ActionButton";
-import Details from "../../../components/common/Details";
+import Details from "../../../components/common/Asset/Details";
+import CustomRow from "../../../components/common/Asset/CustomRow";
 
 const { Option } = Select;
 
@@ -44,19 +42,7 @@ const CloseTab = ({
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <div className="deposit-head">
-          <div className="deposit-head-left">
-            {assetList?.length > 0 &&
-              assetList?.map((item) => (
-                <div className="assets-col mr-3" key={item?.denom}>
-                  <div className="assets-icon">
-                    <SvgIcon name={iconNameFromDenom(item?.denom)} />
-                  </div>
-                  {denomConversion(item?.denom)}
-                </div>
-              ))}
-          </div>
-        </div>
+        <CustomRow assetList={assetList}/>
         <div className="assets-select-card mb-0">
           <div className="assets-left">
             <label className="left-label">
