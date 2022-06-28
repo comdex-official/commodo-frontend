@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Button, List, Select, message, Spin } from "antd";
 import "./index.less";
 import {
+  amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
@@ -20,6 +21,9 @@ import { defaultFee } from "../../../../services/transaction";
 import Long from "long";
 import Details from "../../../../components/common/Details";
 import AssetStats from "../../../../components/common/AssetStats";
+import { comdex } from "../../../../config/network";
+import { DEFAULT_FEE } from "../../../../constants/common";
+import { useNavigate } from "react-router";
 
 const { Option } = Select;
 
@@ -36,6 +40,10 @@ const DepositTab = ({
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
   const [inProgress, setInProgress] = useState(false);
+  const navigate = useNavigate();
+
+  const availableBalance =
+    getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
 
   useEffect(() => {
     if (pool?.poolId) {
@@ -47,75 +55,15 @@ const DepositTab = ({
     }
   }, [pool]);
 
-  const data = [
-    {
-      title: "Total Deposited",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Deposit APY",
-      counts: "8.92%",
-    },
-  ];
-  const data2 = [
-    {
-      title: "Total Deposited",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Deposit APY",
-      counts: "7.24%",
-    },
-  ];
-  const data3 = [
-    {
-      title: "Total Deposited",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Deposit APY",
-      counts: "6.38%",
-    },
-  ];
-
   const handleAssetChange = (value) => {
     setSelectedAssetId(value);
   };
 
-  const onChange = (value) => {
+  const handleInputChange = (value) => {
     value = toDecimals(value).toString().trim();
 
     setAmount(value);
-    setValidationError(
-      ValidateInputNumber(
-        getAmount(value),
-        getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0
-      )
-    );
+    setValidationError(ValidateInputNumber(getAmount(value), availableBalance));
   };
 
   const handleClick = () => {
@@ -158,8 +106,20 @@ const DepositTab = ({
             hash={result?.transactionHash}
           />
         );
+
+        navigate("/myhome");
       }
     );
+  };
+
+  const handleMaxClick = () => {
+    if (assetMap[selectedAssetId]?.denom === comdex.coinMinimalDenom) {
+      return Number(availableBalance) > DEFAULT_FEE
+        ? handleInputChange(amountConversion(availableBalance - DEFAULT_FEE))
+        : handleInputChange();
+    } else {
+      return handleInputChange(amountConversion(availableBalance));
+    }
   };
 
   return (
@@ -238,14 +198,18 @@ const DepositTab = ({
                     {denomConversion(assetMap[selectedAssetId]?.denom)}
                   </span>
                   <div className="max-half">
-                    <Button className="active">Max</Button>
+                    <Button className="active" onClick={handleMaxClick}>
+                      Max
+                    </Button>
                   </div>
                 </div>
                 <div>
                   <div className="input-select">
                     <CustomInput
                       value={amount}
-                      onChange={(event) => onChange(event.target.value)}
+                      onChange={(event) =>
+                        handleInputChange(event.target.value)
+                      }
                       validationError={validationError}
                     />
                   </div>
