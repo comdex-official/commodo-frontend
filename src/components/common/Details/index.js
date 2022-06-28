@@ -7,7 +7,7 @@ import {
 } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
 import { useEffect, useState } from "react";
-import { queryAssetRatesStats } from "../../../services/lend/query";
+import { queryAssetStats } from "../../../services/lend/query";
 import { decimalConversion, marketPrice } from "../../../utils/number";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { connect } from "react-redux";
@@ -17,13 +17,12 @@ const Details = ({ asset, poolId, markets }) => {
 
   useEffect(() => {
     if (asset?.id && poolId) {
-      queryAssetRatesStats(asset?.id, poolId, (error, result) => {
+      queryAssetStats(asset?.id, poolId, (error, result) => {
         if (error) {
           message.error(error);
-          console.log("the err", error);
           return;
         }
-        console.log("the result", result);
+
         setStats(result?.AssetStats);
       });
     }
@@ -54,11 +53,11 @@ const Details = ({ asset, poolId, markets }) => {
     },
     {
       title: "Deposit APY",
-      counts: <>{stats?.lendApr ? decimalConversion(stats?.lendApr) : 0}%</>,
+      counts: <>{decimalConversion(stats?.lendApr)}%</>,
     },
     {
       title: "Borrow APY",
-      counts: <>{stats?.borrowApr ? decimalConversion(stats.borrowApr) : 0}%</>,
+      counts: <>{decimalConversion(stats?.borrowApr)}%</>,
     },
   ];
 

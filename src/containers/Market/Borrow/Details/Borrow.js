@@ -6,41 +6,43 @@ import "./index.less";
 
 const { Option } = Select;
 
-const TooltipContent = <div className="token-details">
-  <div className="tokencard-col">
-    <div className="tokencard">
-      <div className="tokencard-icon">
-        <SvgIcon name="cmdx-icon" />
+const TooltipContent = (
+  <div className="token-details">
+    <div className="tokencard-col">
+      <div className="tokencard">
+        <div className="tokencard-icon">
+          <SvgIcon name="cmdx-icon" />
+        </div>
+        <p>Deposit CMDX</p>
       </div>
-      <p>Deposit CMDX</p>
-    </div>
-    <div className="tokencard with-shadow">
-      <div className="tokencard-icon">
-        <SvgIcon name="cmst-icon" />
+      <div className="tokencard with-shadow">
+        <div className="tokencard-icon">
+          <SvgIcon name="cmst-icon" />
+        </div>
+        <p>Borrow CMST</p>
       </div>
-      <p>Deposit CMST</p>
+      <label>Token A</label>
     </div>
-    <label>Token A</label>
+    <div className="middle-arrow">
+      <SvgIcon name="token-arrow" viewbox="0 0 159 80.387" />
+    </div>
+    <div className="tokencard-col">
+      <div className="tokencard with-shadow">
+        <div className="tokencard-icon">
+          <SvgIcon name="cmst-icon" />
+        </div>
+        <p>Deposit CMST</p>
+      </div>
+      <div className="tokencard">
+        <div className="tokencard-icon">
+          <SvgIcon name="osmosis-icon" />
+        </div>
+        <p>Borrow Osmo</p>
+      </div>
+      <label>Token B</label>
+    </div>
   </div>
-  <div className="middle-arrow">
-    <SvgIcon name="token-arrow" viewbox="0 0 159 80.387" />
-  </div>
-  <div className="tokencard-col">
-    <div className="tokencard with-shadow">
-      <div className="tokencard-icon">
-        <SvgIcon name="cmst-icon" />
-      </div>
-      <p>Borrow CMST</p>
-    </div>
-    <div className="tokencard">
-      <div className="tokencard-icon">
-        <SvgIcon name="osmosis-icon" />
-      </div>
-      <p>Borrow Osmo</p>
-    </div>
-    <label>Token B</label>
-  </div>
-</div>;
+);
 
 const BorrowTab = () => {
   const data = [
@@ -259,31 +261,56 @@ const BorrowTab = () => {
         </div>
         <Row>
           <Col>
-            <Tooltip placement="right" color="#173629" title={TooltipContent} overlayClassName="token-overlay">
+            <Tooltip
+              placement="right"
+              color="#173629"
+              title={TooltipContent}
+              overlayClassName="token-overlay"
+            >
               <div className="borrowbottom-cards">
                 <div className="cards">
                   <div className="cards-inner">
                     <div className="cards-colum">
-                      <div className="inner-icon"><SvgIcon name="osmosis-icon" /></div>
+                      <div className="inner-icon">
+                        <SvgIcon name="osmosis-icon" />
+                      </div>
                       <p>CMDX</p>
                     </div>
-                    <SvgIcon className="longarrow-icon" name="long-arrow" viewbox="0 0 64 5.774" />
+                    <SvgIcon
+                      className="longarrow-icon"
+                      name="long-arrow"
+                      viewbox="0 0 64 5.774"
+                    />
                     <div className="cards-colum">
-                      <div className="inner-icon"><SvgIcon name="cmst-icon" /></div>
+                      <div className="inner-icon">
+                        <SvgIcon name="cmst-icon" />
+                      </div>
                       <p>CMST</p>
                     </div>
                   </div>
                 </div>
-                <SvgIcon className="longarrow-icon-middle" name="long-arrow" viewbox="0 0 64 5.774" />
+                <SvgIcon
+                  className="longarrow-icon-middle"
+                  name="long-arrow"
+                  viewbox="0 0 64 5.774"
+                />
                 <div className="cards">
                   <div className="cards-inner">
                     <div className="cards-colum">
-                      <div className="inner-icon"><SvgIcon name="cmst-icon" /></div>
+                      <div className="inner-icon">
+                        <SvgIcon name="cmst-icon" />
+                      </div>
                       <p>CMST</p>
                     </div>
-                    <SvgIcon className="longarrow-icon" name="long-arrow"  viewbox="0 0 64 5.774" />
+                    <SvgIcon
+                      className="longarrow-icon"
+                      name="long-arrow"
+                      viewbox="0 0 64 5.774"
+                    />
                     <div className="cards-colum">
-                      <div className="inner-icon"><SvgIcon name="osmosis-icon" /></div>
+                      <div className="inner-icon">
+                        <SvgIcon name="osmosis-icon" />
+                      </div>
                       <p>OSMO</p>
                     </div>
                   </div>

@@ -26,7 +26,6 @@ import {
 } from "../../actions/account";
 import { queryAllBalances } from "../../services/bank/query";
 import Lodash from "lodash";
-import { queryVaultList } from "../../services/vault/query";
 import { setAccountVaults } from "../../actions/account";
 import ConnectModal from "../Modal";
 import { marketPrice } from "../../utils/number";
@@ -35,8 +34,10 @@ import { setMarkets } from "../../actions/oracle";
 import { fetchKeplrAccountName } from "../../services/keplr";
 import { comdex } from "../../config/network";
 import { amountConversionWithComma, getDenomBalance } from "../../utils/coin";
-import {queryAssets} from "../../services/asset/query";
-import {setAssets} from "../../actions/asset";
+import { queryAssets } from "../../services/asset/query";
+import { setAssets } from "../../actions/asset";
+import { queryAssetRatesStats } from "../../services/lend/query";
+import { setAssetRatesStats } from "../../actions/lend";
 
 const ConnectButton = ({
   setAccountAddress,
@@ -45,13 +46,13 @@ const ConnectButton = ({
   lang,
   setAssetBalance,
   setcAssetBalance,
-  setPoolBalance,
   markets,
   refreshBalance,
   setMarkets,
   setAccountName,
   balances,
-                         setAssets,
+  setAssets,
+  setAssetRatesStats,
 }) => {
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
@@ -81,21 +82,35 @@ const ConnectButton = ({
   }, [markets]);
   ``;
 
-  useEffect(()=>{
-    queryAssets((DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
-        DEFAULT_PAGE_SIZE,
-        true,
-        false, (error, result)=>{
-      if(error){
+  useEffect(() => {
+    queryAssets(
+      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
+      DEFAULT_PAGE_SIZE,
+      true,
+      false,
+      (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        if (result?.assets?.length > 0) {
+          setAssets(result?.assets);
+        }
+      }
+    );
+
+    queryAssetRatesStats((error, result) => {
+      if (error) {
         message.error(error);
         return;
       }
 
-      if(result?.assets?.length>0){
-        setAssets(result?.assets)
+      if (result?.AssetRatesStats?.length > 0) {
+        setAssetRatesStats(result?.AssetRatesStats);
       }
-    })
-  },[])
+    });
+  }, []);
 
   const fetchBalances = (address) => {
     queryAllBalances(address, (error, result) => {
@@ -186,6 +201,7 @@ const ConnectButton = ({
 ConnectButton.propTypes = {
   lang: PropTypes.string.isRequired,
   refreshBalance: PropTypes.number.isRequired,
+  setAssetRatesStats: PropTypes.func.isRequired,
   setAccountAddress: PropTypes.func.isRequired,
   showAccountConnectModal: PropTypes.func.isRequired,
   setAccountBalances: PropTypes.func.isRequired,
@@ -236,6 +252,7 @@ const actionsToProps = {
   setMarkets,
   setAccountName,
   setAssets,
+  setAssetRatesStats,
 };
 
 export default connect(stateToProps, actionsToProps)(ConnectButton);
