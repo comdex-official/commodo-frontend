@@ -238,15 +238,18 @@ const DepositTab = ({
             <div className="commodo-card">
               <Details
                 asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
+                poolId={pool?.poolId}
               />
               <div className="mt-5">
                 <Details
                   asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
+                  poolId={pool?.poolId}
                 />
               </div>
             </div>
             <div className="commodo-card">
-              <Details asset={assetMap[pool?.mainAssetId?.toNumber()]} />
+              <Details asset={assetMap[pool?.mainAssetId?.toNumber()]}
+                       poolId={pool?.poolId}/>
             </div>
           </div>
         </>

@@ -1,16 +1,17 @@
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../../components/common";
+import { Col, Row } from "../../../components/common";
 import { connect } from "react-redux";
 import { Button, message, Spin, Tabs } from "antd";
 import WithdrawTab from "./Withdraw";
 import DepositTab from "./Deposit";
 import "./index.less";
 import { Link } from "react-router-dom";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { queryLendPool, queryLendPosition } from "../../../services/lend/query";
 import { setPool } from "../../../actions/lend";
 import CloseTab from "./Close";
+import { decode } from "../../../utils/string";
 
 const { TabPane } = Tabs;
 
@@ -27,8 +28,18 @@ const BackButton = {
 const Deposit = ({ setPool }) => {
   const [inProgress, setInProgress] = useState(false);
   const [lendPosition, setLendPosition] = useState();
+  const [activeKey, setActiveKey] = useState("1");
 
   let { id } = useParams();
+
+  const location = useLocation();
+  const type = decode(location.hash);
+
+  useEffect(() => {
+    if (type && type === "withdraw") {
+      setActiveKey("2");
+    }
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -57,7 +68,7 @@ const Deposit = ({ setPool }) => {
   }, [id]);
 
   const refreshLendPosition = () => {
-    if(id) {
+    if (id) {
       queryLendPosition(id, (error, result) => {
         setInProgress(false);
         if (error) {
@@ -78,6 +89,8 @@ const Deposit = ({ setPool }) => {
           <Tabs
             className="commodo-tabs"
             defaultActiveKey="1"
+            onChange={setActiveKey}
+            activeKey={activeKey}
             tabBarExtraContent={BackButton}
           >
             <TabPane tab="Deposit" key="1">

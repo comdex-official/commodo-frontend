@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Button, Table, Switch, message } from "antd";
 import "./index.less";
 import { useEffect, useState } from "react";
-import {queryLendPosition, queryUserLends} from "../../services/lend/query";
+import { queryLendPosition, queryUserLends } from "../../services/lend/query";
 import { iconNameFromDenom } from "../../utils/string";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { useNavigate } from "react-router";
@@ -15,42 +15,42 @@ const Deposit = ({ address }) => {
 
   const navigate = useNavigate();
 
-  useEffect(()=>{
+  useEffect(() => {
     setUserLendList([]);
-  },[]);
+  }, []);
 
   useEffect(() => {
     if (address) {
       fetchUserLends();
-      }
+    }
   }, [address]);
 
-const fetchUserLends = () => {
-  setUserLendList([]);
-  setInProgress(true);
-  queryUserLends(address, (error, result) => {
-    if (error) {
-      message.error(error);
-      setInProgress(false);
-      return;
-    }
+  const fetchUserLends = () => {
+    setUserLendList([]);
+    setInProgress(true);
+    queryUserLends(address, (error, result) => {
+      if (error) {
+        message.error(error);
+        setInProgress(false);
+        return;
+      }
 
-    if(result?.lendIds?.length>0){
-      result?.lendIds?.forEach((id)=>{
-        queryLendPosition(id, (error, result)=>{
-          setInProgress(false);
-          if(error){
-            message.error(error);
-            return;
-          }
-          if (result?.lend?.lendingId) {
-            setUserLendList(state => [...state, result.lend])
-          }
-        })
-      })
-    }
-  })
-}
+      if (result?.lendIds?.length > 0) {
+        result?.lendIds?.forEach((id) => {
+          queryLendPosition(id, (error, result) => {
+            setInProgress(false);
+            if (error) {
+              message.error(error);
+              return;
+            }
+            if (result?.lend?.lendingId) {
+              setUserLendList((state) => [...state, result.lend]);
+            }
+          });
+        });
+      }
+    });
+  };
   const columns = [
     {
       title: "Asset",
@@ -105,7 +105,10 @@ const fetchUserLends = () => {
               type="primary"
               size="small"
               onClick={() =>
-                navigate(`/deposit/${item?.lendingId?.toNumber()}`)
+                navigate({
+                  pathname: `/deposit/${item?.lendingId?.toNumber()}`,
+                  hash: "withdraw",
+                })
               }
               className="ml-2 table-btn"
             >
