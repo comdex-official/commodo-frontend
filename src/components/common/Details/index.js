@@ -53,11 +53,25 @@ const Details = ({ asset, poolId, markets }) => {
     },
     {
       title: "Deposit APY",
-      counts: <>{Number(decimalConversion(stats?.lendApr)) * 100}%</>,
+      counts: (
+        <>
+          {Number(decimalConversion(stats?.lendApr) * 100).toFixed(
+            DOLLAR_DECIMALS
+          )}
+          %
+        </>
+      ),
     },
     {
       title: "Borrow APY",
-      counts: <>{Number(decimalConversion(stats?.borrowApr)) * 100}%</>,
+      counts: (
+        <>
+          {Number(decimalConversion(stats?.borrowApr) * 100).toFixed(
+            DOLLAR_DECIMALS
+          )}
+          %
+        </>
+      ),
     },
   ];
 
