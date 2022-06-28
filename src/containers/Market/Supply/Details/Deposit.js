@@ -1,7 +1,7 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import { connect } from "react-redux";
-import { Button, List, Select, message, Spin } from "antd";
+import { Button, Select, message, Spin } from "antd";
 import "./index.less";
 import {
   amountConversion,
@@ -19,11 +19,12 @@ import variables from "../../../../utils/variables";
 import Snack from "../../../../components/common/Snack";
 import { defaultFee } from "../../../../services/transaction";
 import Long from "long";
-import Details from "../../../../components/common/Details";
-import AssetStats from "../../../../components/common/AssetStats";
+import Details from "../../../../components/common/Asset/Details";
+import AssetStats from "../../../../components/common/Asset/Stats";
 import { comdex } from "../../../../config/network";
 import { DEFAULT_FEE } from "../../../../constants/common";
 import { useNavigate } from "react-router";
+import CustomList from '../../../../components/common/Asset/CustomList';
 
 const { Option } = Select;
 
@@ -127,19 +128,7 @@ const DepositTab = ({
       {!dataInProgress ? (
         <>
           <div className="details-left commodo-card">
-            <div className="deposit-head">
-              <div className="deposit-head-left">
-                {assetList?.length > 0 &&
-                  assetList?.map((item) => (
-                    <div className="assets-col mr-3" key={item?.denom}>
-                      <div className="assets-icon">
-                        <SvgIcon name={iconNameFromDenom(item?.denom)} />
-                      </div>
-                      {denomConversion(item?.denom)}
-                    </div>
-                  ))}
-              </div>
-            </div>
+            <CustomList assetList={assetList}/>
             <div className="assets-select-card mb-0">
               <div className="assets-left">
                 <label className="left-label">
