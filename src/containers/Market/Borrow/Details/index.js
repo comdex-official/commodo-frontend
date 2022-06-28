@@ -18,9 +18,7 @@ const BorrowDetails = () => {
           </Link>
         </Col>
       </Row>
-      <Row>
-        <Borrow />
-      </Row>
+      <Borrow />
     </div>
   );
 };

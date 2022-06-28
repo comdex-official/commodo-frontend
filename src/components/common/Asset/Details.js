@@ -12,7 +12,7 @@ import { decimalConversion, marketPrice } from "../../../utils/number";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { connect } from "react-redux";
 
-const Details = ({ asset, poolId, markets, refreshBalance }) => {
+const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
   const [stats, setStats] = useState();
 
   useEffect(() => {
@@ -28,18 +28,13 @@ const Details = ({ asset, poolId, markets, refreshBalance }) => {
     }
   }, [asset, poolId, refreshBalance]);
 
-  const data = [
+  let data = [
     {
-      title: "Total Deposited",
+      title: parent === "lend" ? "Total Deposited" : "Total Borrowed",
       counts: `$${amountConversionWithComma(
-        Number(stats?.totalLend || 0) * marketPrice(markets, asset?.denom),
-        DOLLAR_DECIMALS
-      )}`,
-    },
-    {
-      title: "Total Borrowed",
-      counts: `$${amountConversionWithComma(
-        Number(stats?.totalBorrowed || 0) * marketPrice(markets, asset?.denom),
+        Number(
+          (parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0
+        ) * marketPrice(markets, asset?.denom),
         DOLLAR_DECIMALS
       )}`,
     },
@@ -52,23 +47,14 @@ const Details = ({ asset, poolId, markets, refreshBalance }) => {
       counts: "30.45%",
     },
     {
-      title: "Deposit APY",
+      title: parent === "lend" ? "Deposit APY" : "Borrow APY",
       counts: (
         <>
-          {Number(decimalConversion(stats?.lendApr) * 100).toFixed(
-            DOLLAR_DECIMALS
-          )}
-          %
-        </>
-      ),
-    },
-    {
-      title: "Borrow APY",
-      counts: (
-        <>
-          {Number(decimalConversion(stats?.borrowApr) * 100).toFixed(
-            DOLLAR_DECIMALS
-          )}
+          {Number(
+            decimalConversion(
+              parent === "lend" ? stats?.lendApr : stats?.borrowApr
+            ) * 100
+          ).toFixed(DOLLAR_DECIMALS)}
           %
         </>
       ),
@@ -126,6 +112,7 @@ Details.propTypes = {
       rates: PropTypes.string,
     })
   ),
+  parent: PropTypes.string,
   poolId: PropTypes.shape({
     low: PropTypes.number,
   }),
