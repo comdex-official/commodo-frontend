@@ -6,6 +6,9 @@ import Deposit from "./Deposit";
 import Borrow from "./Borrow";
 import History from "./History";
 import "./index.less";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
+import { decode } from "../../utils/string";
 
 const { TabPane } = Tabs;
 
@@ -31,6 +34,16 @@ const data = [
 ];
 
 const Myhome = () => {
+  const [activeKey, setActiveKey] = useState("1");
+  const location = useLocation();
+  const type = decode(location.hash);
+
+  useEffect(() => {
+    if (type && type === "borrow") {
+      setActiveKey("2");
+    }
+  }, []);
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -86,6 +99,8 @@ const Myhome = () => {
           <Tabs
             className="commodo-tabs"
             defaultActiveKey="1"
+            onChange={setActiveKey}
+            activeKey={activeKey}
           >
             <TabPane tab="Deposit" key="1">
               <Deposit />
