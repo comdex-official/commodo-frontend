@@ -124,7 +124,10 @@ const BorrowTab = ({
           />
         );
 
-        navigate("/myhome");
+        navigate({
+          pathname: "/myhome",
+          hash: "borrow",
+        });
       }
     );
   };
