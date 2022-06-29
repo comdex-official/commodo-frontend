@@ -1,12 +1,35 @@
 import * as PropTypes from "prop-types";
 import { Col, Row } from "../../../../components/common";
 import { connect } from "react-redux";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import Borrow from "./Borrow";
 import "./index.less";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { queryLendPool } from "../../../../services/lend/query";
+import { setPool } from "../../../../actions/lend";
 
-const BorrowDetails = () => {
+const BorrowDetails = ({ setPool }) => {
+  const [inProgress, setInProgress] = useState(false);
+
+  let { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      setInProgress(true);
+
+      queryLendPool(id, (error, result) => {
+        setInProgress(false);
+        if (error) {
+          message.error(error);
+          return;
+        }
+        setPool(result?.pool);
+      });
+    }
+  }, [id]);
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -18,21 +41,17 @@ const BorrowDetails = () => {
           </Link>
         </Col>
       </Row>
-      <Borrow />
+      <Borrow dataInProgress={inProgress} />
     </div>
   );
 };
 
 BorrowDetails.propTypes = {
-  lang: PropTypes.string.isRequired,
+  setPool: PropTypes.func.isRequired,
 };
 
-const stateToProps = (state) => {
-  return {
-    lang: state.language,
-  };
+const actionsToProps = {
+  setPool,
 };
 
-const actionsToProps = {};
-
-export default connect(stateToProps, actionsToProps)(BorrowDetails);
+export default connect(null, actionsToProps)(BorrowDetails);

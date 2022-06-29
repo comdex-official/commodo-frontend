@@ -38,7 +38,7 @@ const routes = [
     element: <SupplyDetails />,
   },
   {
-    path: "/borrow-details",
+    path: "/borrow-details/:id",
     element: <BorrowDetails />,
   },
   {

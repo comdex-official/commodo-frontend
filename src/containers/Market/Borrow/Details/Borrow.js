@@ -1,489 +1,481 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import { connect } from "react-redux";
-import { Button, List, Select, Input, Tooltip } from "antd";
+import { Button, List, Select, Input, Tooltip, message, Spin } from "antd";
 import "./index.less";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import {
+  amountConversion,
+  amountConversionWithComma,
+  denomConversion,
+  getAmount,
+  getDenomBalance,
+} from "../../../../utils/coin";
+import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
+import { ValidateInputNumber } from "../../../../config/_validation";
+import { signAndBroadcastTransaction } from "../../../../services/helper";
+import Long from "long";
+import { defaultFee } from "../../../../services/transaction";
+import Snack from "../../../../components/common/Snack";
+import variables from "../../../../utils/variables";
+import { comdex } from "../../../../config/network";
+import { DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../../constants/common";
+import CustomRow from "../../../../components/common/Asset/CustomRow";
+import CustomInput from "../../../../components/CustomInput";
+import AssetStats from "../../../../components/common/Asset/Stats";
+import Details from "../../../../components/common/Asset/Details";
+import { commaSeparator, marketPrice } from "../../../../utils/number";
 
 const { Option } = Select;
 
-const TooltipContent = (
-  <div className="token-details">
-    <div className="tokencard-col">
-      <div className="tokencard">
-        <div className="tokencard-icon">
-          <SvgIcon name="cmdx-icon" />
-        </div>
-        <p>Deposit CMDX</p>
-      </div>
-      <div className="tokencard with-shadow">
-        <div className="tokencard-icon">
-          <SvgIcon name="cmst-icon" />
-        </div>
-        <p>Borrow CMST</p>
-      </div>
-      <label>Token A</label>
-    </div>
-    <div className="middle-arrow">
-      <SvgIcon name="token-arrow" viewbox="0 0 159 80.387" />
-    </div>
-    <div className="tokencard-col">
-      <div className="tokencard with-shadow">
-        <div className="tokencard-icon">
-          <SvgIcon name="cmst-icon" />
-        </div>
-        <p>Deposit CMST</p>
-      </div>
-      <div className="tokencard">
-        <div className="tokencard-icon">
-          <SvgIcon name="osmosis-icon" />
-        </div>
-        <p>Borrow Osmo</p>
-      </div>
-      <label>Token B</label>
-    </div>
-  </div>
-);
+const BorrowTab = ({
+  lang,
+  dataInProgress,
+  pool,
+  assetMap,
+  balances,
+  address,
+  markets,
+}) => {
+  const [assetList, setAssetList] = useState();
+  const [collateralAssetId, setCollateralAssetId] = useState();
+  const [borrowAssetId, setBorrowAssetId] = useState();
+  const [amount, setAmount] = useState();
+  const [validationError, setValidationError] = useState();
+  const [inProgress, setInProgress] = useState(false);
+  const navigate = useNavigate();
 
-const BorrowTab = () => {
-  const data = [
-    {
-      title: "Total Borrowed",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Borrow APY",
-      counts: "12.33%",
-    },
-  ];
-  const data2 = [
-    {
-      title: "Total Borrowed",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Borrow APY",
-      counts: "13.33%",
-    },
-  ];
-  const data3 = [
-    {
-      title: "Total Borrowed",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Borrow APY",
-      counts: "12.76%",
-    },
-  ];
+  let collateralAssetDenom = assetMap[collateralAssetId]?.denom;
+  let borrowAssetDenom = assetMap[borrowAssetId]?.denom;
+  const firstBridgeAssetDenom = assetMap[pool?.firstBridgedAssetId]?.denom;
+
+  const availableBalance = getDenomBalance(balances, collateralAssetDenom) || 0;
+
+  useEffect(() => {
+    if (pool?.poolId) {
+      setAssetList([
+        assetMap[pool?.mainAssetId?.toNumber()],
+        assetMap[pool?.firstBridgedAssetId?.toNumber()],
+        assetMap[pool?.secondBridgedAssetId?.toNumber()],
+      ]);
+    }
+  }, [pool]);
+
+  const handleCollateralAssetChange = (value) => {
+    setCollateralAssetId(value);
+  };
+
+  const handleBorrowAssetChange = (value) => {
+    setBorrowAssetId(value);
+  };
+
+  const handleInputChange = (value) => {
+    value = toDecimals(value).toString().trim();
+
+    setAmount(value);
+    setValidationError(ValidateInputNumber(getAmount(value), availableBalance));
+  };
+
+  const handleClick = () => {
+    setInProgress(true);
+
+    signAndBroadcastTransaction(
+      {
+        message: {
+          typeUrl: "/comdex.lend.v1beta1.MsgBorrow",
+          value: {
+            borrower: address,
+            //TODO: update the values dynamically
+            lendId: Long.fromNumber(1),
+            pairId: Long.fromNumber(1),
+            isStableBorrow: false,
+            amountIn: {
+              amount: getAmount(amount),
+              denom: collateralAssetDenom,
+            },
+            amountOut: {
+              amount: getAmount(amount),
+              denom: collateralAssetDenom,
+            },
+          },
+        },
+        fee: defaultFee(),
+        memo: "",
+      },
+      address,
+      (error, result) => {
+        setInProgress(false);
+        setAmount(0);
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        if (result?.code) {
+          message.info(result?.rawLog);
+          return;
+        }
+
+        message.success(
+          <Snack
+            message={variables[lang].tx_success}
+            hash={result?.transactionHash}
+          />
+        );
+
+        navigate("/myhome");
+      }
+    );
+  };
+
+  const handleMaxClick = () => {
+    if (collateralAssetDenom === comdex.coinMinimalDenom) {
+      return Number(availableBalance) > DEFAULT_FEE
+        ? handleInputChange(amountConversion(availableBalance - DEFAULT_FEE))
+        : handleInputChange();
+    } else {
+      return handleInputChange(amountConversion(availableBalance));
+    }
+  };
+
+  const TooltipContent = (
+    <div className="token-details">
+      <div className="tokencard-col">
+        <div className="tokencard">
+          <div className="tokencard-icon">
+            <SvgIcon name="cmdx-icon" />
+          </div>
+          <p>Deposit {denomConversion(collateralAssetDenom)}</p>
+        </div>
+        <div className="tokencard with-shadow">
+          <div className="tokencard-icon">
+            <SvgIcon name="cmst-icon" />
+          </div>
+          <p>Borrow {denomConversion(firstBridgeAssetDenom)}</p>
+        </div>
+        <label>Token A</label>
+      </div>
+      <div className="middle-arrow">
+        <SvgIcon name="token-arrow" viewbox="0 0 159 80.387" />
+      </div>
+      <div className="tokencard-col">
+        <div className="tokencard with-shadow">
+          <div className="tokencard-icon">
+            <SvgIcon name="cmst-icon" />
+          </div>
+          <p>Deposit {denomConversion(firstBridgeAssetDenom)}</p>
+        </div>
+        <div className="tokencard">
+          <div className="tokencard-icon">
+            <SvgIcon name="osmosis-icon" />
+          </div>
+          <p>Borrow {denomConversion(borrowAssetDenom)}</p>
+        </div>
+        <label>Token B</label>
+      </div>
+    </div>
+  );
+
   return (
     <div className="details-wrapper">
-      <div className="details-left commodo-card">
-        <div className="assets-select-card mb-3">
-          <div className="assets-left">
-            <label className="left-label">
-              Collateral Asset <TooltipIcon text="" />
-            </label>
-            <div className="assets-select-wrapper">
-              <Select
-                className="assets-select"
-                dropdownClassName="asset-select-dropdown"
-                defaultValue="2"
-                placeholder={
-                  <div className="select-placeholder">
-                    <div className="circle-icon">
-                      <div className="circle-icon-inner" />
-                    </div>
-                    Select
-                  </div>
-                }
-                defaultActiveFirstOption={true}
-                suffixIcon={
-                  <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
-                }
-              >
-                <Option key="1">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="cmst-icon" />
+      {!dataInProgress ? (
+        <>
+          <div className="details-left commodo-card">
+            <CustomRow assetList={assetList} />
+            <div className="assets-select-card mb-3">
+              <div className="assets-left">
+                <label className="left-label">
+                  Collateral Asset <TooltipIcon text="" />
+                </label>
+                <div className="assets-select-wrapper">
+                  <Select
+                    className="assets-select"
+                    dropdownClassName="asset-select-dropdown"
+                    onChange={handleCollateralAssetChange}
+                    placeholder={
+                      <div className="select-placeholder">
+                        <div className="circle-icon">
+                          <div className="circle-icon-inner" />
+                        </div>
+                        Select
                       </div>
-                    </div>
-                    <div className="name">CMST</div>
+                    }
+                    defaultActiveFirstOption={true}
+                    suffixIcon={
+                      <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
+                    }
+                  >
+                    {assetList?.length > 0 &&
+                      assetList?.map((record) => {
+                        const item = record?.denom ? record?.denom : record;
+
+                        return (
+                          <Option key={item} value={record?.id?.toNumber()}>
+                            <div className="select-inner">
+                              <div className="svg-icon">
+                                <div className="svg-icon-inner">
+                                  <SvgIcon name={iconNameFromDenom(item)} />
+                                </div>
+                              </div>
+                              <div className="name">
+                                {denomConversion(item)}
+                              </div>
+                            </div>
+                          </Option>
+                        );
+                      })}
+                  </Select>
+                </div>
+              </div>
+              <div className="assets-right">
+                <div className="label-right">
+                  Available
+                  <span className="ml-1">
+                    {amountConversionWithComma(
+                      getDenomBalance(balances, collateralAssetDenom) || 0
+                    )}{" "}
+                    {denomConversion(collateralAssetDenom)}
+                  </span>
+                  <div className="max-half">
+                    <Button className="active" onClick={handleMaxClick}>
+                      Max
+                    </Button>
                   </div>
-                </Option>
-                <Option key="2">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="cmdx-icon" />
-                      </div>
-                    </div>
-                    <div className="name">CMDX</div>
+                </div>
+                <div>
+                  <div className="input-select">
+                    <CustomInput
+                      value={amount}
+                      onChange={(event) =>
+                        handleInputChange(event.target.value)
+                      }
+                      validationError={validationError}
+                    />
                   </div>
-                </Option>
-                <Option key="3">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="atom-icon" />
-                      </div>
-                    </div>
-                    <div className="name">Atom</div>
-                  </div>
-                </Option>
-                <Option key="4">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="osmosis-icon" />
-                      </div>
-                    </div>
-                    <div className="name">OSMO</div>
-                  </div>
-                </Option>
-              </Select>
-            </div>
-          </div>
-          <div className="assets-right">
-            <div className="label-right">
-              Available
-              <span className="ml-1">142 CMST</span>
-              <div className="max-half">
-                <Button className="active">Max</Button>
+                  <small>
+                    $
+                    {commaSeparator(
+                      Number(amount) *
+                        marketPrice(markets, collateralAssetDenom),
+                      DOLLAR_DECIMALS
+                    )}
+                  </small>
+                </div>
               </div>
             </div>
-            <div>
-              <div className="input-select">
-                <Input placeholder="" value="23.00" />
+            <div className="assets-select-card mb-2">
+              <div className="assets-left">
+                <label className="left-label">
+                  Borrow Asset <TooltipIcon text="" />
+                </label>
+                <div className="assets-select-wrapper">
+                  <Select
+                    className="assets-select"
+                    dropdownClassName="asset-select-dropdown"
+                    onChange={handleBorrowAssetChange}
+                    placeholder={
+                      <div className="select-placeholder">
+                        <div className="circle-icon">
+                          <div className="circle-icon-inner" />
+                        </div>
+                        Select
+                      </div>
+                    }
+                    defaultActiveFirstOption={true}
+                    suffixIcon={
+                      <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
+                    }
+                  >
+                    {assetList?.length > 0 &&
+                      assetList?.map((record) => {
+                        const item = record?.denom ? record?.denom : record;
+
+                        return (
+                          <Option key={item} value={record?.id?.toNumber()}>
+                            <div className="select-inner">
+                              <div className="svg-icon">
+                                <div className="svg-icon-inner">
+                                  <SvgIcon name={iconNameFromDenom(item)} />
+                                </div>
+                              </div>
+                              <div className="name">
+                                {denomConversion(item)}
+                              </div>
+                            </div>
+                          </Option>
+                        );
+                      })}
+                  </Select>
+                </div>
               </div>
-              <small>$120.00</small>
-            </div>
-          </div>
-        </div>
-        <div className="assets-select-card mb-2">
-          <div className="assets-left">
-            <label className="left-label">
-              Borrow Asset <TooltipIcon text="" />
-            </label>
-            <div className="assets-select-wrapper">
-              <Select
-                className="assets-select"
-                dropdownClassName="asset-select-dropdown"
-                defaultValue="4"
-                placeholder={
-                  <div className="select-placeholder">
-                    <div className="circle-icon">
-                      <div className="circle-icon-inner" />
-                    </div>
-                    Select
+              <div className="assets-right">
+                <div>
+                  <div className="input-select">
+                    <Input placeholder="" value="23.00" disabled />
                   </div>
-                }
-                defaultActiveFirstOption={true}
-                suffixIcon={
-                  <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
-                }
-              >
-                <Option key="1">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="cmst-icon" />
-                      </div>
-                    </div>
-                    <div className="name">CMST</div>
-                  </div>
-                </Option>
-                <Option key="2">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="cmdx-icon" />
-                      </div>
-                    </div>
-                    <div className="name">CMDX</div>
-                  </div>
-                </Option>
-                <Option key="3">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="atom-icon" />
-                      </div>
-                    </div>
-                    <div className="name">Atom</div>
-                  </div>
-                </Option>
-                <Option key="4">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="osmosis-icon" />
-                      </div>
-                    </div>
-                    <div className="name">OSMO</div>
-                  </div>
-                </Option>
-              </Select>
-            </div>
-          </div>
-          <div className="assets-right">
-            <div>
-              <div className="input-select">
-                <Input placeholder="" value="23.00" />
+                  <small>$120.00</small>
+                </div>
               </div>
-              <small>$120.00</small>
             </div>
-          </div>
-        </div>
-        <Row>
-          <Col>
-            <Tooltip
-              placement="right"
-              color="#173629"
-              title={TooltipContent}
-              overlayClassName="token-overlay"
-            >
-              <div className="borrowbottom-cards">
-                <div className="cards">
-                  <div className="cards-inner">
-                    <div className="cards-colum">
-                      <div className="inner-icon">
-                        <SvgIcon name="osmosis-icon" />
+            <Row>
+              <Col>
+                <Tooltip
+                  placement="right"
+                  color="#173629"
+                  title={TooltipContent}
+                  overlayClassName="token-overlay"
+                >
+                  <div className="borrowbottom-cards">
+                    <div className="cards">
+                      <div className="cards-inner">
+                        <div className="cards-colum">
+                          <div className="inner-icon">
+                            <SvgIcon
+                              name={iconNameFromDenom(collateralAssetDenom)}
+                            />
+                          </div>
+                          <p>{denomConversion(collateralAssetDenom)}</p>
+                        </div>
+                        <SvgIcon
+                          className="longarrow-icon"
+                          name="long-arrow"
+                          viewbox="0 0 64 5.774"
+                        />
+                        <div className="cards-colum">
+                          <div className="inner-icon">
+                            <SvgIcon
+                              name={iconNameFromDenom(firstBridgeAssetDenom)}
+                            />
+                          </div>
+                          <p>{denomConversion(firstBridgeAssetDenom)}</p>
+                        </div>
                       </div>
-                      <p>CMDX</p>
                     </div>
                     <SvgIcon
-                      className="longarrow-icon"
+                      className="longarrow-icon-middle"
                       name="long-arrow"
                       viewbox="0 0 64 5.774"
                     />
-                    <div className="cards-colum">
-                      <div className="inner-icon">
-                        <SvgIcon name="cmst-icon" />
+                    <div className="cards">
+                      <div className="cards-inner">
+                        <div className="cards-colum">
+                          <div className="inner-icon">
+                            <SvgIcon
+                              name={iconNameFromDenom(firstBridgeAssetDenom)}
+                            />
+                          </div>
+                          <p>{denomConversion(firstBridgeAssetDenom)}</p>
+                        </div>
+                        <SvgIcon
+                          className="longarrow-icon"
+                          name="long-arrow"
+                          viewbox="0 0 64 5.774"
+                        />
+                        <div className="cards-colum">
+                          <div className="inner-icon">
+                            <SvgIcon
+                              name={iconNameFromDenom(borrowAssetDenom)}
+                            />
+                          </div>
+                          <p>{denomConversion(borrowAssetDenom)}</p>
+                        </div>
                       </div>
-                      <p>CMST</p>
                     </div>
                   </div>
-                </div>
-                <SvgIcon
-                  className="longarrow-icon-middle"
-                  name="long-arrow"
-                  viewbox="0 0 64 5.774"
+                </Tooltip>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm="12" className="mt-3 mx-auto card-bottom-details">
+                <AssetStats assetId={borrowAssetId} />
+              </Col>
+            </Row>
+            <div className="assets-form-btn">
+              <Button
+                type="primary"
+                className="btn-filled"
+                loading={inProgress}
+                disabled={!Number(amount) || inProgress || !collateralAssetId}
+                onClick={handleClick}
+              >
+                Borrow
+              </Button>
+            </div>
+          </div>
+          <div className="details-right">
+            <div className="commodo-card">
+              <Details
+                asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
+                poolId={pool?.poolId}
+                parent="borrow"
+              />
+              <div className="mt-5">
+                <Details
+                  asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
+                  poolId={pool?.poolId}
+                  parent="borrow"
                 />
-                <div className="cards">
-                  <div className="cards-inner">
-                    <div className="cards-colum">
-                      <div className="inner-icon">
-                        <SvgIcon name="cmst-icon" />
-                      </div>
-                      <p>CMST</p>
-                    </div>
-                    <SvgIcon
-                      className="longarrow-icon"
-                      name="long-arrow"
-                      viewbox="0 0 64 5.774"
-                    />
-                    <div className="cards-colum">
-                      <div className="inner-icon">
-                        <SvgIcon name="osmosis-icon" />
-                      </div>
-                      <p>OSMO</p>
-                    </div>
-                  </div>
-                </div>
               </div>
-            </Tooltip>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-            <Row className="mt-2">
-              <Col>
-                <label>Current LTV</label>
-              </Col>
-              <Col className="text-right">35%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>MAx LTV</label>
-              </Col>
-              <Col className="text-right">40%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Borrow </label>
-              </Col>
-              <Col className="text-right">3.80%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Threshold</label>
-              </Col>
-              <Col className="text-right">10%</Col>
-            </Row>
-          </Col>
-        </Row>
-        <div className="assets-form-btn">
-          <Button type="primary" className="btn-filled">
-            Borrow
-          </Button>
-        </div>
-      </div>
-      <div className="details-right">
-        <div className="commodo-card">
-          <div className="card-head">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="cmst-icon" />
-                </div>
-                CMST
-              </div>
-              {/* <span className="percent-badge">
-                +6.18 <SvgIcon name="commodo-icon" />
-              </span> */}
             </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
+            <div className="commodo-card">
+              <Details
+                asset={assetMap[pool?.mainAssetId?.toNumber()]}
+                poolId={pool?.poolId}
+                parent="borrow"
+              />
             </div>
           </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
-          <div className="card-head mt-5">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="atom-icon" />
-                </div>
-                ATOM
-              </div>
-              {/* <span className="percent-badge">
-                +6.18 <SvgIcon name="commodo-icon" />
-              </span> */}
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
-          </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data2}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
+        </>
+      ) : (
+        <div className="loader">
+          <Spin />
         </div>
-        <div className="commodo-card">
-          <div className="card-head">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="cmdx-icon" />
-                </div>
-                CMDX
-              </div>
-              {/* <span className="percent-badge">
-                +6.18 <SvgIcon name="commodo-icon" />
-              </span> */}
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
-          </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data3}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />{" "}
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
-        </div>
-      </div>
+      )}
     </div>
   );
 };
 
 BorrowTab.propTypes = {
+  dataInProgress: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
+  address: PropTypes.string,
+  assetMap: PropTypes.object,
+  balances: PropTypes.arrayOf(
+    PropTypes.shape({
+      denom: PropTypes.string.isRequired,
+      amount: PropTypes.string,
+    })
+  ),
+  markets: PropTypes.arrayOf(
+    PropTypes.shape({
+      rates: PropTypes.string,
+    })
+  ),
+  pool: PropTypes.shape({
+    poolId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    mainAssetId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    firstBridgedAssetId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    secondBridgedAssetId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+  }),
 };
 
 const stateToProps = (state) => {
   return {
+    address: state.account.address,
+    pool: state.lend.pool._,
+    assetMap: state.asset._.map,
+    balances: state.account.balances.list,
     lang: state.language,
+    markets: state.oracle.market.list,
   };
 };
 
