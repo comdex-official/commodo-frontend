@@ -3,38 +3,93 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import { connect } from "react-redux";
-import { Button, List } from "antd";
+import {Button, List, message} from "antd";
 import "./index.less";
 import VoteNowModal from "../VoteNowModal";
 import { Link } from "react-router-dom";
+import {useParams} from "react-router";
+import {useEffect, useState} from "react";
+import {queryProposal} from "../../../services/govern/query";
+import {unixToGMTTime} from "../../../utils/date";
+import {DOLLAR_DECIMALS} from "../../../constants/common";
+import {proposalStatusMap} from "../../../utils/string";
 
-const data = [
-  {
-    title: "Voting Starts",
-    counts: "2022-04-08 15:54:23",
-  },
-  {
-    title: "Voting Ends",
-    counts: "2022-04-10 15:54:23",
-  },
-  {
-    title: "Duration",
-    counts: "3 Days",
-  },
-  {
-    title: "Proposer",
-    counts: "comdex@123t7...123",
-  },
-];
+const GovernDetails = ({address}) => {
+  const { id } = useParams();
+  const [proposal, setProposal] = useState();
+  const [getVotes, setGetVotes] = useState({
+    yes: 0,
+    no: 0,
+    veto: 0,
+    abstain: 0
+  });
 
-const dataVote = [
-  {
-    title: "Total Value",
-    counts: "24,901.25 CMST",
-  },
-];
 
-const GovernDetails = () => {
+  const data = [
+    {
+      title: "Voting Starts",
+      counts: unixToGMTTime(proposal?.votingStartTime?.seconds) || "--/--/--",
+    },
+    {
+      title: "Voting Ends",
+      counts: unixToGMTTime(proposal?.votingEndTime?.seconds) || "--/--/--",
+    },
+    {
+      title: "Duration",
+      counts: "3 Days",
+    },
+    {
+      title: "Proposer",
+      counts: "comdex@123t7...123",
+    },
+  ];
+
+  const dataVote = [
+    {
+      title: "Total Value",
+      counts: "24,901.25 CMST",
+    },
+  ];
+
+  useEffect(()=>{
+    if(id){
+      queryProposal(id, (error, result)=>{
+        if(error){
+          message.error(error);
+          return;
+        }
+
+        setProposal(result?.proposal)
+      })
+    }
+  },[id]);
+
+
+  useEffect(() => {
+    calculateVotes()
+  }, [address, id, proposal])
+
+  const calculateVotes = () => {
+    let value = proposal?.finalTallyResult;
+    let yes = Number(value?.yes);
+    let no = Number(value?.no);
+    let veto = Number(value?.noWithVeto);
+    let abstain = Number(value?.abstain);
+    let totalValue = yes + no + abstain + veto;
+
+    yes = Number((yes / totalValue) * 100).toFixed(DOLLAR_DECIMALS)
+    no = Number((no / totalValue) * 100).toFixed(DOLLAR_DECIMALS)
+    veto = Number((veto / totalValue) * 100).toFixed(DOLLAR_DECIMALS)
+    abstain = Number((abstain / totalValue) * 100).toFixed(DOLLAR_DECIMALS)
+    setGetVotes({
+      ...getVotes,
+      yes: yes,
+      no: no,
+      veto: veto,
+      abstain: abstain
+    })
+  }
+
   const Options = {
     chart: {
       type: "pie",
@@ -84,28 +139,30 @@ const GovernDetails = () => {
         data: [
           {
             name: "Yes",
-            y: 30,
+            y: Number(getVotes?.yes || 0),
             color: "#52B788",
           },
           {
             name: "No",
-            y: 30,
+            y: Number(getVotes?.no || 0),
             color: "#F76872",
           },
           {
             name: "noWithVeto",
-            y: 20,
+            y: Number(getVotes?.veto || 0),
             color: "#AACBB9",
           },
           {
             name: "Abstain",
-            y: 20,
+            y: Number(getVotes?.abstain || 0),
             color: "#6A7B6C",
           },
         ],
       },
     ],
   };
+
+  console.log('the proposal', proposal)
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -136,8 +193,8 @@ const GovernDetails = () => {
                 renderItem={(item) => (
                   <List.Item>
                     <div>
-                      <p>{item.title}</p>
-                      <h3>{item.counts}</h3>
+                      <p>{item?.title}</p>
+                      <h3>{item?.counts}</h3>
                     </div>
                   </List.Item>
                 )}
@@ -151,11 +208,11 @@ const GovernDetails = () => {
           <div className="commodo-card govern-card2 h-100">
             <Row>
               <Col>
-                <h3>#2</h3>
+                <h3>#{proposal?.proposalId?.toNumber()}</h3>
               </Col>
               <Col className="text-right">
                 <Button type="primary" className="btn-filled">
-                  Passed
+                  {proposalStatusMap[proposal?.status]}
                 </Button>
               </Col>
             </Row>
@@ -209,28 +266,28 @@ const GovernDetails = () => {
                         <SvgIcon name="rectangle" viewbox="0 0 34 34" />
                         <div>
                           <label>Yes</label>
-                          <p>51.42%</p>
+                          <p>{Number(getVotes?.yes || "0.00")}%</p>
                         </div>
                       </li>
                       <li>
                         <SvgIcon name="rectangle" viewbox="0 0 34 34" />
                         <div>
                           <label>No</label>
-                          <p>21.42%</p>
+                          <p>{Number(getVotes?.no || "0.00")}%</p>
                         </div>
                       </li>
                       <li>
                         <SvgIcon name="rectangle" viewbox="0 0 34 34" />
                         <div>
                           <label>noWithVeto </label>
-                          <p>0.00%</p>
+                          <p>{Number(getVotes?.veto || "0.00")}%</p>
                         </div>
                       </li>
                       <li>
                         <SvgIcon name="rectangle" viewbox="0 0 34 34" />
                         <div>
                           <label>Abstain</label>
-                          <p>17.70%</p>
+                          <p>{Number(getVotes?.abstain || "0.00")}%</p>
                         </div>
                       </li>
                     </ul>
@@ -247,11 +304,14 @@ const GovernDetails = () => {
 
 GovernDetails.propTypes = {
   lang: PropTypes.string.isRequired,
+  address: PropTypes.string.isRequired,
+
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
+    address: state.account.address,
   };
 };
 

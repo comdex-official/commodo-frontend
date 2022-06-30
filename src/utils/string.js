@@ -1,7 +1,5 @@
 import { sha256 } from "@cosmjs/crypto";
 import { comdex } from "../config/network";
-import { denomConversion } from "./coin";
-import { calculatePoolShare } from "./calculations";
 import { ibcDenoms } from "../config/network";
 
 const encoding = require("@cosmjs/encoding");
@@ -112,3 +110,12 @@ export const uniqueDenoms = (list, type) => {
     ),
   ];
 };
+
+export const proposalStatusMap = {
+  0: "Nil",
+  1: "DepositPeriod",
+  2: "VotingPeriod",
+  3: "Passed",
+  4: "Rejected",
+  5: "Failed",
+}

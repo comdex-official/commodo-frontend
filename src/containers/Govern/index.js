@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 import { queryAllProposals } from "../../services/govern/query";
 import { useEffect, useState } from "react";
 import NoData from "../../components/NoData";
-import moment from "moment";
+import {unixToGMTTime} from "../../utils/date";
 
 const { Option } = Select;
 
@@ -48,13 +48,6 @@ const Govern = () => {
     });
   };
 
-  const unixToGMTTime = (time) => {
-    var timestamp = moment.unix(time);
-    timestamp = timestamp.format("YYYY-MM-DD HH:mm:ss")
-    return timestamp;
-  }
-
-  console.log('proposals', proposals)
   return (
     <div className="app-content-wrapper">
       {inProgress ? (
@@ -125,7 +118,7 @@ const Govern = () => {
                       return (
                         <div
                           className="governlist-row"
-                          onClick={() => navigate("/govern-details")}
+                          onClick={() => navigate(`/govern-details/${item?.proposalId?.toNumber()}`)}
                         >
                           <div className="left-section">
                           <h3>#{item?.proposalId?.toNumber()}</h3>
