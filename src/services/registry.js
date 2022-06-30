@@ -29,6 +29,7 @@ import {
 
 import { Registry } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes } from "@cosmjs/stargate";
+import {MsgVote} from "cosmjs-types/cosmos/gov/v1beta1/tx";
 
 export const myRegistry = new Registry([
   ...defaultRegistryTypes,
@@ -54,4 +55,5 @@ export const myRegistry = new Registry([
   ["/comdex.lend.v1beta1.MsgDepositBorrow", MsgDepositBorrow],
   ["/comdex.lend.v1beta1.MsgDraw", MsgDraw],
   ["/comdex.lend.v1beta1.MsgCloseBorrow", MsgCloseBorrow],
+  ["/cosmos.gov.v1beta1.MsgVote", MsgVote],
 ]);

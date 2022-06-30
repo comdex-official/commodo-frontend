@@ -233,7 +233,7 @@ const GovernDetails = ({address}) => {
           <div className="commodo-card govern-card2">
             <Row>
               <Col className="text-right">
-                <VoteNowModal />
+                <VoteNowModal proposal={proposal}/>
               </Col>
             </Row>
             <Row>
