@@ -40,11 +40,22 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
     },
     {
       title: "Available",
-      counts: "$1,234.20",
+      counts: `$${amountConversionWithComma(
+        Number(Number(stats?.totalLend) - Number(stats?.totalBorrowed) || 0) *
+          marketPrice(markets, asset?.denom),
+        DOLLAR_DECIMALS
+      )}`,
     },
     {
       title: "Utilization",
-      counts: "30.45%",
+      counts: (
+        <>
+          {Number(decimalConversion(stats?.utilisationRatio) * 100).toFixed(
+            DOLLAR_DECIMALS
+          )}
+          %
+        </>
+      ),
     },
     {
       title: parent === "lend" ? "Deposit APY" : "Borrow APY",
