@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import { queryAllProposals } from "../../services/govern/query";
 import { useEffect, useState } from "react";
 import NoData from "../../components/NoData";
+import moment from "moment";
 
 const { Option } = Select;
 
@@ -42,10 +43,16 @@ const Govern = () => {
         message.error(error);
         return;
       }
-
-      setProposals(result?.proposals);
+      
+      setProposals(result?.proposals?.reverse());
     });
   };
+
+  const unixToGMTTime = (time) => {
+    var timestamp = moment.unix(time);
+    timestamp = timestamp.format("YYYY-MM-DD HH:mm:ss")
+    return timestamp;
+  }
 
   console.log('proposals', proposals)
   return (
@@ -88,9 +95,6 @@ const Govern = () => {
             <Col>
               <div className="commodo-card govern-card">
                 <div className="governcard-head">
-                  <Button type="primary" className="btn-filled">
-                    New Proposal
-                  </Button>
                   <a
                     aria-label="Twitter"
                     target="_blank"
@@ -124,25 +128,19 @@ const Govern = () => {
                           onClick={() => navigate("/govern-details")}
                         >
                           <div className="left-section">
-                            <h3>Increasing MaxValidator to 100</h3>
-                            <p>
-                              Increasing MaxValidator from 75 to 100. This will
-                              allow for new validators to enter the set and
-                              further decentralise the network. With the current
-                              number of validators the barrier to becoming
-                              active is too high (40000 CMDX) so an increase to
-                              100 validators would be optimal.
-                            </p>
+                          <h3>#{item?.proposalId?.toNumber()}</h3>
+                            <h3>{item?.title}</h3>
+                            <p>{item?.description} </p>
                           </div>
                           <div className="right-section">
                             <Row>
                               <Col sm="6">
                                 <label>Vote Starts :</label>
-                                <p>2022-04-08 15:54:23</p>
+                                <p>{unixToGMTTime(item?.votingStartTime?.seconds) || "--/--/--"}</p>
                               </Col>
                               <Col sm="6">
                                 <label>Voting Ends :</label>
-                                <p>2022-04-10 15:54:23</p>
+                                <p>{unixToGMTTime(item?.votingEndTime?.seconds) || "--/--/--"}</p>
                               </Col>
                               <Col sm="6">
                                 <label>Duration : </label>
