@@ -49,6 +49,9 @@ const Deposit = ({ address }) => {
           });
         });
       }
+      else{
+        setInProgress(false);
+      }
     });
   };
   const columns = [
