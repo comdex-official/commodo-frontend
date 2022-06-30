@@ -8,6 +8,7 @@ import variables from "../../../utils/variables";
 import Snack from "../../../components/common/Snack";
 import { defaultFee } from "../../../services/transaction";
 import { signAndBroadcastTransaction } from "../../../services/helper";
+import Long from "long";
 
 const VoteNowModal = ({ address, proposal }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -27,7 +28,7 @@ const VoteNowModal = ({ address, proposal }) => {
           typeUrl: "/cosmos.gov.v1beta1.MsgVote",
           value: {
             option: userVote,
-            proposalId: proposal?.proposalId,
+            proposal_id: Long.fromNumber(proposal?.proposal_id),
             voter: address,
           },
         },

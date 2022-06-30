@@ -3,36 +3,36 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import { connect } from "react-redux";
-import {Button, List, message} from "antd";
+import { Button, List, message } from "antd";
 import "./index.less";
 import VoteNowModal from "../VoteNowModal";
 import { Link } from "react-router-dom";
-import {useParams} from "react-router";
-import {useEffect, useState} from "react";
-import {queryProposal} from "../../../services/govern/query";
-import {unixToGMTTime} from "../../../utils/date";
-import {DOLLAR_DECIMALS} from "../../../constants/common";
-import {proposalStatusMap} from "../../../utils/string";
+import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { queryProposal, queryUserVote } from "../../../services/govern/query";
+import { formatTime } from "../../../utils/date";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
+import { proposalStatusMap } from "../../../utils/string";
 
-const GovernDetails = ({address}) => {
+const GovernDetails = ({ address }) => {
   const { id } = useParams();
   const [proposal, setProposal] = useState();
+  const [votedOption, setVotedOption] = useState();
   const [getVotes, setGetVotes] = useState({
     yes: 0,
     no: 0,
     veto: 0,
-    abstain: 0
+    abstain: 0,
   });
-
 
   const data = [
     {
       title: "Voting Starts",
-      counts: unixToGMTTime(proposal?.votingStartTime?.seconds) || "--/--/--",
+      counts: formatTime(proposal?.voting_start_time) || "--/--/--",
     },
     {
       title: "Voting Ends",
-      counts: unixToGMTTime(proposal?.votingEndTime?.seconds) || "--/--/--",
+      counts: formatTime(proposal?.voting_end_time) || "--/--/--",
     },
     {
       title: "Duration",
@@ -51,23 +51,32 @@ const GovernDetails = ({address}) => {
     },
   ];
 
-  useEffect(()=>{
-    if(id){
-      queryProposal(id, (error, result)=>{
-        if(error){
+  useEffect(() => {
+    if (id) {
+      queryProposal(id, (error, result) => {
+        if (error) {
           message.error(error);
           return;
         }
 
-        setProposal(result?.proposal)
-      })
+        setProposal(result?.proposal);
+      });
     }
-  },[id]);
-
+  }, [id]);
 
   useEffect(() => {
-    calculateVotes()
-  }, [address, id, proposal])
+    if (proposal?.proposalId) {
+      calculateVotes();
+      queryUserVote(address, proposal?.proposalId, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setVotedOption(result?.vote);
+      });
+    }
+  }, [address, id, proposal]);
 
   const calculateVotes = () => {
     let value = proposal?.finalTallyResult;
@@ -77,18 +86,18 @@ const GovernDetails = ({address}) => {
     let abstain = Number(value?.abstain);
     let totalValue = yes + no + abstain + veto;
 
-    yes = Number((yes / totalValue) * 100).toFixed(DOLLAR_DECIMALS)
-    no = Number((no / totalValue) * 100).toFixed(DOLLAR_DECIMALS)
-    veto = Number((veto / totalValue) * 100).toFixed(DOLLAR_DECIMALS)
-    abstain = Number((abstain / totalValue) * 100).toFixed(DOLLAR_DECIMALS)
+    yes = Number((yes / totalValue) * 100).toFixed(DOLLAR_DECIMALS);
+    no = Number((no / totalValue) * 100).toFixed(DOLLAR_DECIMALS);
+    veto = Number((veto / totalValue) * 100).toFixed(DOLLAR_DECIMALS);
+    abstain = Number((abstain / totalValue) * 100).toFixed(DOLLAR_DECIMALS);
     setGetVotes({
       ...getVotes,
       yes: yes,
       no: no,
       veto: veto,
-      abstain: abstain
-    })
-  }
+      abstain: abstain,
+    });
+  };
 
   const Options = {
     chart: {
@@ -162,7 +171,7 @@ const GovernDetails = ({address}) => {
     ],
   };
 
-  console.log('the proposal', proposal)
+  console.log("the proposal", proposal);
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -233,7 +242,7 @@ const GovernDetails = ({address}) => {
           <div className="commodo-card govern-card2">
             <Row>
               <Col className="text-right">
-                <VoteNowModal proposal={proposal}/>
+                <VoteNowModal proposal={proposal} />
               </Col>
             </Row>
             <Row>
@@ -305,7 +314,6 @@ const GovernDetails = ({address}) => {
 GovernDetails.propTypes = {
   lang: PropTypes.string.isRequired,
   address: PropTypes.string.isRequired,
-
 };
 
 const stateToProps = (state) => {

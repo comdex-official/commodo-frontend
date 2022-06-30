@@ -112,10 +112,10 @@ export const uniqueDenoms = (list, type) => {
 };
 
 export const proposalStatusMap = {
-  0: "Nil",
-  1: "DepositPeriod",
-  2: "VotingPeriod",
-  3: "Passed",
-  4: "Rejected",
-  5: "Failed",
-}
+  PROPOSAL_STATUS_UNSPECIFIED: "Nil",
+  PROPOSAL_STATUS_DEPOSIT_PERIOD: "DepositPeriod",
+  PROPOSAL_STATUS_VOTING_PERIOD: "VotingPeriod",
+  PROPOSAL_STATUS_PASSED: "Passed",
+  PROPOSAL_STATUS_REJECTED: "Rejected",
+  PROPOSAL_STATUS_FAILED: "Failed",
+};
