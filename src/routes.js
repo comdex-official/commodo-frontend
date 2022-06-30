@@ -54,7 +54,7 @@ const routes = [
     element: <Govern />,
   },
   {
-    path: "/govern-details",
+    path: "/govern-details/:id",
     element: <GovernDetails />,
   },
   {
