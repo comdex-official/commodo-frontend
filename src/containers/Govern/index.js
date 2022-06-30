@@ -7,8 +7,7 @@ import { useNavigate } from "react-router";
 import { fetchRestProposals } from "../../services/govern/query";
 import { useEffect, useState } from "react";
 import NoData from "../../components/NoData";
-import { formatTime } from "../../utils/date";
-import moment from "moment";
+import {formatTime, getDuration} from "../../utils/date";
 
 const { Option } = Select;
 
@@ -49,10 +48,6 @@ const Govern = () => {
       setProposals(result?.proposals?.reverse());
       setAllProposals(result?.proposals);
     });
-  };
-
-  const getDuration = (end, start) => {
-    return moment(end).diff(moment(start), "days"); // 1
   };
 
   const filterAllProposal = (value) => {

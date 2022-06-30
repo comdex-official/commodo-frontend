@@ -28,7 +28,7 @@ const VoteNowModal = ({ address, proposal }) => {
           typeUrl: "/cosmos.gov.v1beta1.MsgVote",
           value: {
             option: userVote,
-            proposal_id: Long.fromNumber(proposal?.proposal_id),
+            proposalId: Long.fromNumber(proposal?.proposal_id),
             voter: address,
           },
         },
@@ -70,7 +70,7 @@ const VoteNowModal = ({ address, proposal }) => {
         className="btn-filled mb-n4"
         onClick={showModal}
         loading={inProgress}
-        disabled={proposal?.status != 2}
+        disabled={proposal?.status != "PROPOSAL_STATUS_VOTING_PERIOD"}
       >
         Vote Now
       </Button>
@@ -89,7 +89,9 @@ const VoteNowModal = ({ address, proposal }) => {
           <Row>
             <Col sm="12">
               <h3>Your Vote</h3>
-              <p>#2 Lorem Ipsum diote Lorem Ipsum diote Lorem Ipsum diote</p>
+              <p>
+                #{proposal?.proposal_id} {proposal?.content?.title}
+              </p>
               <Radio.Group
                 name="radiogroup"
                 onChange={(e) => {

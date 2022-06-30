@@ -9,8 +9,11 @@ import VoteNowModal from "../VoteNowModal";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import { queryProposal, queryUserVote } from "../../../services/govern/query";
-import { formatTime } from "../../../utils/date";
+import {
+  fetchRestProposal,
+  queryUserVote,
+} from "../../../services/govern/query";
+import { formatTime, getDuration } from "../../../utils/date";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { proposalStatusMap } from "../../../utils/string";
 
@@ -36,7 +39,10 @@ const GovernDetails = ({ address }) => {
     },
     {
       title: "Duration",
-      counts: "3 Days",
+      counts: `${
+        getDuration(proposal?.voting_end_time, proposal?.voting_start_time) || 0
+      }
+      Days`,
     },
     {
       title: "Proposer",
@@ -53,7 +59,7 @@ const GovernDetails = ({ address }) => {
 
   useEffect(() => {
     if (id) {
-      queryProposal(id, (error, result) => {
+      fetchRestProposal(id, (error, result) => {
         if (error) {
           message.error(error);
           return;
@@ -65,11 +71,10 @@ const GovernDetails = ({ address }) => {
   }, [id]);
 
   useEffect(() => {
-    if (proposal?.proposalId) {
+    if (proposal?.proposal_id) {
       calculateVotes();
-      queryUserVote(address, proposal?.proposalId, (error, result) => {
+      queryUserVote(address, proposal?.proposal_id, (error, result) => {
         if (error) {
-          message.error(error);
           return;
         }
 
@@ -79,10 +84,10 @@ const GovernDetails = ({ address }) => {
   }, [address, id, proposal]);
 
   const calculateVotes = () => {
-    let value = proposal?.finalTallyResult;
+    let value = proposal?.final_tally_result;
     let yes = Number(value?.yes);
     let no = Number(value?.no);
-    let veto = Number(value?.noWithVeto);
+    let veto = Number(value?.no_with_veto);
     let abstain = Number(value?.abstain);
     let totalValue = yes + no + abstain + veto;
 
@@ -171,7 +176,6 @@ const GovernDetails = ({ address }) => {
     ],
   };
 
-  console.log("the proposal", proposal);
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -217,7 +221,7 @@ const GovernDetails = ({ address }) => {
           <div className="commodo-card govern-card2 h-100">
             <Row>
               <Col>
-                <h3>#{proposal?.proposalId?.toNumber()}</h3>
+                <h3>#{proposal?.proposal_id}</h3>
               </Col>
               <Col className="text-right">
                 <Button type="primary" className="btn-filled">
@@ -227,13 +231,8 @@ const GovernDetails = ({ address }) => {
             </Row>
             <Row>
               <Col>
-                <h2>Increasing MaxValidator to 100</h2>
-                <p>
-                  adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                  dolore magna aliqua. Ut enim ad minim veniam, adipiscing elit,
-                  sed do eiusmod tempor incididunt ut labore et dolore magna
-                  aliqua. Ut enim ad minim veniam,{" "}
-                </p>
+                <h3>{proposal?.content?.title}</h3>
+                <p>{proposal?.content?.description} </p>
               </Col>
             </Row>
           </div>

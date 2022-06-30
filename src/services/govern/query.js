@@ -54,7 +54,7 @@ export const queryUserVote = (address, proposalId, callback) => {
     const queryService = new QueryClientImpl(client);
 
     queryService
-      .Vote({ proposalId: proposalId, voter: address })
+      .Vote({ proposalId: Long.fromNumber(proposalId), voter: address })
       .then((result) => {
         callback(null, result);
       })
@@ -67,6 +67,17 @@ export const queryUserVote = (address, proposalId, callback) => {
 export const fetchRestProposals = (callback) => {
   axios
     .get(`${comdex?.rest}/cosmos/gov/v1beta1/proposals`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
+
+export const fetchRestProposal = (id, callback) => {
+  axios
+    .get(`${comdex?.rest}/cosmos/gov/v1beta1/proposals/${id}`)
     .then((result) => {
       callback(null, result?.data);
     })
