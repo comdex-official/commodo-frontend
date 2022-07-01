@@ -7,7 +7,10 @@ import { useNavigate } from "react-router";
 import { fetchRestProposals } from "../../services/govern/query";
 import { useEffect, useState } from "react";
 import NoData from "../../components/NoData";
-import {formatTime, getDuration} from "../../utils/date";
+import { formatTime, getDuration } from "../../utils/date";
+import { queryStakeTokens } from "../../services/staking/query";
+import { amountConversionWithComma, denomConversion } from "../../utils/coin";
+import { comdex } from "../../config/network";
 
 const { Option } = Select;
 
@@ -16,25 +19,38 @@ const Govern = () => {
   const [proposals, setProposals] = useState();
   const [inProgress, setInProgress] = useState(false);
   const [allProposals, setAllProposals] = useState();
+  const [stakedTokens, setStakedTokens] = useState();
 
+  useEffect(() => {
+    fetchAllProposals();
+    fetchStakeTokens();
+  }, []);
+
+  const fetchStakeTokens = () => {
+    queryStakeTokens((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setStakedTokens(result?.pool?.bondedTokens);
+    });
+  };
   const data = [
     {
       title: "Total Staked",
-      counts: "312.45",
+      counts: (
+        <>
+          {amountConversionWithComma(stakedTokens)}{" "}
+          {denomConversion(comdex.coinMinimalDenom)}
+        </>
+      ),
     },
     {
       title: "Total Proposals",
       counts: allProposals?.length || 0,
     },
-    {
-      title: "Average Participation",
-      counts: "50.12%",
-    },
   ];
-  
-  useEffect(() => {
-    fetchAllProposals();
-  }, []);
 
   const fetchAllProposals = () => {
     setInProgress(true);
@@ -79,10 +95,10 @@ const Govern = () => {
                       gutter: 16,
                       xs: 1,
                       sm: 2,
-                      md: 3,
-                      lg: 3,
-                      xl: 3,
-                      xxl: 3,
+                      md: 2,
+                      lg: 2,
+                      xl: 2,
+                      xxl: 2,
                     }}
                     dataSource={data}
                     renderItem={(item) => (
@@ -138,6 +154,7 @@ const Govern = () => {
                     proposals?.map((item) => {
                       return (
                         <div
+                          key={item?.proposal_id}
                           className="governlist-row"
                           onClick={() =>
                             navigate(`/govern-details/${item?.proposal_id}`)

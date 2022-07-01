@@ -15,7 +15,7 @@ import {
 } from "../../../services/govern/query";
 import { formatTime, getDuration } from "../../../utils/date";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { proposalStatusMap } from "../../../utils/string";
+import { proposalStatusMap, truncateString } from "../../../utils/string";
 import { denomConversion } from "../../../utils/coin";
 import { formatNumber } from "../../../utils/number";
 import { comdex } from "../../../config/network";
@@ -49,7 +49,11 @@ const GovernDetails = ({ address }) => {
     },
     {
       title: "Proposer",
-      counts: "comdex@123t7...123",
+      counts: truncateString(
+        "comdex1glgnuuckrkcvl90uk0ute8h0y4gdp5u8rc89d2",
+        6,
+        6
+      ),
     },
   ];
 
