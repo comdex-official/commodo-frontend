@@ -105,10 +105,10 @@ const Borrow = ({ assetMap }) => {
                 </div>
               </>
             ),
-            total_deposited: "18,233,765",
-            asset_apy: "7.88",
-            bridge_apy: "8.92",
-            bridge_apy2: "7.24",
+            available_to_borrow: item,
+            asset_apy: item,
+            bridge_apy: item,
+            bridge_apy2: item,
             action: item,
           };
         })

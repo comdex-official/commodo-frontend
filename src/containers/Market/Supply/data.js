@@ -1,5 +1,6 @@
 import { ActionButton } from "../ActionButton";
-import TotalDeposit  from "./TotalDeposit";
+import TotalDeposit from "./TotalDeposit";
+import AssetApy from "../AssetApy";
 
 export const columns = [
   {
@@ -48,10 +49,12 @@ export const columns = [
     dataIndex: "asset_apy",
     key: "asset_apy",
     width: 110,
-    render: (asset_apy) => (
-      <>
-        <div>{asset_apy}%</div>
-      </>
+    render: (lendPool) => (
+      <AssetApy
+        poolId={lendPool?.poolId}
+        assetId={lendPool?.mainAssetId}
+        parent="lend"
+      />
     ),
   },
   {
@@ -63,10 +66,12 @@ export const columns = [
     dataIndex: "bridge_apy",
     key: "bridge_apy",
     width: 120,
-    render: (bridge_apy) => (
-      <>
-        <div>{bridge_apy}%</div>
-      </>
+    render: (lendPool) => (
+      <AssetApy
+        poolId={lendPool?.poolId}
+        assetId={lendPool?.firstBridgedAssetId}
+        parent="lend"
+      />
     ),
   },
   {
@@ -78,10 +83,12 @@ export const columns = [
     dataIndex: "bridge_apy2",
     key: "bridge_apy2",
     width: 110,
-    render: (bridge_apy) => (
-      <>
-        <div>{bridge_apy}%</div>
-      </>
+    render: (lendPool) => (
+      <AssetApy
+        poolId={lendPool?.poolId}
+        assetId={lendPool?.secondBridgedAssetId}
+        parent="lend"
+      />
     ),
   },
   {
