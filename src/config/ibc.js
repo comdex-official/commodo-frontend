@@ -19,7 +19,7 @@ export const ibcAssetsInfo = [
   {
     counterpartyChainId: "osmo-test-4",
     sourceChannelId: "channel-1",
-    destChannelId: "channel-339",
+    destChannelId: "channel-346",
     coinMinimalDenom: "uosmo",
     ibcDenomHash: ibcDenoms["uosmo"]
   },
