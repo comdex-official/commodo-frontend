@@ -106,9 +106,9 @@ const Supply = ({ assetMap }) => {
               </>
             ),
             total_deposited: item,
-            asset_apy: "7.88",
-            bridge_apy: "8.92",
-            bridge_apy2: "7.24",
+            asset_apy: item,
+            bridge_apy: item,
+            bridge_apy2: item,
             action: item,
           };
         })

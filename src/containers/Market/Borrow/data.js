@@ -1,4 +1,6 @@
 import { ActionButton } from "../ActionButton";
+import AvailableToBorrow from "./AvailableToBorrow";
+import AssetApy from "../AssetApy";
 
 export const columns = [
   {
@@ -33,10 +35,10 @@ export const columns = [
         Available to <br /> Borrow
       </>
     ),
-    dataIndex: "total_deposited",
-    key: "total_deposited",
+    dataIndex: "available_to_borrow",
+    key: "available_to_borrow",
     width: 130,
-    render: (total_deposited) => <>$ {total_deposited}</>,
+    render: (lendPool) => <AvailableToBorrow lendPool={lendPool} />,
   },
   {
     title: (
@@ -47,10 +49,12 @@ export const columns = [
     dataIndex: "asset_apy",
     key: "asset_apy",
     width: 100,
-    render: (asset_apy) => (
-      <>
-        <div>{asset_apy}% </div>
-      </>
+    render: (lendPool) => (
+      <AssetApy
+        poolId={lendPool?.poolId}
+        assetId={lendPool?.mainBridgedAssetId}
+        parent="lend"
+      />
     ),
   },
   {
@@ -62,6 +66,13 @@ export const columns = [
     dataIndex: "bridge_apy",
     key: "bridge_apy",
     width: 140,
+    render: (lendPool) => (
+      <AssetApy
+        poolId={lendPool?.poolId}
+        assetId={lendPool?.firstBridgedAssetId}
+        parent="borrow"
+      />
+    ),
   },
   {
     title: (
@@ -72,6 +83,13 @@ export const columns = [
     dataIndex: "bridge_apy2",
     key: "bridge_apy2",
     width: 110,
+    render: (lendPool) => (
+      <AssetApy
+        poolId={lendPool?.poolId}
+        assetId={lendPool?.secondBridgedAssetId}
+        parent="borrow"
+      />
+    ),
   },
   {
     title: "",
