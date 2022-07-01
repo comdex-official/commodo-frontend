@@ -15,7 +15,6 @@ const VoteNowModal = ({ address, proposal }) => {
   const [inProgress, setInProgress] = useState(false);
   const [userVote, setUserVote] = useState();
 
-  console.log("the proposal", proposal);
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -70,7 +69,7 @@ const VoteNowModal = ({ address, proposal }) => {
         className="btn-filled mb-n4"
         onClick={showModal}
         loading={inProgress}
-        disabled={proposal?.status != "PROPOSAL_STATUS_VOTING_PERIOD"}
+        disabled={proposal?.status !== "PROPOSAL_STATUS_VOTING_PERIOD"}
       >
         Vote Now
       </Button>

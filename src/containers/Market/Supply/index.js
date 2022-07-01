@@ -10,7 +10,7 @@ import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { denomConversion } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
-import {columns} from "./data";
+import { columns } from "./data";
 
 const Supply = ({ assetMap }) => {
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
@@ -62,13 +62,13 @@ const Supply = ({ assetMap }) => {
                 <div className="assets-with-icon">
                   <div className="assets-icon">
                     <SvgIcon
-                        name={iconNameFromDenom(
-                            assetMap[item?.mainAssetId?.toNumber()]?.denom
-                        )}
+                      name={iconNameFromDenom(
+                        assetMap[item?.mainAssetId?.toNumber()]?.denom
+                      )}
                     />
                   </div>
                   {denomConversion(
-                      assetMap[item?.mainAssetId?.toNumber()]?.denom
+                    assetMap[item?.mainAssetId?.toNumber()]?.denom
                   )}
                 </div>
               </>
@@ -105,7 +105,7 @@ const Supply = ({ assetMap }) => {
                 </div>
               </>
             ),
-            total_deposited: "18,233,765",
+            total_deposited: item,
             asset_apy: "7.88",
             bridge_apy: "8.92",
             bridge_apy2: "7.24",
@@ -116,7 +116,7 @@ const Supply = ({ assetMap }) => {
 
   return (
     <div className="commodo-card bg-none">
-      <div className="card-header">AssetS to supply</div>
+      <div className="card-header">Assets to supply</div>
       <div className="card-content">
         <Table
           className="custom-table market-table1"

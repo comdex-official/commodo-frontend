@@ -1,4 +1,5 @@
 import { ActionButton } from "../ActionButton";
+import TotalDeposit  from "./TotalDeposit";
 
 export const columns = [
   {
@@ -36,7 +37,7 @@ export const columns = [
     dataIndex: "total_deposited",
     key: "total_deposited",
     width: 130,
-    render: (total_deposited) => <>$ {total_deposited}</>,
+    render: (lendPool) => <TotalDeposit lendPool={lendPool} />,
   },
   {
     title: (
