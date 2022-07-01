@@ -52,8 +52,8 @@ export const columns = [
     render: (lendPool) => (
       <AssetApy
         poolId={lendPool?.poolId}
-        assetId={lendPool?.mainBridgedAssetId}
-        parent="lend"
+        assetId={lendPool?.mainAssetId}
+        parent="borrow"
       />
     ),
   },
