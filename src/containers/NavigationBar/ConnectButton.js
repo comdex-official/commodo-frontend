@@ -32,7 +32,7 @@ import { marketPrice } from "../../utils/number";
 import { queryMarketList } from "../../services/oracle/query";
 import { setMarkets } from "../../actions/oracle";
 import { fetchKeplrAccountName } from "../../services/keplr";
-import { comdex } from "../../config/network";
+import { cmst, comdex, harbor } from "../../config/network";
 import { amountConversionWithComma, getDenomBalance } from "../../utils/coin";
 import { queryAssets } from "../../services/asset/query";
 import { setAssets } from "../../actions/asset";
@@ -154,9 +154,11 @@ const ConnectButton = ({
     const assetBalances = balances.filter(
       (item) =>
         item.denom.substr(0, 4) === "ibc/" ||
-        item.denom === comdex.coinMinimalDenom
+        item.denom === comdex.coinMinimalDenom ||
+        item.denom === cmst.coinMinimalDenom ||
+        item.denom === harbor.coinMinimalDenom
     );
-
+      
     const value = assetBalances.map((item) => {
       return getPrice(item.denom) * item.amount;
     });

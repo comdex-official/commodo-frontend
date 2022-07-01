@@ -15,7 +15,10 @@ import {
 } from "../../../services/govern/query";
 import { formatTime, getDuration } from "../../../utils/date";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { proposalStatusMap } from "../../../utils/string";
+import { proposalStatusMap, truncateString } from "../../../utils/string";
+import { denomConversion } from "../../../utils/coin";
+import { formatNumber } from "../../../utils/number";
+import { comdex } from "../../../config/network";
 
 const GovernDetails = ({ address }) => {
   const { id } = useParams();
@@ -46,14 +49,11 @@ const GovernDetails = ({ address }) => {
     },
     {
       title: "Proposer",
-      counts: "comdex@123t7...123",
-    },
-  ];
-
-  const dataVote = [
-    {
-      title: "Total Value",
-      counts: "24,901.25 CMST",
+      counts: truncateString(
+        "comdex1glgnuuckrkcvl90uk0ute8h0y4gdp5u8rc89d2",
+        6,
+        6
+      ),
     },
   ];
 
@@ -82,6 +82,32 @@ const GovernDetails = ({ address }) => {
       });
     }
   }, [address, id, proposal]);
+
+  const calculateTotalValue = () => {
+    let value = proposal?.final_tally_result;
+    let yes = Number(value?.yes);
+    let no = Number(value?.no);
+    let veto = Number(value?.no_with_veto);
+    let abstain = Number(value?.abstain);
+
+    let totalValue = yes + no + abstain + veto;
+
+    totalValue = totalValue / 1000000;
+    totalValue = formatNumber(totalValue);
+    return totalValue;
+  };
+
+  const dataVote = [
+    {
+      title: "Total Vote",
+      counts: (
+        <>
+          {calculateTotalValue() || "0"}{" "}
+          {denomConversion(comdex?.coinMinimalDenom)}
+        </>
+      ),
+    },
+  ];
 
   const calculateVotes = () => {
     let value = proposal?.final_tally_result;
