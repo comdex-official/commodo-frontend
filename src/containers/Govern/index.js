@@ -11,27 +11,27 @@ import {formatTime, getDuration} from "../../utils/date";
 
 const { Option } = Select;
 
-const data = [
-  {
-    title: "Total Staked",
-    counts: "312.45",
-  },
-  {
-    title: "Total Proposals",
-    counts: "7",
-  },
-  {
-    title: "Average Participation",
-    counts: "50.12%",
-  },
-];
-
 const Govern = () => {
   const navigate = useNavigate();
   const [proposals, setProposals] = useState();
   const [inProgress, setInProgress] = useState(false);
   const [allProposals, setAllProposals] = useState();
 
+  const data = [
+    {
+      title: "Total Staked",
+      counts: "312.45",
+    },
+    {
+      title: "Total Proposals",
+      counts: allProposals?.length || 0,
+    },
+    {
+      title: "Average Participation",
+      counts: "50.12%",
+    },
+  ];
+  
   useEffect(() => {
     fetchAllProposals();
   }, []);
