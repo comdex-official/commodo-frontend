@@ -1,22 +1,23 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
-import { Button, Table, Switch, message } from "antd";
+import { Button, Table, message } from "antd";
 import "./index.less";
 import { useEffect, useState } from "react";
-import { queryLendPosition, queryUserLends } from "../../services/lend/query";
+import { queryUserLends } from "../../services/lend/query";
 import { iconNameFromDenom } from "../../utils/string";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { useNavigate } from "react-router";
+import AssetApy from "../Market/AssetApy";
+import { setUserLends } from "../../actions/lend";
 
-const Deposit = ({ address }) => {
+const Deposit = ({ address, setUserLends, userLendList }) => {
   const [inProgress, setInProgress] = useState(false);
-  const [lendList, setUserLendList] = useState([]);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    setUserLendList([]);
+    setUserLends([]);
   }, []);
 
   useEffect(() => {
@@ -26,34 +27,21 @@ const Deposit = ({ address }) => {
   }, [address]);
 
   const fetchUserLends = () => {
-    setUserLendList([]);
     setInProgress(true);
     queryUserLends(address, (error, result) => {
+      setInProgress(false);
+
       if (error) {
         message.error(error);
-        setInProgress(false);
         return;
       }
 
-      if (result?.lendIds?.length > 0) {
-        result?.lendIds?.forEach((id) => {
-          queryLendPosition(id, (error, result) => {
-            setInProgress(false);
-            if (error) {
-              message.error(error);
-              return;
-            }
-            if (result?.lend?.lendingId) {
-              setUserLendList((state) => [...state, result.lend]);
-            }
-          });
-        });
-      }
-      else{
-        setInProgress(false);
+      if (result?.lends?.length > 0) {
+        setUserLends(result?.lends);
       }
     });
   };
+
   const columns = [
     {
       title: "Asset",
@@ -76,7 +64,9 @@ const Deposit = ({ address }) => {
       dataIndex: "apy",
       key: "apy",
       width: 150,
-      render: (apy) => <>{apy}%</>,
+      render: (lend) => (
+        <AssetApy poolId={lend?.poolId} assetId={lend?.assetId} parent="lend" />
+      ),
     },
     {
       title: "Rewards",
@@ -124,8 +114,8 @@ const Deposit = ({ address }) => {
   ];
 
   const tableData =
-    lendList?.length > 0
-      ? lendList?.map((item, index) => {
+    userLendList?.length > 0
+      ? userLendList?.map((item, index) => {
           return {
             key: index,
             asset: (
@@ -145,7 +135,7 @@ const Deposit = ({ address }) => {
                 {denomConversion(item?.amountIn?.denom)}
               </>
             ),
-            apy: "8.92",
+            apy: item,
             rewards: (
               <>
                 {amountConversionWithComma(item?.rewardAccumulated)}{" "}
@@ -183,15 +173,33 @@ const Deposit = ({ address }) => {
 Deposit.propTypes = {
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
+  userLendList: PropTypes.arrayOf(
+    PropTypes.shape({
+      amountIn: PropTypes.shape({
+        denom: PropTypes.string.isRequired,
+        amount: PropTypes.string,
+      }),
+      assetId: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+      poolId: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+      rewardAccumulated: PropTypes.string,
+    })
+  ),
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
     address: state.account.address,
+    userLendList: state.lend.userLends,
   };
 };
 
-const actionsToProps = {};
+const actionsToProps = {
+  setUserLends,
+};
 
 export default connect(stateToProps, actionsToProps)(Deposit);
