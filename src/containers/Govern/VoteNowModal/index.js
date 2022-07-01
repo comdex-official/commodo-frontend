@@ -10,7 +10,7 @@ import { defaultFee } from "../../../services/transaction";
 import { signAndBroadcastTransaction } from "../../../services/helper";
 import Long from "long";
 
-const VoteNowModal = ({ address, proposal }) => {
+const VoteNowModal = ({ address, proposal, lang }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [inProgress, setInProgress] = useState(false);
   const [userVote, setUserVote] = useState();
