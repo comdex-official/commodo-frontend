@@ -50,7 +50,9 @@ export const AvailableToBorrow = ({ lendPool, markets }) => {
 AvailableToBorrow.propTypes = {
   markets: PropTypes.arrayOf(
     PropTypes.shape({
-      rates: PropTypes.string,
+      rates: PropTypes.shape({
+        low: PropTypes.number,
+      }),
     })
   ),
   lendPool: PropTypes.shape({
