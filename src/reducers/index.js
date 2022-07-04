@@ -9,6 +9,7 @@ import lend from "./lend";
 import auction from "./auction";
 import theme from "./theme";
 import oracle from "./oracle";
+import ledger from "./ledger";
 
 const app = combineReducers({
   language,
@@ -21,6 +22,7 @@ const app = combineReducers({
   auction,
   theme,
   oracle,
+  ledger,
 });
 
 const root = (state, action) => {
