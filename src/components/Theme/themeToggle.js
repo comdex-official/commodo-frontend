@@ -30,17 +30,7 @@ const ThemeToggle = ({ isDarkMode, setDarkTheme }) => {
   };
 
   return (
-    <div className="theme-toogle">
-      <div onClick={checkboxHandle} className="theme-icons">
-        <SvgIcon
-          name={
-            localStorage.getItem("isDarkMode") === "false"
-              ? "dark-theme"
-              : "light-theme"
-          }
-        />
-      </div>
-    </div>
+    <div className="theme-toogle"/>
   );
 };
 

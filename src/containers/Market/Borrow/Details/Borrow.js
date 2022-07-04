@@ -452,7 +452,9 @@ BorrowTab.propTypes = {
   ),
   markets: PropTypes.arrayOf(
     PropTypes.shape({
-      rates: PropTypes.string,
+      rates: PropTypes.shape({
+        low: PropTypes.number,
+      }),
     })
   ),
   pool: PropTypes.shape({

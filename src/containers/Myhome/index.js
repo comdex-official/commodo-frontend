@@ -141,7 +141,9 @@ Myhome.propTypes = {
   lang: PropTypes.string.isRequired,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
-      rates: PropTypes.string,
+      rates: PropTypes.shape({
+        low: PropTypes.number,
+      }),
     })
   ),
   userLendList: PropTypes.arrayOf(

@@ -224,7 +224,9 @@ ConnectButton.propTypes = {
   ),
   markets: PropTypes.arrayOf(
     PropTypes.shape({
-      rates: PropTypes.string,
+      rates: PropTypes.shape({
+        low: PropTypes.number,
+      }),
     })
   ),
   show: PropTypes.bool,

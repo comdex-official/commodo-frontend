@@ -304,7 +304,9 @@ Assets.propTypes = {
   ),
   markets: PropTypes.arrayOf(
     PropTypes.shape({
-      rates: PropTypes.string,
+      rates: PropTypes.shape({
+        low: PropTypes.number,
+      }),
       symbol: PropTypes.string,
       script_id: PropTypes.string,
     })
