@@ -7,7 +7,8 @@ export const comdex = {
   prefix: "comdex",  
   rpc: "https://int-rpc.comdex.one/",
   rest: "https://int-rest.comdex.one/",
-  explorerUrlToTx: `https://dev-explorer.comdex.one/transactions/{txHash}`
+  explorerUrlToTx: `https://dev-explorer.comdex.one/transactions/{txHash}`,
+  coinType: 118,
 };
 
 export const ibcDenoms = {

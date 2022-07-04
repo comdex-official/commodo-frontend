@@ -36,3 +36,7 @@ export const marketPrice = (array, denom) => {
 
   return 1; // returning 1 as we are using ust.
 };
+
+export const getAccountNumber = (value) => {
+  return value === "" ? "0" : value;
+};

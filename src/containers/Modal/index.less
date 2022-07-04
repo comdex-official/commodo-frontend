@@ -1,5 +1,26 @@
 @import "../../assets/less/variables.less";
 
+.wallet-links {
+  padding: 7px 25px;
+  display: flex;
+  justify-content: center;
+  background-color: @bg-light;
+  backdrop-filter: blur(40px);
+  color: @bg-dark;
+  font-size: 13px;
+  align-items: center;
+  font-weight: 500;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: @base-border-radius;
+  .round-icon {
+    width: 25px;
+    height: 25px;
+    background-color: gray;
+    border-radius: 50%;
+  }
+}
+
 .connect-modal {
   &.ant-modal {
     border-radius: @base-border-radius;
@@ -29,9 +50,11 @@
         }
 
         .no-link {
-          background: radial-gradient(145.79% 37573.33% at 50% 50%,
-              rgba(39, 48, 68, 0.54) 0%,
-              rgba(30, 34, 43, 0.19) 100%);
+          background: radial-gradient(
+            145.79% 37573.33% at 50% 50%,
+            rgba(39, 48, 68, 0.54) 0%,
+            rgba(30, 34, 43, 0.19) 100%
+          );
           padding: 15px;
           text-align: center;
           max-width: 320px;

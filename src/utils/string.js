@@ -1,4 +1,4 @@
-import { sha256 } from "@cosmjs/crypto";
+import { sha256, stringToPath } from "@cosmjs/crypto";
 import { comdex } from "../config/network";
 import { ibcDenoms } from "../config/network";
 
@@ -118,4 +118,14 @@ export const proposalStatusMap = {
   PROPOSAL_STATUS_PASSED: "Passed",
   PROPOSAL_STATUS_REJECTED: "Rejected",
   PROPOSAL_STATUS_FAILED: "Failed",
+};
+
+export const makeHdPath = (
+  accountNumber = "0",
+  addressIndex = "0",
+  coinType = comdex.coinType
+) => {
+  return stringToPath(
+    "m/44'/" + coinType + "'/" + accountNumber + "'/0/" + addressIndex
+  );
 };

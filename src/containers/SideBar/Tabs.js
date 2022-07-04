@@ -12,7 +12,6 @@ import { encode } from "js-base64";
 import { fetchKeplrAccountName } from "../../services/keplr";
 import { setAccountAddress, setAccountName } from "../../actions/account";
 
-
 const NavTabs = ({ setAccountAddress, lang, setAccountName, onClick }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,12 +28,13 @@ const NavTabs = ({ setAccountAddress, lang, setAccountName, onClick }) => {
         return;
       }
 
-      fetchKeplrAccountName().then((name)=>{
+      fetchKeplrAccountName().then((name) => {
         setAccountName(name);
-      })
+      });
 
       setAccountAddress(account.address);
       localStorage.setItem("ac", encode(account.address));
+      localStorage.setItem("loginType", "keplr");
     });
   };
 
@@ -56,16 +56,14 @@ const NavTabs = ({ setAccountAddress, lang, setAccountName, onClick }) => {
                 (item.value === "dashboard" && !route
                   ? "active_tab"
                   : item.value === route
-                    ? "active_tab"
-                    : "")
+                  ? "active_tab"
+                  : "")
               }
               value={item.value}
-              onClick={
-                () => {
-                  navigate("/" + item.value);
-                  onClick();
-                }
-              }
+              onClick={() => {
+                navigate("/" + item.value);
+                onClick();
+              }}
               {...a11yProps(0)}
             >
               <div className="tab-inner">
@@ -91,7 +89,6 @@ const stateToProps = (state) => {
     lang: state.language,
   };
 };
-
 
 const actionToProps = {
   setAccountAddress,
