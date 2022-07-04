@@ -6,7 +6,7 @@ import "./index.less";
 
 const { Option } = Select;
 
-const RepayTab = () => {
+const CloseTab = () => {
   const data = [
     {
       title: "Total Borrowed",
@@ -67,12 +67,13 @@ const RepayTab = () => {
         <div className="assets-select-card mb-4">
           <div className="assets-left">
             <label className="left-label">
-              Repay <TooltipIcon text="" />
+              Repay Asset <TooltipIcon text="" />
             </label>
             <div className="assets-select-wrapper">
               <Select
                 className="assets-select"
                 dropdownClassName="asset-select-dropdown"
+                defaultValue="1"
                 placeholder={
                   <div className="select-placeholder">
                     <div className="circle-icon">
@@ -97,6 +98,26 @@ const RepayTab = () => {
                   </div>
                 </Option>
                 <Option key="2">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="cmdx-icon" />
+                      </div>
+                    </div>
+                    <div className="name">CMDX</div>
+                  </div>
+                </Option>
+                <Option key="3">
+                  <div className="select-inner">
+                    <div className="svg-icon">
+                      <div className="svg-icon-inner">
+                        <SvgIcon name="atom-icon" />
+                      </div>
+                    </div>
+                    <div className="name">Atom</div>
+                  </div>
+                </Option>
+                <Option key="4">
                   <div className="select-inner">
                     <div className="svg-icon">
                       <div className="svg-icon-inner">
@@ -130,7 +151,9 @@ const RepayTab = () => {
             <Row>
               <Col>
                 <label>Remaining to Repay</label>
-                {/* <p className="remaining-infotext mt-1">You don’t have enough funds to repay the full amount</p> */}
+                <p className="remaining-infotext mt-1">
+                  You don’t have enough funds to repay the full amount
+                </p>
               </Col>
               <Col className="text-right">
                 <div>123.45 CMST</div>
@@ -141,30 +164,18 @@ const RepayTab = () => {
               <Col>
                 <label>Current Health Factor</label>
               </Col>
-              <Col className="text-right">45%</Col>
+              <Col className="text-right">90%</Col>
             </Row>
             <Row className="pb-2">
               <Col>
-                <Progress className="commodo-progress" percent={45} />
+                <Progress className="commodo-progress" percent={30} />
               </Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Max LTV</label>
-              </Col>
-              <Col className="text-right">85%</Col>
             </Row>
             <Row className="mt-2">
               <Col>
                 <label>Liquidation Threshold</label>
               </Col>
               <Col className="text-right">80%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Price</label>
-              </Col>
-              <Col className="text-right">35%</Col>
             </Row>
             <Row className="mt-2">
               <Col>
@@ -176,135 +187,18 @@ const RepayTab = () => {
         </Row>
         <div className="assets-form-btn">
           <Button type="primary" className="btn-filled">
-            Repay
+            Close
           </Button>
         </div>
       </div>
       <div className="details-right">
-        <div className="commodo-card">
-          <div className="card-head">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="cmst-icon" />
-                </div>
-                CMST
-              </div>
-              {/* <span className="percent-badge">
-                +6.18 <SvgIcon name="commodo-icon" />
-              </span> */}
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
-          </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
-          <div className="card-head mt-5">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="atom-icon" />
-                </div>
-                ATOM
-              </div>
-              {/* <span className="percent-badge">
-                +6.18 <SvgIcon name="commodo-icon" />
-              </span> */}
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
-          </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data2}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
-        </div>
-        <div className="commodo-card">
-          <div className="card-head">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="cmdx-icon" />
-                </div>
-                CMDX
-              </div>
-              {/* <span className="percent-badge">
-                +6.18 <SvgIcon name="commodo-icon" />
-              </span> */}
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
-          </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data3}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />{" "}
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
-        </div>
+        
       </div>
     </div>
   );
 };
 
-RepayTab.propTypes = {
+CloseTab.propTypes = {
   lang: PropTypes.string.isRequired,
 };
 
@@ -316,4 +210,4 @@ const stateToProps = (state) => {
 
 const actionsToProps = {};
 
-export default connect(stateToProps, actionsToProps)(RepayTab);
+export default connect(stateToProps, actionsToProps)(CloseTab);

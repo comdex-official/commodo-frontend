@@ -6,11 +6,25 @@
       align-items: center;
       padding: 18px 0;
     }
-
+    .inputbig{
+      padding-bottom: 10px;
+      height: 48px;
+    }
+    .small-label{
+      top: -24px;
+      right: 10px;
+      display: inline-block;
+      position: relative;
+      .dark-mode & {
+        color: @white;
+        font-size: @font-size-sm - 2;
+      }
+    }
     p {
       font-weight: normal;
       margin-bottom: 0;
       font-size: @font-size-lg;
+      font-weight: 600;
 
       .dark-mode & {
         color: @white;
@@ -20,6 +34,7 @@
     label {
       font-weight: lighter;
       font-size: @font-size-lg;
+      font-weight: 700;
 
       .dark-mode & {
         color: @white;

@@ -116,7 +116,8 @@ const Dashboard = ({ isDarkMode }) => {
       {
         name: "Deposited",
         data: [
-          1000, 1500, 500, 1200, 3000, 400, 5000, 3520, 6500, 7000, 4000, 8000,
+          9800000, 456000, 9080000, 2000000, 6235000, 1250000, 6600000, 6452033,
+          3205850, 450000, 2801000, 9958900,
         ],
         lineWidth: 2,
         lineColor: "#52B788",
@@ -125,7 +126,10 @@ const Dashboard = ({ isDarkMode }) => {
       },
       {
         name: "Borrowed",
-        data: [800, 1200, 360, 890, 2500, 4000, 8000, 654, 889, 500, 300, 650],
+        data: [
+          950000, 6000500, 6470000, 850650, 7850009, 32087950, 8956433, 6540030,
+          4506980, 5506063, 6930300, 9850650,
+        ],
         lineWidth: 2,
         lineColor: "#D8F3DC",
         marker: false,
@@ -208,7 +212,14 @@ const Dashboard = ({ isDarkMode }) => {
                   <div className="assets-right">
                     <img alt={AssetsIcon} src={AssetsIcon} />
                     <Button type="primary" className="btn-filled">
-                      Take me there!
+                      <a
+                        aria-label="cswap"
+                        target="_blank"
+                        rel="noreferrer"
+                        href="https://staging.cswap.one/"
+                      >
+                        Take me there!
+                      </a>
                     </Button>
                   </div>
                 </div>

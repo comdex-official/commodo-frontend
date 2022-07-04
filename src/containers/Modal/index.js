@@ -1,10 +1,11 @@
 import "./index.less";
 import "antd/dist/antd.css";
 import * as PropTypes from "prop-types";
-import { Button, Spin, message } from "antd";
+import { Spin, message } from "antd";
 import { connect } from "react-redux";
 import { encode } from "js-base64";
 import { fetchKeplrAccountName, initializeChain } from "../../services/keplr";
+
 import {
   setAccountAddress,
   setAccountName,
@@ -12,6 +13,7 @@ import {
 } from "../../actions/account";
 import React, { useState } from "react";
 import variables from "../../utils/variables";
+import ButtonSubmit from "../NavigationBar/Ledger";
 
 const ConnectModal = ({
   setAccountAddress,
@@ -34,9 +36,10 @@ const ConnectModal = ({
       setAccountAddress(account.address);
       fetchKeplrAccountName().then((name) => {
         setAccountName(name);
-      })
+      });
 
       localStorage.setItem("ac", encode(account.address));
+      localStorage.setItem("loginType", "keplr");
       showAccountConnectModal(false);
     });
   };
@@ -48,9 +51,12 @@ const ConnectModal = ({
           <h3 className="text-center">{variables[lang].connect_wallet}</h3>
         </div>
         <div className="mb-2 mt-3">
-          <Button type="primary" className="btn-filled" block onClick={handleConnectToKeplr}>
-            {variables[lang].keplr_wallet}{" "}
-          </Button>
+          <div className="wallet-links" onClick={handleConnectToKeplr}>
+            <span>{variables[lang].keplr_wallet}</span>{" "}
+          </div>
+        </div>
+        <div className="wallet-links">
+          <ButtonSubmit />
         </div>
       </div>
     </Spin>

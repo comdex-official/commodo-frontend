@@ -5,13 +5,23 @@ import {
   SECOND_RESERVE_COIN_DENOM_SET,
   POOL_TOKEN_SUPPLY_SET,
   POOLS_LIQUIDITY_LIST_SET,
-} from "../constants/liquidity";
+  POOL_SET,
+  ASSET_RATES_STATES_SET,
+  USER_LENDS_SET,
+} from "../constants/lend";
 
 export const setPools = (list, pagination) => {
   return {
     type: POOLS_SET,
     list,
     pagination,
+  };
+};
+
+export const setPool = (value) => {
+  return {
+    type: POOL_SET,
+    value,
   };
 };
 
@@ -48,5 +58,25 @@ export const setPoolLiquidityList = (value, index) => {
     type: POOLS_LIQUIDITY_LIST_SET,
     value,
     index,
+  };
+};
+
+export const setAssetRatesStats = (list, pagination) => {
+  const statsHashMap = list.reduce((map, obj) => {
+    map[obj?.assetId] = obj;
+    return map;
+  }, {});
+
+  return {
+    type: ASSET_RATES_STATES_SET,
+    map: statsHashMap,
+    pagination,
+  };
+};
+
+export const setUserLends = (list) => {
+  return {
+    type: USER_LENDS_SET,
+    list,
   };
 };

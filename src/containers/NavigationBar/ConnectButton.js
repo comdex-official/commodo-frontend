@@ -26,15 +26,18 @@ import {
 } from "../../actions/account";
 import { queryAllBalances } from "../../services/bank/query";
 import Lodash from "lodash";
-import { queryVaultList } from "../../services/vault/query";
 import { setAccountVaults } from "../../actions/account";
 import ConnectModal from "../Modal";
 import { marketPrice } from "../../utils/number";
 import { queryMarketList } from "../../services/oracle/query";
 import { setMarkets } from "../../actions/oracle";
 import { fetchKeplrAccountName } from "../../services/keplr";
-import { comdex } from "../../config/network";
+import { cmst, comdex, harbor } from "../../config/network";
 import { amountConversionWithComma, getDenomBalance } from "../../utils/coin";
+import { queryAssets } from "../../services/asset/query";
+import { setAssets } from "../../actions/asset";
+import { queryAssetRatesStats } from "../../services/lend/query";
+import { setAssetRatesStats } from "../../actions/lend";
 
 const ConnectButton = ({
   setAccountAddress,
@@ -43,13 +46,13 @@ const ConnectButton = ({
   lang,
   setAssetBalance,
   setcAssetBalance,
-  setPoolBalance,
   markets,
   refreshBalance,
   setMarkets,
-  poolBalances,
   setAccountName,
   balances,
+  setAssets,
+  setAssetRatesStats,
 }) => {
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
@@ -79,6 +82,36 @@ const ConnectButton = ({
   }, [markets]);
   ``;
 
+  useEffect(() => {
+    queryAssets(
+      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
+      DEFAULT_PAGE_SIZE,
+      true,
+      false,
+      (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        if (result?.assets?.length > 0) {
+          setAssets(result?.assets);
+        }
+      }
+    );
+
+    queryAssetRatesStats((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      if (result?.AssetRatesStats?.length > 0) {
+        setAssetRatesStats(result?.AssetRatesStats);
+      }
+    });
+  }, []);
+
   const fetchBalances = (address) => {
     queryAllBalances(address, (error, result) => {
       if (error) {
@@ -88,7 +121,6 @@ const ConnectButton = ({
       setAccountBalances(result.balances, result.pagination);
       calculateAssetBalance(result.balances);
       calculatecAssetBalance(result.balances);
-      calculatePoolBalance(result.balances);
     });
   };
 
@@ -114,12 +146,6 @@ const ConnectButton = ({
     setcAssetBalance(Lodash.sum(value));
   };
 
-  const calculatePoolBalance = () => {
-    const sum = Lodash.sumBy(poolBalances);
-
-    setPoolBalance(Number(sum * 10 ** 6));
-  };
-
   const getPrice = (denom) => {
     return marketPrice(markets, denom) || 0;
   };
@@ -128,9 +154,11 @@ const ConnectButton = ({
     const assetBalances = balances.filter(
       (item) =>
         item.denom.substr(0, 4) === "ibc/" ||
-        item.denom === comdex.coinMinimalDenom
+        item.denom === comdex.coinMinimalDenom ||
+        item.denom === cmst.coinMinimalDenom ||
+        item.denom === harbor.coinMinimalDenom
     );
-
+      
     const value = assetBalances.map((item) => {
       return getPrice(item.denom) * item.amount;
     });
@@ -175,6 +203,7 @@ const ConnectButton = ({
 ConnectButton.propTypes = {
   lang: PropTypes.string.isRequired,
   refreshBalance: PropTypes.number.isRequired,
+  setAssetRatesStats: PropTypes.func.isRequired,
   setAccountAddress: PropTypes.func.isRequired,
   showAccountConnectModal: PropTypes.func.isRequired,
   setAccountBalances: PropTypes.func.isRequired,
@@ -198,19 +227,6 @@ ConnectButton.propTypes = {
       rates: PropTypes.string,
     })
   ),
-  poolBalances: PropTypes.array,
-  pools: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.shape({
-        high: PropTypes.number,
-        low: PropTypes.number,
-        unsigned: PropTypes.bool,
-      }),
-      reserveAccountAddress: PropTypes.string,
-      poolCoinDenom: PropTypes.string,
-      reserveCoinDenoms: PropTypes.array,
-    })
-  ),
   show: PropTypes.bool,
 };
 
@@ -221,8 +237,6 @@ const stateToProps = (state) => {
     show: state.account.showModal,
     markets: state.oracle.market.list,
     refreshBalance: state.account.refreshBalance,
-    poolBalances: state.liquidity.poolBalances,
-    pools: state.liquidity.pool.list,
     balances: state.account.balances.list,
   };
 };
@@ -239,6 +253,8 @@ const actionsToProps = {
   setCollateralBalance,
   setMarkets,
   setAccountName,
+  setAssets,
+  setAssetRatesStats,
 };
 
 export default connect(stateToProps, actionsToProps)(ConnectButton);

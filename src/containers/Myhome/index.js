@@ -1,41 +1,68 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
-import variables from "../../utils/variables";
 import { Progress, Tabs, List } from "antd";
 import Deposit from "./Deposit";
 import Borrow from "./Borrow";
 import History from "./History";
 import "./index.less";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
+import { decode } from "../../utils/string";
+import { marketPrice } from "../../utils/number";
+import { amountConversionWithComma } from "../../utils/coin";
+import { DOLLAR_DECIMALS } from "../../constants/common";
 
 const { TabPane } = Tabs;
 
-function callback(key) {
-  console.log(key);
-}
+const Myhome = ({ userLendList, markets }) => {
+  const [activeKey, setActiveKey] = useState("1");
+  const location = useLocation();
+  const type = decode(location.hash);
 
-const data = [
-  {
-    title: (
-      <>
-        Total Deposited{" "}
-        <TooltipIcon text="Value of total Asset Deposited by User" />
-      </>
-    ),
-    counts: "$12,350",
-  },
-  {
-    title: (
-      <>
-        Total Borrowed{" "}
-        <TooltipIcon text="Value of total Asset Borrowed by User" />
-      </>
-    ),
-    counts: "$2,345",
-  },
-];
+  useEffect(() => {
+    if (type && type === "borrow") {
+      setActiveKey("2");
+    }
+  }, []);
 
-const Myhome = () => {
+  const calculateTotalDeposit = () => {
+    const values =
+      userLendList?.length > 0
+        ? userLendList.map((item) => {
+            return (
+              marketPrice(markets, item?.amountIn?.denom) *
+              item?.amountIn.amount
+            );
+          })
+        : [];
+
+    const sum = values.reduce((a, b) => a + b, 0);
+
+    return `$${amountConversionWithComma(sum || 0, DOLLAR_DECIMALS)}`;
+  };
+
+  const data = [
+    {
+      title: (
+        <>
+          Total Deposited{" "}
+          <TooltipIcon text="Value of total Asset Deposited by User" />
+        </>
+      ),
+      counts: calculateTotalDeposit(),
+    },
+    {
+      title: (
+        <>
+          Total Borrowed{" "}
+          <TooltipIcon text="Value of total Asset Borrowed by User" />
+        </>
+      ),
+      counts: "$2,345",
+    },
+  ];
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -91,7 +118,8 @@ const Myhome = () => {
           <Tabs
             className="commodo-tabs"
             defaultActiveKey="1"
-            onChange={callback}
+            onChange={setActiveKey}
+            activeKey={activeKey}
           >
             <TabPane tab="Deposit" key="1">
               <Deposit />
@@ -111,11 +139,33 @@ const Myhome = () => {
 
 Myhome.propTypes = {
   lang: PropTypes.string.isRequired,
+  markets: PropTypes.arrayOf(
+    PropTypes.shape({
+      rates: PropTypes.string,
+    })
+  ),
+  userLendList: PropTypes.arrayOf(
+    PropTypes.shape({
+      amountIn: PropTypes.shape({
+        denom: PropTypes.string.isRequired,
+        amount: PropTypes.string,
+      }),
+      assetId: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+      poolId: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+      rewardAccumulated: PropTypes.string,
+    })
+  ),
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
+    userLendList: state.lend.userLends,
+    markets: state.oracle.market.list,
   };
 };
 

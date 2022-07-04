@@ -1,7 +1,5 @@
-import { sha256 } from "@cosmjs/crypto";
+import { sha256, stringToPath } from "@cosmjs/crypto";
 import { comdex } from "../config/network";
-import { denomConversion } from "./coin";
-import { calculatePoolShare } from "./calculations";
 import { ibcDenoms } from "../config/network";
 
 const encoding = require("@cosmjs/encoding");
@@ -68,7 +66,7 @@ export const iconNameFromDenom = (key) => {
     case ibcDenoms["uatom"]:
       return "atom-icon";
     case "ucmdx":
-      return "comdex-icon";
+      return "cmdx-icon";
     case "ucmst":
       return "cmst-icon";
     case "uharbor":
@@ -111,4 +109,23 @@ export const uniqueDenoms = (list, type) => {
         : []
     ),
   ];
+};
+
+export const proposalStatusMap = {
+  PROPOSAL_STATUS_UNSPECIFIED: "Nil",
+  PROPOSAL_STATUS_DEPOSIT_PERIOD: "DepositPeriod",
+  PROPOSAL_STATUS_VOTING_PERIOD: "VotingPeriod",
+  PROPOSAL_STATUS_PASSED: "Passed",
+  PROPOSAL_STATUS_REJECTED: "Rejected",
+  PROPOSAL_STATUS_FAILED: "Failed",
+};
+
+export const makeHdPath = (
+  accountNumber = "0",
+  addressIndex = "0",
+  coinType = comdex.coinType
+) => {
+  return stringToPath(
+    "m/44'/" + coinType + "'/" + accountNumber + "'/0/" + addressIndex
+  );
 };

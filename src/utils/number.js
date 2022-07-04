@@ -23,7 +23,7 @@ export const commaSeparator = (value) => {
   return stringWithComma;
 };
 
-export const decimalConversion = (data) => {
+export const decimalConversion = (data = 0) => {
   return Decimal.fromAtomics(data, 18).toString();
 };
 
@@ -35,4 +35,8 @@ export const marketPrice = (array, denom) => {
   }
 
   return 1; // returning 1 as we are using ust.
+};
+
+export const getAccountNumber = (value) => {
+  return value === "" ? "0" : value;
 };

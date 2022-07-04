@@ -1,0 +1,298 @@
+import * as PropTypes from "prop-types";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
+import { connect } from "react-redux";
+import { Button, Select, message, Spin } from "antd";
+import "./index.less";
+import {
+  amountConversion,
+  amountConversionWithComma,
+  denomConversion,
+  getAmount,
+  getDenomBalance,
+} from "../../../../utils/coin";
+import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
+import { useEffect, useState } from "react";
+import CustomInput from "../../../../components/CustomInput";
+import { ValidateInputNumber } from "../../../../config/_validation";
+import { signAndBroadcastTransaction } from "../../../../services/helper";
+import variables from "../../../../utils/variables";
+import Snack from "../../../../components/common/Snack";
+import { defaultFee } from "../../../../services/transaction";
+import Long from "long";
+import Details from "../../../../components/common/Asset/Details";
+import AssetStats from "../../../../components/common/Asset/Stats";
+import { comdex } from "../../../../config/network";
+import { DEFAULT_FEE } from "../../../../constants/common";
+import { useNavigate } from "react-router";
+import CustomRow from "../../../../components/common/Asset/CustomRow";
+
+const { Option } = Select;
+
+const DepositTab = ({
+  lang,
+  dataInProgress,
+  pool,
+  assetMap,
+  balances,
+  address,
+}) => {
+  const [assetList, setAssetList] = useState();
+  const [selectedAssetId, setSelectedAssetId] = useState();
+  const [amount, setAmount] = useState();
+  const [validationError, setValidationError] = useState();
+  const [inProgress, setInProgress] = useState(false);
+  const navigate = useNavigate();
+
+  const availableBalance =
+    getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
+
+  useEffect(() => {
+    if (pool?.poolId) {
+      setAssetList([
+        assetMap[pool?.mainAssetId?.toNumber()],
+        assetMap[pool?.firstBridgedAssetId?.toNumber()],
+        assetMap[pool?.secondBridgedAssetId?.toNumber()],
+      ]);
+    }
+  }, [pool]);
+
+  const handleAssetChange = (value) => {
+    setSelectedAssetId(value);
+  };
+
+  const handleInputChange = (value) => {
+    value = toDecimals(value).toString().trim();
+
+    setAmount(value);
+    setValidationError(ValidateInputNumber(getAmount(value), availableBalance));
+  };
+
+  const handleClick = () => {
+    setInProgress(true);
+
+    signAndBroadcastTransaction(
+      {
+        message: {
+          typeUrl: "/comdex.lend.v1beta1.MsgLend",
+          value: {
+            lender: address,
+            poolId: pool?.poolId,
+            assetId: Long.fromNumber(selectedAssetId),
+            amount: {
+              amount: getAmount(amount),
+              denom: assetMap[selectedAssetId]?.denom,
+            },
+          },
+        },
+        fee: defaultFee(),
+        memo: "",
+      },
+      address,
+      (error, result) => {
+        setInProgress(false);
+        setAmount(0);
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        if (result?.code) {
+          message.info(result?.rawLog);
+          return;
+        }
+
+        message.success(
+          <Snack
+            message={variables[lang].tx_success}
+            hash={result?.transactionHash}
+          />
+        );
+
+        navigate("/myhome");
+      }
+    );
+  };
+
+  const handleMaxClick = () => {
+    if (assetMap[selectedAssetId]?.denom === comdex.coinMinimalDenom) {
+      return Number(availableBalance) > DEFAULT_FEE
+        ? handleInputChange(amountConversion(availableBalance - DEFAULT_FEE))
+        : handleInputChange();
+    } else {
+      return handleInputChange(amountConversion(availableBalance));
+    }
+  };
+
+  return (
+    <div className="details-wrapper">
+      {!dataInProgress ? (
+        <>
+          <div className="details-left commodo-card">
+            <CustomRow assetList={assetList} />
+            <div className="assets-select-card mb-0">
+              <div className="assets-left">
+                <label className="left-label">
+                  Deposit <TooltipIcon text="" />
+                </label>
+                <div className="assets-select-wrapper">
+                  <Select
+                    className="assets-select"
+                    dropdownClassName="asset-select-dropdown"
+                    onChange={handleAssetChange}
+                    placeholder={
+                      <div className="select-placeholder">
+                        <div className="circle-icon">
+                          <div className="circle-icon-inner" />
+                        </div>
+                        Select
+                      </div>
+                    }
+                    defaultActiveFirstOption={true}
+                    suffixIcon={
+                      <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
+                    }
+                  >
+                    {assetList?.length > 0 &&
+                      assetList?.map((record) => {
+                        const item = record?.denom ? record?.denom : record;
+
+                        return (
+                          <Option key={item} value={record?.id?.toNumber()}>
+                            <div className="select-inner">
+                              <div className="svg-icon">
+                                <div className="svg-icon-inner">
+                                  <SvgIcon name={iconNameFromDenom(item)} />
+                                </div>
+                              </div>
+                              <div className="name">
+                                {denomConversion(item)}
+                              </div>
+                            </div>
+                          </Option>
+                        );
+                      })}
+                  </Select>
+                </div>
+              </div>
+              <div className="assets-right">
+                <div className="label-right">
+                  Available
+                  <span className="ml-1">
+                    {amountConversionWithComma(
+                      getDenomBalance(
+                        balances,
+                        assetMap[selectedAssetId]?.denom
+                      ) || 0
+                    )}{" "}
+                    {denomConversion(assetMap[selectedAssetId]?.denom)}
+                  </span>
+                  <div className="max-half">
+                    <Button className="active" onClick={handleMaxClick}>
+                      Max
+                    </Button>
+                  </div>
+                </div>
+                <div>
+                  <div className="input-select">
+                    <CustomInput
+                      value={amount}
+                      onChange={(event) =>
+                        handleInputChange(event.target.value)
+                      }
+                      validationError={validationError}
+                    />
+                  </div>
+                  <small>$120.00</small>
+                </div>
+              </div>
+            </div>
+            <Row>
+              <Col sm="12" className="mt-3 mx-auto card-bottom-details">
+                <AssetStats assetId={selectedAssetId} />
+              </Col>
+            </Row>
+            <div className="assets-form-btn">
+              <Button
+                type="primary"
+                className="btn-filled"
+                loading={inProgress}
+                disabled={!Number(amount) || inProgress || !selectedAssetId}
+                onClick={handleClick}
+              >
+                Deposit
+              </Button>
+            </div>
+          </div>
+          <div className="details-right">
+            <div className="commodo-card">
+              <Details
+                asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
+                poolId={pool?.poolId}
+                parent="lend"
+              />
+              <div className="mt-5">
+                <Details
+                  asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
+                  poolId={pool?.poolId}
+                  parent="lend"
+                />
+              </div>
+            </div>
+            <div className="commodo-card">
+              <Details
+                asset={assetMap[pool?.mainAssetId?.toNumber()]}
+                poolId={pool?.poolId}
+                parent="lend"
+              />
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="loader">
+          <Spin />
+        </div>
+      )}
+    </div>
+  );
+};
+
+DepositTab.propTypes = {
+  dataInProgress: PropTypes.bool.isRequired,
+  lang: PropTypes.string.isRequired,
+  address: PropTypes.string,
+  assetMap: PropTypes.object,
+  balances: PropTypes.arrayOf(
+    PropTypes.shape({
+      denom: PropTypes.string.isRequired,
+      amount: PropTypes.string,
+    })
+  ),
+  pool: PropTypes.shape({
+    poolId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    mainAssetId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    firstBridgedAssetId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    secondBridgedAssetId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+  }),
+};
+
+const stateToProps = (state) => {
+  return {
+    address: state.account.address,
+    pool: state.lend.pool._,
+    assetMap: state.asset._.map,
+    balances: state.account.balances.list,
+    lang: state.language,
+  };
+};
+
+const actionsToProps = {};
+
+export default connect(stateToProps, actionsToProps)(DepositTab);

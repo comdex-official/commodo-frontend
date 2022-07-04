@@ -37,6 +37,7 @@ const DisConnectModal = ({
   const handleDisconnect = () => {
     setAccountAddress("");
     localStorage.removeItem("ac");
+    localStorage.removeItem("loginType");
   };
 
   const getTotalValue = () => {
@@ -47,7 +48,11 @@ const DisConnectModal = ({
     <div className="wallet-connect-dropdown">
       <div className="wallet-connect-upper">
         <span />
-        <div>{name}</div>
+        <div>
+          {localStorage.getItem("loginType") === "ledger"
+            ? "native-ledger"
+            : name}
+        </div>
       </div>
       <div className="px-3">
         <div> {variables[lang].balance_wallet}</div>
@@ -71,7 +76,7 @@ const DisConnectModal = ({
           onClick={showModal}
           className="btn-filled"
           block
-          size="small"
+          size="medium"
         >
           {variables[lang].disconnect}
         </Button>
