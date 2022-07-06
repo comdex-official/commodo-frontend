@@ -11,6 +11,7 @@ import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import {
   fetchRestProposal,
+  fetchRestProposer,
   queryUserVote,
 } from "../../../services/govern/query";
 import { formatTime, getDuration } from "../../../utils/date";
@@ -19,10 +20,12 @@ import { proposalStatusMap, truncateString } from "../../../utils/string";
 import { denomConversion } from "../../../utils/coin";
 import { formatNumber } from "../../../utils/number";
 import { comdex } from "../../../config/network";
+import Copy from "../../../components/Copy";
 
 const GovernDetails = ({ address }) => {
   const { id } = useParams();
   const [proposal, setProposal] = useState();
+  const [proposer, setProposer] = useState();
   const [votedOption, setVotedOption] = useState();
   const [getVotes, setGetVotes] = useState({
     yes: 0,
@@ -49,10 +52,15 @@ const GovernDetails = ({ address }) => {
     },
     {
       title: "Proposer",
-      counts: truncateString(
-        "comdex1glgnuuckrkcvl90uk0ute8h0y4gdp5u8rc89d2",
-        6,
-        6
+      counts: (
+        <div className="address_with_copy">
+          {proposer ? (
+            <>
+              <span>{truncateString(proposer, 6, 6)}</span>
+              <Copy text={proposer} />
+            </>
+          ) : null}
+        </div>
       ),
     },
   ];
@@ -66,6 +74,16 @@ const GovernDetails = ({ address }) => {
         }
 
         setProposal(result?.proposal);
+      });
+      fetchRestProposer(id, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setProposer(
+          result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer
+        );
       });
     }
   }, [id]);
