@@ -47,21 +47,17 @@ export const setAccountIndex = (data) => {
 export const fetchLedgerAddress = (accountNumber = "0", addressIndex = "0") => {
   return async (dispatch) => {
     try {
-      let ledgerResponse = fetchAddress(accountNumber, addressIndex);
+      const ledgerResponse = fetchAddress(accountNumber, addressIndex);
       ledgerResponse
         .then(function (address) {
           localStorage.setItem("loginType", "ledger");
           dispatch(setAccountAddress(address));
         })
         .catch((error) => {
-          message.error(
-            error.response ? error.response.data.message : error.message
-          );
+          message.error(error.response ? error.response.data.message : error.message);
         });
     } catch (error) {
-      message.error(
-        error.response ? error.response.data.message : error.message
-      );
+      message.error(error.response ? error.response.data.message : error.message);
     }
   };
 };

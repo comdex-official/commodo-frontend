@@ -12,8 +12,8 @@ const ButtonSubmit = () => {
     dispatch(
       fetchLedgerAddress(
         getAccountNumber(accountNumber.value),
-        getAccountNumber(accountIndex.value)
-      )
+        getAccountNumber(accountIndex.value),
+      ),
     );
   };
 

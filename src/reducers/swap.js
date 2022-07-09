@@ -28,7 +28,7 @@ const offerCoin = (
     denom: "",
     fee: 0,
   },
-  action
+  action,
 ) => {
   switch (action.type) {
     case OFFER_COIN_AMOUNT_SET:
@@ -48,7 +48,7 @@ const demandCoin = (
     amount: 0,
     denom: "",
   },
-  action
+  action,
 ) => {
   switch (action.type) {
     case DEMAND_COIN_DENOM_SET: {

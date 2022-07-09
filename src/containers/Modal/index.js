@@ -6,21 +6,12 @@ import { connect } from "react-redux";
 import { encode } from "js-base64";
 import { fetchKeplrAccountName, initializeChain } from "../../services/keplr";
 
-import {
-  setAccountAddress,
-  setAccountName,
-  showAccountConnectModal,
-} from "../../actions/account";
+import { setAccountAddress, setAccountName, showAccountConnectModal } from "../../actions/account";
 import React, { useState } from "react";
 import variables from "../../utils/variables";
 import ButtonSubmit from "../NavigationBar/Ledger";
 
-const ConnectModal = ({
-  setAccountAddress,
-  setAccountName,
-  lang,
-  showAccountConnectModal,
-}) => {
+const ConnectModal = ({ setAccountAddress, setAccountName, lang, showAccountConnectModal }) => {
   const [inProgress, setInProgress] = useState(false);
 
   const handleConnectToKeplr = () => {

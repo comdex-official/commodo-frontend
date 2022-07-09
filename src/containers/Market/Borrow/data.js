@@ -50,11 +50,7 @@ export const columns = [
     key: "asset_apy",
     width: 100,
     render: (lendPool) => (
-      <AssetApy
-        poolId={lendPool?.poolId}
-        assetId={lendPool?.mainAssetId}
-        parent="borrow"
-      />
+      <AssetApy poolId={lendPool?.poolId} assetId={lendPool?.mainAssetId} parent="borrow" />
     ),
   },
   {
@@ -67,11 +63,7 @@ export const columns = [
     key: "bridge_apy",
     width: 140,
     render: (lendPool) => (
-      <AssetApy
-        poolId={lendPool?.poolId}
-        assetId={lendPool?.firstBridgedAssetId}
-        parent="borrow"
-      />
+      <AssetApy poolId={lendPool?.poolId} assetId={lendPool?.firstBridgedAssetId} parent="borrow" />
     ),
   },
   {
@@ -98,10 +90,7 @@ export const columns = [
     align: "right",
     width: 120,
     render: (item) => (
-      <ActionButton
-        name="Details"
-        path={`/borrow-details/${item?.poolId?.toNumber()}`}
-      />
+      <ActionButton name="Details" path={`/borrow-details/${item?.poolId?.toNumber()}`} />
     ),
   },
 ];

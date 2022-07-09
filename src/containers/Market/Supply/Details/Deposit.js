@@ -28,14 +28,7 @@ import CustomRow from "../../../../components/common/Asset/CustomRow";
 
 const { Option } = Select;
 
-const DepositTab = ({
-  lang,
-  dataInProgress,
-  pool,
-  assetMap,
-  balances,
-  address,
-}) => {
+const DepositTab = ({ lang, dataInProgress, pool, assetMap, balances, address }) => {
   const [assetList, setAssetList] = useState();
   const [selectedAssetId, setSelectedAssetId] = useState();
   const [amount, setAmount] = useState();
@@ -43,8 +36,7 @@ const DepositTab = ({
   const [inProgress, setInProgress] = useState(false);
   const navigate = useNavigate();
 
-  const availableBalance =
-    getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
+  const availableBalance = getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
 
   useEffect(() => {
     if (pool?.poolId) {
@@ -102,14 +94,11 @@ const DepositTab = ({
         }
 
         message.success(
-          <Snack
-            message={variables[lang].tx_success}
-            hash={result?.transactionHash}
-          />
+          <Snack message={variables[lang].tx_success} hash={result?.transactionHash} />,
         );
 
         navigate("/myhome");
-      }
+      },
     );
   };
 
@@ -148,9 +137,7 @@ const DepositTab = ({
                       </div>
                     }
                     defaultActiveFirstOption={true}
-                    suffixIcon={
-                      <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
-                    }
+                    suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />}
                   >
                     {assetList?.length > 0 &&
                       assetList?.map((record) => {
@@ -164,9 +151,7 @@ const DepositTab = ({
                                   <SvgIcon name={iconNameFromDenom(item)} />
                                 </div>
                               </div>
-                              <div className="name">
-                                {denomConversion(item)}
-                              </div>
+                              <div className="name">{denomConversion(item)}</div>
                             </div>
                           </Option>
                         );
@@ -179,10 +164,7 @@ const DepositTab = ({
                   Available
                   <span className="ml-1">
                     {amountConversionWithComma(
-                      getDenomBalance(
-                        balances,
-                        assetMap[selectedAssetId]?.denom
-                      ) || 0
+                      getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0,
                     )}{" "}
                     {denomConversion(assetMap[selectedAssetId]?.denom)}
                   </span>
@@ -196,9 +178,7 @@ const DepositTab = ({
                   <div className="input-select">
                     <CustomInput
                       value={amount}
-                      onChange={(event) =>
-                        handleInputChange(event.target.value)
-                      }
+                      onChange={(event) => handleInputChange(event.target.value)}
                       validationError={validationError}
                     />
                   </div>
@@ -265,7 +245,7 @@ DepositTab.propTypes = {
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
       amount: PropTypes.string,
-    })
+    }),
   ),
   pool: PropTypes.shape({
     poolId: PropTypes.shape({

@@ -4,11 +4,9 @@ import { ibcDenoms } from "../config/network";
 
 const encoding = require("@cosmjs/encoding");
 
-export const decode = (hash) =>
-  decodeURIComponent(hash.replace("#", "")) || undefined;
+export const decode = (hash) => decodeURIComponent(hash.replace("#", "")) || undefined;
 
-export const generateHash = (txBytes) =>
-  encoding.toHex(sha256(txBytes)).toUpperCase();
+export const generateHash = (txBytes) => encoding.toHex(sha256(txBytes)).toUpperCase();
 
 export const ibcDenomToDenom = (key) => {
   switch (key) {
@@ -85,20 +83,16 @@ export const iconNameFromDenom = (key) => {
 export const trimWhiteSpaces = (data) => data.split(" ").join("");
 
 export const truncateString = (string, front, back) =>
-  `${string.substr(0, front)}...${string.substr(
-    string.length - back,
-    string.length
-  )}`;
+  `${string.substr(0, front)}...${string.substr(string.length - back, string.length)}`;
 
 export const lowercaseFirstLetter = (string) => {
   return string.charAt(0).toLowerCase() + string.slice(1).toUpperCase();
 };
 
-//Considering input with given decimal point only.
+// Considering input with given decimal point only.
 export const toDecimals = (value, decimal = comdex.coinDecimals) =>
   value.indexOf(".") >= 0
-    ? value.substr(0, value.indexOf(".")) +
-      value.substr(value.indexOf("."), decimal + 1)
+    ? value.substr(0, value.indexOf(".")) + value.substr(value.indexOf("."), decimal + 1)
     : value;
 
 export const uniqueDenoms = (list, type) => {
@@ -106,7 +100,7 @@ export const uniqueDenoms = (list, type) => {
     ...new Set(
       list && list.length > 0
         ? list.map((item) => (type === "in" ? item.denomIn : item.denomOut))
-        : []
+        : [],
     ),
   ];
 };
@@ -120,12 +114,6 @@ export const proposalStatusMap = {
   PROPOSAL_STATUS_FAILED: "Failed",
 };
 
-export const makeHdPath = (
-  accountNumber = "0",
-  addressIndex = "0",
-  coinType = comdex.coinType
-) => {
-  return stringToPath(
-    "m/44'/" + coinType + "'/" + accountNumber + "'/0/" + addressIndex
-  );
+export const makeHdPath = (accountNumber = "0", addressIndex = "0", coinType = comdex.coinType) => {
+  return stringToPath("m/44'/" + coinType + "'/" + accountNumber + "'/0/" + addressIndex);
 };

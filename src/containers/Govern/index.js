@@ -41,8 +41,7 @@ const Govern = () => {
       title: "Total Staked",
       counts: (
         <>
-          {amountConversionWithComma(stakedTokens)}{" "}
-          {denomConversion(comdex.coinMinimalDenom)}
+          {amountConversionWithComma(stakedTokens)} {denomConversion(comdex.coinMinimalDenom)}
         </>
       ),
     },
@@ -67,7 +66,7 @@ const Govern = () => {
   };
 
   const filterAllProposal = (value) => {
-    let allFilteredProposal =
+    const allFilteredProposal =
       allProposals &&
       allProposals?.filter((item) => {
         if (value === "all") {
@@ -132,18 +131,14 @@ const Govern = () => {
                     defaultValue="Filter"
                     className="select-primary ml-2"
                     onChange={(e) => filterAllProposal(e)}
-                    suffixIcon={
-                      <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
-                    }
+                    suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />}
                     style={{ width: 120 }}
                   >
                     <Option value="all" className="govern-select-option">
                       All
                     </Option>
                     <Option value="PROPOSAL_STATUS_VOTING_PERIOD">Open</Option>
-                    <Option value="PROPOSAL_STATUS_DEPOSIT_PERIOD">
-                      Pending
-                    </Option>
+                    <Option value="PROPOSAL_STATUS_DEPOSIT_PERIOD">Pending</Option>
                     <Option value="PROPOSAL_STATUS_PASSED">Passed</Option>
                     <Option value="PROPOSAL_STATUS_FAILED">Failed</Option>
                     <Option value="PROPOSAL_STATUS_REJECTED">Rejected</Option>
@@ -156,9 +151,7 @@ const Govern = () => {
                         <div
                           key={item?.proposal_id}
                           className="governlist-row"
-                          onClick={() =>
-                            navigate(`/govern-details/${item?.proposal_id}`)
-                          }
+                          onClick={() => navigate(`/govern-details/${item?.proposal_id}`)}
                         >
                           <div className="left-section">
                             <h3>#{item?.proposal_id}</h3>
@@ -169,25 +162,16 @@ const Govern = () => {
                             <Row>
                               <Col sm="6">
                                 <label>Vote Starts :</label>
-                                <p>
-                                  {formatTime(item?.voting_start_time) ||
-                                    "--/--/--"}
-                                </p>
+                                <p>{formatTime(item?.voting_start_time) || "--/--/--"}</p>
                               </Col>
                               <Col sm="6">
                                 <label>Voting Ends :</label>
-                                <p>
-                                  {formatTime(item?.voting_end_time) ||
-                                    "--/--/--"}
-                                </p>
+                                <p>{formatTime(item?.voting_end_time) || "--/--/--"}</p>
                               </Col>
                               <Col sm="6">
                                 <label>Duration : </label>
                                 <p>
-                                  {getDuration(
-                                    item?.voting_end_time,
-                                    item?.voting_start_time
-                                  ) || 0}{" "}
+                                  {getDuration(item?.voting_end_time, item?.voting_start_time) || 0}{" "}
                                   Days
                                 </p>
                               </Col>

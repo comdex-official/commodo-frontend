@@ -24,9 +24,7 @@ const AssetApy = ({ assetId, poolId, parent }) => {
   return (
     <>
       {Number(
-        decimalConversion(
-          parent === "lend" ? stats?.lendApr : stats?.borrowApr
-        ) * 100
+        decimalConversion(parent === "lend" ? stats?.lendApr : stats?.borrowApr) * 100,
       ).toFixed(DOLLAR_DECIMALS)}
       %
     </>

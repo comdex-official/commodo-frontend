@@ -8,13 +8,13 @@ import React from "react";
 import reducer from "./reducers";
 import thunk from "redux-thunk";
 import { Disclaimer } from "./components/common";
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
 
 const store = createStore(
   reducer,
   composeWithDevTools({
     trace: true,
-  })(applyMiddleware(thunk))
+  })(applyMiddleware(thunk)),
 );
 
 const app = (
@@ -26,7 +26,7 @@ const app = (
   </Provider>
 );
 
-const container = document.getElementById('root');
+const container = document.getElementById("root");
 const root = createRoot(container);
 root.render(app);
 

@@ -35,22 +35,15 @@ export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
     const sum =
       Number(
         decimalConversion(assetStats[lendPool?.mainAssetId]?.totalLend) *
-          marketPrice(markets, assetMap?.[lendPool?.mainAssetId]?.denom)
+          marketPrice(markets, assetMap?.[lendPool?.mainAssetId]?.denom),
       ) +
       Number(
-        decimalConversion(
-          assetStats[lendPool?.firstBridgedAssetId]?.totalLend
-        ) *
-          marketPrice(markets, assetMap?.[lendPool?.firstBridgedAssetId]?.denom)
+        decimalConversion(assetStats[lendPool?.firstBridgedAssetId]?.totalLend) *
+          marketPrice(markets, assetMap?.[lendPool?.firstBridgedAssetId]?.denom),
       ) +
       Number(
-        decimalConversion(
-          assetStats[lendPool?.secondBridgedAssetId]?.totalLend
-        ) *
-          marketPrice(
-            markets,
-            assetMap?.[lendPool?.secondBridgedAssetId]?.denom
-          )
+        decimalConversion(assetStats[lendPool?.secondBridgedAssetId]?.totalLend) *
+          marketPrice(markets, assetMap?.[lendPool?.secondBridgedAssetId]?.denom),
       );
 
     return `$${amountConversionWithComma(sum || 0, DOLLAR_DECIMALS)}`;
@@ -65,7 +58,7 @@ TotalDeposit.propTypes = {
       rates: PropTypes.shape({
         low: PropTypes.number,
       }),
-    })
+    }),
   ),
   lendPool: PropTypes.shape({
     mainAssetId: PropTypes.shape({

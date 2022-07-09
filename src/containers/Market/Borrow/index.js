@@ -1,10 +1,7 @@
 import { message, Table } from "antd";
 import { SvgIcon } from "../../../components/common";
 import { useEffect, useState } from "react";
-import {
-  DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE,
-} from "../../../constants/common";
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../../constants/common";
 import { queryLendPools } from "../../../services/lend/query";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -43,12 +40,7 @@ const Borrow = ({ assetMap }) => {
   const handleChange = (value) => {
     setPageNumber(value.current - 1);
     setPageSize(value.pageSize);
-    fetchLendPools(
-      (value.current - 1) * value.pageSize,
-      value.pageSize,
-      true,
-      false
-    );
+    fetchLendPools((value.current - 1) * value.pageSize, value.pageSize, true, false);
   };
 
   const tableData =
@@ -62,14 +54,10 @@ const Borrow = ({ assetMap }) => {
                 <div className="assets-with-icon">
                   <div className="assets-icon">
                     <SvgIcon
-                      name={iconNameFromDenom(
-                        assetMap[item?.mainAssetId?.toNumber()]?.denom
-                      )}
+                      name={iconNameFromDenom(assetMap[item?.mainAssetId?.toNumber()]?.denom)}
                     />
                   </div>
-                  {denomConversion(
-                    assetMap[item?.mainAssetId?.toNumber()]?.denom
-                  )}
+                  {denomConversion(assetMap[item?.mainAssetId?.toNumber()]?.denom)}
                 </div>
               </>
             ),
@@ -79,13 +67,11 @@ const Borrow = ({ assetMap }) => {
                   <div className="assets-icon">
                     <SvgIcon
                       name={iconNameFromDenom(
-                        assetMap[item?.firstBridgedAssetId?.toNumber()]?.denom
+                        assetMap[item?.firstBridgedAssetId?.toNumber()]?.denom,
                       )}
                     />
                   </div>
-                  {denomConversion(
-                    assetMap[item?.firstBridgedAssetId?.toNumber()]?.denom
-                  )}
+                  {denomConversion(assetMap[item?.firstBridgedAssetId?.toNumber()]?.denom)}
                 </div>
               </>
             ),
@@ -95,13 +81,11 @@ const Borrow = ({ assetMap }) => {
                   <div className="assets-icon">
                     <SvgIcon
                       name={iconNameFromDenom(
-                        assetMap[item?.secondBridgedAssetId?.toNumber()]?.denom
+                        assetMap[item?.secondBridgedAssetId?.toNumber()]?.denom,
                       )}
                     />
                   </div>
-                  {denomConversion(
-                    assetMap[item?.secondBridgedAssetId?.toNumber()]?.denom
-                  )}
+                  {denomConversion(assetMap[item?.secondBridgedAssetId?.toNumber()]?.denom)}
                 </div>
               </>
             ),
@@ -125,8 +109,7 @@ const Borrow = ({ assetMap }) => {
           loading={inProgress}
           onChange={(event) => handleChange(event)}
           pagination={{
-            total:
-              lendPools && lendPools?.pagination && lendPools.pagination.total,
+            total: lendPools && lendPools?.pagination && lendPools.pagination.total,
             pageSize,
           }}
           scroll={{ x: "100%", y: "30vh" }}

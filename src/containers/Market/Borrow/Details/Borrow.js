@@ -29,15 +29,7 @@ import { commaSeparator, marketPrice } from "../../../../utils/number";
 
 const { Option } = Select;
 
-const BorrowTab = ({
-  lang,
-  dataInProgress,
-  pool,
-  assetMap,
-  balances,
-  address,
-  markets,
-}) => {
+const BorrowTab = ({ lang, dataInProgress, pool, assetMap, balances, address, markets }) => {
   const [assetList, setAssetList] = useState();
   const [collateralAssetId, setCollateralAssetId] = useState();
   const [borrowAssetId, setBorrowAssetId] = useState();
@@ -46,8 +38,8 @@ const BorrowTab = ({
   const [inProgress, setInProgress] = useState(false);
   const navigate = useNavigate();
 
-  let collateralAssetDenom = assetMap[collateralAssetId]?.denom;
-  let borrowAssetDenom = assetMap[borrowAssetId]?.denom;
+  const collateralAssetDenom = assetMap[collateralAssetId]?.denom;
+  const borrowAssetDenom = assetMap[borrowAssetId]?.denom;
   const firstBridgeAssetDenom = assetMap[pool?.firstBridgedAssetId]?.denom;
 
   const availableBalance = getDenomBalance(balances, collateralAssetDenom) || 0;
@@ -86,7 +78,7 @@ const BorrowTab = ({
           typeUrl: "/comdex.lend.v1beta1.MsgBorrow",
           value: {
             borrower: address,
-            //TODO: update the values dynamically
+            // TODO: update the values dynamically
             lendId: Long.fromNumber(1),
             pairId: Long.fromNumber(1),
             isStableBorrow: false,
@@ -118,17 +110,14 @@ const BorrowTab = ({
         }
 
         message.success(
-          <Snack
-            message={variables[lang].tx_success}
-            hash={result?.transactionHash}
-          />
+          <Snack message={variables[lang].tx_success} hash={result?.transactionHash} />,
         );
 
         navigate({
           pathname: "/myhome",
           hash: "borrow",
         });
-      }
+      },
     );
   };
 
@@ -205,9 +194,7 @@ const BorrowTab = ({
                       </div>
                     }
                     defaultActiveFirstOption={true}
-                    suffixIcon={
-                      <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
-                    }
+                    suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />}
                   >
                     {assetList?.length > 0 &&
                       assetList?.map((record) => {
@@ -221,9 +208,7 @@ const BorrowTab = ({
                                   <SvgIcon name={iconNameFromDenom(item)} />
                                 </div>
                               </div>
-                              <div className="name">
-                                {denomConversion(item)}
-                              </div>
+                              <div className="name">{denomConversion(item)}</div>
                             </div>
                           </Option>
                         );
@@ -236,7 +221,7 @@ const BorrowTab = ({
                   Available
                   <span className="ml-1">
                     {amountConversionWithComma(
-                      getDenomBalance(balances, collateralAssetDenom) || 0
+                      getDenomBalance(balances, collateralAssetDenom) || 0,
                     )}{" "}
                     {denomConversion(collateralAssetDenom)}
                   </span>
@@ -250,18 +235,15 @@ const BorrowTab = ({
                   <div className="input-select">
                     <CustomInput
                       value={amount}
-                      onChange={(event) =>
-                        handleInputChange(event.target.value)
-                      }
+                      onChange={(event) => handleInputChange(event.target.value)}
                       validationError={validationError}
                     />
                   </div>
                   <small>
                     $
                     {commaSeparator(
-                      Number(amount) *
-                        marketPrice(markets, collateralAssetDenom),
-                      DOLLAR_DECIMALS
+                      Number(amount) * marketPrice(markets, collateralAssetDenom),
+                      DOLLAR_DECIMALS,
                     )}
                   </small>
                 </div>
@@ -286,9 +268,7 @@ const BorrowTab = ({
                       </div>
                     }
                     defaultActiveFirstOption={true}
-                    suffixIcon={
-                      <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
-                    }
+                    suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />}
                   >
                     {assetList?.length > 0 &&
                       assetList?.map((record) => {
@@ -302,9 +282,7 @@ const BorrowTab = ({
                                   <SvgIcon name={iconNameFromDenom(item)} />
                                 </div>
                               </div>
-                              <div className="name">
-                                {denomConversion(item)}
-                              </div>
+                              <div className="name">{denomConversion(item)}</div>
                             </div>
                           </Option>
                         );
@@ -334,9 +312,7 @@ const BorrowTab = ({
                       <div className="cards-inner">
                         <div className="cards-colum">
                           <div className="inner-icon">
-                            <SvgIcon
-                              name={iconNameFromDenom(collateralAssetDenom)}
-                            />
+                            <SvgIcon name={iconNameFromDenom(collateralAssetDenom)} />
                           </div>
                           <p>{denomConversion(collateralAssetDenom)}</p>
                         </div>
@@ -347,9 +323,7 @@ const BorrowTab = ({
                         />
                         <div className="cards-colum">
                           <div className="inner-icon">
-                            <SvgIcon
-                              name={iconNameFromDenom(firstBridgeAssetDenom)}
-                            />
+                            <SvgIcon name={iconNameFromDenom(firstBridgeAssetDenom)} />
                           </div>
                           <p>{denomConversion(firstBridgeAssetDenom)}</p>
                         </div>
@@ -364,9 +338,7 @@ const BorrowTab = ({
                       <div className="cards-inner">
                         <div className="cards-colum">
                           <div className="inner-icon">
-                            <SvgIcon
-                              name={iconNameFromDenom(firstBridgeAssetDenom)}
-                            />
+                            <SvgIcon name={iconNameFromDenom(firstBridgeAssetDenom)} />
                           </div>
                           <p>{denomConversion(firstBridgeAssetDenom)}</p>
                         </div>
@@ -377,9 +349,7 @@ const BorrowTab = ({
                         />
                         <div className="cards-colum">
                           <div className="inner-icon">
-                            <SvgIcon
-                              name={iconNameFromDenom(borrowAssetDenom)}
-                            />
+                            <SvgIcon name={iconNameFromDenom(borrowAssetDenom)} />
                           </div>
                           <p>{denomConversion(borrowAssetDenom)}</p>
                         </div>
@@ -448,14 +418,14 @@ BorrowTab.propTypes = {
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
       amount: PropTypes.string,
-    })
+    }),
   ),
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
         low: PropTypes.number,
       }),
-    })
+    }),
   ),
   pool: PropTypes.shape({
     poolId: PropTypes.shape({

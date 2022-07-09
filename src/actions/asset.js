@@ -55,8 +55,7 @@ export const setAmountOut = (value) => {
 
 export const setAssets = (list, pagination) => {
   const cAssets = list.filter(
-    (item) =>
-      item.denom.substr(0, 2) === "uc" && !(item.denom.substr(0, 3) === "ucm")
+    (item) => item.denom.substr(0, 2) === "uc" && !(item.denom.substr(0, 3) === "ucm"),
   );
 
   const assetHashMap = list.reduce((map, obj) => {
@@ -74,7 +73,7 @@ export const setAssets = (list, pagination) => {
 };
 
 export const fetchProofHeight = (rest, channel, callback) => {
-  let url = `${rest}/ibc/core/channel/v1/channels/${channel}/ports/transfer`;
+  const url = `${rest}/ibc/core/channel/v1/channels/${channel}/ports/transfer`;
   const headers = {
     "Content-Type": "application/json",
   };

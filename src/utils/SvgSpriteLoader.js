@@ -8,8 +8,7 @@ const SvgSprite = (props) => {
 
   useEffect(() => {
     const svgVersion = "0.1.2";
-    const isLocalStorage =
-      "localStorage" in window && window.localStorage !== null;
+    const isLocalStorage = "localStorage" in window && window.localStorage !== null;
     let data;
     if (isLocalStorage && localStorage.getItem("inlineSVGrev") === svgVersion) {
       data = localStorage.getItem("inlineSVGdata");
@@ -39,8 +38,9 @@ const SvgSprite = (props) => {
   return (
     <div
       dangerouslySetInnerHTML={{ __html: svg }}
-      className={`svgInline svgInline--${isLoaded ? "loaded" : "loading"} ${isErrored ? "svgInline--errored" : ""
-        }`}
+      className={`svgInline svgInline--${isLoaded ? "loaded" : "loading"} ${
+        isErrored ? "svgInline--errored" : ""
+      }`}
     />
   );
 };

@@ -13,7 +13,7 @@ import { setPool } from "../../../../actions/lend";
 const SupplyDetails = ({ setPool }) => {
   const [inProgress, setInProgress] = useState(false);
 
-  let { id } = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
     if (id) {

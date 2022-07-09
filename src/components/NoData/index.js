@@ -1,9 +1,7 @@
-import './index.scss';
+import "./index.scss";
 
 const NoData = () => {
-    return(
-        <div className="no_data">Sorry, no data found</div>
-    )
-}
+  return <div className="no_data">Sorry, no data found</div>;
+};
 
 export default NoData;

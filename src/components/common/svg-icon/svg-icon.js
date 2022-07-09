@@ -2,16 +2,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import classNames from "classnames";
 
-const SvgIcon = ({
-  name,
-  viewbox,
-  width,
-  height,
-  fill,
-  className,
-  onClick,
-  ...attrs
-}) => {
+const SvgIcon = ({ name, viewbox, width, height, fill, className, onClick, ...attrs }) => {
   const classes = classNames(className, "icon");
   return (
     <>

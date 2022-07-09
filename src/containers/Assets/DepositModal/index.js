@@ -19,13 +19,7 @@ import { ValidateInputNumber } from "../../../config/_validation";
 import { DEFAULT_FEE } from "../../../constants/common";
 import Snack from "../../../components/common/Snack";
 
-const Deposit = ({
-  lang,
-  chain,
-  address,
-  refreshBalance,
-  setBalanceRefresh,
-}) => {
+const Deposit = ({ lang, chain, address, refreshBalance, setBalanceRefresh }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [sourceAddress, setSourceAddress] = useState("");
   const [inProgress, setInProgress] = useState(false);
@@ -39,9 +33,7 @@ const Deposit = ({
     value = toDecimals(value).toString().trim();
 
     setAmount(value);
-    setValidationError(
-      ValidateInputNumber(getAmount(value), availableBalance?.amount || 0)
-    );
+    setValidationError(ValidateInputNumber(getAmount(value), availableBalance?.amount || 0));
   };
 
   const showModal = () => {
@@ -55,18 +47,13 @@ const Deposit = ({
       setSourceAddress(account?.address);
       setBalanceInProgress(true);
 
-      queryBalance(
-        chain?.chainInfo?.rpc,
-        account?.address,
-        chain?.denom,
-        (error, result) => {
-          setBalanceInProgress(false);
+      queryBalance(chain?.chainInfo?.rpc, account?.address, chain?.denom, (error, result) => {
+        setBalanceInProgress(false);
 
-          if (error) return;
+        if (error) return;
 
-          setAvailableBalance(result?.balance);
-        }
-      );
+        setAvailableBalance(result?.balance);
+      });
 
       fetchProofHeight(comdex?.rest, chain.sourceChannelId, (error, data) => {
         if (error) return;
@@ -117,7 +104,7 @@ const Deposit = ({
             message={variables[lang].tx_failed}
             explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
             hash={result?.transactionHash}
-          />
+          />,
         );
         return;
       }
@@ -127,7 +114,7 @@ const Deposit = ({
           message={variables[lang].tx_success}
           explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
           hash={result?.transactionHash}
-        />
+        />,
       );
 
       setBalanceRefresh(refreshBalance + 1);
@@ -164,21 +151,13 @@ const Deposit = ({
           <Row>
             <Col>
               <Form.Item label="From">
-                <CustomInput
-                  type="text"
-                  value={truncateString(sourceAddress, 9, 9)}
-                  disabled
-                />
+                <CustomInput type="text" value={truncateString(sourceAddress, 9, 9)} disabled />
               </Form.Item>
             </Col>
             <SvgIcon name="arrow-right" viewbox="0 0 17.04 15.13" />
             <Col>
               <Form.Item label="To">
-                <CustomInput
-                  type="text"
-                  value={truncateString(address, 9, 9)}
-                  disabled
-                />
+                <CustomInput type="text" value={truncateString(address, 9, 9)} disabled />
               </Form.Item>
             </Col>
           </Row>
@@ -206,10 +185,8 @@ const Deposit = ({
                         onClick={() => {
                           setAmount(
                             availableBalance?.amount > DEFAULT_FEE
-                              ? amountConversion(
-                                  availableBalance?.amount - DEFAULT_FEE
-                                )
-                              : amountConversion(availableBalance?.amount)
+                              ? amountConversion(availableBalance?.amount - DEFAULT_FEE)
+                              : amountConversion(availableBalance?.amount),
                           );
                         }}
                       >
@@ -233,9 +210,7 @@ const Deposit = ({
               <Button
                 loading={inProgress}
                 type="primary"
-                disabled={
-                  inProgress || !Number(amount) || validationError?.message
-                }
+                disabled={inProgress || !Number(amount) || validationError?.message}
                 className="btn-filled modal-btn"
                 onClick={signIBCTx}
               >

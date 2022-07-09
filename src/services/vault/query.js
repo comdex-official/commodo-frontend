@@ -2,14 +2,7 @@ import { QueryClientImpl } from "comdex-codec/build/comdex/vault/v1beta1/query";
 import Long from "long";
 import { createQueryClient } from "../helper";
 
-export const queryVaultList = (
-  owner,
-  offset,
-  limit,
-  countTotal,
-  reverse,
-  callback
-) => {
+export const queryVaultList = (owner, offset, limit, countTotal, reverse, callback) => {
   createQueryClient((error, rpcClient) => {
     if (error) {
       callback(error);

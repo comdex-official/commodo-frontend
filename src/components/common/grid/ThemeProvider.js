@@ -36,7 +36,7 @@ function createBootstrapComponent(Component, opts) {
       const bsPrefix = useBootstrapPrefix(props.bsPrefix, prefix);
       return <Component {...props} bsPrefix={bsPrefix} />;
     },
-    { displayName: `Bootstrap(${Component.displayName || Component.name})` }
+    { displayName: `Bootstrap(${Component.displayName || Component.name})` },
   );
 }
 

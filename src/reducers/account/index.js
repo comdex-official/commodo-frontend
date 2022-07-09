@@ -36,7 +36,7 @@ const vaults = (
     list: [],
     pagination: {},
   },
-  action
+  action,
 ) => {
   if (action.type === ACCOUNT_VAULTS_SET) {
     return {
@@ -54,7 +54,7 @@ const history = (
     list: [],
     count: 0,
   },
-  action
+  action,
 ) => {
   if (action.type === TRANSACTION_HISTORY_SET) {
     return {
@@ -72,7 +72,7 @@ const showFormModal = (
     show: false,
     key: "",
   },
-  action
+  action,
 ) => {
   if (action.type === FORM_MODAL_SHOW) {
     return {
@@ -103,7 +103,7 @@ const balances = (
     debt: 0,
     collateral: 0,
   },
-  action
+  action,
 ) => {
   switch (action.type) {
     case ACCOUNT_BALANCES_SET:

@@ -28,18 +28,12 @@ const SideBar = () => {
 
   const onTabClick = () => {
     setIsOpen(true);
-  }
+  };
 
   return (
     <>
-      <Layout
-        className={isOpen ? "sidebar-wrapper" : "sidebar-open sidebar-wrapper"}
-      >
-        <button
-          className="sidebar-toggle"
-          title="sidebar-toggle"
-          onClick={toggle}
-        >
+      <Layout className={isOpen ? "sidebar-wrapper" : "sidebar-open sidebar-wrapper"}>
+        <button className="sidebar-toggle" title="sidebar-toggle" onClick={toggle}>
           {isMobile ? (
             <SvgIcon
               className={isOpen ? "open" : ""}
@@ -52,13 +46,7 @@ const SideBar = () => {
             />
           )}
         </button>
-        <Sider
-          collapsible
-          breakpoint="lg"
-          collapsed={isOpen}
-          collapsedWidth="0"
-          trigger={null}
-        >
+        <Sider collapsible breakpoint="lg" collapsed={isOpen} collapsedWidth="0" trigger={null}>
           <div className="side_bar">
             <div
               className="logo"

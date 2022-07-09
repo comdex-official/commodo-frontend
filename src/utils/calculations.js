@@ -17,12 +17,7 @@ export const calculatePoolShare = (item) => {
   return amount ? amountConversionWithComma(amount) : 0;
 };
 
-export const calculateUserShare = (
-  userLiquidity,
-  denomAmount,
-  poolTokenSupply
-) => {
-  const userShare =
-    (userLiquidity * denomAmount) / Number(poolTokenSupply?.amount);
+export const calculateUserShare = (userLiquidity, denomAmount, poolTokenSupply) => {
+  const userShare = (userLiquidity * denomAmount) / Number(poolTokenSupply?.amount);
   return userShare ? amountConversion(userShare) : 0;
 };

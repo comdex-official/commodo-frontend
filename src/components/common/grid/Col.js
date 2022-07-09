@@ -12,10 +12,7 @@ const colSize = PropTypes.oneOfType([
   PropTypes.oneOf(["auto"]),
 ]);
 
-const stringOrNumber = PropTypes.oneOfType([
-  PropTypes.number,
-  PropTypes.string,
-]);
+const stringOrNumber = PropTypes.oneOfType([PropTypes.number, PropTypes.string]);
 
 const column = PropTypes.oneOfType([
   colSize,
@@ -90,9 +87,7 @@ const Col = React.forwardRef(
       const infix = breakPoint !== "xs" ? `-${breakPoint}` : "";
 
       if (span != null) {
-        spans.push(
-          span === true ? `${prefix}${infix}` : `${prefix}${infix}-${span}`
-        );
+        spans.push(span === true ? `${prefix}${infix}` : `${prefix}${infix}-${span}`);
       }
 
       if (order != null) {
@@ -108,13 +103,9 @@ const Col = React.forwardRef(
     }
 
     return (
-      <Component
-        {...props}
-        ref={ref}
-        className={classNames(className, ...spans, ...classes)}
-      />
+      <Component {...props} ref={ref} className={classNames(className, ...spans, ...classes)} />
     );
-  }
+  },
 );
 
 Col.displayName = "Col";

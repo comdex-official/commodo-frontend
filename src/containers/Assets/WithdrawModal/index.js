@@ -6,11 +6,7 @@ import React, { useState } from "react";
 import { Button, Form, message, Modal } from "antd";
 import variables from "../../../utils/variables";
 import { getChainConfig, initializeIBCChain } from "../../../services/keplr";
-import {
-  amountConversion,
-  denomConversion,
-  getAmount,
-} from "../../../utils/coin";
+import { amountConversion, denomConversion, getAmount } from "../../../utils/coin";
 import { defaultFee } from "../../../services/transaction";
 import { aminoSignIBCTx } from "../../../services/helper";
 import { toDecimals, truncateString } from "../../../utils/string";
@@ -21,13 +17,7 @@ import { ValidateInputNumber } from "../../../config/_validation";
 import Snack from "../../../components/common/Snack";
 import { comdex } from "../../../config/network";
 
-const Withdraw = ({
-  lang,
-  chain,
-  address,
-  refreshBalance,
-  setBalanceRefresh,
-}) => {
+const Withdraw = ({ lang, chain, address, refreshBalance, setBalanceRefresh }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [destinationAddress, setDestinationAddress] = useState("");
   const [inProgress, setInProgress] = useState(false);
@@ -39,9 +29,7 @@ const Withdraw = ({
     value = toDecimals(value).toString().trim();
 
     setAmount(value);
-    setValidationError(
-      ValidateInputNumber(getAmount(value), chain?.ibc?.amount || 0)
-    );
+    setValidationError(ValidateInputNumber(getAmount(value), chain?.ibc?.amount || 0));
   };
 
   const showModal = () => {
@@ -51,15 +39,11 @@ const Withdraw = ({
         return;
       }
       setDestinationAddress(account?.address);
-      fetchProofHeight(
-        chain.chainInfo?.rest,
-        chain.sourceChannelId,
-        (error, data) => {
-          if (error) return;
+      fetchProofHeight(chain.chainInfo?.rest, chain.sourceChannelId, (error, data) => {
+        if (error) return;
 
-          setProofHeight(data);
-        }
-      );
+        setProofHeight(data);
+      });
     });
     setIsModalVisible(true);
   };
@@ -105,7 +89,7 @@ const Withdraw = ({
             message={variables[lang].tx_failed}
             explorerUrlToTx={comdex.explorerUrlToTx}
             hash={result?.transactionHash}
-          />
+          />,
         );
         return;
       }
@@ -115,7 +99,7 @@ const Withdraw = ({
           message={variables[lang].tx_success}
           explorerUrlToTx={comdex.explorerUrlToTx}
           hash={result?.transactionHash}
-        />
+        />,
       );
 
       setBalanceRefresh(refreshBalance + 1);
@@ -152,11 +136,7 @@ const Withdraw = ({
           <Row>
             <Col>
               <Form.Item label="From">
-                <CustomInput
-                  type="text"
-                  value={truncateString(address, 9, 9)}
-                  disabled
-                />
+                <CustomInput type="text" value={truncateString(address, 9, 9)} disabled />
               </Form.Item>
             </Col>
             <SvgIcon name="arrow-right" viewbox="0 0 17.04 15.13" />
@@ -175,8 +155,7 @@ const Withdraw = ({
               <div className="available-balance">
                 {variables[lang].available}
                 <span className="ml-1">
-                  {(chain && chain.ibc && amountConversion(chain.ibc.amount)) ||
-                    0}{" "}
+                  {(chain && chain.ibc && amountConversion(chain.ibc.amount)) || 0}{" "}
                   {(chain.currency &&
                     chain.currency.coinDenom &&
                     denomConversion(chain.currency.coinDenom)) ||
@@ -207,9 +186,7 @@ const Withdraw = ({
               <Button
                 loading={inProgress}
                 type="primary"
-                disabled={
-                  inProgress || !Number(amount) || validationError?.message
-                }
+                disabled={inProgress || !Number(amount) || validationError?.message}
                 onClick={signIBCTx}
                 className="btn-filled modal-btn"
               >

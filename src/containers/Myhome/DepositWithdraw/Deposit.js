@@ -40,8 +40,7 @@ const DepositTab = ({
   const [validationError, setValidationError] = useState();
   const selectedAssetId = lendPosition?.assetId?.toNumber();
 
-  const availableBalance =
-    getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
+  const availableBalance = getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
 
   useEffect(() => {
     if (pool?.poolId) {
@@ -102,16 +101,10 @@ const DepositTab = ({
                   <div className="select-inner">
                     <div className="svg-icon">
                       <div className="svg-icon-inner">
-                        <SvgIcon
-                          name={iconNameFromDenom(
-                            assetMap[selectedAssetId]?.denom
-                          )}
-                        />
+                        <SvgIcon name={iconNameFromDenom(assetMap[selectedAssetId]?.denom)} />
                       </div>
                     </div>
-                    <div className="name">
-                      {denomConversion(assetMap[selectedAssetId]?.denom)}
-                    </div>
+                    <div className="name">{denomConversion(assetMap[selectedAssetId]?.denom)}</div>
                   </div>
                 </Option>
               </Select>
@@ -122,8 +115,7 @@ const DepositTab = ({
               Available
               <span className="ml-1">
                 {amountConversionWithComma(
-                  getDenomBalance(balances, assetMap[selectedAssetId]?.denom) ||
-                    0
+                  getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0,
                 )}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
               </span>
@@ -200,7 +192,7 @@ DepositTab.propTypes = {
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
       amount: PropTypes.string,
-    })
+    }),
   ),
   lendPosition: PropTypes.shape({
     lendingId: PropTypes.shape({

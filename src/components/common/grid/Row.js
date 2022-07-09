@@ -33,11 +33,7 @@ const Row = React.forwardRef((props, ref) => {
     <Component
       ref={ref}
       {...otherProps}
-      className={classNames(
-        className,
-        decoratedBsPrefix,
-        noGutters && "no-gutters"
-      )}
+      className={classNames(className, decoratedBsPrefix, noGutters && "no-gutters")}
     />
   );
 });

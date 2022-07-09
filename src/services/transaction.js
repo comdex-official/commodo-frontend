@@ -107,9 +107,7 @@ export const fetchTxHistory = (address, pageNumber, pageSize, callback) => {
   Tendermint34Client.connect(comdex.rpc)
     .then((tendermintClient) => {
       tendermintClient
-        .txSearch(
-          txSearchParams(address, pageNumber, pageSize, "message.sender")
-        )
+        .txSearch(txSearchParams(address, pageNumber, pageSize, "message.sender"))
         .then((res) => {
           callback(null, res);
         })

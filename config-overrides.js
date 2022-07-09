@@ -1,8 +1,8 @@
-const webpack = require('webpack');
+const webpack = require("webpack");
 
 module.exports = function override(config) {
   console.log("override");
-  let loaders = config.resolve;
+  const loaders = config.resolve;
   loaders.fallback = {
     assets: false,
     fs: false,

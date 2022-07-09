@@ -51,14 +51,8 @@ export const fetchCoinStats =
         }
       })
       .catch((error) => {
-        message.error(
-          error.response ? error.response.data.message : error.message
-        );
-        dispatch(
-          fetchCoinStatsError(
-            error.response ? error.response.data.message : error.message
-          )
-        );
+        message.error(error.response ? error.response.data.message : error.message);
+        dispatch(fetchCoinStatsError(error.response ? error.response.data.message : error.message));
       });
   };
 
@@ -89,7 +83,7 @@ export const fetchVolumeChartData =
     dispatch(setVolumeChartDataFetchInProgress(true));
     CoinGeckoClient.coins
       .fetchMarketChartRange(coinId, {
-        //range d,w,M,y , note: m - is for minutes
+        // range d,w,M,y , note: m - is for minutes
         from: moment().subtract(1, range).unix(),
         to: moment().unix(),
         vs_currency: "usd",
@@ -102,7 +96,7 @@ export const fetchVolumeChartData =
         (error) => {
           dispatch(setVolumeChartDataError(error?.message));
           message.error(error?.message);
-        }
+        },
       );
   };
 

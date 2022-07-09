@@ -24,9 +24,7 @@ const Extra = () => {
   function success() {
     Modal.success({
       title: "Success",
-      icon: (
-        <SvgIcon fill="#52B788" name="success-icon" viewbox="0 0 129 129" />
-      ),
+      icon: <SvgIcon fill="#52B788" name="success-icon" viewbox="0 0 129 129" />,
       content: "Successfully message here..",
     });
   }
@@ -34,13 +32,7 @@ const Extra = () => {
   function error() {
     Modal.error({
       title: "error",
-      icon: (
-        <SvgIcon
-          fill="#f5222d"
-          name="error-icon"
-          viewbox="0 0 103.096 103.096"
-        />
-      ),
+      icon: <SvgIcon fill="#f5222d" name="error-icon" viewbox="0 0 103.096 103.096" />,
       content: "Error message here...",
     });
   }

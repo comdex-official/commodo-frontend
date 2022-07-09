@@ -1,8 +1,5 @@
-import { comdex } from "../config/network";import {
-  ChainStore,
-  getKeplrFromWindow,
-  AccountSetBase,
-} from "@keplr-wallet/stores";
+import { comdex } from "../config/network";
+import { ChainStore, getKeplrFromWindow, AccountSetBase } from "@keplr-wallet/stores";
 
 export const getChainConfig = () => {
   return {
@@ -112,11 +109,11 @@ export const fetchKeplrAccountName = async () => {
       suggestChain: false,
       autoInit: true,
       getKeplr: getKeplrFromWindow,
-    }
+    },
   );
 
-   // Need wait some time to get the Keplr.
-   await (() => {
+  // Need wait some time to get the Keplr.
+  await (() => {
     return new Promise((resolve) => {
       setTimeout(resolve, 1000);
     });

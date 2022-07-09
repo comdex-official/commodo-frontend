@@ -8,12 +8,7 @@ const Router = () => {
     <div className="content scroll_bar">
       <Routes>
         {routes.map((route) => (
-          <Route
-            key={route.path}
-            exact
-            element={route.element}
-            path={route.path}
-          />
+          <Route key={route.path} exact element={route.element} path={route.path} />
         ))}
         <Route exact element={<Dashboard />} path="*" />
       </Routes>

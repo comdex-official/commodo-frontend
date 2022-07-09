@@ -1,16 +1,12 @@
 import { combineReducers } from "redux";
-import {
-  AUCTION_LIST_SET,
-  BIDDING_LIST_SET,
-  BID_AMOUNT_SET,
-} from "../constants/auction";
+import { AUCTION_LIST_SET, BIDDING_LIST_SET, BID_AMOUNT_SET } from "../constants/auction";
 
 const data = (
   state = {
     list: [],
     pagination: {},
   },
-  action
+  action,
 ) => {
   if (action.type === AUCTION_LIST_SET) {
     return {
@@ -37,7 +33,7 @@ const bidding = (
     pagination: {},
     bidder: "",
   },
-  action
+  action,
 ) => {
   if (action.type === BIDDING_LIST_SET) {
     return {

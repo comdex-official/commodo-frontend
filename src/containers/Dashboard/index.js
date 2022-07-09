@@ -116,8 +116,8 @@ const Dashboard = ({ isDarkMode }) => {
       {
         name: "Deposited",
         data: [
-          9800000, 456000, 9080000, 2000000, 6235000, 1250000, 6600000, 6452033,
-          3205850, 450000, 2801000, 9958900,
+          9800000, 456000, 9080000, 2000000, 6235000, 1250000, 6600000, 6452033, 3205850, 450000,
+          2801000, 9958900,
         ],
         lineWidth: 2,
         lineColor: "#52B788",
@@ -127,8 +127,8 @@ const Dashboard = ({ isDarkMode }) => {
       {
         name: "Borrowed",
         data: [
-          950000, 6000500, 6470000, 850650, 7850009, 32087950, 8956433, 6540030,
-          4506980, 5506063, 6930300, 9850650,
+          950000, 6000500, 6470000, 850650, 7850009, 32087950, 8956433, 6540030, 4506980, 5506063,
+          6930300, 9850650,
         ],
         lineWidth: 2,
         lineColor: "#D8F3DC",
@@ -145,8 +145,7 @@ const Dashboard = ({ isDarkMode }) => {
             <div className="commodo-card h-100">
               <div className="dashboard-statics ml-4">
                 <p>
-                  Total Value Locked{" "}
-                  <TooltipIcon text="Value of Assets Locked" />
+                  Total Value Locked <TooltipIcon text="Value of Assets Locked" />
                 </p>
                 <h2>$57,156,855</h2>
               </div>
@@ -155,23 +154,15 @@ const Dashboard = ({ isDarkMode }) => {
                   <HighchartsReact highcharts={Highcharts} options={Options} />
                 </div>
                 <div className="total-values-right">
-                  <div
-                    className="dashboard-statics mb-5"
-                    style={{ borderColor: "#52B788" }}
-                  >
+                  <div className="dashboard-statics mb-5" style={{ borderColor: "#52B788" }}>
                     <p>
-                      Total Deposited{" "}
-                      <TooltipIcon text="Value of Assets Depositedon platfrom" />
+                      Total Deposited <TooltipIcon text="Value of Assets Depositedon platfrom" />
                     </p>
                     <h3>$30,283,670</h3>
                   </div>
-                  <div
-                    className="dashboard-statics mb-0"
-                    style={{ borderColor: "#E2F7E5" }}
-                  >
+                  <div className="dashboard-statics mb-0" style={{ borderColor: "#E2F7E5" }}>
                     <p>
-                      Total Collateral{" "}
-                      <TooltipIcon text="Value of Assets Deposited" />
+                      Total Collateral <TooltipIcon text="Value of Assets Deposited" />
                     </p>
                     <h3>$26,873,185</h3>
                   </div>
@@ -182,16 +173,12 @@ const Dashboard = ({ isDarkMode }) => {
           <div className="dashboard-upper-right">
             <div className="commodo-card commodo-launch-card">
               <div className="commodo-launch-card-inner">
-                <img
-                  className="launch-bg"
-                  alt="CMDO Token Launch"
-                  src={LaunchImage}
-                />
+                <img className="launch-bg" alt="CMDO Token Launch" src={LaunchImage} />
                 <div className="assets-section">
                   <div className="assets-left">
                     <p>
-                      Provide liquidity on CMDX-CMST pool on CSWAP to earn
-                      external incentives on COMMODO
+                      Provide liquidity on CMDX-CMST pool on CSWAP to earn external incentives on
+                      COMMODO
                     </p>
                     <div className="mt-3">
                       <div className="small-icons mb-2">
@@ -310,23 +297,14 @@ const Dashboard = ({ isDarkMode }) => {
                     <SvgIcon name="rectangle" /> Borrowed
                   </div>
                 </div>
-                <HighchartsReact
-                  highcharts={Highcharts}
-                  options={DepositBorrowChart}
-                />
+                <HighchartsReact highcharts={Highcharts} options={DepositBorrowChart} />
               </div>
               <div className="bottom-chart-right">
-                <div
-                  className="dashboard-statics"
-                  style={{ borderColor: "#52B788" }}
-                >
+                <div className="dashboard-statics" style={{ borderColor: "#52B788" }}>
                   <p>Total Deposited</p>
                   <h2>$30,283,670</h2>
                 </div>
-                <div
-                  className="dashboard-statics"
-                  style={{ borderColor: "#E2F7E5" }}
-                >
+                <div className="dashboard-statics" style={{ borderColor: "#E2F7E5" }}>
                   <p>Total Borrowed</p>
                   <h2>$14,323,970</h2>
                 </div>

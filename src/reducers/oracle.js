@@ -6,7 +6,7 @@ const market = (
     list: [],
     pagination: {},
   },
-  action
+  action,
 ) => {
   if (action.type === MARKET_LIST_SET) {
     return {

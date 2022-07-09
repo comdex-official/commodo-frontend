@@ -1,9 +1,7 @@
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useEffect, useState } from "react";
-import {
-  queryModuleBalance,
-} from "../../../services/lend/query";
+import { queryModuleBalance } from "../../../services/lend/query";
 import { message } from "antd";
 import { marketPrice } from "../../../utils/number";
 import { amountConversionWithComma } from "../../../utils/coin";
@@ -33,9 +31,7 @@ export const AvailableToBorrow = ({ lendPool, markets }) => {
     const values =
       moduleBalanceStats?.length > 0
         ? moduleBalanceStats.map((item) => {
-            return (
-              marketPrice(markets, item?.balance?.denom) * item?.balance.amount
-            );
+            return marketPrice(markets, item?.balance?.denom) * item?.balance.amount;
           })
         : [];
 
@@ -53,7 +49,7 @@ AvailableToBorrow.propTypes = {
       rates: PropTypes.shape({
         low: PropTypes.number,
       }),
-    })
+    }),
   ),
   lendPool: PropTypes.shape({
     mainAssetId: PropTypes.shape({

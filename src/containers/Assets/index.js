@@ -7,11 +7,7 @@ import Withdraw from "./WithdrawModal";
 import { ibcAssetsInfo } from "../../config/ibc";
 import { commaSeparator, marketPrice } from "../../utils/number";
 import { embedChainInfo } from "../../config/chain";
-import {
-  amountConversion,
-  amountConversionWithComma,
-  denomConversion,
-} from "../../utils/coin";
+import { amountConversion, amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { cmst, comdex, harbor } from "../../config/network";
 import { iconNameFromDenom } from "../../utils/string";
 import Lodash from "lodash";
@@ -66,12 +62,7 @@ const Assets = ({ assetBalance, balances, markets }) => {
       width: 150,
       render: (balance) => (
         <>
-          <p>
-            $
-            {commaSeparator(
-              amountConversion(balance?.value || 0, DOLLAR_DECIMALS)
-            )}
-          </p>
+          <p>${commaSeparator(amountConversion(balance?.value || 0, DOLLAR_DECIMALS))}</p>
         </>
       ),
     },
@@ -105,26 +96,22 @@ const Assets = ({ assetBalance, balances, markets }) => {
     return marketPrice(markets, denom) || 0;
   };
 
-  let ibcBalances = ibcAssetsInfo.map((channelInfo) => {
+  const ibcBalances = ibcAssetsInfo.map((channelInfo) => {
     const chainInfo = embedChainInfo.filter(
-      (item) => item.chainId === channelInfo.counterpartyChainId
+      (item) => item.chainId === channelInfo.counterpartyChainId,
     )[0];
 
     const originCurrency =
       chainInfo &&
-      chainInfo.currencies.find(
-        (cur) => cur.coinMinimalDenom === channelInfo.coinMinimalDenom
-      );
+      chainInfo.currencies.find((cur) => cur.coinMinimalDenom === channelInfo.coinMinimalDenom);
 
     if (!originCurrency) {
       message.info(
-        `Unknown currency ${channelInfo.coinMinimalDenom} for ${channelInfo.counterpartyChainId}`
+        `Unknown currency ${channelInfo.coinMinimalDenom} for ${channelInfo.counterpartyChainId}`,
       );
     }
 
-    const ibcBalance = balances.find(
-      (item) => item.denom === channelInfo?.ibcDenomHash
-    );
+    const ibcBalance = balances.find((item) => item.denom === channelInfo?.ibcDenomHash);
     const value = getPrice(ibcBalance?.denom) * ibcBalance?.amount;
 
     return {
@@ -142,20 +129,14 @@ const Assets = ({ assetBalance, balances, markets }) => {
     };
   });
 
-  const nativeCoin = balances.filter(
-    (item) => item.denom === comdex?.coinMinimalDenom
-  )[0];
+  const nativeCoin = balances.filter((item) => item.denom === comdex?.coinMinimalDenom)[0];
 
   const nativeCoinValue = getPrice(nativeCoin?.denom) * nativeCoin?.amount;
 
-  const cmstCoin = balances.filter(
-    (item) => item.denom === cmst?.coinMinimalDenom
-  )[0];
+  const cmstCoin = balances.filter((item) => item.denom === cmst?.coinMinimalDenom)[0];
   const cmstCoinValue = getPrice(cmstCoin?.denom) * cmstCoin?.amount;
 
-  const harborCoin = balances.filter(
-    (item) => item.denom === harbor?.coinMinimalDenom
-  )[0];
+  const harborCoin = balances.filter((item) => item.denom === harbor?.coinMinimalDenom)[0];
   const harborCoinValue = getPrice(harborCoin?.denom) * harborCoin?.amount;
 
   const currentChainData = [
@@ -171,9 +152,7 @@ const Assets = ({ assetBalance, balances, markets }) => {
           </div>
         </>
       ),
-      no_of_tokens: nativeCoin?.amount
-        ? amountConversion(nativeCoin.amount)
-        : 0,
+      no_of_tokens: nativeCoin?.amount ? amountConversion(nativeCoin.amount) : 0,
       oracle_price: getPrice(comdex?.coinMinimalDenom),
       amount: {
         value: nativeCoinValue || 0,
@@ -209,9 +188,7 @@ const Assets = ({ assetBalance, balances, markets }) => {
           </div>
         </>
       ),
-      no_of_tokens: harborCoin?.amount
-        ? amountConversion(harborCoin.amount)
-        : 0,
+      no_of_tokens: harborCoin?.amount ? amountConversion(harborCoin.amount) : 0,
       oracle_price: getPrice(harbor?.coinMinimalDenom),
       amount: {
         value: harborCoinValue || 0,
@@ -228,9 +205,7 @@ const Assets = ({ assetBalance, balances, markets }) => {
           <>
             <div className="assets-with-icon">
               <div className="assets-icon">
-                <SvgIcon
-                  name={iconNameFromDenom(item.currency?.coinMinimalDenom)}
-                />
+                <SvgIcon name={iconNameFromDenom(item.currency?.coinMinimalDenom)} />
               </div>{" "}
               {item.currency?.coinDenom}{" "}
             </div>
@@ -300,7 +275,7 @@ Assets.propTypes = {
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
       amount: PropTypes.string,
-    })
+    }),
   ),
   markets: PropTypes.arrayOf(
     PropTypes.shape({
@@ -309,7 +284,7 @@ Assets.propTypes = {
       }),
       symbol: PropTypes.string,
       script_id: PropTypes.string,
-    })
+    }),
   ),
 };
 

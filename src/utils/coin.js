@@ -24,20 +24,10 @@ export const orderPriceConversion = (amount) => {
 
 export const denomConversion = (denom) => {
   if (denom && denom.substr(0, 1) === "u") {
-    if (
-      denom &&
-      denom.substr(0, 2) === "uc" &&
-      !(denom.substr(0, 3) === "ucm")
-    ) {
-      return (
-        denom.substr(1, denom.length) &&
-        lowercaseFirstLetter(denom.substr(1, denom.length))
-      );
+    if (denom && denom.substr(0, 2) === "uc" && !(denom.substr(0, 3) === "ucm")) {
+      return denom.substr(1, denom.length) && lowercaseFirstLetter(denom.substr(1, denom.length));
     }
-    return (
-      denom.substr(1, denom.length) &&
-      denom.substr(1, denom.length).toUpperCase()
-    );
+    return denom.substr(1, denom.length) && denom.substr(1, denom.length).toUpperCase();
   } else {
     if (denom && denom.substr(0, 3) === "ibc") {
       const voucherDenom = ibcDenomToDenom(denom);

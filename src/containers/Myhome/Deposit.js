@@ -64,9 +64,7 @@ const Deposit = ({ address, setUserLends, userLendList }) => {
       dataIndex: "apy",
       key: "apy",
       width: 150,
-      render: (lend) => (
-        <AssetApy poolId={lend?.poolId} assetId={lend?.assetId} parent="lend" />
-      ),
+      render: (lend) => <AssetApy poolId={lend?.poolId} assetId={lend?.assetId} parent="lend" />,
     },
     {
       title: "Rewards",
@@ -85,9 +83,7 @@ const Deposit = ({ address, setUserLends, userLendList }) => {
         <>
           <div className="d-flex">
             <Button
-              onClick={() =>
-                navigate(`/deposit/${item?.lendingId?.toNumber()}`)
-              }
+              onClick={() => navigate(`/deposit/${item?.lendingId?.toNumber()}`)}
               type="primary"
               className="btn-filled table-btn"
               size="small"
@@ -186,7 +182,7 @@ Deposit.propTypes = {
         low: PropTypes.number,
       }),
       rewardAccumulated: PropTypes.string,
-    })
+    }),
   ),
 };
 

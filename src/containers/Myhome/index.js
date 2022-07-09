@@ -30,10 +30,7 @@ const Myhome = ({ userLendList, markets }) => {
     const values =
       userLendList?.length > 0
         ? userLendList.map((item) => {
-            return (
-              marketPrice(markets, item?.amountIn?.denom) *
-              item?.amountIn.amount
-            );
+            return marketPrice(markets, item?.amountIn?.denom) * item?.amountIn.amount;
           })
         : [];
 
@@ -46,8 +43,7 @@ const Myhome = ({ userLendList, markets }) => {
     {
       title: (
         <>
-          Total Deposited{" "}
-          <TooltipIcon text="Value of total Asset Deposited by User" />
+          Total Deposited <TooltipIcon text="Value of total Asset Deposited by User" />
         </>
       ),
       counts: calculateTotalDeposit(),
@@ -55,8 +51,7 @@ const Myhome = ({ userLendList, markets }) => {
     {
       title: (
         <>
-          Total Borrowed{" "}
-          <TooltipIcon text="Value of total Asset Borrowed by User" />
+          Total Borrowed <TooltipIcon text="Value of total Asset Borrowed by User" />
         </>
       ),
       counts: "$2,345",
@@ -144,7 +139,7 @@ Myhome.propTypes = {
       rates: PropTypes.shape({
         low: PropTypes.number,
       }),
-    })
+    }),
   ),
   userLendList: PropTypes.arrayOf(
     PropTypes.shape({
@@ -159,7 +154,7 @@ Myhome.propTypes = {
         low: PropTypes.number,
       }),
       rewardAccumulated: PropTypes.string,
-    })
+    }),
   ),
 };
 

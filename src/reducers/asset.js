@@ -14,7 +14,7 @@ const pairs = (
     list: [],
     pagination: {},
   },
-  action
+  action,
 ) => {
   if (action.type === PAIRS_SET) {
     return {
@@ -34,7 +34,7 @@ const _ = (
     inProgress: false,
     map: {},
   },
-  action
+  action,
 ) => {
   if (action.type === ASSETS_SET) {
     return {
@@ -43,7 +43,6 @@ const _ = (
       cAssets: action.cAssets,
       pagination: action.pagination,
       map: action.map,
-
     };
   }
 

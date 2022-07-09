@@ -25,7 +25,7 @@ CustomRow.propTypes = {
   assetList: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
-    })
+    }),
   ),
 };
 

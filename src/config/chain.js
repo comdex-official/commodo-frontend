@@ -28,8 +28,7 @@ export const embedChainInfo = [
         coinMinimalDenom: "uatom",
         coinDecimals: 6,
         coinGeckoId: "cosmos",
-        coinImageUrl:
-          window.location.origin + "/public/assets/tokens/cosmos.svg",
+        coinImageUrl: window.location.origin + "/public/assets/tokens/cosmos.svg",
       },
     ],
     feeCurrencies: [
@@ -38,14 +37,12 @@ export const embedChainInfo = [
         coinMinimalDenom: "uatom",
         coinDecimals: 6,
         coinGeckoId: "cosmos",
-        coinImageUrl:
-          window.location.origin + "/public/assets/tokens/cosmos.svg",
+        coinImageUrl: window.location.origin + "/public/assets/tokens/cosmos.svg",
       },
     ],
     coinType: 118,
     features: ["ibc-transfer"],
-    explorerUrlToTx:
-      "https://explorer.theta-testnet.polypore.xyz/transactions/{txHash}",
+    explorerUrlToTx: "https://explorer.theta-testnet.polypore.xyz/transactions/{txHash}",
   },
   {
     rpc: "https://rpc.testnet.persistence.one",
@@ -89,8 +86,7 @@ export const embedChainInfo = [
       },
     ],
     features: ["ibc-transfer"],
-    explorerUrlToTx:
-      "https://test-core-1.explorer.persistence.one/transactions/{txHash}",
+    explorerUrlToTx: "https://test-core-1.explorer.persistence.one/transactions/{txHash}",
   },
   {
     rpc: "https://osmosis-testnet.rpc.zenscape.one/",
@@ -102,8 +98,7 @@ export const embedChainInfo = [
       coinMinimalDenom: "uosmo",
       coinDecimals: 6,
       coinGeckoId: "osmosis",
-      coinImageUrl:
-        window.location.origin + "/public/assets/tokens/osmosis.svg",
+      coinImageUrl: window.location.origin + "/public/assets/tokens/osmosis.svg",
     },
     bip44: {
       coinType: 118,
@@ -122,8 +117,7 @@ export const embedChainInfo = [
         coinMinimalDenom: "uosmo",
         coinDecimals: 6,
         coinGeckoId: "osmosis",
-        coinImageUrl:
-          window.location.origin + "/public/assets/tokens/osmosis.svg",
+        coinImageUrl: window.location.origin + "/public/assets/tokens/osmosis.svg",
       },
       {
         coinDenom: "ION",
@@ -139,12 +133,10 @@ export const embedChainInfo = [
         coinMinimalDenom: "uosmo",
         coinDecimals: 6,
         coinGeckoId: "osmosis",
-        coinImageUrl:
-          window.location.origin + "/public/assets/tokens/osmosis.svg",
+        coinImageUrl: window.location.origin + "/public/assets/tokens/osmosis.svg",
       },
     ],
     features: ["ibc-transfer"],
-    explorerUrlToTx:
-      "https://bigdipper.testnet.osmo.mp20.net/transactions/{txHash}",
+    explorerUrlToTx: "https://bigdipper.testnet.osmo.mp20.net/transactions/{txHash}",
   },
 ];

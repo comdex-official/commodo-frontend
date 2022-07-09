@@ -37,12 +37,7 @@ const Borrow = () => {
       width: 300,
       align: "center",
       render: (text) => (
-        <Progress
-          className="health-progress"
-          style={{ width: 150 }}
-          percent={text}
-          size="small"
-        />
+        <Progress className="health-progress" style={{ width: 150 }} percent={text} size="small" />
       ),
     },
     {

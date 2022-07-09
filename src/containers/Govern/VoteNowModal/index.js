@@ -49,12 +49,9 @@ const VoteNowModal = ({ address, proposal, lang }) => {
         }
 
         message.success(
-          <Snack
-            message={variables[lang].tx_success}
-            hash={result?.transactionHash}
-          />
+          <Snack message={variables[lang].tx_success} hash={result?.transactionHash} />,
         );
-      }
+      },
     );
   };
 
@@ -108,12 +105,7 @@ const VoteNowModal = ({ address, proposal, lang }) => {
           </Row>
           <Row className="p-0">
             <Col className="text-right mt-3">
-              <Button
-                type="primary"
-                className="px-5 mr-3"
-                size="large"
-                onClick={handleCancel}
-              >
+              <Button type="primary" className="px-5 mr-3" size="large" onClick={handleCancel}>
                 Cancel
               </Button>
               <Button

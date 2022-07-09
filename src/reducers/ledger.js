@@ -25,7 +25,7 @@ const accountIndex = (
       message: "",
     },
   },
-  { type, data }
+  { type, data },
 ) => {
   switch (type) {
     case SET_LEDGER_ACCOUNT_INDEX:
@@ -49,7 +49,7 @@ const accountNumber = (
       message: "",
     },
   },
-  { type, data }
+  { type, data },
 ) => {
   switch (type) {
     case SET_LEDGER_ACCOUNT_NUMBER:
@@ -73,7 +73,7 @@ const ledgerInfo = (
       message: "",
     },
   },
-  { type, data }
+  { type, data },
 ) => {
   switch (type) {
     case SET_LEDGER_INFO:

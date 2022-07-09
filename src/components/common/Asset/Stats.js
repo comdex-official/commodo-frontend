@@ -12,9 +12,9 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
           <label>Max LTV</label>
         </Col>
         <Col className="text-right">
-          {Number(
-            decimalConversion(assetRatesStatsMap[assetId]?.uOptimal) * 100
-          ).toFixed(DOLLAR_DECIMALS)}
+          {Number(decimalConversion(assetRatesStatsMap[assetId]?.uOptimal) * 100).toFixed(
+            DOLLAR_DECIMALS,
+          )}
           %
         </Col>
       </Row>
@@ -24,9 +24,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
         </Col>
         <Col className="text-right">
           {Number(
-            decimalConversion(
-              assetRatesStatsMap[assetId]?.liquidationThreshold
-            ) * 100
+            decimalConversion(assetRatesStatsMap[assetId]?.liquidationThreshold) * 100,
           ).toFixed(DOLLAR_DECIMALS)}
           %
         </Col>
@@ -36,10 +34,9 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
           <label>Liquidation Penalty</label>
         </Col>
         <Col className="text-right">
-          {Number(
-            decimalConversion(assetRatesStatsMap[assetId]?.liquidationPenalty) *
-              100
-          ).toFixed(DOLLAR_DECIMALS)}
+          {Number(decimalConversion(assetRatesStatsMap[assetId]?.liquidationPenalty) * 100).toFixed(
+            DOLLAR_DECIMALS,
+          )}
           %
         </Col>
       </Row>
@@ -48,9 +45,9 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
           <label>Current LTV</label>
         </Col>
         <Col className="text-right">
-          {Number(
-            decimalConversion(assetRatesStatsMap[assetId]?.ltv) * 100
-          ).toFixed(DOLLAR_DECIMALS)}
+          {Number(decimalConversion(assetRatesStatsMap[assetId]?.ltv) * 100).toFixed(
+            DOLLAR_DECIMALS,
+          )}
           %
         </Col>
       </Row>

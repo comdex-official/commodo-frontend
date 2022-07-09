@@ -60,17 +60,14 @@ export const ActionButton = ({
         }
 
         message.success(
-          <Snack
-            message={variables[lang].tx_success}
-            hash={result?.transactionHash}
-          />
+          <Snack message={variables[lang].tx_success} hash={result?.transactionHash} />,
         );
         if (name !== "Close") {
           refreshData();
         } else {
           navigate("/myhome");
         }
-      }
+      },
     );
   };
 

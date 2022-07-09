@@ -3,7 +3,7 @@ import { message } from "antd";
 import { CAMPAIGN_URL } from "../constants/url";
 
 export const fetchCampaignStats = (address, callback) => {
-  let url = `${CAMPAIGN_URL}/stats/${address}`;
+  const url = `${CAMPAIGN_URL}/stats/${address}`;
   const headers = {
     "Content-Type": "application/json",
   };
@@ -22,7 +22,7 @@ export const fetchCampaignStats = (address, callback) => {
 };
 
 export const updateCampaignStats = (walletAddress, flagType, callback) => {
-  let url = `${CAMPAIGN_URL}/externals/`;
+  const url = `${CAMPAIGN_URL}/externals/`;
   const headers = {
     "Content-Type": "application/json",
   };
@@ -36,7 +36,7 @@ export const updateCampaignStats = (walletAddress, flagType, callback) => {
       },
       {
         headers,
-      }
+      },
     )
     .then((response) => {
       callback(null, response.data);

@@ -29,9 +29,7 @@ const ThemeToggle = ({ isDarkMode, setDarkTheme }) => {
     localStorage.setItem("isDarkMode", !isDarkMode);
   };
 
-  return (
-    <div className="theme-toogle"/>
-  );
+  return <div className="theme-toogle" />;
 };
 
 ThemeToggle.propTypes = {

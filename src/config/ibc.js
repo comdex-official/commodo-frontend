@@ -3,7 +3,7 @@ import { ibcDenoms } from "./network";
 export const ibcAssetsInfo = [
   {
     counterpartyChainId: "theta-testnet-001",
-    //cosmos
+    // cosmos
     sourceChannelId: "channel-1",
     destChannelId: "channel-308",
     coinMinimalDenom: "uatom",
@@ -14,13 +14,13 @@ export const ibcAssetsInfo = [
     sourceChannelId: "channel-2",
     destChannelId: "channel-72",
     coinMinimalDenom: "uxprt",
-    ibcDenomHash:ibcDenoms["uxprt"],
+    ibcDenomHash: ibcDenoms["uxprt"],
   },
   {
     counterpartyChainId: "osmo-test-4",
     sourceChannelId: "channel-1",
     destChannelId: "channel-346",
     coinMinimalDenom: "uosmo",
-    ibcDenomHash: ibcDenoms["uosmo"]
+    ibcDenomHash: ibcDenoms["uosmo"],
   },
 ];

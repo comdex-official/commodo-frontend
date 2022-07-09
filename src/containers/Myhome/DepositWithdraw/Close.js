@@ -5,24 +5,14 @@ import { Select } from "antd";
 import "./index.less";
 import { useEffect, useState } from "react";
 import { iconNameFromDenom } from "../../../utils/string";
-import {
-  amountConversionWithComma,
-  denomConversion,
-} from "../../../utils/coin";
+import { amountConversionWithComma, denomConversion } from "../../../utils/coin";
 import ActionButton from "./ActionButton";
 import Details from "../../../components/common/Asset/Details";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 
 const { Option } = Select;
 
-const CloseTab = ({
-  lang,
-  lendPosition,
-  pool,
-  assetMap,
-  balances,
-  address,
-}) => {
+const CloseTab = ({ lang, lendPosition, pool, assetMap, balances, address }) => {
   const [assetList, setAssetList] = useState();
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
@@ -63,24 +53,16 @@ const CloseTab = ({
                   </div>
                 }
                 defaultActiveFirstOption={true}
-                suffixIcon={
-                  <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
-                }
+                suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />}
               >
                 <Option key="1">
                   <div className="select-inner">
                     <div className="svg-icon">
                       <div className="svg-icon-inner">
-                        <SvgIcon
-                          name={iconNameFromDenom(
-                            assetMap[selectedAssetId]?.denom
-                          )}
-                        />
+                        <SvgIcon name={iconNameFromDenom(assetMap[selectedAssetId]?.denom)} />
                       </div>
                     </div>
-                    <div className="name">
-                      {denomConversion(assetMap[selectedAssetId]?.denom)}
-                    </div>
+                    <div className="name">{denomConversion(assetMap[selectedAssetId]?.denom)}</div>
                   </div>
                 </Option>
               </Select>
@@ -144,7 +126,7 @@ CloseTab.propTypes = {
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
       amount: PropTypes.string,
-    })
+    }),
   ),
   lendPosition: PropTypes.shape({
     lendingId: PropTypes.shape({

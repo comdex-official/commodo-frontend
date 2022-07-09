@@ -2,13 +2,7 @@ import { QueryClientImpl } from "comdex-codec/build/comdex/lend/v1beta1/query";
 import Long from "long";
 import { createQueryClient } from "../helper";
 
-export const queryLendPools = (
-  offset,
-  limit,
-  countTotal,
-  reverse,
-  callback
-) => {
+export const queryLendPools = (offset, limit, countTotal, reverse, callback) => {
   createQueryClient((error, rpcClient) => {
     if (error) {
       callback(error);

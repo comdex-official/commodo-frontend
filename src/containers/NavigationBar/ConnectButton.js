@@ -3,19 +3,11 @@ import { Button, message, Dropdown } from "antd";
 import { SvgIcon } from "../../components/common";
 import { connect } from "react-redux";
 import { decode } from "js-base64";
-import {
-  setAccountAddress,
-  setAccountName,
-  showAccountConnectModal,
-} from "../../actions/account";
+import { setAccountAddress, setAccountName, showAccountConnectModal } from "../../actions/account";
 import DisConnectModal from "../DisConnectModal";
 import React, { useEffect } from "react";
 import variables from "../../utils/variables";
-import {
-  DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE,
-  DOLLAR_DECIMALS,
-} from "../../constants/common";
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, DOLLAR_DECIMALS } from "../../constants/common";
 import {
   setAccountBalances,
   setPoolBalance,
@@ -77,7 +69,7 @@ const ConnectButton = ({
       (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
       DEFAULT_PAGE_SIZE,
       true,
-      false
+      false,
     );
   }, [markets]);
   ``;
@@ -97,7 +89,7 @@ const ConnectButton = ({
         if (result?.assets?.length > 0) {
           setAssets(result?.assets);
         }
-      }
+      },
     );
 
     queryAssetRatesStats((error, result) => {
@@ -136,8 +128,7 @@ const ConnectButton = ({
 
   const calculatecAssetBalance = (balances) => {
     const cAssets = balances.filter(
-      (item) =>
-        item.denom.substr(0, 2) === "uc" && !(item.denom.substr(0, 3) === "ucm")
+      (item) => item.denom.substr(0, 2) === "uc" && !(item.denom.substr(0, 3) === "ucm"),
     );
     const value = cAssets.map((item) => {
       return marketPrice(markets, item.denom) * item.amount;
@@ -156,9 +147,9 @@ const ConnectButton = ({
         item.denom.substr(0, 4) === "ibc/" ||
         item.denom === comdex.coinMinimalDenom ||
         item.denom === cmst.coinMinimalDenom ||
-        item.denom === harbor.coinMinimalDenom
+        item.denom === harbor.coinMinimalDenom,
     );
-      
+
     const value = assetBalances.map((item) => {
       return getPrice(item.denom) * item.amount;
     });
@@ -177,7 +168,7 @@ const ConnectButton = ({
               <SvgIcon name="cmdx-icon" />{" "}
               {amountConversionWithComma(
                 getDenomBalance(balances, comdex.coinMinimalDenom) || 0,
-                DOLLAR_DECIMALS
+                DOLLAR_DECIMALS,
               )}
             </div>
           </div>
@@ -185,11 +176,7 @@ const ConnectButton = ({
         </div>
       ) : (
         <div>
-          <Dropdown
-            overlay={WalletConnectedDropdown}
-            placement="bottomRight"
-            trigger={["click"]}
-          >
+          <Dropdown overlay={WalletConnectedDropdown} placement="bottomRight" trigger={["click"]}>
             <Button shape="round" type="primary" className="btn-filled">
               {variables[lang].connect_wallet}
             </Button>
@@ -220,14 +207,14 @@ ConnectButton.propTypes = {
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
       amount: PropTypes.string,
-    })
+    }),
   ),
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
         low: PropTypes.number,
       }),
-    })
+    }),
   ),
   show: PropTypes.bool,
 };

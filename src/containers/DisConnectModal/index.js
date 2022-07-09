@@ -2,10 +2,7 @@ import * as PropTypes from "prop-types";
 import { Button, Modal, Dropdown } from "antd";
 import { SvgIcon } from "../../components/common";
 import { connect } from "react-redux";
-import {
-  setAccountAddress,
-  showAccountConnectModal,
-} from "../../actions/account";
+import { setAccountAddress, showAccountConnectModal } from "../../actions/account";
 import React, { useState } from "react";
 import variables from "../../utils/variables";
 import { amountConversionWithComma } from "../../utils/coin";
@@ -13,13 +10,7 @@ import { truncateString } from "../../utils/string";
 import Copy from "../../components/Copy";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 
-const DisConnectModal = ({
-  setAccountAddress,
-  lang,
-  address,
-  assetBalance,
-  name,
-}) => {
+const DisConnectModal = ({ setAccountAddress, lang, address, assetBalance, name }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
@@ -48,36 +39,24 @@ const DisConnectModal = ({
     <div className="wallet-connect-dropdown">
       <div className="wallet-connect-upper">
         <span />
-        <div>
-          {localStorage.getItem("loginType") === "ledger"
-            ? "native-ledger"
-            : name}
-        </div>
+        <div>{localStorage.getItem("loginType") === "ledger" ? "native-ledger" : name}</div>
       </div>
       <div className="px-3">
         <div> {variables[lang].balance_wallet}</div>
         <div className="balance__value__data">
-          {amountConversionWithComma(getTotalValue(), DOLLAR_DECIMALS)}{" "}
-          {variables[lang].USD}
+          {amountConversionWithComma(getTotalValue(), DOLLAR_DECIMALS)} {variables[lang].USD}
         </div>
       </div>
       <div className="mt-2 px-3">
         <div>{variables[lang].address_wallet} </div>
         <div className="wallet-address">
           <div className="address-wallet-address d-flex">
-            <span className="mr-3"> {truncateString(address, 6, 6)} </span>{" "}
-            <Copy text={address} />
+            <span className="mr-3"> {truncateString(address, 6, 6)} </span> <Copy text={address} />
           </div>
         </div>
       </div>
       <div className="mb-2 mt-3">
-        <Button
-          type="primary"
-          onClick={showModal}
-          className="btn-filled"
-          block
-          size="medium"
-        >
+        <Button type="primary" onClick={showModal} className="btn-filled" block size="medium">
           {variables[lang].disconnect}
         </Button>
       </div>
@@ -116,13 +95,7 @@ const DisConnectModal = ({
               {" "}
               {variables[lang].no}
             </Button>
-            <Button
-              type="primary"
-              className="mx-3"
-              size="large"
-              onClick={handleDisconnect}
-              block
-            >
+            <Button type="primary" className="mx-3" size="large" onClick={handleDisconnect} block>
               {" "}
               {variables[lang].yes}
             </Button>

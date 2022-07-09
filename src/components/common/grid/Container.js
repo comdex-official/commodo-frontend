@@ -41,7 +41,7 @@ const Container = React.forwardRef(
       className,
       ...props
     },
-    ref
+    ref,
   ) => {
     const prefix = useBootstrapPrefix(bsPrefix, "container");
     const suffix = typeof fluid === "string" ? `-${fluid}` : "-fluid";
@@ -52,7 +52,7 @@ const Container = React.forwardRef(
         className={classNames(className, fluid ? `${prefix}${suffix}` : prefix)}
       />
     );
-  }
+  },
 );
 
 Container.displayName = "Container";

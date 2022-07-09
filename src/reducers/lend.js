@@ -19,7 +19,7 @@ const pool = (
     pagination: {},
     inProgress: false,
   },
-  action
+  action,
 ) => {
   switch (action.type) {
     case POOLS_SET:
@@ -43,7 +43,7 @@ const poolDeposit = (
     list: [],
     pagination: {},
   },
-  action
+  action,
 ) => {
   if (action.type === POOL_DEPOSITS_SET) {
     return {
@@ -102,7 +102,7 @@ const assetRatesStats = (
     map: {},
     pagination: {},
   },
-  action
+  action,
 ) => {
   if (action.type === ASSET_RATES_STATES_SET) {
     return {

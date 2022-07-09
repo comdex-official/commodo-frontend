@@ -100,24 +100,16 @@ const WithdrawTab = ({
                   </div>
                 }
                 defaultActiveFirstOption={true}
-                suffixIcon={
-                  <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
-                }
+                suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />}
               >
                 <Option key="1">
                   <div className="select-inner">
                     <div className="svg-icon">
                       <div className="svg-icon-inner">
-                        <SvgIcon
-                          name={iconNameFromDenom(
-                            assetMap[selectedAssetId]?.denom
-                          )}
-                        />
+                        <SvgIcon name={iconNameFromDenom(assetMap[selectedAssetId]?.denom)} />
                       </div>
                     </div>
-                    <div className="name">
-                      {denomConversion(assetMap[selectedAssetId]?.denom)}
-                    </div>
+                    <div className="name">{denomConversion(assetMap[selectedAssetId]?.denom)}</div>
                   </div>
                 </Option>
               </Select>
@@ -200,7 +192,7 @@ WithdrawTab.propTypes = {
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
       amount: PropTypes.string,
-    })
+    }),
   ),
   lendPosition: PropTypes.shape({
     lendingId: PropTypes.shape({

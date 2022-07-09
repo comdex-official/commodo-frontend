@@ -88,10 +88,7 @@ const History = ({ address, setTransactionHistory, history }) => {
             {" "}
             {
               <a
-                href={`${comdex.explorerUrlToTx.replace(
-                  "{txHash}",
-                  hash?.toUpperCase()
-                )}`}
+                href={`${comdex.explorerUrlToTx.replace("{txHash}", hash?.toUpperCase())}`}
                 rel="noreferrer"
                 target="_blank"
               >
@@ -148,7 +145,7 @@ History.propTypes = {
         index: PropTypes.number,
         height: PropTypes.number,
         tx: PropTypes.any,
-      })
+      }),
     ),
   }),
 };

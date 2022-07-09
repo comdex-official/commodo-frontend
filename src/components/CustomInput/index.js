@@ -26,11 +26,11 @@ const CustomInput = ({
         onChange={onChange}
         onFocus={onFocus}
       />
-      {isError ?
+      {isError ? (
         <div className={isError ? "alert-label" : "alert-label alert-hidden"}>
           {validationError?.message}
         </div>
-        : null}
+      ) : null}
     </>
   );
 };

@@ -47,7 +47,7 @@ const variables = {
     month: "Month",
     year: "Year",
 
-    //Total volume
+    // Total volume
     total_volume: "TOTAL VOLUME",
 
     // Balances
@@ -129,7 +129,7 @@ const variables = {
     poolLiquidity: "Pool Liquidity",
     apr: "APR",
 
-    //Assets
+    // Assets
     total_asset_balance: "Total Asset Balance",
     tx_success: "Transaction Successful",
     tx_failed: "Transaction Failed",

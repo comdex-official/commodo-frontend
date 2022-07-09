@@ -25,11 +25,7 @@ const BorrowRepay = () => {
     <div className="app-content-wrapper">
       <Row>
         <Col>
-          <Tabs
-            className="commodo-tabs"
-            defaultActiveKey="1"
-            tabBarExtraContent={BackButton}
-          >
+          <Tabs className="commodo-tabs" defaultActiveKey="1" tabBarExtraContent={BackButton}>
             <TabPane tab="Borrow" key="1">
               <BorrowTab />
             </TabPane>

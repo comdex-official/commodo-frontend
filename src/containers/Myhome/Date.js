@@ -20,9 +20,7 @@ const Date = ({ height }) => {
 
   return (
     <div className="dates-col" style={{ width: "240px" }}>
-      <div className="dates">
-        {moment(timestamp).format("MMM DD, YYYY HH:mm")}
-      </div>
+      <div className="dates">{moment(timestamp).format("MMM DD, YYYY HH:mm")}</div>
     </div>
   );
 };

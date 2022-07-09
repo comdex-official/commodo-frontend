@@ -30,7 +30,7 @@ const Deposit = ({ setPool }) => {
   const [lendPosition, setLendPosition] = useState();
   const [activeKey, setActiveKey] = useState("1");
 
-  let { id } = useParams();
+  const { id } = useParams();
 
   const location = useLocation();
   const type = decode(location.hash);
@@ -99,10 +99,7 @@ const Deposit = ({ setPool }) => {
                   <Spin />
                 </div>
               ) : (
-                <DepositTab
-                  lendPosition={lendPosition}
-                  dataInProgress={inProgress}
-                />
+                <DepositTab lendPosition={lendPosition} dataInProgress={inProgress} />
               )}
             </TabPane>
             <TabPane tab="Withdraw" key="2">
@@ -124,10 +121,7 @@ const Deposit = ({ setPool }) => {
                   <Spin />
                 </div>
               ) : (
-                <CloseTab
-                  lendPosition={lendPosition}
-                  dataInProgress={inProgress}
-                />
+                <CloseTab lendPosition={lendPosition} dataInProgress={inProgress} />
               )}
             </TabPane>
           </Tabs>

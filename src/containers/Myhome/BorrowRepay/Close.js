@@ -83,9 +83,7 @@ const CloseTab = () => {
                   </div>
                 }
                 defaultActiveFirstOption={true}
-                suffixIcon={
-                  <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
-                }
+                suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />}
               >
                 <Option key="1">
                   <div className="select-inner">
@@ -191,9 +189,7 @@ const CloseTab = () => {
           </Button>
         </div>
       </div>
-      <div className="details-right">
-        
-      </div>
+      <div className="details-right"></div>
     </div>
   );
 };

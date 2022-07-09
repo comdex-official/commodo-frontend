@@ -45,9 +45,7 @@ const GovernDetails = ({ address }) => {
     },
     {
       title: "Duration",
-      counts: `${
-        getDuration(proposal?.voting_end_time, proposal?.voting_start_time) || 0
-      }
+      counts: `${getDuration(proposal?.voting_end_time, proposal?.voting_start_time) || 0}
       Days`,
     },
     {
@@ -81,9 +79,7 @@ const GovernDetails = ({ address }) => {
           return;
         }
 
-        setProposer(
-          result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer
-        );
+        setProposer(result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer);
       });
     }
   }, [id]);
@@ -102,11 +98,11 @@ const GovernDetails = ({ address }) => {
   }, [address, id, proposal]);
 
   const calculateTotalValue = () => {
-    let value = proposal?.final_tally_result;
-    let yes = Number(value?.yes);
-    let no = Number(value?.no);
-    let veto = Number(value?.no_with_veto);
-    let abstain = Number(value?.abstain);
+    const value = proposal?.final_tally_result;
+    const yes = Number(value?.yes);
+    const no = Number(value?.no);
+    const veto = Number(value?.no_with_veto);
+    const abstain = Number(value?.abstain);
 
     let totalValue = yes + no + abstain + veto;
 
@@ -120,20 +116,19 @@ const GovernDetails = ({ address }) => {
       title: "Total Vote",
       counts: (
         <>
-          {calculateTotalValue() || "0"}{" "}
-          {denomConversion(comdex?.coinMinimalDenom)}
+          {calculateTotalValue() || "0"} {denomConversion(comdex?.coinMinimalDenom)}
         </>
       ),
     },
   ];
 
   const calculateVotes = () => {
-    let value = proposal?.final_tally_result;
+    const value = proposal?.final_tally_result;
     let yes = Number(value?.yes);
     let no = Number(value?.no);
     let veto = Number(value?.no_with_veto);
     let abstain = Number(value?.abstain);
-    let totalValue = yes + no + abstain + veto;
+    const totalValue = yes + no + abstain + veto;
 
     yes = Number((yes / totalValue) * 100).toFixed(DOLLAR_DECIMALS);
     no = Number((no / totalValue) * 100).toFixed(DOLLAR_DECIMALS);
@@ -292,10 +287,7 @@ const GovernDetails = ({ address }) => {
               <Col>
                 <div className="govern-dlt-card">
                   <div className="govern-dlt-chart">
-                    <HighchartsReact
-                      highcharts={Highcharts}
-                      options={Options}
-                    />
+                    <HighchartsReact highcharts={Highcharts} options={Options} />
                   </div>
                   <div className="govern-dlt-right">
                     <List

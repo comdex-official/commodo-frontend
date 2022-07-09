@@ -97,23 +97,12 @@ const FilterModal = () => {
             </Row>
             <Row className="mt-2">
               <Col className="text-left">
-                <Button
-                  type="primary"
-                  size="large"
-                  onClick={handleCancel}
-                  block
-                >
+                <Button type="primary" size="large" onClick={handleCancel} block>
                   Cancel
                 </Button>
               </Col>
               <Col className="text-right">
-                <Button
-                  type="primary"
-                  className="btn-filled"
-                  size="large"
-                  onClick={handleOk}
-                  block
-                >
+                <Button type="primary" className="btn-filled" size="large" onClick={handleOk} block>
                   Apply
                 </Button>
               </Col>

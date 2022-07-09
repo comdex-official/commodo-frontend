@@ -8,6 +8,7 @@ const Snack = ({ message, explorerUrlToTx = comdex.explorerUrlToTx, hash }) => {
         href={`${explorerUrlToTx.replace("{txHash}", hash?.toUpperCase())}`}
         target="_blank"
         className="ml-3 text-light "
+        rel="noreferrer"
       >
         {" "}
         View Explorer

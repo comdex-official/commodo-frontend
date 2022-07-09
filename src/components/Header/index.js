@@ -39,7 +39,7 @@ Header.propTypes = {
     PropTypes.shape({
       name: PropTypes.string.isRequired,
       route: PropTypes.string,
-    })
+    }),
   ),
   title: PropTypes.string,
 };

@@ -1,10 +1,7 @@
 import { SvgIcon, TooltipIcon } from "../index";
 import { List, message } from "antd";
 import * as PropTypes from "prop-types";
-import {
-  amountConversionWithComma,
-  denomConversion,
-} from "../../../utils/coin";
+import { amountConversionWithComma, denomConversion } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
 import { useEffect, useState } from "react";
 import { queryAssetStats } from "../../../services/lend/query";
@@ -28,14 +25,13 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
     }
   }, [asset, poolId, refreshBalance]);
 
-  let data = [
+  const data = [
     {
       title: parent === "lend" ? "Total Deposited" : "Total Borrowed",
       counts: `$${amountConversionWithComma(
-        Number(
-          (parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0
-        ) * marketPrice(markets, asset?.denom),
-        DOLLAR_DECIMALS
+        Number((parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0) *
+          marketPrice(markets, asset?.denom),
+        DOLLAR_DECIMALS,
       )}`,
     },
     {
@@ -43,18 +39,13 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
       counts: `$${amountConversionWithComma(
         Number(Number(stats?.totalLend) - Number(stats?.totalBorrowed) || 0) *
           marketPrice(markets, asset?.denom),
-        DOLLAR_DECIMALS
+        DOLLAR_DECIMALS,
       )}`,
     },
     {
       title: "Utilization",
       counts: (
-        <>
-          {Number(decimalConversion(stats?.utilisationRatio) * 100).toFixed(
-            DOLLAR_DECIMALS
-          )}
-          %
-        </>
+        <>{Number(decimalConversion(stats?.utilisationRatio) * 100).toFixed(DOLLAR_DECIMALS)}%</>
       ),
     },
     {
@@ -62,9 +53,7 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
       counts: (
         <>
           {Number(
-            decimalConversion(
-              parent === "lend" ? stats?.lendApr : stats?.borrowApr
-            ) * 100
+            decimalConversion(parent === "lend" ? stats?.lendApr : stats?.borrowApr) * 100,
           ).toFixed(DOLLAR_DECIMALS)}
           %
         </>
@@ -123,7 +112,7 @@ Details.propTypes = {
       rates: PropTypes.shape({
         low: PropTypes.number,
       }),
-    })
+    }),
   ),
   parent: PropTypes.string,
   poolId: PropTypes.shape({
