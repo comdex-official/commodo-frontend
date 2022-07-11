@@ -19,7 +19,7 @@ import { defaultFee } from "../../../../services/transaction";
 import Snack from "../../../../components/common/Snack";
 import variables from "../../../../utils/variables";
 import { comdex } from "../../../../config/network";
-import { DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../../constants/common";
+import {DEFAULT_FEE, DOLLAR_DECIMALS, UC_DENOM} from "../../../../constants/common";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
 import CustomInput from "../../../../components/CustomInput";
 import AssetStats from "../../../../components/common/Asset/Stats";
@@ -42,23 +42,25 @@ const BorrowTab = ({
   poolLendPositions,
 }) => {
   const [assetList, setAssetList] = useState();
-  const [collateralAssetId, setCollateralAssetId] = useState();
-  const [borrowAssetId, setBorrowAssetId] = useState();
   const [lend, setLend] = useState();
-  const [amount, setAmount] = useState();
+  const [pair, setPair] = useState();
+  const [inAmount, setInAmount] = useState();
+  const [outAmount, setOutAmount] = useState();
   const [validationError, setValidationError] = useState();
+  const [borrowValidationError, setBorrowValidationError] = useState();
   const [inProgress, setInProgress] = useState(false);
   const [extendedPairs, setExtendedPairs] = useState({});
 
   const navigate = useNavigate();
 
-  let collateralAssetDenom = assetMap[collateralAssetId]?.denom;
-  let borrowAssetDenom = assetMap[borrowAssetId]?.denom;
+  let collateralAssetDenom = assetMap[lend?.assetId]?.denom;
+  let borrowAssetDenom = assetMap[pair?.assetOut]?.denom;
   const firstBridgeAssetDenom = assetMap[pool?.firstBridgedAssetId]?.denom;
 
   const availableBalance = lend?.availableToBorrow || 0;
 
   const collateralList = poolLendPositions.map((item) => item?.amountIn?.denom);
+
   const borrowList =
     extendedPairs &&
     Object.values(extendedPairs)?.map(
@@ -81,7 +83,6 @@ const BorrowTab = ({
     )[0];
 
     if (selectedLend?.assetId) {
-      setCollateralAssetId(selectedLend?.assetId);
       setLend(selectedLend);
       setExtendedPairs();
       queryAssetPairs(
@@ -120,14 +121,27 @@ const BorrowTab = ({
   };
 
   const handleBorrowAssetChange = (value) => {
-    setBorrowAssetId(value);
+    const selectedPair =
+      extendedPairs &&
+      Object.values(extendedPairs)?.filter(
+        (item) => assetMap[item?.assetOut]?.denom === value
+      )[0];
+
+    setPair(selectedPair);
   };
 
-  const handleInputChange = (value) => {
+  const handleInAmountChange = (value) => {
     value = toDecimals(value).toString().trim();
 
-    setAmount(value);
+    setInAmount(value);
     setValidationError(ValidateInputNumber(getAmount(value), availableBalance));
+  };
+
+  const handleOutAmountChange = (value) => {
+    value = toDecimals(value).toString().trim();
+
+    setOutAmount(value);
+    setBorrowValidationError(ValidateInputNumber(getAmount(value)));
   };
 
   const handleClick = () => {
@@ -139,17 +153,17 @@ const BorrowTab = ({
           typeUrl: "/comdex.lend.v1beta1.MsgBorrow",
           value: {
             borrower: address,
-            //TODO: update the values dynamically
-            lendId: Long.fromNumber(1),
-            pairId: Long.fromNumber(1),
+            lendId: lend?.lendingId,
+            pairId: pair?.id,
             isStableBorrow: false,
             amountIn: {
-              amount: getAmount(amount),
-              denom: collateralAssetDenom,
+              amount: getAmount(inAmount),
+              // Sending uc + denom as per message 
+              denom: UC_DENOM.concat(collateralAssetDenom.substring(1)),
             },
             amountOut: {
-              amount: getAmount(amount),
-              denom: collateralAssetDenom,
+              amount: getAmount(outAmount),
+              denom: borrowAssetDenom,
             },
           },
         },
@@ -159,7 +173,7 @@ const BorrowTab = ({
       address,
       (error, result) => {
         setInProgress(false);
-        setAmount(0);
+        setInAmount(0);
         if (error) {
           message.error(error);
           return;
@@ -188,10 +202,10 @@ const BorrowTab = ({
   const handleMaxClick = () => {
     if (collateralAssetDenom === comdex.coinMinimalDenom) {
       return Number(availableBalance) > DEFAULT_FEE
-        ? handleInputChange(amountConversion(availableBalance - DEFAULT_FEE))
-        : handleInputChange();
+        ? handleInAmountChange(amountConversion(availableBalance - DEFAULT_FEE))
+        : handleInAmountChange();
     } else {
-      return handleInputChange(amountConversion(availableBalance));
+      return handleInAmountChange(amountConversion(availableBalance));
     }
   };
 
@@ -300,9 +314,9 @@ const BorrowTab = ({
                 <div>
                   <div className="input-select">
                     <CustomInput
-                      value={amount}
+                      value={inAmount}
                       onChange={(event) =>
-                        handleInputChange(event.target.value)
+                        handleInAmountChange(event.target.value)
                       }
                       validationError={validationError}
                     />
@@ -310,8 +324,10 @@ const BorrowTab = ({
                   <small>
                     $
                     {commaSeparator(
-                      Number(amount) *
-                        marketPrice(markets, collateralAssetDenom),
+                      Number(
+                        inAmount * marketPrice(markets, collateralAssetDenom) ||
+                          0
+                      ),
                       DOLLAR_DECIMALS
                     )}
                   </small>
@@ -366,9 +382,23 @@ const BorrowTab = ({
               <div className="assets-right">
                 <div>
                   <div className="input-select">
-                    <Input placeholder="" value="23.00" disabled />
+                    <CustomInput
+                      value={outAmount}
+                      onChange={(event) =>
+                        handleOutAmountChange(event.target.value)
+                      }
+                      validationError={borrowValidationError}
+                    />{" "}
                   </div>
-                  <small>$120.00</small>
+                  <small>
+                    $
+                    {commaSeparator(
+                      Number(
+                        outAmount * marketPrice(markets, borrowAssetDenom) || 0
+                      ),
+                      DOLLAR_DECIMALS
+                    )}
+                  </small>{" "}
                 </div>
               </div>
             </div>
@@ -442,7 +472,7 @@ const BorrowTab = ({
             </Row>
             <Row>
               <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-                <AssetStats assetId={borrowAssetId} />
+                <AssetStats assetId={pair?.assetOut} />
               </Col>
             </Row>
             <div className="assets-form-btn">
@@ -450,7 +480,13 @@ const BorrowTab = ({
                 type="primary"
                 className="btn-filled"
                 loading={inProgress}
-                disabled={!Number(amount) || inProgress || !collateralAssetId}
+                disabled={
+                  !Number(inAmount) ||
+                  !Number(outAmount) ||
+                  inProgress ||
+                  !lend?.lendingId ||
+                  !pair?.id
+                }
                 onClick={handleClick}
               >
                 Borrow
