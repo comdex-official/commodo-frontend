@@ -37,10 +37,11 @@ const BorrowTab = ({
   balances,
   address,
   markets,
+  poolLendPositions,
 }) => {
-  const [assetList, setAssetList] = useState();
   const [collateralAssetId, setCollateralAssetId] = useState();
   const [borrowAssetId, setBorrowAssetId] = useState();
+  const [lend, setLend] = useState();
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
   const [inProgress, setInProgress] = useState(false);
@@ -50,20 +51,19 @@ const BorrowTab = ({
   let borrowAssetDenom = assetMap[borrowAssetId]?.denom;
   const firstBridgeAssetDenom = assetMap[pool?.firstBridgedAssetId]?.denom;
 
-  const availableBalance = getDenomBalance(balances, collateralAssetDenom) || 0;
+  const availableBalance = lend?.availableToBorrow || 0;
 
-  useEffect(() => {
-    if (pool?.poolId) {
-      setAssetList([
-        assetMap[pool?.mainAssetId?.toNumber()],
-        assetMap[pool?.firstBridgedAssetId?.toNumber()],
-        assetMap[pool?.secondBridgedAssetId?.toNumber()],
-      ]);
-    }
-  }, [pool]);
+  const assetList = poolLendPositions.map((item) => item?.amountIn?.denom);
 
   const handleCollateralAssetChange = (value) => {
-    setCollateralAssetId(value);
+    const selectedLend = poolLendPositions.filter(
+      (item) => item?.amountIn?.denom === value
+    )[0];
+
+    if (selectedLend?.assetId) {
+      setCollateralAssetId(selectedLend?.assetId);
+      setLend(selectedLend);
+    }
   };
 
   const handleBorrowAssetChange = (value) => {
@@ -180,6 +180,7 @@ const BorrowTab = ({
     </div>
   );
 
+  console.log("asset list", assetList);
   return (
     <div className="details-wrapper">
       {!dataInProgress ? (
@@ -235,9 +236,7 @@ const BorrowTab = ({
                 <div className="label-right">
                   Available
                   <span className="ml-1">
-                    {amountConversionWithComma(
-                      getDenomBalance(balances, collateralAssetDenom) || 0
-                    )}{" "}
+                    {amountConversionWithComma(availableBalance)}{" "}
                     {denomConversion(collateralAssetDenom)}
                   </span>
                   <div className="max-half">
@@ -471,6 +470,20 @@ BorrowTab.propTypes = {
       low: PropTypes.number,
     }),
   }),
+  poolLendPositions: PropTypes.arrayOf(
+    PropTypes.shape({
+      assetId: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+      lendingId: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+      amountIn: PropTypes.shape({
+        denom: PropTypes.string,
+        amount: PropTypes.string,
+      }),
+    })
+  ),
 };
 
 const stateToProps = (state) => {
@@ -481,6 +494,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     lang: state.language,
     markets: state.oracle.market.list,
+    poolLendPositions: state.lend.poolLends,
   };
 };
 
