@@ -7,16 +7,19 @@ import "./index.less";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { queryLendPool } from "../../../../services/lend/query";
-import { setPool } from "../../../../actions/lend";
+import {
+  queryLendPool,
+  queryUserPoolLends,
+} from "../../../../services/lend/query";
+import { setPool, setPoolLends } from "../../../../actions/lend";
 
-const BorrowDetails = ({ setPool }) => {
+const BorrowDetails = ({ address, setPool, setPoolLends }) => {
   const [inProgress, setInProgress] = useState(false);
 
   let { id } = useParams();
 
   useEffect(() => {
-    if (id) {
+    if (address && id) {
       setInProgress(true);
 
       queryLendPool(id, (error, result) => {
@@ -27,8 +30,17 @@ const BorrowDetails = ({ setPool }) => {
         }
         setPool(result?.pool);
       });
+
+      queryUserPoolLends(address, id, (error, result) => {
+        setInProgress(false);
+        if (error) {
+          message.error(error);
+          return;
+        }
+        setPoolLends(result?.lends);
+      });
     }
-  }, [id]);
+  }, [address, id]);
 
   return (
     <div className="app-content-wrapper">
@@ -48,10 +60,19 @@ const BorrowDetails = ({ setPool }) => {
 
 BorrowDetails.propTypes = {
   setPool: PropTypes.func.isRequired,
+  setPoolLends: PropTypes.func.isRequired,
+  address: PropTypes.string,
+};
+
+const stateToProps = (state) => {
+  return {
+    address: state.account.address,
+  };
 };
 
 const actionsToProps = {
   setPool,
+  setPoolLends,
 };
 
-export default connect(null, actionsToProps)(BorrowDetails);
+export default connect(stateToProps, actionsToProps)(BorrowDetails);

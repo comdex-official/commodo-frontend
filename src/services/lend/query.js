@@ -144,3 +144,65 @@ export const queryModuleBalance = (poolId, callback) => {
       });
   });
 };
+
+export const queryUserPoolLends = (address, poolId, callback) => {
+  createQueryClient((error, rpcClient) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    new QueryClientImpl(rpcClient)
+      .QueryAllLendByOwnerAndPool({
+        owner: address,
+        poolId: Long.fromNumber(poolId),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};
+
+export const queryAssetPairs = (assetId, poolId, callback) => {
+  createQueryClient((error, rpcClient) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    new QueryClientImpl(rpcClient)
+      .QueryAssetToPairMapping({
+        assetId: Long.fromNumber(assetId),
+        poolId: Long.fromNumber(poolId),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};
+
+export const queryLendPair = (id, callback) => {
+  createQueryClient((error, rpcClient) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    new QueryClientImpl(rpcClient)
+      .QueryPair({
+        id: Long.fromNumber(id),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};

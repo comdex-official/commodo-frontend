@@ -8,6 +8,7 @@ import {
   POOL_SET,
   ASSET_RATES_STATES_SET,
   USER_LENDS_SET,
+  POOL_LENDS_SET,
 } from "../constants/lend";
 
 export const setPools = (list, pagination) => {
@@ -77,6 +78,13 @@ export const setAssetRatesStats = (list, pagination) => {
 export const setUserLends = (list) => {
   return {
     type: USER_LENDS_SET,
+    list,
+  };
+};
+
+export const setPoolLends = (list) => {
+  return {
+    type: POOL_LENDS_SET,
     list,
   };
 };
