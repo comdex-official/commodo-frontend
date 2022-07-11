@@ -1,8 +1,9 @@
 import { comdex } from "../../../config/network";
+import "./index.less";
 
 const Snack = ({ message, explorerUrlToTx = comdex.explorerUrlToTx, hash }) => {
   return (
-    <span>
+    <span className="sucessMessages">
       {message}
       <a
         href={`${explorerUrlToTx.replace("{txHash}", hash?.toUpperCase())}`}

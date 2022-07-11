@@ -269,6 +269,10 @@ const GovernDetails = ({ address }) => {
               </Col>
               <Col className="text-right">
                 <Button type="primary" className="btn-filled">
+                  {/* Please use below for pass and faild */}
+                  
+                  <span className="passed-circle"></span>
+                  {/* <span className="failed-circle"></span> */}
                   {proposalStatusMap[proposal?.status]}
                 </Button>
               </Col>
