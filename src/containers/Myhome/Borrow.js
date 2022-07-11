@@ -1,11 +1,46 @@
 import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
-import { Button, Table, Progress } from "antd";
+import { Button, Table, Progress, message } from "antd";
 import { Link } from "react-router-dom";
 import "./index.less";
+import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { setUserBorrows } from "../../actions/lend";
+import { queryUserBorrows } from "../../services/lend/query";
 
-const Borrow = () => {
+const Borrow = ({ address, setUserBorrows, userBorrowList }) => {
+  const [inProgress, setInProgress] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setUserBorrows([]);
+  }, []);
+
+  useEffect(() => {
+    if (address) {
+      fetchUserBorrows();
+    }
+  }, [address]);
+
+  const fetchUserBorrows = () => {
+    setInProgress(true);
+    queryUserBorrows(address, (error, result) => {
+      setInProgress(false);
+
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      console.log("the resur", result);
+      if (result?.borrows?.length > 0) {
+        setUserBorrows(result?.borrows);
+      }
+    });
+  };
+
   const columns = [
     {
       title: "Asset",
@@ -105,6 +140,7 @@ const Borrow = () => {
     },
   ];
 
+  console.log("borrows", userBorrowList);
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -115,6 +151,7 @@ const Borrow = () => {
               <Table
                 className="custom-table"
                 dataSource={tableData}
+                loading={inProgress}
                 columns={columns}
                 pagination={false}
                 scroll={{ x: "100%" }}
@@ -129,14 +166,34 @@ const Borrow = () => {
 
 Borrow.propTypes = {
   lang: PropTypes.string.isRequired,
+  address: PropTypes.string,
+  userBorrowList: PropTypes.arrayOf(
+    PropTypes.shape({
+      amountIn: PropTypes.shape({
+        denom: PropTypes.string.isRequired,
+        amount: PropTypes.string,
+      }),
+      assetId: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+      poolId: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+      rewardAccumulated: PropTypes.string,
+    })
+  ),
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
+    address: state.account.address,
+    userBorrowList: state.lend.userBorrows,
   };
 };
 
-const actionsToProps = {};
+const actionsToProps = {
+  setUserBorrows,
+};
 
 export default connect(stateToProps, actionsToProps)(Borrow);
