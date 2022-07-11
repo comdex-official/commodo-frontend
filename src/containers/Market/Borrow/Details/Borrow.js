@@ -10,7 +10,6 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
 } from "../../../../utils/coin";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import { ValidateInputNumber } from "../../../../config/_validation";
@@ -26,6 +25,10 @@ import CustomInput from "../../../../components/CustomInput";
 import AssetStats from "../../../../components/common/Asset/Stats";
 import Details from "../../../../components/common/Asset/Details";
 import { commaSeparator, marketPrice } from "../../../../utils/number";
+import {
+  queryAssetPairs,
+  queryLendPair,
+} from "../../../../services/lend/query";
 
 const { Option } = Select;
 
@@ -34,17 +37,19 @@ const BorrowTab = ({
   dataInProgress,
   pool,
   assetMap,
-  balances,
   address,
   markets,
   poolLendPositions,
 }) => {
+  const [assetList, setAssetList] = useState();
   const [collateralAssetId, setCollateralAssetId] = useState();
   const [borrowAssetId, setBorrowAssetId] = useState();
   const [lend, setLend] = useState();
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
   const [inProgress, setInProgress] = useState(false);
+  const [extendedPairs, setExtendedPairs] = useState({});
+
   const navigate = useNavigate();
 
   let collateralAssetDenom = assetMap[collateralAssetId]?.denom;
@@ -53,7 +58,22 @@ const BorrowTab = ({
 
   const availableBalance = lend?.availableToBorrow || 0;
 
-  const assetList = poolLendPositions.map((item) => item?.amountIn?.denom);
+  const collateralList = poolLendPositions.map((item) => item?.amountIn?.denom);
+  const borrowList =
+    extendedPairs &&
+    Object.values(extendedPairs)?.map(
+      (item) => assetMap[item?.assetOut]?.denom
+    );
+
+  useEffect(() => {
+    if (pool?.poolId) {
+      setAssetList([
+        assetMap[pool?.mainAssetId?.toNumber()],
+        assetMap[pool?.firstBridgedAssetId?.toNumber()],
+        assetMap[pool?.secondBridgedAssetId?.toNumber()],
+      ]);
+    }
+  }, [pool]);
 
   const handleCollateralAssetChange = (value) => {
     const selectedLend = poolLendPositions.filter(
@@ -63,7 +83,40 @@ const BorrowTab = ({
     if (selectedLend?.assetId) {
       setCollateralAssetId(selectedLend?.assetId);
       setLend(selectedLend);
+      setExtendedPairs();
+      queryAssetPairs(
+        selectedLend?.assetId,
+        selectedLend?.poolId,
+        (error, result) => {
+          if (error) {
+            message.error(error);
+            return;
+          }
+
+          let pairMapping = result?.AssetToPairMapping;
+
+          if (pairMapping?.assetId) {
+            for (let i = 0; i < pairMapping?.pairId?.length; i++) {
+              fetchPair(pairMapping?.pairId[i]);
+            }
+          }
+        }
+      );
     }
+  };
+
+  const fetchPair = (id) => {
+    queryLendPair(id, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setExtendedPairs((prevState) => ({
+        [result?.ExtendedPair?.id]: result?.ExtendedPair,
+        ...prevState,
+      }));
+    });
   };
 
   const handleBorrowAssetChange = (value) => {
@@ -180,7 +233,6 @@ const BorrowTab = ({
     </div>
   );
 
-  console.log("asset list", assetList);
   return (
     <div className="details-wrapper">
       {!dataInProgress ? (
@@ -210,8 +262,8 @@ const BorrowTab = ({
                       <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                     }
                   >
-                    {assetList?.length > 0 &&
-                      assetList?.map((record) => {
+                    {collateralList?.length > 0 &&
+                      collateralList?.map((record) => {
                         const item = record?.denom ? record?.denom : record;
 
                         return (
@@ -289,8 +341,8 @@ const BorrowTab = ({
                       <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                     }
                   >
-                    {assetList?.length > 0 &&
-                      assetList?.map((record) => {
+                    {borrowList?.length > 0 &&
+                      borrowList?.map((record) => {
                         const item = record?.denom ? record?.denom : record;
 
                         return (
@@ -443,12 +495,6 @@ BorrowTab.propTypes = {
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
-  balances: PropTypes.arrayOf(
-    PropTypes.shape({
-      denom: PropTypes.string.isRequired,
-      amount: PropTypes.string,
-    })
-  ),
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
@@ -491,7 +537,6 @@ const stateToProps = (state) => {
     address: state.account.address,
     pool: state.lend.pool._,
     assetMap: state.asset._.map,
-    balances: state.account.balances.list,
     lang: state.language,
     markets: state.oracle.market.list,
     poolLendPositions: state.lend.poolLends,
