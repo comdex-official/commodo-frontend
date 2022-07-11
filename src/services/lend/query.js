@@ -206,3 +206,21 @@ export const queryLendPair = (id, callback) => {
       });
   });
 };
+
+export const queryUserBorrows = (address, callback) => {
+  createQueryClient((error, rpcClient) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    new QueryClientImpl(rpcClient)
+      .QueryAllBorrowByOwner({ owner: address })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};

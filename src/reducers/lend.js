@@ -11,6 +11,7 @@ import {
   ASSET_RATES_STATES_SET,
   USER_LENDS_SET,
   POOL_LENDS_SET,
+  USER_BORROWS_SET,
 } from "../constants/lend";
 
 const pool = (
@@ -131,6 +132,14 @@ const poolLends = (state = [], action) => {
   return state;
 };
 
+const userBorrows = (state = [], action) => {
+  if (action.type === USER_BORROWS_SET) {
+    return action.list;
+  }
+
+  return state;
+};
+
 export default combineReducers({
   pool,
   poolDeposit,
@@ -142,4 +151,5 @@ export default combineReducers({
   assetRatesStats,
   userLends,
   poolLends,
+  userBorrows,
 });
