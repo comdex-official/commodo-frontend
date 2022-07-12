@@ -34,7 +34,6 @@ const Borrow = ({ address, setUserBorrows, userBorrowList }) => {
         return;
       }
 
-      console.log("the resur", result);
       if (result?.borrows?.length > 0) {
         setUserBorrows(result?.borrows);
       }
@@ -169,17 +168,20 @@ Borrow.propTypes = {
   address: PropTypes.string,
   userBorrowList: PropTypes.arrayOf(
     PropTypes.shape({
-      amountIn: PropTypes.shape({
+      amountOut: PropTypes.shape({
         denom: PropTypes.string.isRequired,
         amount: PropTypes.string,
       }),
-      assetId: PropTypes.shape({
+      borrowingId: PropTypes.shape({
         low: PropTypes.number,
       }),
-      poolId: PropTypes.shape({
+      lendingId: PropTypes.shape({
         low: PropTypes.number,
       }),
-      rewardAccumulated: PropTypes.string,
+      pairId: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+      interestAccumulated: PropTypes.string,
     })
   ),
 };
