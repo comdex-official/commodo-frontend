@@ -22,9 +22,10 @@ import Long from "long";
 import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
 import { comdex } from "../../../../config/network";
-import { DEFAULT_FEE } from "../../../../constants/common";
+import { DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../../constants/common";
 import { useNavigate } from "react-router";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
+import { commaSeparator, marketPrice } from "../../../../utils/number";
 
 const { Option } = Select;
 
@@ -35,6 +36,7 @@ const DepositTab = ({
   assetMap,
   balances,
   address,
+  markets,
 }) => {
   const [assetList, setAssetList] = useState();
   const [selectedAssetId, setSelectedAssetId] = useState();
@@ -202,7 +204,17 @@ const DepositTab = ({
                       validationError={validationError}
                     />
                   </div>
-                  <small>$120.00</small>
+                  $
+                  {commaSeparator(
+                    Number(
+                      amount *
+                        marketPrice(
+                          markets,
+                          assetMap[selectedAssetId]?.denom
+                        ) || 0
+                    ),
+                    DOLLAR_DECIMALS
+                  )}{" "}
                 </div>
               </div>
             </div>
@@ -267,6 +279,13 @@ DepositTab.propTypes = {
       amount: PropTypes.string,
     })
   ),
+  markets: PropTypes.arrayOf(
+    PropTypes.shape({
+      rates: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+    })
+  ),
   pool: PropTypes.shape({
     poolId: PropTypes.shape({
       low: PropTypes.number,
@@ -290,6 +309,7 @@ const stateToProps = (state) => {
     assetMap: state.asset._.map,
     balances: state.account.balances.list,
     lang: state.language,
+    markets: state.oracle.market.list,
   };
 };
 
