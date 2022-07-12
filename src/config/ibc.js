@@ -4,8 +4,8 @@ export const ibcAssetsInfo = [
   {
     counterpartyChainId: "theta-testnet-001",
     //cosmos
-    sourceChannelId: "channel-1",
-    destChannelId: "channel-308",
+    sourceChannelId: "channel-8",
+    destChannelId: "channel-498",
     coinMinimalDenom: "uatom",
     ibcDenomHash: ibcDenoms["uatom"],
   },
@@ -14,13 +14,13 @@ export const ibcAssetsInfo = [
     sourceChannelId: "channel-2",
     destChannelId: "channel-72",
     coinMinimalDenom: "uxprt",
-    ibcDenomHash:ibcDenoms["uxprt"],
+    ibcDenomHash: ibcDenoms["uxprt"],
   },
   {
     counterpartyChainId: "osmo-test-4",
-    sourceChannelId: "channel-1",
-    destChannelId: "channel-346",
+    sourceChannelId: "channel-7",
+    destChannelId: "channel-351",
     coinMinimalDenom: "uosmo",
-    ibcDenomHash: ibcDenoms["uosmo"]
+    ibcDenomHash: ibcDenoms["uosmo"],
   },
 ];
