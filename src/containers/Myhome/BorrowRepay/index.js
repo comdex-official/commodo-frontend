@@ -111,7 +111,16 @@ const BorrowRepay = ({ setPair }) => {
               )}
             </TabPane>
             <TabPane tab="Repay" key="2">
-              <RepayTab />
+              {inProgress ? (
+                <div className="loader">
+                  <Spin />
+                </div>
+              ) : (
+                <RepayTab
+                  borrowPosition={borrowPosition}
+                  dataInProgress={inProgress}
+                />
+              )}
             </TabPane>
             <TabPane tab="Close" key="3">
               <CloseTab />
