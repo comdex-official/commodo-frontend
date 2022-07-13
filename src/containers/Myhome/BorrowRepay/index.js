@@ -11,9 +11,9 @@ import { useLocation, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import {
   queryBorrowPosition,
-  queryLendPool,
+  queryLendPair,
 } from "../../../services/lend/query";
-import { setPool } from "../../../actions/lend";
+import { setPair } from "../../../actions/lend";
 import { decode } from "../../../utils/string";
 
 const { TabPane } = Tabs;
@@ -28,7 +28,7 @@ const BackButton = {
   ),
 };
 
-const BorrowRepay = ({ setPool }) => {
+const BorrowRepay = ({ setPair }) => {
   const [inProgress, setInProgress] = useState(false);
   const [borrowPosition, setBorrowPosition] = useState();
   const [activeKey, setActiveKey] = useState("1");
@@ -58,13 +58,14 @@ const BorrowRepay = ({ setPool }) => {
         if (result?.borrow?.pairId) {
           setBorrowPosition(result?.borrow);
 
-          queryLendPool(result?.borrow?.poolId, (error, result) => {
+          queryLendPair(result?.borrow?.pairId, (error, result) => {
             setInProgress(false);
             if (error) {
               message.error(error);
               return;
             }
-            setPool(result?.pool);
+            console.log("the pair", result?.ExtendedPair);
+            setPair(result?.ExtendedPair);
           });
         }
       });
@@ -124,7 +125,7 @@ const BorrowRepay = ({ setPool }) => {
 
 BorrowRepay.propTypes = {
   lang: PropTypes.string.isRequired,
-  setPool: PropTypes.func.isRequired,
+  setPair: PropTypes.func.isRequired,
 };
 
 const stateToProps = (state) => {
@@ -134,7 +135,7 @@ const stateToProps = (state) => {
 };
 
 const actionsToProps = {
-  setPool,
+  setPair,
 };
 
 export default connect(stateToProps, actionsToProps)(BorrowRepay);

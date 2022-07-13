@@ -34,13 +34,15 @@ const BorrowTab = ({
   refreshBalance,
   setBalanceRefresh,
   markets,
+  pair,
 }) => {
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
 
-  const selectedAssetId = 3;
+  const selectedAssetId = pair?.assetOut?.toNumber();
   const availableBalance =
-    getDenomBalance(balances, borrowPosition?.amountOut?.denom) || 0;
+    getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
+
   //TODO update available balance
 
   const handleInputChange = (value) => {
@@ -71,7 +73,7 @@ const BorrowTab = ({
         <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="left-label">
-              Borrow <TooltipIcon text="" />
+              Asset <TooltipIcon text="" />
             </label>
             <div className="assets-select-wrapper">
               <div className="assets-select-wrapper">
@@ -187,6 +189,17 @@ BorrowTab.propTypes = {
       amount: PropTypes.string,
     }),
   }),
+  pair: PropTypes.shape({
+    id: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    assetIn: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    amountOut: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+  }),
   pool: PropTypes.shape({
     poolId: PropTypes.shape({
       low: PropTypes.number,
@@ -205,6 +218,7 @@ const stateToProps = (state) => {
   return {
     address: state.account.address,
     pool: state.lend.pool._,
+    pair: state.lend.pair,
     assetMap: state.asset._.map,
     balances: state.account.balances.list,
     lang: state.language,
