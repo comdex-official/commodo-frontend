@@ -1,12 +1,20 @@
 import * as PropTypes from "prop-types";
 import { Col, Row } from "../../../components/common";
 import { connect } from "react-redux";
-import { Button, Tabs } from "antd";
+import { Button, Spin, Tabs } from "antd";
 import BorrowTab from "./Borrow";
 import RepayTab from "./Repay";
 import CloseTab from "./Close";
 import "./index.less";
 import { Link } from "react-router-dom";
+import { useLocation, useParams } from "react-router";
+import { useEffect, useState } from "react";
+import {
+  queryBorrowPosition,
+  queryLendPool,
+} from "../../../services/lend/query";
+import { setPool } from "../../../actions/lend";
+import { decode } from "../../../utils/string";
 
 const { TabPane } = Tabs;
 
@@ -20,7 +28,63 @@ const BackButton = {
   ),
 };
 
-const BorrowRepay = () => {
+const BorrowRepay = ({ setPool }) => {
+  const [inProgress, setInProgress] = useState(false);
+  const [borrowPosition, setBorrowPosition] = useState();
+  const [activeKey, setActiveKey] = useState("1");
+
+  let { id } = useParams();
+
+  const location = useLocation();
+  const type = decode(location.hash);
+
+  useEffect(() => {
+    if (type && type === "repay") {
+      setActiveKey("2");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (id) {
+      setInProgress(true);
+
+      queryBorrowPosition(id, (error, result) => {
+        setInProgress(false);
+        if (error) {
+          message.error(error);
+          return;
+        }
+        if (result?.borrow?.pairId) {
+          setBorrowPosition(result?.borrow);
+
+          queryLendPool(result?.borrow?.poolId, (error, result) => {
+            setInProgress(false);
+            if (error) {
+              message.error(error);
+              return;
+            }
+            setPool(result?.pool);
+          });
+        }
+      });
+    }
+  }, [id]);
+
+  const refreshBorrowPosition = () => {
+    if (id) {
+      queryBorrowPosition(id, (error, result) => {
+        setInProgress(false);
+        if (error) {
+          message.error(error);
+          return;
+        }
+        if (result?.borrow?.pairId) {
+          setBorrowPosition(result?.borrow);
+        }
+      });
+    }
+  };
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -31,7 +95,16 @@ const BorrowRepay = () => {
             tabBarExtraContent={BackButton}
           >
             <TabPane tab="Borrow" key="1">
-              <BorrowTab />
+              {inProgress ? (
+                <div className="loader">
+                  <Spin />
+                </div>
+              ) : (
+                <BorrowTab
+                  borrowPosition={borrowPosition}
+                  dataInProgress={inProgress}
+                />
+              )}
             </TabPane>
             <TabPane tab="Repay" key="2">
               <RepayTab />
@@ -48,6 +121,7 @@ const BorrowRepay = () => {
 
 BorrowRepay.propTypes = {
   lang: PropTypes.string.isRequired,
+  setPool: PropTypes.func.isRequired,
 };
 
 const stateToProps = (state) => {
@@ -56,6 +130,8 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {};
+const actionsToProps = {
+  setPool,
+};
 
 export default connect(stateToProps, actionsToProps)(BorrowRepay);

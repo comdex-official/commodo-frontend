@@ -100,7 +100,7 @@ const Borrow = ({ address, setUserBorrows, userBorrowList }) => {
           <div className="d-flex">
             <Button
               onClick={() =>
-                navigate(`/deposit/${item?.borrowingId?.toNumber()}`)
+                navigate(`/borrow/${item?.borrowingId?.toNumber()}`)
               }
               type="primary"
               className="btn-filled"
@@ -112,7 +112,7 @@ const Borrow = ({ address, setUserBorrows, userBorrowList }) => {
               <Button
                 onClick={() =>
                   navigate({
-                    pathname: `/deposit/${item?.borrowingId?.toNumber()}`,
+                    pathname: `/borrow/${item?.borrowingId?.toNumber()}`,
                     hash: "repay",
                   })
                 }
@@ -158,7 +158,6 @@ const Borrow = ({ address, setUserBorrows, userBorrowList }) => {
         })
       : [];
 
-  console.log("borrows", userBorrowList);
   return (
     <div className="app-content-wrapper">
       <Row>
