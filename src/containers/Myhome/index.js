@@ -15,7 +15,7 @@ import { DOLLAR_DECIMALS } from "../../constants/common";
 
 const { TabPane } = Tabs;
 
-const Myhome = ({ userLendList, markets }) => {
+const Myhome = ({ userLendList, userBorrowList, markets }) => {
   const [activeKey, setActiveKey] = useState("1");
   const location = useLocation();
   const type = decode(location.hash);
@@ -42,6 +42,22 @@ const Myhome = ({ userLendList, markets }) => {
     return `$${amountConversionWithComma(sum || 0, DOLLAR_DECIMALS)}`;
   };
 
+  const calculateTotalBorrow = () => {
+    const values =
+      userBorrowList?.length > 0
+        ? userBorrowList.map((item) => {
+            return (
+              marketPrice(markets, item?.amountOut?.denom) *
+              item?.amountOut.amount
+            );
+          })
+        : [];
+
+    const sum = values.reduce((a, b) => a + b, 0);
+
+    return `$${amountConversionWithComma(sum || 0, DOLLAR_DECIMALS)}`;
+  };
+
   const data = [
     {
       title: (
@@ -59,7 +75,7 @@ const Myhome = ({ userLendList, markets }) => {
           <TooltipIcon text="Value of total Asset Borrowed by User" />
         </>
       ),
-      counts: "$2,345",
+      counts: calculateTotalBorrow(),
     },
   ];
 
@@ -146,6 +162,24 @@ Myhome.propTypes = {
       }),
     })
   ),
+  userBorrowList: PropTypes.arrayOf(
+    PropTypes.shape({
+      amountOut: PropTypes.shape({
+        denom: PropTypes.string.isRequired,
+        amount: PropTypes.string,
+      }),
+      borrowingId: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+      lendingId: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+      pairId: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+      interestAccumulated: PropTypes.string,
+    })
+  ),
   userLendList: PropTypes.arrayOf(
     PropTypes.shape({
       amountIn: PropTypes.shape({
@@ -167,6 +201,7 @@ const stateToProps = (state) => {
   return {
     lang: state.language,
     userLendList: state.lend.userLends,
+    userBorrowList: state.lend.userBorrows,
     markets: state.oracle.market.list,
   };
 };

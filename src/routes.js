@@ -22,7 +22,7 @@ const routes = [
     element: <MyHome />,
   },
   {
-    path: "/borrow",
+    path: "/borrow/:id",
     element: <BorrowRepay />,
   },
   {

@@ -18,9 +18,10 @@ import ActionButton from "./ActionButton";
 import { setBalanceRefresh } from "../../../actions/account";
 import Details from "../../../components/common/Asset/Details";
 import { comdex } from "../../../config/network";
-import { DEFAULT_FEE } from "../../../constants/common";
+import { DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../constants/common";
 import AssetStats from "../../../components/common/Asset/Stats";
 import CustomRow from "../../../components/common/Asset/CustomRow";
+import { commaSeparator, marketPrice } from "../../../utils/number";
 
 const { Option } = Select;
 
@@ -34,6 +35,7 @@ const DepositTab = ({
   address,
   refreshBalance,
   setBalanceRefresh,
+  markets,
 }) => {
   const [assetList, setAssetList] = useState();
   const [amount, setAmount] = useState();
@@ -141,7 +143,17 @@ const DepositTab = ({
                   validationError={validationError}
                 />
               </div>
-              <small>$120.00</small>
+              <small>
+                $
+                {commaSeparator(
+                  Number(
+                    amount *
+                      marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
+                      0
+                  ),
+                  DOLLAR_DECIMALS
+                )}{" "}
+              </small>
             </div>
           </div>
         </div>
@@ -211,6 +223,13 @@ DepositTab.propTypes = {
       amount: PropTypes.string,
     }),
   }),
+  markets: PropTypes.arrayOf(
+    PropTypes.shape({
+      rates: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+    })
+  ),
   pool: PropTypes.shape({
     poolId: PropTypes.shape({
       low: PropTypes.number,
@@ -233,6 +252,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
+    markets: state.oracle.market.list,
   };
 };
 

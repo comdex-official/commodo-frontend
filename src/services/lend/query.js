@@ -109,6 +109,24 @@ export const queryLendPosition = (id, callback) => {
   });
 };
 
+export const queryBorrowPosition = (id, callback) => {
+  createQueryClient((error, rpcClient) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    new QueryClientImpl(rpcClient)
+      .QueryBorrow({ id: Long.fromNumber(id) })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};
+
 export const queryAssetRatesStats = (callback) => {
   createQueryClient((error, rpcClient) => {
     if (error) {
