@@ -38,7 +38,6 @@ const BorrowRepay = ({ setPair }) => {
   const location = useLocation();
   const type = decode(location.hash);
 
-  console.log("the type", type);
   useEffect(() => {
     if (type && type === "repay") {
       setActiveKey("2");
@@ -64,7 +63,6 @@ const BorrowRepay = ({ setPair }) => {
               message.error(error);
               return;
             }
-            console.log("the pair", result?.ExtendedPair);
             setPair(result?.ExtendedPair);
           });
         }
@@ -111,10 +109,28 @@ const BorrowRepay = ({ setPair }) => {
               )}
             </TabPane>
             <TabPane tab="Repay" key="2">
-              <RepayTab />
+              {inProgress ? (
+                <div className="loader">
+                  <Spin />
+                </div>
+              ) : (
+                <RepayTab
+                  borrowPosition={borrowPosition}
+                  dataInProgress={inProgress}
+                />
+              )}
             </TabPane>
             <TabPane tab="Close" key="3">
-              <CloseTab />
+              {inProgress ? (
+                  <div className="loader">
+                    <Spin />
+                  </div>
+              ) : (
+                  <CloseTab
+                      borrowPosition={borrowPosition}
+                      dataInProgress={inProgress}
+                  />
+              )}
             </TabPane>
           </Tabs>
         </Col>
