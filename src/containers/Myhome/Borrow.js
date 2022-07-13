@@ -2,7 +2,6 @@ import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
 import { Button, Table, Progress, message } from "antd";
-import { Link } from "react-router-dom";
 import "./index.less";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
@@ -108,21 +107,19 @@ const Borrow = ({ address, setUserBorrows, userBorrowList }) => {
             >
               Borrow
             </Button>
-            <Link to="/borrow">
-              <Button
-                onClick={() =>
-                  navigate({
-                    pathname: `/borrow/${item?.borrowingId?.toNumber()}`,
-                    hash: "repay",
-                  })
-                }
-                type="primary"
-                size="small"
-                className="ml-2"
-              >
-                Repay
-              </Button>
-            </Link>
+            <Button
+              onClick={() =>
+                navigate({
+                  pathname: `/borrow/${item?.borrowingId?.toNumber()}`,
+                  hash: "repay",
+                })
+              }
+              type="primary"
+              size="small"
+              className="ml-2"
+            >
+              Repay
+            </Button>
           </div>
         </>
       ),

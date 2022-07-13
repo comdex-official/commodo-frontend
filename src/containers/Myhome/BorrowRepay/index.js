@@ -20,7 +20,7 @@ const { TabPane } = Tabs;
 
 const BackButton = {
   right: (
-    <Link to="/myhome">
+    <Link to="/myhome#borrow">
       <Button className="back-btn" type="primary">
         Back
       </Button>
@@ -38,6 +38,7 @@ const BorrowRepay = ({ setPool }) => {
   const location = useLocation();
   const type = decode(location.hash);
 
+  console.log("the type", type);
   useEffect(() => {
     if (type && type === "repay") {
       setActiveKey("2");
@@ -92,6 +93,8 @@ const BorrowRepay = ({ setPool }) => {
           <Tabs
             className="commodo-tabs"
             defaultActiveKey="1"
+            onChange={setActiveKey}
+            activeKey={activeKey}
             tabBarExtraContent={BackButton}
           >
             <TabPane tab="Borrow" key="1">
