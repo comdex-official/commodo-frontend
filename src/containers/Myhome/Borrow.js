@@ -1,15 +1,15 @@
+import { Button, message, Progress, Table } from "antd";
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
-import { connect } from "react-redux";
-import { Button, Table, Progress, message } from "antd";
-import "./index.less";
-import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { useNavigate } from "react-router";
 import { setUserBorrows } from "../../actions/lend";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { queryUserBorrows } from "../../services/lend/query";
-import AssetApy from "../Market/AssetApy";
-import { iconNameFromDenom } from "../../utils/string";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
+import { iconNameFromDenom } from "../../utils/string";
+import AssetApy from "../Market/AssetApy";
+import "./index.less";
 
 const Borrow = ({ address, setUserBorrows, userBorrowList }) => {
   const [inProgress, setInProgress] = useState(false);
@@ -58,6 +58,12 @@ const Borrow = ({ address, setUserBorrows, userBorrowList }) => {
       dataIndex: "debt",
       key: "debt",
       width: 150,
+    },
+    {
+      title: "cPool",
+      dataIndex: "cpool",
+      key: "cpool",
+      width: 180,
     },
     {
       title: "APY",
@@ -148,6 +154,7 @@ const Borrow = ({ address, setUserBorrows, userBorrowList }) => {
                 {denomConversion(item?.amountOut?.denom)}
               </>
             ),
+            cpool: item?.cpoolName,
             apy: item,
             health: item,
             action: item,
@@ -190,6 +197,7 @@ Borrow.propTypes = {
       borrowingId: PropTypes.shape({
         low: PropTypes.number,
       }),
+      cpoolName: PropTypes.string,
       lendingId: PropTypes.shape({
         low: PropTypes.number,
       }),
