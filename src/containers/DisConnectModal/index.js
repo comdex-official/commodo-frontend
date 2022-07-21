@@ -38,6 +38,7 @@ const DisConnectModal = ({
     setAccountAddress("");
     localStorage.removeItem("ac");
     localStorage.removeItem("loginType");
+    window.location.reload();
   };
 
   const getTotalValue = () => {

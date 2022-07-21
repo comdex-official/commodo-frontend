@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 import {
   POOLS_SET,
   POOL_SET,
+  PAIR_SET,
   POOL_DEPOSITS_SET,
   SPOT_PRICE_SET,
   POOL_BALANCE_FETCH_IN_PROGRESS,
@@ -11,6 +12,7 @@ import {
   ASSET_RATES_STATES_SET,
   USER_LENDS_SET,
   POOL_LENDS_SET,
+  USER_BORROWS_SET,
 } from "../constants/lend";
 
 const pool = (
@@ -131,6 +133,21 @@ const poolLends = (state = [], action) => {
   return state;
 };
 
+const userBorrows = (state = [], action) => {
+  if (action.type === USER_BORROWS_SET) {
+    return action.list;
+  }
+
+  return state;
+};
+
+const pair = (state = {}, action) => {
+  if (action.type === PAIR_SET) {
+    return action.value;
+  }
+
+  return state;
+};
 export default combineReducers({
   pool,
   poolDeposit,
@@ -142,4 +159,6 @@ export default combineReducers({
   assetRatesStats,
   userLends,
   poolLends,
+  userBorrows,
+  pair,
 });
