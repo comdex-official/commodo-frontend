@@ -1,34 +1,37 @@
+import { Button, message, Select, Spin, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
-import { connect } from "react-redux";
-import { Button, List, Select, Input, Tooltip, message, Spin } from "antd";
-import "./index.less";
 import { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import { useNavigate } from "react-router";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
+import CustomRow from "../../../../components/common/Asset/CustomRow";
+import Details from "../../../../components/common/Asset/Details";
+import AssetStats from "../../../../components/common/Asset/Stats";
+import Snack from "../../../../components/common/Snack";
+import CustomInput from "../../../../components/CustomInput";
+import { comdex } from "../../../../config/network";
+import { ValidateInputNumber } from "../../../../config/_validation";
+import {
+  DEFAULT_FEE,
+  DOLLAR_DECIMALS,
+  UC_DENOM
+} from "../../../../constants/common";
+import { signAndBroadcastTransaction } from "../../../../services/helper";
+import {
+  queryAssetPairs,
+  queryLendPair
+} from "../../../../services/lend/query";
+import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount,
+  getAmount
 } from "../../../../utils/coin";
-import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
-import { ValidateInputNumber } from "../../../../config/_validation";
-import { signAndBroadcastTransaction } from "../../../../services/helper";
-import Long from "long";
-import { defaultFee } from "../../../../services/transaction";
-import Snack from "../../../../components/common/Snack";
-import variables from "../../../../utils/variables";
-import { comdex } from "../../../../config/network";
-import {DEFAULT_FEE, DOLLAR_DECIMALS, UC_DENOM} from "../../../../constants/common";
-import CustomRow from "../../../../components/common/Asset/CustomRow";
-import CustomInput from "../../../../components/CustomInput";
-import AssetStats from "../../../../components/common/Asset/Stats";
-import Details from "../../../../components/common/Asset/Details";
 import { commaSeparator, marketPrice } from "../../../../utils/number";
-import {
-  queryAssetPairs,
-  queryLendPair,
-} from "../../../../services/lend/query";
+import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
+import variables from "../../../../utils/variables";
+import "./index.less";
 
 const { Option } = Select;
 
@@ -59,8 +62,6 @@ const BorrowTab = ({
 
   const availableBalance = lend?.availableToBorrow || 0;
 
-  const collateralList = poolLendPositions.map((item) => item?.amountIn?.denom);
-
   const borrowList =
     extendedPairs &&
     Object.values(extendedPairs)?.map(
@@ -77,9 +78,9 @@ const BorrowTab = ({
     }
   }, [pool]);
 
-  const handleCollateralAssetChange = (value) => {
+  const handleCollateralAssetChange = (lendingId) => {
     const selectedLend = poolLendPositions.filter(
-      (item) => item?.amountIn?.denom === value
+      (item) => item?.lendingId?.toNumber() === lendingId
     )[0];
 
     if (selectedLend?.assetId) {
@@ -158,7 +159,7 @@ const BorrowTab = ({
             isStableBorrow: false,
             amountIn: {
               amount: getAmount(inAmount),
-              // Sending uc + denom as per message 
+              // Sending uc + denom as per message
               denom: UC_DENOM.concat(collateralAssetDenom.substring(1)),
             },
             amountOut: {
@@ -276,12 +277,17 @@ const BorrowTab = ({
                       <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                     }
                   >
-                    {collateralList?.length > 0 &&
-                      collateralList?.map((record) => {
-                        const item = record?.denom ? record?.denom : record;
+                    {poolLendPositions?.length > 0 &&
+                      poolLendPositions?.map((record) => {
+                        const item = record?.amountIn?.denom
+                          ? record?.amountIn.denom
+                          : record;
 
                         return (
-                          <Option key={item} value={record?.id?.toNumber()}>
+                          <Option
+                            key={record?.lendingId?.toNumber()}
+                            value={record?.lendingId?.toNumber()}
+                          >
                             <div className="select-inner">
                               <div className="svg-icon">
                                 <div className="svg-icon-inner">
@@ -289,7 +295,8 @@ const BorrowTab = ({
                                 </div>
                               </div>
                               <div className="name">
-                                {denomConversion(item)}
+                                {denomConversion(item)} (
+                                {"cPool-" + record?.cpoolName.split("-")?.[0]})
                               </div>
                             </div>
                           </Option>

@@ -1,14 +1,75 @@
-import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
-import { connect } from "react-redux";
+import { Button } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import "./index.less";
-import LaunchImage from "../../assets/images/launch-bg.jpg";
+import * as PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import AssetsIcon from "../../assets/images/assets-icon.png";
-import { Button } from "antd";
+import LaunchImage from "../../assets/images/launch-bg.jpg";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import { DOLLAR_DECIMALS } from "../../constants/common";
+import {
+  queryBorrowStats,
+  queryDepositStats,
+  queryUserDepositStats
+} from "../../services/lend/query";
+import { amountConversionWithComma } from "../../utils/coin";
+import { marketPrice } from "../../utils/number";
+import "./index.less";
 
-const Dashboard = ({ isDarkMode }) => {
+const Dashboard = ({ isDarkMode, markets, assetMap }) => {
+  const [depositStats, setDepositStats] = useState();
+  const [borrowStats, setBorrowStats] = useState();
+  const [userDepositStats, setUserDepositStats] = useState();
+
+  useEffect(() => {
+    queryDepositStats((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setDepositStats(result?.DepositStats?.balanceStats);
+    });
+
+    queryUserDepositStats((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setUserDepositStats(result?.UserDepositStats?.balanceStats);
+    });
+    queryBorrowStats((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setBorrowStats(result?.BorrowStats?.balanceStats);
+    });
+  }, []);
+
+  const calculateTotalValue = (list) => {
+    const values =
+      list?.length > 0
+        ? list.map((item) => {
+            return (
+              marketPrice(markets, assetMap[item?.assetId?.toNumber()]?.denom) *
+              item?.amount
+            );
+          })
+        : [];
+
+    const sum = values.reduce((a, b) => a + b, 0);
+
+    return Number(sum || 0);
+  };
+
+  const totalDepositStats = calculateTotalValue(depositStats);
+  const totalBorrowStats = calculateTotalValue(borrowStats);
+  const totalUserDepositStats = calculateTotalValue(userDepositStats);
+
   const Options = {
     chart: {
       type: "pie",
@@ -47,13 +108,14 @@ const Dashboard = ({ isDarkMode }) => {
         name: "",
         data: [
           {
-            name: "Total Deposited",
-            y: 70,
+            name: "Total Available",
+            y: Number(totalDepositStats) || 0,
             color: "#52B788",
           },
           {
-            name: "Total Collateral",
-            y: 30,
+            name: "Total Borrowed",
+            y: Number(totalBorrowStats) || 0,
+
             color: "#E2F7E5",
           },
         ],
@@ -137,6 +199,7 @@ const Dashboard = ({ isDarkMode }) => {
       },
     ],
   };
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -148,7 +211,13 @@ const Dashboard = ({ isDarkMode }) => {
                   Total Value Locked{" "}
                   <TooltipIcon text="Value of Assets Locked" />
                 </p>
-                <h2>$57,156,855</h2>
+                <h3>
+                  $
+                  {amountConversionWithComma(
+                    totalDepositStats + totalBorrowStats || 0,
+                    DOLLAR_DECIMALS
+                  )}
+                </h3>{" "}
               </div>
               <div className="total-values">
                 <div className="total-values-chart">
@@ -160,20 +229,32 @@ const Dashboard = ({ isDarkMode }) => {
                     style={{ borderColor: "#52B788" }}
                   >
                     <p>
-                      Total Deposited{" "}
-                      <TooltipIcon text="Value of Assets Depositedon platfrom" />
+                      Total Available{" "}
+                      <TooltipIcon text="Value of Assets available on platfrom" />
                     </p>
-                    <h3>$30,283,670</h3>
+                    <h3>
+                      $
+                      {amountConversionWithComma(
+                        totalDepositStats || 0,
+                        DOLLAR_DECIMALS
+                      )}
+                    </h3>
                   </div>
                   <div
                     className="dashboard-statics mb-0"
                     style={{ borderColor: "#E2F7E5" }}
                   >
                     <p>
-                      Total Collateral{" "}
-                      <TooltipIcon text="Value of Assets Deposited" />
+                      Total Borrow{" "}
+                      <TooltipIcon text="Value of Assets Borrowed" />
                     </p>
-                    <h3>$26,873,185</h3>
+                    <h3>
+                      $
+                      {amountConversionWithComma(
+                        totalBorrowStats || 0,
+                        DOLLAR_DECIMALS
+                      )}
+                    </h3>{" "}
                   </div>
                 </div>
               </div>
@@ -321,14 +402,26 @@ const Dashboard = ({ isDarkMode }) => {
                   style={{ borderColor: "#52B788" }}
                 >
                   <p>Total Deposited</p>
-                  <h2>$30,283,670</h2>
+                  <h3>
+                    $
+                    {amountConversionWithComma(
+                      totalUserDepositStats || 0,
+                      DOLLAR_DECIMALS
+                    )}
+                  </h3>{" "}
                 </div>
                 <div
                   className="dashboard-statics"
                   style={{ borderColor: "#E2F7E5" }}
                 >
                   <p>Total Borrowed</p>
-                  <h2>$14,323,970</h2>
+                  <h3>
+                    $
+                    {amountConversionWithComma(
+                      totalBorrowStats || 0,
+                      DOLLAR_DECIMALS
+                    )}
+                  </h3>{" "}
                 </div>
               </div>
             </div>
@@ -342,11 +435,21 @@ const Dashboard = ({ isDarkMode }) => {
 Dashboard.propTypes = {
   isDarkMode: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
+  assetMap: PropTypes.object,
+  markets: PropTypes.arrayOf(
+    PropTypes.shape({
+      rates: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+    })
+  ),
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
+    markets: state.oracle.market.list,
+    assetMap: state.asset._.map,
   };
 };
 

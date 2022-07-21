@@ -163,7 +163,7 @@ export const queryModuleBalance = (poolId, callback) => {
   });
 };
 
-export const queryUserPoolLends = (address, poolId, callback) => {
+export const queryUserPoolLends = (address, callback) => {
   createQueryClient((error, rpcClient) => {
     if (error) {
       callback(error);
@@ -171,9 +171,8 @@ export const queryUserPoolLends = (address, poolId, callback) => {
     }
 
     new QueryClientImpl(rpcClient)
-      .QueryAllLendByOwnerAndPool({
+      .QueryAllLendByOwner({
         owner: address,
-        poolId: Long.fromNumber(poolId),
       })
       .then((result) => {
         callback(null, result);
@@ -234,6 +233,60 @@ export const queryUserBorrows = (address, callback) => {
 
     new QueryClientImpl(rpcClient)
       .QueryAllBorrowByOwner({ owner: address })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};
+
+export const queryDepositStats = (callback) => {
+  createQueryClient((error, rpcClient) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    new QueryClientImpl(rpcClient)
+      .QueryDepositStats()
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};
+
+export const queryUserDepositStats = (callback) => {
+  createQueryClient((error, rpcClient) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    new QueryClientImpl(rpcClient)
+      .QueryUserDepositStats()
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};
+
+export const queryBorrowStats = (callback) => {
+  createQueryClient((error, rpcClient) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    new QueryClientImpl(rpcClient)
+      .QueryBorrowStats()
       .then((result) => {
         callback(null, result);
       })

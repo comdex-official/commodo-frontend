@@ -10,7 +10,7 @@ export const columns = [
     width: 80,
   },
   {
-    title: "Asset",
+    title: "cPool Asset",
     dataIndex: "asset",
     key: "asset",
     width: 120,
