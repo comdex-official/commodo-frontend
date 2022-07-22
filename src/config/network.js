@@ -1,8 +1,8 @@
 export const comdex = {
   chainId: process.env.REACT_APP_CHAIN_ID,
   chainName: process.env.REACT_APP_CHAIN_NAME,
-  rpc: "http://46.166.172.240:26657",
-  rest: "http://46.166.172.240:1317",
+  rpc: "https://devnet.rpc.commodo.one",
+  rest: "https://devnet.rest.commodo.one",
   explorerUrlToTx: process.env.REACT_APP_EXPLORER_URL_TO_TX,
   coinDenom: "CMDX",
   coinMinimalDenom: "ucmdx",
