@@ -1,15 +1,15 @@
+import { Button, message, Table } from "antd";
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
-import { connect } from "react-redux";
-import { Button, Table, message } from "antd";
-import "./index.less";
 import { useEffect, useState } from "react";
-import { queryUserLends } from "../../services/lend/query";
-import { iconNameFromDenom } from "../../utils/string";
-import { amountConversionWithComma, denomConversion } from "../../utils/coin";
+import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import AssetApy from "../Market/AssetApy";
 import { setUserLends } from "../../actions/lend";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import { queryUserLends } from "../../services/lend/query";
+import { amountConversionWithComma, denomConversion } from "../../utils/coin";
+import { iconNameFromDenom } from "../../utils/string";
+import AssetApy from "../Market/AssetApy";
+import "./index.less";
 
 const Deposit = ({ address, setUserLends, userLendList }) => {
   const [inProgress, setInProgress] = useState(false);
@@ -58,6 +58,12 @@ const Deposit = ({ address, setUserLends, userLendList }) => {
       dataIndex: "available",
       key: "available",
       width: 250,
+    },
+    {
+      title: "cPool",
+      dataIndex: "cpool",
+      key: "cpool",
+      width: 180,
     },
     {
       title: "APY",
@@ -135,6 +141,7 @@ const Deposit = ({ address, setUserLends, userLendList }) => {
                 {denomConversion(item?.amountIn?.denom)}
               </>
             ),
+            cpool: item?.cpoolName,
             apy: item,
             rewards: (
               <>
@@ -182,6 +189,7 @@ Deposit.propTypes = {
       assetId: PropTypes.shape({
         low: PropTypes.number,
       }),
+      cpoolName: PropTypes.string,
       poolId: PropTypes.shape({
         low: PropTypes.number,
       }),
