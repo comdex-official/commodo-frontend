@@ -1,10 +1,16 @@
 import { ActionButton } from "../ActionButton";
-import TotalDeposit from "./TotalDeposit";
 import AssetApy from "../AssetApy";
+import TotalDeposit from "./TotalDeposit";
 
 export const columns = [
   {
-    title: "Asset",
+    title: "cPool Id",
+    dataIndex: "pool_id",
+    key: "pool_id",
+    width: 80,
+  },
+  {
+    title: "cPool Asset",
     dataIndex: "asset",
     key: "asset",
     width: 120,

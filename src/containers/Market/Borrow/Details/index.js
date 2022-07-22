@@ -1,17 +1,17 @@
-import * as PropTypes from "prop-types";
-import { Col, Row } from "../../../../components/common";
-import { connect } from "react-redux";
 import { Button, message } from "antd";
-import Borrow from "./Borrow";
-import "./index.less";
-import { Link } from "react-router-dom";
+import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import { useParams } from "react-router";
+import { Link } from "react-router-dom";
+import { setPool, setPoolLends } from "../../../../actions/lend";
+import { Col, Row } from "../../../../components/common";
 import {
   queryLendPool,
-  queryUserPoolLends,
+  queryUserPoolLends
 } from "../../../../services/lend/query";
-import { setPool, setPoolLends } from "../../../../actions/lend";
+import Borrow from "./Borrow";
+import "./index.less";
 
 const BorrowDetails = ({ address, setPool, setPoolLends }) => {
   const [inProgress, setInProgress] = useState(false);
@@ -30,8 +30,12 @@ const BorrowDetails = ({ address, setPool, setPoolLends }) => {
         }
         setPool(result?.pool);
       });
+    }
+  }, [address, id]);
 
-      queryUserPoolLends(address, id, (error, result) => {
+  useEffect(() => {
+    if (address) {
+      queryUserPoolLends(address, (error, result) => {
         setInProgress(false);
         if (error) {
           message.error(error);
@@ -40,7 +44,7 @@ const BorrowDetails = ({ address, setPool, setPoolLends }) => {
         setPoolLends(result?.lends);
       });
     }
-  }, [address, id]);
+  }, [address]);
 
   return (
     <div className="app-content-wrapper">

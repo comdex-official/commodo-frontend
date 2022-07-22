@@ -1,10 +1,16 @@
 import { ActionButton } from "../ActionButton";
-import AvailableToBorrow from "./AvailableToBorrow";
 import AssetApy from "../AssetApy";
+import AvailableToBorrow from "./AvailableToBorrow";
 
 export const columns = [
   {
-    title: "Asset",
+    title: "cPool Id",
+    dataIndex: "pool_id",
+    key: "pool_id",
+    width: 80,
+  },
+  {
+    title: "cPool Asset",
     dataIndex: "asset",
     key: "asset",
     width: 120,

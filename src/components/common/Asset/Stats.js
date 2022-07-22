@@ -1,8 +1,8 @@
-import { Col, Row } from "../index";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { decimalConversion } from "../../../utils/number";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
+import { decimalConversion } from "../../../utils/number";
+import { Col, Row } from "../index";
 
 const AssetStats = ({ assetId, assetRatesStatsMap }) => {
   return (
@@ -45,11 +45,11 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
       </Row>
       <Row className="mt-2">
         <Col>
-          <label>Current LTV</label>
+          <label>Liquidation Bonus</label>
         </Col>
         <Col className="text-right">
           {Number(
-            decimalConversion(assetRatesStatsMap[assetId]?.ltv) * 100
+            decimalConversion(assetRatesStatsMap[assetId]?.liquidationBonus) * 100
           ).toFixed(DOLLAR_DECIMALS)}
           %
         </Col>
