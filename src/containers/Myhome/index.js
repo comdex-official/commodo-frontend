@@ -1,22 +1,35 @@
+import { List, Progress, Tabs } from "antd";
 import * as PropTypes from "prop-types";
-import { Col, Row, TooltipIcon } from "../../components/common";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Progress, Tabs, List } from "antd";
-import Deposit from "./Deposit";
+import { useLocation } from "react-router";
+import { setUserBorrows, setUserLends } from "../../actions/lend";
+import { Col, Row, TooltipIcon } from "../../components/common";
+import { DOLLAR_DECIMALS } from "../../constants/common";
+import { queryUserBorrows, queryUserLends } from "../../services/lend/query";
+import { amountConversionWithComma } from "../../utils/coin";
+import { decimalConversion, marketPrice } from "../../utils/number";
+import { decode } from "../../utils/string";
 import Borrow from "./Borrow";
+import Deposit from "./Deposit";
 import History from "./History";
 import "./index.less";
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router";
-import { decode } from "../../utils/string";
-import { marketPrice } from "../../utils/number";
-import { amountConversionWithComma } from "../../utils/coin";
-import { DOLLAR_DECIMALS } from "../../constants/common";
 
 const { TabPane } = Tabs;
 
-const Myhome = ({ userLendList, userBorrowList, markets }) => {
+const Myhome = ({
+  address,
+  userLendList,
+  setUserLends,
+  setUserBorrows,
+  userBorrowList,
+  markets,
+  assetRatesStatsMap,
+}) => {
   const [activeKey, setActiveKey] = useState("1");
+  const [lendsInProgress, setLendsInProgress] = useState(false);
+  const [borrowsInProgress, setBorrowsInProgress] = useState(false);
+
   const location = useLocation();
   const type = decode(location.hash);
 
@@ -25,6 +38,50 @@ const Myhome = ({ userLendList, userBorrowList, markets }) => {
       setActiveKey("2");
     }
   }, []);
+
+  useEffect(() => {
+    setUserLends([]);
+    setUserBorrows([]);
+  }, []);
+
+  useEffect(() => {
+    if (address) {
+      fetchUserBorrows();
+      fetchUserLends();
+    }
+  }, [address]);
+
+  const fetchUserLends = () => {
+    setLendsInProgress(true);
+    queryUserLends(address, (error, result) => {
+      setLendsInProgress(false);
+
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      if (result?.lends?.length > 0) {
+        setUserLends(result?.lends);
+      }
+    });
+  };
+
+  const fetchUserBorrows = () => {
+    setBorrowsInProgress(true);
+    queryUserBorrows(address, (error, result) => {
+      setBorrowsInProgress(false);
+
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      if (result?.borrows?.length > 0) {
+        setUserBorrows(result?.borrows);
+      }
+    });
+  };
 
   const calculateTotalDeposit = () => {
     const values =
@@ -53,10 +110,29 @@ const Myhome = ({ userLendList, userBorrowList, markets }) => {
           })
         : [];
 
-    const sum = values.reduce((a, b) => a + b, 0);
-
-    return `$${amountConversionWithComma(sum || 0, DOLLAR_DECIMALS)}`;
+    return values.reduce((a, b) => a + b, 0);
   };
+
+  const calculateTotalBorrowLimit = () => {
+    const values =
+      userLendList?.length > 0
+        ? userLendList.map((item) => {
+            return (
+              marketPrice(markets, item?.amountIn?.denom) *
+              item?.amountIn.amount *
+              Number(decimalConversion(assetRatesStatsMap[item?.assetId]?.ltv))
+            );
+          })
+        : [];
+
+    return values.reduce((a, b) => a + b, 0);
+  };
+
+  const totalBorrow = Number(calculateTotalBorrow());
+  const borrowLimit = Number(calculateTotalBorrowLimit());
+  const currentLimit = ((totalBorrow / borrowLimit || 0) * 100).toFixed(
+    DOLLAR_DECIMALS
+  );
 
   const data = [
     {
@@ -75,7 +151,10 @@ const Myhome = ({ userLendList, userBorrowList, markets }) => {
           <TooltipIcon text="Value of total Asset Borrowed by User" />
         </>
       ),
-      counts: calculateTotalBorrow(),
+      counts: `$${amountConversionWithComma(
+        totalBorrow || 0,
+        DOLLAR_DECIMALS
+      )}`,
     },
   ];
 
@@ -113,16 +192,30 @@ const Myhome = ({ userLendList, userBorrowList, markets }) => {
               <div className="borrow-limit-bar">
                 <div className="borrow-limit-upper">
                   <div>
-                    <h4>25%</h4>
+                    <h4>{currentLimit || 0}%</h4>
                   </div>
-                  <div className="small-text">Borrow Limit :$7255</div>
+                  <div className="small-text">
+                    Borrow Limit :$
+                    {amountConversionWithComma(
+                      borrowLimit || 0,
+                      DOLLAR_DECIMALS
+                    )}
+                  </div>
                 </div>
                 <div className="borrow-limit-middle">
-                  <Progress percent={25} size="small" />
+                  <Progress percent={currentLimit} size="small" />
                 </div>
                 <div className="borrow-limit-bottom">
-                  <div className="small-text">Collateral :$12,150</div>
-                  <div className="small-text">Borrowed :$2345</div>
+                  <div className="small-text">
+                    Collateral :{calculateTotalDeposit()}
+                  </div>
+                  <div className="small-text">
+                    Borrowed :$
+                    {amountConversionWithComma(
+                      totalBorrow || 0,
+                      DOLLAR_DECIMALS
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -138,10 +231,10 @@ const Myhome = ({ userLendList, userBorrowList, markets }) => {
             activeKey={activeKey}
           >
             <TabPane tab="Deposit" key="1">
-              <Deposit />
+              <Deposit inProgress={lendsInProgress} />
             </TabPane>
             <TabPane tab="Borrow" key="2">
-              <Borrow />
+              <Borrow inProgress={borrowsInProgress} />
             </TabPane>
             <TabPane tab="History" key="3">
               <History />
@@ -155,6 +248,10 @@ const Myhome = ({ userLendList, userBorrowList, markets }) => {
 
 Myhome.propTypes = {
   lang: PropTypes.string.isRequired,
+  setUserBorrows: PropTypes.func.isRequired,
+  setUserLends: PropTypes.func.isRequired,
+  address: PropTypes.string,
+  assetRatesStatsMap: PropTypes.object,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
@@ -200,12 +297,17 @@ Myhome.propTypes = {
 const stateToProps = (state) => {
   return {
     lang: state.language,
+    address: state.account.address,
     userLendList: state.lend.userLends,
     userBorrowList: state.lend.userBorrows,
     markets: state.oracle.market.list,
+    assetRatesStatsMap: state.lend.assetRatesStats.map,
   };
 };
 
-const actionsToProps = {};
+const actionsToProps = {
+  setUserBorrows,
+  setUserLends,
+};
 
 export default connect(stateToProps, actionsToProps)(Myhome);

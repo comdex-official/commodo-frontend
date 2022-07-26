@@ -1,20 +1,21 @@
-import * as PropTypes from "prop-types";
-import { Col, Row } from "../../../components/common";
-import { connect } from "react-redux";
 import { Button, Spin, Tabs } from "antd";
-import BorrowTab from "./Borrow";
-import RepayTab from "./Repay";
-import CloseTab from "./Close";
-import "./index.less";
-import { Link } from "react-router-dom";
-import { useLocation, useParams } from "react-router";
+import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { useLocation, useParams } from "react-router";
+import { Link } from "react-router-dom";
+import { setPair, setPool } from "../../../actions/lend";
+import { Col, Row } from "../../../components/common";
 import {
   queryBorrowPosition,
   queryLendPair,
+  queryLendPool
 } from "../../../services/lend/query";
-import { setPair } from "../../../actions/lend";
 import { decode } from "../../../utils/string";
+import BorrowTab from "./Borrow";
+import CloseTab from "./Close";
+import "./index.less";
+import RepayTab from "./Repay";
 
 const { TabPane } = Tabs;
 
@@ -28,7 +29,7 @@ const BackButton = {
   ),
 };
 
-const BorrowRepay = ({ setPair }) => {
+const BorrowRepay = ({ setPair, setPool }) => {
   const [inProgress, setInProgress] = useState(false);
   const [borrowPosition, setBorrowPosition] = useState();
   const [activeKey, setActiveKey] = useState("1");
@@ -64,6 +65,16 @@ const BorrowRepay = ({ setPair }) => {
               return;
             }
             setPair(result?.ExtendedPair);
+            queryLendPool(
+              result?.ExtendedPair?.assetOutPoolId,
+              (error, result) => {
+                if (error) {
+                  message.error(error);
+                  return;
+                }
+                setPool(result?.pool);
+              }
+            );
           });
         }
       });
@@ -122,14 +133,14 @@ const BorrowRepay = ({ setPair }) => {
             </TabPane>
             <TabPane tab="Close" key="3">
               {inProgress ? (
-                  <div className="loader">
-                    <Spin />
-                  </div>
+                <div className="loader">
+                  <Spin />
+                </div>
               ) : (
-                  <CloseTab
-                      borrowPosition={borrowPosition}
-                      dataInProgress={inProgress}
-                  />
+                <CloseTab
+                  borrowPosition={borrowPosition}
+                  dataInProgress={inProgress}
+                />
               )}
             </TabPane>
           </Tabs>
@@ -142,6 +153,7 @@ const BorrowRepay = ({ setPair }) => {
 BorrowRepay.propTypes = {
   lang: PropTypes.string.isRequired,
   setPair: PropTypes.func.isRequired,
+  setPool: PropTypes.func.isRequired,
 };
 
 const stateToProps = (state) => {
@@ -152,6 +164,7 @@ const stateToProps = (state) => {
 
 const actionsToProps = {
   setPair,
+  setPool,
 };
 
 export default connect(stateToProps, actionsToProps)(BorrowRepay);

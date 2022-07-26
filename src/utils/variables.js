@@ -68,7 +68,6 @@ const variables = {
     cmdx: "cmdx",
     ust: "ust",
     atom: "atom",
-    xprt: "xprt",
     USD: "USD",
     CMDX: "CMDX",
     deposit: "Deposit",

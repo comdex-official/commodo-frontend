@@ -1,8 +1,8 @@
+import { Button, Checkbox, Divider, Form, Modal, Slider } from "antd";
 import * as PropTypes from "prop-types";
-import { Button, Modal, Checkbox, Form, Slider, Divider } from "antd";
-import { Row, Col, SvgIcon } from "../../../components/common";
-import { connect } from "react-redux";
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import { Col, Row, SvgIcon } from "../../../components/common";
 import "./index.less";
 
 const marks = {
@@ -54,7 +54,6 @@ const FilterModal = () => {
               <Col sm="12">
                 <label className="labels">Auctioned Asset</label>
                 <Checkbox>ATOM</Checkbox>
-                <Checkbox>XPRT</Checkbox>
                 <Checkbox>AKT</Checkbox>
                 <Checkbox>CMDX</Checkbox>
                 <Checkbox>DVPN</Checkbox>
