@@ -1,4 +1,4 @@
-import { Button, Progress, Select } from "antd";
+import { Button, Select } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -7,6 +7,7 @@ import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import CustomInput from "../../../components/CustomInput";
+import HealthFactor from "../../../components/HealthFactor";
 import { comdex } from "../../../config/network";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../constants/common";
@@ -15,7 +16,7 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
@@ -186,17 +187,7 @@ const RepayTab = ({
                 </small>
               </Col>
             </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Current Health Factor</label>
-              </Col>
-              <Col className="text-right">90%</Col>
-            </Row>
-            <Row className="pb-2">
-              <Col>
-                <Progress className="commodo-progress" percent={30} />
-              </Col>
-            </Row>
+            <HealthFactor borrow={borrowPosition} />
             <Row className="mt-2">
               <Col>
                 <label>Liquidation Threshold</label>

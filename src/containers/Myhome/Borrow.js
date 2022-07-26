@@ -1,8 +1,9 @@
-import { Button, Progress, Table } from "antd";
+import { Button, Table } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import HealthFactor from "../../components/HealthFactor";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
@@ -53,15 +54,7 @@ const Borrow = ({ userBorrowList, inProgress }) => {
       key: "health",
       width: 300,
       align: "center",
-      render: (text) => (
-        // TODO : integrate health
-        <Progress
-          className="health-progress"
-          style={{ width: 150 }}
-          percent={"-"}
-          size="small"
-        />
-      ),
+      render: (item) => <HealthFactor parent="table" borrow={item} />,
     },
     {
       title: "",
