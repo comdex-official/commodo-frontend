@@ -1,6 +1,5 @@
 import { sha256, stringToPath } from "@cosmjs/crypto";
-import { comdex } from "../config/network";
-import { ibcDenoms } from "../config/network";
+import { comdex, ibcDenoms } from "../config/network";
 
 const encoding = require("@cosmjs/encoding");
 
@@ -18,8 +17,6 @@ export const ibcDenomToDenom = (key) => {
       return "uust";
     case ibcDenoms["uluna"]:
       return "uluna";
-    case ibcDenoms["uxprt"]:
-      return "uxprt";
     case ibcDenoms["uosmo"]:
       return "uosmo";
     default:
@@ -38,9 +35,6 @@ export const denomToSymbol = (key) => {
       return "ATOM";
     case "udvpn":
       return "DVPN";
-    case "uxprt":
-    case ibcDenoms["uxprt"]:
-      return "XPRT";
     case "uluna":
     case ibcDenoms["uluna"]:
       return "LUNA";
@@ -71,9 +65,6 @@ export const iconNameFromDenom = (key) => {
       return "cmst-icon";
     case "uharbor":
       return "harbor-icon";
-    case "uxprt":
-    case ibcDenoms["uxprt"]:
-      return "xprt-icon";
     case "uosmo":
     case ibcDenoms["uosmo"]:
       return "osmosis-icon";
