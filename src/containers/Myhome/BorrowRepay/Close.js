@@ -1,10 +1,10 @@
-import { Progress } from "antd";
 import * as PropTypes from "prop-types";
 import { useState } from "react";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
 import { Col, Row } from "../../../components/common";
 import Details from "../../../components/common/Asset/Details";
+import HealthFactor from "../../../components/HealthFactor";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   amountConversion,
@@ -68,17 +68,7 @@ const CloseTab = ({
                 </small>
               </Col>
             </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Current Health Factor</label>
-              </Col>
-              <Col className="text-right">90%</Col>
-            </Row>
-            <Row className="pb-2">
-              <Col>
-                <Progress className="commodo-progress" percent={30} />
-              </Col>
-            </Row>
+            <HealthFactor borrow={borrowPosition} />
             <Row className="mt-2">
               <Col>
                 <label>Liquidation Threshold</label>

@@ -9,6 +9,7 @@ import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
 import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
+import HealthFactor from "../../../../components/HealthFactor";
 import { comdex } from "../../../../config/network";
 import { ValidateInputNumber } from "../../../../config/_validation";
 import {
@@ -371,6 +372,7 @@ const BorrowTab = ({
                 </div>
               </div>
             </div>
+            <HealthFactor />
             <Row>
               <Col sm="12" className="mt-3 mx-auto card-bottom-details">
                 <AssetStats assetId={pair?.assetOut} />

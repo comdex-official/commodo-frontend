@@ -2,6 +2,7 @@ import { Progress } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { Col, Row } from "../../components/common";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { decimalConversion, marketPrice } from "../../utils/number";
 
@@ -34,11 +35,34 @@ const HealthFactor = ({
   }, [markets, borrow]);
 
   return (
-    <Progress
-      className={parent === "table" ? "health-progress" : ""}
-      percent={Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}
-      size={size ? size : "small"}
-    />
+    <>
+      {parent === "table" ? (
+        <Progress
+          className={"health-progress"}
+          percent={Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}
+          size={size ? size : "small"}
+        />
+      ) : (
+        <>
+          <Row className="mt-2">
+            <Col>
+              <label>Current Health Factor</label>
+            </Col>
+            <Col className="text-right">
+              {Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}%
+            </Col>
+          </Row>
+          <Row className="pb-2">
+            <Col>
+              <Progress
+                className="commodo-progress"
+                percent={Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}
+              />
+            </Col>
+          </Row>
+        </>
+      )}
+    </>
   );
 };
 
