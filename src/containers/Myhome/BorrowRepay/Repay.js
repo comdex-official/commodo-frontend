@@ -1,24 +1,25 @@
+import { Button, Progress, Select } from "antd";
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Button, List, Select, Input, Progress } from "antd";
-import "./index.less";
 import { setBalanceRefresh } from "../../../actions/account";
-import { useState } from "react";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import Details from "../../../components/common/Asset/Details";
+import CustomInput from "../../../components/CustomInput";
+import { comdex } from "../../../config/network";
+import { ValidateInputNumber } from "../../../config/_validation";
+import { DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../../utils/coin";
-import { iconNameFromDenom, toDecimals } from "../../../utils/string";
-import { ValidateInputNumber } from "../../../config/_validation";
-import { comdex } from "../../../config/network";
-import { DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../constants/common";
-import CustomInput from "../../../components/CustomInput";
 import { commaSeparator, marketPrice } from "../../../utils/number";
+import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "./ActionButton";
+import "./index.less";
 
 const { Option } = Select;
 
@@ -37,10 +38,21 @@ const RepayTab = ({
 }) => {
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
+  const [assetList, setAssetList] = useState();
 
   const selectedAssetId = pair?.assetOut?.toNumber();
   const availableBalance =
     getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
+
+  useEffect(() => {
+    if (pool?.poolId) {
+      setAssetList([
+        assetMap[pool?.mainAssetId?.toNumber()],
+        assetMap[pool?.firstBridgedAssetId?.toNumber()],
+        assetMap[pool?.secondBridgedAssetId?.toNumber()],
+      ]);
+    }
+  }, [pool]);
 
   const handleInputChange = (value) => {
     value = toDecimals(value).toString().trim();
@@ -207,6 +219,29 @@ const RepayTab = ({
             borrowId={borrowPosition?.borrowingId}
             denom={borrowPosition?.amountOut?.denom}
             refreshData={handleRefresh}
+          />
+        </div>
+      </div>
+      <div className="details-right">
+        <div className="commodo-card">
+          <Details
+            asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
+            poolId={pool?.poolId}
+            parent="borrow"
+          />
+          <div className="mt-5">
+            <Details
+              asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
+              poolId={pool?.poolId}
+              parent="borrow"
+            />
+          </div>
+        </div>
+        <div className="commodo-card">
+          <Details
+            asset={assetMap[pool?.mainAssetId?.toNumber()]}
+            poolId={pool?.poolId}
+            parent="borrow"
           />
         </div>
       </div>
