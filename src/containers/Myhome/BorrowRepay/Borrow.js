@@ -58,7 +58,6 @@ const BorrowTab = ({
     }
   }, [pool]);
 
-  console.log("the pool", pool);
   const handleInputChange = (value) => {
     value = toDecimals(value).toString().trim();
 

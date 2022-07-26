@@ -29,9 +29,9 @@ const Borrow = ({ userBorrowList, inProgress }) => {
       width: 150,
     },
     {
-      title: "cPool",
-      dataIndex: "cpool",
-      key: "cpool",
+      title: "Collateral",
+      dataIndex: "collateral",
+      key: "collateral",
       width: 180,
     },
     {
@@ -123,7 +123,13 @@ const Borrow = ({ userBorrowList, inProgress }) => {
                 {denomConversion(item?.amountOut?.denom)}
               </>
             ),
-            cpool: item?.cpoolName,
+            collateral: (
+              <>
+                {" "}
+                {amountConversionWithComma(item?.amountIn?.amount)}{" "}
+                {denomConversion(item?.amountIn?.denom)}
+              </>
+            ),
             apy: item,
             health: item,
             action: item,

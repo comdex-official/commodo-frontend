@@ -1,18 +1,19 @@
-import * as PropTypes from "prop-types";
-import { Col, Row } from "../../../components/common";
-import { connect } from "react-redux";
 import { Progress } from "antd";
-import "./index.less";
-import { setBalanceRefresh } from "../../../actions/account";
+import * as PropTypes from "prop-types";
 import { useState } from "react";
+import { connect } from "react-redux";
+import { setBalanceRefresh } from "../../../actions/account";
+import { Col, Row } from "../../../components/common";
+import Details from "../../../components/common/Asset/Details";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   amountConversion,
   amountConversionWithComma,
-  denomConversion,
+  denomConversion
 } from "../../../utils/coin";
-import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import ActionButton from "./ActionButton";
+import "./index.less";
 
 const CloseTab = ({
   lang,
@@ -29,7 +30,6 @@ const CloseTab = ({
 }) => {
   const [amount, setAmount] = useState();
   const selectedAssetId = pair?.assetOut?.toNumber();
-
 
   const handleRefresh = () => {
     setBalanceRefresh(refreshBalance + 1);
@@ -103,6 +103,29 @@ const CloseTab = ({
             borrowId={borrowPosition?.borrowingId}
             denom={borrowPosition?.amountOut?.denom}
             refreshData={handleRefresh}
+          />
+        </div>
+      </div>
+      <div className="details-right">
+        <div className="commodo-card">
+          <Details
+            asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
+            poolId={pool?.poolId}
+            parent="borrow"
+          />
+          <div className="mt-5">
+            <Details
+              asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
+              poolId={pool?.poolId}
+              parent="borrow"
+            />
+          </div>
+        </div>
+        <div className="commodo-card">
+          <Details
+            asset={assetMap[pool?.mainAssetId?.toNumber()]}
+            poolId={pool?.poolId}
+            parent="borrow"
           />
         </div>
       </div>

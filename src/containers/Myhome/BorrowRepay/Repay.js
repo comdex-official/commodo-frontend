@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import CustomInput from "../../../components/CustomInput";
 import { comdex } from "../../../config/network";
@@ -14,7 +15,7 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
@@ -79,6 +80,7 @@ const RepayTab = ({
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
+        <CustomRow assetList={assetList} />
         <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="left-label">

@@ -1,4 +1,4 @@
-import { Button, message, Select, Spin, Tooltip } from "antd";
+import { Button, message, Select, Spin } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -210,44 +210,6 @@ const BorrowTab = ({
     }
   };
 
-  const TooltipContent = (
-    <div className="token-details">
-      <div className="tokencard-col">
-        <div className="tokencard">
-          <div className="tokencard-icon">
-            <SvgIcon name="cmdx-icon" />
-          </div>
-          <p>Deposit {denomConversion(collateralAssetDenom)}</p>
-        </div>
-        <div className="tokencard with-shadow">
-          <div className="tokencard-icon">
-            <SvgIcon name="cmst-icon" />
-          </div>
-          <p>Borrow {denomConversion(firstBridgeAssetDenom)}</p>
-        </div>
-        <label>Token A</label>
-      </div>
-      <div className="middle-arrow">
-        <SvgIcon name="token-arrow" viewbox="0 0 159 80.387" />
-      </div>
-      <div className="tokencard-col">
-        <div className="tokencard with-shadow">
-          <div className="tokencard-icon">
-            <SvgIcon name="cmst-icon" />
-          </div>
-          <p>Deposit {denomConversion(firstBridgeAssetDenom)}</p>
-        </div>
-        <div className="tokencard">
-          <div className="tokencard-icon">
-            <SvgIcon name="osmosis-icon" />
-          </div>
-          <p>Borrow {denomConversion(borrowAssetDenom)}</p>
-        </div>
-        <label>Token B</label>
-      </div>
-    </div>
-  );
-
   return (
     <div className="details-wrapper">
       {!dataInProgress ? (
@@ -409,74 +371,6 @@ const BorrowTab = ({
                 </div>
               </div>
             </div>
-            <Row>
-              <Col>
-                <Tooltip
-                  placement="right"
-                  color="#173629"
-                  title={TooltipContent}
-                  overlayClassName="token-overlay"
-                >
-                  <div className="borrowbottom-cards">
-                    <div className="cards">
-                      <div className="cards-inner">
-                        <div className="cards-colum">
-                          <div className="inner-icon">
-                            <SvgIcon
-                              name={iconNameFromDenom(collateralAssetDenom)}
-                            />
-                          </div>
-                          <p>{denomConversion(collateralAssetDenom)}</p>
-                        </div>
-                        <SvgIcon
-                          className="longarrow-icon"
-                          name="long-arrow"
-                          viewbox="0 0 64 5.774"
-                        />
-                        <div className="cards-colum">
-                          <div className="inner-icon">
-                            <SvgIcon
-                              name={iconNameFromDenom(firstBridgeAssetDenom)}
-                            />
-                          </div>
-                          <p>{denomConversion(firstBridgeAssetDenom)}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <SvgIcon
-                      className="longarrow-icon-middle"
-                      name="long-arrow"
-                      viewbox="0 0 64 5.774"
-                    />
-                    <div className="cards">
-                      <div className="cards-inner">
-                        <div className="cards-colum">
-                          <div className="inner-icon">
-                            <SvgIcon
-                              name={iconNameFromDenom(firstBridgeAssetDenom)}
-                            />
-                          </div>
-                          <p>{denomConversion(firstBridgeAssetDenom)}</p>
-                        </div>
-                        <SvgIcon
-                          className="longarrow-icon"
-                          name="long-arrow"
-                          viewbox="0 0 64 5.774"
-                        />
-                        <div className="cards-colum">
-                          <div className="inner-icon">
-                            <SvgIcon
-                              name={iconNameFromDenom(borrowAssetDenom)}
-                            />
-                          </div>
-                          <p>{denomConversion(borrowAssetDenom)}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Tooltip>
-              </Col>
-            </Row>
             <Row>
               <Col sm="12" className="mt-3 mx-auto card-bottom-details">
                 <AssetStats assetId={pair?.assetOut} />
