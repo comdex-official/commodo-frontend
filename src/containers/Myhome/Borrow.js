@@ -1,46 +1,15 @@
-import { Button, message, Progress, Table } from "antd";
+import { Button, Progress, Table } from "antd";
 import * as PropTypes from "prop-types";
-import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import { setUserBorrows } from "../../actions/lend";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
-import { queryUserBorrows } from "../../services/lend/query";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
 import "./index.less";
 
-const Borrow = ({ address, setUserBorrows, userBorrowList }) => {
-  const [inProgress, setInProgress] = useState(false);
-
+const Borrow = ({ userBorrowList, inProgress }) => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setUserBorrows([]);
-  }, []);
-
-  useEffect(() => {
-    if (address) {
-      fetchUserBorrows();
-    }
-  }, [address]);
-
-  const fetchUserBorrows = () => {
-    setInProgress(true);
-    queryUserBorrows(address, (error, result) => {
-      setInProgress(false);
-
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      if (result?.borrows?.length > 0) {
-        setUserBorrows(result?.borrows);
-      }
-    });
-  };
 
   const columns = [
     {
@@ -187,7 +156,7 @@ const Borrow = ({ address, setUserBorrows, userBorrowList }) => {
 
 Borrow.propTypes = {
   lang: PropTypes.string.isRequired,
-  address: PropTypes.string,
+  inProgress: PropTypes.bool,
   userBorrowList: PropTypes.arrayOf(
     PropTypes.shape({
       amountOut: PropTypes.shape({
@@ -212,13 +181,8 @@ Borrow.propTypes = {
 const stateToProps = (state) => {
   return {
     lang: state.language,
-    address: state.account.address,
     userBorrowList: state.lend.userBorrows,
   };
 };
 
-const actionsToProps = {
-  setUserBorrows,
-};
-
-export default connect(stateToProps, actionsToProps)(Borrow);
+export default connect(stateToProps)(Borrow);

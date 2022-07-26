@@ -1,22 +1,34 @@
+import { List, Progress, Tabs } from "antd";
 import * as PropTypes from "prop-types";
-import { Col, Row, TooltipIcon } from "../../components/common";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Progress, Tabs, List } from "antd";
-import Deposit from "./Deposit";
+import { useLocation } from "react-router";
+import { setUserBorrows, setUserLends } from "../../actions/lend";
+import { Col, Row, TooltipIcon } from "../../components/common";
+import { DOLLAR_DECIMALS } from "../../constants/common";
+import { queryUserBorrows, queryUserLends } from "../../services/lend/query";
+import { amountConversionWithComma } from "../../utils/coin";
+import { marketPrice } from "../../utils/number";
+import { decode } from "../../utils/string";
 import Borrow from "./Borrow";
+import Deposit from "./Deposit";
 import History from "./History";
 import "./index.less";
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router";
-import { decode } from "../../utils/string";
-import { marketPrice } from "../../utils/number";
-import { amountConversionWithComma } from "../../utils/coin";
-import { DOLLAR_DECIMALS } from "../../constants/common";
 
 const { TabPane } = Tabs;
 
-const Myhome = ({ userLendList, userBorrowList, markets }) => {
+const Myhome = ({
+  address,
+  userLendList,
+  setUserLends,
+  setUserBorrows,
+  userBorrowList,
+  markets,
+}) => {
   const [activeKey, setActiveKey] = useState("1");
+  const [lendsInProgress, setLendsInProgress] = useState(false);
+  const [borrowsInProgress, setBorrowsInProgress] = useState(false);
+
   const location = useLocation();
   const type = decode(location.hash);
 
@@ -25,6 +37,50 @@ const Myhome = ({ userLendList, userBorrowList, markets }) => {
       setActiveKey("2");
     }
   }, []);
+
+  useEffect(() => {
+    setUserLends([]);
+    setUserBorrows([]);
+  }, []);
+
+  useEffect(() => {
+    if (address) {
+      fetchUserBorrows();
+      fetchUserLends();
+    }
+  }, [address]);
+
+  const fetchUserLends = () => {
+    setLendsInProgress(true);
+    queryUserLends(address, (error, result) => {
+      setLendsInProgress(false);
+
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      if (result?.lends?.length > 0) {
+        setUserLends(result?.lends);
+      }
+    });
+  };
+
+  const fetchUserBorrows = () => {
+    setBorrowsInProgress(true);
+    queryUserBorrows(address, (error, result) => {
+      setBorrowsInProgress(false);
+
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      if (result?.borrows?.length > 0) {
+        setUserBorrows(result?.borrows);
+      }
+    });
+  };
 
   const calculateTotalDeposit = () => {
     const values =
@@ -138,10 +194,10 @@ const Myhome = ({ userLendList, userBorrowList, markets }) => {
             activeKey={activeKey}
           >
             <TabPane tab="Deposit" key="1">
-              <Deposit />
+              <Deposit inProgress={lendsInProgress} />
             </TabPane>
             <TabPane tab="Borrow" key="2">
-              <Borrow />
+              <Borrow inProgress={borrowsInProgress} />
             </TabPane>
             <TabPane tab="History" key="3">
               <History />
@@ -155,6 +211,9 @@ const Myhome = ({ userLendList, userBorrowList, markets }) => {
 
 Myhome.propTypes = {
   lang: PropTypes.string.isRequired,
+  setUserBorrows: PropTypes.func.isRequired,
+  setUserLends: PropTypes.func.isRequired,
+  address: PropTypes.string,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
@@ -200,12 +259,16 @@ Myhome.propTypes = {
 const stateToProps = (state) => {
   return {
     lang: state.language,
+    address: state.account.address,
     userLendList: state.lend.userLends,
     userBorrowList: state.lend.userBorrows,
     markets: state.oracle.market.list,
   };
 };
 
-const actionsToProps = {};
+const actionsToProps = {
+  setUserBorrows,
+  setUserLends,
+};
 
 export default connect(stateToProps, actionsToProps)(Myhome);

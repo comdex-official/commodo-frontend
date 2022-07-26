@@ -1,46 +1,15 @@
-import { Button, message, Table } from "antd";
+import { Button, Table } from "antd";
 import * as PropTypes from "prop-types";
-import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import { setUserLends } from "../../actions/lend";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
-import { queryUserLends } from "../../services/lend/query";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
 import "./index.less";
 
-const Deposit = ({ address, setUserLends, userLendList }) => {
-  const [inProgress, setInProgress] = useState(false);
-
+const Deposit = ({ userLendList, inProgress }) => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setUserLends([]);
-  }, []);
-
-  useEffect(() => {
-    if (address) {
-      fetchUserLends();
-    }
-  }, [address]);
-
-  const fetchUserLends = () => {
-    setInProgress(true);
-    queryUserLends(address, (error, result) => {
-      setInProgress(false);
-
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      if (result?.lends?.length > 0) {
-        setUserLends(result?.lends);
-      }
-    });
-  };
 
   const columns = [
     {
@@ -179,7 +148,6 @@ const Deposit = ({ address, setUserLends, userLendList }) => {
 
 Deposit.propTypes = {
   lang: PropTypes.string.isRequired,
-  address: PropTypes.string,
   userLendList: PropTypes.arrayOf(
     PropTypes.shape({
       amountIn: PropTypes.shape({
@@ -201,13 +169,8 @@ Deposit.propTypes = {
 const stateToProps = (state) => {
   return {
     lang: state.language,
-    address: state.account.address,
     userLendList: state.lend.userLends,
   };
 };
 
-const actionsToProps = {
-  setUserLends,
-};
-
-export default connect(stateToProps, actionsToProps)(Deposit);
+export default connect(stateToProps)(Deposit);
