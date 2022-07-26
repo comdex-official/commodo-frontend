@@ -26,7 +26,11 @@ const HealthFactor = ({
         setPercentage(
           (borrow?.amountIn?.amount *
             marketPrice(markets, borrow?.amountIn?.denom) *
-            Number(decimalConversion(assetRatesStatsMap[asset?.id]?.ltv))) /
+            Number(
+              decimalConversion(
+                assetRatesStatsMap[asset?.id]?.liquidationThreshold
+              )
+            )) /
             (borrow?.amountOut?.amount *
               marketPrice(markets, borrow?.amountOut?.denom))
         );
