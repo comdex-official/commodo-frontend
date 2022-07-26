@@ -13,6 +13,7 @@ const HealthFactor = ({
   assetRatesStatsMap,
   markets,
   assetMap,
+  name,
 }) => {
   const [percentage, setPercentage] = useState(0);
 
@@ -50,7 +51,7 @@ const HealthFactor = ({
         <>
           <Row className="mt-2">
             <Col>
-              <label>Current Health Factor</label>
+              <label>{name || "Current Health Factor"}</label>
             </Col>
             <Col className="text-right">
               {Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}%
@@ -81,6 +82,7 @@ HealthFactor.propTypes = {
       }),
     })
   ),
+  name: PropTypes.string,
   parent: PropTypes.string,
 };
 
