@@ -8,6 +8,7 @@ import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import AssetStats from "../../../components/common/Asset/Stats";
 import CustomInput from "../../../components/CustomInput";
+import HealthFactor from "../../../components/HealthFactor";
 import { comdex } from "../../../config/network";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../constants/common";
@@ -162,6 +163,7 @@ const BorrowTab = ({
         </div>
         <Row>
           <Col sm="12" className="mt-3 mx-auto card-bottom-details">
+            <HealthFactor borrow={borrowPosition} />
             <AssetStats assetId={selectedAssetId} />
           </Col>
         </Row>

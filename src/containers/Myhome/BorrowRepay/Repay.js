@@ -6,6 +6,7 @@ import { setBalanceRefresh } from "../../../actions/account";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
+import AssetStats from '../../../components/common/Asset/Stats';
 import CustomInput from "../../../components/CustomInput";
 import HealthFactor from "../../../components/HealthFactor";
 import { comdex } from "../../../config/network";
@@ -188,18 +189,7 @@ const RepayTab = ({
               </Col>
             </Row>
             <HealthFactor borrow={borrowPosition} />
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Threshold</label>
-              </Col>
-              <Col className="text-right">80%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Penalty</label>
-              </Col>
-              <Col className="text-right">5%</Col>
-            </Row>
+            <AssetStats assetId={selectedAssetId} />
           </Col>
         </Row>
         <div className="assets-form-btn">
