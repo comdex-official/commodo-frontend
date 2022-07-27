@@ -13,7 +13,7 @@ import {
   queryDepositStats,
   queryUserDepositStats
 } from "../../services/lend/query";
-import { amountConversionWithComma } from "../../utils/coin";
+import { amountConversion, amountConversionWithComma } from "../../utils/coin";
 import { marketPrice } from "../../utils/number";
 import "./index.less";
 
@@ -109,12 +109,12 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
         data: [
           {
             name: "Total Available",
-            y: Number(totalDepositStats) || 0,
+            y: Number(amountConversion(totalDepositStats || 0)),
             color: "#52B788",
           },
           {
             name: "Total Borrowed",
-            y: Number(totalBorrowStats) || 0,
+            y: Number(amountConversion(totalBorrowStats || 0)),
 
             color: "#E2F7E5",
           },

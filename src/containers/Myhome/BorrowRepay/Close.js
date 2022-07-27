@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
 import { Col, Row } from "../../../components/common";
 import Details from "../../../components/common/Asset/Details";
+import AssetStats from "../../../components/common/Asset/Stats";
 import HealthFactor from "../../../components/HealthFactor";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
@@ -69,18 +70,7 @@ const CloseTab = ({
               </Col>
             </Row>
             <HealthFactor borrow={borrowPosition} />
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Threshold</label>
-              </Col>
-              <Col className="text-right">80%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Penalty</label>
-              </Col>
-              <Col className="text-right">5%</Col>
-            </Row>
+            <AssetStats assetId={selectedAssetId} />
           </Col>
         </Row>
         <div className="assets-form-btn">

@@ -372,7 +372,8 @@ const BorrowTab = ({
                 </div>
               </div>
             </div>
-            <HealthFactor name="Health Factor" />
+            <HealthFactor name="Health Factor"  pair={pair} inAmount={inAmount}
+            outAmount={outAmount}/>
             <Row>
               <Col sm="12" className="mt-3 mx-auto card-bottom-details">
                 <AssetStats assetId={pair?.assetOut} />
