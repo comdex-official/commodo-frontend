@@ -14,6 +14,9 @@ const HealthFactor = ({
   markets,
   assetMap,
   name,
+  pair,
+  inAmount,
+  outAmount,
 }) => {
   const [percentage, setPercentage] = useState(0);
 
@@ -38,6 +41,23 @@ const HealthFactor = ({
       }
     }
   }, [markets, borrow]);
+
+  useEffect(() => {
+    if (pair?.id && Number(inAmount) && Number(outAmount)) {
+
+      setPercentage(
+        (Number(inAmount) *
+          marketPrice(markets, assetMap[pair?.assetIn]?.denom) *
+          Number(
+            decimalConversion(
+              assetRatesStatsMap[pair?.assetIn]?.liquidationThreshold
+            )
+          )) /
+          (Number(outAmount) *
+            marketPrice(markets, assetMap[pair?.assetOut]?.denom))
+      );
+    }
+  }, [markets, pair, inAmount, outAmount]);
 
   return (
     <>
@@ -75,6 +95,7 @@ HealthFactor.propTypes = {
   assetMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
   borrow: PropTypes.object,
+  inAmount: PropTypes.string,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
@@ -83,7 +104,9 @@ HealthFactor.propTypes = {
     })
   ),
   name: PropTypes.string,
+  pair: PropTypes.object,
   parent: PropTypes.string,
+  outAmount: PropTypes.string,
 };
 
 const stateToProps = (state) => {
