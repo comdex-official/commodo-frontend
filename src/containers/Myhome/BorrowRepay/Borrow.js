@@ -6,20 +6,21 @@ import { setBalanceRefresh } from "../../../actions/account";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
-import AssetStats from "../../../components/common/Asset/Stats";
 import CustomInput from "../../../components/CustomInput";
 import HealthFactor from "../../../components/HealthFactor";
-import { comdex } from "../../../config/network";
 import { ValidateInputNumber } from "../../../config/_validation";
-import { DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../constants/common";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount,
-  getDenomBalance
+  getAmount
 } from "../../../utils/coin";
-import { commaSeparator, marketPrice } from "../../../utils/number";
+import {
+  commaSeparator,
+  decimalConversion,
+  marketPrice
+} from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
@@ -32,6 +33,7 @@ const BorrowTab = ({
   borrowPosition,
   pool,
   assetMap,
+  assetRatesStatsMap,
   balances,
   address,
   refreshBalance,
@@ -45,9 +47,17 @@ const BorrowTab = ({
 
   const selectedAssetId = pair?.assetOut?.toNumber();
   const availableBalance =
-    getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
+    Number(
+      borrowPosition?.amountIn?.amount *
+        marketPrice(markets, borrowPosition?.amountIn.denom) *
+        Number(decimalConversion(assetRatesStatsMap[pair?.assetIn]?.uOptimal))
+    ) -
+    Number(
+      borrowPosition?.amountOut?.amount *
+        marketPrice(markets, borrowPosition?.amountOut.denom)
+    );
 
-  //TODO update available balance
+  // Collateral deposited value * Max LTV of collateral minus already Borrowed asset value
 
   useEffect(() => {
     if (pool?.poolId) {
@@ -67,19 +77,25 @@ const BorrowTab = ({
   };
 
   const handleMaxClick = () => {
-    if (assetMap[selectedAssetId]?.denom === comdex.coinMinimalDenom) {
-      return Number(availableBalance) > DEFAULT_FEE
-        ? handleInputChange(amountConversion(availableBalance - DEFAULT_FEE))
-        : handleInputChange();
-    } else {
-      return handleInputChange(amountConversion(availableBalance));
-    }
+    return handleInputChange(amountConversion(availableBalance));
   };
 
   const handleRefresh = () => {
     setBalanceRefresh(refreshBalance + 1);
     setAmount();
   };
+
+  let currentLTV = Number(
+    ((Number(
+      amount
+        ? Number(borrowPosition?.amountOut?.amount) + Number(getAmount(amount))
+        : borrowPosition?.amountOut?.amount
+    ) *
+      marketPrice(markets, borrowPosition?.amountOut?.denom)) /
+      (Number(borrowPosition?.amountIn?.amount) *
+        marketPrice(markets, borrowPosition?.amountIn?.denom))) *
+      100
+  );
 
   return (
     <div className="details-wrapper">
@@ -128,7 +144,7 @@ const BorrowTab = ({
           </div>
           <div className="assets-right">
             <div className="label-right">
-              Available
+              Balance
               <span className="ml-1">
                 {amountConversionWithComma(availableBalance)}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
@@ -163,8 +179,45 @@ const BorrowTab = ({
         </div>
         <Row>
           <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-            <HealthFactor borrow={borrowPosition} />
-            <AssetStats assetId={selectedAssetId} />
+            <HealthFactor
+              borrow={borrowPosition}
+              pair={pair}
+              inAmount={borrowPosition?.amountIn?.amount}
+              outAmount={
+                amount
+                  ? Number(borrowPosition?.amountOut?.amount) +
+                    Number(getAmount(amount))
+                  : borrowPosition?.amountOut?.amount
+              }
+            />
+            <Row>
+              <Col sm="12" className="mt-3 mx-auto card-bottom-details">
+                <Row className="mt-2">
+                  <Col>
+                    <label>Current LTV</label>
+                  </Col>
+                  <Col className="text-right">
+                    {(isFinite(currentLTV) ? currentLTV : 0).toFixed(
+                      DOLLAR_DECIMALS
+                    )}
+                    %
+                  </Col>
+                </Row>
+                <Row className="mt-2">
+                  <Col>
+                    <label>Max LTV</label>
+                  </Col>
+                  <Col className="text-right">
+                    {Number(
+                      decimalConversion(
+                        assetRatesStatsMap[pair?.assetIn]?.uOptimal
+                      ) * 100
+                    ).toFixed(DOLLAR_DECIMALS)}
+                    %
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
           </Col>
         </Row>
         <div className="assets-form-btn">
@@ -213,6 +266,7 @@ BorrowTab.propTypes = {
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  assetRatesStatsMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -263,6 +317,7 @@ const stateToProps = (state) => {
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
     markets: state.oracle.market.list,
+    assetRatesStatsMap: state.lend.assetRatesStats.map,
   };
 };
 

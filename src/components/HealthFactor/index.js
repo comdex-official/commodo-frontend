@@ -23,8 +23,10 @@ const HealthFactor = ({
   useEffect(() => {
     if (borrow?.borrowingId) {
       let asset = Object.values(assetMap).filter(
-        (item) => item.denom === borrow?.amountOut?.denom
+        (item) => item.denom === borrow?.amountIn?.denom.replace("uc", "u")
       )[0];
+
+      // TODO: update taking selected asset
 
       if (asset?.id) {
         setPercentage(
@@ -44,7 +46,6 @@ const HealthFactor = ({
 
   useEffect(() => {
     if (pair?.id && Number(inAmount) && Number(outAmount)) {
-
       setPercentage(
         (Number(inAmount) *
           marketPrice(markets, assetMap[pair?.assetIn]?.denom) *
@@ -64,6 +65,7 @@ const HealthFactor = ({
       {parent === "table" ? (
         <Progress
           className={"health-progress"}
+          format={(percent) => percent}
           percent={Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}
           size={size ? size : "small"}
         />
@@ -74,12 +76,13 @@ const HealthFactor = ({
               <label>{name || "Current Health Factor"}</label>
             </Col>
             <Col className="text-right">
-              {Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}%
+              {Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}
             </Col>
           </Row>
           <Row className="pb-2">
             <Col>
               <Progress
+                format={(percent) => percent}
                 className="commodo-progress"
                 percent={Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}
               />
