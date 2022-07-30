@@ -6,14 +6,11 @@ import { useNavigate } from "react-router";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
 import Details from "../../../../components/common/Asset/Details";
-import AssetStats from "../../../../components/common/Asset/Stats";
 import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
 import HealthFactor from "../../../../components/HealthFactor";
-import { comdex } from "../../../../config/network";
 import { ValidateInputNumber } from "../../../../config/_validation";
 import {
-  DEFAULT_FEE,
   DOLLAR_DECIMALS,
   UC_DENOM
 } from "../../../../constants/common";
@@ -29,7 +26,11 @@ import {
   denomConversion,
   getAmount
 } from "../../../../utils/coin";
-import { commaSeparator, marketPrice } from "../../../../utils/number";
+import {
+  commaSeparator,
+  decimalConversion,
+  marketPrice
+} from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import "./index.less";
@@ -44,6 +45,7 @@ const BorrowTab = ({
   address,
   markets,
   poolLendPositions,
+  assetRatesStatsMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [lend, setLend] = useState();
@@ -59,9 +61,13 @@ const BorrowTab = ({
 
   let collateralAssetDenom = assetMap[lend?.assetId]?.denom;
   let borrowAssetDenom = assetMap[pair?.assetOut]?.denom;
-  const firstBridgeAssetDenom = assetMap[pool?.firstBridgedAssetId]?.denom;
 
   const availableBalance = lend?.availableToBorrow || 0;
+  const borrowableBalance = getAmount(
+    Number(inAmount) *
+      marketPrice(markets, collateralAssetDenom) *
+      Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv)) || 0
+  );
 
   const borrowList =
     extendedPairs &&
@@ -143,7 +149,9 @@ const BorrowTab = ({
     value = toDecimals(value).toString().trim();
 
     setOutAmount(value);
-    setBorrowValidationError(ValidateInputNumber(getAmount(value)));
+    setBorrowValidationError(
+      ValidateInputNumber(getAmount(value), borrowableBalance)
+    );
   };
 
   const handleClick = () => {
@@ -202,14 +210,18 @@ const BorrowTab = ({
   };
 
   const handleMaxClick = () => {
-    if (collateralAssetDenom === comdex.coinMinimalDenom) {
-      return Number(availableBalance) > DEFAULT_FEE
-        ? handleInAmountChange(amountConversion(availableBalance - DEFAULT_FEE))
-        : handleInAmountChange();
-    } else {
-      return handleInAmountChange(amountConversion(availableBalance));
-    }
+    return handleInAmountChange(amountConversion(availableBalance));
   };
+
+  const handleBorrowMaxClick = () => {
+    return handleOutAmountChange(amountConversion(borrowableBalance));
+  };
+
+  let currentLTV = Number(
+    ((outAmount * marketPrice(markets, borrowAssetDenom)) /
+      (inAmount * marketPrice(markets, collateralAssetDenom))) *
+      100
+  );
 
   return (
     <div className="details-wrapper">
@@ -350,6 +362,18 @@ const BorrowTab = ({
                 </div>
               </div>
               <div className="assets-right">
+                <div className="label-right">
+                  Borrowable
+                  <span className="ml-1">
+                    {amountConversionWithComma(borrowableBalance)}{" "}
+                    {denomConversion(borrowAssetDenom)}
+                  </span>
+                  <div className="max-half">
+                    <Button className="active" onClick={handleBorrowMaxClick}>
+                      Max
+                    </Button>
+                  </div>
+                </div>
                 <div>
                   <div className="input-select">
                     <CustomInput
@@ -372,11 +396,38 @@ const BorrowTab = ({
                 </div>
               </div>
             </div>
-            <HealthFactor name="Health Factor"  pair={pair} inAmount={inAmount}
-            outAmount={outAmount}/>
+            <HealthFactor
+              name="Health Factor"
+              pair={pair}
+              inAmount={inAmount}
+              outAmount={outAmount}
+            />
             <Row>
               <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-                <AssetStats assetId={pair?.assetOut} />
+                <Row className="mt-2">
+                  <Col>
+                    <label>Current LTV</label>
+                  </Col>
+                  <Col className="text-right">
+                    {(isFinite(currentLTV) ? currentLTV : 0).toFixed(
+                      DOLLAR_DECIMALS
+                    )}
+                    %
+                  </Col>
+                </Row>
+                <Row className="mt-2">
+                  <Col>
+                    <label>Max LTV</label>
+                  </Col>
+                  <Col className="text-right">
+                    {Number(
+                      decimalConversion(
+                        assetRatesStatsMap[lend?.assetId]?.uOptimal
+                      ) * 100
+                    ).toFixed(DOLLAR_DECIMALS)}
+                    %
+                  </Col>
+                </Row>
               </Col>
             </Row>
             <div className="assets-form-btn">
@@ -387,6 +438,8 @@ const BorrowTab = ({
                 disabled={
                   !Number(inAmount) ||
                   !Number(outAmount) ||
+                  validationError?.message ||
+                  borrowValidationError?.message ||
                   inProgress ||
                   !lend?.lendingId ||
                   !pair?.id
@@ -435,6 +488,7 @@ BorrowTab.propTypes = {
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  assetRatesStatsMap: PropTypes.object,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
@@ -480,6 +534,7 @@ const stateToProps = (state) => {
     lang: state.language,
     markets: state.oracle.market.list,
     poolLendPositions: state.lend.poolLends,
+    assetRatesStatsMap: state.lend.assetRatesStats.map,
   };
 };
 

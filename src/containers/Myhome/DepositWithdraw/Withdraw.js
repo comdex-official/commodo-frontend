@@ -1,24 +1,25 @@
-import * as PropTypes from "prop-types";
-import { SvgIcon, TooltipIcon } from "../../../components/common";
-import { connect } from "react-redux";
 import { Button, Select } from "antd";
-import "./index.less";
+import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { iconNameFromDenom, toDecimals } from "../../../utils/string";
+import { connect } from "react-redux";
+import { setBalanceRefresh } from "../../../actions/account";
+import { SvgIcon, TooltipIcon } from "../../../components/common";
+import CustomRow from "../../../components/common/Asset/CustomRow";
+import Details from "../../../components/common/Asset/Details";
+import CustomInput from "../../../components/CustomInput";
+import { comdex } from "../../../config/network";
+import { ValidateInputNumber } from "../../../config/_validation";
+import { DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount,
+  getAmount
 } from "../../../utils/coin";
-import CustomInput from "../../../components/CustomInput";
-import { ValidateInputNumber } from "../../../config/_validation";
+import { commaSeparator, marketPrice } from "../../../utils/number";
+import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "./ActionButton";
-import Details from "../../../components/common/Asset/Details";
-import { setBalanceRefresh } from "../../../actions/account";
-import { comdex } from "../../../config/network";
-import { DEFAULT_FEE } from "../../../constants/common";
-import CustomRow from "../../../components/common/Asset/CustomRow";
+import "./index.less";
 
 const { Option } = Select;
 
@@ -29,10 +30,10 @@ const WithdrawTab = ({
   refreshLendPosition,
   pool,
   assetMap,
-  balances,
   address,
   refreshBalance,
   setBalanceRefresh,
+  markets,
 }) => {
   const [assetList, setAssetList] = useState();
   const [amount, setAmount] = useState();
@@ -144,7 +145,14 @@ const WithdrawTab = ({
                   validationError={validationError}
                 />
               </div>
-              <small>$120.00</small>
+              <small>$
+                    {commaSeparator(
+                      Number(
+                        amount * marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
+                          0
+                      ),
+                      DOLLAR_DECIMALS
+                    )}</small>
             </div>
           </div>
         </div>
@@ -196,10 +204,11 @@ WithdrawTab.propTypes = {
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
-  balances: PropTypes.arrayOf(
+  markets: PropTypes.arrayOf(
     PropTypes.shape({
-      denom: PropTypes.string.isRequired,
-      amount: PropTypes.string,
+      rates: PropTypes.shape({
+        low: PropTypes.number,
+      }),
     })
   ),
   lendPosition: PropTypes.shape({
@@ -232,6 +241,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     refreshBalance: state.account.refreshBalance,
     lang: state.language,
+    markets: state.oracle.market.list,
   };
 };
 

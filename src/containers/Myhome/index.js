@@ -205,18 +205,6 @@ const Myhome = ({
                 <div className="borrow-limit-middle">
                   <Progress percent={currentLimit} size="small" />
                 </div>
-                <div className="borrow-limit-bottom">
-                  <div className="small-text">
-                    Collateral :{calculateTotalDeposit()}
-                  </div>
-                  <div className="small-text">
-                    Borrowed :$
-                    {amountConversionWithComma(
-                      totalBorrow || 0,
-                      DOLLAR_DECIMALS
-                    )}
-                  </div>
-                </div>
               </div>
             </div>
           </div>
