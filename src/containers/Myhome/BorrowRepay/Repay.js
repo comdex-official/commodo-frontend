@@ -1,4 +1,4 @@
-import { Button, Select } from "antd";
+import { Select } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -6,12 +6,11 @@ import { setBalanceRefresh } from "../../../actions/account";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
-import AssetStats from '../../../components/common/Asset/Stats';
+import AssetStats from "../../../components/common/Asset/Stats";
 import CustomInput from "../../../components/CustomInput";
 import HealthFactor from "../../../components/HealthFactor";
-import { comdex } from "../../../config/network";
 import { ValidateInputNumber } from "../../../config/_validation";
-import { DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../constants/common";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   amountConversion,
   amountConversionWithComma,
@@ -61,17 +60,13 @@ const RepayTab = ({
     value = toDecimals(value).toString().trim();
 
     setAmount(value);
-    setValidationError(ValidateInputNumber(getAmount(value), availableBalance));
-  };
-
-  const handleMaxClick = () => {
-    if (assetMap[selectedAssetId]?.denom === comdex.coinMinimalDenom) {
-      return Number(availableBalance) > DEFAULT_FEE
-        ? handleInputChange(amountConversion(availableBalance - DEFAULT_FEE))
-        : handleInputChange();
-    } else {
-      return handleInputChange(amountConversion(availableBalance));
-    }
+    setValidationError(
+      ValidateInputNumber(
+        getAmount(value),
+        borrowPosition?.updatedAmountOut,
+        "repay"
+      )
+    );
   };
 
   const handleRefresh = () => {
@@ -131,11 +126,6 @@ const RepayTab = ({
                 {amountConversionWithComma(availableBalance)}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
               </span>
-              <div className="max-half">
-                <Button className="active" onClick={handleMaxClick}>
-                  Max
-                </Button>
-              </div>
             </div>
             <div>
               <div className="input-select">
@@ -164,20 +154,17 @@ const RepayTab = ({
             <Row>
               <Col>
                 <label>Remaining to Repay</label>
-                <p className="remaining-infotext mt-1">
-                  You don’t have enough funds to repay the full amount
-                </p>
               </Col>
               <Col className="text-right">
                 <div>
-                  {amountConversionWithComma(borrowPosition?.amountOut?.amount)}{" "}
+                  {amountConversionWithComma(borrowPosition?.updatedAmountOut)}{" "}
                   {denomConversion(borrowPosition?.amountOut?.denom)}
                 </div>
                 <small className="font-weight-light">
                   $
                   {commaSeparator(
                     Number(
-                      amountConversion(borrowPosition?.amountOut?.amount) *
+                      amountConversion(borrowPosition?.updatedAmountOut) *
                         marketPrice(
                           markets,
                           assetMap[selectedAssetId]?.denom
@@ -188,7 +175,17 @@ const RepayTab = ({
                 </small>
               </Col>
             </Row>
-            <HealthFactor borrow={borrowPosition} />
+            <HealthFactor
+              borrow={borrowPosition}
+              pair={pair}
+              inAmount={borrowPosition?.amountIn?.amount}
+              outAmount={
+                amount
+                  ? Number(borrowPosition?.updatedAmountOut) -
+                    Number(getAmount(amount))
+                  : borrowPosition?.updatedAmountOut
+              }
+            />{" "}
             <AssetStats assetId={selectedAssetId} />
           </Col>
         </Row>
@@ -196,7 +193,7 @@ const RepayTab = ({
           <ActionButton
             name="Repay"
             lang={lang}
-            disabled={!Number(amount) || dataInProgress || !selectedAssetId}
+            disabled={!Number(amount) || dataInProgress || !selectedAssetId || validationError?.message}
             amount={amount}
             address={address}
             borrowId={borrowPosition?.borrowingId}

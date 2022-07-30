@@ -37,7 +37,7 @@ const HealthFactor = ({
                 assetRatesStatsMap[asset?.id]?.liquidationThreshold
               )
             )) /
-            (borrow?.amountOut?.amount *
+            (borrow?.updatedAmountOut *
               marketPrice(markets, borrow?.amountOut?.denom))
         );
       }

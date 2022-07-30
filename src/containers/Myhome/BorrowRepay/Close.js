@@ -10,7 +10,7 @@ import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   amountConversion,
   amountConversionWithComma,
-  denomConversion
+  denomConversion,
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import ActionButton from "./ActionButton";
@@ -45,20 +45,17 @@ const CloseTab = ({
             <Row>
               <Col>
                 <label>Amount to be closed</label>
-                <p className="remaining-infotext mt-1">
-                  You don’t have enough funds to repay the full amount
-                </p>
               </Col>
               <Col className="text-right">
                 <div>
-                  {amountConversionWithComma(borrowPosition?.amountOut?.amount)}{" "}
+                  {amountConversionWithComma(borrowPosition?.updatedAmountOut)}{" "}
                   {denomConversion(borrowPosition?.amountOut?.denom)}
                 </div>
                 <small className="font-weight-light">
                   $
                   {commaSeparator(
                     Number(
-                      amountConversion(borrowPosition?.amountOut?.amount) *
+                      amountConversion(borrowPosition?.updatedAmountOut) *
                         marketPrice(
                           markets,
                           assetMap[selectedAssetId]?.denom
@@ -69,7 +66,12 @@ const CloseTab = ({
                 </small>
               </Col>
             </Row>
-            <HealthFactor borrow={borrowPosition} />
+            <HealthFactor
+              borrow={borrowPosition}
+              pair={pair}
+              inAmount={borrowPosition?.amountIn?.amount}
+              outAmount={Number(borrowPosition?.updatedAmountOut)}
+            />{" "}
             <AssetStats assetId={selectedAssetId} />
           </Col>
         </Row>

@@ -1,4 +1,4 @@
-import { Button, Spin, Tabs } from "antd";
+import { Button, message, Spin, Tabs } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";

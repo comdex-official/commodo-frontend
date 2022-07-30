@@ -235,7 +235,7 @@ const DepositTab = ({
             amount={amount}
             address={address}
             borrowId={borrowPosition?.borrowingId}
-            denom={borrowPosition?.amountOut?.denom}
+            denom={borrowPosition?.amountIn?.denom}
             refreshData={handleRefresh}
           />
         </div>
