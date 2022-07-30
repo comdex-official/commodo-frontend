@@ -14,6 +14,7 @@ import {
 import { decode } from "../../../utils/string";
 import BorrowTab from "./Borrow";
 import CloseTab from "./Close";
+import DepositTab from './Deposit';
 import "./index.less";
 import RepayTab from "./Repay";
 
@@ -119,7 +120,19 @@ const BorrowRepay = ({ setPair, setPool }) => {
                 />
               )}
             </TabPane>
-            <TabPane tab="Repay" key="2">
+            <TabPane tab="Deposit" key="2">
+              {inProgress ? (
+                <div className="loader">
+                  <Spin />
+                </div>
+              ) : (
+                <DepositTab
+                  borrowPosition={borrowPosition}
+                  dataInProgress={inProgress}
+                />
+              )}
+            </TabPane>
+            <TabPane tab="Repay" key="3">
               {inProgress ? (
                 <div className="loader">
                   <Spin />
@@ -131,7 +144,7 @@ const BorrowRepay = ({ setPair, setPool }) => {
                 />
               )}
             </TabPane>
-            <TabPane tab="Close" key="3">
+            <TabPane tab="Close" key="4">
               {inProgress ? (
                 <div className="loader">
                   <Spin />
