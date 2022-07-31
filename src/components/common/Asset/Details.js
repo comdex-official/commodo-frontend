@@ -30,7 +30,7 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
         setStats(result?.AssetStats);
       });
     }
-  }, [asset, poolId]);
+  }, [asset, poolId, refreshBalance]);
 
   useEffect(() => {
     if (poolId) {
@@ -63,7 +63,7 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
       title: "Available",
       counts: `$${amountConversionWithComma(
         marketPrice(markets, assetStats?.balance?.denom) *
-          assetStats?.balance.amount,
+          assetStats?.balance.amount || 0,
         DOLLAR_DECIMALS
       )}`,
     },

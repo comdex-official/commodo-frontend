@@ -42,7 +42,7 @@ const BorrowRepay = ({ setPair, setPool }) => {
 
   useEffect(() => {
     if (type && type === "repay") {
-      setActiveKey("2");
+      setActiveKey("3");
     }
   }, []);
 
@@ -117,6 +117,7 @@ const BorrowRepay = ({ setPair, setPool }) => {
                 <BorrowTab
                   borrowPosition={borrowPosition}
                   dataInProgress={inProgress}
+                  refreshBorrowPosition={refreshBorrowPosition}
                 />
               )}
             </TabPane>
@@ -129,6 +130,7 @@ const BorrowRepay = ({ setPair, setPool }) => {
                 <DepositTab
                   borrowPosition={borrowPosition}
                   dataInProgress={inProgress}
+                  refreshBorrowPosition={refreshBorrowPosition}
                 />
               )}
             </TabPane>
