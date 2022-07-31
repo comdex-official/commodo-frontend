@@ -49,7 +49,7 @@ export const columns = [
   {
     title: (
       <>
-        Asset <br /> APY
+        Main Asset <br /> APY
       </>
     ),
     dataIndex: "asset_apy",

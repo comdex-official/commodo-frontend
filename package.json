@@ -13,6 +13,7 @@
     "@craco/craco": "^6.4.3",
     "@keplr-wallet/common": "^0.10.1",
     "@keplr-wallet/stores": "^0.10.1",
+    "@ledgerhq/hw-transport-webusb": "^6.27.2",
     "@restart/context": "^2.1.4",
     "antd": "^4.16.8",
     "babel-plugin-import": "^1.13.0",

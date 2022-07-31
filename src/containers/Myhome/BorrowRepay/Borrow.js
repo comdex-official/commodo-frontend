@@ -144,7 +144,7 @@ const BorrowTab = ({
           </div>
           <div className="assets-right">
             <div className="label-right">
-              Balance
+              Borrowable
               <span className="ml-1">
                 {amountConversionWithComma(availableBalance)}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
