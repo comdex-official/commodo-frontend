@@ -63,12 +63,10 @@ const BorrowTab = ({
 
   const availableBalance = lend?.availableToBorrow || 0;
 
-  let isCrossPool = pair?.assetOutPoolId.toNumber() !== lend?.poolId.toNumber();
-
   const borrowableBalance = getAmount(
     Number(inAmount) *
       marketPrice(markets, collateralAssetDenom) *
-      (isCrossPool
+      (pair?.assetOutPoolId.toNumber() !== lend?.poolId.toNumber() // isCrossPool
         ? Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv)) *
           Number(
             decimalConversion(
