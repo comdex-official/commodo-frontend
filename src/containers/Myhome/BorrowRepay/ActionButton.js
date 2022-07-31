@@ -1,11 +1,11 @@
 import { Button, message } from "antd";
-import { signAndBroadcastTransaction } from "../../../services/helper";
-import { getAmount } from "../../../utils/coin";
-import { defaultFee } from "../../../services/transaction";
-import Snack from "../../../components/common/Snack";
-import variables from "../../../utils/variables";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import Snack from "../../../components/common/Snack";
+import { signAndBroadcastTransaction } from "../../../services/helper";
+import { defaultFee } from "../../../services/transaction";
+import { getAmount } from "../../../utils/coin";
+import variables from "../../../utils/variables";
 
 export const ActionButton = ({
   lang,
@@ -21,6 +21,7 @@ export const ActionButton = ({
   const navigate = useNavigate();
 
   const messageMap = {
+    Deposit: "/comdex.lend.v1beta1.MsgDepositBorrow",
     Borrow: "/comdex.lend.v1beta1.MsgDraw",
     Repay: "/comdex.lend.v1beta1.MsgRepay",
     Close: "/comdex.lend.v1beta1.MsgCloseBorrow",

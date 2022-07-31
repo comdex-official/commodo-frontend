@@ -1,4 +1,4 @@
-import { Select } from "antd";
+import { Button, Select } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -6,31 +6,35 @@ import { setBalanceRefresh } from "../../../actions/account";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
-import AssetStats from "../../../components/common/Asset/Stats";
 import CustomInput from "../../../components/CustomInput";
 import HealthFactor from "../../../components/HealthFactor";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
+import { queryLendPosition } from "../../../services/lend/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount,
-  getDenomBalance
+  getAmount
 } from "../../../utils/coin";
-import { commaSeparator, marketPrice } from "../../../utils/number";
+import {
+  commaSeparator,
+  decimalConversion,
+  marketPrice
+} from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
 
 const { Option } = Select;
 
-const RepayTab = ({
+const DepositTab = ({
   lang,
   dataInProgress,
   borrowPosition,
   pool,
   assetMap,
+  assetRatesStatsMap,
   balances,
   address,
   refreshBalance,
@@ -41,10 +45,12 @@ const RepayTab = ({
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
   const [assetList, setAssetList] = useState();
+  const [lend, setLendPosition] = useState();
 
-  const selectedAssetId = pair?.assetOut?.toNumber();
-  const availableBalance =
-    getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
+  const selectedAssetId = pair?.assetIn?.toNumber();
+  const availableBalance = lend?.availableToBorrow || 0;
+
+  // Collateral deposited value * Max LTV of collateral minus already Borrowed asset value
 
   useEffect(() => {
     if (pool?.poolId) {
@@ -56,23 +62,47 @@ const RepayTab = ({
     }
   }, [pool]);
 
+  useEffect(() => {
+    if (borrowPosition?.lendingId) {
+      queryLendPosition(borrowPosition?.lendingId, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+        if (result?.lend?.poolId) {
+          setLendPosition(result?.lend);
+        }
+      });
+    }
+  }, [borrowPosition]);
+
   const handleInputChange = (value) => {
     value = toDecimals(value).toString().trim();
 
     setAmount(value);
-    setValidationError(
-      ValidateInputNumber(
-        getAmount(value),
-        borrowPosition?.updatedAmountOut,
-        "repay"
-      )
-    );
+    setValidationError(ValidateInputNumber(getAmount(value), availableBalance));
+  };
+
+  const handleMaxClick = () => {
+    return handleInputChange(amountConversion(availableBalance));
   };
 
   const handleRefresh = () => {
     setBalanceRefresh(refreshBalance + 1);
     setAmount();
   };
+
+  let currentLTV = Number(
+    ((Number(borrowPosition?.amountOut?.amount) *
+      marketPrice(markets, borrowPosition?.amountOut?.denom)) /
+      (Number(
+        amount
+          ? Number(borrowPosition?.amountIn?.amount) + Number(getAmount(amount))
+          : borrowPosition?.amountIn?.amount
+      ) *
+        marketPrice(markets, borrowPosition?.amountIn?.denom))) *
+      100
+  );
 
   return (
     <div className="details-wrapper">
@@ -81,7 +111,7 @@ const RepayTab = ({
         <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="left-label">
-              Repay Asset <TooltipIcon text="" />
+              Asset <TooltipIcon text="" />
             </label>
             <div className="assets-select-wrapper">
               <div className="assets-select-wrapper">
@@ -121,11 +151,16 @@ const RepayTab = ({
           </div>
           <div className="assets-right">
             <div className="label-right">
-              Available
+              Depositable
               <span className="ml-1">
                 {amountConversionWithComma(availableBalance)}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
               </span>
+              <div className="max-half">
+                <Button className="active" onClick={handleMaxClick}>
+                  Max
+                </Button>
+              </div>
             </div>
             <div>
               <div className="input-select">
@@ -150,54 +185,57 @@ const RepayTab = ({
           </div>
         </div>
         <Row>
-          <Col sm="12" className="mt-2 mx-auto card-bottom-details">
-            <Row>
-              <Col>
-                <label>Remaining to Repay</label>
-              </Col>
-              <Col className="text-right">
-                <div>
-                  {amountConversionWithComma(borrowPosition?.updatedAmountOut)}{" "}
-                  {denomConversion(borrowPosition?.amountOut?.denom)}
-                </div>
-                <small className="font-weight-light">
-                  $
-                  {commaSeparator(
-                    Number(
-                      amountConversion(borrowPosition?.updatedAmountOut) *
-                        marketPrice(
-                          markets,
-                          assetMap[selectedAssetId]?.denom
-                        ) || 0
-                    ),
-                    DOLLAR_DECIMALS
-                  )}
-                </small>
-              </Col>
-            </Row>
+          <Col sm="12" className="mt-3 mx-auto card-bottom-details">
             <HealthFactor
               borrow={borrowPosition}
               pair={pair}
-              inAmount={borrowPosition?.amountIn?.amount}
-              outAmount={
+              inAmount={
                 amount
-                  ? Number(borrowPosition?.updatedAmountOut) -
+                  ? Number(borrowPosition?.amountIn?.amount) +
                     Number(getAmount(amount))
-                  : borrowPosition?.updatedAmountOut
+                  : borrowPosition?.amountIn?.amount
               }
-            />{" "}
-            <AssetStats assetId={selectedAssetId} />
+              outAmount={borrowPosition?.amountOut?.amount}
+            />
+            <Row>
+              <Col sm="12" className="mt-3 mx-auto card-bottom-details">
+                <Row className="mt-2">
+                  <Col>
+                    <label>Current LTV</label>
+                  </Col>
+                  <Col className="text-right">
+                    {(isFinite(currentLTV) ? currentLTV : 0).toFixed(
+                      DOLLAR_DECIMALS
+                    )}
+                    %
+                  </Col>
+                </Row>
+                <Row className="mt-2">
+                  <Col>
+                    <label>Max LTV</label>
+                  </Col>
+                  <Col className="text-right">
+                    {Number(
+                      decimalConversion(
+                        assetRatesStatsMap[pair?.assetIn]?.uOptimal
+                      ) * 100
+                    ).toFixed(DOLLAR_DECIMALS)}
+                    %
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
           </Col>
         </Row>
         <div className="assets-form-btn">
           <ActionButton
-            name="Repay"
+            name="Deposit"
             lang={lang}
-            disabled={!Number(amount) || dataInProgress || !selectedAssetId || validationError?.message}
+            disabled={!Number(amount) || dataInProgress || !selectedAssetId}
             amount={amount}
             address={address}
             borrowId={borrowPosition?.borrowingId}
-            denom={borrowPosition?.amountOut?.denom}
+            denom={borrowPosition?.amountIn?.denom}
             refreshData={handleRefresh}
           />
         </div>
@@ -229,12 +267,13 @@ const RepayTab = ({
   );
 };
 
-RepayTab.propTypes = {
+DepositTab.propTypes = {
   dataInProgress: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  assetRatesStatsMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -285,6 +324,7 @@ const stateToProps = (state) => {
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
     markets: state.oracle.market.list,
+    assetRatesStatsMap: state.lend.assetRatesStats.map,
   };
 };
 
@@ -292,4 +332,4 @@ const actionsToProps = {
   setBalanceRefresh,
 };
 
-export default connect(stateToProps, actionsToProps)(RepayTab);
+export default connect(stateToProps, actionsToProps)(DepositTab);
