@@ -1,19 +1,23 @@
-import { SvgIcon, TooltipIcon } from "../index";
 import { List, message } from "antd";
 import * as PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
+import {
+  queryAssetStats,
+  queryModuleBalance
+} from "../../../services/lend/query";
 import {
   amountConversionWithComma,
-  denomConversion,
+  denomConversion
 } from "../../../utils/coin";
-import { iconNameFromDenom } from "../../../utils/string";
-import { useEffect, useState } from "react";
-import { queryAssetStats } from "../../../services/lend/query";
 import { decimalConversion, marketPrice } from "../../../utils/number";
-import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { connect } from "react-redux";
+import { iconNameFromDenom } from "../../../utils/string";
+import { SvgIcon, TooltipIcon } from "../index";
 
 const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
   const [stats, setStats] = useState();
+  const [moduleBalanceStats, setModuleBalanceStats] = useState([]);
 
   useEffect(() => {
     if (asset?.id && poolId) {
@@ -28,6 +32,23 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
     }
   }, [asset, poolId, refreshBalance]);
 
+  useEffect(() => {
+    if (poolId) {
+      queryModuleBalance(poolId, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setModuleBalanceStats(result?.ModuleBalance?.moduleBalanceStats);
+      });
+    }
+  }, [poolId]);
+
+  let assetStats = moduleBalanceStats?.filter(
+    (item) => item?.assetId?.toNumber() === asset?.id?.toNumber()
+  )[0];
+
   let data = [
     {
       title: parent === "lend" ? "Total Deposited" : "Total Borrowed",
@@ -41,8 +62,8 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
     {
       title: "Available",
       counts: `$${amountConversionWithComma(
-        Number(Number(stats?.totalLend) - Number(stats?.totalBorrowed) || 0) *
-          marketPrice(markets, asset?.denom),
+        marketPrice(markets, assetStats?.balance?.denom) *
+          assetStats?.balance.amount || 0,
         DOLLAR_DECIMALS
       )}`,
     },

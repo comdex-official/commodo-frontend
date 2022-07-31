@@ -34,11 +34,11 @@ const BorrowTab = ({
   pool,
   assetMap,
   assetRatesStatsMap,
-  balances,
   address,
   refreshBalance,
   setBalanceRefresh,
   markets,
+  refreshBorrowPosition,
   pair,
 }) => {
   const [amount, setAmount] = useState();
@@ -81,6 +81,7 @@ const BorrowTab = ({
   };
 
   const handleRefresh = () => {
+    refreshBorrowPosition();
     setBalanceRefresh(refreshBalance + 1);
     setAmount();
   };
@@ -144,7 +145,7 @@ const BorrowTab = ({
           </div>
           <div className="assets-right">
             <div className="label-right">
-              Balance
+              Borrowable
               <span className="ml-1">
                 {amountConversionWithComma(availableBalance)}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
@@ -263,16 +264,11 @@ const BorrowTab = ({
 BorrowTab.propTypes = {
   dataInProgress: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
+  refreshBorrowPosition: PropTypes.func.isRequired,
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
-  balances: PropTypes.arrayOf(
-    PropTypes.shape({
-      denom: PropTypes.string.isRequired,
-      amount: PropTypes.string,
-    })
-  ),
   borrowPosition: PropTypes.shape({
     lendingId: PropTypes.shape({
       low: PropTypes.number,
@@ -313,7 +309,6 @@ const stateToProps = (state) => {
     pool: state.lend.pool._,
     pair: state.lend.pair,
     assetMap: state.asset._.map,
-    balances: state.account.balances.list,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
     markets: state.oracle.market.list,

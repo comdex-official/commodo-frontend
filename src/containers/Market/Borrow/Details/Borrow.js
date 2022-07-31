@@ -10,14 +10,12 @@ import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
 import HealthFactor from "../../../../components/HealthFactor";
 import { ValidateInputNumber } from "../../../../config/_validation";
-import {
-  DOLLAR_DECIMALS,
-  UC_DENOM
-} from "../../../../constants/common";
+import { DOLLAR_DECIMALS, UC_DENOM } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
   queryAssetPairs,
-  queryLendPair
+  queryLendPair,
+  queryLendPool
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
@@ -56,6 +54,7 @@ const BorrowTab = ({
   const [borrowValidationError, setBorrowValidationError] = useState();
   const [inProgress, setInProgress] = useState(false);
   const [extendedPairs, setExtendedPairs] = useState({});
+  const [assetToPool, setAssetToPool] = useState({});
 
   const navigate = useNavigate();
 
@@ -63,10 +62,19 @@ const BorrowTab = ({
   let borrowAssetDenom = assetMap[pair?.assetOut]?.denom;
 
   const availableBalance = lend?.availableToBorrow || 0;
+
   const borrowableBalance = getAmount(
     Number(inAmount) *
       marketPrice(markets, collateralAssetDenom) *
-      Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv)) || 0
+      (pair?.assetOutPoolId.toNumber() !== lend?.poolId.toNumber() // isCrossPool
+        ? Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv)) *
+          Number(
+            decimalConversion(
+              assetRatesStatsMap[pool?.firstBridgedAssetId]?.ltv
+            )
+          )
+        : Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv))) ||
+      0
   );
 
   const borrowList =
@@ -120,6 +128,21 @@ const BorrowTab = ({
         message.error(error);
         return;
       }
+
+      queryLendPool(
+        result?.ExtendedPair?.assetOutPoolId,
+        (error, poolResult) => {
+          if (error) {
+            message.error(error);
+            return;
+          }
+
+          setAssetToPool((prevState) => ({
+            [assetMap[result?.ExtendedPair?.assetOut]?.denom]: poolResult?.pool,
+            ...prevState,
+          }));
+        }
+      );
 
       setExtendedPairs((prevState) => ({
         [result?.ExtendedPair?.id]: result?.ExtendedPair,
@@ -271,7 +294,7 @@ const BorrowTab = ({
                               </div>
                               <div className="name">
                                 {denomConversion(item)} (
-                                {"cPool-" + record?.cpoolName.split("-")?.[0]})
+                                {"cPool-" + record?.cpoolName?.split("-")?.[0]})
                               </div>
                             </div>
                           </Option>
@@ -352,7 +375,10 @@ const BorrowTab = ({
                                 </div>
                               </div>
                               <div className="name">
-                                {denomConversion(item)}
+                                {denomConversion(item)}(
+                                {"cPool-" +
+                                  assetToPool[item]?.cpoolName?.split("-")?.[0]}
+                                ) )
                               </div>
                             </div>
                           </Option>
@@ -362,18 +388,20 @@ const BorrowTab = ({
                 </div>
               </div>
               <div className="assets-right">
-                <div className="label-right">
-                  Borrowable
-                  <span className="ml-1">
-                    {amountConversionWithComma(borrowableBalance)}{" "}
-                    {denomConversion(borrowAssetDenom)}
-                  </span>
-                  <div className="max-half">
-                    <Button className="active" onClick={handleBorrowMaxClick}>
-                      Max
-                    </Button>
+                {borrowAssetDenom ? (
+                  <div className="label-right">
+                    Borrowable
+                    <span className="ml-1">
+                      {amountConversionWithComma(borrowableBalance)}{" "}
+                      {denomConversion(borrowAssetDenom)}
+                    </span>
+                    <div className="max-half">
+                      <Button className="active" onClick={handleBorrowMaxClick}>
+                        Max
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                ) : null}
                 <div>
                   <div className="input-select">
                     <CustomInput

@@ -49,6 +49,12 @@ const Borrow = ({ userBorrowList, inProgress }) => {
       ),
     },
     {
+      title: "Interest",
+      dataIndex: "interest",
+      key: "interest",
+      width: 200,
+    },
+    {
       title: "Health",
       dataIndex: "health",
       key: "health",
@@ -124,6 +130,12 @@ const Borrow = ({ userBorrowList, inProgress }) => {
               </>
             ),
             apy: item,
+            interest: (
+              <>
+                {amountConversionWithComma(item?.interestAccumulated)}{" "}
+                {denomConversion(item?.amountOut?.denom)}
+              </>
+            ),
             health: item,
             action: item,
           };
