@@ -1,11 +1,11 @@
-import * as PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { useEffect, useState } from "react";
-import { queryAssetStats } from "../../../services/lend/query";
 import { message } from "antd";
-import { decimalConversion, marketPrice } from "../../../utils/number";
+import * as PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { amountConversionWithComma } from "../../../utils/coin";
+import { queryAssetStats } from "../../../services/lend/query";
+import { amountConversion } from "../../../utils/coin";
+import { commaSeparator, marketPrice } from "../../../utils/number";
 
 export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
   const [assetStats, setAssetStats] = useState({});
@@ -34,17 +34,15 @@ export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
   const getTotalDeposited = () => {
     const sum =
       Number(
-        decimalConversion(assetStats[lendPool?.mainAssetId]?.totalLend) *
+        amountConversion(assetStats[lendPool?.mainAssetId]?.totalLend) *
           marketPrice(markets, assetMap?.[lendPool?.mainAssetId]?.denom)
       ) +
       Number(
-        decimalConversion(
-          assetStats[lendPool?.firstBridgedAssetId]?.totalLend
-        ) *
+        amountConversion(assetStats[lendPool?.firstBridgedAssetId]?.totalLend) *
           marketPrice(markets, assetMap?.[lendPool?.firstBridgedAssetId]?.denom)
       ) +
       Number(
-        decimalConversion(
+        amountConversion(
           assetStats[lendPool?.secondBridgedAssetId]?.totalLend
         ) *
           marketPrice(
@@ -53,7 +51,7 @@ export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
           )
       );
 
-    return `$${amountConversionWithComma(sum || 0, DOLLAR_DECIMALS)}`;
+    return `$${commaSeparator(sum || 0, DOLLAR_DECIMALS)}`;
   };
   return <div>{getTotalDeposited()}</div>;
 };

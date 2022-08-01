@@ -1,43 +1,35 @@
-import * as PropTypes from "prop-types";
-import { Button, message, Dropdown } from "antd";
-import { SvgIcon } from "../../components/common";
-import { connect } from "react-redux";
+import { Button, Dropdown, message } from "antd";
 import { decode } from "js-base64";
+import Lodash from "lodash";
+import * as PropTypes from "prop-types";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import {
   setAccountAddress,
-  setAccountName,
-  showAccountConnectModal,
-} from "../../actions/account";
-import DisConnectModal from "../DisConnectModal";
-import React, { useEffect } from "react";
-import variables from "../../utils/variables";
-import {
-  DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE,
-  DOLLAR_DECIMALS,
-} from "../../constants/common";
-import {
   setAccountBalances,
-  setPoolBalance,
-  setcAssetBalance,
+  setAccountName,
+  setAccountVaults,
   setAssetBalance,
-  setDebtBalance,
+  setcAssetBalance,
   setCollateralBalance,
+  setDebtBalance,
+  setPoolBalance,
+  showAccountConnectModal
 } from "../../actions/account";
-import { queryAllBalances } from "../../services/bank/query";
-import Lodash from "lodash";
-import { setAccountVaults } from "../../actions/account";
-import ConnectModal from "../Modal";
-import { marketPrice } from "../../utils/number";
-import { queryMarketList } from "../../services/oracle/query";
-import { setMarkets } from "../../actions/oracle";
-import { fetchKeplrAccountName } from "../../services/keplr";
-import { cmst, comdex, harbor } from "../../config/network";
-import { amountConversionWithComma, getDenomBalance } from "../../utils/coin";
-import { queryAssets } from "../../services/asset/query";
 import { setAssets } from "../../actions/asset";
-import { queryAssetRatesStats } from "../../services/lend/query";
 import { setAssetRatesStats } from "../../actions/lend";
+import { setMarkets } from "../../actions/oracle";
+import { cmst, comdex, harbor } from "../../config/network";
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
+import { queryAssets } from "../../services/asset/query";
+import { queryAllBalances } from "../../services/bank/query";
+import { fetchKeplrAccountName } from "../../services/keplr";
+import { queryAssetRatesStats } from "../../services/lend/query";
+import { queryMarketList } from "../../services/oracle/query";
+import { marketPrice } from "../../utils/number";
+import variables from "../../utils/variables";
+import DisConnectModal from "../DisConnectModal";
+import ConnectModal from "../Modal";
 
 const ConnectButton = ({
   setAccountAddress,
@@ -50,7 +42,6 @@ const ConnectButton = ({
   refreshBalance,
   setMarkets,
   setAccountName,
-  balances,
   setAssets,
   setAssetRatesStats,
 }) => {
@@ -158,7 +149,7 @@ const ConnectButton = ({
         item.denom === cmst.coinMinimalDenom ||
         item.denom === harbor.coinMinimalDenom
     );
-      
+
     const value = assetBalances.map((item) => {
       return getPrice(item.denom) * item.amount;
     });
@@ -172,15 +163,6 @@ const ConnectButton = ({
     <>
       {address ? (
         <div className="connected_div">
-          <div className="connected_left">
-            <div className="testnet-top">
-              <SvgIcon name="cmdx-icon" />{" "}
-              {amountConversionWithComma(
-                getDenomBalance(balances, comdex.coinMinimalDenom) || 0,
-                DOLLAR_DECIMALS
-              )}
-            </div>
-          </div>
           <DisConnectModal />
         </div>
       ) : (
@@ -216,12 +198,6 @@ ConnectButton.propTypes = {
   setMarkets: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
   address: PropTypes.string,
-  balances: PropTypes.arrayOf(
-    PropTypes.shape({
-      denom: PropTypes.string.isRequired,
-      amount: PropTypes.string,
-    })
-  ),
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
@@ -239,7 +215,6 @@ const stateToProps = (state) => {
     show: state.account.showModal,
     markets: state.oracle.market.list,
     refreshBalance: state.account.refreshBalance,
-    balances: state.account.balances.list,
   };
 };
 

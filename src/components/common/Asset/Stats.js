@@ -13,7 +13,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
         </Col>
         <Col className="text-right">
           {Number(
-            decimalConversion(assetRatesStatsMap[assetId]?.uOptimal) * 100
+            decimalConversion(assetRatesStatsMap[assetId]?.ltv) * 100
           ).toFixed(DOLLAR_DECIMALS)}
           %
         </Col>
@@ -49,7 +49,8 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
         </Col>
         <Col className="text-right">
           {Number(
-            decimalConversion(assetRatesStatsMap[assetId]?.liquidationBonus) * 100
+            decimalConversion(assetRatesStatsMap[assetId]?.liquidationBonus) *
+              100
           ).toFixed(DOLLAR_DECIMALS)}
           %
         </Col>
