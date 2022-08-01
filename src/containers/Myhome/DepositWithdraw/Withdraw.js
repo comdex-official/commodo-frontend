@@ -38,7 +38,6 @@ const WithdrawTab = ({
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
 
-  console.log("position", lendPosition);
   const selectedAssetId = lendPosition?.assetId?.toNumber();
   const availableBalance = lendPosition?.updatedAmountIn || 0;
 
