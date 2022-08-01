@@ -120,3 +120,7 @@ export const makeHdPath = (
     "m/44'/" + coinType + "'/" + accountNumber + "'/0/" + addressIndex
   );
 };
+
+export const ucDenomToDenom = (denom) => {
+  return denom.slice(0, 1) + denom.slice(2); //example uccmdx => ucmdx
+};

@@ -10,7 +10,7 @@ import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   amountConversion,
   amountConversionWithComma,
-  denomConversion,
+  denomConversion
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import ActionButton from "./ActionButton";
@@ -22,7 +22,6 @@ const CloseTab = ({
   borrowPosition,
   pool,
   assetMap,
-  balances,
   address,
   refreshBalance,
   setBalanceRefresh,
@@ -69,6 +68,7 @@ const CloseTab = ({
             <HealthFactor
               borrow={borrowPosition}
               pair={pair}
+              pool={pool}
               inAmount={borrowPosition?.amountIn?.amount}
               outAmount={Number(borrowPosition?.updatedAmountOut)}
             />{" "}
@@ -121,12 +121,6 @@ CloseTab.propTypes = {
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
-  balances: PropTypes.arrayOf(
-    PropTypes.shape({
-      denom: PropTypes.string.isRequired,
-      amount: PropTypes.string,
-    })
-  ),
   borrowPosition: PropTypes.shape({
     lendingId: PropTypes.shape({
       low: PropTypes.number,
@@ -167,7 +161,6 @@ const stateToProps = (state) => {
     pool: state.lend.pool._,
     pair: state.lend.pair,
     assetMap: state.asset._.map,
-    balances: state.account.balances.list,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
     markets: state.oracle.market.list,

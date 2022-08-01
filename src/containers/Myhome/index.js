@@ -1,4 +1,4 @@
-import { List, Progress, Tabs } from "antd";
+import { List, message, Progress, Tabs } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -6,7 +6,12 @@ import { useLocation } from "react-router";
 import { setUserBorrows, setUserLends } from "../../actions/lend";
 import { Col, Row, TooltipIcon } from "../../components/common";
 import { DOLLAR_DECIMALS } from "../../constants/common";
-import { queryUserBorrows, queryUserLends } from "../../services/lend/query";
+import {
+  queryLendPair,
+  queryLendPool,
+  queryUserBorrows,
+  queryUserLends
+} from "../../services/lend/query";
 import { amountConversionWithComma } from "../../utils/coin";
 import { decimalConversion, marketPrice } from "../../utils/number";
 import { decode } from "../../utils/string";
@@ -29,6 +34,8 @@ const Myhome = ({
   const [activeKey, setActiveKey] = useState("1");
   const [lendsInProgress, setLendsInProgress] = useState(false);
   const [borrowsInProgress, setBorrowsInProgress] = useState(false);
+  const [borrowToPair, setBorrowToPair] = useState({});
+  const [borrowToPool, setBorrowToPool] = useState({});
 
   const location = useLocation();
   const type = decode(location.hash);
@@ -79,10 +86,41 @@ const Myhome = ({
 
       if (result?.borrows?.length > 0) {
         setUserBorrows(result?.borrows);
+        for (let i = 0; i < result?.borrows?.length; i++) {
+          fetchPair(result?.borrows[i]);
+        }
       }
     });
   };
 
+  const fetchPair = (borrow) => {
+    queryLendPair(borrow?.pairId, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setBorrowToPair((prevState) => ({
+        [borrow?.borrowingId]: result?.ExtendedPair,
+        ...prevState,
+      }));
+
+      queryLendPool(
+        result?.ExtendedPair?.assetOutPoolId,
+        (error, poolResult) => {
+          if (error) {
+            message.error(error);
+            return;
+          }
+
+          setBorrowToPool((prevState) => ({
+            [borrow?.borrowingId]: poolResult?.pool,
+            ...prevState,
+          }));
+        }
+      );
+    });
+  };
   const calculateTotalDeposit = () => {
     const values =
       userLendList?.length > 0
@@ -115,12 +153,33 @@ const Myhome = ({
 
   const calculateTotalBorrowLimit = () => {
     const values =
-      userLendList?.length > 0
-        ? userLendList.map((item) => {
+      userBorrowList?.length > 0
+        ? userBorrowList.map((item) => {
             return (
-              marketPrice(markets, item?.amountIn?.denom) *
-              item?.amountIn.amount *
-              Number(decimalConversion(assetRatesStatsMap[item?.assetId]?.ltv))
+              marketPrice(markets, borrowToPair[item?.borrowingId]?.assetIn) *
+              Number(item?.amountIn.amount) *
+              (borrowToPair[item?.borrowingId]?.isInterPool
+                ? Number(
+                    decimalConversion(
+                      assetRatesStatsMap[
+                        borrowToPair[item?.borrowingId]?.assetIn
+                      ]?.ltv
+                    )
+                  ) *
+                  Number(
+                    decimalConversion(
+                      assetRatesStatsMap[
+                        borrowToPool[item?.borrowingId]?.firstBridgedAssetId
+                      ]?.ltv
+                    )
+                  )
+                : Number(
+                    decimalConversion(
+                      assetRatesStatsMap[
+                        borrowToPair[item?.borrowingId]?.assetIn
+                      ]?.ltv
+                    ) || 0
+                  ))
             );
           })
         : [];
@@ -130,9 +189,9 @@ const Myhome = ({
 
   const totalBorrow = Number(calculateTotalBorrow());
   const borrowLimit = Number(calculateTotalBorrowLimit());
-  const currentLimit = ((totalBorrow / borrowLimit || 0) * 100).toFixed(
-    DOLLAR_DECIMALS
-  );
+  const currentLimit = (
+    (borrowLimit ? totalBorrow / borrowLimit : 0) * 100
+  ).toFixed(DOLLAR_DECIMALS);
 
   const data = [
     {

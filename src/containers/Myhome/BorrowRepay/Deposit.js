@@ -175,6 +175,7 @@ const DepositTab = ({
             <HealthFactor
               borrow={borrowPosition}
               pair={pair}
+              pool={pool}
               inAmount={
                 amount
                   ? Number(borrowPosition?.amountIn?.amount) +

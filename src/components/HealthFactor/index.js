@@ -1,10 +1,12 @@
-import { Progress } from "antd";
+import { message, Progress } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Col, Row } from "../../components/common";
 import { DOLLAR_DECIMALS } from "../../constants/common";
+import { queryLendPair, queryLendPool } from "../../services/lend/query";
 import { decimalConversion, marketPrice } from "../../utils/number";
+import { ucDenomToDenom } from "../../utils/string";
 
 const HealthFactor = ({
   parent,
@@ -17,30 +19,52 @@ const HealthFactor = ({
   pair,
   inAmount,
   outAmount,
+  pool,
 }) => {
   const [percentage, setPercentage] = useState(0);
-
   useEffect(() => {
-    if (borrow?.borrowingId) {
-      let asset = Object.values(assetMap).filter(
-        (item) => item.denom === borrow?.amountIn?.denom.replace("uc", "u")
-      )[0];
+    if (borrow?.borrowingId && !pair?.id) {
+      queryLendPair(borrow?.pairId, (error, pairResult) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
 
-      // TODO: update taking selected asset
+        const lendPair = pairResult?.ExtendedPair;
 
-      if (asset?.id) {
-        setPercentage(
-          (borrow?.amountIn?.amount *
-            marketPrice(markets, borrow?.amountIn?.denom) *
-            Number(
-              decimalConversion(
-                assetRatesStatsMap[asset?.id]?.liquidationThreshold
-              )
-            )) /
-            (borrow?.updatedAmountOut *
-              marketPrice(markets, borrow?.amountOut?.denom))
-        );
-      }
+        queryLendPool(lendPair?.assetOutPoolId, (error, result) => {
+          if (error) {
+            message.error(error);
+            return;
+          }
+
+          setPercentage(
+            (borrow?.amountIn?.amount *
+              marketPrice(markets, ucDenomToDenom(borrow?.amountIn?.denom)) *
+              (lendPair?.isInterPool
+                ? Number(
+                    decimalConversion(
+                      assetRatesStatsMap[lendPair?.assetIn]
+                        ?.liquidationThreshold
+                    )
+                  ) *
+                  Number(
+                    decimalConversion(
+                      assetRatesStatsMap[result?.pool?.firstBridgedAssetId]
+                        ?.liquidationThreshold
+                    )
+                  )
+                : Number(
+                    decimalConversion(
+                      assetRatesStatsMap[lendPair?.assetIn]
+                        ?.liquidationThreshold
+                    )
+                  ))) /
+              (borrow?.updatedAmountOut *
+                marketPrice(markets, borrow?.amountOut?.denom))
+          );
+        });
+      });
     }
   }, [markets, borrow]);
 
@@ -49,16 +73,28 @@ const HealthFactor = ({
       setPercentage(
         (Number(inAmount) *
           marketPrice(markets, assetMap[pair?.assetIn]?.denom) *
-          Number(
-            decimalConversion(
-              assetRatesStatsMap[pair?.assetIn]?.liquidationThreshold
-            )
-          )) /
+          (pair?.isInterPool
+            ? Number(
+                decimalConversion(
+                  assetRatesStatsMap[pair?.assetIn]?.liquidationThreshold
+                )
+              ) *
+              Number(
+                decimalConversion(
+                  assetRatesStatsMap[pool?.firstBridgedAssetId]
+                    ?.liquidationThreshold
+                )
+              )
+            : Number(
+                decimalConversion(
+                  assetRatesStatsMap[pair?.assetIn]?.liquidationThreshold
+                )
+              ))) /
           (Number(outAmount) *
             marketPrice(markets, assetMap[pair?.assetOut]?.denom))
       );
     }
-  }, [markets, pair, inAmount, outAmount]);
+  }, [markets, pair, inAmount, outAmount, pool]);
 
   return (
     <>
@@ -109,6 +145,14 @@ HealthFactor.propTypes = {
   name: PropTypes.string,
   pair: PropTypes.object,
   parent: PropTypes.string,
+  pool: PropTypes.shape({
+    poolId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    firstBridgedAssetId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+  }),
   outAmount: PropTypes.string,
 };
 
