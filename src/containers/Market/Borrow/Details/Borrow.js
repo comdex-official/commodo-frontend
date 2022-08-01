@@ -250,7 +250,7 @@ const BorrowTab = ({
     <div className="details-wrapper">
       {!dataInProgress ? (
         <>
-          <div className="details-left commodo-card">
+          <div className="details-left commodo-card commodo-borrow-page">
             <CustomRow assetList={assetList} />
             <div className="assets-select-card mb-3">
               <div className="assets-left">

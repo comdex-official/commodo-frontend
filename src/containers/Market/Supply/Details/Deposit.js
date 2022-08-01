@@ -131,7 +131,7 @@ const DepositTab = ({
       {!dataInProgress ? (
         <>
           <div className="details-left commodo-card">
-            <CustomRow assetList={assetList} />
+            <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
             <div className="assets-select-card mb-0">
               <div className="assets-left">
                 <label className="left-label">
@@ -209,10 +209,10 @@ const DepositTab = ({
                   {commaSeparator(
                     Number(
                       amount *
-                        marketPrice(
-                          markets,
-                          assetMap[selectedAssetId]?.denom
-                        ) || 0
+                      marketPrice(
+                        markets,
+                        assetMap[selectedAssetId]?.denom
+                      ) || 0
                     ),
                     DOLLAR_DECIMALS
                   )}{" "}
