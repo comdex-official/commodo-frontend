@@ -43,7 +43,7 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
         setModuleBalanceStats(result?.ModuleBalance?.moduleBalanceStats);
       });
     }
-  }, [poolId]);
+  }, [poolId, refreshBalance]);
 
   let assetStats = moduleBalanceStats?.filter(
     (item) => item?.assetId?.toNumber() === asset?.id?.toNumber()
