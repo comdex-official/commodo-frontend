@@ -9,7 +9,8 @@ import { Col, Row } from "../../../components/common";
 import {
   queryBorrowPosition,
   queryLendPair,
-  queryLendPool
+  queryLendPool,
+  queryLendPosition
 } from "../../../services/lend/query";
 import { decode } from "../../../utils/string";
 import BorrowTab from "./Borrow";
@@ -34,6 +35,8 @@ const BorrowRepay = ({ setPair, setPool }) => {
   const [inProgress, setInProgress] = useState(false);
   const [borrowPosition, setBorrowPosition] = useState();
   const [activeKey, setActiveKey] = useState("1");
+  const [lendPosition, setLendPosition] = useState();
+
 
   let { id } = useParams();
 
@@ -82,6 +85,20 @@ const BorrowRepay = ({ setPair, setPool }) => {
     }
   }, [id]);
 
+  useEffect(() => {
+    if (borrowPosition?.lendingId) {
+      queryLendPosition(borrowPosition?.lendingId, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+        if (result?.lend?.poolId) {
+          setLendPosition(result?.lend);
+        }
+      });
+    }
+  }, [borrowPosition]);
+
   const refreshBorrowPosition = () => {
     if (id) {
       queryBorrowPosition(id, (error, result) => {
@@ -117,6 +134,7 @@ const BorrowRepay = ({ setPair, setPool }) => {
                 <BorrowTab
                   borrowPosition={borrowPosition}
                   dataInProgress={inProgress}
+                  lendPosition = {lendPosition}
                   refreshBorrowPosition={refreshBorrowPosition}
                 />
               )}
@@ -130,6 +148,7 @@ const BorrowRepay = ({ setPair, setPool }) => {
                 <DepositTab
                   borrowPosition={borrowPosition}
                   dataInProgress={inProgress}
+                  lendPosition = {lendPosition}
                   refreshBorrowPosition={refreshBorrowPosition}
                 />
               )}

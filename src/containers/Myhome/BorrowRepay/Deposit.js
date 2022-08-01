@@ -10,7 +10,6 @@ import CustomInput from "../../../components/CustomInput";
 import HealthFactor from "../../../components/HealthFactor";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { queryLendPosition } from "../../../services/lend/query";
 import {
   amountConversion,
   amountConversionWithComma,
@@ -32,6 +31,7 @@ const DepositTab = ({
   lang,
   dataInProgress,
   borrowPosition,
+  lendPosition,
   pool,
   assetMap,
   assetRatesStatsMap,
@@ -45,10 +45,9 @@ const DepositTab = ({
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
   const [assetList, setAssetList] = useState();
-  const [lend, setLendPosition] = useState();
 
   const selectedAssetId = pair?.assetIn?.toNumber();
-  const availableBalance = lend?.availableToBorrow || 0;
+  const availableBalance = lendPosition?.availableToBorrow || 0;
 
   // Collateral deposited value * Max LTV of collateral minus already Borrowed asset value
 
@@ -61,20 +60,6 @@ const DepositTab = ({
       ]);
     }
   }, [pool]);
-
-  useEffect(() => {
-    if (borrowPosition?.lendingId) {
-      queryLendPosition(borrowPosition?.lendingId, (error, result) => {
-        if (error) {
-          message.error(error);
-          return;
-        }
-        if (result?.lend?.poolId) {
-          setLendPosition(result?.lend);
-        }
-      });
-    }
-  }, [borrowPosition]);
 
   const handleInputChange = (value) => {
     value = toDecimals(value).toString().trim();
@@ -218,7 +203,7 @@ const DepositTab = ({
                   <Col className="text-right">
                     {Number(
                       decimalConversion(
-                        assetRatesStatsMap[pair?.assetIn]?.uOptimal
+                        assetRatesStatsMap[pair?.assetIn]?.ltv
                       ) * 100
                     ).toFixed(DOLLAR_DECIMALS)}
                     %
@@ -283,6 +268,11 @@ DepositTab.propTypes = {
     amountIn: PropTypes.shape({
       denom: PropTypes.string,
       amount: PropTypes.string,
+    }),
+  }),
+  lendPosition: PropTypes.shape({
+    poolId: PropTypes.shape({
+      low: PropTypes.number,
     }),
   }),
   pair: PropTypes.shape({

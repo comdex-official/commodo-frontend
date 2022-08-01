@@ -69,7 +69,7 @@ export const ActionButton = ({
         if (name !== "Close") {
           refreshData();
         } else {
-          navigate("/myhome");
+          navigate("/myhome#borrow");
         }
       }
     );

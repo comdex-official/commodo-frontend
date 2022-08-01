@@ -31,6 +31,7 @@ const BorrowTab = ({
   lang,
   dataInProgress,
   borrowPosition,
+  lendPosition,
   pool,
   assetMap,
   assetRatesStatsMap,
@@ -46,17 +47,34 @@ const BorrowTab = ({
   const [assetList, setAssetList] = useState();
 
   const selectedAssetId = pair?.assetOut?.toNumber();
-  const availableBalance =
+
+  console.log(
+    "amount out",
+    pair,
+    lendPosition,
+    borrowPosition?.updatedAmountOut
+  );
+  const borrowable =
     Number(
       borrowPosition?.amountIn?.amount *
         marketPrice(markets, borrowPosition?.amountIn.denom) *
-        Number(decimalConversion(assetRatesStatsMap[pair?.assetIn]?.uOptimal))
+        (pair?.assetOutPoolId?.toNumber() !== lendPosition?.poolId?.toNumber() // isCrossPool
+          ? Number(
+              decimalConversion(assetRatesStatsMap[lendPosition?.assetId]?.ltv)
+            ) *
+            Number(
+              decimalConversion(
+                assetRatesStatsMap[pool?.firstBridgedAssetId]?.ltv
+              )
+            )
+          : Number(
+              decimalConversion(assetRatesStatsMap[lendPosition?.assetId]?.ltv)
+            )) || 0
     ) -
     Number(
-      borrowPosition?.amountOut?.amount *
+      borrowPosition?.updatedAmountOut *
         marketPrice(markets, borrowPosition?.amountOut.denom)
     );
-
   // Collateral deposited value * Max LTV of collateral minus already Borrowed asset value
 
   useEffect(() => {
@@ -73,11 +91,11 @@ const BorrowTab = ({
     value = toDecimals(value).toString().trim();
 
     setAmount(value);
-    setValidationError(ValidateInputNumber(getAmount(value), availableBalance));
+    setValidationError(ValidateInputNumber(getAmount(value), borrowable));
   };
 
   const handleMaxClick = () => {
-    return handleInputChange(amountConversion(availableBalance));
+    return handleInputChange(amountConversion(borrowable));
   };
 
   const handleRefresh = () => {
@@ -147,7 +165,9 @@ const BorrowTab = ({
             <div className="label-right">
               Borrowable
               <span className="ml-1">
-                {amountConversionWithComma(availableBalance)}{" "}
+                {amountConversionWithComma(
+                  borrowPosition?.lendingId && pair?.assetOutPoolId ? borrowable : 0
+                )}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
               </span>
               <div className="max-half">
@@ -276,6 +296,11 @@ BorrowTab.propTypes = {
     amountIn: PropTypes.shape({
       denom: PropTypes.string,
       amount: PropTypes.string,
+    }),
+  }),
+  lendPosition: PropTypes.shape({
+    poolId: PropTypes.shape({
+      low: PropTypes.number,
     }),
   }),
   pair: PropTypes.shape({

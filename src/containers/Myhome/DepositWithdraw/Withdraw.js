@@ -7,9 +7,8 @@ import { SvgIcon, TooltipIcon } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import CustomInput from "../../../components/CustomInput";
-import { comdex } from "../../../config/network";
 import { ValidateInputNumber } from "../../../config/_validation";
-import { DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../constants/common";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   amountConversion,
   amountConversionWithComma,
@@ -40,7 +39,7 @@ const WithdrawTab = ({
   const [validationError, setValidationError] = useState();
 
   const selectedAssetId = lendPosition?.assetId?.toNumber();
-  const availableBalance = lendPosition?.amountIn?.amount || 0;
+  const availableBalance = lendPosition?.updatedAmountIn || 0;
 
   useEffect(() => {
     if (pool?.poolId) {
@@ -69,13 +68,11 @@ const WithdrawTab = ({
   };
 
   const handleMaxClick = () => {
-    if (assetMap[selectedAssetId]?.denom === comdex.coinMinimalDenom) {
-      return Number(availableBalance) > DEFAULT_FEE
-        ? handleInputChange(amountConversion(availableBalance - DEFAULT_FEE))
-        : handleInputChange();
-    } else {
-      return handleInputChange(amountConversion(availableBalance));
-    }
+    // change the number to dynamic.
+
+    return handleInputChange(
+      amountConversion(Number(availableBalance) - 100000)
+    );
   };
 
   return (
@@ -145,14 +142,17 @@ const WithdrawTab = ({
                   validationError={validationError}
                 />
               </div>
-              <small>$
-                    {commaSeparator(
-                      Number(
-                        amount * marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
-                          0
-                      ),
-                      DOLLAR_DECIMALS
-                    )}</small>
+              <small>
+                $
+                {commaSeparator(
+                  Number(
+                    amount *
+                      marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
+                      0
+                  ),
+                  DOLLAR_DECIMALS
+                )}
+              </small>
             </div>
           </div>
         </div>
