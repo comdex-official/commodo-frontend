@@ -178,6 +178,7 @@ const RepayTab = ({
             <HealthFactor
               borrow={borrowPosition}
               pair={pair}
+              pool={pool}
               inAmount={borrowPosition?.amountIn?.amount}
               outAmount={
                 amount
@@ -193,7 +194,12 @@ const RepayTab = ({
           <ActionButton
             name="Repay"
             lang={lang}
-            disabled={!Number(amount) || dataInProgress || !selectedAssetId || validationError?.message}
+            disabled={
+              !Number(amount) ||
+              dataInProgress ||
+              !selectedAssetId ||
+              validationError?.message
+            }
             amount={amount}
             address={address}
             borrowId={borrowPosition?.borrowingId}

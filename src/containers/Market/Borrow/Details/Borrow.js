@@ -66,7 +66,7 @@ const BorrowTab = ({
   const borrowableBalance = getAmount(
     Number(inAmount) *
       marketPrice(markets, collateralAssetDenom) *
-      (pair?.assetOutPoolId?.toNumber() !== lend?.poolId?.toNumber() // isCrossPool
+      (pair?.isInterPool
         ? Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv)) *
           Number(
             decimalConversion(
@@ -429,6 +429,7 @@ const BorrowTab = ({
               pair={pair}
               inAmount={inAmount}
               outAmount={outAmount}
+              pool={pool}
             />
             <Row>
               <Col sm="12" className="mt-3 mx-auto card-bottom-details">
@@ -448,11 +449,26 @@ const BorrowTab = ({
                     <label>Max LTV</label>
                   </Col>
                   <Col className="text-right">
-                    {Number(
-                      decimalConversion(
-                        assetRatesStatsMap[lend?.assetId]?.ltv
-                      ) * 100
-                    ).toFixed(DOLLAR_DECIMALS)}
+                    {pair?.isInterPool
+                      ? Number(
+                          Number(
+                            decimalConversion(
+                              assetRatesStatsMap[lend?.assetId]?.ltv
+                            )
+                          ) *
+                            Number(
+                              decimalConversion(
+                                assetRatesStatsMap[pool?.firstBridgedAssetId]
+                                  ?.ltv
+                              )
+                            ) *
+                            100
+                        ).toFixed(DOLLAR_DECIMALS)
+                      : Number(
+                          decimalConversion(
+                            assetRatesStatsMap[lend?.assetId]?.ltv
+                          ) * 100
+                        ).toFixed(DOLLAR_DECIMALS)}
                     %
                   </Col>
                 </Row>

@@ -14,12 +14,12 @@ import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "./ActionButton";
@@ -48,17 +48,11 @@ const BorrowTab = ({
 
   const selectedAssetId = pair?.assetOut?.toNumber();
 
-  console.log(
-    "amount out",
-    pair,
-    lendPosition,
-    borrowPosition?.updatedAmountOut
-  );
   const borrowable =
     Number(
       borrowPosition?.amountIn?.amount *
         marketPrice(markets, borrowPosition?.amountIn.denom) *
-        (pair?.assetOutPoolId?.toNumber() !== lendPosition?.poolId?.toNumber() // isCrossPool
+        (pair?.isInterPool
           ? Number(
               decimalConversion(assetRatesStatsMap[lendPosition?.assetId]?.ltv)
             ) *
@@ -166,7 +160,9 @@ const BorrowTab = ({
               Borrowable
               <span className="ml-1">
                 {amountConversionWithComma(
-                  borrowPosition?.lendingId && pair?.assetOutPoolId ? borrowable : 0
+                  borrowPosition?.lendingId && pair?.assetOutPoolId
+                    ? borrowable
+                    : 0
                 )}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
               </span>
@@ -203,6 +199,7 @@ const BorrowTab = ({
             <HealthFactor
               borrow={borrowPosition}
               pair={pair}
+              pool={pool}
               inAmount={borrowPosition?.amountIn?.amount}
               outAmount={
                 amount
