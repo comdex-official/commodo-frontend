@@ -1,12 +1,12 @@
-import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
-import { connect } from "react-redux";
 import { Table } from "antd";
-import PlaceBidModal from "./PlaceBidModal";
-import "./index.less";
+import * as PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import FilterModal from "./FilterModal";
+import "./index.less";
+import PlaceBidModal from "./PlaceBidModal";
 
-const Liquidation = () => {
+const Auction = () => {
   const columns = [
     {
       title: (
@@ -187,7 +187,7 @@ const Liquidation = () => {
           <div className="commodo-card py-3 bg-none">
             <div className="card-content">
               <Table
-                className="custom-table liquidation-table"
+                className="custom-table auction-table"
                 dataSource={tableData}
                 columns={columns}
                 pagination={{ defaultPageSize: 10 }}
@@ -201,7 +201,7 @@ const Liquidation = () => {
   );
 };
 
-Liquidation.propTypes = {
+Auction.propTypes = {
   lang: PropTypes.string.isRequired,
 };
 
@@ -213,4 +213,4 @@ const stateToProps = (state) => {
 
 const actionsToProps = {};
 
-export default connect(stateToProps, actionsToProps)(Liquidation);
+export default connect(stateToProps, actionsToProps)(Auction);
