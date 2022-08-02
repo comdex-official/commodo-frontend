@@ -42,7 +42,7 @@ const CloseTab = ({
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <CustomRow assetList={assetList} />
+        <CustomRow assetList={assetList}  poolId={pool?.poolId?.low}/>
         <div className="assets-select-card mb-0">
           <div className="assets-left">
             <label className="left-label">
