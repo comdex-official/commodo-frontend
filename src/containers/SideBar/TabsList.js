@@ -24,9 +24,9 @@ export const tabsList = [
     index: 3,
   },
   {
-    name: "Liquidation",
-    value: "liquidation",
-    langKey: "liquidation",
+    name: "Auction",
+    value: "auction",
+    langKey: "auction",
     index: 4,
   },
   {
