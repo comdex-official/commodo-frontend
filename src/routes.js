@@ -1,10 +1,10 @@
 import Airdrop from "./containers/Airdrop";
 import Assets from "./containers/Assets";
+import Auction from "./containers/Auction";
 import Dashboard from "./containers/Dashboard";
 import Extra from "./containers/Extra";
 import Govern from "./containers/Govern";
 import GovernDetails from "./containers/Govern/Details";
-import Liquidation from "./containers/Liquidation";
 import Market from "./containers/Market";
 import BorrowDetails from "./containers/Market/Borrow/Details";
 import SupplyDetails from "./containers/Market/Supply/Details";
@@ -43,7 +43,7 @@ const routes = [
   },
   {
     path: "/auction",
-    element: <Liquidation />,
+    element: <Auction />,
   },
   {
     path: "/airdrop",
