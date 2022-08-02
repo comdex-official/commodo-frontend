@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { queryAssetStats } from "../../../services/lend/query";
-import { amountConversion } from "../../../utils/coin";
-import { commaSeparator, marketPrice } from "../../../utils/number";
+import { amountConversionWithComma } from "../../../utils/coin";
+import { marketPrice } from "../../../utils/number";
 
 export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
   const [assetStats, setAssetStats] = useState({});
@@ -34,24 +34,22 @@ export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
   const getTotalDeposited = () => {
     const sum =
       Number(
-        amountConversion(assetStats[lendPool?.mainAssetId]?.totalLend) *
+        assetStats[lendPool?.mainAssetId]?.totalLend *
           marketPrice(markets, assetMap?.[lendPool?.mainAssetId]?.denom)
       ) +
       Number(
-        amountConversion(assetStats[lendPool?.firstBridgedAssetId]?.totalLend) *
+        assetStats[lendPool?.firstBridgedAssetId]?.totalLend *
           marketPrice(markets, assetMap?.[lendPool?.firstBridgedAssetId]?.denom)
       ) +
       Number(
-        amountConversion(
-          assetStats[lendPool?.secondBridgedAssetId]?.totalLend
-        ) *
+        assetStats[lendPool?.secondBridgedAssetId]?.totalLend *
           marketPrice(
             markets,
             assetMap?.[lendPool?.secondBridgedAssetId]?.denom
           )
       );
 
-    return `$${commaSeparator(sum || 0, DOLLAR_DECIMALS)}`;
+    return `$${amountConversionWithComma(sum || 0, DOLLAR_DECIMALS)}`;
   };
   return <div>{getTotalDeposited()}</div>;
 };

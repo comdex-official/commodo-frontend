@@ -16,7 +16,7 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
@@ -34,6 +34,7 @@ const RepayTab = ({
   balances,
   address,
   refreshBalance,
+  refreshBorrowPosition,
   setBalanceRefresh,
   markets,
   pair,
@@ -70,6 +71,7 @@ const RepayTab = ({
   };
 
   const handleRefresh = () => {
+    refreshBorrowPosition();
     setBalanceRefresh(refreshBalance + 1);
     setAmount();
   };
@@ -238,6 +240,7 @@ const RepayTab = ({
 RepayTab.propTypes = {
   dataInProgress: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
+  refreshBorrowPosition: PropTypes.func.isRequired,
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,

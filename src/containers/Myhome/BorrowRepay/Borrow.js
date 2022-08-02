@@ -14,12 +14,12 @@ import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount,
+  getAmount
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice,
+  marketPrice
 } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "./ActionButton";
@@ -226,12 +226,26 @@ const BorrowTab = ({
                     <label>Max LTV</label>
                   </Col>
                   <Col className="text-right">
-                    {Number(
-                      decimalConversion(
-                        assetRatesStatsMap[pair?.assetIn]?.uOptimal
-                      ) * 100
-                    ).toFixed(DOLLAR_DECIMALS)}
-                    %
+                    {pair?.isInterPool
+                      ? Number(
+                          Number(
+                            decimalConversion(
+                              assetRatesStatsMap[pair?.assetIn]?.ltv
+                            )
+                          ) *
+                            Number(
+                              decimalConversion(
+                                assetRatesStatsMap[pool?.firstBridgedAssetId]
+                                  ?.ltv
+                              )
+                            ) *
+                            100
+                        ).toFixed(DOLLAR_DECIMALS)
+                      : Number(
+                          decimalConversion(
+                            assetRatesStatsMap[pair?.assetIn]?.ltv
+                          ) * 100
+                        ).toFixed(DOLLAR_DECIMALS)}
                   </Col>
                 </Row>
               </Col>
