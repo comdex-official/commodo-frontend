@@ -21,7 +21,11 @@ import {
   decimalConversion,
   marketPrice
 } from "../../../utils/number";
-import { iconNameFromDenom, toDecimals } from "../../../utils/string";
+import {
+  iconNameFromDenom,
+  toDecimals,
+  ucDenomToDenom
+} from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
 
@@ -86,14 +90,17 @@ const DepositTab = ({
           ? Number(borrowPosition?.amountIn?.amount) + Number(getAmount(amount))
           : borrowPosition?.amountIn?.amount
       ) *
-        marketPrice(markets, borrowPosition?.amountIn?.denom))) *
+        marketPrice(
+          markets,
+          ucDenomToDenom(borrowPosition?.amountIn?.denom)
+        ))) *
       100
   );
 
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <CustomRow assetList={assetList} />
+        <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
         <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="left-label">
@@ -140,7 +147,7 @@ const DepositTab = ({
               Depositable
               <span className="ml-1">
                 {amountConversionWithComma(availableBalance)}{" "}
-                {denomConversion(assetMap[selectedAssetId]?.denom)}
+                {denomConversion(borrowPosition?.amountIn?.denom)}
               </span>
               <div className="max-half">
                 <Button className="active" onClick={handleMaxClick}>
@@ -202,12 +209,26 @@ const DepositTab = ({
                     <label>Max LTV</label>
                   </Col>
                   <Col className="text-right">
-                    {Number(
-                      decimalConversion(
-                        assetRatesStatsMap[pair?.assetIn]?.ltv
-                      ) * 100
-                    ).toFixed(DOLLAR_DECIMALS)}
-                    %
+                    {pair?.isInterPool
+                      ? Number(
+                          Number(
+                            decimalConversion(
+                              assetRatesStatsMap[pair?.assetIn]?.ltv
+                            )
+                          ) *
+                            Number(
+                              decimalConversion(
+                                assetRatesStatsMap[pool?.firstBridgedAssetId]
+                                  ?.ltv
+                              )
+                            ) *
+                            100
+                        ).toFixed(DOLLAR_DECIMALS)
+                      : Number(
+                          decimalConversion(
+                            assetRatesStatsMap[pair?.assetIn]?.ltv
+                          ) * 100
+                        ).toFixed(DOLLAR_DECIMALS)}
                   </Col>
                 </Row>
               </Col>

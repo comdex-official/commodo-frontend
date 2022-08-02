@@ -6,7 +6,7 @@ const variables = {
     asset: "Asset",
     market: "Market",
     govern: "Govern",
-    liquidation: "Liquidation",
+    auction: "Auction",
     airdrop: "Airdrop",
     extra: "Extra",
 

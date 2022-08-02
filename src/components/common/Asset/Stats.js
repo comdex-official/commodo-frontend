@@ -4,7 +4,7 @@ import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { decimalConversion } from "../../../utils/number";
 import { Col, Row } from "../index";
 
-const AssetStats = ({ assetId, assetRatesStatsMap }) => {
+const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool }) => {
   return (
     <>
       <Row className="mt-2">
@@ -12,10 +12,21 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
           <label>Max LTV</label>
         </Col>
         <Col className="text-right">
-          {Number(
-            decimalConversion(assetRatesStatsMap[assetId]?.ltv) * 100
-          ).toFixed(DOLLAR_DECIMALS)}
-          %
+          {pair?.isInterPool
+            ? Number(
+                Number(
+                  decimalConversion(assetRatesStatsMap[pair?.assetIn || assetId]?.ltv)
+                ) *
+                  Number(
+                    decimalConversion(
+                      assetRatesStatsMap[pool?.firstBridgedAssetId]?.ltv
+                    )
+                  ) *
+                  100
+              ).toFixed(DOLLAR_DECIMALS)
+            : Number(
+                decimalConversion(assetRatesStatsMap[pair?.assetIn || assetId]?.ltv) * 100
+              ).toFixed(DOLLAR_DECIMALS)}
         </Col>
       </Row>
       <Row className="mt-2">
@@ -25,7 +36,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
         <Col className="text-right">
           {Number(
             decimalConversion(
-              assetRatesStatsMap[assetId]?.liquidationThreshold
+              assetRatesStatsMap[pair?.assetIn || assetId]?.liquidationThreshold
             ) * 100
           ).toFixed(DOLLAR_DECIMALS)}
           %
@@ -37,7 +48,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
         </Col>
         <Col className="text-right">
           {Number(
-            decimalConversion(assetRatesStatsMap[assetId]?.liquidationPenalty) *
+            decimalConversion(assetRatesStatsMap[pair?.assetIn || assetId]?.liquidationPenalty) *
               100
           ).toFixed(DOLLAR_DECIMALS)}
           %
@@ -49,7 +60,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap }) => {
         </Col>
         <Col className="text-right">
           {Number(
-            decimalConversion(assetRatesStatsMap[assetId]?.liquidationBonus) *
+            decimalConversion(assetRatesStatsMap[pair?.assetIn || assetId]?.liquidationBonus) *
               100
           ).toFixed(DOLLAR_DECIMALS)}
           %
@@ -64,6 +75,28 @@ AssetStats.propTypes = {
     low: PropTypes.number,
   }),
   assetRatesStatsMap: PropTypes.object,
+  pair: PropTypes.shape({
+    id: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    assetIn: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    amountOut: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+  }),
+  pool: PropTypes.shape({
+    poolId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    firstBridgedAssetId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    secondBridgedAssetId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+  }),
 };
 
 const stateToProps = (state) => {

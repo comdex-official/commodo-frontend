@@ -14,12 +14,12 @@ import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount,
+  getAmount
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice,
+  marketPrice
 } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "./ActionButton";
@@ -113,7 +113,7 @@ const BorrowTab = ({
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <CustomRow assetList={assetList} />
+        <CustomRow assetList={assetList} poolId={pool?.poolId?.low}/>
         <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="left-label">
@@ -226,12 +226,26 @@ const BorrowTab = ({
                     <label>Max LTV</label>
                   </Col>
                   <Col className="text-right">
-                    {Number(
-                      decimalConversion(
-                        assetRatesStatsMap[pair?.assetIn]?.uOptimal
-                      ) * 100
-                    ).toFixed(DOLLAR_DECIMALS)}
-                    %
+                    {pair?.isInterPool
+                      ? Number(
+                          Number(
+                            decimalConversion(
+                              assetRatesStatsMap[pair?.assetIn]?.ltv
+                            )
+                          ) *
+                            Number(
+                              decimalConversion(
+                                assetRatesStatsMap[pool?.firstBridgedAssetId]
+                                  ?.ltv
+                              )
+                            ) *
+                            100
+                        ).toFixed(DOLLAR_DECIMALS)
+                      : Number(
+                          decimalConversion(
+                            assetRatesStatsMap[pair?.assetIn]?.ltv
+                          ) * 100
+                        ).toFixed(DOLLAR_DECIMALS)}
                   </Col>
                 </Row>
               </Col>

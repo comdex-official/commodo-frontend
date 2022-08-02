@@ -1,5 +1,4 @@
 import * as PropTypes from "prop-types";
-import { useState } from "react";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
 import { Col, Row } from "../../../components/common";
@@ -10,7 +9,8 @@ import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   amountConversion,
   amountConversionWithComma,
-  denomConversion
+  denomConversion,
+  getDenomBalance
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import ActionButton from "./ActionButton";
@@ -26,14 +26,16 @@ const CloseTab = ({
   refreshBalance,
   setBalanceRefresh,
   markets,
+  balances,
   pair,
 }) => {
-  const [amount, setAmount] = useState();
   const selectedAssetId = pair?.assetOut?.toNumber();
+
+  const availableBalance =
+    getDenomBalance(balances, borrowPosition?.amountOut?.denom) || 0;
 
   const handleRefresh = () => {
     setBalanceRefresh(refreshBalance + 1);
-    setAmount();
   };
 
   return (
@@ -65,6 +67,17 @@ const CloseTab = ({
                 </small>
               </Col>
             </Row>
+            <Row>
+              <Col>
+                <label>Available</label>
+              </Col>
+              <Col className="text-right">
+                <div>
+                  {amountConversionWithComma(availableBalance)}{" "}
+                  {denomConversion(borrowPosition?.amountOut?.denom)}
+                </div>
+              </Col>
+            </Row>
             <HealthFactor
               borrow={borrowPosition}
               pair={pair}
@@ -72,15 +85,20 @@ const CloseTab = ({
               inAmount={borrowPosition?.amountIn?.amount}
               outAmount={Number(borrowPosition?.updatedAmountOut)}
             />{" "}
-            <AssetStats assetId={selectedAssetId} />
+            <AssetStats pair={pair} pool={pool} />
           </Col>
         </Row>
         <div className="assets-form-btn">
           <ActionButton
             name="Close"
             lang={lang}
-            disabled={dataInProgress || !selectedAssetId}
-            amount={amountConversion(borrowPosition?.amountOut?.amount)}
+            disabled={
+              dataInProgress ||
+              !selectedAssetId ||
+              Number(availableBalance) <
+                Number(borrowPosition?.updatedAmountOut)
+            }
+            amount={amountConversion(borrowPosition?.updatedAmountOut)}
             address={address}
             borrowId={borrowPosition?.borrowingId}
             denom={borrowPosition?.amountOut?.denom}
@@ -121,6 +139,12 @@ CloseTab.propTypes = {
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  balances: PropTypes.arrayOf(
+    PropTypes.shape({
+      denom: PropTypes.string.isRequired,
+      amount: PropTypes.string,
+    })
+  ),
   borrowPosition: PropTypes.shape({
     lendingId: PropTypes.shape({
       low: PropTypes.number,
@@ -160,6 +184,7 @@ const stateToProps = (state) => {
     address: state.account.address,
     pool: state.lend.pool._,
     pair: state.lend.pair,
+    balances: state.account.balances.list,
     assetMap: state.asset._.map,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,

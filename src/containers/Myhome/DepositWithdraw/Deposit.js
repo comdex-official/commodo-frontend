@@ -1,27 +1,27 @@
-import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
-import { connect } from "react-redux";
 import { Button, Select } from "antd";
-import "./index.less";
+import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { iconNameFromDenom, toDecimals } from "../../../utils/string";
+import { connect } from "react-redux";
+import { setBalanceRefresh } from "../../../actions/account";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import CustomRow from "../../../components/common/Asset/CustomRow";
+import Details from "../../../components/common/Asset/Details";
+import AssetStats from "../../../components/common/Asset/Stats";
+import CustomInput from "../../../components/CustomInput";
+import { comdex } from "../../../config/network";
+import { ValidateInputNumber } from "../../../config/_validation";
+import { DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../../utils/coin";
-import CustomInput from "../../../components/CustomInput";
-import { ValidateInputNumber } from "../../../config/_validation";
-import ActionButton from "./ActionButton";
-import { setBalanceRefresh } from "../../../actions/account";
-import Details from "../../../components/common/Asset/Details";
-import { comdex } from "../../../config/network";
-import { DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../constants/common";
-import AssetStats from "../../../components/common/Asset/Stats";
-import CustomRow from "../../../components/common/Asset/CustomRow";
 import { commaSeparator, marketPrice } from "../../../utils/number";
+import { iconNameFromDenom, toDecimals } from "../../../utils/string";
+import ActionButton from "./ActionButton";
+import "./index.less";
 
 const { Option } = Select;
 
@@ -79,7 +79,7 @@ const DepositTab = ({
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <CustomRow assetList={assetList} />
+        <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
         <div className="assets-select-card mb-0">
           <div className="assets-left">
             <label className="left-label">
@@ -159,7 +159,7 @@ const DepositTab = ({
         </div>
         <Row>
           <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-            <AssetStats assetId={selectedAssetId} />
+            <AssetStats assetId={selectedAssetId} pool={pool} />
           </Col>
         </Row>
         <div className="assets-form-btn">

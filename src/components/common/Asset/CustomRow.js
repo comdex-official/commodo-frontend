@@ -1,7 +1,7 @@
-import { SvgIcon } from "../index";
-import { iconNameFromDenom } from "../../../utils/string";
-import { denomConversion } from "../../../utils/coin";
 import * as PropTypes from "prop-types";
+import { denomConversion } from "../../../utils/coin";
+import { iconNameFromDenom } from "../../../utils/string";
+import { SvgIcon } from "../index";
 import TooltipIcon from "../TooltipIcon";
 
 const CustomRow = ({ assetList, poolId }) => {
@@ -18,7 +18,7 @@ const CustomRow = ({ assetList, poolId }) => {
             </div>
           ))}
       </div>
-      {poolId && <div className="deposit-poolId">#{poolId}<TooltipIcon text="Pool Id" /></div>}
+      {poolId && <div className="deposit-poolId">#{poolId}<TooltipIcon text="cPool Id" /></div>}
     </div>
   );
 };

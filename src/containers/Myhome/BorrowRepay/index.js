@@ -161,6 +161,7 @@ const BorrowRepay = ({ setPair, setPool }) => {
               ) : (
                 <RepayTab
                   borrowPosition={borrowPosition}
+                  refreshBorrowPosition={refreshBorrowPosition}
                   dataInProgress={inProgress}
                 />
               )}

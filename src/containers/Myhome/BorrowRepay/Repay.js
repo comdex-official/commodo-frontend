@@ -34,6 +34,7 @@ const RepayTab = ({
   balances,
   address,
   refreshBalance,
+  refreshBorrowPosition,
   setBalanceRefresh,
   markets,
   pair,
@@ -70,6 +71,7 @@ const RepayTab = ({
   };
 
   const handleRefresh = () => {
+    refreshBorrowPosition();
     setBalanceRefresh(refreshBalance + 1);
     setAmount();
   };
@@ -77,7 +79,7 @@ const RepayTab = ({
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <CustomRow assetList={assetList} />
+        <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
         <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="left-label">
@@ -187,7 +189,7 @@ const RepayTab = ({
                   : borrowPosition?.updatedAmountOut
               }
             />{" "}
-            <AssetStats assetId={selectedAssetId} />
+            <AssetStats pair={pair} pool={pool} />
           </Col>
         </Row>
         <div className="assets-form-btn">
@@ -238,6 +240,7 @@ const RepayTab = ({
 RepayTab.propTypes = {
   dataInProgress: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
+  refreshBorrowPosition: PropTypes.func.isRequired,
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
