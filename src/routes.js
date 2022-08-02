@@ -1,16 +1,16 @@
-import MyHome from "./containers/Myhome";
-import Dashboard from "./containers/Dashboard";
-import Market from "./containers/Market";
-import Liquidation from "./containers/Liquidation";
 import Airdrop from "./containers/Airdrop";
+import Assets from "./containers/Assets";
+import Dashboard from "./containers/Dashboard";
+import Extra from "./containers/Extra";
 import Govern from "./containers/Govern";
 import GovernDetails from "./containers/Govern/Details";
+import Liquidation from "./containers/Liquidation";
+import Market from "./containers/Market";
+import BorrowDetails from "./containers/Market/Borrow/Details";
+import SupplyDetails from "./containers/Market/Supply/Details";
+import MyHome from "./containers/Myhome";
 import BorrowRepay from "./containers/Myhome/BorrowRepay";
 import Deposit from "./containers/Myhome/DepositWithdraw";
-import Assets from "./containers/Assets";
-import Extra from "./containers/Extra";
-import SupplyDetails from "./containers/Market/Supply/Details";
-import BorrowDetails from "./containers/Market/Borrow/Details";
 
 const routes = [
   {
@@ -42,7 +42,7 @@ const routes = [
     element: <BorrowDetails />,
   },
   {
-    path: "/liquidation",
+    path: "/auction",
     element: <Liquidation />,
   },
   {
