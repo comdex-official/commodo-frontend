@@ -159,6 +159,8 @@ const BorrowTab = ({
       )[0];
 
     setPair(selectedPair);
+    setOutAmount(0);
+    setBorrowValidationError();
   };
 
   const handleInAmountChange = (value) => {

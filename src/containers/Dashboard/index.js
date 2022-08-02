@@ -7,14 +7,20 @@ import { connect } from "react-redux";
 import AssetsIcon from "../../assets/images/assets-icon.png";
 import LaunchImage from "../../assets/images/launch-bg.jpg";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
-import { DOLLAR_DECIMALS } from "../../constants/common";
+import { DOLLAR_DECIMALS, NUMBER_OF_TOP_ASSETS } from "../../constants/common";
 import {
   queryBorrowStats,
   queryDepositStats,
   queryUserDepositStats
 } from "../../services/lend/query";
-import { amountConversion, amountConversionWithComma } from "../../utils/coin";
+import {
+  amountConversion,
+  amountConversionWithComma,
+  denomConversion
+} from "../../utils/coin";
 import { marketPrice } from "../../utils/number";
+import { iconNameFromDenom } from "../../utils/string";
+import AverageAssetApy from "./AverageAssetApy";
 import "./index.less";
 
 const Dashboard = ({ isDarkMode, markets, assetMap }) => {
@@ -66,9 +72,30 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
     return Number(sum || 0);
   };
 
+  const getTopAssets = (list) => {
+    let assets =
+      list?.length > 0
+        ? list.map((item) => {
+            let value =
+              marketPrice(markets, assetMap[item?.assetId?.toNumber()]?.denom) *
+              item?.amount;
+            return {
+              assetId: item?.assetId,
+              value,
+            };
+          })
+        : [];
+
+    let sortedAssets = assets.sort((a, b) => b.value - a.value);
+
+    return sortedAssets.slice(0, NUMBER_OF_TOP_ASSETS);
+  };
+
   const totalDepositStats = calculateTotalValue(depositStats);
   const totalBorrowStats = calculateTotalValue(borrowStats);
   const totalUserDepositStats = calculateTotalValue(userDepositStats);
+  const topDepositAssets = getTopAssets(depositStats);
+  const topBorrowAssets = getTopAssets(borrowStats);
 
   const Options = {
     chart: {
@@ -307,70 +334,63 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
               </div>
             </div>
             <div className="commodo-card top-three-assets">
-              <div className="card-head">Top 3 Assets</div>
+              <div className="card-head">Top {NUMBER_OF_TOP_ASSETS} Assets</div>
               <div className="card-content">
                 <div className="deposited-list">
                   <p>Deposited</p>
                   <ul>
-                    <li>
-                      <div className="assets-col">
-                        <div className="assets-icon">
-                          <SvgIcon name="cmst-icon" />
-                        </div>
-                        CMST
-                      </div>
-                      <b>8.92%</b>
-                    </li>
-                    <li>
-                      <div className="assets-col">
-                        <div className="assets-icon">
-                          <SvgIcon name="cmdx-icon" />
-                        </div>
-                        CMDX
-                      </div>
-                      <b>7.88%</b>
-                    </li>
-                    <li>
-                      <div className="assets-col">
-                        <div className="assets-icon">
-                          <SvgIcon name="atom-icon" />
-                        </div>
-                        ATOM
-                      </div>
-                      <b>7.24%</b>
-                    </li>
+                    {topDepositAssets?.length > 0
+                      ? topDepositAssets?.map((item) => {
+                          return (
+                            <li>
+                              <div className="assets-col">
+                                <div className="assets-icon">
+                                  <SvgIcon
+                                    name={iconNameFromDenom(
+                                      assetMap[item?.assetId]?.denom
+                                    )}
+                                  />
+                                </div>
+                                {denomConversion(
+                                  assetMap[item?.assetId]?.denom
+                                )}
+                              </div>
+                              <b>
+                                <AverageAssetApy
+                                  assetId={item?.assetId}
+                                  parent="lend"
+                                />
+                              </b>
+                            </li>
+                          );
+                        })
+                      : null}
                   </ul>
                 </div>
                 <div className="deposited-list">
                   <p>Borrowed</p>
                   <ul>
-                    <li>
-                      <div className="assets-col">
-                        <div className="assets-icon">
-                          <SvgIcon name="cmst-icon" />
-                        </div>
-                        CMST
-                      </div>
-                      <b>12.33%</b>
-                    </li>
-                    <li>
-                      <div className="assets-col">
-                        <div className="assets-icon">
-                          <SvgIcon name="cmdx-icon" />
-                        </div>
-                        CMDX
-                      </div>
-                      <b>14.76%</b>
-                    </li>
-                    <li>
-                      <div className="assets-col">
-                        <div className="assets-icon">
-                          <SvgIcon name="atom-icon" />
-                        </div>
-                        ATOM
-                      </div>
-                      <b>13.33%</b>
-                    </li>
+                    {topBorrowAssets?.length > 0
+                      ? topBorrowAssets?.map((item) => {
+                          return (
+                            <li>
+                              <div className="assets-col">
+                                <div className="assets-icon">
+                                  <SvgIcon
+                                    name={iconNameFromDenom(
+                                      assetMap[item?.assetId]?.denom
+                                    )}
+                                  />
+                                </div>
+                                {denomConversion(
+                                  assetMap[item?.assetId]?.denom
+                                )}
+                              </div>
+                              <AverageAssetApy assetId={item?.assetId} />
+                            </li>
+                          );
+                        })
+                      : null}
                   </ul>
                 </div>
               </div>
