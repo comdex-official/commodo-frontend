@@ -20,6 +20,7 @@ import {
 } from "../../utils/coin";
 import { marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
+import AverageAssetApy from "./AverageAssetApy";
 import "./index.less";
 
 const Dashboard = ({ isDarkMode, markets, assetMap }) => {
@@ -354,7 +355,12 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                                   assetMap[item?.assetId]?.denom
                                 )}
                               </div>
-                              <b>8.92%</b>
+                              <b>
+                                <AverageAssetApy
+                                  assetId={item?.assetId}
+                                  parent="lend"
+                                />
+                              </b>
                             </li>
                           );
                         })
@@ -380,7 +386,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                                   assetMap[item?.assetId]?.denom
                                 )}
                               </div>
-                              <b>8.92%</b>
+                              <AverageAssetApy assetId={item?.assetId} />
                             </li>
                           );
                         })
