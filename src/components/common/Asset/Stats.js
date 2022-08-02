@@ -15,7 +15,9 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool }) => {
           {pair?.isInterPool
             ? Number(
                 Number(
-                  decimalConversion(assetRatesStatsMap[pair?.assetIn || assetId]?.ltv)
+                  decimalConversion(
+                    assetRatesStatsMap[pair?.assetIn || assetId]?.ltv
+                  )
                 ) *
                   Number(
                     decimalConversion(
@@ -25,8 +27,11 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool }) => {
                   100
               ).toFixed(DOLLAR_DECIMALS)
             : Number(
-                decimalConversion(assetRatesStatsMap[pair?.assetIn || assetId]?.ltv) * 100
+                decimalConversion(
+                  assetRatesStatsMap[pair?.assetIn || assetId]?.ltv
+                ) * 100
               ).toFixed(DOLLAR_DECIMALS)}
+          %
         </Col>
       </Row>
       <Row className="mt-2">
@@ -34,11 +39,28 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool }) => {
           <label>Liquidation Threshold</label>
         </Col>
         <Col className="text-right">
-          {Number(
-            decimalConversion(
-              assetRatesStatsMap[pair?.assetIn || assetId]?.liquidationThreshold
-            ) * 100
-          ).toFixed(DOLLAR_DECIMALS)}
+          {pair?.isInterPool
+            ? Number(
+                Number(
+                  decimalConversion(
+                    assetRatesStatsMap[pair?.assetIn || assetId]
+                      ?.liquidationThreshold
+                  )
+                ) *
+                  Number(
+                    decimalConversion(
+                      assetRatesStatsMap[pool?.firstBridgedAssetId]
+                        ?.liquidationThreshold
+                    )
+                  ) *
+                  100
+              ).toFixed(DOLLAR_DECIMALS)
+            : Number(
+                decimalConversion(
+                  assetRatesStatsMap[pair?.assetIn || assetId]
+                    ?.liquidationThreshold
+                ) * 100
+              ).toFixed(DOLLAR_DECIMALS)}
           %
         </Col>
       </Row>
@@ -48,8 +70,9 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool }) => {
         </Col>
         <Col className="text-right">
           {Number(
-            decimalConversion(assetRatesStatsMap[pair?.assetIn || assetId]?.liquidationPenalty) *
-              100
+            decimalConversion(
+              assetRatesStatsMap[pair?.assetIn || assetId]?.liquidationPenalty
+            ) * 100
           ).toFixed(DOLLAR_DECIMALS)}
           %
         </Col>
@@ -60,8 +83,9 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool }) => {
         </Col>
         <Col className="text-right">
           {Number(
-            decimalConversion(assetRatesStatsMap[pair?.assetIn || assetId]?.liquidationBonus) *
-              100
+            decimalConversion(
+              assetRatesStatsMap[pair?.assetIn || assetId]?.liquidationBonus
+            ) * 100
           ).toFixed(DOLLAR_DECIMALS)}
           %
         </Col>
