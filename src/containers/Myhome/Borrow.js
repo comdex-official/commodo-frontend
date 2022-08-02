@@ -40,13 +40,7 @@ const Borrow = ({ userBorrowList, inProgress }) => {
       dataIndex: "apy",
       key: "apy",
       width: 110,
-      render: (borrow) => (
-        <AssetApy
-          poolId={borrow?.poolId}
-          assetId={borrow?.assetId}
-          parent="borrow"
-        />
-      ),
+      render: (borrow) => <AssetApy borrowPosition={borrow} parent="borrow" />,
     },
     {
       title: "Interest",
