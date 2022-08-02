@@ -189,7 +189,7 @@ const RepayTab = ({
                   : borrowPosition?.updatedAmountOut
               }
             />{" "}
-            <AssetStats assetId={selectedAssetId} pair={pair} pool={pool} />
+            <AssetStats pair={pair} pool={pool} />
           </Col>
         </Row>
         <div className="assets-form-btn">

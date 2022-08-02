@@ -15,7 +15,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool }) => {
           {pair?.isInterPool
             ? Number(
                 Number(
-                  decimalConversion(assetRatesStatsMap[pair?.assetIn]?.ltv)
+                  decimalConversion(assetRatesStatsMap[pair?.assetIn || assetId]?.ltv)
                 ) *
                   Number(
                     decimalConversion(
@@ -25,7 +25,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool }) => {
                   100
               ).toFixed(DOLLAR_DECIMALS)
             : Number(
-                decimalConversion(assetRatesStatsMap[pair?.assetIn]?.ltv) * 100
+                decimalConversion(assetRatesStatsMap[pair?.assetIn || assetId]?.ltv) * 100
               ).toFixed(DOLLAR_DECIMALS)}
         </Col>
       </Row>
@@ -36,7 +36,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool }) => {
         <Col className="text-right">
           {Number(
             decimalConversion(
-              assetRatesStatsMap[assetId]?.liquidationThreshold
+              assetRatesStatsMap[pair?.assetIn || assetId]?.liquidationThreshold
             ) * 100
           ).toFixed(DOLLAR_DECIMALS)}
           %
@@ -48,7 +48,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool }) => {
         </Col>
         <Col className="text-right">
           {Number(
-            decimalConversion(assetRatesStatsMap[assetId]?.liquidationPenalty) *
+            decimalConversion(assetRatesStatsMap[pair?.assetIn || assetId]?.liquidationPenalty) *
               100
           ).toFixed(DOLLAR_DECIMALS)}
           %
@@ -60,7 +60,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool }) => {
         </Col>
         <Col className="text-right">
           {Number(
-            decimalConversion(assetRatesStatsMap[assetId]?.liquidationBonus) *
+            decimalConversion(assetRatesStatsMap[pair?.assetIn || assetId]?.liquidationBonus) *
               100
           ).toFixed(DOLLAR_DECIMALS)}
           %

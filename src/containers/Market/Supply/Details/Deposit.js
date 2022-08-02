@@ -12,7 +12,11 @@ import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
 import { comdex } from "../../../../config/network";
 import { ValidateInputNumber } from "../../../../config/_validation";
-import { APP_ID, DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../../constants/common";
+import {
+  APP_ID,
+  DEFAULT_FEE,
+  DOLLAR_DECIMALS
+} from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { defaultFee } from "../../../../services/transaction";
 import {
@@ -209,10 +213,10 @@ const DepositTab = ({
                   {commaSeparator(
                     Number(
                       amount *
-                      marketPrice(
-                        markets,
-                        assetMap[selectedAssetId]?.denom
-                      ) || 0
+                        marketPrice(
+                          markets,
+                          assetMap[selectedAssetId]?.denom
+                        ) || 0
                     ),
                     DOLLAR_DECIMALS
                   )}{" "}
@@ -221,7 +225,7 @@ const DepositTab = ({
             </div>
             <Row>
               <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-                <AssetStats assetId={selectedAssetId} />
+                <AssetStats assetId={selectedAssetId} pool={pool} />
               </Col>
             </Row>
             <div className="assets-form-btn">
