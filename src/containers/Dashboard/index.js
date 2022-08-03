@@ -1,4 +1,4 @@
-import { Button, message } from "antd";
+import { Button, message, Skeleton } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import * as PropTypes from "prop-types";
@@ -25,11 +25,16 @@ import "./index.less";
 
 const Dashboard = ({ isDarkMode, markets, assetMap }) => {
   const [depositStats, setDepositStats] = useState();
+  const [depositsInProgress, setDepositsInProgress] = useState();
   const [borrowStats, setBorrowStats] = useState();
+  const [borrowsInProgress, setBorrowsInProgress] = useState();
   const [userDepositStats, setUserDepositStats] = useState();
 
   useEffect(() => {
+    setDepositsInProgress(true);
+    setBorrowsInProgress(true);
     queryDepositStats((error, result) => {
+      setDepositsInProgress(false);
       if (error) {
         message.error(error);
         return;
@@ -47,6 +52,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
       setUserDepositStats(result?.UserDepositStats?.balanceStats);
     });
     queryBorrowStats((error, result) => {
+      setBorrowsInProgress(false);
       if (error) {
         message.error(error);
         return;
@@ -227,6 +233,11 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
     ],
   };
 
+  const showSkeletonLoader = () => {
+    return [...Array(NUMBER_OF_TOP_ASSETS)].map((item) => (
+      <Skeleton.Input key={item} active size="small" className="mb-1" />
+    ));
+  };
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -364,7 +375,9 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                             </li>
                           );
                         })
-                      : null}
+                      : borrowsInProgress
+                      ? showSkeletonLoader()
+                      : ""}
                   </ul>
                 </div>
                 <div className="deposited-list">
@@ -386,11 +399,15 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                                   assetMap[item?.assetId]?.denom
                                 )}
                               </div>
-                              <AverageAssetApy assetId={item?.assetId} />
+                              <b>
+                                <AverageAssetApy assetId={item?.assetId} />
+                              </b>
                             </li>
                           );
                         })
-                      : null}
+                      : depositsInProgress
+                      ? showSkeletonLoader()
+                      : ""}
                   </ul>
                 </div>
               </div>
