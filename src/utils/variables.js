@@ -5,6 +5,8 @@ const variables = {
     myhome: "My Home",
     asset: "Asset",
     market: "Market",
+    lend: "Lend",
+    borrow: "Borrow",
     govern: "Govern",
     auction: "Auction",
     airdrop: "Airdrop",

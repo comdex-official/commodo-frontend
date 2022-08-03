@@ -10,6 +10,7 @@ import {
 import { queryLendPools } from "../../../services/lend/query";
 import { denomConversion } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
+import '../index.less';
 import { columns } from "./data";
 
 const Supply = ({ assetMap }) => {
