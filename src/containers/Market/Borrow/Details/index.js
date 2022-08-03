@@ -50,7 +50,7 @@ const BorrowDetails = ({ address, setPool, setPoolLends }) => {
     <div className="app-content-wrapper">
       <Row>
         <Col className="text-right mb-3">
-          <Link to="/market">
+          <Link to="/borrow">
             <Button className="back-btn" type="primary">
               Back
             </Button>

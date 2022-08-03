@@ -10,7 +10,9 @@ import {
 import { queryLendPools } from "../../../services/lend/query";
 import { denomConversion } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
+import '../index.less';
 import { columns } from "./data";
+
 
 const Borrow = ({ assetMap }) => {
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
