@@ -33,6 +33,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
   useEffect(() => {
     setDepositsInProgress(true);
     setBorrowsInProgress(true);
+
     queryDepositStats((error, result) => {
       setDepositsInProgress(false);
       if (error) {
@@ -51,6 +52,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
 
       setUserDepositStats(result?.UserDepositStats?.balanceStats);
     });
+    
     queryBorrowStats((error, result) => {
       setBorrowsInProgress(false);
       if (error) {
@@ -238,6 +240,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
       <Skeleton.Input key={item} active size="small" className="mb-1" />
     ));
   };
+  
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -377,7 +380,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                         })
                       : borrowsInProgress
                       ? showSkeletonLoader()
-                      : ""}
+                      : "No data"}
                   </ul>
                 </div>
                 <div className="deposited-list">
