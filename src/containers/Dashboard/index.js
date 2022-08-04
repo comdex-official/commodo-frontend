@@ -326,6 +326,48 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                     />
                     <div className="assets-section">
                       <div className="assets-left">
+                        <p>A seamless borrowing and lending platform</p>
+                        <div className="mt-2">
+                          <ul className="static-list">
+                            <li>
+                              <label>#cPools</label>
+                              <p>78</p>
+                            </li>
+                            <li>
+                              <label>#Reserves</label>
+                              <p>$1.00M</p>
+                            </li>
+                            <li>
+                              <label>#Lenders</label>
+                              <p>4,128</p>
+                            </li>
+                            <li>
+                              <label>#Borrowers</label>
+                              <p>697</p>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="assets-right">
+                        <img
+                          className="commodo-logo"
+                          src={LogoIcon}
+                          alt={LogoIcon}
+                        />
+                        <h2>COMMODO</h2>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="commodo-launch-card-inner">
+                    <img
+                      className="launch-bg"
+                      alt="CMDO Token Launch"
+                      src={LaunchImage}
+                    />
+                    <div className="assets-section">
+                      <div className="assets-left">
                         <p>
                           Provide liquidity on CMDX-CMST pool on CSWAP to earn
                           external incentives on COMMODO
@@ -358,48 +400,6 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                             Take me there!
                           </a>
                         </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div className="commodo-launch-card-inner">
-                    <img
-                      className="launch-bg"
-                      alt="CMDO Token Launch"
-                      src={LaunchImage}
-                    />
-                    <div className="assets-section">
-                      <div className="assets-left">
-                        <p>A seamless borrowing and lending platform</p>
-                        <div className="mt-2">
-                          <ul className="static-list">
-                            <li>
-                              <label>#cPools</label>
-                              <p>78</p>
-                            </li>
-                            <li>
-                              <label>#Reserves</label>
-                              <p>$1.00M</p>
-                            </li>
-                            <li>
-                              <label>#Lenders</label>
-                              <p>4,128</p>
-                            </li>
-                            <li>
-                              <label>#Borrowers</label>
-                              <p>697</p>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                      <div className="assets-right">
-                        <img
-                          className="commodo-logo"
-                          src={LogoIcon}
-                          alt={LogoIcon}
-                        />
-                        <h2>COMMODO</h2>
                       </div>
                     </div>
                   </div>

@@ -38,12 +38,12 @@ const Borrow = ({ userBorrowList, inProgress }) => {
     {
       title: (
         <>
-          Health <TooltipIcon text="Liquidation at <1.0" />
+          Health Factor <TooltipIcon text="Numeric representation of your position's safety. Liquidation at H.F<1.0" />
         </>
       ),
       dataIndex: "health",
       key: "health",
-      width: 100,
+      width: 130,
       align: "center",
       render: (item) => <HealthFactor parent="table" borrow={item} />,
     },

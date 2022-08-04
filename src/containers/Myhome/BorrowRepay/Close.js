@@ -1,7 +1,7 @@
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
-import { Col, Row } from "../../../components/common";
+import { Col, Row, TooltipIcon } from "../../../components/common";
 import Details from "../../../components/common/Asset/Details";
 import HealthFactor from "../../../components/HealthFactor";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
@@ -80,6 +80,7 @@ const CloseTab = ({
             <Row className="mt-2">
               <Col>
                 <label>Health Factor</label>
+                <TooltipIcon text="Numeric representation of your position's safety" />
               </Col>
               <Col className="text-right">
                 <HealthFactor
