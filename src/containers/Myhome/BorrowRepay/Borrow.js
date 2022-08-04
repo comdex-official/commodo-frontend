@@ -113,7 +113,7 @@ const BorrowTab = ({
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <CustomRow assetList={assetList} poolId={pool?.poolId?.low}/>
+        <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
         <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="left-label">
@@ -161,7 +161,9 @@ const BorrowTab = ({
               <span className="ml-1">
                 {amountConversionWithComma(
                   borrowPosition?.lendingId && pair?.assetOutPoolId
-                    ? borrowable
+                    ? borrowable >= 0
+                      ? borrowable
+                      : 0
                     : 0
                 )}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
@@ -196,58 +198,60 @@ const BorrowTab = ({
         </div>
         <Row>
           <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-            <HealthFactor
-              borrow={borrowPosition}
-              pair={pair}
-              pool={pool}
-              inAmount={borrowPosition?.amountIn?.amount}
-              outAmount={
-                amount
-                  ? Number(borrowPosition?.amountOut?.amount) +
-                    Number(getAmount(amount))
-                  : borrowPosition?.amountOut?.amount
-              }
-            />
-            <Row>
-              <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-                <Row className="mt-2">
-                  <Col>
-                    <label>Current LTV</label>
-                  </Col>
-                  <Col className="text-right">
-                    {(isFinite(currentLTV) ? currentLTV : 0).toFixed(
-                      DOLLAR_DECIMALS
-                    )}
-                    %
-                  </Col>
-                </Row>
-                <Row className="mt-2">
-                  <Col>
-                    <label>Max LTV</label>
-                  </Col>
-                  <Col className="text-right">
-                    {pair?.isInterPool
-                      ? Number(
-                          Number(
-                            decimalConversion(
-                              assetRatesStatsMap[pair?.assetIn]?.ltv
-                            )
-                          ) *
-                            Number(
-                              decimalConversion(
-                                assetRatesStatsMap[pool?.firstBridgedAssetId]
-                                  ?.ltv
-                              )
-                            ) *
-                            100
-                        ).toFixed(DOLLAR_DECIMALS)
-                      : Number(
+            <Row className="mt-2">
+              <Col>
+                <label>Health Factor</label>
+              </Col>
+              <Col className="text-right">
+                  <HealthFactor
+                    borrow={borrowPosition}
+                    pair={pair}
+                    pool={pool}
+                    inAmount={borrowPosition?.amountIn?.amount}
+                    outAmount={
+                      amount
+                        ? Number(borrowPosition?.amountOut?.amount) +
+                          Number(getAmount(amount))
+                        : borrowPosition?.amountOut?.amount
+                    }
+                  />
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <label>Current LTV</label>
+              </Col>
+              <Col className="text-right">
+                {(isFinite(currentLTV) ? currentLTV : 0).toFixed(
+                  DOLLAR_DECIMALS
+                )}
+                %
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <label>Max LTV</label>
+              </Col>
+              <Col className="text-right">
+                {pair?.isInterPool
+                  ? Number(
+                      Number(
+                        decimalConversion(
+                          assetRatesStatsMap[pair?.assetIn]?.ltv
+                        )
+                      ) *
+                        Number(
                           decimalConversion(
-                            assetRatesStatsMap[pair?.assetIn]?.ltv
-                          ) * 100
-                        ).toFixed(DOLLAR_DECIMALS)}
-                  </Col>
-                </Row>
+                            assetRatesStatsMap[pool?.firstBridgedAssetId]?.ltv
+                          )
+                        ) *
+                        100
+                    ).toFixed(DOLLAR_DECIMALS)
+                  : Number(
+                      decimalConversion(
+                        assetRatesStatsMap[pair?.assetIn]?.ltv
+                      ) * 100
+                    ).toFixed(DOLLAR_DECIMALS)}
               </Col>
             </Row>
           </Col>

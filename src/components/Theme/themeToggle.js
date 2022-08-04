@@ -1,7 +1,6 @@
 import * as PropTypes from "prop-types";
-import { SvgIcon } from "../common";
-import { connect } from "react-redux";
 import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import { setDarkTheme } from "../../actions/theme";
 
 const ThemeToggle = ({ isDarkMode, setDarkTheme }) => {
@@ -29,15 +28,13 @@ const ThemeToggle = ({ isDarkMode, setDarkTheme }) => {
     localStorage.setItem("isDarkMode", !isDarkMode);
   };
 
-  return (
-    <div className="theme-toogle"/>
-  );
+  return <div className="theme-toogle" />;
 };
 
 ThemeToggle.propTypes = {
   setDarkTheme: PropTypes.func.isRequired,
-  isDarkMode: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
+  isDarkMode: PropTypes.bool,
 };
 
 const stateToProps = (state) => {

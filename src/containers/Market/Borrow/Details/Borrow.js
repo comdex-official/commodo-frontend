@@ -100,7 +100,10 @@ const BorrowTab = ({
 
     if (selectedLend?.assetId) {
       setLend(selectedLend);
+      setInAmount(0);
+      setValidationError();
       setExtendedPairs();
+
       queryAssetPairs(
         selectedLend?.assetId,
         selectedLend?.poolId,
@@ -394,7 +397,9 @@ const BorrowTab = ({
                   <div className="label-right">
                     Borrowable
                     <span className="ml-1">
-                      {amountConversionWithComma(borrowableBalance)}{" "}
+                      {amountConversionWithComma(
+                        borrowableBalance >= 0 ? borrowableBalance : 0
+                      )}{" "}
                       {denomConversion(borrowAssetDenom)}
                     </span>
                     <div className="max-half">
@@ -426,15 +431,22 @@ const BorrowTab = ({
                 </div>
               </div>
             </div>
-            <HealthFactor
-              name="Health Factor"
-              pair={pair}
-              inAmount={inAmount}
-              outAmount={outAmount}
-              pool={pool}
-            />
             <Row>
               <Col sm="12" className="mt-3 mx-auto card-bottom-details">
+                <Row className="mt-2">
+                  <Col>
+                    <label>Health Factor</label>
+                  </Col>
+                  <Col className="text-right">
+                    <HealthFactor
+                      name="Health Factor"
+                      pair={pair}
+                      inAmount={inAmount}
+                      outAmount={outAmount}
+                      pool={pool}
+                    />
+                  </Col>
+                </Row>
                 <Row className="mt-2">
                   <Col>
                     <label>Current LTV</label>

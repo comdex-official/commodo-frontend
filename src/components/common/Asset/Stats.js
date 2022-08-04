@@ -3,13 +3,16 @@ import { connect } from "react-redux";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { decimalConversion } from "../../../utils/number";
 import { Col, Row } from "../index";
+import TooltipIcon from "../TooltipIcon";
 
-const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool }) => {
+const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool, parent }) => {
   return (
     <>
       <Row className="mt-2">
         <Col>
-          <label>Max LTV</label>
+          <label>
+            Max LTV <TooltipIcon text="Loan to value of the collateral" />
+          </label>
         </Col>
         <Col className="text-right">
           {pair?.isInterPool
@@ -34,62 +37,76 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool }) => {
           %
         </Col>
       </Row>
-      <Row className="mt-2">
-        <Col>
-          <label>Liquidation Threshold</label>
-        </Col>
-        <Col className="text-right">
-          {pair?.isInterPool
-            ? Number(
-                Number(
-                  decimalConversion(
-                    assetRatesStatsMap[pair?.assetIn || assetId]
-                      ?.liquidationThreshold
-                  )
-                ) *
-                  Number(
+      {parent !== "lend" ? (
+        <>
+          <Row className="mt-2">
+            <Col>
+              <label>
+                Liquidation Threshold{" "}
+                <TooltipIcon text="The % at which a loan is defined as under collateralised" />
+              </label>
+            </Col>
+            <Col className="text-right">
+              {pair?.isInterPool
+                ? Number(
+                    Number(
+                      decimalConversion(
+                        assetRatesStatsMap[pair?.assetIn || assetId]
+                          ?.liquidationThreshold
+                      )
+                    ) *
+                      Number(
+                        decimalConversion(
+                          assetRatesStatsMap[pool?.firstBridgedAssetId]
+                            ?.liquidationThreshold
+                        )
+                      ) *
+                      100
+                  ).toFixed(DOLLAR_DECIMALS)
+                : Number(
                     decimalConversion(
-                      assetRatesStatsMap[pool?.firstBridgedAssetId]
+                      assetRatesStatsMap[pair?.assetIn || assetId]
                         ?.liquidationThreshold
-                    )
-                  ) *
-                  100
-              ).toFixed(DOLLAR_DECIMALS)
-            : Number(
+                    ) * 100
+                  ).toFixed(DOLLAR_DECIMALS)}
+              %
+            </Col>
+          </Row>
+          <Row className="mt-2">
+            <Col>
+              <label>
+                Liquidation Penalty{" "}
+                <TooltipIcon text="Fee paid by Vault owners on liquidation" />
+              </label>
+            </Col>
+            <Col className="text-right">
+              {Number(
                 decimalConversion(
                   assetRatesStatsMap[pair?.assetIn || assetId]
-                    ?.liquidationThreshold
+                    ?.liquidationPenalty
                 ) * 100
               ).toFixed(DOLLAR_DECIMALS)}
-          %
-        </Col>
-      </Row>
-      <Row className="mt-2">
-        <Col>
-          <label>Liquidation Penalty</label>
-        </Col>
-        <Col className="text-right">
-          {Number(
-            decimalConversion(
-              assetRatesStatsMap[pair?.assetIn || assetId]?.liquidationPenalty
-            ) * 100
-          ).toFixed(DOLLAR_DECIMALS)}
-          %
-        </Col>
-      </Row>
-      <Row className="mt-2">
-        <Col>
-          <label>Liquidation Bonus</label>
-        </Col>
-        <Col className="text-right">
-          {Number(
-            decimalConversion(
-              assetRatesStatsMap[pair?.assetIn || assetId]?.liquidationBonus
-            ) * 100
-          ).toFixed(DOLLAR_DECIMALS)}
-          %
-        </Col>
-      </Row>
+              %
+            </Col>
+          </Row>
+          <Row className="mt-2">
+            <Col>
+              <label>
+                Liquidation Bonus{" "}
+                <TooltipIcon text="Discount on the collateral unlocked to liquidators" />
+              </label>
+            </Col>
+            <Col className="text-right">
+              {Number(
+                decimalConversion(
+                  assetRatesStatsMap[pair?.assetIn || assetId]?.liquidationBonus
+                ) * 100
+              ).toFixed(DOLLAR_DECIMALS)}
+              %
+            </Col>
+          </Row>
+        </>
+      ) : null}
     </>
   );
 };
@@ -110,6 +127,7 @@ AssetStats.propTypes = {
       low: PropTypes.number,
     }),
   }),
+  parent: PropTypes.string,
   pool: PropTypes.shape({
     poolId: PropTypes.shape({
       low: PropTypes.number,

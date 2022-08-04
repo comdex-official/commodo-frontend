@@ -10,9 +10,8 @@ import {
 import { queryLendPools } from "../../../services/lend/query";
 import { denomConversion } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
-import '../index.less';
+import "../index.less";
 import { columns } from "./data";
-
 
 const Borrow = ({ assetMap }) => {
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
@@ -118,7 +117,7 @@ const Borrow = ({ assetMap }) => {
 
   return (
     <div className="commodo-card bg-none">
-      <div className="card-header">AssetS to BORROW</div>
+      <div className="card-header">Borrow Markets</div>
       <div className="card-content">
         <Table
           className="custom-table market-table1"

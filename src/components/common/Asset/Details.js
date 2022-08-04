@@ -51,7 +51,7 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
 
   let data = [
     {
-      title: parent === "lend" ? "Total Deposited" : "Total Borrowed",
+      title: parent === "lend" ? "Deposited" : "Borrowed",
       counts: `$${amountConversionWithComma(
         Number(
           (parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0

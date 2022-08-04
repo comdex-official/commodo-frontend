@@ -64,6 +64,8 @@ const DepositTab = ({
 
   const handleAssetChange = (value) => {
     setSelectedAssetId(value);
+    setAmount(0);
+    setValidationError();
   };
 
   const handleInputChange = (value) => {
@@ -236,7 +238,7 @@ const DepositTab = ({
                 disabled={!Number(amount) || inProgress || !selectedAssetId}
                 onClick={handleClick}
               >
-                Deposit
+                Lend
               </Button>
             </div>
           </div>

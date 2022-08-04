@@ -177,18 +177,25 @@ const RepayTab = ({
                 </small>
               </Col>
             </Row>
-            <HealthFactor
-              borrow={borrowPosition}
-              pair={pair}
-              pool={pool}
-              inAmount={borrowPosition?.amountIn?.amount}
-              outAmount={
-                amount
-                  ? Number(borrowPosition?.updatedAmountOut) -
-                    Number(getAmount(amount))
-                  : borrowPosition?.updatedAmountOut
-              }
-            />{" "}
+            <Row className="mt-2">
+              <Col>
+                <label>Health Factor</label>
+              </Col>
+              <Col className="text-right">
+                <HealthFactor
+                  borrow={borrowPosition}
+                  pair={pair}
+                  pool={pool}
+                  inAmount={borrowPosition?.amountIn?.amount}
+                  outAmount={
+                    amount
+                      ? Number(borrowPosition?.updatedAmountOut) -
+                        Number(getAmount(amount))
+                      : borrowPosition?.updatedAmountOut
+                  }
+                />{" "}
+              </Col>
+            </Row>
             <AssetStats pair={pair} pool={pool} />
           </Col>
         </Row>
