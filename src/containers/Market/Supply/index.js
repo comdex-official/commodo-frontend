@@ -10,7 +10,7 @@ import {
 import { queryLendPools } from "../../../services/lend/query";
 import { denomConversion } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
-import '../index.less';
+import "../index.less";
 import { columns } from "./data";
 
 const Supply = ({ assetMap }) => {
@@ -117,7 +117,7 @@ const Supply = ({ assetMap }) => {
 
   return (
     <div className="commodo-card bg-none">
-      <div className="card-header">Assets to supply</div>
+      <div className="card-header">Lend Markets</div>
       <div className="card-content">
         <Table
           className="custom-table market-table1"

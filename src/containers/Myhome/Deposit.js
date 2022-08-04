@@ -16,7 +16,7 @@ const Deposit = ({ userLendList, inProgress }) => {
       title: "Asset",
       dataIndex: "asset",
       key: "asset",
-      width: 180,
+      width: 150,
     },
     {
       title: (

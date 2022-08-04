@@ -99,12 +99,7 @@ const HealthFactor = ({
   return (
     <>
       {parent === "table" ? (
-        <Progress
-          className={"health-progress"}
-          format={(percent) => percent}
-          percent={Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}
-          size={size ? size : "small"}
-        />
+        <b>{Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}</b>
       ) : (
         <>
           <Row className="mt-2">

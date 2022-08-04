@@ -17,7 +17,7 @@ const Borrow = ({ userBorrowList, inProgress }) => {
       title: "Asset",
       dataIndex: "asset",
       key: "asset",
-      width: 180,
+      width: 150,
     },
     {
       title: (
@@ -27,34 +27,38 @@ const Borrow = ({ userBorrowList, inProgress }) => {
       ),
       dataIndex: "debt",
       key: "debt",
-      width: 150,
+      width: 200,
     },
     {
       title: "Collateral",
       dataIndex: "collateral",
       key: "collateral",
-      width: 180,
+      width: 200,
+    },
+    {
+      title: (
+        <>
+          Health <TooltipIcon text="Liquidation at <1.0" />
+        </>
+      ),
+      dataIndex: "health",
+      key: "health",
+      width: 100,
+      align: "center",
+      render: (item) => <HealthFactor parent="table" borrow={item} />,
     },
     {
       title: "APY",
       dataIndex: "apy",
       key: "apy",
-      width: 110,
+      width: 100,
       render: (borrow) => <AssetApy borrowPosition={borrow} parent="borrow" />,
     },
     {
       title: "Interest",
       dataIndex: "interest",
       key: "interest",
-      width: 200,
-    },
-    {
-      title: "Health",
-      dataIndex: "health",
-      key: "health",
-      width: 300,
-      align: "center",
-      render: (item) => <HealthFactor parent="table" borrow={item} />,
+      width: 150,
     },
     {
       title: "",
