@@ -39,7 +39,7 @@ export const tabsList = [
     name: "Govern",
     value: "govern",
     langKey: "govern",
-    index: 5,
+    index: 6,
   },
   // {
   //   name: "Airdrop",

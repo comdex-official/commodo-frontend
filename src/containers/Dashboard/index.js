@@ -4,8 +4,11 @@ import HighchartsReact from "highcharts-react-official";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import Slider from "react-slick";
 import AssetsIcon from "../../assets/images/assets-icon.png";
 import LaunchImage from "../../assets/images/launch-bg.jpg";
+import LogoIcon from "../../assets/images/logo-icon.svg";
+import "../../assets/less/plugins/slick-slider/slick.less";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { DOLLAR_DECIMALS, NUMBER_OF_TOP_ASSETS } from "../../constants/common";
 import {
@@ -21,11 +24,7 @@ import {
 import { marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import AverageAssetApy from "./AverageAssetApy";
-import Slider from "react-slick";
-import "../../assets/less/plugins/slick-slider/slick.less";
 import "./index.less";
-
-import LogoIcon from "../../assets/images/logo-icon.svg";
 
 const Dashboard = ({ isDarkMode, markets, assetMap }) => {
   const [depositStats, setDepositStats] = useState();
@@ -56,7 +55,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
 
       setUserDepositStats(result?.UserDepositStats?.balanceStats);
     });
-    
+
     queryBorrowStats((error, result) => {
       setBorrowsInProgress(false);
       if (error) {
@@ -240,11 +239,11 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
   };
 
   const showSkeletonLoader = () => {
-    return [...Array(NUMBER_OF_TOP_ASSETS)].map((item) => (
-      <Skeleton.Input key={item} active size="small" className="mb-1" />
+    return [...Array(NUMBER_OF_TOP_ASSETS)].map((item, index) => (
+      <Skeleton.Input key={index} active size="small" className="mb-1" />
     ));
   };
-  
+
   var settings = {
     dots: true,
     infinite: true,
@@ -252,7 +251,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 2000
+    autoplaySpeed: 2000,
   };
 
   return (
@@ -319,89 +318,91 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
             <div className="commodo-card commodo-launch-card">
               <Slider {...settings}>
                 <div>
-                    <div className="commodo-launch-card-inner">
-                      <img
-                        className="launch-bg"
-                        alt="CMDO Token Launch"
-                        src={LaunchImage}
-                      />
-                      <div className="assets-section">
-                        <div className="assets-left">
-                          <p>
-                            Provide liquidity on CMDX-CMST pool on CSWAP to earn
-                            external incentives on COMMODO
-                          </p>
-                          <div className="mt-3">
-                            <div className="small-icons mb-2">
-                              <div className="icon-col mr-2">
-                                <SvgIcon name="cmst-icon" />
-                                CMST
-                              </div>{" "}
-                              -
-                              <div className="icon-col ml-2">
-                                <SvgIcon name="cmdx-icon" /> CMDX
-                              </div>
+                  <div className="commodo-launch-card-inner">
+                    <img
+                      className="launch-bg"
+                      alt="CMDO Token Launch"
+                      src={LaunchImage}
+                    />
+                    <div className="assets-section">
+                      <div className="assets-left">
+                        <p>
+                          Provide liquidity on CMDX-CMST pool on CSWAP to earn
+                          external incentives on COMMODO
+                        </p>
+                        <div className="mt-3">
+                          <div className="small-icons mb-2">
+                            <div className="icon-col mr-2">
+                              <SvgIcon name="cmst-icon" />
+                              CMST
+                            </div>{" "}
+                            -
+                            <div className="icon-col ml-2">
+                              <SvgIcon name="cmdx-icon" /> CMDX
                             </div>
-                            <h3 className="h3-botttom">
-                              300% <small>APR</small>
-                            </h3>
                           </div>
-                        </div>
-                        <div className="assets-right">
-                          <img alt={AssetsIcon} src={AssetsIcon} />
-                          <Button type="primary" className="btn-filled">
-                            <a
-                              aria-label="cswap"
-                              target="_blank"
-                              rel="noreferrer"
-                              href="https://staging.cswap.one/"
-                            >
-                              Take me there!
-                            </a>
-                          </Button>
+                          <h3 className="h3-botttom">
+                            300% <small>APR</small>
+                          </h3>
                         </div>
                       </div>
+                      <div className="assets-right">
+                        <img alt={AssetsIcon} src={AssetsIcon} />
+                        <Button type="primary" className="btn-filled">
+                          <a
+                            aria-label="cswap"
+                            target="_blank"
+                            rel="noreferrer"
+                            href="https://staging.cswap.one/"
+                          >
+                            Take me there!
+                          </a>
+                        </Button>
+                      </div>
                     </div>
+                  </div>
                 </div>
                 <div>
-                    <div className="commodo-launch-card-inner">
-                      <img
-                        className="launch-bg"
-                        alt="CMDO Token Launch"
-                        src={LaunchImage}
-                      />
-                      <div className="assets-section">
-                        <div className="assets-left">
-                          <p>
-                            A seamless borrowing and lending platform
-                          </p>
-                          <div className="mt-2">
-                            <ul className="static-list">
-                              <li>
-                                <label>#cPools</label>
-                                <p>78</p>
-                              </li>
-                              <li>
-                                <label>#Reserves</label>
-                                <p>$1.00M</p>
-                              </li>
-                              <li>
-                                <label>#Lenders</label>
-                                <p>4,128</p>
-                              </li>
-                              <li>
-                                <label>#Borrowers</label>
-                                <p>697</p>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div className="assets-right">
-                          <img className="commodo-logo" src={LogoIcon} alt={LogoIcon} />
-                          <h2>COMMODO</h2>
+                  <div className="commodo-launch-card-inner">
+                    <img
+                      className="launch-bg"
+                      alt="CMDO Token Launch"
+                      src={LaunchImage}
+                    />
+                    <div className="assets-section">
+                      <div className="assets-left">
+                        <p>A seamless borrowing and lending platform</p>
+                        <div className="mt-2">
+                          <ul className="static-list">
+                            <li>
+                              <label>#cPools</label>
+                              <p>78</p>
+                            </li>
+                            <li>
+                              <label>#Reserves</label>
+                              <p>$1.00M</p>
+                            </li>
+                            <li>
+                              <label>#Lenders</label>
+                              <p>4,128</p>
+                            </li>
+                            <li>
+                              <label>#Borrowers</label>
+                              <p>697</p>
+                            </li>
+                          </ul>
                         </div>
                       </div>
+                      <div className="assets-right">
+                        <img
+                          className="commodo-logo"
+                          src={LogoIcon}
+                          alt={LogoIcon}
+                        />
+                        <h2>COMMODO</h2>
+                      </div>
                     </div>
+                  </div>
                 </div>
               </Slider>
             </div>
@@ -414,7 +415,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                     {topDepositAssets?.length > 0
                       ? topDepositAssets?.map((item) => {
                           return (
-                            <li>
+                            <li key={item?.assetId}>
                               <div className="assets-col">
                                 <div className="assets-icon">
                                   <SvgIcon
@@ -447,7 +448,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                     {topBorrowAssets?.length > 0
                       ? topBorrowAssets?.map((item) => {
                           return (
-                            <li>
+                            <li key={item?.assetId}>
                               <div className="assets-col">
                                 <div className="assets-icon">
                                   <SvgIcon
@@ -531,9 +532,9 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
 };
 
 Dashboard.propTypes = {
-  isDarkMode: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
   assetMap: PropTypes.object,
+  isDarkMode: PropTypes.bool,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
