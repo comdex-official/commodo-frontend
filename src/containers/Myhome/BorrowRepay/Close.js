@@ -80,6 +80,7 @@ const CloseTab = ({
             <Row className="mt-2">
               <Col>
                 <label>Health Factor</label>
+                <TooltipIcon text="Numeric representation of your position's safety" />
               </Col>
               <Col className="text-right">
                 <HealthFactor

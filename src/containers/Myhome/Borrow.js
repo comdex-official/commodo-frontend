@@ -38,7 +38,7 @@ const Borrow = ({ userBorrowList, inProgress }) => {
     {
       title: (
         <>
-          Health <TooltipIcon text="Liquidation at <1.0" />
+          Health <TooltipIcon text="Numeric representation of your position's safety. Liquidation at <1.0" />
         </>
       ),
       dataIndex: "health",
