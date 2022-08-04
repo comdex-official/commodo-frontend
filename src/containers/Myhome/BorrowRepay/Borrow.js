@@ -113,7 +113,7 @@ const BorrowTab = ({
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <CustomRow assetList={assetList} poolId={pool?.poolId?.low}/>
+        <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
         <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="left-label">
@@ -161,7 +161,9 @@ const BorrowTab = ({
               <span className="ml-1">
                 {amountConversionWithComma(
                   borrowPosition?.lendingId && pair?.assetOutPoolId
-                    ? borrowable
+                    ? borrowable >= 0
+                      ? borrowable
+                      : 0
                     : 0
                 )}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
