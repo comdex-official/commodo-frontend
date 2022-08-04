@@ -141,7 +141,7 @@ const DepositTab = ({
             <div className="assets-select-card mb-0">
               <div className="assets-left">
                 <label className="left-label">
-                  Deposit <TooltipIcon text="" />
+                  Lend <TooltipIcon text="" />
                 </label>
                 <div className="assets-select-wrapper">
                   <Select
@@ -227,7 +227,11 @@ const DepositTab = ({
             </div>
             <Row>
               <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-                <AssetStats assetId={selectedAssetId} pool={pool} />
+                <AssetStats
+                  assetId={selectedAssetId}
+                  pool={pool}
+                  parent="lend"
+                />
               </Col>
             </Row>
             <div className="assets-form-btn">

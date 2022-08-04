@@ -6,6 +6,7 @@ import { setBalanceRefresh } from "../../../actions/account";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
+import AssetStats from '../../../components/common/Asset/Stats';
 import CustomInput from "../../../components/CustomInput";
 import HealthFactor from "../../../components/HealthFactor";
 import { ValidateInputNumber } from "../../../config/_validation";
@@ -17,9 +18,7 @@ import {
   getAmount
 } from "../../../utils/coin";
 import {
-  commaSeparator,
-  decimalConversion,
-  marketPrice
+  commaSeparator, marketPrice
 } from "../../../utils/number";
 import {
   iconNameFromDenom,
@@ -28,8 +27,6 @@ import {
 } from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
-
-const { Option } = Select;
 
 const DepositTab = ({
   lang,
@@ -212,33 +209,7 @@ const DepositTab = ({
                     %
                   </Col>
                 </Row>
-                <Row className="mt-2">
-                  <Col>
-                    <label>Max LTV</label>
-                  </Col>
-                  <Col className="text-right">
-                    {pair?.isInterPool
-                      ? Number(
-                          Number(
-                            decimalConversion(
-                              assetRatesStatsMap[pair?.assetIn]?.ltv
-                            )
-                          ) *
-                            Number(
-                              decimalConversion(
-                                assetRatesStatsMap[pool?.firstBridgedAssetId]
-                                  ?.ltv
-                              )
-                            ) *
-                            100
-                        ).toFixed(DOLLAR_DECIMALS)
-                      : Number(
-                          decimalConversion(
-                            assetRatesStatsMap[pair?.assetIn]?.ltv
-                          ) * 100
-                        ).toFixed(DOLLAR_DECIMALS)}
-                  </Col>
-                </Row>
+                <AssetStats pair={pair} pool={pool} />
               </Col>
             </Row>
           </Col>

@@ -1,7 +1,7 @@
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
-import { Col, Row } from "../../../components/common";
+import { Col, Row, TooltipIcon } from "../../../components/common";
 import Details from "../../../components/common/Asset/Details";
 import HealthFactor from "../../../components/HealthFactor";
 import { DOLLAR_DECIMALS } from "../../../constants/common";

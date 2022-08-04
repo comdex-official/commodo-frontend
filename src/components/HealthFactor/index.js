@@ -113,7 +113,7 @@ HealthFactor.propTypes = {
   assetMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
   borrow: PropTypes.object,
-  inAmount: PropTypes.string,
+  inAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
@@ -132,7 +132,7 @@ HealthFactor.propTypes = {
       low: PropTypes.number,
     }),
   }),
-  outAmount: PropTypes.string,
+  outAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 const stateToProps = (state) => {
