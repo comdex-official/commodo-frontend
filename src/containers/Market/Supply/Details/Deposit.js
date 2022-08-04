@@ -64,6 +64,8 @@ const DepositTab = ({
 
   const handleAssetChange = (value) => {
     setSelectedAssetId(value);
+    setAmount(0);
+    setValidationError();
   };
 
   const handleInputChange = (value) => {
