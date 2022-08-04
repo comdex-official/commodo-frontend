@@ -21,7 +21,11 @@ import {
 import { marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import AverageAssetApy from "./AverageAssetApy";
+import Slider from "react-slick";
+import "../../assets/less/plugins/slick-slider/slick.less";
 import "./index.less";
+
+import LogoIcon from "../../assets/images/logo-icon.svg";
 
 const Dashboard = ({ isDarkMode, markets, assetMap }) => {
   const [depositStats, setDepositStats] = useState();
@@ -241,6 +245,16 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
     ));
   };
   
+  var settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000
+  };
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -303,49 +317,93 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
           </div>
           <div className="dashboard-upper-right">
             <div className="commodo-card commodo-launch-card">
-              <div className="commodo-launch-card-inner">
-                <img
-                  className="launch-bg"
-                  alt="CMDO Token Launch"
-                  src={LaunchImage}
-                />
-                <div className="assets-section">
-                  <div className="assets-left">
-                    <p>
-                      Provide liquidity on CMDX-CMST pool on CSWAP to earn
-                      external incentives on COMMODO
-                    </p>
-                    <div className="mt-3">
-                      <div className="small-icons mb-2">
-                        <div className="icon-col mr-2">
-                          <SvgIcon name="cmst-icon" />
-                          CMST
-                        </div>{" "}
-                        -
-                        <div className="icon-col ml-2">
-                          <SvgIcon name="cmdx-icon" /> CMDX
+              <Slider {...settings}>
+                <div>
+                    <div className="commodo-launch-card-inner">
+                      <img
+                        className="launch-bg"
+                        alt="CMDO Token Launch"
+                        src={LaunchImage}
+                      />
+                      <div className="assets-section">
+                        <div className="assets-left">
+                          <p>
+                            Provide liquidity on CMDX-CMST pool on CSWAP to earn
+                            external incentives on COMMODO
+                          </p>
+                          <div className="mt-3">
+                            <div className="small-icons mb-2">
+                              <div className="icon-col mr-2">
+                                <SvgIcon name="cmst-icon" />
+                                CMST
+                              </div>{" "}
+                              -
+                              <div className="icon-col ml-2">
+                                <SvgIcon name="cmdx-icon" /> CMDX
+                              </div>
+                            </div>
+                            <h3 className="h3-botttom">
+                              300% <small>APR</small>
+                            </h3>
+                          </div>
+                        </div>
+                        <div className="assets-right">
+                          <img alt={AssetsIcon} src={AssetsIcon} />
+                          <Button type="primary" className="btn-filled">
+                            <a
+                              aria-label="cswap"
+                              target="_blank"
+                              rel="noreferrer"
+                              href="https://staging.cswap.one/"
+                            >
+                              Take me there!
+                            </a>
+                          </Button>
                         </div>
                       </div>
-                      <h3 className="h3-botttom">
-                        300% <small>APR</small>
-                      </h3>
                     </div>
-                  </div>
-                  <div className="assets-right">
-                    <img alt={AssetsIcon} src={AssetsIcon} />
-                    <Button type="primary" className="btn-filled">
-                      <a
-                        aria-label="cswap"
-                        target="_blank"
-                        rel="noreferrer"
-                        href="https://staging.cswap.one/"
-                      >
-                        Take me there!
-                      </a>
-                    </Button>
-                  </div>
                 </div>
-              </div>
+                <div>
+                    <div className="commodo-launch-card-inner">
+                      <img
+                        className="launch-bg"
+                        alt="CMDO Token Launch"
+                        src={LaunchImage}
+                      />
+                      <div className="assets-section">
+                        <div className="assets-left">
+                          <p>
+                            A seamless borrowing and lending platform
+                          </p>
+                          <div className="mt-2">
+                            <ul className="static-list">
+                              <li>
+                                <label>#cPools</label>
+                                <p>78</p>
+                              </li>
+                              <li>
+                                <label>#Reserves</label>
+                                <p>$1.00M</p>
+                              </li>
+                              <li>
+                                <label>#Lenders</label>
+                                <p>4,128</p>
+                              </li>
+                              <li>
+                                <label>#Borrowers</label>
+                                <p>697</p>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div className="assets-right">
+                          <img className="commodo-logo" src={LogoIcon} alt={LogoIcon} />
+                          <h2>COMMODO</h2>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </Slider>
             </div>
             <div className="commodo-card top-three-assets">
               <div className="card-head">Top {NUMBER_OF_TOP_ASSETS} Assets</div>
