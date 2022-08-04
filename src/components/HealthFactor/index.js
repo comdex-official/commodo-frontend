@@ -102,7 +102,7 @@ const HealthFactor = ({
       ) : (
         <>
           <div>{Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}</div>
-          <small className="font-weight-light">{"Liquidation at <1.0"}</small>
+          <small className="font-weight-light">{"Liquidation at H.F<1.0"}</small>
         </>
       )}
     </>

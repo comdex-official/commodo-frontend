@@ -11,7 +11,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool, parent }) => {
       <Row className="mt-2">
         <Col>
           <label>
-            Max LTV <TooltipIcon text="Loan to value of the collateral" />
+            Max LTV <TooltipIcon text="The maximum borrowing power of the collateral" />
           </label>
         </Col>
         <Col className="text-right">
@@ -43,7 +43,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool, parent }) => {
             <Col>
               <label>
                 Liquidation Threshold{" "}
-                <TooltipIcon text="The % at which a loan is defined as under collateralised" />
+                <TooltipIcon text="The threshold at which a loan is defined as undercollateralised and subject to liquidation of collateral" />
               </label>
             </Col>
             <Col className="text-right">
@@ -76,7 +76,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool, parent }) => {
             <Col>
               <label>
                 Liquidation Penalty{" "}
-                <TooltipIcon text="Fee paid by Vault owners on liquidation" />
+                <TooltipIcon text="Fee paid by vault owners on liquidation" />
               </label>
             </Col>
             <Col className="text-right">
