@@ -431,15 +431,22 @@ const BorrowTab = ({
                 </div>
               </div>
             </div>
-            <HealthFactor
-              name="Health Factor"
-              pair={pair}
-              inAmount={inAmount}
-              outAmount={outAmount}
-              pool={pool}
-            />
             <Row>
               <Col sm="12" className="mt-3 mx-auto card-bottom-details">
+                <Row className="mt-2">
+                  <Col>
+                    <label>Health Factor</label>
+                  </Col>
+                  <Col className="text-right">
+                    <HealthFactor
+                      name="Health Factor"
+                      pair={pair}
+                      inAmount={inAmount}
+                      outAmount={outAmount}
+                      pool={pool}
+                    />
+                  </Col>
+                </Row>
                 <Row className="mt-2">
                   <Col>
                     <label>Current LTV</label>

@@ -77,13 +77,20 @@ const CloseTab = ({
                 </div>
               </Col>
             </Row>
-            <HealthFactor
-              borrow={borrowPosition}
-              pair={pair}
-              pool={pool}
-              inAmount={borrowPosition?.amountIn?.amount}
-              outAmount={Number(borrowPosition?.updatedAmountOut)}
-            />{" "}
+            <Row className="mt-2">
+              <Col>
+                <label>Health Factor</label>
+              </Col>
+              <Col className="text-right">
+                <HealthFactor
+                  borrow={borrowPosition}
+                  pair={pair}
+                  pool={pool}
+                  inAmount={borrowPosition?.amountIn?.amount}
+                  outAmount={Number(borrowPosition?.updatedAmountOut)}
+                />{" "}
+              </Col>
+            </Row>
           </Col>
         </Row>
         <div className="assets-form-btn">
