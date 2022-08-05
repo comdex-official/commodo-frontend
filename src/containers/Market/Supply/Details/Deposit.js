@@ -243,7 +243,12 @@ const DepositTab = ({
                 type="primary"
                 className="btn-filled"
                 loading={inProgress}
-                disabled={!Number(amount) || inProgress || !selectedAssetId}
+                disabled={
+                  !Number(amount) ||
+                  validationError?.message ||
+                  inProgress ||
+                  !selectedAssetId
+                }
                 onClick={handleClick}
               >
                 Lend
