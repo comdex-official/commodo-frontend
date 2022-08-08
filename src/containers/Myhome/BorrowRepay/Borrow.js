@@ -6,6 +6,7 @@ import { setBalanceRefresh } from "../../../actions/account";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
+import AssetStats from "../../../components/common/Asset/Stats";
 import CustomInput from "../../../components/CustomInput";
 import HealthFactor from "../../../components/HealthFactor";
 import { ValidateInputNumber } from "../../../config/_validation";
@@ -201,20 +202,21 @@ const BorrowTab = ({
             <Row className="mt-2">
               <Col>
                 <label>Health Factor</label>
+                <TooltipIcon text="Numeric representation of your position's safety" />
               </Col>
               <Col className="text-right">
-                  <HealthFactor
-                    borrow={borrowPosition}
-                    pair={pair}
-                    pool={pool}
-                    inAmount={borrowPosition?.amountIn?.amount}
-                    outAmount={
-                      amount
-                        ? Number(borrowPosition?.amountOut?.amount) +
-                          Number(getAmount(amount))
-                        : borrowPosition?.amountOut?.amount
-                    }
-                  />
+                <HealthFactor
+                  borrow={borrowPosition}
+                  pair={pair}
+                  pool={pool}
+                  inAmount={borrowPosition?.amountIn?.amount}
+                  outAmount={
+                    amount
+                      ? Number(borrowPosition?.amountOut?.amount) +
+                        Number(getAmount(amount))
+                      : borrowPosition?.amountOut?.amount
+                  }
+                />
               </Col>
             </Row>
             <Row className="mt-2">
@@ -228,32 +230,7 @@ const BorrowTab = ({
                 %
               </Col>
             </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Max LTV</label>
-              </Col>
-              <Col className="text-right">
-                {pair?.isInterPool
-                  ? Number(
-                      Number(
-                        decimalConversion(
-                          assetRatesStatsMap[pair?.assetIn]?.ltv
-                        )
-                      ) *
-                        Number(
-                          decimalConversion(
-                            assetRatesStatsMap[pool?.firstBridgedAssetId]?.ltv
-                          )
-                        ) *
-                        100
-                    ).toFixed(DOLLAR_DECIMALS)
-                  : Number(
-                      decimalConversion(
-                        assetRatesStatsMap[pair?.assetIn]?.ltv
-                      ) * 100
-                    ).toFixed(DOLLAR_DECIMALS)}
-              </Col>
-            </Row>
+            <AssetStats pair={pair} pool={pool} />
           </Col>
         </Row>
         <div className="assets-form-btn">

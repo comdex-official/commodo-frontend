@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
 import Details from "../../../../components/common/Asset/Details";
+import AssetStats from "../../../../components/common/Asset/Stats";
 import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
 import HealthFactor from "../../../../components/HealthFactor";
@@ -436,6 +437,7 @@ const BorrowTab = ({
                 <Row className="mt-2">
                   <Col>
                     <label>Health Factor</label>
+                    <TooltipIcon text="Numeric representation of your position's safety" />
                   </Col>
                   <Col className="text-right">
                     <HealthFactor
@@ -458,34 +460,7 @@ const BorrowTab = ({
                     %
                   </Col>
                 </Row>
-                <Row className="mt-2">
-                  <Col>
-                    <label>Max LTV</label>
-                  </Col>
-                  <Col className="text-right">
-                    {pair?.isInterPool
-                      ? Number(
-                          Number(
-                            decimalConversion(
-                              assetRatesStatsMap[lend?.assetId]?.ltv
-                            )
-                          ) *
-                            Number(
-                              decimalConversion(
-                                assetRatesStatsMap[pool?.firstBridgedAssetId]
-                                  ?.ltv
-                              )
-                            ) *
-                            100
-                        ).toFixed(DOLLAR_DECIMALS)
-                      : Number(
-                          decimalConversion(
-                            assetRatesStatsMap[lend?.assetId]?.ltv
-                          ) * 100
-                        ).toFixed(DOLLAR_DECIMALS)}
-                    %
-                  </Col>
-                </Row>
+                <AssetStats assetId={lend?.assetId} pool={pool} pair={pair} />
               </Col>
             </Row>
             <div className="assets-form-btn">

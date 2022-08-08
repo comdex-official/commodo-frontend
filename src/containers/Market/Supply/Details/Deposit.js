@@ -4,6 +4,7 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
+import { setBalanceRefresh } from "../../../../actions/account";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
 import Details from "../../../../components/common/Asset/Details";
@@ -41,6 +42,8 @@ const DepositTab = ({
   balances,
   address,
   markets,
+  setBalanceRefresh,
+  refreshBalance,
 }) => {
   const [assetList, setAssetList] = useState();
   const [selectedAssetId, setSelectedAssetId] = useState();
@@ -117,6 +120,7 @@ const DepositTab = ({
           />
         );
 
+        setBalanceRefresh(refreshBalance + 1);
         navigate("/myhome");
       }
     );
@@ -141,7 +145,7 @@ const DepositTab = ({
             <div className="assets-select-card mb-0">
               <div className="assets-left">
                 <label className="left-label">
-                  Deposit <TooltipIcon text="" />
+                  Lend <TooltipIcon text="" />
                 </label>
                 <div className="assets-select-wrapper">
                   <Select
@@ -227,7 +231,11 @@ const DepositTab = ({
             </div>
             <Row>
               <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-                <AssetStats assetId={selectedAssetId} pool={pool} />
+                <AssetStats
+                  assetId={selectedAssetId}
+                  pool={pool}
+                  parent="lend"
+                />
               </Col>
             </Row>
             <div className="assets-form-btn">
@@ -235,7 +243,12 @@ const DepositTab = ({
                 type="primary"
                 className="btn-filled"
                 loading={inProgress}
-                disabled={!Number(amount) || inProgress || !selectedAssetId}
+                disabled={
+                  !Number(amount) ||
+                  validationError?.message ||
+                  inProgress ||
+                  !selectedAssetId
+                }
                 onClick={handleClick}
               >
                 Lend
@@ -278,6 +291,7 @@ const DepositTab = ({
 DepositTab.propTypes = {
   dataInProgress: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
+  setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
   balances: PropTypes.arrayOf(
@@ -307,6 +321,7 @@ DepositTab.propTypes = {
       low: PropTypes.number,
     }),
   }),
+  refreshBalance: PropTypes.number.isRequired,
 };
 
 const stateToProps = (state) => {
@@ -317,9 +332,10 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     lang: state.language,
     markets: state.oracle.market.list,
+    refreshBalance: state.account.refreshBalance,
   };
 };
 
-const actionsToProps = {};
+const actionsToProps = { setBalanceRefresh };
 
 export default connect(stateToProps, actionsToProps)(DepositTab);
