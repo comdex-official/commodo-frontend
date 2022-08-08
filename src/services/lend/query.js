@@ -1,5 +1,6 @@
 import { QueryClientImpl } from "comdex-codec/build/comdex/lend/v1beta1/query";
 import Long from "long";
+import { APP_ID } from "../../constants/common";
 import { createQueryClient } from "../helper";
 
 export const queryLendPools = (
@@ -293,5 +294,23 @@ export const queryBorrowStats = (callback) => {
       .catch((error) => {
         callback(error?.message);
       });
+  });
+};
+
+export const queryAuctionMippingIdParams = (callback) => {
+  createQueryClient((error, rpcClient) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    new QueryClientImpl(rpcClient)
+      .QueryAuctionParams({
+        appId: Long.fromNumber(APP_ID),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
   });
 };

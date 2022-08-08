@@ -12,6 +12,12 @@ const marks = {
 
 const FilterModal = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [auctionedAsset, setAuctionedAsset] = useState([{
+    atom: false,
+    akt: false,
+    cmdx: false,
+    dvpn: false
+  }])
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -25,6 +31,10 @@ const FilterModal = () => {
     setIsModalVisible(false);
   };
 
+  const onChange = (e) => {
+    setAuctionedAsset([{ ...auctionedAsset[0], [e.target.name]: e.target.checked }])
+  };
+  // console.log(auctionedAsset, "auctioned Asset");
   return (
     <>
       <Button
@@ -53,10 +63,10 @@ const FilterModal = () => {
             <Row>
               <Col sm="12">
                 <label className="labels">Auctioned Asset</label>
-                <Checkbox>ATOM</Checkbox>
-                <Checkbox>AKT</Checkbox>
-                <Checkbox>CMDX</Checkbox>
-                <Checkbox>DVPN</Checkbox>
+                <Checkbox name="atom" onChange={(e) => { onChange(e) }}>ATOM</Checkbox>
+                <Checkbox name="akt" onChange={onChange}>AKT</Checkbox>
+                <Checkbox name="cmdx" onChange={onChange}>CMDX</Checkbox>
+                <Checkbox name="dvpn" onChange={onChange}>DVPN</Checkbox>
               </Col>
             </Row>
             <Row>
