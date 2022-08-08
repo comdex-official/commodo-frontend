@@ -5,8 +5,9 @@ import Dashboard from "./containers/Dashboard";
 import Extra from "./containers/Extra";
 import Govern from "./containers/Govern";
 import GovernDetails from "./containers/Govern/Details";
-import Market from "./containers/Market";
+import Borrow from "./containers/Market/Borrow";
 import BorrowDetails from "./containers/Market/Borrow/Details";
+import Lend from "./containers/Market/Supply";
 import SupplyDetails from "./containers/Market/Supply/Details";
 import MyHome from "./containers/Myhome";
 import BorrowRepay from "./containers/Myhome/BorrowRepay";
@@ -30,15 +31,19 @@ const routes = [
     element: <Deposit />,
   },
   {
-    path: "/market",
-    element: <Market />,
+    path: "/lend",
+    element: <Lend />,
   },
   {
-    path: "/supply-details/:id",
+    path: "/borrow",
+    element: <Borrow />,
+  },
+  {
+    path: "/lend-markets/:id",
     element: <SupplyDetails />,
   },
   {
-    path: "/borrow-details/:id",
+    path: "/borrow-markets/:id",
     element: <BorrowDetails />,
   },
   {

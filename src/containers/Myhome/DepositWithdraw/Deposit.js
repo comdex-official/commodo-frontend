@@ -159,7 +159,7 @@ const DepositTab = ({
         </div>
         <Row>
           <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-            <AssetStats assetId={selectedAssetId} pool={pool} />
+            <AssetStats assetId={selectedAssetId} pool={pool} parent="lend" />
           </Col>
         </Row>
         <div className="assets-form-btn">

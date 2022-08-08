@@ -18,23 +18,29 @@ export const tabsList = [
     index: 2,
   },
   {
-    name: "Market",
-    value: "market",
-    langKey: "market",
+    name: "Lend",
+    value: "lend",
+    langKey: "lend",
     index: 3,
+  },
+  {
+    name: "Borrow",
+    value: "borrow",
+    langKey: "borrow",
+    index: 4,
   },
   {
     name: "Auction",
     value: "auction",
     langKey: "auction",
-    index: 4,
+    index: 5,
   },
   {
     name: "Govern",
     value: "govern",
     langKey: "govern",
-    index: 5,
-  }
+    index: 6,
+  },
   // {
   //   name: "Airdrop",
   //   value: "airdrop",

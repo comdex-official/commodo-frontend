@@ -42,38 +42,42 @@ const Auction = ({ address }) => {
       ),
       dataIndex: "bidding_asset",
       key: "bidding_asset",
-      width: 180,
+      width: 160,
+      align: "center",
     },
     {
       title: (
         <>
-          Quantity <TooltipIcon text="Amount of asset being sold" />
+          Quantity <TooltipIcon text="Amount of Auctioned asset being sold" />
         </>
       ),
       dataIndex: "quantity",
       key: "quantity",
-      width: 180,
+      width: 200,
+      align: "center",
     },
     {
       title: (
         <>
-          End Time <TooltipIcon text="Duration when auction closes" />
+          End Time <TooltipIcon text="Auction closing time" />
         </>
       ),
       dataIndex: "end_time",
       key: "end_time",
       width: 200,
+      align: "center",
       render: (end_time) => <div className="endtime-badge">{end_time}</div>,
     },
     {
       title: (
         <>
-          Current Auction Price <TooltipIcon text="" />
+          Current Auction Price <TooltipIcon text="Current price of auction asset" />
         </>
       ),
       dataIndex: "current_price",
       key: "current_price",
-      width: 150,
+      width: 160,
+      align: "center",
       render: (price) => (
         <>
           $
@@ -86,7 +90,9 @@ const Auction = ({ address }) => {
       ),
     },
     {
-      title: <FilterModal />,
+      title: <>
+        <FilterModal />
+      </>,
       dataIndex: "action",
       key: "action",
       width: 140,
@@ -149,7 +155,7 @@ const Auction = ({ address }) => {
 
   useEffect(() => {
     fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, false);
-  }, [address, auctions])
+  }, [address])
 
   useEffect(() => {
     fetchData();
@@ -210,7 +216,13 @@ const Auction = ({ address }) => {
       }
     });
   };
-
+  // console.log(auctions, "Auctions");
+  // console.log(auctions && auctions[0]?.outflowTokenCurrentAmount?.denom, "-Auctions Asset");
+  const filterAuction = (demomName) => {
+    let filteredAuctioned = auctions && auctions.filter((item) => item?.outflowTokenCurrentAmount?.denom === demomName)
+    // console.log(filteredAuctioned, "Filtered Auction");
+  }
+  filterAuction("ucmdx")
   return (
     <div className="app-content-wrapper">
       <Row>

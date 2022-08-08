@@ -1,5 +1,5 @@
 import { Table, Button, message } from "antd";
-import { SvgIcon } from "../../components/common";
+import { Col, Row, SvgIcon } from "../../components/common";
 import { iconNameFromDenom } from "../../utils/string";
 import { denomConversion, amountConversionWithComma } from "../../utils/coin";
 import TooltipIcon from "../../components/common/TooltipIcon/index";
@@ -15,7 +15,7 @@ export const Bidding = ({ biddingList, inProgress }) => {
             ),
             dataIndex: "inflowToken",
             key: "inflowToken",
-            width: 250,
+            width: 200,
         },
         {
             title: (
@@ -27,12 +27,14 @@ export const Bidding = ({ biddingList, inProgress }) => {
             dataIndex: "outflowToken",
             key: "outflowToken",
             width: 200,
+            align: "center",
         },
         {
             title: "Timestamp",
             dataIndex: "timestamp",
             key: "timestamp",
             width: 200,
+            align: "center",
             render: (end_time) => <div className="endtime-badge">{end_time}</div>,
         },
         {
@@ -44,6 +46,7 @@ export const Bidding = ({ biddingList, inProgress }) => {
             dataIndex: "auctionStatus",
             key: "auctionStatus",
             align: "center",
+            width: 150,
         },
         {
             title: (
@@ -54,6 +57,7 @@ export const Bidding = ({ biddingList, inProgress }) => {
             dataIndex: "action",
             key: "action",
             align: "right",
+            width: 150,
         },
     ];
 
@@ -124,16 +128,23 @@ export const Bidding = ({ biddingList, inProgress }) => {
         });
 
     return (
-        <div className="">
-
-            <Table
-                className="custom-table auction-table  bidding-bottom-table "
-                dataSource={tableBiddingData}
-                columns={columnsBidding}
-                pagination={false}
-                loading={inProgress}
-                scroll={{ x: "100%" }}
-            />
+        <div className="app-content-wrapper">
+            <Row>
+                <Col>
+                    <div className="commodo-card py-3 bg-none">
+                        <div className="card-content">
+                            <Table
+                                className="custom-table auction-table  bidding-bottom-table "
+                                dataSource={tableBiddingData}
+                                columns={columnsBidding}
+                                pagination={false}
+                                loading={inProgress}
+                                scroll={{ x: "100%" }}
+                            />
+                        </div>
+                    </div>
+                </Col>
+            </Row>
         </div>
     );
 };

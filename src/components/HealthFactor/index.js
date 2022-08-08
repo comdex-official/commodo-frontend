@@ -1,8 +1,7 @@
-import { message, Progress } from "antd";
+import { message } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Col, Row } from "../../components/common";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { queryLendPair, queryLendPool } from "../../services/lend/query";
 import { decimalConversion, marketPrice } from "../../utils/number";
@@ -99,31 +98,11 @@ const HealthFactor = ({
   return (
     <>
       {parent === "table" ? (
-        <Progress
-          className={"health-progress"}
-          format={(percent) => percent}
-          percent={Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}
-          size={size ? size : "small"}
-        />
+        <b>{Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}</b>
       ) : (
         <>
-          <Row className="mt-2">
-            <Col>
-              <label>{name || "Current Health Factor"}</label>
-            </Col>
-            <Col className="text-right">
-              {Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}
-            </Col>
-          </Row>
-          <Row className="pb-2">
-            <Col>
-              <Progress
-                format={(percent) => percent}
-                className="commodo-progress"
-                percent={Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}
-              />
-            </Col>
-          </Row>
+          <div>{Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}</div>
+          <small className="font-weight-light">{"Liquidation at <1.0"}</small>
         </>
       )}
     </>

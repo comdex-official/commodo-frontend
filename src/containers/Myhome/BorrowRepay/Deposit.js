@@ -179,18 +179,25 @@ const DepositTab = ({
         </div>
         <Row>
           <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-            <HealthFactor
-              borrow={borrowPosition}
-              pair={pair}
-              pool={pool}
-              inAmount={
-                amount
-                  ? Number(borrowPosition?.amountIn?.amount) +
-                    Number(getAmount(amount))
-                  : borrowPosition?.amountIn?.amount
-              }
-              outAmount={borrowPosition?.amountOut?.amount}
-            />
+            <Row className="mt-2">
+              <Col>
+                <label>Health Factor</label>
+              </Col>
+              <Col className="text-right">
+                <HealthFactor
+                  borrow={borrowPosition}
+                  pair={pair}
+                  pool={pool}
+                  inAmount={
+                    amount
+                      ? Number(borrowPosition?.amountIn?.amount) +
+                        Number(getAmount(amount))
+                      : borrowPosition?.amountIn?.amount
+                  }
+                  outAmount={borrowPosition?.amountOut?.amount}
+                />
+              </Col>
+            </Row>
             <Row>
               <Col sm="12" className="mt-3 mx-auto card-bottom-details">
                 <Row className="mt-2">
