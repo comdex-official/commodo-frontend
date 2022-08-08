@@ -63,6 +63,8 @@ const CloseTab = ({
                   </div>
                 }
                 defaultActiveFirstOption={true}
+                showArrow={false}
+                disabled
                 suffixIcon={
                   <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                 }
