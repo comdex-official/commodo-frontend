@@ -100,6 +100,8 @@ const RepayTab = ({
                     </div>
                   }
                   defaultActiveFirstOption={true}
+                  showArrow={false}
+                  disabled
                 >
                   <Option key="1">
                     <div className="select-inner">

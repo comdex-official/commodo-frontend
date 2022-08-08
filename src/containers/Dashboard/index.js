@@ -251,7 +251,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 2000,
+    autoplaySpeed: 2800,
   };
 
   return (
