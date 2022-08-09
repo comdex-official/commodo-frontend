@@ -1,8 +1,8 @@
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { buildQuery } from "@cosmjs/tendermint-rpc/build/tendermint34/requests";
 import { comdex } from "../config/network";
-
 import { DEFAULT_FEE } from "../constants/common";
+
 
 export const getTypeURL = (key) => {
   switch (key) {
@@ -79,6 +79,8 @@ export const messageTypeToText = (type) => {
       return "Draw";
     case "/comdex.lend.v1beta1.MsgCloseBorrow":
       return "CloseBorrow";
+    case "/comdex.lend.v1beta1.MsgBorrowAlternate":
+      return "BorrowAlternate";
     default:
       return type;
   }
