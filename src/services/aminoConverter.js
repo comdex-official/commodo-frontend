@@ -106,4 +106,111 @@ export const customAminoTypes = {
       };
     },
   },
+  "/comdex.lend.v1beta1.MsgRepay": {
+    aminoType: "comdex/lend/MsgRepay",
+    toAmino: ({ borrower, borrowId, amount }) => {
+      return {
+        borrower: borrower,
+        borrow_id: String(borrowId),
+        amount: amount,
+      };
+    },
+    fromAmino: ({ borrower, borrow_id, amount }) => {
+      return {
+        borrower: borrower,
+        lendId: Number(borrow_id),
+        amount: amount,
+      };
+    },
+  },
+  "/comdex.lend.v1beta1.MsgDepositBorrow": {
+    aminoType: "comdex/lend/MsgDepositBorrow",
+    toAmino: ({ borrower, borrowId, amount }) => {
+      return {
+        borrower: borrower,
+        borrow_id: String(borrowId),
+        amount: amount,
+      };
+    },
+    fromAmino: ({ borrower, borrow_id, amount }) => {
+      return {
+        borrower: borrower,
+        lendId: Number(borrow_id),
+        amount: amount,
+      };
+    },
+  },
+  "/comdex.lend.v1beta1.MsgDraw": {
+    aminoType: "comdex/lend/MsgDraw",
+    toAmino: ({ borrower, borrowId, amount }) => {
+      return {
+        borrower: borrower,
+        borrow_id: String(borrowId),
+        amount: amount,
+      };
+    },
+    fromAmino: ({ borrower, borrow_id, amount }) => {
+      return {
+        borrower: borrower,
+        lendId: Number(borrow_id),
+        amount: amount,
+      };
+    },
+  },
+  "/comdex.lend.v1beta1.MsgCloseBorrow": {
+    aminoType: "comdex/lend/MsgCloseBorrow",
+    toAmino: ({ borrower, borrowId }) => {
+      return {
+        borrower: borrower,
+        borrow_id: String(borrowId),
+      };
+    },
+    fromAmino: ({ borrower, borrow_id }) => {
+      return {
+        borrower: borrower,
+        lendId: Number(borrow_id),
+      };
+    },
+  },
+  "/comdex.lend.v1beta1.MsgBorrowAlternate": {
+    aminoType: "comdex/lend/MsgBorrowAlternate",
+    toAmino: ({
+      lender,
+      assetId,
+      poolId,
+      isStableBorrow,
+      amountIn,
+      amountOut,
+      appId,
+    }) => {
+      return {
+        lender: lender,
+        asset_id: String(assetId),
+        pool_id: String(poolId),
+        app_id: String(appId),
+        is_stable_borrow: isStableBorrow,
+        amount_in: amountIn,
+        amount_out: amountOut,
+      };
+    },
+    fromAmino: ({
+      lender,
+      asset_id,
+      pool_id,
+      is_stable_borrow,
+      amount_in,
+      amount_out,
+      app_id,
+    }) => {
+      return {
+        lender: lender,
+        assetId: Number(asset_id),
+        poolId: Number(pool_id),
+        appId: Number(app_id),
+        isStableBorrow: is_stable_borrow,
+        amountIn: amount_in,
+        amountOut: amount_out,
+      };
+    },
+  },
 };
