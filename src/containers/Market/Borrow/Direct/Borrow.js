@@ -534,6 +534,7 @@ const BorrowTab = ({
                   !Number(inAmount) ||
                   !Number(outAmount) ||
                   validationError?.message ||
+                  collateralAssetDenom === borrowAssetDenom ||
                   borrowValidationError?.message ||
                   inProgress ||
                   !collateralAssetId ||
