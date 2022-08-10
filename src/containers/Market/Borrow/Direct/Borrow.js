@@ -275,11 +275,11 @@ const BorrowTab = ({
       {!dataInProgress ? (
         <>
           <div className="details-left commodo-card commodo-borrow-page">
-            <div className="card-header">Direct Borrow</div>
+            <div className="card-header text-left">Direct Borrow <TooltipIcon text="Lend and Borrow in one click" /></div>
             <div className="assets-select-card mb-3">
-              <div className="assets-left">
+              <div className="assets-left full-with-asset">
                 <label className="left-label">
-                  cPool <TooltipIcon text="" />
+                  cPool
                 </label>
                 <div className="assets-select-wrapper">
                   <Select
@@ -322,7 +322,7 @@ const BorrowTab = ({
             <div className="assets-select-card mb-3">
               <div className="assets-left">
                 <label className="left-label">
-                  Collateral Asset <TooltipIcon text="" />
+                  Collateral Asset
                 </label>
                 <div className="assets-select-wrapper">
                   <Select
@@ -406,7 +406,7 @@ const BorrowTab = ({
             <div className="assets-select-card mb-2">
               <div className="assets-left">
                 <label className="left-label">
-                  Borrow Asset <TooltipIcon text="" />
+                  Borrow Asset
                 </label>
                 <div className="assets-select-wrapper">
                   <Select

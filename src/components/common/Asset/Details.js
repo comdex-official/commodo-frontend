@@ -58,6 +58,7 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
         ) * marketPrice(markets, asset?.denom),
         DOLLAR_DECIMALS
       )}`,
+      tooltipText: parent === "lend" ? "Total funds Deposited" :  "Total funds Borrowed"
     },
     {
       title: "Available",
@@ -66,6 +67,7 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
           assetStats?.balance.amount || 0,
         DOLLAR_DECIMALS
       )}`,
+      tooltipText: parent === "lend" ? "Total funds Available" : "Total funds Available"
     },
     {
       title: "Utilization",
@@ -77,9 +79,10 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
           %
         </>
       ),
+      tooltipText: parent === "lend" ? "Asset Utilization" : "Asset Utilization"
     },
     {
-      title: parent === "lend" ? "Deposit APY" : "Borrow APY",
+      title: parent === "lend" ? "Lend APY" : "Borrow APY",
       counts: (
         <>
           {Number(
@@ -90,6 +93,7 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
           %
         </>
       ),
+      tooltipText: parent === "lend" ? "Lend APY of Asset" : "Borrow APY of Asset"
     },
   ];
 
@@ -123,7 +127,7 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
           <List.Item>
             <div>
               <p>
-                {item.title} <TooltipIcon />
+                {item.title} <TooltipIcon text={item.tooltipText} />
               </p>
               <h3>{item.counts}</h3>
             </div>

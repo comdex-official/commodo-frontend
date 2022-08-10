@@ -261,7 +261,7 @@ const BorrowTab = ({
             <div className="assets-select-card mb-3">
               <div className="assets-left">
                 <label className="left-label">
-                  Collateral Asset <TooltipIcon text="" />
+                  Collateral Asset
                 </label>
                 <div className="assets-select-wrapper">
                   <Select
@@ -348,7 +348,7 @@ const BorrowTab = ({
             <div className="assets-select-card mb-2">
               <div className="assets-left">
                 <label className="left-label">
-                  Borrow Asset <TooltipIcon text="" />
+                  Borrow Asset
                 </label>
                 <div className="assets-select-wrapper">
                   <Select
