@@ -6,7 +6,7 @@ import { setBalanceRefresh } from "../../../actions/account";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
-import AssetStats from '../../../components/common/Asset/Stats';
+import AssetStats from "../../../components/common/Asset/Stats";
 import CustomInput from "../../../components/CustomInput";
 import HealthFactor from "../../../components/HealthFactor";
 import { ValidateInputNumber } from "../../../config/_validation";
@@ -17,9 +17,7 @@ import {
   denomConversion,
   getAmount
 } from "../../../utils/coin";
-import {
-  commaSeparator, marketPrice
-} from "../../../utils/number";
+import { commaSeparator, marketPrice } from "../../../utils/number";
 import {
   iconNameFromDenom,
   toDecimals,
@@ -33,9 +31,9 @@ const DepositTab = ({
   dataInProgress,
   borrowPosition,
   lendPosition,
+  lendPool,
   pool,
   assetMap,
-  assetRatesStatsMap,
   address,
   refreshBalance,
   setBalanceRefresh,
@@ -53,14 +51,14 @@ const DepositTab = ({
   // Collateral deposited value * Max LTV of collateral minus already Borrowed asset value
 
   useEffect(() => {
-    if (pool?.poolId) {
+    if (lendPool?.poolId) {
       setAssetList([
-        assetMap[pool?.mainAssetId?.toNumber()],
-        assetMap[pool?.firstBridgedAssetId?.toNumber()],
-        assetMap[pool?.secondBridgedAssetId?.toNumber()],
+        assetMap[lendPool?.mainAssetId?.toNumber()],
+        assetMap[lendPool?.firstBridgedAssetId?.toNumber()],
+        assetMap[lendPool?.secondBridgedAssetId?.toNumber()],
       ]);
     }
-  }, [pool]);
+  }, [lendPool]);
 
   const handleInputChange = (value) => {
     value = toDecimals(value).toString().trim();
@@ -97,7 +95,7 @@ const DepositTab = ({
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
+        <CustomRow assetList={assetList} poolId={lendPool?.poolId?.low} />
         <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="left-label">
@@ -232,23 +230,23 @@ const DepositTab = ({
       <div className="details-right">
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
-            poolId={pool?.poolId}
-            parent="borrow"
+            asset={assetMap[lendPool?.firstBridgedAssetId?.toNumber()]}
+            poolId={lendPool?.poolId}
+            parent="lend"
           />
           <div className="mt-5">
             <Details
-              asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
-              poolId={pool?.poolId}
-              parent="borrow"
+              asset={assetMap[lendPool?.secondBridgedAssetId?.toNumber()]}
+              poolId={lendPool?.poolId}
+              parent="lend"
             />
           </div>
         </div>
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.mainAssetId?.toNumber()]}
-            poolId={pool?.poolId}
-            parent="borrow"
+            asset={assetMap[lendPool?.mainAssetId?.toNumber()]}
+            poolId={lendPool?.poolId}
+            parent="lend"
           />
         </div>
       </div>
@@ -263,7 +261,6 @@ DepositTab.propTypes = {
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
-  assetRatesStatsMap: PropTypes.object,
   borrowPosition: PropTypes.shape({
     lendingId: PropTypes.shape({
       low: PropTypes.number,
@@ -271,6 +268,17 @@ DepositTab.propTypes = {
     amountIn: PropTypes.shape({
       denom: PropTypes.string,
       amount: PropTypes.string,
+    }),
+  }),
+  lendPool: PropTypes.shape({
+    poolId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    firstBridgedAssetId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    secondBridgedAssetId: PropTypes.shape({
+      low: PropTypes.number,
     }),
   }),
   lendPosition: PropTypes.shape({
@@ -312,7 +320,6 @@ const stateToProps = (state) => {
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
     markets: state.oracle.market.list,
-    assetRatesStatsMap: state.lend.assetRatesStats.map,
   };
 };
 

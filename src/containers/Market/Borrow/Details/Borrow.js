@@ -56,6 +56,8 @@ const BorrowTab = ({
   const [inProgress, setInProgress] = useState(false);
   const [extendedPairs, setExtendedPairs] = useState({});
   const [assetToPool, setAssetToPool] = useState({});
+  const [selectedBorrowValue, setSelectedBorrowValue] = useState();
+  const [assetOutPool, setAssetOutPool] = useState();
 
   const navigate = useNavigate();
 
@@ -78,12 +80,6 @@ const BorrowTab = ({
       0
   );
 
-  const borrowList =
-    extendedPairs &&
-    Object.values(extendedPairs)?.map(
-      (item) => assetMap[item?.assetOut]?.denom
-    );
-
   useEffect(() => {
     if (pool?.poolId) {
       setAssetList([
@@ -94,7 +90,23 @@ const BorrowTab = ({
     }
   }, [pool]);
 
+  useEffect(() => {
+    if (pair?.assetOutPoolId !== pool?.poolId) {
+      queryLendPool(pair?.assetOutPoolId, (error, poolResult) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setAssetOutPool(poolResult?.pool);
+      });
+    }
+  }, [pair]);
+
   const handleCollateralAssetChange = (lendingId) => {
+    setSelectedBorrowValue();
+    setAssetToPool({});
+    setAssetOutPool();
     const selectedLend = poolLendPositions.filter(
       (item) => item?.lendingId?.toNumber() === lendingId
     )[0];
@@ -156,6 +168,7 @@ const BorrowTab = ({
   };
 
   const handleBorrowAssetChange = (value) => {
+    setSelectedBorrowValue(value);
     const selectedPair =
       extendedPairs &&
       Object.values(extendedPairs)?.filter(
@@ -246,6 +259,12 @@ const BorrowTab = ({
     return handleOutAmountChange(amountConversion(borrowableBalance));
   };
 
+  const borrowList =
+    extendedPairs &&
+    Object.values(extendedPairs)?.map(
+      (item) => assetMap[item?.assetOut]?.denom
+    );
+
   let currentLTV = Number(
     ((outAmount * marketPrice(markets, borrowAssetDenom)) /
       (inAmount * marketPrice(markets, collateralAssetDenom))) *
@@ -257,12 +276,11 @@ const BorrowTab = ({
       {!dataInProgress ? (
         <>
           <div className="details-left commodo-card commodo-borrow-page">
+            {pair?.isInterPool ? "InterPool" : "SamePool"}
             <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
             <div className="assets-select-card mb-3">
               <div className="assets-left">
-                <label className="left-label">
-                  Collateral Asset
-                </label>
+                <label className="left-label">Collateral Asset</label>
                 <div className="assets-select-wrapper">
                   <Select
                     className="assets-select"
@@ -347,14 +365,13 @@ const BorrowTab = ({
             </div>
             <div className="assets-select-card mb-2">
               <div className="assets-left">
-                <label className="left-label">
-                  Borrow Asset
-                </label>
+                <label className="left-label">Borrow Asset</label>
                 <div className="assets-select-wrapper">
                   <Select
                     className="assets-select"
                     dropdownClassName="asset-select-dropdown"
                     onChange={handleBorrowAssetChange}
+                    value={selectedBorrowValue}
                     placeholder={
                       <div className="select-placeholder">
                         <div className="circle-icon">
@@ -472,6 +489,7 @@ const BorrowTab = ({
                   !Number(inAmount) ||
                   !Number(outAmount) ||
                   validationError?.message ||
+                  collateralAssetDenom === borrowAssetDenom ||
                   borrowValidationError?.message ||
                   inProgress ||
                   !lend?.lendingId ||
@@ -486,13 +504,23 @@ const BorrowTab = ({
           <div className="details-right">
             <div className="commodo-card">
               <Details
-                asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
+                asset={
+                  assetMap[
+                    assetOutPool?.firstBridgedAssetId?.toNumber() ||
+                      pool?.firstBridgedAssetId?.toNumber()
+                  ]
+                }
                 poolId={pool?.poolId}
                 parent="borrow"
               />
               <div className="mt-5">
                 <Details
-                  asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
+                  asset={
+                    assetMap[
+                      assetOutPool?.secondBridgedAssetId?.toNumber() ||
+                        pool?.secondBridgedAssetId?.toNumber()
+                    ]
+                  }
                   poolId={pool?.poolId}
                   parent="borrow"
                 />
@@ -500,7 +528,12 @@ const BorrowTab = ({
             </div>
             <div className="commodo-card">
               <Details
-                asset={assetMap[pool?.mainAssetId?.toNumber()]}
+                asset={
+                  assetMap[
+                    assetOutPool?.mainAssetId?.toNumber() ||
+                      pool?.mainAssetId?.toNumber()
+                  ]
+                }
                 poolId={pool?.poolId}
                 parent="borrow"
               />

@@ -60,6 +60,8 @@ const BorrowTab = ({
   const [assetToPool, setAssetToPool] = useState({});
   const [pool, setPool] = useState();
   const [outPool, setOutPool] = useState();
+  const [selectedCollateralValue, setSelectedCollateralValue] = useState();
+  const [selectedBorrowValue, setSelectedBorrowValue] = useState();
 
   const navigate = useNavigate();
 
@@ -104,6 +106,9 @@ const BorrowTab = ({
   const handleCollateralAssetChange = (assetId) => {
     if (assetId) {
       setCollateralAssetId(assetId);
+      setSelectedCollateralValue(assetId);
+      setSelectedBorrowValue();
+      setAssetToPool({});
       setInAmount(0);
       setValidationError();
       setExtendedPairs();
@@ -162,6 +167,7 @@ const BorrowTab = ({
       )[0];
 
     setPair(selectedPair);
+    setSelectedBorrowValue(value);
 
     let selectedPool = pools?.filter(
       (item) =>
@@ -180,6 +186,8 @@ const BorrowTab = ({
       (item) => item?.poolId?.toNumber() === value
     )[0];
     if (selectedPool?.poolId) {
+      setSelectedCollateralValue();
+      setSelectedBorrowValue();
       setPool(selectedPool);
     }
   };
@@ -275,12 +283,12 @@ const BorrowTab = ({
       {!dataInProgress ? (
         <>
           <div className="details-left commodo-card commodo-borrow-page">
-            <div className="card-header text-left">Direct Borrow <TooltipIcon text="Lend and Borrow in one click" /></div>
+            <div className="card-header text-left">
+              Direct Borrow <TooltipIcon text="Lend and Borrow in one click" />
+            </div>
             <div className="assets-select-card mb-3">
               <div className="assets-left full-with-asset">
-                <label className="left-label">
-                  cPool
-                </label>
+                <label className="left-label">cPool</label>
                 <div className="assets-select-wrapper">
                   <Select
                     className="assets-select"
@@ -321,14 +329,13 @@ const BorrowTab = ({
             </div>
             <div className="assets-select-card mb-3">
               <div className="assets-left">
-                <label className="left-label">
-                  Collateral Asset
-                </label>
+                <label className="left-label">Collateral Asset</label>
                 <div className="assets-select-wrapper">
                   <Select
                     className="assets-select"
                     dropdownClassName="asset-select-dropdown"
                     onChange={handleCollateralAssetChange}
+                    value={selectedCollateralValue}
                     placeholder={
                       <div className="select-placeholder">
                         <div className="circle-icon">
@@ -405,14 +412,13 @@ const BorrowTab = ({
             </div>
             <div className="assets-select-card mb-2">
               <div className="assets-left">
-                <label className="left-label">
-                  Borrow Asset
-                </label>
+                <label className="left-label">Borrow Asset</label>
                 <div className="assets-select-wrapper">
                   <Select
                     className="assets-select"
                     dropdownClassName="asset-select-dropdown"
                     onChange={handleBorrowAssetChange}
+                    value={selectedBorrowValue}
                     placeholder={
                       <div className="select-placeholder">
                         <div className="circle-icon">
@@ -534,6 +540,7 @@ const BorrowTab = ({
                   !Number(inAmount) ||
                   !Number(outAmount) ||
                   validationError?.message ||
+                  collateralAssetDenom === borrowAssetDenom ||
                   borrowValidationError?.message ||
                   inProgress ||
                   !collateralAssetId ||

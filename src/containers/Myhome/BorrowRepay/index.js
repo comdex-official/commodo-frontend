@@ -10,12 +10,12 @@ import {
   queryBorrowPosition,
   queryLendPair,
   queryLendPool,
-  queryLendPosition
+  queryLendPosition,
 } from "../../../services/lend/query";
 import { decode } from "../../../utils/string";
 import BorrowTab from "./Borrow";
 import CloseTab from "./Close";
-import DepositTab from './Deposit';
+import DepositTab from "./Deposit";
 import "./index.less";
 import RepayTab from "./Repay";
 
@@ -36,7 +36,7 @@ const BorrowRepay = ({ setPair, setPool }) => {
   const [borrowPosition, setBorrowPosition] = useState();
   const [activeKey, setActiveKey] = useState("1");
   const [lendPosition, setLendPosition] = useState();
-
+  const [lendPool, setLendPool] = useState();
 
   let { id } = useParams();
 
@@ -99,6 +99,18 @@ const BorrowRepay = ({ setPair, setPool }) => {
     }
   }, [borrowPosition]);
 
+  useEffect(() => {
+    if (lendPosition?.poolId) {
+      queryLendPool(lendPosition?.poolId, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+        setLendPool(result?.pool);
+      });
+    }
+  }, [lendPosition]);
+
   const refreshBorrowPosition = () => {
     if (id) {
       queryBorrowPosition(id, (error, result) => {
@@ -134,7 +146,7 @@ const BorrowRepay = ({ setPair, setPool }) => {
                 <BorrowTab
                   borrowPosition={borrowPosition}
                   dataInProgress={inProgress}
-                  lendPosition = {lendPosition}
+                  lendPosition={lendPosition}
                   refreshBorrowPosition={refreshBorrowPosition}
                 />
               )}
@@ -148,7 +160,8 @@ const BorrowRepay = ({ setPair, setPool }) => {
                 <DepositTab
                   borrowPosition={borrowPosition}
                   dataInProgress={inProgress}
-                  lendPosition = {lendPosition}
+                  lendPosition={lendPosition}
+                  lendPool={lendPool}
                   refreshBorrowPosition={refreshBorrowPosition}
                 />
               )}
