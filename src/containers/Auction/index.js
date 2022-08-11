@@ -1,11 +1,11 @@
 import { message, Table } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, DOLLAR_DECIMALS } from "../../constants/common";
 import { queryAuctionParams, queryDutchAuctionList, queryDutchBiddingList } from "../../services/auction";
-import { iconNameFromDenom } from "../../utils/string";
+import { denomToSymbol, iconNameFromDenom, symbolToDenom } from "../../utils/string";
 import { amountConversionWithComma, denomConversion } from '../../utils/coin'
 import FilterModal from "./FilterModal";
 import "./index.less";
@@ -15,11 +15,15 @@ import { commaSeparator, decimalConversion } from "../../utils/number";
 import { queryAuctionMippingIdParams } from "../../services/lend/query";
 import Bidding from "./Bidding";
 
-const Auction = ({ address }) => {
+const Auction = ({ address, selectedAuctionedAsset }) => {
+  const auctionedAsset = useSelector((state) => state.auction.auctionedAsset[0])
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [params, setParams] = useState({});
   const [auctions, setAuctions] = useState();
+  const [filterAuctions, setFilterAuctions] = useState([])
+  const [newAuction, setNewAuction] = useState([])
+  const [newAuction2, setNewAuction2] = useState([])
   const [loading, setLoading] = useState(true)
   const [inProgress, setInProgress] = useState(false);
   const [biddings, setBiddings] = useState("");
@@ -91,7 +95,8 @@ const Auction = ({ address }) => {
     },
     {
       title: <>
-        <FilterModal />
+        {/* <FilterModal auctions={auctions} setAuctions={setAuctions} /> */}
+        Bid
       </>,
       dataIndex: "action",
       key: "action",
@@ -111,8 +116,8 @@ const Auction = ({ address }) => {
   ];
 
   const tableData =
-    auctions && auctions.length > 0
-      ? auctions.map((item, index) => {
+    filterAuctions && filterAuctions.length > 0
+      ? filterAuctions.map((item, index) => {
         return {
           key: index,
           auctioned_asset: (
@@ -157,6 +162,12 @@ const Auction = ({ address }) => {
     fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, false);
   }, [address])
 
+  // useEffect(() => {
+  //   let uniqueData = [...new Set(filterAuctions)];
+  //   setFilterAuctions(uniqueData)
+  // }, [filterAuctions])
+
+
   useEffect(() => {
     fetchData();
     queryParams();
@@ -190,10 +201,12 @@ const Auction = ({ address }) => {
         }
         if (result?.auctions?.length > 0) {
           setAuctions(result && result.auctions);
+          setFilterAuctions(result && [...result.auctions])
           setLoading(false)
         }
         else {
           setAuctions("");
+          setFilterAuctions("");
           setLoading(false)
         }
       }
@@ -216,13 +229,52 @@ const Auction = ({ address }) => {
       }
     });
   };
-  // console.log(auctions, "Auctions");
-  // console.log(auctions && auctions[0]?.outflowTokenCurrentAmount?.denom, "-Auctions Asset");
+
   const filterAuction = (demomName) => {
-    let filteredAuctioned = auctions && auctions.filter((item) => item?.outflowTokenCurrentAmount?.denom === demomName)
-    // console.log(filteredAuctioned, "Filtered Auction");
+    console.log(demomName, "demomName");
+    let denom = symbolToDenom(demomName)
+    console.log(denom, "denom");
+    let filteredAuctioned = auctions && auctions?.filter((item) => item?.outflowTokenCurrentAmount?.denom === denom)
+
+    console.log(filteredAuctioned, "Filtered Auction");
+    if (filteredAuctioned?.length > 0) {
+      // setAuctions(filteredAuctioned)
+      // setFilterAuctions([{ ...filteredAuctioned, filteredAuctioned }])
+      // setFilterAuctions([...filterAuctions, filteredAuctioned])
+    }
+    else {
+      setFilterAuctions("")
+    }
   }
-  filterAuction("ucmdx")
+
+  const auctionfilter = () => {
+    console.log(auctionedAsset, "auctioned Asset");
+    let filteredAuctioned
+    {
+      selectedAuctionedAsset && selectedAuctionedAsset.length > 0 && selectedAuctionedAsset.map((singleSelectedAsset) => {
+        let symbolToDenomAsset = symbolToDenom(singleSelectedAsset)
+        filteredAuctioned = auctions && auctions?.filter((item) => item?.outflowTokenCurrentAmount?.denom === symbolToDenomAsset)
+        console.log(filteredAuctioned, "filteredAuctioned in map func");
+
+        // setNewAuction([...newAuction, ...filteredAuctioned])
+        setNewAuction([...newAuction, ...filteredAuctioned])
+        setFilterAuctions([...newAuction, ...filteredAuctioned])
+
+      })
+      if (selectedAuctionedAsset.length === 0) {
+        setFilterAuctions(auctions)
+      }
+    }
+  }
+
+
+  // useEffect(() => {
+  //   console.log(newAuction, "newAuction");
+  //   auctionfilter()
+  //   console.log(selectedAuctionedAsset, "selectedAuctionedAsset");
+  // }, [selectedAuctionedAsset])
+
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -255,12 +307,14 @@ const Auction = ({ address }) => {
 Auction.propTypes = {
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
+  selectedAuctionedAsset: PropTypes.array,
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
     address: state.account.address,
+    selectedAuctionedAsset: state.auction.selectedAuctionedAsset,
   };
 };
 

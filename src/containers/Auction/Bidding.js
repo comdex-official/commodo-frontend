@@ -137,7 +137,7 @@ export const Bidding = ({ biddingList, inProgress }) => {
                                 className="custom-table auction-table  bidding-bottom-table "
                                 dataSource={tableBiddingData}
                                 columns={columnsBidding}
-                                pagination={false}
+                                pagination={{ defaultPageSize: 5 }}
                                 loading={inProgress}
                                 scroll={{ x: "100%" }}
                             />
