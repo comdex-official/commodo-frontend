@@ -108,6 +108,7 @@ const BorrowTab = ({
       setCollateralAssetId(assetId);
       setSelectedCollateralValue(assetId);
       setSelectedBorrowValue();
+      setAssetToPool({});
       setInAmount(0);
       setValidationError();
       setExtendedPairs();
@@ -282,12 +283,12 @@ const BorrowTab = ({
       {!dataInProgress ? (
         <>
           <div className="details-left commodo-card commodo-borrow-page">
-            <div className="card-header text-left">Direct Borrow <TooltipIcon text="Lend and Borrow in one click" /></div>
+            <div className="card-header text-left">
+              Direct Borrow <TooltipIcon text="Lend and Borrow in one click" />
+            </div>
             <div className="assets-select-card mb-3">
               <div className="assets-left full-with-asset">
-                <label className="left-label">
-                  cPool
-                </label>
+                <label className="left-label">cPool</label>
                 <div className="assets-select-wrapper">
                   <Select
                     className="assets-select"
@@ -328,9 +329,7 @@ const BorrowTab = ({
             </div>
             <div className="assets-select-card mb-3">
               <div className="assets-left">
-                <label className="left-label">
-                  Collateral Asset
-                </label>
+                <label className="left-label">Collateral Asset</label>
                 <div className="assets-select-wrapper">
                   <Select
                     className="assets-select"
@@ -413,9 +412,7 @@ const BorrowTab = ({
             </div>
             <div className="assets-select-card mb-2">
               <div className="assets-left">
-                <label className="left-label">
-                  Borrow Asset
-                </label>
+                <label className="left-label">Borrow Asset</label>
                 <div className="assets-select-wrapper">
                   <Select
                     className="assets-select"

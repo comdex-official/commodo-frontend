@@ -80,12 +80,6 @@ const BorrowTab = ({
       0
   );
 
-  const borrowList =
-    extendedPairs &&
-    Object.values(extendedPairs)?.map(
-      (item) => assetMap[item?.assetOut]?.denom
-    );
-    
   useEffect(() => {
     if (pool?.poolId) {
       setAssetList([
@@ -111,6 +105,7 @@ const BorrowTab = ({
 
   const handleCollateralAssetChange = (lendingId) => {
     setSelectedBorrowValue();
+    setAssetToPool({});
     setAssetOutPool();
     const selectedLend = poolLendPositions.filter(
       (item) => item?.lendingId?.toNumber() === lendingId
@@ -264,6 +259,12 @@ const BorrowTab = ({
     return handleOutAmountChange(amountConversion(borrowableBalance));
   };
 
+  const borrowList =
+    extendedPairs &&
+    Object.values(extendedPairs)?.map(
+      (item) => assetMap[item?.assetOut]?.denom
+    );
+
   let currentLTV = Number(
     ((outAmount * marketPrice(markets, borrowAssetDenom)) /
       (inAmount * marketPrice(markets, collateralAssetDenom))) *
@@ -279,9 +280,7 @@ const BorrowTab = ({
             <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
             <div className="assets-select-card mb-3">
               <div className="assets-left">
-                <label className="left-label">
-                  Collateral Asset
-                </label>
+                <label className="left-label">Collateral Asset</label>
                 <div className="assets-select-wrapper">
                   <Select
                     className="assets-select"
@@ -366,9 +365,7 @@ const BorrowTab = ({
             </div>
             <div className="assets-select-card mb-2">
               <div className="assets-left">
-                <label className="left-label">
-                  Borrow Asset
-                </label>
+                <label className="left-label">Borrow Asset</label>
                 <div className="assets-select-wrapper">
                   <Select
                     className="assets-select"
