@@ -1,8 +1,9 @@
-import { message, Table } from "antd";
+import { Button, message, Table } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { SvgIcon } from "../../../components/common";
+import { Link } from "react-router-dom";
+import { SvgIcon, TooltipIcon } from "../../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE
@@ -117,7 +118,16 @@ const Borrow = ({ assetMap }) => {
 
   return (
     <div className="commodo-card bg-none">
-      <div className="card-header">Borrow Markets</div>
+      <div className="card-header d-flex justify-content-between">
+        <div>Borrow Markets</div>
+        <div>
+          <Link to="/borrow-direct">
+            <Button className="back-btn ml-auto" type="primary">
+              <TooltipIcon text="Lend and Borrow in one click" /> <span className="pl-1">Direct Borrow</span>
+            </Button>
+          </Link>
+        </div>
+      </div>
       <div className="card-content">
         <Table
           className="custom-table market-table1"

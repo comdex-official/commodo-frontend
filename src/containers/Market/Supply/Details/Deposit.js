@@ -145,7 +145,7 @@ const DepositTab = ({
             <div className="assets-select-card mb-0">
               <div className="assets-left">
                 <label className="left-label">
-                  Lend <TooltipIcon text="" />
+                  Lend
                 </label>
                 <div className="assets-select-wrapper">
                   <Select
