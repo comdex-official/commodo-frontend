@@ -95,7 +95,6 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
     },
     {
       title: <>
-        {/* <FilterModal auctions={auctions} setAuctions={setAuctions} /> */}
         Bid
       </>,
       dataIndex: "action",
@@ -161,12 +160,6 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
   useEffect(() => {
     fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, false);
   }, [address])
-
-  // useEffect(() => {
-  //   let uniqueData = [...new Set(filterAuctions)];
-  //   setFilterAuctions(uniqueData)
-  // }, [filterAuctions])
-
 
   useEffect(() => {
     fetchData();
@@ -248,32 +241,20 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
   }
 
   const auctionfilter = () => {
-    console.log(auctionedAsset, "auctioned Asset");
     let filteredAuctioned
     {
       selectedAuctionedAsset && selectedAuctionedAsset.length > 0 && selectedAuctionedAsset.map((singleSelectedAsset) => {
         let symbolToDenomAsset = symbolToDenom(singleSelectedAsset)
         filteredAuctioned = auctions && auctions?.filter((item) => item?.outflowTokenCurrentAmount?.denom === symbolToDenomAsset)
         console.log(filteredAuctioned, "filteredAuctioned in map func");
-
-        // setNewAuction([...newAuction, ...filteredAuctioned])
         setNewAuction([...newAuction, ...filteredAuctioned])
         setFilterAuctions([...newAuction, ...filteredAuctioned])
-
       })
       if (selectedAuctionedAsset.length === 0) {
         setFilterAuctions(auctions)
       }
     }
   }
-
-
-  // useEffect(() => {
-  //   console.log(newAuction, "newAuction");
-  //   auctionfilter()
-  //   console.log(selectedAuctionedAsset, "selectedAuctionedAsset");
-  // }, [selectedAuctionedAsset])
-
 
   return (
     <div className="app-content-wrapper">

@@ -19,7 +19,6 @@ const FilterModal = ({ auctions, setAuctions, selectedAuctionedAsset, setSelecte
   const dispatch = useDispatch()
   const auctionedAsset = useSelector((state) => state.auction.auctionedAsset[0])
   const [isModalVisible, setIsModalVisible] = useState(false);
-  // const [selectedAuctionedAsset, setSelectedAuctionedAsset] = useState([]);
   const [selectedAsset, setSelectedAsset] = useState([])
   const [auctionedAsseted, setAuctionedAsseted] = useState([{
     atom: false,
@@ -34,7 +33,6 @@ const FilterModal = ({ auctions, setAuctions, selectedAuctionedAsset, setSelecte
   };
 
   const handleOk = () => {
-    // selectedAuctionedAssets()
     dispatch(setAuctionedAsset(auctionedAsseted))
     setSelectedAuctionedAsset(selectedAsset)
     setIsModalVisible(false);
@@ -48,10 +46,7 @@ const FilterModal = ({ auctions, setAuctions, selectedAuctionedAsset, setSelecte
   const onChange = (e) => {
     let removedData;
     setAuctionedAsseted([{ ...auctionedAsseted[0], [e.target.name]: e.target.checked }])
-    // console.log({ [e.target.name]: e.target.checked });
     if (e.target.checked) {
-      // console.log([e.target.name], "yes true");
-      // setSelectedAuctionedAsset((prev) => [...prev, e.target.name])
       setSelectedAsset((prev) => [...prev, e.target.name])
     }
     else {
@@ -60,11 +55,9 @@ const FilterModal = ({ auctions, setAuctions, selectedAuctionedAsset, setSelecte
       removedData = selectedAsset.filter(function (item) {
         return item !== name[0]
       })
-      // console.log(removedData, "removedData");
-      // setSelectedAuctionedAsset(removedData)
+
       setSelectedAsset(removedData)
     }
-    // dispatch(setAuctionedAsset([{ ...auctionedAsset, [e.target.name]: e.target.checked }]))
   };
 
   const selectedAuctionedAssets = () => {
