@@ -223,22 +223,6 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
     });
   };
 
-  const filterAuction = (demomName) => {
-    console.log(demomName, "demomName");
-    let denom = symbolToDenom(demomName)
-    console.log(denom, "denom");
-    let filteredAuctioned = auctions && auctions?.filter((item) => item?.outflowTokenCurrentAmount?.denom === denom)
-
-    console.log(filteredAuctioned, "Filtered Auction");
-    if (filteredAuctioned?.length > 0) {
-      // setAuctions(filteredAuctioned)
-      // setFilterAuctions([{ ...filteredAuctioned, filteredAuctioned }])
-      // setFilterAuctions([...filterAuctions, filteredAuctioned])
-    }
-    else {
-      setFilterAuctions("")
-    }
-  }
 
   const auctionfilter = () => {
     let filteredAuctioned
