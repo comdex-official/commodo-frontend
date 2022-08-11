@@ -60,6 +60,8 @@ const BorrowTab = ({
   const [assetToPool, setAssetToPool] = useState({});
   const [pool, setPool] = useState();
   const [outPool, setOutPool] = useState();
+  const [selectedCollateralValue, setSelectedCollateralValue] = useState();
+  const [selectedBorrowValue, setSelectedBorrowValue] = useState();
 
   const navigate = useNavigate();
 
@@ -104,6 +106,8 @@ const BorrowTab = ({
   const handleCollateralAssetChange = (assetId) => {
     if (assetId) {
       setCollateralAssetId(assetId);
+      setSelectedCollateralValue(assetId);
+      setSelectedBorrowValue();
       setInAmount(0);
       setValidationError();
       setExtendedPairs();
@@ -162,6 +166,7 @@ const BorrowTab = ({
       )[0];
 
     setPair(selectedPair);
+    setSelectedBorrowValue(value);
 
     let selectedPool = pools?.filter(
       (item) =>
@@ -180,6 +185,8 @@ const BorrowTab = ({
       (item) => item?.poolId?.toNumber() === value
     )[0];
     if (selectedPool?.poolId) {
+      setSelectedCollateralValue();
+      setSelectedBorrowValue();
       setPool(selectedPool);
     }
   };
@@ -329,6 +336,7 @@ const BorrowTab = ({
                     className="assets-select"
                     dropdownClassName="asset-select-dropdown"
                     onChange={handleCollateralAssetChange}
+                    value={selectedCollateralValue}
                     placeholder={
                       <div className="select-placeholder">
                         <div className="circle-icon">
@@ -413,6 +421,7 @@ const BorrowTab = ({
                     className="assets-select"
                     dropdownClassName="asset-select-dropdown"
                     onChange={handleBorrowAssetChange}
+                    value={selectedBorrowValue}
                     placeholder={
                       <div className="select-placeholder">
                         <div className="circle-icon">
