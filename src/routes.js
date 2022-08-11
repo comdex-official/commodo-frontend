@@ -7,6 +7,7 @@ import Govern from "./containers/Govern";
 import GovernDetails from "./containers/Govern/Details";
 import Borrow from "./containers/Market/Borrow";
 import BorrowDetails from "./containers/Market/Borrow/Details";
+import DirectBorrow from "./containers/Market/Borrow/Direct";
 import Lend from "./containers/Market/Supply";
 import SupplyDetails from "./containers/Market/Supply/Details";
 import MyHome from "./containers/Myhome";
@@ -45,6 +46,10 @@ const routes = [
   {
     path: "/borrow-markets/:id",
     element: <BorrowDetails />,
+  },
+  {
+    path: "/borrow-direct",
+    element: <DirectBorrow />,
   },
   {
     path: "/auction",
