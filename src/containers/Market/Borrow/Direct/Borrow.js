@@ -286,19 +286,16 @@ const BorrowTab = ({
             <div className="card-header text-left">
               Direct Borrow <TooltipIcon text="Lend and Borrow in one click" />
             </div>
-            <div className="assets-select-card mb-3">
+            <div className="assets-select-card py-3 cpool-select-card mb-3">
               <div className="assets-left full-with-asset">
-                <label className="left-label">cPool</label>
-                <div className="assets-select-wrapper">
+                <label className="left-label">Collateral cPool</label>
+                <div className="assets-select-wrapper mt-0">
                   <Select
                     className="assets-select"
                     dropdownClassName="asset-select-dropdown"
                     onChange={handlePoolChange}
                     placeholder={
                       <div className="select-placeholder">
-                        <div className="circle-icon">
-                          <div className="circle-icon-inner" />
-                        </div>
                         Select
                       </div>
                     }
@@ -315,9 +312,6 @@ const BorrowTab = ({
                             value={record?.poolId?.toNumber()}
                           >
                             <div className="select-inner">
-                              <div className="svg-icon">
-                                <div className="svg-icon-inner"></div>
-                              </div>
                               <div className="name">{record?.cpoolName}</div>
                             </div>
                           </Option>
