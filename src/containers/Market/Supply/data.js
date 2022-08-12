@@ -18,7 +18,7 @@ export const columns = [
   {
     title: (
       <>
-        Bridge <br /> Asset 1
+        Transit<br /> Asset 1
       </>
     ),
     dataIndex: "bridge_asset",
@@ -28,7 +28,7 @@ export const columns = [
   {
     title: (
       <>
-        Bridge <br /> Asset 2
+        Transit<br /> Asset 2
       </>
     ),
     dataIndex: "bridge_asset2",
@@ -66,7 +66,7 @@ export const columns = [
   {
     title: (
       <>
-        Bridge Asset 1 <br /> APY
+        Transit Asset 1 <br /> APY
       </>
     ),
     dataIndex: "bridge_apy",
@@ -83,7 +83,7 @@ export const columns = [
   {
     title: (
       <>
-        Bridge Asset 2 <br /> APY
+        Transit Asset 2 <br /> APY
       </>
     ),
     dataIndex: "bridge_apy2",

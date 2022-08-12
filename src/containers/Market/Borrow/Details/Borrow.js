@@ -276,7 +276,6 @@ const BorrowTab = ({
       {!dataInProgress ? (
         <>
           <div className="details-left commodo-card commodo-borrow-page">
-            {pair?.isInterPool ? "InterPool" : "SamePool"}
             <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
             <div className="assets-select-card mb-3">
               <div className="assets-left">
@@ -510,7 +509,7 @@ const BorrowTab = ({
                       pool?.firstBridgedAssetId?.toNumber()
                   ]
                 }
-                poolId={pool?.poolId}
+                poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
               />
               <div className="mt-5">
@@ -521,7 +520,7 @@ const BorrowTab = ({
                         pool?.secondBridgedAssetId?.toNumber()
                     ]
                   }
-                  poolId={pool?.poolId}
+                  poolId={assetOutPool?.poolId || pool?.poolId}
                   parent="borrow"
                 />
               </div>
@@ -534,7 +533,7 @@ const BorrowTab = ({
                       pool?.mainAssetId?.toNumber()
                   ]
                 }
-                poolId={pool?.poolId}
+                poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
               />
             </div>
