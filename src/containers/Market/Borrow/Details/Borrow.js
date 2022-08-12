@@ -510,7 +510,7 @@ const BorrowTab = ({
                       pool?.firstBridgedAssetId?.toNumber()
                   ]
                 }
-                poolId={pool?.poolId}
+                poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
               />
               <div className="mt-5">
@@ -521,7 +521,7 @@ const BorrowTab = ({
                         pool?.secondBridgedAssetId?.toNumber()
                     ]
                   }
-                  poolId={pool?.poolId}
+                  poolId={assetOutPool?.poolId || pool?.poolId}
                   parent="borrow"
                 />
               </div>
@@ -534,7 +534,7 @@ const BorrowTab = ({
                       pool?.mainAssetId?.toNumber()
                   ]
                 }
-                poolId={pool?.poolId}
+                poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
               />
             </div>
