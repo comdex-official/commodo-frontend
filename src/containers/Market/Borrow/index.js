@@ -122,8 +122,9 @@ const Borrow = ({ assetMap }) => {
         <div>Borrow Markets</div>
         <div>
           <Link to="/borrow-direct">
-            <Button className="back-btn ml-auto" type="primary">
-              <TooltipIcon text="Lend and Borrow in one click" /> <span className="pl-1">Direct Borrow</span>
+            <Button className="back-btn ml-auto" icon={<SvgIcon name="direct-borrow" viewbox="0 0 57.25 54.685" />} type="primary">
+              {/* <TooltipIcon text="Lend and Borrow in one click" /> */}
+               <span className="pl-1">Direct Borrow</span>
             </Button>
           </Link>
         </div>
