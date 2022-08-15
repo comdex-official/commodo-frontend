@@ -1,4 +1,4 @@
-import { Button, message, Select, Spin } from "antd";
+import { Button, message, Select, Spin, List } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -271,6 +271,24 @@ const BorrowTab = ({
       100
   );
 
+  let data = [
+    {
+      title: "Liquidation Threshold",
+      counts: "0.00",
+      tooltipText: "Liquidation Threshold"
+    },
+    {
+      title: "Liquidation Penalty",
+      counts: "0.00",
+      tooltipText: "Liquidation Penalty"
+    },
+    {
+      title: "Liquidation Bonus",
+      counts: "0.00",
+      tooltipText: "Liquidation Bonus"
+    },
+  ]
+
   return (
     <div className="details-wrapper">
       {!dataInProgress ? (
@@ -452,6 +470,15 @@ const BorrowTab = ({
               <Col sm="12" className="mt-3 mx-auto card-bottom-details">
                 <Row className="mt-2">
                   <Col>
+                    <label>Routing mechanism</label>
+                    <TooltipIcon text="Routing mechanism" />
+                  </Col>
+                  <Col className="text-right">
+                    0.00
+                  </Col>
+                </Row>
+                <Row className="mt-2">
+                  <Col>
                     <label>Health Factor</label>
                     <TooltipIcon text="Numeric representation of your position's safety" />
                   </Col>
@@ -535,6 +562,40 @@ const BorrowTab = ({
                 }
                 poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
+              />
+            </div>
+            <div className="commodo-card">
+              <div className="card-head">
+                <div className="head-left">
+                  <div className="assets-col">
+                    <div className="assets-icon">
+                      <SvgIcon name={"atom-icon"} />
+                    </div>
+                    Collateral Asset Liquidation Params
+                  </div>
+                </div>
+              </div>
+              <List
+                grid={{
+                  gutter: 16,
+                  xs: 2,
+                  sm: 2,
+                  md: 2,
+                  lg: 3,
+                  xl: 3,
+                  xxl: 3,
+                }}
+                dataSource={data}
+                renderItem={(item) => (
+                  <List.Item>
+                    <div>
+                      <p>
+                        {item.title} <TooltipIcon text={item.tooltipText} />
+                      </p>
+                      <h3>{item.counts}</h3>
+                    </div>
+                  </List.Item>
+                )}
               />
             </div>
           </div>
