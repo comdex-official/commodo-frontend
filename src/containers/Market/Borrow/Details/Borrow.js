@@ -1,4 +1,4 @@
-import { Button, message, Select, Spin } from "antd";
+import { Button, message, Select, Spin, List, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -271,6 +271,78 @@ const BorrowTab = ({
       100
   );
 
+  let data = [
+    {
+      title: "Liquidation Threshold",
+      counts: "0.00",
+      tooltipText: "Liquidation Threshold"
+    },
+    {
+      title: "Liquidation Penalty",
+      counts: "0.00",
+      tooltipText: "Liquidation Penalty"
+    },
+    {
+      title: "Liquidation Bonus",
+      counts: "0.00",
+      tooltipText: "Liquidation Bonus"
+    },
+  ];
+
+  const TooltipContent = <div className="token-details">
+    <div className="tokencard-col">
+      <div className="tokencard">
+        <div className="tokencard-icon">
+          <SvgIcon name="cmdx-icon" />
+        </div>
+        <p>Deposit CMDX</p>
+      </div>
+      <div className="tokencard with-shadow">
+        <div className="tokencard-icon">
+          <SvgIcon name="cmst-icon" />
+        </div>
+        <p>Deposit CMST</p>
+      </div>
+      <label>#1</label>
+    </div>
+    <div className="middle-arrow">
+      <SvgIcon name="token-arrow" viewbox="0 0 159 80.387" />
+    </div>
+    <div className="tokencard-col">
+      <div className="tokencard with-shadow">
+        <div className="tokencard-icon">
+          <SvgIcon name="cmst-icon" />
+        </div>
+        <p>Borrow CMST</p>
+      </div>
+      <div className="tokencard">
+        <div className="tokencard-icon">
+          <SvgIcon name="osmosis-icon" />
+        </div>
+        <p>Borrow Osmo</p>
+      </div>
+      <label>#2</label>
+    </div>
+  </div>;
+
+  const TooltipContent2 = <div className="token-details token-details-small">
+    <div className="tokencard-col">
+      <div className="tokencard">
+        <div className="tokencard-icon">
+          <SvgIcon name="cmdx-icon" />
+        </div>
+        <p>Deposit CMDX</p>
+      </div>
+      <div className="tokencard with-shadow">
+        <div className="tokencard-icon">
+          <SvgIcon name="cmst-icon" />
+        </div>
+        <p>Deposit CMST</p>
+      </div>
+      <label>#1</label>
+    </div>
+  </div>;
+
   return (
     <div className="details-wrapper">
       {!dataInProgress ? (
@@ -449,7 +521,74 @@ const BorrowTab = ({
               </div>
             </div>
             <Row>
+              <Col>
+                  <div className="borrowbottom-cards">
+                    <div className="cards">
+                      <div className="cards-inner">
+                        <div className="cards-colum">
+                          <div className="inner-icon"><SvgIcon name="osmosis-icon" /></div>
+                          <p>CMDX</p>
+                        </div>
+                        <SvgIcon className="longarrow-icon" name="long-arrow" viewbox="0 0 64 5.774" />
+                        <div className="cards-colum">
+                          <div className="inner-icon"><SvgIcon name="cmst-icon" /></div>
+                          <p>CMST</p>
+                        </div>
+                      </div>
+                    </div>
+                    <SvgIcon className="longarrow-icon-middle" name="long-arrow" viewbox="0 0 64 5.774" />
+                    <div className="cards">
+                      <Tooltip className="commodo-tooltip tooltip-icon" placement="right" color="#173629" title={TooltipContent} overlayClassName="token-overlay">
+                          <SvgIcon className="tooltip-icon" name="info-icon" />
+                      </Tooltip>
+                      <div className="cards-inner">
+                        <div className="cards-colum">
+                          <div className="inner-icon"><SvgIcon name="cmst-icon" /></div>
+                          <p>CMST</p>
+                        </div>
+                        <SvgIcon className="longarrow-icon" name="long-arrow"  viewbox="0 0 64 5.774" />
+                        <div className="cards-colum">
+                          <div className="inner-icon"><SvgIcon name="osmosis-icon" /></div>
+                          <p>OSMO</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                  <div className="borrowbottom-cards justify-content-center">
+                    <div className="cards">
+                      <Tooltip className="commodo-tooltip tooltip-icon" placement="right" color="#173629" title={TooltipContent2} overlayClassName="token-overlay token-overlay-small">
+                          <SvgIcon className="tooltip-icon" name="info-icon" />
+                      </Tooltip>
+                      <div className="cards-inner">
+                        <div className="cards-colum">
+                          <div className="inner-icon"><SvgIcon name="cmst-icon" /></div>
+                          <p>CMST</p>
+                        </div>
+                        <SvgIcon className="longarrow-icon" name="long-arrow"  viewbox="0 0 64 5.774" />
+                        <div className="cards-colum">
+                          <div className="inner-icon"><SvgIcon name="osmosis-icon" /></div>
+                          <p>OSMO</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </Col>
+            </Row>
+            <Row>
               <Col sm="12" className="mt-3 mx-auto card-bottom-details">
+                <Row className="mt-2">
+                  <Col>
+                    <label>Routing mechanism</label>
+                    <TooltipIcon text="Routing mechanism" />
+                  </Col>
+                  <Col className="text-right">
+                    0.00
+                  </Col>
+                </Row>
                 <Row className="mt-2">
                   <Col>
                     <label>Health Factor</label>
@@ -535,6 +674,40 @@ const BorrowTab = ({
                 }
                 poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
+              />
+            </div>
+            <div className="commodo-card">
+              <div className="card-head">
+                <div className="head-left">
+                  <div className="assets-col">
+                    <div className="assets-icon">
+                      <SvgIcon name={"atom-icon"} />
+                    </div>
+                    Collateral Asset Liquidation Params
+                  </div>
+                </div>
+              </div>
+              <List
+                grid={{
+                  gutter: 16,
+                  xs: 2,
+                  sm: 2,
+                  md: 2,
+                  lg: 3,
+                  xl: 3,
+                  xxl: 3,
+                }}
+                dataSource={data}
+                renderItem={(item) => (
+                  <List.Item>
+                    <div>
+                      <p>
+                        {item.title} <TooltipIcon text={item.tooltipText} />
+                      </p>
+                      <h3>{item.counts}</h3>
+                    </div>
+                  </List.Item>
+                )}
               />
             </div>
           </div>

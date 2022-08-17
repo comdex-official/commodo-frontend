@@ -37,7 +37,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool, parent }) => {
           %
         </Col>
       </Row>
-      {parent !== "lend" ? (
+      {/* {parent !== "lend" ? (
         <>
           <Row className="mt-2">
             <Col>
@@ -106,7 +106,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool, parent }) => {
             </Col>
           </Row>
         </>
-      ) : null}
+      ) : null} */}
     </>
   );
 };
