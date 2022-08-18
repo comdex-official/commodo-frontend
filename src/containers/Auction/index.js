@@ -16,7 +16,7 @@ import { queryAuctionMippingIdParams } from "../../services/lend/query";
 import Bidding from "./Bidding";
 
 const Auction = ({ address, selectedAuctionedAsset }) => {
-  const auctionedAsset = useSelector((state) => state.auction.auctionedAsset[0])
+  const auctionedAsset = useSelector((state) => state.auction.auctionedAsset?.auctionedAsset[0])
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [params, setParams] = useState({});
@@ -230,7 +230,6 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
       selectedAuctionedAsset && selectedAuctionedAsset.length > 0 && selectedAuctionedAsset.map((singleSelectedAsset) => {
         let symbolToDenomAsset = symbolToDenom(singleSelectedAsset)
         filteredAuctioned = auctions && auctions?.filter((item) => item?.outflowTokenCurrentAmount?.denom === symbolToDenomAsset)
-        console.log(filteredAuctioned, "filteredAuctioned in map func");
         setNewAuction([...newAuction, ...filteredAuctioned])
         setFilterAuctions([...newAuction, ...filteredAuctioned])
       })
