@@ -50,7 +50,6 @@ const FilterModal = ({ auctions, setAuctions, selectedAuctionedAsset, setSelecte
       setSelectedAsset((prev) => [...prev, e.target.name])
     }
     else {
-      console.log([e.target.name], "No false ");
       let name = [e.target.name]
       removedData = selectedAsset.filter(function (item) {
         return item !== name[0]
