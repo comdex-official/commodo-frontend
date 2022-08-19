@@ -59,16 +59,7 @@ const FilterModal = ({ auctions, setAuctions, selectedAuctionedAsset, setSelecte
     }
   };
 
-  const selectedAuctionedAssets = () => {
 
-    let entries = Object.entries(auctionedAsseted[0])
-    let data = entries.map(([key, val] = entry) => {
-      if (auctionedAsseted[0][key] === true) {
-        console.log(`${key}: ${val}, Data object single`);
-        console.log({ key: val });
-      }
-    });
-  }
 
 
   return (
