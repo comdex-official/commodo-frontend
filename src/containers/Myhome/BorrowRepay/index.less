@@ -13,6 +13,7 @@
         left: 0;
         right: 0;
         margin: auto;
+        z-index: 2;
     }
     .cards{
         display: flex;
@@ -47,10 +48,10 @@
             .cards-colum{
                 text-align: center;
                 .inner-icon{
-                    width: 52px;
-                    height: 52px;
-                    border-radius: 52px;
-                    padding: 2px;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 40px;
+                    padding: 1px;
                     border: 1px solid @border-dark;
                     background: linear-gradient(180deg, #E2F7E5 0%, #032517 100%);
                     display: inline-flex;
@@ -61,8 +62,8 @@
                     }
                     .icon{
                         background: #19315A;
-                        width: 98%;
-                        height: 98%;
+                        width: 99%;
+                        height: 99%;
                         border-radius: 100%;
                     }
                 }
@@ -117,6 +118,11 @@
             margin-top: 10px;
             line-height: 1;
         }
+        .token-down-arrow{
+            height: 20px;
+            width: 100%;
+            fill: @bg-light;
+        }
         .tokencard{
             border-radius: 5px;
             width: 100%;
@@ -127,11 +133,11 @@
                 margin-bottom: 10px;
             }
             .tokencard-icon{
-                width: 28px;
-                height: 28px;
-                border-radius: 28px;
+                width: 34px;
+                height: 34px;
+                border-radius: 34px;
                 background: linear-gradient(180deg, #E2F7E5 0%, #032517 100%);
-                padding: 2px;
+                padding: 1px;
                 margin: auto;
                 .icon{
                     width: 100%;
@@ -153,4 +159,25 @@
             width: 100%;
         }
     }
+}
+
+.available-amount{
+    display: flex;
+    justify-content: flex-end;
+    font-size: @font-size-base;
+    color: @text-color-dark;
+    font-weight: 600;
+
+    .dark-mode & {
+    color: @white;
+    }
+
+    span {
+    color: @success-color;
+    margin: 0;
+    }
+}
+
+.fs20{
+    font-size: 20px;
 }

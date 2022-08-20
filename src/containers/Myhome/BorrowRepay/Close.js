@@ -45,9 +45,7 @@ const CloseTab = ({
             <Row>
               <Col>
                 <label>Amount to be closed</label>
-              </Col>
-              <Col className="text-right">
-                <div>
+                <div className="fs20">
                   {amountConversionWithComma(borrowPosition?.updatedAmountOut)}{" "}
                   {denomConversion(borrowPosition?.amountOut?.denom)}
                 </div>
@@ -65,19 +63,16 @@ const CloseTab = ({
                   )}
                 </small>
               </Col>
-            </Row>
-            <Row>
-              <Col>
-                <label>Available</label>
-              </Col>
-              <Col className="text-right">
-                <div>
-                  {amountConversionWithComma(availableBalance)}{" "}
-                  {denomConversion(borrowPosition?.amountOut?.denom)}
+              <Col className="text-right available-amount">
+                <div class="label-right">Available
+                  <span class="ml-1">
+                    {amountConversionWithComma(availableBalance)}{" "}
+                    {denomConversion(borrowPosition?.amountOut?.denom)}
+                  </span>
                 </div>
               </Col>
             </Row>
-            <Row className="mt-2">
+            <Row className="mt-3">
               <Col>
                 <label>Health Factor</label>
                 <TooltipIcon text="Numeric representation of your position's safety" />

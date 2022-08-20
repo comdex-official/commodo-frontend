@@ -1,4 +1,4 @@
-import { Button, message, Table } from "antd";
+import { Button, message, Table, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -122,10 +122,11 @@ const Borrow = ({ assetMap }) => {
         <div>Borrow Markets</div>
         <div>
           <Link to="/borrow-direct">
-            <Button className="back-btn ml-auto" icon={<SvgIcon name="direct-borrow" viewbox="0 0 57.25 54.685" />} type="primary">
-              {/* <TooltipIcon text="Lend and Borrow in one click" /> */}
-               <span className="pl-1">Direct Borrow</span>
-            </Button>
+            <Tooltip overlayClassName="commodo-tooltip" title="Lend and Borrow in one click">
+              <Button className="back-btn ml-auto" icon={<SvgIcon name="direct-borrow" viewbox="0 0 57.25 54.685" />} type="primary">
+                <span className="pl-1">Direct Borrow</span>
+              </Button>
+            </Tooltip>
           </Link>
         </div>
       </div>
