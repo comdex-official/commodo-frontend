@@ -65,8 +65,12 @@ const BorrowTab = ({
 
   const navigate = useNavigate();
 
-  let collateralAssetDenom = selectedCollateralValue ? assetMap[collateralAssetId]?.denom : "";
-  let borrowAssetDenom = selectedBorrowValue ? assetMap[pair?.assetOut]?.denom: "";
+  let collateralAssetDenom = selectedCollateralValue
+    ? assetMap[collateralAssetId]?.denom
+    : "";
+  let borrowAssetDenom = selectedBorrowValue
+    ? assetMap[pair?.assetOut]?.denom
+    : "";
 
   const availableBalance = getDenomBalance(balances, collateralAssetDenom) || 0;
 
@@ -108,6 +112,8 @@ const BorrowTab = ({
       setCollateralAssetId(assetId);
       setSelectedCollateralValue(assetId);
       setSelectedBorrowValue();
+      setPair();
+      setOutPool();
       setAssetToPool({});
       setInAmount(0);
       setValidationError();
@@ -188,7 +194,10 @@ const BorrowTab = ({
     if (selectedPool?.poolId) {
       setSelectedCollateralValue();
       setSelectedBorrowValue();
+      setPair();
+      setOutPool();
       setPool(selectedPool);
+      setCollateralAssetId();
     }
   };
 
@@ -340,7 +349,11 @@ const BorrowTab = ({
           </div>
           <p>Deposit {denomConversion(collateralAssetDenom)}</p>
         </div>
-        <SvgIcon className="token-down-arrow" name="tokenarrow-down" viewbox="0 0 9.774 45.02" />
+        <SvgIcon
+          className="token-down-arrow"
+          name="tokenarrow-down"
+          viewbox="0 0 9.774 45.02"
+        />
         <div className="tokencard with-shadow">
           <div className="tokencard-icon">
             <SvgIcon
@@ -372,7 +385,11 @@ const BorrowTab = ({
             {denomConversion(assetMap[pool?.firstBridgedAssetId]?.denom)}{" "}
           </p>
         </div>
-        <SvgIcon className="token-down-arrow" name="tokenarrow-down" viewbox="0 0 9.774 45.02" />
+        <SvgIcon
+          className="token-down-arrow"
+          name="tokenarrow-down"
+          viewbox="0 0 9.774 45.02"
+        />
         <div className="tokencard">
           <div className="tokencard-icon">
             <SvgIcon name={iconNameFromDenom(borrowAssetDenom)} />
@@ -393,7 +410,11 @@ const BorrowTab = ({
           </div>
           <p>Deposit {denomConversion(collateralAssetDenom)}</p>
         </div>
-        <SvgIcon className="token-down-arrow" name="tokenarrow-down" viewbox="0 0 9.774 45.02" />
+        <SvgIcon
+          className="token-down-arrow"
+          name="tokenarrow-down"
+          viewbox="0 0 9.774 45.02"
+        />
         <div className="tokencard with-shadow">
           <div className="tokencard-icon">
             <SvgIcon name={iconNameFromDenom(borrowAssetDenom)} />

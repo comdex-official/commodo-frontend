@@ -16,19 +16,19 @@ import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
   queryAssetPairs,
   queryLendPair,
-  queryLendPool
+  queryLendPool,
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
@@ -62,7 +62,9 @@ const BorrowTab = ({
   const navigate = useNavigate();
 
   let collateralAssetDenom = assetMap[lend?.assetId]?.denom;
-  let borrowAssetDenom = selectedBorrowValue ? assetMap[pair?.assetOut]?.denom: "";
+  let borrowAssetDenom = selectedBorrowValue
+    ? assetMap[pair?.assetOut]?.denom
+    : "";
 
   const availableBalance = lend?.availableToBorrow || 0;
 
@@ -105,6 +107,7 @@ const BorrowTab = ({
 
   const handleCollateralAssetChange = (lendingId) => {
     setSelectedBorrowValue();
+    setPair();
     setAssetToPool({});
     setAssetOutPool();
     const selectedLend = poolLendPositions.filter(
@@ -332,7 +335,11 @@ const BorrowTab = ({
           </div>
           <p>Deposit {denomConversion(collateralAssetDenom)}</p>
         </div>
-        <SvgIcon className="token-down-arrow" name="tokenarrow-down" viewbox="0 0 9.774 45.02" />
+        <SvgIcon
+          className="token-down-arrow"
+          name="tokenarrow-down"
+          viewbox="0 0 9.774 45.02"
+        />
         <div className="tokencard with-shadow">
           <div className="tokencard-icon">
             <SvgIcon
@@ -364,7 +371,11 @@ const BorrowTab = ({
             {denomConversion(assetMap[pool?.firstBridgedAssetId]?.denom)}{" "}
           </p>
         </div>
-        <SvgIcon className="token-down-arrow" name="tokenarrow-down" viewbox="0 0 9.774 45.02" />
+        <SvgIcon
+          className="token-down-arrow"
+          name="tokenarrow-down"
+          viewbox="0 0 9.774 45.02"
+        />
         <div className="tokencard">
           <div className="tokencard-icon">
             <SvgIcon name={iconNameFromDenom(borrowAssetDenom)} />
@@ -385,7 +396,11 @@ const BorrowTab = ({
           </div>
           <p>Deposit {denomConversion(collateralAssetDenom)}</p>
         </div>
-        <SvgIcon className="token-down-arrow" name="tokenarrow-down" viewbox="0 0 9.774 45.02" />
+        <SvgIcon
+          className="token-down-arrow"
+          name="tokenarrow-down"
+          viewbox="0 0 9.774 45.02"
+        />
         <div className="tokencard with-shadow">
           <div className="tokencard-icon">
             <SvgIcon name={iconNameFromDenom(borrowAssetDenom)} />
@@ -754,22 +769,14 @@ const BorrowTab = ({
           <div className="details-right">
             <div className="commodo-card">
               <Details
-                asset={
-                  assetMap[
-                    assetOutPool?.firstBridgedAssetId?.toNumber() ||
-                      pool?.firstBridgedAssetId?.toNumber()
-                  ]
-                }
+                asset={assetMap[assetOutPool?.firstBridgedAssetId?.toNumber()]}
                 poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
               />
               <div className="mt-5">
                 <Details
                   asset={
-                    assetMap[
-                      assetOutPool?.secondBridgedAssetId?.toNumber() ||
-                        pool?.secondBridgedAssetId?.toNumber()
-                    ]
+                    assetMap[assetOutPool?.secondBridgedAssetId?.toNumber()]
                   }
                   poolId={assetOutPool?.poolId || pool?.poolId}
                   parent="borrow"
@@ -778,12 +785,7 @@ const BorrowTab = ({
             </div>
             <div className="commodo-card">
               <Details
-                asset={
-                  assetMap[
-                    assetOutPool?.mainAssetId?.toNumber() ||
-                      pool?.mainAssetId?.toNumber()
-                  ]
-                }
+                asset={assetMap[assetOutPool?.mainAssetId?.toNumber()]}
                 poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
               />

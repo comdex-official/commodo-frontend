@@ -29,6 +29,8 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
 
         setStats(result?.AssetStats);
       });
+    } else if (stats?.poolId) {
+      setStats();
     }
   }, [asset, poolId, refreshBalance]);
 
@@ -58,7 +60,8 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
         ) * marketPrice(markets, asset?.denom),
         DOLLAR_DECIMALS
       )}`,
-      tooltipText: parent === "lend" ? "Total funds Deposited" :  "Total funds Borrowed"
+      tooltipText:
+        parent === "lend" ? "Total funds Deposited" : "Total funds Borrowed",
     },
     {
       title: "Available",
@@ -67,7 +70,8 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
           assetStats?.balance.amount || 0,
         DOLLAR_DECIMALS
       )}`,
-      tooltipText: parent === "lend" ? "Total funds Available" : "Total funds Available"
+      tooltipText:
+        parent === "lend" ? "Total funds Available" : "Total funds Available",
     },
     {
       title: "Utilization",
@@ -79,7 +83,8 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
           %
         </>
       ),
-      tooltipText: parent === "lend" ? "Asset Utilization" : "Asset Utilization"
+      tooltipText:
+        parent === "lend" ? "Asset Utilization" : "Asset Utilization",
     },
     {
       title: parent === "lend" ? "Lend APY" : "Borrow APY",
@@ -93,7 +98,8 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
           %
         </>
       ),
-      tooltipText: parent === "lend" ? "Lend APY of Asset" : "Borrow APY of Asset"
+      tooltipText:
+        parent === "lend" ? "Lend APY of Asset" : "Borrow APY of Asset",
     },
   ];
 
