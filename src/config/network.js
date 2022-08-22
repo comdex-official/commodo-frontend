@@ -1,8 +1,8 @@
 export const comdex = {
   chainId: process.env.REACT_APP_CHAIN_ID,
   chainName: process.env.REACT_APP_CHAIN_NAME,
-  rpc: "https://devnet.rpc.commodo.one",
-  rest: "https://devnet.rest.commodo.one",
+  rpc: process.env.REACT_APP_RPC,
+  rest: process.env.REACT_APP_REST,
   explorerUrlToTx: process.env.REACT_APP_EXPLORER_URL_TO_TX,
   coinDenom: "CMDX",
   coinMinimalDenom: "ucmdx",
@@ -12,8 +12,8 @@ export const comdex = {
 };
 
 export const ibcDenoms = {
-  uatom: "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
-  uosmo: "ibc/0471F1C4E7AFD3F07702BEF6DC365268D64570F7C1FDC98EA6098DD6DE59817B",
+  uatom: process.env.REACT_APP_ATOM_IBC_DENOM,
+  uosmo: process.env.REACT_APP_OSMO_IBC_DENOM,
 };
 
 export const cmst = {
