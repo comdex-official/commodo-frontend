@@ -410,9 +410,9 @@ const BorrowTab = ({
       {!dataInProgress ? (
         <>
           <div className="details-left commodo-card commodo-borrow-page">
-            <div className="card-header text-left">
+            {/* <div className="card-header text-left">
               <SvgIcon className="dborrow-iconhead" name="direct-borrow" viewbox="0 0 57.25 54.685" /> Direct Borrow <TooltipIcon text="Lend and Borrow in one click" />
-            </div>
+            </div> */}
             <div className="assets-select-card py-3 cpool-select-card mb-3">
               <div className="assets-left full-with-asset">
                 <label className="left-label">Collateral cPool</label>

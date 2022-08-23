@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { setPools } from "../../../../actions/lend";
-import { Col, Row } from "../../../../components/common";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE
@@ -37,7 +37,10 @@ const Direct = ({ setPools }) => {
 
   return (
     <div className="app-content-wrapper">
-      <Row>
+      <Row className="align-items-center">
+        <Col className="dborrow-heading-left">
+          <SvgIcon className="dborrow-iconhead" name="direct-borrow" viewbox="0 0 57.25 54.685" /> Direct Borrow <TooltipIcon text="Lend and Borrow in one click" />
+        </Col>
         <Col className="text-right mb-3">
           <Link to="/borrow">
             <Button className="back-btn" type="primary">
