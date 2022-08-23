@@ -1,22 +1,22 @@
-import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
-import { connect } from "react-redux";
 import { List, message, Table } from "antd";
-import Deposit from "./DepositModal";
-import Withdraw from "./WithdrawModal";
-import { ibcAssetsInfo } from "../../config/ibc";
-import { commaSeparator, marketPrice } from "../../utils/number";
-import { embedChainInfo } from "../../config/chain";
-import {
-  amountConversion,
-  amountConversionWithComma,
-  denomConversion,
-} from "../../utils/coin";
-import { cmst, comdex, harbor } from "../../config/network";
-import { iconNameFromDenom } from "../../utils/string";
 import Lodash from "lodash";
+import * as PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import { embedChainInfo } from "../../config/chain";
+import { ibcAssetsInfo } from "../../config/ibc";
+import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
+import {
+    amountConversion,
+    amountConversionWithComma,
+    denomConversion
+} from "../../utils/coin";
+import { commaSeparator, marketPrice } from "../../utils/number";
+import { iconNameFromDenom } from "../../utils/string";
+import Deposit from "./DepositModal";
 import "./index.less";
+import Withdraw from "./WithdrawModal";
 
 const Assets = ({ assetBalance, balances, markets }) => {
   const data = [
@@ -278,7 +278,7 @@ const Assets = ({ assetBalance, balances, markets }) => {
             <div className="commodo-card py-3 bg-none">
               <div className="card-content">
                 <Table
-                  className="custom-table liquidation-table"
+                  className="custom-table auction-table"
                   dataSource={tableData}
                   columns={columns}
                   pagination={false}

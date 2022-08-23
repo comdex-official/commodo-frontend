@@ -1,5 +1,6 @@
 import { QueryClientImpl } from "comdex-codec/build/comdex/lend/v1beta1/query";
 import Long from "long";
+import { APP_ID } from "../../constants/common";
 import { createQueryClient } from "../helper";
 
 export const queryLendPools = (
@@ -109,6 +110,24 @@ export const queryLendPosition = (id, callback) => {
   });
 };
 
+export const queryBorrowPosition = (id, callback) => {
+  createQueryClient((error, rpcClient) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    new QueryClientImpl(rpcClient)
+      .QueryBorrow({ id: Long.fromNumber(id) })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};
+
 export const queryAssetRatesStats = (callback) => {
   createQueryClient((error, rpcClient) => {
     if (error) {
@@ -145,7 +164,7 @@ export const queryModuleBalance = (poolId, callback) => {
   });
 };
 
-export const queryUserPoolLends = (address, poolId, callback) => {
+export const queryUserPoolLends = (address, callback) => {
   createQueryClient((error, rpcClient) => {
     if (error) {
       callback(error);
@@ -153,9 +172,8 @@ export const queryUserPoolLends = (address, poolId, callback) => {
     }
 
     new QueryClientImpl(rpcClient)
-      .QueryAllLendByOwnerAndPool({
+      .QueryAllLendByOwner({
         owner: address,
-        poolId: Long.fromNumber(poolId),
       })
       .then((result) => {
         callback(null, result);
@@ -222,5 +240,77 @@ export const queryUserBorrows = (address, callback) => {
       .catch((error) => {
         callback(error?.message);
       });
+  });
+};
+
+export const queryDepositStats = (callback) => {
+  createQueryClient((error, rpcClient) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    new QueryClientImpl(rpcClient)
+      .QueryDepositStats()
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};
+
+export const queryUserDepositStats = (callback) => {
+  createQueryClient((error, rpcClient) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    new QueryClientImpl(rpcClient)
+      .QueryUserDepositStats()
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};
+
+export const queryBorrowStats = (callback) => {
+  createQueryClient((error, rpcClient) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    new QueryClientImpl(rpcClient)
+      .QueryBorrowStats()
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};
+
+export const queryAuctionMippingIdParams = (callback) => {
+  createQueryClient((error, rpcClient) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    new QueryClientImpl(rpcClient)
+      .QueryAuctionParams({
+        appId: Long.fromNumber(APP_ID),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
   });
 };

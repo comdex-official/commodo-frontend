@@ -1,17 +1,17 @@
-import * as PropTypes from "prop-types";
-import { SvgIcon, TooltipIcon } from "../../../components/common";
-import { connect } from "react-redux";
 import { Select } from "antd";
-import "./index.less";
+import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { iconNameFromDenom } from "../../../utils/string";
+import { connect } from "react-redux";
+import { SvgIcon, TooltipIcon } from "../../../components/common";
+import CustomRow from "../../../components/common/Asset/CustomRow";
+import Details from "../../../components/common/Asset/Details";
 import {
   amountConversionWithComma,
-  denomConversion,
+  denomConversion
 } from "../../../utils/coin";
+import { iconNameFromDenom } from "../../../utils/string";
 import ActionButton from "./ActionButton";
-import Details from "../../../components/common/Asset/Details";
-import CustomRow from "../../../components/common/Asset/CustomRow";
+import "./index.less";
 
 const { Option } = Select;
 
@@ -42,7 +42,7 @@ const CloseTab = ({
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <CustomRow assetList={assetList} />
+        <CustomRow assetList={assetList}  poolId={pool?.poolId?.low}/>
         <div className="assets-select-card mb-0">
           <div className="assets-left">
             <label className="left-label">
@@ -63,6 +63,8 @@ const CloseTab = ({
                   </div>
                 }
                 defaultActiveFirstOption={true}
+                showArrow={false}
+                disabled
                 suffixIcon={
                   <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                 }
@@ -90,7 +92,7 @@ const CloseTab = ({
             <div className="label-right">
               Available
               <span className="ml-1">
-                {amountConversionWithComma(lendPosition?.amountIn?.amount || 0)}{" "}
+                {amountConversionWithComma(lendPosition?.updatedAmountIn || 0)}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
               </span>
             </div>

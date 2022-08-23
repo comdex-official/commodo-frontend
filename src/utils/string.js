@@ -1,6 +1,5 @@
 import { sha256, stringToPath } from "@cosmjs/crypto";
-import { comdex } from "../config/network";
-import { ibcDenoms } from "../config/network";
+import { comdex, ibcDenoms } from "../config/network";
 
 const encoding = require("@cosmjs/encoding");
 
@@ -18,15 +17,37 @@ export const ibcDenomToDenom = (key) => {
       return "uust";
     case ibcDenoms["uluna"]:
       return "uluna";
-    case ibcDenoms["uxprt"]:
-      return "uxprt";
     case ibcDenoms["uosmo"]:
       return "uosmo";
     default:
       return "";
   }
 };
-
+export const symbolToDenom = (key) => {
+  switch (key) {
+    case "atom":
+    case ibcDenoms["atom"]:
+      return "uatom";
+    case "xprt":
+    case ibcDenoms["xprt"]:
+      return "uxprt";
+    case "osmo":
+    case ibcDenoms["osmo"]:
+      return "uosmo";
+    case "cmdx":
+      return "ucmdx";
+    case "cmst":
+      return "ucmst";
+    case "akt":
+      return "uakt";
+    case "dvpn":
+      return "udvpn";
+    case "harbor":
+      return "uharbor";
+    default:
+      return "";
+  }
+};
 export const denomToSymbol = (key) => {
   switch (key) {
     case "ucmst":
@@ -38,9 +59,6 @@ export const denomToSymbol = (key) => {
       return "ATOM";
     case "udvpn":
       return "DVPN";
-    case "uxprt":
-    case ibcDenoms["uxprt"]:
-      return "XPRT";
     case "uluna":
     case ibcDenoms["uluna"]:
       return "LUNA";
@@ -71,9 +89,6 @@ export const iconNameFromDenom = (key) => {
       return "cmst-icon";
     case "uharbor":
       return "harbor-icon";
-    case "uxprt":
-    case ibcDenoms["uxprt"]:
-      return "xprt-icon";
     case "uosmo":
     case ibcDenoms["uosmo"]:
       return "osmosis-icon";
@@ -98,7 +113,7 @@ export const lowercaseFirstLetter = (string) => {
 export const toDecimals = (value, decimal = comdex.coinDecimals) =>
   value.indexOf(".") >= 0
     ? value.substr(0, value.indexOf(".")) +
-      value.substr(value.indexOf("."), decimal + 1)
+    value.substr(value.indexOf("."), decimal + 1)
     : value;
 
 export const uniqueDenoms = (list, type) => {
@@ -128,4 +143,8 @@ export const makeHdPath = (
   return stringToPath(
     "m/44'/" + coinType + "'/" + accountNumber + "'/0/" + addressIndex
   );
+};
+
+export const ucDenomToDenom = (denom) => {
+  return denom.slice(0, 1) + denom.slice(2); //example uccmdx => ucmdx
 };

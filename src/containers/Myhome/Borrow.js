@@ -1,52 +1,23 @@
+import { Button, Table } from "antd";
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
-import { Button, Table, Progress, message } from "antd";
-import { Link } from "react-router-dom";
-import "./index.less";
 import { useNavigate } from "react-router";
-import { useEffect, useState } from "react";
-import { setUserBorrows } from "../../actions/lend";
-import { queryUserBorrows } from "../../services/lend/query";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import HealthFactor from "../../components/HealthFactor";
+import { amountConversionWithComma, denomConversion } from "../../utils/coin";
+import { iconNameFromDenom } from "../../utils/string";
+import AssetApy from "../Market/AssetApy";
+import "./index.less";
 
-const Borrow = ({ address, setUserBorrows, userBorrowList }) => {
-  const [inProgress, setInProgress] = useState(false);
-
+const Borrow = ({ userBorrowList, inProgress }) => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setUserBorrows([]);
-  }, []);
-
-  useEffect(() => {
-    if (address) {
-      fetchUserBorrows();
-    }
-  }, [address]);
-
-  const fetchUserBorrows = () => {
-    setInProgress(true);
-    queryUserBorrows(address, (error, result) => {
-      setInProgress(false);
-
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      console.log("the resur", result);
-      if (result?.borrows?.length > 0) {
-        setUserBorrows(result?.borrows);
-      }
-    });
-  };
 
   const columns = [
     {
       title: "Asset",
       dataIndex: "asset",
       key: "asset",
-      width: 180,
+      width: 150,
     },
     {
       title: (
@@ -56,29 +27,38 @@ const Borrow = ({ address, setUserBorrows, userBorrowList }) => {
       ),
       dataIndex: "debt",
       key: "debt",
-      width: 150,
+      width: 200,
+    },
+    {
+      title: "Collateral",
+      dataIndex: "collateral",
+      key: "collateral",
+      width: 200,
+    },
+    {
+      title: (
+        <>
+          Health Factor <TooltipIcon text="Numeric representation of your position's safety. Liquidation at H.F<1.0" />
+        </>
+      ),
+      dataIndex: "health",
+      key: "health",
+      width: 130,
+      align: "center",
+      render: (item) => <HealthFactor parent="table" borrow={item} />,
     },
     {
       title: "APY",
       dataIndex: "apy",
       key: "apy",
-      width: 110,
-      render: (apy) => <>{apy}%</>,
+      width: 100,
+      render: (borrow) => <AssetApy borrowPosition={borrow} parent="borrow" />,
     },
     {
-      title: "Health",
-      dataIndex: "health",
-      key: "health",
-      width: 300,
-      align: "center",
-      render: (text) => (
-        <Progress
-          className="health-progress"
-          style={{ width: 150 }}
-          percent={text}
-          size="small"
-        />
-      ),
+      title: "Interest",
+      dataIndex: "interest",
+      key: "interest",
+      width: 150,
     },
     {
       title: "",
@@ -86,61 +66,80 @@ const Borrow = ({ address, setUserBorrows, userBorrowList }) => {
       key: "action",
       align: "right",
       width: 200,
-      render: () => (
+      render: (item) => (
         <>
           <div className="d-flex">
-            <Link to="/borrow">
-              <Button type="primary" className="btn-filled" size="small">
-                Borrow
-              </Button>
-            </Link>
-            <Link to="/borrow">
-              <Button type="primary" size="small" className="ml-2">
-                Repay
-              </Button>
-            </Link>
+            <Button
+              onClick={() =>
+                navigate(`/borrow/${item?.borrowingId?.toNumber()}`)
+              }
+              type="primary"
+              className="btn-filled"
+              size="small"
+            >
+              Borrow
+            </Button>
+            <Button
+              onClick={() =>
+                navigate({
+                  pathname: `/borrow/${item?.borrowingId?.toNumber()}`,
+                  hash: "repay",
+                })
+              }
+              type="primary"
+              size="small"
+              className="ml-2"
+            >
+              Repay
+            </Button>
           </div>
         </>
       ),
     },
   ];
 
-  const tableData = [
-    {
-      key: 1,
-      asset: (
-        <>
-          <div className="assets-with-icon">
-            <div className="assets-icon">
-              <SvgIcon name="cmst-icon" viewBox="0 0 30 30" />
-            </div>
-            CMST
-          </div>
-        </>
-      ),
-      debt: "142 CMST",
-      apy: "13.33",
-      health: "36",
-    },
-    {
-      key: 1,
-      asset: (
-        <>
-          <div className="assets-with-icon">
-            <div className="assets-icon">
-              <SvgIcon name="osmosis-icon" viewBox="0 0 30 30" />
-            </div>
-            OSMO
-          </div>
-        </>
-      ),
-      debt: "159 OSMO",
-      apy: "11.56",
-      health: "20",
-    },
-  ];
+  const tableData =
+    userBorrowList?.length > 0
+      ? userBorrowList?.map((item, index) => {
+          return {
+            key: index,
+            asset: (
+              <>
+                <div className="assets-with-icon">
+                  <div className="assets-icon">
+                    <SvgIcon name={iconNameFromDenom(item?.amountOut?.denom)} />
+                  </div>
+                  {denomConversion(item?.amountOut?.denom)}
+                </div>
+              </>
+            ),
+            debt: (
+              <>
+                {" "}
+                {amountConversionWithComma(item?.amountOut?.amount)}{" "}
+                {denomConversion(item?.amountOut?.denom)}
+              </>
+            ),
+            collateral: (
+              <>
+                {" "}
+                {amountConversionWithComma(item?.amountIn?.amount)}{" "}
+                {denomConversion(item?.amountIn?.denom)}
+              </>
+            ),
+            apy: item,
+            interest: (
+              <>
+                {amountConversionWithComma(item?.interestAccumulated)}{" "}
+                {denomConversion(item?.amountOut?.denom)}
+              </>
+            ),
+            health: item,
+            action: item,
+          };
+        })
+      : [];
 
-  console.log("borrows", userBorrowList);
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -166,20 +165,24 @@ const Borrow = ({ address, setUserBorrows, userBorrowList }) => {
 
 Borrow.propTypes = {
   lang: PropTypes.string.isRequired,
-  address: PropTypes.string,
+  inProgress: PropTypes.bool,
   userBorrowList: PropTypes.arrayOf(
     PropTypes.shape({
-      amountIn: PropTypes.shape({
+      amountOut: PropTypes.shape({
         denom: PropTypes.string.isRequired,
         amount: PropTypes.string,
       }),
-      assetId: PropTypes.shape({
+      borrowingId: PropTypes.shape({
         low: PropTypes.number,
       }),
-      poolId: PropTypes.shape({
+      cpoolName: PropTypes.string,
+      lendingId: PropTypes.shape({
         low: PropTypes.number,
       }),
-      rewardAccumulated: PropTypes.string,
+      pairId: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+      interestAccumulated: PropTypes.string,
     })
   ),
 };
@@ -187,13 +190,8 @@ Borrow.propTypes = {
 const stateToProps = (state) => {
   return {
     lang: state.language,
-    address: state.account.address,
     userBorrowList: state.lend.userBorrows,
   };
 };
 
-const actionsToProps = {
-  setUserBorrows,
-};
-
-export default connect(stateToProps, actionsToProps)(Borrow);
+export default connect(stateToProps)(Borrow);

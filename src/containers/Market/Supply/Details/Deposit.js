@@ -1,30 +1,36 @@
+import { Button, message, Select, Spin } from "antd";
+import Long from "long";
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Button, Select, message, Spin } from "antd";
-import "./index.less";
+import { useNavigate } from "react-router";
+import { setBalanceRefresh } from "../../../../actions/account";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
+import CustomRow from "../../../../components/common/Asset/CustomRow";
+import Details from "../../../../components/common/Asset/Details";
+import AssetStats from "../../../../components/common/Asset/Stats";
+import Snack from "../../../../components/common/Snack";
+import CustomInput from "../../../../components/CustomInput";
+import { comdex } from "../../../../config/network";
+import { ValidateInputNumber } from "../../../../config/_validation";
+import {
+  APP_ID,
+  DEFAULT_FEE,
+  DOLLAR_DECIMALS
+} from "../../../../constants/common";
+import { signAndBroadcastTransaction } from "../../../../services/helper";
+import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../../../utils/coin";
+import { commaSeparator, marketPrice } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
-import { useEffect, useState } from "react";
-import CustomInput from "../../../../components/CustomInput";
-import { ValidateInputNumber } from "../../../../config/_validation";
-import { signAndBroadcastTransaction } from "../../../../services/helper";
 import variables from "../../../../utils/variables";
-import Snack from "../../../../components/common/Snack";
-import { defaultFee } from "../../../../services/transaction";
-import Long from "long";
-import Details from "../../../../components/common/Asset/Details";
-import AssetStats from "../../../../components/common/Asset/Stats";
-import { comdex } from "../../../../config/network";
-import { DEFAULT_FEE } from "../../../../constants/common";
-import { useNavigate } from "react-router";
-import CustomRow from "../../../../components/common/Asset/CustomRow";
+import "./index.less";
 
 const { Option } = Select;
 
@@ -35,6 +41,9 @@ const DepositTab = ({
   assetMap,
   balances,
   address,
+  markets,
+  setBalanceRefresh,
+  refreshBalance,
 }) => {
   const [assetList, setAssetList] = useState();
   const [selectedAssetId, setSelectedAssetId] = useState();
@@ -58,6 +67,8 @@ const DepositTab = ({
 
   const handleAssetChange = (value) => {
     setSelectedAssetId(value);
+    setAmount(0);
+    setValidationError();
   };
 
   const handleInputChange = (value) => {
@@ -75,6 +86,7 @@ const DepositTab = ({
         message: {
           typeUrl: "/comdex.lend.v1beta1.MsgLend",
           value: {
+            appId: Long.fromNumber(APP_ID),
             lender: address,
             poolId: pool?.poolId,
             assetId: Long.fromNumber(selectedAssetId),
@@ -108,6 +120,7 @@ const DepositTab = ({
           />
         );
 
+        setBalanceRefresh(refreshBalance + 1);
         navigate("/myhome");
       }
     );
@@ -128,11 +141,11 @@ const DepositTab = ({
       {!dataInProgress ? (
         <>
           <div className="details-left commodo-card">
-            <CustomRow assetList={assetList} />
+            <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
             <div className="assets-select-card mb-0">
               <div className="assets-left">
                 <label className="left-label">
-                  Deposit <TooltipIcon text="" />
+                  Lend
                 </label>
                 <div className="assets-select-wrapper">
                   <Select
@@ -202,13 +215,27 @@ const DepositTab = ({
                       validationError={validationError}
                     />
                   </div>
-                  <small>$120.00</small>
+                  $
+                  {commaSeparator(
+                    Number(
+                      amount *
+                        marketPrice(
+                          markets,
+                          assetMap[selectedAssetId]?.denom
+                        ) || 0
+                    ),
+                    DOLLAR_DECIMALS
+                  )}{" "}
                 </div>
               </div>
             </div>
             <Row>
               <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-                <AssetStats assetId={selectedAssetId} />
+                <AssetStats
+                  assetId={selectedAssetId}
+                  pool={pool}
+                  parent="lend"
+                />
               </Col>
             </Row>
             <div className="assets-form-btn">
@@ -216,10 +243,15 @@ const DepositTab = ({
                 type="primary"
                 className="btn-filled"
                 loading={inProgress}
-                disabled={!Number(amount) || inProgress || !selectedAssetId}
+                disabled={
+                  !Number(amount) ||
+                  validationError?.message ||
+                  inProgress ||
+                  !selectedAssetId
+                }
                 onClick={handleClick}
               >
-                Deposit
+                Lend
               </Button>
             </div>
           </div>
@@ -259,12 +291,20 @@ const DepositTab = ({
 DepositTab.propTypes = {
   dataInProgress: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
+  setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
       amount: PropTypes.string,
+    })
+  ),
+  markets: PropTypes.arrayOf(
+    PropTypes.shape({
+      rates: PropTypes.shape({
+        low: PropTypes.number,
+      }),
     })
   ),
   pool: PropTypes.shape({
@@ -281,6 +321,7 @@ DepositTab.propTypes = {
       low: PropTypes.number,
     }),
   }),
+  refreshBalance: PropTypes.number.isRequired,
 };
 
 const stateToProps = (state) => {
@@ -290,9 +331,11 @@ const stateToProps = (state) => {
     assetMap: state.asset._.map,
     balances: state.account.balances.list,
     lang: state.language,
+    markets: state.oracle.market.list,
+    refreshBalance: state.account.refreshBalance,
   };
 };
 
-const actionsToProps = {};
+const actionsToProps = { setBalanceRefresh };
 
 export default connect(stateToProps, actionsToProps)(DepositTab);

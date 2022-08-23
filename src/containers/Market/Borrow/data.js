@@ -1,10 +1,16 @@
 import { ActionButton } from "../ActionButton";
-import AvailableToBorrow from "./AvailableToBorrow";
 import AssetApy from "../AssetApy";
+import AvailableToBorrow from "./AvailableToBorrow";
 
 export const columns = [
   {
-    title: "Asset",
+    title: "cPool Id",
+    dataIndex: "pool_id",
+    key: "pool_id",
+    width: 80,
+  },
+  {
+    title: "cPool Asset",
     dataIndex: "asset",
     key: "asset",
     width: 120,
@@ -12,7 +18,7 @@ export const columns = [
   {
     title: (
       <>
-        Bridge <br /> Asset 1
+        Transit<br /> Asset 1
       </>
     ),
     dataIndex: "bridge_asset",
@@ -22,7 +28,7 @@ export const columns = [
   {
     title: (
       <>
-        Bridge <br /> Asset 2
+        Transit<br /> Asset 2
       </>
     ),
     dataIndex: "bridge_asset2",
@@ -43,7 +49,7 @@ export const columns = [
   {
     title: (
       <>
-        Asset <br /> APY
+        Main Asset <br /> APY
       </>
     ),
     dataIndex: "asset_apy",
@@ -60,7 +66,7 @@ export const columns = [
   {
     title: (
       <>
-        Bridge Asset 1 <br /> APY
+        Transit Asset 1 <br /> APY
       </>
     ),
     dataIndex: "bridge_apy",
@@ -77,7 +83,7 @@ export const columns = [
   {
     title: (
       <>
-        Bridge Asset 2 <br /> APY
+        Transit Asset 2 <br /> APY
       </>
     ),
     dataIndex: "bridge_apy2",
@@ -100,7 +106,7 @@ export const columns = [
     render: (item) => (
       <ActionButton
         name="Details"
-        path={`/borrow-details/${item?.poolId?.toNumber()}`}
+        path={`/borrow-markets/${item?.poolId?.toNumber()}`}
       />
     ),
   },

@@ -1,117 +1,155 @@
+import { Select } from "antd";
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Button, List, Select, Input, Progress } from "antd";
+import { setBalanceRefresh } from "../../../actions/account";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import CustomRow from "../../../components/common/Asset/CustomRow";
+import Details from "../../../components/common/Asset/Details";
+import AssetStats from "../../../components/common/Asset/Stats";
+import CustomInput from "../../../components/CustomInput";
+import HealthFactor from "../../../components/HealthFactor";
+import { ValidateInputNumber } from "../../../config/_validation";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
+import {
+  amountConversion,
+  amountConversionWithComma,
+  denomConversion,
+  getAmount,
+  getDenomBalance
+} from "../../../utils/coin";
+import { commaSeparator, marketPrice } from "../../../utils/number";
+import { iconNameFromDenom, toDecimals } from "../../../utils/string";
+import ActionButton from "./ActionButton";
 import "./index.less";
 
 const { Option } = Select;
 
-const RepayTab = () => {
-  const data = [
-    {
-      title: "Total Borrowed",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Borrow APY",
-      counts: "12.33%",
-    },
-  ];
-  const data2 = [
-    {
-      title: "Total Borrowed",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Borrow APY",
-      counts: "13.33%",
-    },
-  ];
-  const data3 = [
-    {
-      title: "Total Borrowed",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Available",
-      counts: "$1,234.20",
-    },
-    {
-      title: "Utilization",
-      counts: "30.45%",
-    },
-    {
-      title: "Borrow APY",
-      counts: "12.76%",
-    },
-  ];
+const RepayTab = ({
+  lang,
+  dataInProgress,
+  borrowPosition,
+  pool,
+  assetMap,
+  balances,
+  address,
+  refreshBalance,
+  refreshBorrowPosition,
+  setBalanceRefresh,
+  markets,
+  pair,
+}) => {
+  const [amount, setAmount] = useState();
+  const [validationError, setValidationError] = useState();
+  const [assetList, setAssetList] = useState();
+
+  const selectedAssetId = pair?.assetOut?.toNumber();
+  const availableBalance =
+    getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
+
+  useEffect(() => {
+    if (pool?.poolId) {
+      setAssetList([
+        assetMap[pool?.mainAssetId?.toNumber()],
+        assetMap[pool?.firstBridgedAssetId?.toNumber()],
+        assetMap[pool?.secondBridgedAssetId?.toNumber()],
+      ]);
+    }
+  }, [pool]);
+
+  const handleInputChange = (value) => {
+    value = toDecimals(value).toString().trim();
+
+    setAmount(value);
+    setValidationError(
+      ValidateInputNumber(
+        getAmount(value),
+        borrowPosition?.updatedAmountOut,
+        "repay"
+      )
+    );
+  };
+
+  const handleRefresh = () => {
+    refreshBorrowPosition();
+    setBalanceRefresh(refreshBalance + 1);
+    setAmount();
+  };
+
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <div className="assets-select-card mb-4">
+        <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
+        <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="left-label">
               Repay Asset <TooltipIcon text="" />
             </label>
             <div className="assets-select-wrapper">
-              <Select
-                className="assets-select"
-                dropdownClassName="asset-select-dropdown"
-                placeholder={
-                  <div className="select-placeholder">
-                    <div className="circle-icon">
-                      <div className="circle-icon-inner" />
+              <div className="assets-select-wrapper">
+                <Select
+                  className="assets-select"
+                  dropdownClassName="asset-select-dropdown"
+                  defaultValue="1"
+                  placeholder={
+                    <div className="select-placeholder">
+                      <div className="circle-icon">
+                        <div className="circle-icon-inner" />
+                      </div>
+                      Select
                     </div>
-                    Select
-                  </div>
-                }
-                defaultActiveFirstOption={true}
-                suffixIcon={
-                  <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
-                }
-              >
-                <Option key="1">
-                  <div className="select-inner">
-                    <div className="svg-icon">
-                      <div className="svg-icon-inner">
-                        <SvgIcon name="atom-icon" />
+                  }
+                  defaultActiveFirstOption={true}
+                  showArrow={false}
+                  disabled
+                >
+                  <Option key="1">
+                    <div className="select-inner">
+                      <div className="svg-icon">
+                        <div className="svg-icon-inner">
+                          <SvgIcon
+                            name={iconNameFromDenom(
+                              assetMap[selectedAssetId]?.denom
+                            )}
+                          />
+                        </div>
+                      </div>
+                      <div className="name">
+                        {denomConversion(assetMap[selectedAssetId]?.denom)}
                       </div>
                     </div>
-                    <div className="name">Atom</div>
-                  </div>
-                </Option>
-              </Select>
+                  </Option>
+                </Select>
+              </div>
             </div>
           </div>
           <div className="assets-right">
             <div className="label-right">
               Available
-              <span className="ml-1">142 CMST</span>
-              <div className="max-half">
-                <Button className="active">Max</Button>
-              </div>
+              <span className="ml-1">
+                {amountConversionWithComma(availableBalance)}{" "}
+                {denomConversion(assetMap[selectedAssetId]?.denom)}
+              </span>
             </div>
             <div>
               <div className="input-select">
-                <Input placeholder="" value="23.00" />
+                <CustomInput
+                  value={amount}
+                  onChange={(event) => handleInputChange(event.target.value)}
+                  validationError={validationError}
+                />{" "}
               </div>
-              <small>$120.00</small>
+              <small>
+                $
+                {commaSeparator(
+                  Number(
+                    amount *
+                      marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
+                      0
+                  ),
+                  DOLLAR_DECIMALS
+                )}{" "}
+              </small>{" "}
             </div>
           </div>
         </div>
@@ -120,163 +158,88 @@ const RepayTab = () => {
             <Row>
               <Col>
                 <label>Remaining to Repay</label>
-                <p className="remaining-infotext mt-1">
-                  You don’t have enough funds to repay the full amount
-                </p>
               </Col>
               <Col className="text-right">
-                <div>123.45 CMST</div>
-                <small className="font-weight-light">$420.00</small>
+                <div>
+                  {amountConversionWithComma(borrowPosition?.updatedAmountOut)}{" "}
+                  {denomConversion(borrowPosition?.amountOut?.denom)}
+                </div>
+                <small className="font-weight-light">
+                  $
+                  {commaSeparator(
+                    Number(
+                      amountConversion(borrowPosition?.updatedAmountOut) *
+                        marketPrice(
+                          markets,
+                          assetMap[selectedAssetId]?.denom
+                        ) || 0
+                    ),
+                    DOLLAR_DECIMALS
+                  )}
+                </small>
               </Col>
             </Row>
             <Row className="mt-2">
               <Col>
-                <label>Current Health Factor</label>
+                <label>Health Factor</label>
+                <TooltipIcon text="Numeric representation of your position's safety" />
               </Col>
-              <Col className="text-right">90%</Col>
-            </Row>
-            <Row className="pb-2">
-              <Col>
-                <Progress className="commodo-progress" percent={30} />
+              <Col className="text-right">
+                <HealthFactor
+                  borrow={borrowPosition}
+                  pair={pair}
+                  pool={pool}
+                  inAmount={borrowPosition?.amountIn?.amount}
+                  outAmount={
+                    amount
+                      ? Number(borrowPosition?.updatedAmountOut) -
+                        Number(getAmount(amount))
+                      : borrowPosition?.updatedAmountOut
+                  }
+                />{" "}
               </Col>
             </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Threshold</label>
-              </Col>
-              <Col className="text-right">80%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Penalty</label>
-              </Col>
-              <Col className="text-right">5%</Col>
-            </Row>
+            <AssetStats pair={pair} pool={pool} />
           </Col>
         </Row>
         <div className="assets-form-btn">
-          <Button type="primary" className="btn-filled">
-            Repay
-          </Button>
+          <ActionButton
+            name="Repay"
+            lang={lang}
+            disabled={
+              !Number(amount) ||
+              dataInProgress ||
+              !selectedAssetId ||
+              validationError?.message
+            }
+            amount={amount}
+            address={address}
+            borrowId={borrowPosition?.borrowingId}
+            denom={borrowPosition?.amountOut?.denom}
+            refreshData={handleRefresh}
+          />
         </div>
       </div>
       <div className="details-right">
         <div className="commodo-card">
-          <div className="card-head">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="cmst-icon" />
-                </div>
-                CMST
-              </div>
-              {/* <span className="percent-badge">
-                +6.18 <SvgIcon name="commodo-icon" />
-              </span> */}
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
-          </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
+          <Details
+            asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
+            poolId={pool?.poolId}
+            parent="borrow"
           />
-          <div className="card-head mt-5">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="atom-icon" />
-                </div>
-                ATOM
-              </div>
-              {/* <span className="percent-badge">
-                +6.18 <SvgIcon name="commodo-icon" />
-              </span> */}
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
+          <div className="mt-5">
+            <Details
+              asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
+              poolId={pool?.poolId}
+              parent="borrow"
+            />
           </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data2}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
-          />
         </div>
         <div className="commodo-card">
-          <div className="card-head">
-            <div className="head-left">
-              <div className="assets-col">
-                <div className="assets-icon">
-                  <SvgIcon name="cmdx-icon" />
-                </div>
-                CMDX
-              </div>
-              {/* <span className="percent-badge">
-                +6.18 <SvgIcon name="commodo-icon" />
-              </span> */}
-            </div>
-            <div className="head-right">
-              <span>Oracle Price</span> : $123.45
-            </div>
-          </div>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 2,
-              sm: 2,
-              md: 2,
-              lg: 4,
-              xl: 4,
-              xxl: 4,
-            }}
-            dataSource={data3}
-            renderItem={(item) => (
-              <List.Item>
-                <div>
-                  <p>
-                    {item.title} <TooltipIcon />{" "}
-                  </p>
-                  <h3>{item.counts}</h3>
-                </div>
-              </List.Item>
-            )}
+          <Details
+            asset={assetMap[pool?.mainAssetId?.toNumber()]}
+            poolId={pool?.poolId}
+            parent="borrow"
           />
         </div>
       </div>
@@ -285,15 +248,67 @@ const RepayTab = () => {
 };
 
 RepayTab.propTypes = {
+  dataInProgress: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
+  refreshBorrowPosition: PropTypes.func.isRequired,
+  setBalanceRefresh: PropTypes.func.isRequired,
+  address: PropTypes.string,
+  assetMap: PropTypes.object,
+  balances: PropTypes.arrayOf(
+    PropTypes.shape({
+      denom: PropTypes.string.isRequired,
+      amount: PropTypes.string,
+    })
+  ),
+  borrowPosition: PropTypes.shape({
+    lendingId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    amountIn: PropTypes.shape({
+      denom: PropTypes.string,
+      amount: PropTypes.string,
+    }),
+  }),
+  pair: PropTypes.shape({
+    id: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    assetIn: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    amountOut: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+  }),
+  pool: PropTypes.shape({
+    poolId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    firstBridgedAssetId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+    secondBridgedAssetId: PropTypes.shape({
+      low: PropTypes.number,
+    }),
+  }),
+  refreshBalance: PropTypes.number.isRequired,
 };
 
 const stateToProps = (state) => {
   return {
+    address: state.account.address,
+    pool: state.lend.pool._,
+    pair: state.lend.pair,
+    assetMap: state.asset._.map,
+    balances: state.account.balances.list,
     lang: state.language,
+    refreshBalance: state.account.refreshBalance,
+    markets: state.oracle.market.list,
   };
 };
 
-const actionsToProps = {};
+const actionsToProps = {
+  setBalanceRefresh,
+};
 
 export default connect(stateToProps, actionsToProps)(RepayTab);

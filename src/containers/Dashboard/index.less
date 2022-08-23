@@ -153,13 +153,14 @@
       filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
       .commodo-launch-card-inner {
         height: 100%;
+        min-height: 200px;
         position: relative;
         z-index: 1;
         color: @white;
         padding: 20px;
         .launch-bg {
           position: absolute;
-          height: 100%;
+          height: 110%;
           width: 100%;
           z-index: -1;
           top: 0;
@@ -172,6 +173,24 @@
           justify-content: space-between;
           .assets-left {
             max-width: 400px;
+            .static-list{
+              list-style-type: none;
+              padding-left: 0;
+              display: grid;
+              grid-template-columns: repeat(2, 1fr);
+              margin-bottom: 0;
+              li{
+                padding-top: 6px;
+                label{
+                  font-size: 1rem;
+                  line-height: 1;
+                }
+                p{
+                  font-size: 1.7rem;
+                  line-height: 1.1;
+                }
+              }
+            }
             .small-icons {
               display: flex;
               align-items: center;
@@ -203,6 +222,7 @@
               font-size: 1.1rem;
               font-weight: 700;
               margin-bottom: 0;
+              line-height: 1.5;
               @media screen and (max-width: 1367px) {
                 font-size: 0.9rem;
               }
@@ -216,9 +236,19 @@
               margin-left: auto;
               margin-right: auto;
               display: block;
+              &.commodo-logo{
+                width: 120px;
+                margin-top: 2rem;
+                margin-right: 1rem;
+              }
               @media screen and (max-width: 1367px) {
                 width: 100px;
               }
+            }
+            h2{
+              margin-bottom: 0;
+              color: @white;
+              font-weight: 600;
             }
           }
         }

@@ -10,3 +10,4 @@ export const ASSET_RATES_STATES_SET = "ASSET_RATES_STATES_SET";
 export const USER_LENDS_SET = "USER_LENDS_SET";
 export const POOL_LENDS_SET = "POOL_LENDS_SET";
 export const USER_BORROWS_SET = "USER_BORROWS_SET";
+export const PAIR_SET = "PAIR_SET";
