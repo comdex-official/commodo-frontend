@@ -246,7 +246,7 @@ const Myhome = ({
             </div>
             <div className="myhome-upper-right">
               <div className="mb-3">
-                {activeKey === 1 ? "Your Borrow Limit" : "Your rewards"}
+                Your Borrow Limit
                 <TooltipIcon text="Borrow limit of User" />
               </div>
               <div className="borrow-limit-bar">

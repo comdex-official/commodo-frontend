@@ -1,22 +1,21 @@
 import { message, Table } from "antd";
+import moment from "moment";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, DOLLAR_DECIMALS } from "../../constants/common";
-import { queryAuctionParams, queryDutchAuctionList, queryDutchBiddingList } from "../../services/auction";
-import { denomToSymbol, iconNameFromDenom, symbolToDenom } from "../../utils/string";
-import { amountConversionWithComma, denomConversion } from '../../utils/coin'
-import FilterModal from "./FilterModal";
+import { queryDutchAuctionList, queryDutchBiddingList } from "../../services/auction";
+import { queryAuctionMippingIdParams } from "../../services/lend/query";
+import { amountConversionWithComma, denomConversion } from '../../utils/coin';
+import { commaSeparator, decimalConversion } from "../../utils/number";
+import { iconNameFromDenom, symbolToDenom } from "../../utils/string";
+import Bidding from "./Bidding";
 import "./index.less";
 import PlaceBidModal from "./PlaceBidModal";
-import moment from "moment";
-import { commaSeparator, decimalConversion } from "../../utils/number";
-import { queryAuctionMippingIdParams } from "../../services/lend/query";
-import Bidding from "./Bidding";
 
 const Auction = ({ address, selectedAuctionedAsset }) => {
-  const auctionedAsset = useSelector((state) => state.auction.auctionedAsset?.auctionedAsset[0])
+  const auctionedAsset = useSelector((state) => state.auction.auctionedAsset?.auctionedAsset?.[0])
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [params, setParams] = useState({});
