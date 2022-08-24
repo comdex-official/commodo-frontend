@@ -1,17 +1,17 @@
+import { Button, Dropdown, Modal } from "antd";
 import * as PropTypes from "prop-types";
-import { Button, Modal, Dropdown } from "antd";
-import { SvgIcon } from "../../components/common";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import {
   setAccountAddress,
-  showAccountConnectModal,
+  showAccountConnectModal
 } from "../../actions/account";
-import React, { useState } from "react";
-import variables from "../../utils/variables";
-import { amountConversionWithComma } from "../../utils/coin";
-import { truncateString } from "../../utils/string";
+import { SvgIcon } from "../../components/common";
 import Copy from "../../components/Copy";
 import { DOLLAR_DECIMALS } from "../../constants/common";
+import { amountConversionWithComma } from "../../utils/coin";
+import { truncateString } from "../../utils/string";
+import variables from "../../utils/variables";
 
 const DisConnectModal = ({
   setAccountAddress,
@@ -59,7 +59,7 @@ const DisConnectModal = ({
         <div> {variables[lang].balance_wallet}</div>
         <div className="balance__value__data">
           {amountConversionWithComma(getTotalValue(), DOLLAR_DECIMALS)}{" "}
-          {variables[lang].USD}
+          CMST
         </div>
       </div>
       <div className="mt-2 px-3">

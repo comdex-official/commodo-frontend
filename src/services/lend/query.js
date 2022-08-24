@@ -334,3 +334,35 @@ export const queryAuctionMippingIdParams = (callback) => {
       .catch((error) => callback(error?.message));
   });
 };
+
+export const queryTopDeposits = (callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryDepositRanking()
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+
+export const queryTopBorrows = (callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryBorrowRanking()
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};

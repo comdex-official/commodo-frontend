@@ -3,7 +3,7 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
-import { SvgIcon, TooltipIcon } from "../../../components/common";
+import { SvgIcon } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import CustomInput from "../../../components/CustomInput";
@@ -82,7 +82,7 @@ const WithdrawTab = ({
         <div className="assets-select-card mb-0">
           <div className="assets-left">
             <label className="left-label">
-              Withdraw <TooltipIcon text="" />
+              Withdraw 
             </label>
             <div className="assets-select-wrapper">
               <Select

@@ -118,7 +118,7 @@ const BorrowTab = ({
         <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="left-label">
-              Asset <TooltipIcon text="" />
+              Asset 
             </label>
             <div className="assets-select-wrapper">
               <div className="assets-select-wrapper">

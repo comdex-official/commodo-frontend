@@ -527,7 +527,7 @@ const BorrowTab = ({
                       })}
                   </Select>
                 </div>
-                {/* <div>
+                <div>
                   <div className="input-select">
                     <CustomInput
                       value={inAmount}
@@ -547,7 +547,7 @@ const BorrowTab = ({
                       DOLLAR_DECIMALS
                     )}
                   </small>
-                </div> */}
+                </div>
               </div>
             </div>
             <div className="assets-select-card mb-2 align-items-center">
@@ -614,7 +614,7 @@ const BorrowTab = ({
                       })}
                   </Select>
                 </div>
-                {/* <div>
+                <div>
                   <div className="input-select">
                     <CustomInput
                       value={outAmount}
@@ -633,7 +633,7 @@ const BorrowTab = ({
                       DOLLAR_DECIMALS
                     )}
                   </small>{" "}
-                </div> */}
+                </div>
               </div>
             </div>
             {pair?.isInterPool ? (

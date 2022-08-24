@@ -1,14 +1,12 @@
-import { SigningStargateClient } from "@cosmjs/stargate";
+import { LedgerSigner } from "@cosmjs/ledger-amino";
+import { AminoTypes, createProtobufRpcClient, QueryClient, SigningStargateClient } from "@cosmjs/stargate";
+import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
+import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { comdex } from "../config/network";
 import { makeHdPath } from "../utils/string";
-import { myRegistry } from "./registry";
-import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
-import { LedgerSigner } from "@cosmjs/ledger-amino";
-import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
-import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { AminoTypes } from "@cosmjs/stargate";
-import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { customAminoTypes } from "./aminoConverter";
+import { myRegistry } from "./registry";
 
 const aminoTypes = new AminoTypes(customAminoTypes);
 
