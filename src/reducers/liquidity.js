@@ -1,3 +1,4 @@
+import { combineReducers } from "redux";
 import { POOL_PRICE_SET } from "../constants/liquidity";
 
 const poolPriceMap = (state = {}, action) => {

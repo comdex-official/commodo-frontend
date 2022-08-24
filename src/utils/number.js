@@ -34,9 +34,31 @@ export const marketPrice = (array, denom) => {
     return value[0] && value[0].rates / 1000000;
   }
 
-  return 1; // returning 1 as we are using ust.
+  return 0;
 };
 
 export const getAccountNumber = (value) => {
   return value === "" ? "0" : value;
+};
+
+export const getPoolPrice = (
+  oraclePrice,
+  oracleAssetDenom,
+  firstAsset,
+  secondAsset
+) => {
+  let x = firstAsset?.amount,
+    y = secondAsset?.amount,
+    xPoolPrice,
+    yPoolPrice;
+
+  if (oracleAssetDenom === firstAsset?.denom) {
+    yPoolPrice = (x / y) * oraclePrice;
+    xPoolPrice = (y / x) * yPoolPrice;
+  } else {
+    xPoolPrice = (y / x) * oraclePrice;
+    yPoolPrice = (x / y) * xPoolPrice;
+  }
+
+  return { xPoolPrice, yPoolPrice };
 };

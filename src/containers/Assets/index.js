@@ -19,7 +19,7 @@ import "./index.less";
 import Withdraw from "./WithdrawModal";
 
 
-const Assets = ({ assetBalance, balances, markets }) => {
+const Assets = ({ assetBalance, balances, markets, poolPriceMap }) => {
   const data = [
     {
       title: (
@@ -103,7 +103,7 @@ const Assets = ({ assetBalance, balances, markets }) => {
   ];
 
   const getPrice = (denom) => {
-    return marketPrice(markets, denom) || 0;
+    return poolPriceMap[denom] || marketPrice(markets, denom) || 0;
   };
 
   let ibcBalances = AssetList?.tokens.map((token) => {
@@ -288,6 +288,7 @@ Assets.propTypes = {
       script_id: PropTypes.string,
     })
   ),
+  poolPriceMap: PropTypes.object,
 };
 
 const stateToProps = (state) => {
@@ -296,9 +297,8 @@ const stateToProps = (state) => {
     assetBalance: state.account.balances.asset,
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
+    poolPriceMap: state.liquidity.poolPriceMap,
   };
 };
 
-const actionsToProps = {};
-
-export default connect(stateToProps, actionsToProps)(Assets);
+export default connect(stateToProps)(Assets);
