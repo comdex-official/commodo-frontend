@@ -98,9 +98,7 @@ const DepositTab = ({
         <CustomRow assetList={assetList} poolId={lendPool?.poolId?.low} />
         <div className="assets-select-card mb-3">
           <div className="assets-left">
-            <label className="left-label">
-              Asset <TooltipIcon text="" />
-            </label>
+            <label className="left-label">Asset</label>
             <div className="assets-select-wrapper">
               <div className="assets-select-wrapper">
                 <Select

@@ -2,7 +2,7 @@ import { Select } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { SvgIcon, TooltipIcon } from "../../../components/common";
+import { SvgIcon } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import {
@@ -47,7 +47,6 @@ const CloseTab = ({
           <div className="assets-left">
             <label className="left-label">
               Close Position
-              <TooltipIcon text="" />
             </label>
             <div className="assets-select-wrapper">
               <Select
