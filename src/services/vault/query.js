@@ -2,6 +2,26 @@ import { QueryClientImpl } from "comdex-codec/build/comdex/vault/v1beta1/query";
 import Long from "long";
 import { createQueryClient } from "../helper";
 
+let myClient = null;
+
+const getQueryService = (callback) => {
+  if (myClient) {
+    const queryService = new QueryClientImpl(myClient);
+
+    return callback(null, queryService);
+  } else {
+    createQueryClient((error, client) => {
+      if (error) {
+        callback(error);
+      }
+      myClient = client;
+      const queryService = new QueryClientImpl(client);
+
+      return callback(null, queryService);
+    });
+  }
+};
+
 export const queryVaultList = (
   owner,
   offset,
@@ -10,13 +30,13 @@ export const queryVaultList = (
   reverse,
   callback
 ) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryVaults({
         owner,
         pagination: {
@@ -37,13 +57,13 @@ export const queryVaultList = (
 };
 
 export const queryVault = (id, callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryVault({
         id,
       })
@@ -57,13 +77,13 @@ export const queryVault = (id, callback) => {
 };
 
 export const queryTotalCollateral = (callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryTotalCollaterals({})
       .then((result) => {
         callback(null, result);
