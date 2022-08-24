@@ -57,11 +57,6 @@ export const denomToSymbol = (key) => {
     case "uatom":
     case ibcDenoms["uatom"]:
       return "ATOM";
-    case "udvpn":
-      return "DVPN";
-    case "uluna":
-    case ibcDenoms["uluna"]:
-      return "LUNA";
     case "uosmo":
     case ibcDenoms["uosmo"]:
       return "OSMO";
@@ -113,7 +108,7 @@ export const lowercaseFirstLetter = (string) => {
 export const toDecimals = (value, decimal = comdex.coinDecimals) =>
   value.indexOf(".") >= 0
     ? value.substr(0, value.indexOf(".")) +
-    value.substr(value.indexOf("."), decimal + 1)
+      value.substr(value.indexOf("."), decimal + 1)
     : value;
 
 export const uniqueDenoms = (list, type) => {

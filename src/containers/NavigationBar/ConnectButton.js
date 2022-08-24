@@ -2,7 +2,7 @@ import { Button, Dropdown, message } from "antd";
 import { decode } from "js-base64";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { connect } from "react-redux";
 import {
   setAccountAddress,
@@ -18,15 +18,17 @@ import {
 } from "../../actions/account";
 import { setAssets } from "../../actions/asset";
 import { setAssetRatesStats } from "../../actions/lend";
+import { setPoolPrice } from "../../actions/liquidity";
 import { setMarkets } from "../../actions/oracle";
 import { cmst, comdex, harbor } from "../../config/network";
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
+import { CMST_POOL_ID_LIST, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, HARBOR_POOL_ID_LIST } from "../../constants/common";
 import { queryAssets } from "../../services/asset/query";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
 import { queryAssetRatesStats } from "../../services/lend/query";
+import { queryPool } from "../../services/liquidity/query";
 import { queryMarketList } from "../../services/oracle/query";
-import { marketPrice } from "../../utils/number";
+import {getPoolPrice, marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
 import ConnectModal from "../Modal";
@@ -44,6 +46,7 @@ const ConnectButton = ({
   setAccountName,
   setAssets,
   setAssetRatesStats,
+  setPoolPrice,
 }) => {
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
@@ -102,6 +105,54 @@ const ConnectButton = ({
       }
     });
   }, []);
+
+  const calculatePoolPrice = useCallback(
+    (pool) => {
+      if (pool?.id) {
+        let firstAsset = pool?.balances[0];
+        let secondAsset = pool?.balances[1];
+
+        let oracleAsset = {};
+        if (marketPrice(markets, firstAsset?.denom)) {
+          oracleAsset = firstAsset;
+        } else if (marketPrice(markets, secondAsset?.denom)) {
+          oracleAsset = secondAsset;
+        }
+
+        if (oracleAsset?.denom) {
+          let { xPoolPrice, yPoolPrice } = getPoolPrice(
+            marketPrice(markets, oracleAsset?.denom),
+            oracleAsset?.denom,
+            firstAsset,
+            secondAsset
+          );
+
+          setPoolPrice(firstAsset?.denom, xPoolPrice);
+          setPoolPrice(secondAsset?.denom, yPoolPrice);
+        }
+      }
+    },
+    [markets, setPoolPrice]
+  );
+
+  useEffect(() => {
+    const fetchListedPools = (list) => {
+      if (list?.length > 0) {
+        for (let i = 0; i < list?.length; i++) {
+          queryPool(list[i], (error, result) => {
+            if (error) {
+              return;
+            }
+
+            calculatePoolPrice(result?.pool);
+          });
+        }
+      }
+    };
+
+    fetchListedPools(HARBOR_POOL_ID_LIST);
+    fetchListedPools(CMST_POOL_ID_LIST);
+  }, [calculatePoolPrice]);
 
   const fetchBalances = (address) => {
     queryAllBalances(address, (error, result) => {
@@ -197,6 +248,7 @@ ConnectButton.propTypes = {
   setDebtBalance: PropTypes.func.isRequired,
   setMarkets: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
+  setPoolPrice: PropTypes.func.isRequired,
   address: PropTypes.string,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
@@ -232,6 +284,7 @@ const actionsToProps = {
   setAccountName,
   setAssets,
   setAssetRatesStats,
+  setPoolPrice,
 };
 
 export default connect(stateToProps, actionsToProps)(ConnectButton);
