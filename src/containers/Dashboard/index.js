@@ -254,7 +254,6 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
     autoplaySpeed: 2800,
   };
 
-  console.log('top borrows', topBorrows)
   return (
     <div className="app-content-wrapper">
       <Row>
