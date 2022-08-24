@@ -13,8 +13,7 @@ import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { DOLLAR_DECIMALS, NUMBER_OF_TOP_ASSETS } from "../../constants/common";
 import {
   queryBorrowStats,
-  queryDepositStats,
-  queryUserDepositStats
+  queryDepositStats, queryTopDeposits, queryUserDepositStats
 } from "../../services/lend/query";
 import {
   amountConversion,
@@ -32,6 +31,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
   const [borrowStats, setBorrowStats] = useState();
   const [borrowsInProgress, setBorrowsInProgress] = useState();
   const [userDepositStats, setUserDepositStats] = useState();
+  const [topDeposits, setTopDeposits] = useState();
 
   useEffect(() => {
     setDepositsInProgress(true);
@@ -65,6 +65,15 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
 
       setBorrowStats(result?.BorrowStats?.balanceStats);
     });
+
+    queryTopDeposits((error, result) => {
+      if(error){
+        message.error(error);
+        return;
+      }
+
+      setTopDeposits(result?.depositRanking)
+    })
   }, []);
 
   const calculateTotalValue = (list) => {
@@ -254,6 +263,8 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
     autoplaySpeed: 2800,
   };
 
+  console.log('it si', topDeposits && Object.values(topDeposits), typeof topDeposits)
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -412,8 +423,9 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                 <div className="deposited-list">
                   <p>Deposited</p>
                   <ul>
-                    {topDepositAssets?.length > 0
-                      ? topDepositAssets?.map((item) => {
+                    {topDeposits && Object.values(topDeposits)?.length > 0
+                      ? Object.values(topDeposits)?.map((item) => {
+                        console.log('the item', item)
                           return (
                             <li key={item?.assetId}>
                               <div className="assets-col">
