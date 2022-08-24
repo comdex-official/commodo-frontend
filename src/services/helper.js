@@ -42,7 +42,6 @@ export const signAndBroadcastTransaction = (transaction, address, callback) => {
 };
 
 export const TransactionWithKeplr = async (transaction, address, callback) => {
-  console.log('the tx', transaction)
   const [offlineSigner, accounts] = await KeplrWallet(comdex.chainId);
   if (address !== accounts[0].address) {
     const error = "Connected account is not active in Keplr";

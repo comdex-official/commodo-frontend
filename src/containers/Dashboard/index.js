@@ -13,16 +13,18 @@ import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { DOLLAR_DECIMALS, NUMBER_OF_TOP_ASSETS } from "../../constants/common";
 import {
   queryBorrowStats,
-  queryDepositStats, queryTopDeposits, queryUserDepositStats
+  queryDepositStats,
+  queryTopBorrows,
+  queryTopDeposits,
+  queryUserDepositStats
 } from "../../services/lend/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion
 } from "../../utils/coin";
-import { marketPrice } from "../../utils/number";
+import { decimalConversion, marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
-import AverageAssetApy from "./AverageAssetApy";
 import "./index.less";
 
 const Dashboard = ({ isDarkMode, markets, assetMap }) => {
@@ -32,6 +34,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
   const [borrowsInProgress, setBorrowsInProgress] = useState();
   const [userDepositStats, setUserDepositStats] = useState();
   const [topDeposits, setTopDeposits] = useState();
+  const [topBorrows, setTopBorrows] = useState();
 
   useEffect(() => {
     setDepositsInProgress(true);
@@ -67,13 +70,22 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
     });
 
     queryTopDeposits((error, result) => {
-      if(error){
+      if (error) {
         message.error(error);
         return;
       }
 
-      setTopDeposits(result?.depositRanking)
-    })
+      setTopDeposits(result?.depositRanking);
+    });
+
+    queryTopBorrows((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setTopBorrows(result?.borrowRanking);
+    });
   }, []);
 
   const calculateTotalValue = (list) => {
@@ -92,30 +104,9 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
     return Number(sum || 0);
   };
 
-  const getTopAssets = (list) => {
-    let assets =
-      list?.length > 0
-        ? list.map((item) => {
-            let value =
-              marketPrice(markets, assetMap[item?.assetId?.toNumber()]?.denom) *
-              item?.amount;
-            return {
-              assetId: item?.assetId,
-              value,
-            };
-          })
-        : [];
-
-    let sortedAssets = assets.sort((a, b) => b.value - a.value);
-
-    return sortedAssets.slice(0, NUMBER_OF_TOP_ASSETS);
-  };
-
   const totalDepositStats = calculateTotalValue(depositStats);
   const totalBorrowStats = calculateTotalValue(borrowStats);
   const totalUserDepositStats = calculateTotalValue(userDepositStats);
-  const topDepositAssets = getTopAssets(depositStats);
-  const topBorrowAssets = getTopAssets(borrowStats);
 
   const Options = {
     chart: {
@@ -263,8 +254,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
     autoplaySpeed: 2800,
   };
 
-  console.log('it si', topDeposits && Object.values(topDeposits), typeof topDeposits)
-
+  console.log('top borrows', topBorrows)
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -425,7 +415,6 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                   <ul>
                     {topDeposits && Object.values(topDeposits)?.length > 0
                       ? Object.values(topDeposits)?.map((item) => {
-                        console.log('the item', item)
                           return (
                             <li key={item?.assetId}>
                               <div className="assets-col">
@@ -441,10 +430,10 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                                 )}
                               </div>
                               <b>
-                                <AverageAssetApy
-                                  assetId={item?.assetId}
-                                  parent="lend"
-                                />
+                                {Number(
+                                  decimalConversion(item?.apr) * 100
+                                ).toFixed(DOLLAR_DECIMALS)}
+                                %
                               </b>
                             </li>
                           );
@@ -457,8 +446,8 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                 <div className="deposited-list">
                   <p>Borrowed</p>
                   <ul>
-                    {topBorrowAssets?.length > 0
-                      ? topBorrowAssets?.map((item) => {
+                    {topBorrows && Object.values(topBorrows)?.length > 0
+                      ? Object.values(topBorrows)?.map((item) => {
                           return (
                             <li key={item?.assetId}>
                               <div className="assets-col">
@@ -474,7 +463,10 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                                 )}
                               </div>
                               <b>
-                                <AverageAssetApy assetId={item?.assetId} />
+                                {Number(
+                                  decimalConversion(item?.apr) * 100
+                                ).toFixed(DOLLAR_DECIMALS)}
+                                %
                               </b>
                             </li>
                           );
