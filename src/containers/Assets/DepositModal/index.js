@@ -1,23 +1,26 @@
-import "./index.less";
+import { Button, Form, message, Modal, Spin } from "antd";
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../../components/common";
-import { connect } from "react-redux";
 import React, { useState } from "react";
-import { Button, Form, Modal, message, Spin } from "antd";
-import { aminoSignIBCTx } from "../../../services/helper";
-import { initializeIBCChain } from "../../../services/keplr";
-import { amountConversion, getAmount } from "../../../utils/coin";
-import variables from "../../../utils/variables";
-import { denomConversion } from "../../../utils/coin";
-import { queryBalance } from "../../../services/bank/query";
-import { toDecimals, truncateString } from "../../../utils/string";
-import { fetchProofHeight } from "../../../actions/asset";
-import CustomInput from "../../../components/CustomInput";
+import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
+import { fetchProofHeight } from "../../../actions/asset";
+import { Col, Row, SvgIcon } from "../../../components/common";
+import Snack from "../../../components/common/Snack";
+import CustomInput from "../../../components/CustomInput";
 import { comdex } from "../../../config/network";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DEFAULT_FEE } from "../../../constants/common";
-import Snack from "../../../components/common/Snack";
+import { queryBalance } from "../../../services/bank/query";
+import { aminoSignIBCTx } from "../../../services/helper";
+import { initializeIBCChain } from "../../../services/keplr";
+import {
+  amountConversion,
+  denomConversion,
+  getAmount
+} from "../../../utils/coin";
+import { toDecimals, truncateString } from "../../../utils/string";
+import variables from "../../../utils/variables";
+import "./index.less";
 
 const Deposit = ({
   lang,
@@ -40,7 +43,7 @@ const Deposit = ({
 
     setAmount(value);
     setValidationError(
-      ValidateInputNumber(getAmount(value), availableBalance?.amount || 0)
+      ValidateInputNumber(getAmount(value), availableBalance?.amount)
     );
   };
 
@@ -58,7 +61,7 @@ const Deposit = ({
       queryBalance(
         chain?.chainInfo?.rpc,
         account?.address,
-        chain?.denom,
+        chain?.coinMinimalDenom,
         (error, result) => {
           setBalanceInProgress(false);
 
@@ -92,7 +95,7 @@ const Deposit = ({
           source_port: "transfer",
           source_channel: chain.destChannelId,
           token: {
-            denom: chain.denom,
+            denom: chain?.coinMinimalDenom,
             amount: getAmount(amount),
           },
           sender: sourceAddress,
@@ -195,10 +198,7 @@ const Deposit = ({
                         availableBalance.amount &&
                         amountConversion(availableBalance.amount)) ||
                         0}{" "}
-                      {(chain.currency &&
-                        chain.currency.coinDenom &&
-                        denomConversion(chain.currency.coinDenom)) ||
-                        ""}
+                      {denomConversion(chain?.coinMinimalDenom || "")}
                     </span>
                     <span className="assets-max-half">
                       <Button
