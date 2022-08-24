@@ -215,10 +215,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
     series: [
       {
         name: "Deposited",
-        data: [
-          9800000, 456000, 9080000, 2000000, 6235000, 1250000, 6600000, 6452033,
-          3205850, 450000, 2801000, 9958900,
-        ],
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         lineWidth: 2,
         lineColor: "#52B788",
         marker: false,
@@ -226,10 +223,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
       },
       {
         name: "Borrowed",
-        data: [
-          950000, 6000500, 6470000, 850650, 7850009, 32087950, 8956433, 6540030,
-          4506980, 5506063, 6930300, 9850650,
-        ],
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         lineWidth: 2,
         lineColor: "#D8F3DC",
         marker: false,
