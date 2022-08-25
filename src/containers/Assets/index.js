@@ -123,6 +123,7 @@ const Assets = ({ assetBalance, balances, markets, poolPriceMap }) => {
       sourceChannelId: token.comdexChannel,
       destChannelId: token.channel,
       ibcDenomHash: token?.ibcDenomHash,
+      explorerUrlToTx: token?.explorerUrlToTx,
     };
   });
 
