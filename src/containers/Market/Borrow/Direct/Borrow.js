@@ -470,20 +470,6 @@ const BorrowTab = ({
             <div className="assets-select-card mb-3 align-items-center">
               <div className="assets-left">
                 <label className="left-label">Collateral Asset</label>
-              </div>
-              <div className="assets-right">
-                <div className="label-right">
-                  Available
-                  <span className="ml-1">
-                    {amountConversionWithComma(availableBalance)}{" "}
-                    {denomConversion(collateralAssetDenom)}
-                  </span>
-                  <div className="max-half">
-                    <Button className="active" onClick={handleMaxClick}>
-                      Max
-                    </Button>
-                  </div>
-                </div>
                 <div className="assets-select-wrapper">
                   <Select
                     className="assets-select"
@@ -527,6 +513,20 @@ const BorrowTab = ({
                       })}
                   </Select>
                 </div>
+              </div>
+              <div className="assets-right">
+                <div className="label-right">
+                  Available
+                  <span className="ml-1">
+                    {amountConversionWithComma(availableBalance)}{" "}
+                    {denomConversion(collateralAssetDenom)}
+                  </span>
+                  <div className="max-half">
+                    <Button className="active" onClick={handleMaxClick}>
+                      Max
+                    </Button>
+                  </div>
+                </div>
                 <div>
                   <div className="input-select">
                     <CustomInput
@@ -553,24 +553,6 @@ const BorrowTab = ({
             <div className="assets-select-card mb-2 align-items-center">
               <div className="assets-left">
                 <label className="left-label">Borrow Asset</label>
-              </div>
-              <div className="assets-right">
-                {borrowAssetDenom ? (
-                  <div className="label-right">
-                    Borrowable
-                    <span className="ml-1">
-                      {amountConversionWithComma(
-                        borrowableBalance >= 0 ? borrowableBalance : 0
-                      )}{" "}
-                      {denomConversion(borrowAssetDenom)}
-                    </span>
-                    <div className="max-half">
-                      <Button className="active" onClick={handleBorrowMaxClick}>
-                        Max
-                      </Button>
-                    </div>
-                  </div>
-                ) : null}
                 <div className="assets-select-wrapper">
                   <Select
                     className="assets-select"
@@ -614,6 +596,24 @@ const BorrowTab = ({
                       })}
                   </Select>
                 </div>
+              </div>
+              <div className="assets-right">
+                {borrowAssetDenom ? (
+                  <div className="label-right">
+                    Borrowable
+                    <span className="ml-1">
+                      {amountConversionWithComma(
+                        borrowableBalance >= 0 ? borrowableBalance : 0
+                      )}{" "}
+                      {denomConversion(borrowAssetDenom)}
+                    </span>
+                    <div className="max-half">
+                      <Button className="active" onClick={handleBorrowMaxClick}>
+                        Max
+                      </Button>
+                    </div>
+                  </div>
+                ) : null}
                 <div>
                   <div className="input-select">
                     <CustomInput
