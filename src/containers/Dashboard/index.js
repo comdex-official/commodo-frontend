@@ -319,36 +319,38 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                       src={LaunchImage}
                     />
                     <div className="assets-section">
-                      <div className="assets-left">
-                        <p>A seamless borrowing and lending platform</p>
-                        <div className="mt-2">
-                          <ul className="static-list">
-                            <li>
-                              <label>#cPools</label>
-                              <p>78</p>
-                            </li>
-                            <li>
-                              <label>#Reserves</label>
-                              <p>$1.00M</p>
-                            </li>
-                            <li>
-                              <label>#Lenders</label>
-                              <p>4,128</p>
-                            </li>
-                            <li>
-                              <label>#Borrowers</label>
-                              <p>697</p>
-                            </li>
-                          </ul>
+                      <p className="upper-title">A seamless borrowing and lending platform</p>
+                      <div className="assets-section-inner">
+                        <div className="assets-left">
+                          <div className="mt-2">
+                            <ul className="static-list">
+                              <li>
+                                <label>#cPools</label>
+                                <p>78</p>
+                              </li>
+                              <li>
+                                <label>#Reserves</label>
+                                <p>$1.00M</p>
+                              </li>
+                              <li>
+                                <label>#Lenders</label>
+                                <p>4,128</p>
+                              </li>
+                              <li>
+                                <label>#Borrowers</label>
+                                <p>697</p>
+                              </li>
+                            </ul>
+                          </div>
                         </div>
-                      </div>
-                      <div className="assets-right">
-                        <img
-                          className="commodo-logo"
-                          src={LogoIcon}
-                          alt={LogoIcon}
-                        />
-                        <h2>COMMODO</h2>
+                        <div className="assets-right">
+                          <img
+                            className="commodo-logo"
+                            src={LogoIcon}
+                            alt={LogoIcon}
+                          />
+                          <h2>COMMODO</h2>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -361,39 +363,44 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                       src={LaunchImage}
                     />
                     <div className="assets-section">
-                      <div className="assets-left">
-                        <p>
-                          Provide liquidity on CMDX-CMST pool on CSWAP to earn
-                          external incentives on COMMODO
-                        </p>
-                        <div className="mt-3">
-                          <div className="small-icons mb-2">
-                            <div className="icon-col mr-2">
-                              <SvgIcon name="cmst-icon" />
-                              CMST
-                            </div>{" "}
-                            -
-                            <div className="icon-col ml-2">
-                              <SvgIcon name="cmdx-icon" /> CMDX
+                      <div className="assets-section-inner">
+                        <div className="assets-left">
+                          <p>
+                            Provide liquidity on CMDX-CMST pool on CSWAP to earn
+                            external incentives on COMMODO
+                          </p>
+                          <div className="mt-auto">
+                            <div className="small-icons mb-2">
+                              <div className="icon-col mr-2">
+                                <SvgIcon name="cmst-icon" />
+                                CMST
+                              </div>{" "}
+                              -
+                              <div className="icon-col ml-2">
+                                <SvgIcon name="cmdx-icon" /> CMDX
+                              </div>
                             </div>
+                            <h3 className="h3-botttom">
+                              300% <small>High APR</small>
+                            </h3>
                           </div>
-                          <h3 className="h3-botttom">
-                            300% <small>APR</small>
-                          </h3>
+                          <div className="comingsoon-text">
+                            Coming soon..
+                          </div>
                         </div>
-                      </div>
-                      <div className="assets-right">
-                        <img alt={AssetsIcon} src={AssetsIcon} />
-                        <Button type="primary" className="btn-filled">
-                          <a
-                            aria-label="cswap"
-                            target="_blank"
-                            rel="noreferrer"
-                            href="https://staging.cswap.one/"
-                          >
-                            Take me there!
-                          </a>
-                        </Button>
+                        <div className="assets-right">
+                          <img alt={AssetsIcon} src={AssetsIcon} />
+                          <Button type="primary" className="btn-filled">
+                            <a
+                              aria-label="cswap"
+                              target="_blank"
+                              rel="noreferrer"
+                              href="https://staging.cswap.one/"
+                            >
+                              Take me there!
+                            </a>
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>

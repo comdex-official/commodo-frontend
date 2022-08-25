@@ -34,7 +34,12 @@ const SupplyDetails = ({ setPool }) => {
     <div className="app-content-wrapper">
       <Row>
         <Col className="text-right mb-3">
-          <Tooltip overlayClassName="commodo-tooltip" title="Previous cPool">
+          <Link to="/lend">
+            <Button className="back-btn" type="primary">
+              Back
+            </Button>
+          </Link>
+          {/* <Tooltip overlayClassName="commodo-tooltip" title="Previous cPool">
             <Button className="back-btn px-3 mr-2" type="primary">
               <SvgIcon className="mx-0 mb-0" name="back-arrow" viewbox="0 0 20.243 13.501" />
             </Button>
@@ -43,7 +48,7 @@ const SupplyDetails = ({ setPool }) => {
             <Button className="back-btn px-3" type="primary">
               <SvgIcon className="mx-0 mb-0" name="next-arrow" viewbox="0 0 20.243 13.501" />
             </Button>
-          </Tooltip>
+          </Tooltip> */}
         </Col>
       </Row>
       <Deposit dataInProgress={inProgress} />

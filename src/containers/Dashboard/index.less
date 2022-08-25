@@ -169,10 +169,31 @@
           margin-left: auto;
         }
         .assets-section {
-          display: flex;
-          justify-content: space-between;
+          .assets-section-inner{
+            display: flex;
+            justify-content: space-between;
+          }
+          .upper-title{
+            color: @white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            line-height: 1.5;
+            @media screen and (max-width: 1367px) {
+              font-size: 0.9rem;
+            }
+          }
           .assets-left {
             max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            .comingsoon-text{
+              position: absolute;
+              left: 50%;
+              transform: translateX(-50%);
+              bottom: 18px;
+              font-size: @font-size-lg + 1;
+            }
             .static-list{
               list-style-type: none;
               padding-left: 0;
@@ -188,6 +209,7 @@
                 p{
                   font-size: 1.7rem;
                   line-height: 1.1;
+                  font-weight: 600;
                 }
               }
             }
@@ -207,7 +229,7 @@
             h3 {
               color: @white;
               font-size: 1.5rem;
-              font-weight: bold;
+              font-weight: 600;
               text-transform: uppercase;
               margin-bottom: 0;
               small {
@@ -216,6 +238,7 @@
             }
             .h3-botttom {
               line-height: 1;
+              text-transform: inherit;
             }
             p {
               color: @white;
@@ -237,9 +260,8 @@
               margin-right: auto;
               display: block;
               &.commodo-logo{
-                width: 120px;
-                margin-top: 2rem;
-                margin-right: 1rem;
+                width: 90px;
+                margin-top: 1.2rem;
               }
               @media screen and (max-width: 1367px) {
                 width: 100px;
@@ -248,7 +270,8 @@
             h2{
               margin-bottom: 0;
               color: @white;
-              font-weight: 600;
+              font-weight: 700;
+              font-size: 1.8rem;
             }
           }
         }
