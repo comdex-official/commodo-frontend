@@ -71,7 +71,6 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
 
     queryTopDeposits((error, result) => {
       if (error) {
-        message.error(error);
         return;
       }
 
@@ -80,7 +79,6 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
 
     queryTopBorrows((error, result) => {
       if (error) {
-        message.error(error);
         return;
       }
 
@@ -319,7 +317,9 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                       src={LaunchImage}
                     />
                     <div className="assets-section">
-                      <p className="upper-title">A seamless borrowing and lending platform</p>
+                      <p className="upper-title">
+                        A seamless borrowing and lending platform
+                      </p>
                       <div className="assets-section-inner">
                         <div className="assets-left">
                           <div className="mt-2">
@@ -384,9 +384,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                               300% <small>High APR</small>
                             </h3>
                           </div>
-                          <div className="comingsoon-text">
-                            Coming soon..
-                          </div>
+                          <div className="comingsoon-text">Coming soon..</div>
                         </div>
                         <div className="assets-right">
                           <img alt={AssetsIcon} src={AssetsIcon} />

@@ -16,19 +16,19 @@ import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
   queryAssetPairs,
   queryLendPair,
-  queryLendPool,
+  queryLendPool
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount,
+  getAmount
 } from "../../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice,
+  marketPrice
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
@@ -69,7 +69,7 @@ const BorrowTab = ({
   const availableBalance = lend?.availableToBorrow || 0;
 
   const borrowableBalance = getAmount(
-    Number(inAmount) *
+    (Number(inAmount) *
       marketPrice(markets, collateralAssetDenom) *
       (pair?.isInterPool
         ? Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv)) *
@@ -79,7 +79,7 @@ const BorrowTab = ({
             )
           )
         : Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv))) ||
-      0
+      0) / marketPrice(markets, borrowAssetDenom)
   );
 
   useEffect(() => {
@@ -496,8 +496,7 @@ const BorrowTab = ({
                       Number(
                         inAmount * marketPrice(markets, collateralAssetDenom) ||
                           0
-                      ),
-                      DOLLAR_DECIMALS
+                      ).toFixed(DOLLAR_DECIMALS)
                     )}
                   </small>
                 </div>
@@ -582,8 +581,7 @@ const BorrowTab = ({
                     {commaSeparator(
                       Number(
                         outAmount * marketPrice(markets, borrowAssetDenom) || 0
-                      ),
-                      DOLLAR_DECIMALS
+                      ).toFixed(DOLLAR_DECIMALS)
                     )}
                   </small>{" "}
                 </div>

@@ -28,6 +28,10 @@ export const decimalConversion = (data = 0) => {
 };
 
 export const marketPrice = (array, denom) => {
+  if (denom === "ucmst") {
+    return 1;
+  }
+
   const value = array.filter((item) => item.symbol === denomToSymbol(denom));
 
   if (value && value[0]) {

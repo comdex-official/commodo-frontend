@@ -165,8 +165,7 @@ const DepositTab = ({
                     amount *
                       marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
                       0
-                  ),
-                  DOLLAR_DECIMALS
+                  ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
               </small>{" "}
             </div>
