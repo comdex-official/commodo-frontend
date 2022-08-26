@@ -30,6 +30,7 @@ const Myhome = ({
   userBorrowList,
   markets,
   assetRatesStatsMap,
+  assetMap,
 }) => {
   const [activeKey, setActiveKey] = useState("1");
   const [lendsInProgress, setLendsInProgress] = useState(false);
@@ -156,7 +157,10 @@ const Myhome = ({
       userBorrowList?.length > 0
         ? userBorrowList.map((item) => {
             return (
-              marketPrice(markets, borrowToPair[item?.borrowingId]?.assetIn) *
+              marketPrice(
+                markets,
+                assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.denom
+              ) *
               Number(item?.amountIn.amount) *
               (borrowToPair[item?.borrowingId]?.isInterPool
                 ? Number(
@@ -299,6 +303,7 @@ Myhome.propTypes = {
   setUserBorrows: PropTypes.func.isRequired,
   setUserLends: PropTypes.func.isRequired,
   address: PropTypes.string,
+  assetMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
@@ -350,6 +355,7 @@ const stateToProps = (state) => {
     userBorrowList: state.lend.userBorrows,
     markets: state.oracle.market.list,
     assetRatesStatsMap: state.lend.assetRatesStats.map,
+    assetMap: state.asset._.map,
   };
 };
 

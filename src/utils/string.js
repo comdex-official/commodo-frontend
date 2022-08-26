@@ -141,5 +141,5 @@ export const makeHdPath = (
 };
 
 export const ucDenomToDenom = (denom) => {
-  return denom.slice(0, 1) + denom.slice(2); //example uccmdx => ucmdx
+  return denom?.slice(0, 1) + denom?.slice(2); //example uccmdx => ucmdx
 };

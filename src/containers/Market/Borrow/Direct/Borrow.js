@@ -75,7 +75,7 @@ const BorrowTab = ({
   const availableBalance = getDenomBalance(balances, collateralAssetDenom) || 0;
 
   const borrowableBalance = getAmount(
-    Number(inAmount) *
+    (Number(inAmount) *
       marketPrice(markets, collateralAssetDenom) *
       (pair?.isInterPool
         ? Number(
@@ -88,7 +88,7 @@ const BorrowTab = ({
           )
         : Number(
             decimalConversion(assetRatesStatsMap[collateralAssetId]?.ltv)
-          )) || 0
+          )) || 0) / marketPrice(markets, borrowAssetDenom)
   );
 
   const borrowList =
@@ -248,6 +248,7 @@ const BorrowTab = ({
       (error, result) => {
         setInProgress(false);
         setInAmount(0);
+        setOutAmount(0);
         if (error) {
           message.error(error);
           return;
@@ -543,8 +544,7 @@ const BorrowTab = ({
                       Number(
                         inAmount * marketPrice(markets, collateralAssetDenom) ||
                           0
-                      ),
-                      DOLLAR_DECIMALS
+                      ).toFixed(DOLLAR_DECIMALS)
                     )}
                   </small>
                 </div>
@@ -629,8 +629,7 @@ const BorrowTab = ({
                     {commaSeparator(
                       Number(
                         outAmount * marketPrice(markets, borrowAssetDenom) || 0
-                      ),
-                      DOLLAR_DECIMALS
+                      ).toFixed(DOLLAR_DECIMALS)
                     )}
                   </small>{" "}
                 </div>

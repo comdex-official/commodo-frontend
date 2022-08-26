@@ -1,12 +1,10 @@
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
-import { Col, Row, TooltipIcon, SvgIcon } from "../../../components/common";
+import { Col, Row, TooltipIcon } from "../../../components/common";
 import Details from "../../../components/common/Asset/Details";
 import HealthFactor from "../../../components/HealthFactor";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { Button, Select } from 'antd';
-import CustomInput from "../../../components/CustomInput";
 import {
   amountConversion,
   amountConversionWithComma,
@@ -45,74 +43,33 @@ const CloseTab = ({
         <Row>
           <Col sm="12" className="mt-2 mx-auto card-bottom-details">
             <Row>
-              <Col sm="12">
-                <div className="assets-select-card mb-0">
-                  <div className="assets-left">
-                    <label className="left-label">
-                      Close Position
-                    </label>
-                    <div className="assets-select-wrapper">
-                      <Select
-                        className="assets-select"
-                        dropdownClassName="asset-select-dropdown"
-                        defaultValue="1"
-                        placeholder={
-                          <div className="select-placeholder">
-                            <div className="circle-icon">
-                              <div className="circle-icon-inner" />
-                            </div>
-                            Select
-                          </div>
-                        }
-                        defaultActiveFirstOption={true}
-                        disabled
-                        showArrow={false}
-                      >
-                        <Option value="1">
-                          <div className="select-inner">
-                            <div className="svg-icon">
-                              <div className="svg-icon-inner">
-                                <SvgIcon name="osmosis-icon" />
-                              </div>
-                            </div>
-                            <div className="name">
-                              CMDX
-                            </div>
-                          </div>
-                        </Option>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="assets-right">
-                    <div className="label-right">
-                      Available
-                      <span className="ml-1">
-                        {amountConversionWithComma(availableBalance)}{" "}
-                        {denomConversion(borrowPosition?.amountOut?.denom)}
-                      </span>
-                    </div>
-                    <div>
-                      <div className="input-select">
-                        <CustomInput
-                          value={amountConversionWithComma(borrowPosition?.updatedAmountOut)}
-                          onChange={(event) =>
-                            handleInputChange(event.target.value)
-                          }
-                        />
-                      </div>
-                      $
-                      {commaSeparator(
-                        Number(
-                          amountConversion(borrowPosition?.updatedAmountOut) *
-                            marketPrice(
-                              markets,
-                              assetMap[selectedAssetId]?.denom
-                            ) || 0
-                        ),
-                        DOLLAR_DECIMALS
-                      )}
-                    </div>
-                  </div>
+              <Col>
+                <label>Amount to be closed</label>
+                <div className="fs20">
+                  {amountConversionWithComma(borrowPosition?.updatedAmountOut)}{" "}
+                  {denomConversion(borrowPosition?.amountOut?.denom)}
+                </div>
+                <small className="font-weight-light">
+                  $
+                  {commaSeparator(
+                    Number(
+                      amountConversion(borrowPosition?.updatedAmountOut) *
+                        marketPrice(
+                          markets,
+                          assetMap[selectedAssetId]?.denom
+                        ) || 0
+                    ),
+                    DOLLAR_DECIMALS
+                  )}
+                </small>
+              </Col>
+              <Col className="text-right available-amount">
+                <div class="label-right">
+                  Available
+                  <span class="ml-1">
+                    {amountConversionWithComma(availableBalance)}{" "}
+                    {denomConversion(borrowPosition?.amountOut?.denom)}
+                  </span>
                 </div>
               </Col>
             </Row>
