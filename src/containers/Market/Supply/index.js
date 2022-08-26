@@ -1,15 +1,16 @@
 import { message, Table } from "antd";
-import { SvgIcon } from "../../../components/common";
+import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { SvgIcon } from "../../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE,
+  DEFAULT_PAGE_SIZE
 } from "../../../constants/common";
 import { queryLendPools } from "../../../services/lend/query";
-import * as PropTypes from "prop-types";
-import { connect } from "react-redux";
 import { denomConversion } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
+import "../index.less";
 import { columns } from "./data";
 
 const Supply = ({ assetMap }) => {
@@ -56,7 +57,7 @@ const Supply = ({ assetMap }) => {
       ? lendPools?.pools?.map((item, index) => {
           return {
             key: index,
-            id: item.id,
+            pool_id: item.poolId?.toNumber(),
             asset: (
               <>
                 <div className="assets-with-icon">
@@ -116,7 +117,7 @@ const Supply = ({ assetMap }) => {
 
   return (
     <div className="commodo-card bg-none">
-      <div className="card-header">Assets to supply</div>
+      <div className="card-header text-left">Lend Markets</div>
       <div className="card-content">
         <Table
           className="custom-table market-table1"

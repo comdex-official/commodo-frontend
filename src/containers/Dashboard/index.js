@@ -1,14 +1,111 @@
-import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
-import { connect } from "react-redux";
+import { Button, message, Skeleton } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import "./index.less";
-import LaunchImage from "../../assets/images/launch-bg.jpg";
+import * as PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import Slider from "react-slick";
 import AssetsIcon from "../../assets/images/assets-icon.png";
-import { Button } from "antd";
+import LaunchImage from "../../assets/images/launch-bg.jpg";
+import LogoIcon from "../../assets/images/logo-icon.svg";
+import "../../assets/less/plugins/slick-slider/slick.less";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import { DOLLAR_DECIMALS, NUMBER_OF_TOP_ASSETS } from "../../constants/common";
+import {
+  queryBorrowStats,
+  queryDepositStats,
+  queryTopBorrows,
+  queryTopDeposits,
+  queryUserDepositStats
+} from "../../services/lend/query";
+import {
+  amountConversion,
+  amountConversionWithComma,
+  denomConversion
+} from "../../utils/coin";
+import { decimalConversion, marketPrice } from "../../utils/number";
+import { iconNameFromDenom } from "../../utils/string";
+import "./index.less";
 
-const Dashboard = ({ isDarkMode }) => {
+const Dashboard = ({ isDarkMode, markets, assetMap }) => {
+  const [depositStats, setDepositStats] = useState();
+  const [depositsInProgress, setDepositsInProgress] = useState();
+  const [borrowStats, setBorrowStats] = useState();
+  const [borrowsInProgress, setBorrowsInProgress] = useState();
+  const [userDepositStats, setUserDepositStats] = useState();
+  const [topDeposits, setTopDeposits] = useState();
+  const [topBorrows, setTopBorrows] = useState();
+
+  useEffect(() => {
+    setDepositsInProgress(true);
+    setBorrowsInProgress(true);
+
+    queryDepositStats((error, result) => {
+      setDepositsInProgress(false);
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setDepositStats(result?.DepositStats?.balanceStats);
+    });
+
+    queryUserDepositStats((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setUserDepositStats(result?.UserDepositStats?.balanceStats);
+    });
+
+    queryBorrowStats((error, result) => {
+      setBorrowsInProgress(false);
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setBorrowStats(result?.BorrowStats?.balanceStats);
+    });
+
+    queryTopDeposits((error, result) => {
+      if (error) {
+        return;
+      }
+
+      setTopDeposits(result?.depositRanking);
+    });
+
+    queryTopBorrows((error, result) => {
+      if (error) {
+        return;
+      }
+
+      setTopBorrows(result?.borrowRanking);
+    });
+  }, []);
+
+  const calculateTotalValue = (list) => {
+    const values =
+      list?.length > 0
+        ? list.map((item) => {
+            return (
+              marketPrice(markets, assetMap[item?.assetId?.toNumber()]?.denom) *
+              item?.amount
+            );
+          })
+        : [];
+
+    const sum = values.reduce((a, b) => a + b, 0);
+
+    return Number(sum || 0);
+  };
+
+  const totalDepositStats = calculateTotalValue(depositStats);
+  const totalBorrowStats = calculateTotalValue(borrowStats);
+  const totalUserDepositStats = calculateTotalValue(userDepositStats);
+
   const Options = {
     chart: {
       type: "pie",
@@ -47,13 +144,14 @@ const Dashboard = ({ isDarkMode }) => {
         name: "",
         data: [
           {
-            name: "Total Deposited",
-            y: 70,
+            name: "Total Available",
+            y: Number(amountConversion(totalDepositStats || 0)),
             color: "#52B788",
           },
           {
-            name: "Total Collateral",
-            y: 30,
+            name: "Total Borrowed",
+            y: Number(amountConversion(totalBorrowStats || 0)),
+
             color: "#E2F7E5",
           },
         ],
@@ -115,10 +213,7 @@ const Dashboard = ({ isDarkMode }) => {
     series: [
       {
         name: "Deposited",
-        data: [
-          9800000, 456000, 9080000, 2000000, 6235000, 1250000, 6600000, 6452033,
-          3205850, 450000, 2801000, 9958900,
-        ],
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         lineWidth: 2,
         lineColor: "#52B788",
         marker: false,
@@ -126,10 +221,7 @@ const Dashboard = ({ isDarkMode }) => {
       },
       {
         name: "Borrowed",
-        data: [
-          950000, 6000500, 6470000, 850650, 7850009, 32087950, 8956433, 6540030,
-          4506980, 5506063, 6930300, 9850650,
-        ],
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         lineWidth: 2,
         lineColor: "#D8F3DC",
         marker: false,
@@ -137,6 +229,23 @@ const Dashboard = ({ isDarkMode }) => {
       },
     ],
   };
+
+  const showSkeletonLoader = () => {
+    return [...Array(NUMBER_OF_TOP_ASSETS)].map((item, index) => (
+      <Skeleton.Input key={index} active size="small" className="mb-1" />
+    ));
+  };
+
+  var settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2800,
+  };
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -148,7 +257,13 @@ const Dashboard = ({ isDarkMode }) => {
                   Total Value Locked{" "}
                   <TooltipIcon text="Value of Assets Locked" />
                 </p>
-                <h2>$57,156,855</h2>
+                <h3>
+                  $
+                  {amountConversionWithComma(
+                    totalDepositStats + totalBorrowStats || 0,
+                    DOLLAR_DECIMALS
+                  )}
+                </h3>{" "}
               </div>
               <div className="total-values">
                 <div className="total-values-chart">
@@ -160,20 +275,32 @@ const Dashboard = ({ isDarkMode }) => {
                     style={{ borderColor: "#52B788" }}
                   >
                     <p>
-                      Total Deposited{" "}
-                      <TooltipIcon text="Value of Assets Depositedon platfrom" />
+                      Total Available{" "}
+                      <TooltipIcon text="Value of Assets available on platfrom" />
                     </p>
-                    <h3>$30,283,670</h3>
+                    <h3>
+                      $
+                      {amountConversionWithComma(
+                        totalDepositStats || 0,
+                        DOLLAR_DECIMALS
+                      )}
+                    </h3>
                   </div>
                   <div
                     className="dashboard-statics mb-0"
                     style={{ borderColor: "#E2F7E5" }}
                   >
                     <p>
-                      Total Collateral{" "}
-                      <TooltipIcon text="Value of Assets Deposited" />
+                      Total Borrow{" "}
+                      <TooltipIcon text="Value of Assets Borrowed" />
                     </p>
-                    <h3>$26,873,185</h3>
+                    <h3>
+                      $
+                      {amountConversionWithComma(
+                        totalBorrowStats || 0,
+                        DOLLAR_DECIMALS
+                      )}
+                    </h3>{" "}
                   </div>
                 </div>
               </div>
@@ -181,115 +308,170 @@ const Dashboard = ({ isDarkMode }) => {
           </div>
           <div className="dashboard-upper-right">
             <div className="commodo-card commodo-launch-card">
-              <div className="commodo-launch-card-inner">
-                <img
-                  className="launch-bg"
-                  alt="CMDO Token Launch"
-                  src={LaunchImage}
-                />
-                <div className="assets-section">
-                  <div className="assets-left">
-                    <p>
-                      Provide liquidity on CMDX-CMST pool on CSWAP to earn
-                      external incentives on COMMODO
-                    </p>
-                    <div className="mt-3">
-                      <div className="small-icons mb-2">
-                        <div className="icon-col mr-2">
-                          <SvgIcon name="cmst-icon" />
-                          CMST
-                        </div>{" "}
-                        -
-                        <div className="icon-col ml-2">
-                          <SvgIcon name="cmdx-icon" /> CMDX
+              <Slider {...settings}>
+                <div>
+                  <div className="commodo-launch-card-inner">
+                    <img
+                      className="launch-bg"
+                      alt="CMDO Token Launch"
+                      src={LaunchImage}
+                    />
+                    <div className="assets-section">
+                      <p className="upper-title">
+                        A seamless borrowing and lending platform
+                      </p>
+                      <div className="assets-section-inner">
+                        <div className="assets-left">
+                          <div className="mt-2">
+                            <ul className="static-list">
+                              <li>
+                                <label>#cPools</label>
+                                <p>78</p>
+                              </li>
+                              <li>
+                                <label>#Reserves</label>
+                                <p>$1.00M</p>
+                              </li>
+                              <li>
+                                <label>#Lenders</label>
+                                <p>4,128</p>
+                              </li>
+                              <li>
+                                <label>#Borrowers</label>
+                                <p>697</p>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div className="assets-right">
+                          <img
+                            className="commodo-logo"
+                            src={LogoIcon}
+                            alt={LogoIcon}
+                          />
+                          <h2>COMMODO</h2>
                         </div>
                       </div>
-                      <h3 className="h3-botttom">
-                        300% <small>APR</small>
-                      </h3>
                     </div>
                   </div>
-                  <div className="assets-right">
-                    <img alt={AssetsIcon} src={AssetsIcon} />
-                    <Button type="primary" className="btn-filled">
-                      <a
-                        aria-label="cswap"
-                        target="_blank"
-                        rel="noreferrer"
-                        href="https://staging.cswap.one/"
-                      >
-                        Take me there!
-                      </a>
-                    </Button>
+                </div>
+                <div>
+                  <div className="commodo-launch-card-inner">
+                    <img
+                      className="launch-bg"
+                      alt="CMDO Token Launch"
+                      src={LaunchImage}
+                    />
+                    <div className="assets-section">
+                      <div className="assets-section-inner">
+                        <div className="assets-left">
+                          <p>
+                            Provide liquidity on CMDX-CMST pool on CSWAP to earn
+                            external incentives on COMMODO
+                          </p>
+                          <div className="mt-auto">
+                            <div className="small-icons mb-2">
+                              <div className="icon-col mr-2">
+                                <SvgIcon name="cmst-icon" />
+                                CMST
+                              </div>{" "}
+                              -
+                              <div className="icon-col ml-2">
+                                <SvgIcon name="cmdx-icon" /> CMDX
+                              </div>
+                            </div>
+                            <h3 className="h3-botttom">
+                              300% <small>High APR</small>
+                            </h3>
+                          </div>
+                          <div className="comingsoon-text">Coming soon..</div>
+                        </div>
+                        <div className="assets-right">
+                          <img alt={AssetsIcon} src={AssetsIcon} />
+                          <Button type="primary" className="btn-filled">
+                            <a
+                              aria-label="cswap"
+                              target="_blank"
+                              rel="noreferrer"
+                              href="https://staging.cswap.one/"
+                            >
+                              Take me there!
+                            </a>
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Slider>
             </div>
             <div className="commodo-card top-three-assets">
-              <div className="card-head">Top 3 Assets</div>
+              <div className="card-head">Top {NUMBER_OF_TOP_ASSETS} Assets</div>
               <div className="card-content">
                 <div className="deposited-list">
                   <p>Deposited</p>
                   <ul>
-                    <li>
-                      <div className="assets-col">
-                        <div className="assets-icon">
-                          <SvgIcon name="cmst-icon" />
-                        </div>
-                        CMST
-                      </div>
-                      <b>8.92%</b>
-                    </li>
-                    <li>
-                      <div className="assets-col">
-                        <div className="assets-icon">
-                          <SvgIcon name="cmdx-icon" />
-                        </div>
-                        CMDX
-                      </div>
-                      <b>7.88%</b>
-                    </li>
-                    <li>
-                      <div className="assets-col">
-                        <div className="assets-icon">
-                          <SvgIcon name="atom-icon" />
-                        </div>
-                        ATOM
-                      </div>
-                      <b>7.24%</b>
-                    </li>
+                    {topDeposits && Object.values(topDeposits)?.length > 0
+                      ? Object.values(topDeposits)?.map((item) => {
+                          return (
+                            <li key={item?.assetId}>
+                              <div className="assets-col">
+                                <div className="assets-icon">
+                                  <SvgIcon
+                                    name={iconNameFromDenom(
+                                      assetMap[item?.assetId]?.denom
+                                    )}
+                                  />
+                                </div>
+                                {denomConversion(
+                                  assetMap[item?.assetId]?.denom
+                                )}
+                              </div>
+                              <b>
+                                {Number(
+                                  decimalConversion(item?.apr) * 100
+                                ).toFixed(DOLLAR_DECIMALS)}
+                                %
+                              </b>
+                            </li>
+                          );
+                        })
+                      : borrowsInProgress
+                      ? showSkeletonLoader()
+                      : "No data"}
                   </ul>
                 </div>
                 <div className="deposited-list">
                   <p>Borrowed</p>
                   <ul>
-                    <li>
-                      <div className="assets-col">
-                        <div className="assets-icon">
-                          <SvgIcon name="cmst-icon" />
-                        </div>
-                        CMST
-                      </div>
-                      <b>12.33%</b>
-                    </li>
-                    <li>
-                      <div className="assets-col">
-                        <div className="assets-icon">
-                          <SvgIcon name="cmdx-icon" />
-                        </div>
-                        CMDX
-                      </div>
-                      <b>14.76%</b>
-                    </li>
-                    <li>
-                      <div className="assets-col">
-                        <div className="assets-icon">
-                          <SvgIcon name="atom-icon" />
-                        </div>
-                        ATOM
-                      </div>
-                      <b>13.33%</b>
-                    </li>
+                    {topBorrows && Object.values(topBorrows)?.length > 0
+                      ? Object.values(topBorrows)?.map((item) => {
+                          return (
+                            <li key={item?.assetId}>
+                              <div className="assets-col">
+                                <div className="assets-icon">
+                                  <SvgIcon
+                                    name={iconNameFromDenom(
+                                      assetMap[item?.assetId]?.denom
+                                    )}
+                                  />
+                                </div>
+                                {denomConversion(
+                                  assetMap[item?.assetId]?.denom
+                                )}
+                              </div>
+                              <b>
+                                {Number(
+                                  decimalConversion(item?.apr) * 100
+                                ).toFixed(DOLLAR_DECIMALS)}
+                                %
+                              </b>
+                            </li>
+                          );
+                        })
+                      : depositsInProgress
+                      ? showSkeletonLoader()
+                      : ""}
                   </ul>
                 </div>
               </div>
@@ -321,14 +503,26 @@ const Dashboard = ({ isDarkMode }) => {
                   style={{ borderColor: "#52B788" }}
                 >
                   <p>Total Deposited</p>
-                  <h2>$30,283,670</h2>
+                  <h3>
+                    $
+                    {amountConversionWithComma(
+                      totalUserDepositStats || 0,
+                      DOLLAR_DECIMALS
+                    )}
+                  </h3>{" "}
                 </div>
                 <div
                   className="dashboard-statics"
                   style={{ borderColor: "#E2F7E5" }}
                 >
                   <p>Total Borrowed</p>
-                  <h2>$14,323,970</h2>
+                  <h3>
+                    $
+                    {amountConversionWithComma(
+                      totalBorrowStats || 0,
+                      DOLLAR_DECIMALS
+                    )}
+                  </h3>{" "}
                 </div>
               </div>
             </div>
@@ -340,13 +534,23 @@ const Dashboard = ({ isDarkMode }) => {
 };
 
 Dashboard.propTypes = {
-  isDarkMode: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
+  assetMap: PropTypes.object,
+  isDarkMode: PropTypes.bool,
+  markets: PropTypes.arrayOf(
+    PropTypes.shape({
+      rates: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+    })
+  ),
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
+    markets: state.oracle.market.list,
+    assetMap: state.asset._.map,
   };
 };
 

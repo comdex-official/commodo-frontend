@@ -1,25 +1,34 @@
+import { Button, Select } from "antd";
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Button, List, Select, Input, Tooltip } from "antd";
-import "./index.less";
-import AssetStats from "../../../components/common/Asset/Stats";
 import { setBalanceRefresh } from "../../../actions/account";
-import { iconNameFromDenom, toDecimals } from "../../../utils/string";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import CustomRow from "../../../components/common/Asset/CustomRow";
+import Details from "../../../components/common/Asset/Details";
+import AssetStats from "../../../components/common/Asset/Stats";
+import CustomInput from "../../../components/CustomInput";
+import HealthFactor from "../../../components/HealthFactor";
+import { ValidateInputNumber } from "../../../config/_validation";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount,
-  getDenomBalance,
+  getAmount
 } from "../../../utils/coin";
-import { commaSeparator, marketPrice } from "../../../utils/number";
-import { DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../constants/common";
-import CustomInput from "../../../components/CustomInput";
-import { useState } from "react";
-import { ValidateInputNumber } from "../../../config/_validation";
-import { comdex } from "../../../config/network";
+import {
+  commaSeparator,
+  decimalConversion,
+  marketPrice
+} from "../../../utils/number";
+import {
+  iconNameFromDenom,
+  toDecimals,
+  ucDenomToDenom
+} from "../../../utils/string";
 import ActionButton from "./ActionButton";
+import "./index.less";
 
 const { Option } = Select;
 
@@ -27,54 +36,97 @@ const BorrowTab = ({
   lang,
   dataInProgress,
   borrowPosition,
+  lendPosition,
   pool,
   assetMap,
-  balances,
+  assetRatesStatsMap,
   address,
   refreshBalance,
   setBalanceRefresh,
   markets,
+  refreshBorrowPosition,
   pair,
 }) => {
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
+  const [assetList, setAssetList] = useState();
 
   const selectedAssetId = pair?.assetOut?.toNumber();
-  const availableBalance =
-    getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
 
-  //TODO update available balance
+  const borrowable =
+    (Number(
+      borrowPosition?.amountIn?.amount *
+        marketPrice(markets, ucDenomToDenom(borrowPosition?.amountIn?.denom)) *
+        (pair?.isInterPool
+          ? Number(
+              decimalConversion(assetRatesStatsMap[lendPosition?.assetId]?.ltv)
+            ) *
+            Number(
+              decimalConversion(
+                assetRatesStatsMap[pool?.firstBridgedAssetId]?.ltv
+              )
+            )
+          : Number(
+              decimalConversion(assetRatesStatsMap[lendPosition?.assetId]?.ltv)
+            )) || 0
+    ) -
+      Number(
+        borrowPosition?.updatedAmountOut *
+          marketPrice(markets, borrowPosition?.amountOut.denom)
+      )) /
+    marketPrice(markets, borrowPosition?.amountOut.denom);
+
+  // Collateral deposited value * Max LTV of collateral minus already Borrowed asset value
+
+  useEffect(() => {
+    if (pool?.poolId) {
+      setAssetList([
+        assetMap[pool?.mainAssetId?.toNumber()],
+        assetMap[pool?.firstBridgedAssetId?.toNumber()],
+        assetMap[pool?.secondBridgedAssetId?.toNumber()],
+      ]);
+    }
+  }, [pool]);
 
   const handleInputChange = (value) => {
     value = toDecimals(value).toString().trim();
 
     setAmount(value);
-    setValidationError(ValidateInputNumber(getAmount(value), availableBalance));
+    setValidationError(ValidateInputNumber(getAmount(value), borrowable));
   };
 
   const handleMaxClick = () => {
-    if (assetMap[selectedAssetId]?.denom === comdex.coinMinimalDenom) {
-      return Number(availableBalance) > DEFAULT_FEE
-        ? handleInputChange(amountConversion(availableBalance - DEFAULT_FEE))
-        : handleInputChange();
-    } else {
-      return handleInputChange(amountConversion(availableBalance));
-    }
+    return handleInputChange(amountConversion(borrowable));
   };
 
   const handleRefresh = () => {
+    refreshBorrowPosition();
     setBalanceRefresh(refreshBalance + 1);
     setAmount();
   };
 
+  let currentLTV = Number(
+    ((Number(
+      amount
+        ? Number(borrowPosition?.updatedAmountOut) + Number(getAmount(amount))
+        : borrowPosition?.updatedAmountOut
+    ) *
+      marketPrice(markets, borrowPosition?.amountOut?.denom)) /
+      (Number(borrowPosition?.amountIn?.amount) *
+        marketPrice(
+          markets,
+          ucDenomToDenom(borrowPosition?.amountIn?.denom)
+        ))) *
+      100
+  );
+
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
+        <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
         <div className="assets-select-card mb-3">
           <div className="assets-left">
-            <label className="left-label">
-              Asset <TooltipIcon text="" />
-            </label>
+            <label className="left-label">Asset</label>
             <div className="assets-select-wrapper">
               <div className="assets-select-wrapper">
                 <Select
@@ -90,6 +142,8 @@ const BorrowTab = ({
                     </div>
                   }
                   defaultActiveFirstOption={true}
+                  showArrow={false}
+                  disabled
                 >
                   <Option key="1">
                     <div className="select-inner">
@@ -113,9 +167,15 @@ const BorrowTab = ({
           </div>
           <div className="assets-right">
             <div className="label-right">
-              Available
+              Borrowable
               <span className="ml-1">
-                {amountConversionWithComma(availableBalance)}{" "}
+                {amountConversionWithComma(
+                  borrowPosition?.lendingId && pair?.assetOutPoolId
+                    ? borrowable >= 0
+                      ? borrowable
+                      : 0
+                    : 0
+                )}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
               </span>
               <div className="max-half">
@@ -139,8 +199,7 @@ const BorrowTab = ({
                     amount *
                       marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
                       0
-                  ),
-                  DOLLAR_DECIMALS
+                  ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
               </small>{" "}
             </div>
@@ -148,7 +207,38 @@ const BorrowTab = ({
         </div>
         <Row>
           <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-            <AssetStats assetId={selectedAssetId} />
+            <Row className="mt-2">
+              <Col>
+                <label>Health Factor</label>
+                <TooltipIcon text="Numeric representation of your position's safety" />
+              </Col>
+              <Col className="text-right">
+                <HealthFactor
+                  borrow={borrowPosition}
+                  pair={pair}
+                  pool={pool}
+                  inAmount={borrowPosition?.amountIn?.amount}
+                  outAmount={
+                    amount
+                      ? Number(borrowPosition?.amountOut?.amount) +
+                        Number(getAmount(amount))
+                      : borrowPosition?.amountOut?.amount
+                  }
+                />
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <label>Current LTV</label>
+              </Col>
+              <Col className="text-right">
+                {(isFinite(currentLTV) ? currentLTV : 0).toFixed(
+                  DOLLAR_DECIMALS
+                )}
+                %
+              </Col>
+            </Row>
+            <AssetStats pair={pair} pool={pool} />
           </Col>
         </Row>
         <div className="assets-form-btn">
@@ -164,6 +254,29 @@ const BorrowTab = ({
           />
         </div>
       </div>
+      <div className="details-right">
+        <div className="commodo-card">
+          <Details
+            asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
+            poolId={pool?.poolId}
+            parent="borrow"
+          />
+          <div className="mt-5">
+            <Details
+              asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
+              poolId={pool?.poolId}
+              parent="borrow"
+            />
+          </div>
+        </div>
+        <div className="commodo-card">
+          <Details
+            asset={assetMap[pool?.mainAssetId?.toNumber()]}
+            poolId={pool?.poolId}
+            parent="borrow"
+          />
+        </div>
+      </div>
     </div>
   );
 };
@@ -171,15 +284,11 @@ const BorrowTab = ({
 BorrowTab.propTypes = {
   dataInProgress: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
+  refreshBorrowPosition: PropTypes.func.isRequired,
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
-  balances: PropTypes.arrayOf(
-    PropTypes.shape({
-      denom: PropTypes.string.isRequired,
-      amount: PropTypes.string,
-    })
-  ),
+  assetRatesStatsMap: PropTypes.object,
   borrowPosition: PropTypes.shape({
     lendingId: PropTypes.shape({
       low: PropTypes.number,
@@ -187,6 +296,11 @@ BorrowTab.propTypes = {
     amountIn: PropTypes.shape({
       denom: PropTypes.string,
       amount: PropTypes.string,
+    }),
+  }),
+  lendPosition: PropTypes.shape({
+    poolId: PropTypes.shape({
+      low: PropTypes.number,
     }),
   }),
   pair: PropTypes.shape({
@@ -220,10 +334,10 @@ const stateToProps = (state) => {
     pool: state.lend.pool._,
     pair: state.lend.pair,
     assetMap: state.asset._.map,
-    balances: state.account.balances.list,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
     markets: state.oracle.market.list,
+    assetRatesStatsMap: state.lend.assetRatesStats.map,
   };
 };
 

@@ -1,25 +1,21 @@
-import "./index.less";
-import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../../components/common";
-import { connect } from "react-redux";
-import React, { useState } from "react";
 import { Button, Form, message, Modal } from "antd";
-import variables from "../../../utils/variables";
-import { getChainConfig, initializeIBCChain } from "../../../services/keplr";
-import {
-  amountConversion,
-  denomConversion,
-  getAmount,
-} from "../../../utils/coin";
-import { defaultFee } from "../../../services/transaction";
-import { aminoSignIBCTx } from "../../../services/helper";
-import { toDecimals, truncateString } from "../../../utils/string";
-import { fetchProofHeight } from "../../../actions/asset";
-import CustomInput from "../../../components/CustomInput";
+import * as PropTypes from "prop-types";
+import React, { useState } from "react";
+import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
-import { ValidateInputNumber } from "../../../config/_validation";
+import { fetchProofHeight } from "../../../actions/asset";
+import { Col, Row, SvgIcon } from "../../../components/common";
 import Snack from "../../../components/common/Snack";
+import CustomInput from "../../../components/CustomInput";
 import { comdex } from "../../../config/network";
+import { ValidateInputNumber } from "../../../config/_validation";
+import { aminoSignIBCTx } from "../../../services/helper";
+import { getChainConfig, initializeIBCChain } from "../../../services/keplr";
+import { defaultFee } from "../../../services/transaction";
+import { denomConversion, getAmount } from "../../../utils/coin";
+import { toDecimals, truncateString } from "../../../utils/string";
+import variables from "../../../utils/variables";
+import "./index.less";
 
 const Withdraw = ({
   lang,
@@ -39,9 +35,7 @@ const Withdraw = ({
     value = toDecimals(value).toString().trim();
 
     setAmount(value);
-    setValidationError(
-      ValidateInputNumber(getAmount(value), chain?.ibc?.amount || 0)
-    );
+    setValidationError(ValidateInputNumber(value, chain?.balance?.amount));
   };
 
   const showModal = () => {
@@ -78,16 +72,16 @@ const Withdraw = ({
         typeUrl: "/ibc.applications.transfer.v1.MsgTransfer",
         value: {
           source_port: "transfer",
-          source_channel: chain.sourceChannelId,
+          source_channel: chain?.sourceChannelId,
           token: {
-            denom: chain.ibc?.denom,
+            denom: chain?.ibcDenomHash,
             amount: getAmount(amount),
           },
           sender: address,
           receiver: destinationAddress,
           timeout_height: {
-            revisionNumber: Number(proofHeight.revision_number),
-            revisionHeight: Number(proofHeight.revision_height) + 100,
+            revisionNumber: Number(proofHeight?.revision_number),
+            revisionHeight: Number(proofHeight?.revision_height) + 100,
           },
           timeout_timestamp: undefined,
         },
@@ -100,20 +94,24 @@ const Withdraw = ({
       setInProgress(false);
 
       if (error) {
-        message.error(
-          <Snack
-            message={variables[lang].tx_failed}
-            explorerUrlToTx={comdex.explorerUrlToTx}
-            hash={result?.transactionHash}
-          />
-        );
+        if (result?.transactionHash) {
+          message.error(
+            <Snack
+              message={variables[lang].tx_failed}
+              explorerUrlToTx={chain.chainInfo.explorerUrlToTx}
+              hash={result?.transactionHash}
+            />
+          );
+        } else {
+          message.error(error);
+        }
         return;
       }
 
       message.success(
         <Snack
           message={variables[lang].tx_success}
-          explorerUrlToTx={comdex.explorerUrlToTx}
+          explorerUrlToTx={comdex?.explorerUrlToTx}
           hash={result?.transactionHash}
         />
       );
@@ -175,18 +173,14 @@ const Withdraw = ({
               <div className="available-balance">
                 {variables[lang].available}
                 <span className="ml-1">
-                  {(chain && chain.ibc && amountConversion(chain.ibc.amount)) ||
-                    0}{" "}
-                  {(chain.currency &&
-                    chain.currency.coinDenom &&
-                    denomConversion(chain.currency.coinDenom)) ||
-                    ""}
+                  {chain?.balance?.amount || 0}{" "}
+                  {denomConversion(chain?.coinMinimalDenom) || ""}
                 </span>
                 <span className="assets-max-half">
                   <Button
                     className=" active"
                     onClick={() => {
-                      setAmount(amountConversion(chain?.ibc?.amount || 0));
+                      setAmount(chain?.balance?.amount || 0);
                     }}
                   >
                     {variables[lang].max}

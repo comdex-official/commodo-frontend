@@ -1,24 +1,25 @@
+import { List, Table } from "antd";
+import Lodash from "lodash";
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { connect } from "react-redux";
-import { List, message, Table } from "antd";
-import Deposit from "./DepositModal";
-import Withdraw from "./WithdrawModal";
-import { ibcAssetsInfo } from "../../config/ibc";
-import { commaSeparator, marketPrice } from "../../utils/number";
-import { embedChainInfo } from "../../config/chain";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import AssetList from "../../config/ibc_assets.json";
+import { cmst, comdex, harbor } from "../../config/network";
+import { DOLLAR_DECIMALS } from "../../constants/common";
+import { getChainConfig } from "../../services/keplr";
 import {
   amountConversion,
   amountConversionWithComma,
-  denomConversion,
+  denomConversion
 } from "../../utils/coin";
-import { cmst, comdex, harbor } from "../../config/network";
+import { commaSeparator, marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
-import Lodash from "lodash";
-import { DOLLAR_DECIMALS } from "../../constants/common";
+import Deposit from "./DepositModal";
 import "./index.less";
+import Withdraw from "./WithdrawModal";
 
-const Assets = ({ assetBalance, balances, markets }) => {
+
+const Assets = ({ assetBalance, balances, markets, poolPriceMap }) => {
   const data = [
     {
       title: (
@@ -39,8 +40,8 @@ const Assets = ({ assetBalance, balances, markets }) => {
     },
     {
       title: "No. of Tokens",
-      dataIndex: "no_of_tokens",
-      key: "no_of_tokens",
+      dataIndex: "noOfTokens",
+      key: "noOfTokens",
       width: 150,
       render: (tokens) => (
         <>
@@ -50,8 +51,8 @@ const Assets = ({ assetBalance, balances, markets }) => {
     },
     {
       title: "Oracle Price",
-      dataIndex: "oracle_price",
-      key: "oracle_price",
+      dataIndex: "price",
+      key: "price",
       width: 150,
       render: (price) => (
         <>
@@ -77,8 +78,8 @@ const Assets = ({ assetBalance, balances, markets }) => {
     },
     {
       title: "IBC Deposit",
-      dataIndex: "ibc_deposit",
-      key: "ibc_deposit",
+      dataIndex: "ibcdeposit",
+      key: "ibcdeposit",
       width: 150,
       align: "center",
       render: (value) => {
@@ -89,8 +90,8 @@ const Assets = ({ assetBalance, balances, markets }) => {
     },
     {
       title: "IBC Withdraw",
-      dataIndex: "ibc_withdraw",
-      key: "ibc_withdraw",
+      dataIndex: "ibcwithdraw",
+      key: "ibcwithdraw",
       width: 150,
       align: "center",
       render: (value) => {
@@ -102,50 +103,33 @@ const Assets = ({ assetBalance, balances, markets }) => {
   ];
 
   const getPrice = (denom) => {
-    return marketPrice(markets, denom) || 0;
+    return poolPriceMap[denom] || marketPrice(markets, denom) || 0;
   };
 
-  let ibcBalances = ibcAssetsInfo.map((channelInfo) => {
-    const chainInfo = embedChainInfo.filter(
-      (item) => item.chainId === channelInfo.counterpartyChainId
-    )[0];
-
-    const originCurrency =
-      chainInfo &&
-      chainInfo.currencies.find(
-        (cur) => cur.coinMinimalDenom === channelInfo.coinMinimalDenom
-      );
-
-    if (!originCurrency) {
-      message.info(
-        `Unknown currency ${channelInfo.coinMinimalDenom} for ${channelInfo.counterpartyChainId}`
-      );
-    }
-
+  let ibcBalances = AssetList?.tokens.map((token) => {
     const ibcBalance = balances.find(
-      (item) => item.denom === channelInfo?.ibcDenomHash
+      (item) => item.denom === token?.ibcDenomHash
     );
+
     const value = getPrice(ibcBalance?.denom) * ibcBalance?.amount;
 
     return {
-      chainInfo: chainInfo,
-      denom: originCurrency?.coinMinimalDenom,
+      chainInfo: getChainConfig(token),
+      coinMinimalDenom: token?.coinMinimalDenom,
       balance: {
         amount: ibcBalance?.amount ? amountConversion(ibcBalance.amount) : 0,
         value: value || 0,
       },
-      ibc: ibcBalance,
-      sourceChannelId: channelInfo.sourceChannelId,
-      destChannelId: channelInfo.destChannelId,
-      isUnstable: channelInfo.isUnstable,
-      currency: originCurrency,
+      sourceChannelId: token.comdexChannel,
+      destChannelId: token.channel,
+      ibcDenomHash: token?.ibcDenomHash,
+      explorerUrlToTx: token?.explorerUrlToTx,
     };
   });
 
   const nativeCoin = balances.filter(
     (item) => item.denom === comdex?.coinMinimalDenom
   )[0];
-
   const nativeCoinValue = getPrice(nativeCoin?.denom) * nativeCoin?.amount;
 
   const cmstCoin = balances.filter(
@@ -171,10 +155,8 @@ const Assets = ({ assetBalance, balances, markets }) => {
           </div>
         </>
       ),
-      no_of_tokens: nativeCoin?.amount
-        ? amountConversion(nativeCoin.amount)
-        : 0,
-      oracle_price: getPrice(comdex?.coinMinimalDenom),
+      noOfTokens: nativeCoin?.amount ? amountConversion(nativeCoin.amount) : 0,
+      price: getPrice(comdex?.coinMinimalDenom),
       amount: {
         value: nativeCoinValue || 0,
       },
@@ -191,8 +173,8 @@ const Assets = ({ assetBalance, balances, markets }) => {
           </div>
         </>
       ),
-      no_of_tokens: cmstCoin?.amount ? amountConversion(cmstCoin.amount) : 0,
-      oracle_price: getPrice(cmst?.coinMinimalDenom),
+      noOfTokens: cmstCoin?.amount ? amountConversion(cmstCoin.amount) : 0,
+      price: getPrice(cmst?.coinMinimalDenom),
       amount: {
         value: cmstCoinValue || 0,
       },
@@ -209,10 +191,8 @@ const Assets = ({ assetBalance, balances, markets }) => {
           </div>
         </>
       ),
-      no_of_tokens: harborCoin?.amount
-        ? amountConversion(harborCoin.amount)
-        : 0,
-      oracle_price: getPrice(harbor?.coinMinimalDenom),
+      noOfTokens: harborCoin?.amount ? amountConversion(harborCoin.amount) : 0,
+      price: getPrice(harbor?.coinMinimalDenom),
       amount: {
         value: harborCoinValue || 0,
       },
@@ -223,24 +203,22 @@ const Assets = ({ assetBalance, balances, markets }) => {
     ibcBalances &&
     ibcBalances.map((item) => {
       return {
-        key: item.denom,
+        key: item?.coinMinimalDenom,
         asset: (
           <>
             <div className="assets-with-icon">
               <div className="assets-icon">
-                <SvgIcon
-                  name={iconNameFromDenom(item.currency?.coinMinimalDenom)}
-                />
+                <SvgIcon name={iconNameFromDenom(item?.coinMinimalDenom)} />
               </div>{" "}
-              {item.currency?.coinDenom}{" "}
+              {denomConversion(item?.coinMinimalDenom)}{" "}
             </div>
           </>
         ),
-        no_of_tokens: item?.balance?.amount,
-        oracle_price: getPrice(item.currency?.coinMinimalDenom),
+        noOfTokens: item?.balance?.amount,
+        price: getPrice(item?.coinMinimalDenom),
         amount: item.balance,
-        ibc_deposit: item,
-        ibc_withdraw: item,
+        ibcdeposit: item,
+        ibcwithdraw: item,
       };
     });
 
@@ -278,7 +256,7 @@ const Assets = ({ assetBalance, balances, markets }) => {
             <div className="commodo-card py-3 bg-none">
               <div className="card-content">
                 <Table
-                  className="custom-table liquidation-table"
+                  className="custom-table auction-table"
                   dataSource={tableData}
                   columns={columns}
                   pagination={false}
@@ -311,6 +289,7 @@ Assets.propTypes = {
       script_id: PropTypes.string,
     })
   ),
+  poolPriceMap: PropTypes.object,
 };
 
 const stateToProps = (state) => {
@@ -319,9 +298,8 @@ const stateToProps = (state) => {
     assetBalance: state.account.balances.asset,
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
+    poolPriceMap: state.liquidity.poolPriceMap,
   };
 };
 
-const actionsToProps = {};
-
-export default connect(stateToProps, actionsToProps)(Assets);
+export default connect(stateToProps)(Assets);

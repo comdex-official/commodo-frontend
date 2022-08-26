@@ -1,18 +1,19 @@
 import * as PropTypes from "prop-types";
-import { Col, Row } from "../../../components/common";
 import { connect } from "react-redux";
-import { Progress } from "antd";
-import "./index.less";
 import { setBalanceRefresh } from "../../../actions/account";
-import { useState } from "react";
+import { Col, Row, TooltipIcon } from "../../../components/common";
+import Details from "../../../components/common/Asset/Details";
+import HealthFactor from "../../../components/HealthFactor";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
+  getDenomBalance
 } from "../../../utils/coin";
-import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import ActionButton from "./ActionButton";
+import "./index.less";
 
 const CloseTab = ({
   lang,
@@ -20,20 +21,20 @@ const CloseTab = ({
   borrowPosition,
   pool,
   assetMap,
-  balances,
   address,
   refreshBalance,
   setBalanceRefresh,
   markets,
+  balances,
   pair,
 }) => {
-  const [amount, setAmount] = useState();
   const selectedAssetId = pair?.assetOut?.toNumber();
 
+  const availableBalance =
+    getDenomBalance(balances, borrowPosition?.amountOut?.denom) || 0;
 
   const handleRefresh = () => {
     setBalanceRefresh(refreshBalance + 1);
-    setAmount();
   };
 
   return (
@@ -44,20 +45,15 @@ const CloseTab = ({
             <Row>
               <Col>
                 <label>Amount to be closed</label>
-                <p className="remaining-infotext mt-1">
-                  You don’t have enough funds to repay the full amount
-                </p>
-              </Col>
-              <Col className="text-right">
-                <div>
-                  {amountConversionWithComma(borrowPosition?.amountOut?.amount)}{" "}
+                <div className="fs20">
+                  {amountConversionWithComma(borrowPosition?.updatedAmountOut)}{" "}
                   {denomConversion(borrowPosition?.amountOut?.denom)}
                 </div>
                 <small className="font-weight-light">
                   $
                   {commaSeparator(
                     Number(
-                      amountConversion(borrowPosition?.amountOut?.amount) *
+                      amountConversion(borrowPosition?.updatedAmountOut) *
                         marketPrice(
                           markets,
                           assetMap[selectedAssetId]?.denom
@@ -67,29 +63,30 @@ const CloseTab = ({
                   )}
                 </small>
               </Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Current Health Factor</label>
-              </Col>
-              <Col className="text-right">90%</Col>
-            </Row>
-            <Row className="pb-2">
-              <Col>
-                <Progress className="commodo-progress" percent={30} />
+              <Col className="text-right available-amount">
+                <div class="label-right">
+                  Available
+                  <span class="ml-1">
+                    {amountConversionWithComma(availableBalance)}{" "}
+                    {denomConversion(borrowPosition?.amountOut?.denom)}
+                  </span>
+                </div>
               </Col>
             </Row>
-            <Row className="mt-2">
+            <Row className="mt-3">
               <Col>
-                <label>Liquidation Threshold</label>
+                <label>Health Factor</label>
+                <TooltipIcon text="Numeric representation of your position's safety" />
               </Col>
-              <Col className="text-right">80%</Col>
-            </Row>
-            <Row className="mt-2">
-              <Col>
-                <label>Liquidation Penalty</label>
+              <Col className="text-right">
+                <HealthFactor
+                  borrow={borrowPosition}
+                  pair={pair}
+                  pool={pool}
+                  inAmount={borrowPosition?.amountIn?.amount}
+                  outAmount={Number(borrowPosition?.updatedAmountOut)}
+                />{" "}
               </Col>
-              <Col className="text-right">5%</Col>
             </Row>
           </Col>
         </Row>
@@ -97,12 +94,40 @@ const CloseTab = ({
           <ActionButton
             name="Close"
             lang={lang}
-            disabled={dataInProgress || !selectedAssetId}
-            amount={amountConversion(borrowPosition?.amountOut?.amount)}
+            disabled={
+              dataInProgress ||
+              !selectedAssetId ||
+              Number(availableBalance) <
+                Number(borrowPosition?.updatedAmountOut)
+            }
+            amount={amountConversion(borrowPosition?.updatedAmountOut)}
             address={address}
             borrowId={borrowPosition?.borrowingId}
             denom={borrowPosition?.amountOut?.denom}
             refreshData={handleRefresh}
+          />
+        </div>
+      </div>
+      <div className="details-right">
+        <div className="commodo-card">
+          <Details
+            asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
+            poolId={pool?.poolId}
+            parent="borrow"
+          />
+          <div className="mt-5">
+            <Details
+              asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
+              poolId={pool?.poolId}
+              parent="borrow"
+            />
+          </div>
+        </div>
+        <div className="commodo-card">
+          <Details
+            asset={assetMap[pool?.mainAssetId?.toNumber()]}
+            poolId={pool?.poolId}
+            parent="borrow"
           />
         </div>
       </div>
@@ -161,8 +186,8 @@ const stateToProps = (state) => {
     address: state.account.address,
     pool: state.lend.pool._,
     pair: state.lend.pair,
-    assetMap: state.asset._.map,
     balances: state.account.balances.list,
+    assetMap: state.asset._.map,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
     markets: state.oracle.market.list,

@@ -1,6 +1,28 @@
 import { QueryClientImpl } from "comdex-codec/build/comdex/lend/v1beta1/query";
 import Long from "long";
+import { APP_ID } from "../../constants/common";
 import { createQueryClient } from "../helper";
+
+let myClient = null;
+
+const getQueryService = (callback) => {
+  if (myClient) {
+    const queryService = new QueryClientImpl(myClient);
+
+    return callback(null, queryService);
+  } else {
+    createQueryClient((error, client) => {
+      if (error) {
+        return callback(error);
+      }
+      
+      myClient = client;
+      const queryService = new QueryClientImpl(client);
+
+      return callback(null, queryService);
+    });
+  }
+};
 
 export const queryLendPools = (
   offset,
@@ -9,13 +31,13 @@ export const queryLendPools = (
   reverse,
   callback
 ) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryPools({
         pagination: {
           key: "",
@@ -35,13 +57,13 @@ export const queryLendPools = (
 };
 
 export const queryLendPool = (poolId, callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryPool({ id: Long.fromNumber(poolId) })
       .then((result) => {
         callback(null, result);
@@ -53,13 +75,13 @@ export const queryLendPool = (poolId, callback) => {
 };
 
 export const queryAssetStats = (assetId, poolId, callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryAssetStats({
         assetId: Long.fromNumber(assetId),
         poolId: Long.fromNumber(poolId),
@@ -74,13 +96,13 @@ export const queryAssetStats = (assetId, poolId, callback) => {
 };
 
 export const queryUserLends = (address, callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryAllLendByOwner({ owner: address })
       .then((result) => {
         callback(null, result);
@@ -92,13 +114,13 @@ export const queryUserLends = (address, callback) => {
 };
 
 export const queryLendPosition = (id, callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryLend({ id: Long.fromNumber(id) })
       .then((result) => {
         callback(null, result);
@@ -110,13 +132,13 @@ export const queryLendPosition = (id, callback) => {
 };
 
 export const queryBorrowPosition = (id, callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryBorrow({ id: Long.fromNumber(id) })
       .then((result) => {
         callback(null, result);
@@ -128,13 +150,13 @@ export const queryBorrowPosition = (id, callback) => {
 };
 
 export const queryAssetRatesStats = (callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryAssetRatesStats({})
       .then((result) => {
         callback(null, result);
@@ -146,13 +168,13 @@ export const queryAssetRatesStats = (callback) => {
 };
 
 export const queryModuleBalance = (poolId, callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryModuleBalance({ poolId: Long.fromNumber(poolId) })
       .then((result) => {
         callback(null, result);
@@ -163,17 +185,16 @@ export const queryModuleBalance = (poolId, callback) => {
   });
 };
 
-export const queryUserPoolLends = (address, poolId, callback) => {
-  createQueryClient((error, rpcClient) => {
+export const queryUserPoolLends = (address, callback) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
-      .QueryAllLendByOwnerAndPool({
+    queryService
+      .QueryAllLendByOwner({
         owner: address,
-        poolId: Long.fromNumber(poolId),
       })
       .then((result) => {
         callback(null, result);
@@ -185,13 +206,13 @@ export const queryUserPoolLends = (address, poolId, callback) => {
 };
 
 export const queryAssetPairs = (assetId, poolId, callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryAssetToPairMapping({
         assetId: Long.fromNumber(assetId),
         poolId: Long.fromNumber(poolId),
@@ -206,13 +227,13 @@ export const queryAssetPairs = (assetId, poolId, callback) => {
 };
 
 export const queryLendPair = (id, callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryPair({
         id: Long.fromNumber(id),
       })
@@ -226,13 +247,13 @@ export const queryLendPair = (id, callback) => {
 };
 
 export const queryUserBorrows = (address, callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryAllBorrowByOwner({ owner: address })
       .then((result) => {
         callback(null, result);
@@ -240,5 +261,109 @@ export const queryUserBorrows = (address, callback) => {
       .catch((error) => {
         callback(error?.message);
       });
+  });
+};
+
+export const queryDepositStats = (callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryDepositStats()
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};
+
+export const queryUserDepositStats = (callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryUserDepositStats()
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};
+
+export const queryBorrowStats = (callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryBorrowStats()
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};
+
+export const queryAuctionMippingIdParams = (callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryAuctionParams({
+        appId: Long.fromNumber(APP_ID),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+
+export const queryTopDeposits = (callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryDepositRanking()
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+
+export const queryTopBorrows = (callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryBorrowRanking()
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
   });
 };

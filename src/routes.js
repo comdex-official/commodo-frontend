@@ -1,16 +1,18 @@
-import MyHome from "./containers/Myhome";
-import Dashboard from "./containers/Dashboard";
-import Market from "./containers/Market";
-import Liquidation from "./containers/Liquidation";
 import Airdrop from "./containers/Airdrop";
+import Assets from "./containers/Assets";
+import Auction from "./containers/Auction";
+import Dashboard from "./containers/Dashboard";
+import Extra from "./containers/Extra";
 import Govern from "./containers/Govern";
 import GovernDetails from "./containers/Govern/Details";
+import Borrow from "./containers/Market/Borrow";
+import BorrowDetails from "./containers/Market/Borrow/Details";
+import DirectBorrow from "./containers/Market/Borrow/Direct";
+import Lend from "./containers/Market/Supply";
+import SupplyDetails from "./containers/Market/Supply/Details";
+import MyHome from "./containers/Myhome";
 import BorrowRepay from "./containers/Myhome/BorrowRepay";
 import Deposit from "./containers/Myhome/DepositWithdraw";
-import Assets from "./containers/Assets";
-import Extra from "./containers/Extra";
-import SupplyDetails from "./containers/Market/Supply/Details";
-import BorrowDetails from "./containers/Market/Borrow/Details";
 
 const routes = [
   {
@@ -30,20 +32,28 @@ const routes = [
     element: <Deposit />,
   },
   {
-    path: "/market",
-    element: <Market />,
+    path: "/lend",
+    element: <Lend />,
   },
   {
-    path: "/supply-details/:id",
+    path: "/borrow",
+    element: <Borrow />,
+  },
+  {
+    path: "/lend-markets/:id",
     element: <SupplyDetails />,
   },
   {
-    path: "/borrow-details/:id",
+    path: "/borrow-markets/:id",
     element: <BorrowDetails />,
   },
   {
-    path: "/liquidation",
-    element: <Liquidation />,
+    path: "/borrow-direct",
+    element: <DirectBorrow />,
+  },
+  {
+    path: "/auction",
+    element: <Auction />,
   },
   {
     path: "/airdrop",

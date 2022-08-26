@@ -9,6 +9,11 @@ export const ValidateInputNumber = (value, max, key) => {
     return new Error("No available balance");
   }
 
+
+  if (key === "repay" && max && Number(max) <= value) {
+    return new Error("Please enter amount less than repay");
+  }
+  
   if (max && Number(max) < value) {
     return new Error("Insufficient funds");
   }

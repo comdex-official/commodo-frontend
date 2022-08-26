@@ -1,15 +1,16 @@
 import { combineReducers } from "redux";
 import account from "./account";
 import asset from "./asset";
+import auction from "./auction";
 import dashboard from "./dashboard";
 import farm from "./farm";
 import language from "./language";
-import swap from "./swap";
-import lend from "./lend";
-import auction from "./auction";
-import theme from "./theme";
-import oracle from "./oracle";
 import ledger from "./ledger";
+import lend from "./lend";
+import liquidity from "./liquidity";
+import oracle from "./oracle";
+import swap from "./swap";
+import theme from "./theme";
 
 const app = combineReducers({
   language,
@@ -23,6 +24,7 @@ const app = combineReducers({
   theme,
   oracle,
   ledger,
+  liquidity,
 });
 
 const root = (state, action) => {

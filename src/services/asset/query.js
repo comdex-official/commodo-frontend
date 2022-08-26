@@ -2,14 +2,35 @@ import { QueryClientImpl } from "comdex-codec/build/comdex/asset/v1beta1/query";
 import Long from "long";
 import { createQueryClient } from "../helper";
 
+let myClient = null;
+
+const getQueryService = (callback) => {
+  if (myClient) {
+    const queryService = new QueryClientImpl(myClient);
+
+    return callback(null, queryService);
+  } else {
+    createQueryClient((error, client) => {
+      if (error) {
+        return callback(error);
+      }
+
+      myClient = client;
+      const queryService = new QueryClientImpl(client);
+
+      return callback(null, queryService);
+    });
+  }
+};
+
 export const queryPairs = (offset, limit, countTotal, reverse, callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryPairs({
         pagination: {
           key: "",
@@ -29,13 +50,13 @@ export const queryPairs = (offset, limit, countTotal, reverse, callback) => {
 };
 
 export const queryAssets = (offset, limit, countTotal, reverse, callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryAssets({
         pagination: {
           key: "",
@@ -55,13 +76,13 @@ export const queryAssets = (offset, limit, countTotal, reverse, callback) => {
 };
 
 export const queryPair = (pairId, callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryPair({
         id: Long.fromNumber(pairId),
       })
@@ -73,4 +94,3 @@ export const queryPair = (pairId, callback) => {
       });
   });
 };
-

@@ -1,19 +1,23 @@
-import { SvgIcon, TooltipIcon } from "../index";
 import { List, message } from "antd";
 import * as PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
+import {
+  queryAssetStats,
+  queryModuleBalance
+} from "../../../services/lend/query";
 import {
   amountConversionWithComma,
-  denomConversion,
+  denomConversion
 } from "../../../utils/coin";
-import { iconNameFromDenom } from "../../../utils/string";
-import { useEffect, useState } from "react";
-import { queryAssetStats } from "../../../services/lend/query";
 import { decimalConversion, marketPrice } from "../../../utils/number";
-import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { connect } from "react-redux";
+import { iconNameFromDenom } from "../../../utils/string";
+import { SvgIcon, TooltipIcon } from "../index";
 
 const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
   const [stats, setStats] = useState();
+  const [moduleBalanceStats, setModuleBalanceStats] = useState([]);
 
   useEffect(() => {
     if (asset?.id && poolId) {
@@ -25,26 +29,49 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
 
         setStats(result?.AssetStats);
       });
+    } else if (stats?.poolId) {
+      setStats();
     }
   }, [asset, poolId, refreshBalance]);
 
+  useEffect(() => {
+    if (poolId) {
+      queryModuleBalance(poolId, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setModuleBalanceStats(result?.ModuleBalance?.moduleBalanceStats);
+      });
+    }
+  }, [poolId, refreshBalance]);
+
+  let assetStats = moduleBalanceStats?.filter(
+    (item) => item?.assetId?.toNumber() === asset?.id?.toNumber()
+  )[0];
+
   let data = [
     {
-      title: parent === "lend" ? "Total Deposited" : "Total Borrowed",
+      title: parent === "lend" ? "Deposited" : "Borrowed",
       counts: `$${amountConversionWithComma(
         Number(
           (parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0
         ) * marketPrice(markets, asset?.denom),
         DOLLAR_DECIMALS
       )}`,
+      tooltipText:
+        parent === "lend" ? "Total funds Deposited" : "Total funds Borrowed",
     },
     {
       title: "Available",
       counts: `$${amountConversionWithComma(
-        Number(Number(stats?.totalLend) - Number(stats?.totalBorrowed) || 0) *
-          marketPrice(markets, asset?.denom),
+        marketPrice(markets, assetStats?.balance?.denom) *
+          assetStats?.balance.amount || 0,
         DOLLAR_DECIMALS
       )}`,
+      tooltipText:
+        parent === "lend" ? "Total funds Available" : "Total funds Available",
     },
     {
       title: "Utilization",
@@ -56,9 +83,11 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
           %
         </>
       ),
+      tooltipText:
+        parent === "lend" ? "Asset Utilization" : "Asset Utilization",
     },
     {
-      title: parent === "lend" ? "Deposit APY" : "Borrow APY",
+      title: parent === "lend" ? "Lend APY" : "Borrow APY",
       counts: (
         <>
           {Number(
@@ -69,6 +98,8 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
           %
         </>
       ),
+      tooltipText:
+        parent === "lend" ? "Lend APY of Asset" : "Borrow APY of Asset",
     },
   ];
 
@@ -102,7 +133,7 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
           <List.Item>
             <div>
               <p>
-                {item.title} <TooltipIcon />
+                {item.title} <TooltipIcon text={item.tooltipText} />
               </p>
               <h3>{item.counts}</h3>
             </div>
