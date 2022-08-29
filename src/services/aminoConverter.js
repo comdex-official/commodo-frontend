@@ -1,3 +1,25 @@
+import Long from "long";
+
+const omitDefault = (input) => {
+  if (typeof input === "string") {
+    return input === "" ? undefined : input;
+  }
+
+  if (typeof input === "number") {
+    return input === 0 ? undefined : input;
+  }
+
+  if (Long.isLong(input)) {
+    return input.isZero() ? undefined : input;
+  }
+
+  if(typeof input === "boolean"){
+    return input;
+  }
+
+  throw new Error(`Got unsupported type '${typeof input}'`);
+}
+
 export const customAminoTypes = {
   "/comdex.lend.v1beta1.MsgLend": {
     aminoType: "comdex/lend/MsgLend",
@@ -83,7 +105,7 @@ export const customAminoTypes = {
         borrower: borrower,
         lend_id: String(lendId),
         pair_id: String(pairId),
-        is_stable_borrow: isStableBorrow,
+        is_stable_borrow: omitDefault(isStableBorrow)?.toString(),
         amount_in: amountIn,
         amount_out: amountOut,
       };
@@ -118,7 +140,7 @@ export const customAminoTypes = {
     fromAmino: ({ borrower, borrow_id, amount }) => {
       return {
         borrower: borrower,
-        lendId: Number(borrow_id),
+        borrowId: Number(borrow_id),
         amount: amount,
       };
     },
@@ -135,7 +157,7 @@ export const customAminoTypes = {
     fromAmino: ({ borrower, borrow_id, amount }) => {
       return {
         borrower: borrower,
-        lendId: Number(borrow_id),
+        borrowId: Number(borrow_id),
         amount: amount,
       };
     },
@@ -152,7 +174,7 @@ export const customAminoTypes = {
     fromAmino: ({ borrower, borrow_id, amount }) => {
       return {
         borrower: borrower,
-        lendId: Number(borrow_id),
+        borrowId: Number(borrow_id),
         amount: amount,
       };
     },
@@ -168,7 +190,7 @@ export const customAminoTypes = {
     fromAmino: ({ borrower, borrow_id }) => {
       return {
         borrower: borrower,
-        lendId: Number(borrow_id),
+        borrowId: Number(borrow_id),
       };
     },
   },
@@ -177,6 +199,7 @@ export const customAminoTypes = {
     toAmino: ({
       lender,
       assetId,
+      pairId,
       poolId,
       isStableBorrow,
       amountIn,
@@ -188,7 +211,8 @@ export const customAminoTypes = {
         asset_id: String(assetId),
         pool_id: String(poolId),
         app_id: String(appId),
-        is_stable_borrow: isStableBorrow,
+        pair_id: String(pairId),
+        is_stable_borrow: omitDefault(isStableBorrow)?.toString(),
         amount_in: amountIn,
         amount_out: amountOut,
       };
@@ -197,6 +221,7 @@ export const customAminoTypes = {
       lender,
       asset_id,
       pool_id,
+      pair_id,
       is_stable_borrow,
       amount_in,
       amount_out,
@@ -206,6 +231,7 @@ export const customAminoTypes = {
         lender: lender,
         assetId: Number(asset_id),
         poolId: Number(pool_id),
+        pairId: Number(pair_id),
         appId: Number(app_id),
         isStableBorrow: is_stable_borrow,
         amountIn: amount_in,
