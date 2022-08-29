@@ -267,7 +267,7 @@ const Myhome = ({
                   </div>
                 </div>
                 <div className="borrow-limit-middle">
-                  <Progress percent={"20"} size="small" />
+                  <Progress percent={currentLimit} size="small" />
                 </div>
               </div>
             </div>

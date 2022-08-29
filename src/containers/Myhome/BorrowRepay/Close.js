@@ -1,7 +1,8 @@
+import { Select } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
-import { Col, Row, TooltipIcon, SvgIcon } from "../../../components/common";
+import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import Details from "../../../components/common/Asset/Details";
 import HealthFactor from "../../../components/HealthFactor";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
@@ -12,8 +13,8 @@ import {
   getDenomBalance
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
+import { iconNameFromDenom } from "../../../utils/string";
 import ActionButton from "./ActionButton";
-import { Select } from "antd";
 import "./index.less";
 
 const CloseTab = ({
@@ -41,7 +42,7 @@ const CloseTab = ({
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-      <div className="assets-select-card mb-3">
+        <div className="assets-select-card mb-3">
           <div className="assets-left">
             <label className="left-label">Close position</label>
             <div className="assets-select-wrapper">
@@ -67,12 +68,14 @@ const CloseTab = ({
                       <div className="svg-icon">
                         <div className="svg-icon-inner">
                           <SvgIcon
-                            name="cmdx-icon"
+                            name={iconNameFromDenom(
+                              borrowPosition?.amountOut?.denom
+                            )}
                           />
                         </div>
                       </div>
                       <div className="name">
-                        CMDX
+                        {denomConversion(borrowPosition?.amountOut?.denom)}{" "}
                       </div>
                     </div>
                   </Option>
@@ -90,60 +93,26 @@ const CloseTab = ({
             </div>
             <div>
               <div className="input-select">
-                <h2 className="mt-2">
+                <h2 className="mt-3">
                   {amountConversionWithComma(borrowPosition?.updatedAmountOut)}{" "}
-                  {denomConversion(borrowPosition?.amountOut?.denom)}
                 </h2>
               </div>
-              <small>
+              <small className="mt-1">
                 $
-                  {commaSeparator(
-                    Number(
-                      amountConversion(borrowPosition?.updatedAmountOut) *
-                        marketPrice(
-                          markets,
-                          assetMap[selectedAssetId]?.denom
-                        ) || 0
-                    ),
-                    DOLLAR_DECIMALS
-                  )}
+                {commaSeparator(
+                  Number(
+                    amountConversion(borrowPosition?.updatedAmountOut) *
+                      marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
+                      0
+                  ),
+                  DOLLAR_DECIMALS
+                )}
               </small>{" "}
             </div>
           </div>
         </div>
         <Row>
           <Col sm="12" className="mt-2 mx-auto card-bottom-details">
-            {/* <Row>
-              <Col>
-                <label>Close position</label>
-                <div className="fs20">
-                  {amountConversionWithComma(borrowPosition?.updatedAmountOut)}{" "}
-                  {denomConversion(borrowPosition?.amountOut?.denom)}
-                </div>
-                <small className="font-weight-light">
-                  $
-                  {commaSeparator(
-                    Number(
-                      amountConversion(borrowPosition?.updatedAmountOut) *
-                        marketPrice(
-                          markets,
-                          assetMap[selectedAssetId]?.denom
-                        ) || 0
-                    ),
-                    DOLLAR_DECIMALS
-                  )}
-                </small>
-              </Col>
-              <Col className="text-right available-amount">
-                <div class="label-right">
-                  Available
-                  <span class="ml-1">
-                    {amountConversionWithComma(availableBalance)}{" "}
-                    {denomConversion(borrowPosition?.amountOut?.denom)}
-                  </span>
-                </div>
-              </Col>
-            </Row> */}
             <Row className="mt-3">
               <Col>
                 <label>Health Factor</label>
