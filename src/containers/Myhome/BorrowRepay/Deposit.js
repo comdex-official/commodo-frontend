@@ -140,6 +140,7 @@ const DepositTab = ({
           <div className="assets-right">
             <div className="label-right">
               Depositable
+              <TooltipIcon text="To get cTokens, deposit more funds in your existing Lend position" />
               <span className="ml-1">
                 {amountConversionWithComma(availableBalance)}{" "}
                 {denomConversion(borrowPosition?.amountIn?.denom)}
