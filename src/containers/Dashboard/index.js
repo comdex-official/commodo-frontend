@@ -381,7 +381,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                               </div>
                             </div>
                             <h3 className="h3-botttom">
-                              300% <small>High APR</small>
+                              <small>High APR</small>
                             </h3>
                           </div>
                           <div className="comingsoon-text">Coming soon..</div>
