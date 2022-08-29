@@ -104,8 +104,7 @@ const CloseTab = ({
                     amountConversion(borrowPosition?.updatedAmountOut) *
                       marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
                       0
-                  ),
-                  DOLLAR_DECIMALS
+                  ).toFixed(DOLLAR_DECIMALS)
                 )}
               </small>{" "}
             </div>

@@ -92,7 +92,9 @@ const BorrowTab = ({
     value = toDecimals(value).toString().trim();
 
     setAmount(value);
-    setValidationError(ValidateInputNumber(getAmount(value), borrowable));
+    setValidationError(
+      ValidateInputNumber(value, amountConversion(borrowable))
+    );
   };
 
   const handleMaxClick = () => {
@@ -245,7 +247,12 @@ const BorrowTab = ({
           <ActionButton
             name="Borrow"
             lang={lang}
-            disabled={!Number(amount) || dataInProgress || !selectedAssetId}
+            disabled={
+              !Number(amount) ||
+              validationError?.message ||
+              dataInProgress ||
+              !selectedAssetId
+            }
             amount={amount}
             address={address}
             borrowId={borrowPosition?.borrowingId}

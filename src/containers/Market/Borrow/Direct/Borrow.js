@@ -205,6 +205,7 @@ const BorrowTab = ({
     value = toDecimals(value).toString().trim();
 
     setInAmount(value);
+    setOutAmount(0);
     setValidationError(ValidateInputNumber(getAmount(value), availableBalance));
   };
 
