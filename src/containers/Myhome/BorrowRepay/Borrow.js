@@ -22,7 +22,11 @@ import {
   decimalConversion,
   marketPrice
 } from "../../../utils/number";
-import { iconNameFromDenom, toDecimals } from "../../../utils/string";
+import {
+  iconNameFromDenom,
+  toDecimals,
+  ucDenomToDenom
+} from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
 
@@ -50,9 +54,9 @@ const BorrowTab = ({
   const selectedAssetId = pair?.assetOut?.toNumber();
 
   const borrowable =
-    Number(
+    (Number(
       borrowPosition?.amountIn?.amount *
-        marketPrice(markets, borrowPosition?.amountIn.denom) *
+        marketPrice(markets, ucDenomToDenom(borrowPosition?.amountIn?.denom)) *
         (pair?.isInterPool
           ? Number(
               decimalConversion(assetRatesStatsMap[lendPosition?.assetId]?.ltv)
@@ -66,10 +70,12 @@ const BorrowTab = ({
               decimalConversion(assetRatesStatsMap[lendPosition?.assetId]?.ltv)
             )) || 0
     ) -
-    Number(
-      borrowPosition?.updatedAmountOut *
-        marketPrice(markets, borrowPosition?.amountOut.denom)
-    );
+      Number(
+        borrowPosition?.updatedAmountOut *
+          marketPrice(markets, borrowPosition?.amountOut.denom)
+      )) /
+    marketPrice(markets, borrowPosition?.amountOut.denom);
+
   // Collateral deposited value * Max LTV of collateral minus already Borrowed asset value
 
   useEffect(() => {
@@ -86,7 +92,9 @@ const BorrowTab = ({
     value = toDecimals(value).toString().trim();
 
     setAmount(value);
-    setValidationError(ValidateInputNumber(getAmount(value), borrowable));
+    setValidationError(
+      ValidateInputNumber(value, amountConversion(borrowable))
+    );
   };
 
   const handleMaxClick = () => {
@@ -102,12 +110,15 @@ const BorrowTab = ({
   let currentLTV = Number(
     ((Number(
       amount
-        ? Number(borrowPosition?.amountOut?.amount) + Number(getAmount(amount))
-        : borrowPosition?.amountOut?.amount
+        ? Number(borrowPosition?.updatedAmountOut) + Number(getAmount(amount))
+        : borrowPosition?.updatedAmountOut
     ) *
       marketPrice(markets, borrowPosition?.amountOut?.denom)) /
       (Number(borrowPosition?.amountIn?.amount) *
-        marketPrice(markets, borrowPosition?.amountIn?.denom))) *
+        marketPrice(
+          markets,
+          ucDenomToDenom(borrowPosition?.amountIn?.denom)
+        ))) *
       100
   );
 
@@ -117,9 +128,7 @@ const BorrowTab = ({
         <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
         <div className="assets-select-card mb-3">
           <div className="assets-left">
-            <label className="left-label">
-              Asset <TooltipIcon text="" />
-            </label>
+            <label className="left-label">Asset</label>
             <div className="assets-select-wrapper">
               <div className="assets-select-wrapper">
                 <Select
@@ -192,8 +201,7 @@ const BorrowTab = ({
                     amount *
                       marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
                       0
-                  ),
-                  DOLLAR_DECIMALS
+                  ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
               </small>{" "}
             </div>
@@ -239,7 +247,12 @@ const BorrowTab = ({
           <ActionButton
             name="Borrow"
             lang={lang}
-            disabled={!Number(amount) || dataInProgress || !selectedAssetId}
+            disabled={
+              !Number(amount) ||
+              validationError?.message ||
+              dataInProgress ||
+              !selectedAssetId
+            }
             amount={amount}
             address={address}
             borrowId={borrowPosition?.borrowingId}

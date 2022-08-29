@@ -98,9 +98,7 @@ const DepositTab = ({
         <CustomRow assetList={assetList} poolId={lendPool?.poolId?.low} />
         <div className="assets-select-card mb-3">
           <div className="assets-left">
-            <label className="left-label">
-              Asset <TooltipIcon text="" />
-            </label>
+            <label className="left-label">Asset</label>
             <div className="assets-select-wrapper">
               <div className="assets-select-wrapper">
                 <Select
@@ -142,6 +140,7 @@ const DepositTab = ({
           <div className="assets-right">
             <div className="label-right">
               Depositable
+              <TooltipIcon text="Max number of tokens depositable. To get cTokens, deposit more funds in your existing Lend position" />
               <span className="ml-1">
                 {amountConversionWithComma(availableBalance)}{" "}
                 {denomConversion(borrowPosition?.amountIn?.denom)}
@@ -167,8 +166,7 @@ const DepositTab = ({
                     amount *
                       marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
                       0
-                  ),
-                  DOLLAR_DECIMALS
+                  ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
               </small>{" "}
             </div>
@@ -218,7 +216,12 @@ const DepositTab = ({
           <ActionButton
             name="Deposit"
             lang={lang}
-            disabled={!Number(amount) || dataInProgress || !selectedAssetId}
+            disabled={
+              !Number(amount) ||
+              validationError?.message ||
+              dataInProgress ||
+              !selectedAssetId
+            }
             amount={amount}
             address={address}
             borrowId={borrowPosition?.borrowingId}

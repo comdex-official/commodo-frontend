@@ -117,7 +117,7 @@ const Supply = ({ assetMap }) => {
 
   return (
     <div className="commodo-card bg-none">
-      <div className="card-header">Lend Markets</div>
+      <div className="card-header text-left">Lend Markets</div>
       <div className="card-content">
         <Table
           className="custom-table market-table1"

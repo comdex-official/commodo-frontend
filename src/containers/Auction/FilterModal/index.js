@@ -1,8 +1,13 @@
 import { Button, Checkbox, Divider, Form, Modal, Slider } from "antd";
 import * as PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { connect } from "react-redux";
+import { setAuctionedAsset } from "../../../actions/auction";
+import { setSelectedAuctionedAsset } from '../../../actions/auction'
 import { Col, Row, SvgIcon } from "../../../components/common";
+import { SET_AUCTIONED_ASSET } from "../../../constants/auction";
 import "./index.less";
 
 const marks = {
@@ -10,21 +15,28 @@ const marks = {
   100: "3d:00h:00m",
 };
 
-const FilterModal = () => {
+const FilterModal = ({ auctions, setAuctions, selectedAuctionedAsset, setSelectedAuctionedAsset }) => {
+  const dispatch = useDispatch()
+  const auctionedAsset = useSelector((state) => state.auction.auctionedAsset[0])
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [auctionedAsset, setAuctionedAsset] = useState([{
+  const [selectedAsset, setSelectedAsset] = useState([])
+  const [auctionedAsseted, setAuctionedAsseted] = useState([{
     atom: false,
     akt: false,
     cmdx: false,
     dvpn: false
   }])
+  let newSelectedAsset = new Array();
 
   const showModal = () => {
     setIsModalVisible(true);
   };
 
   const handleOk = () => {
+    dispatch(setAuctionedAsset(auctionedAsseted))
+    setSelectedAuctionedAsset(selectedAsset)
     setIsModalVisible(false);
+
   };
 
   const handleCancel = () => {
@@ -32,9 +44,24 @@ const FilterModal = () => {
   };
 
   const onChange = (e) => {
-    setAuctionedAsset([{ ...auctionedAsset[0], [e.target.name]: e.target.checked }])
+    let removedData;
+    setAuctionedAsseted([{ ...auctionedAsseted[0], [e.target.name]: e.target.checked }])
+    if (e.target.checked) {
+      setSelectedAsset((prev) => [...prev, e.target.name])
+    }
+    else {
+      let name = [e.target.name]
+      removedData = selectedAsset.filter(function (item) {
+        return item !== name[0]
+      })
+
+      setSelectedAsset(removedData)
+    }
   };
-  // console.log(auctionedAsset, "auctioned Asset");
+
+
+
+
   return (
     <>
       <Button
@@ -136,14 +163,18 @@ const FilterModal = () => {
 
 FilterModal.propTypes = {
   lang: PropTypes.string.isRequired,
+  selectedAuctionedAsset: PropTypes.array,
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
+    selectedAuctionedAsset: state.auction.selectedAuctionedAsset,
   };
 };
 
-const actionsToProps = {};
+const actionsToProps = {
+  setSelectedAuctionedAsset,
+};
 
 export default connect(stateToProps, actionsToProps)(FilterModal);

@@ -23,7 +23,31 @@ export const ibcDenomToDenom = (key) => {
       return "";
   }
 };
-
+export const symbolToDenom = (key) => {
+  switch (key) {
+    case "atom":
+    case ibcDenoms["atom"]:
+      return "uatom";
+    case "xprt":
+    case ibcDenoms["xprt"]:
+      return "uxprt";
+    case "osmo":
+    case ibcDenoms["osmo"]:
+      return "uosmo";
+    case "cmdx":
+      return "ucmdx";
+    case "cmst":
+      return "ucmst";
+    case "akt":
+      return "uakt";
+    case "dvpn":
+      return "udvpn";
+    case "harbor":
+      return "uharbor";
+    default:
+      return "";
+  }
+};
 export const denomToSymbol = (key) => {
   switch (key) {
     case "ucmst":
@@ -33,11 +57,6 @@ export const denomToSymbol = (key) => {
     case "uatom":
     case ibcDenoms["uatom"]:
       return "ATOM";
-    case "udvpn":
-      return "DVPN";
-    case "uluna":
-    case ibcDenoms["uluna"]:
-      return "LUNA";
     case "uosmo":
     case ibcDenoms["uosmo"]:
       return "OSMO";
@@ -122,5 +141,5 @@ export const makeHdPath = (
 };
 
 export const ucDenomToDenom = (denom) => {
-  return denom.slice(0, 1) + denom.slice(2); //example uccmdx => ucmdx
+  return denom?.slice(0, 1) + denom?.slice(2); //example uccmdx => ucmdx
 };

@@ -160,7 +160,7 @@
         padding: 20px;
         .launch-bg {
           position: absolute;
-          height: 100%;
+          height: 110%;
           width: 100%;
           z-index: -1;
           top: 0;
@@ -169,10 +169,32 @@
           margin-left: auto;
         }
         .assets-section {
-          display: flex;
-          justify-content: space-between;
+          .assets-section-inner{
+            display: flex;
+            justify-content: space-between;
+          }
+          .upper-title{
+            color: @white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            line-height: 1.5;
+            @media screen and (max-width: 1367px) {
+              font-size: 0.9rem;
+            }
+          }
           .assets-left {
             max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            .comingsoon-text{
+              position: absolute;
+              left: 50%;
+              transform: translateX(-50%);
+              bottom: 18px;
+              font-size: @font-size-lg + 4;
+              font-weight: 600;
+            }
             .static-list{
               list-style-type: none;
               padding-left: 0;
@@ -180,7 +202,19 @@
               grid-template-columns: repeat(2, 1fr);
               margin-bottom: 0;
               li{
-                padding-bottom: 10px;
+                padding-top: 6px;
+                &:nth-child(3), &:nth-child(4){
+                  padding-top: 12px;
+                }
+                label{
+                  font-size: 1rem;
+                  line-height: 1;
+                }
+                p{
+                  font-size: 1.7rem;
+                  line-height: 1.1;
+                  font-weight: 600;
+                }
               }
             }
             .small-icons {
@@ -199,21 +233,23 @@
             h3 {
               color: @white;
               font-size: 1.5rem;
-              font-weight: bold;
+              font-weight: 600;
               text-transform: uppercase;
               margin-bottom: 0;
               small {
-                font-size: 12px;
+                font-size: 13px;
               }
             }
             .h3-botttom {
               line-height: 1;
+              text-transform: inherit;
             }
             p {
               color: @white;
               font-size: 1.1rem;
               font-weight: 700;
               margin-bottom: 0;
+              line-height: 1.5;
               @media screen and (max-width: 1367px) {
                 font-size: 0.9rem;
               }
@@ -228,8 +264,8 @@
               margin-right: auto;
               display: block;
               &.commodo-logo{
-                width: 80px;
-                margin-top: 2rem;
+                width: 90px;
+                margin-top: 1.2rem;
               }
               @media screen and (max-width: 1367px) {
                 width: 100px;
@@ -238,7 +274,8 @@
             h2{
               margin-bottom: 0;
               color: @white;
-              font-weight: 600;
+              font-weight: 700;
+              font-size: 1.8rem;
             }
           }
         }

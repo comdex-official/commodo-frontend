@@ -82,9 +82,7 @@ const RepayTab = ({
         <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
         <div className="assets-select-card mb-3">
           <div className="assets-left">
-            <label className="left-label">
-              Repay Asset <TooltipIcon text="" />
-            </label>
+            <label className="left-label">Repay Asset</label>
             <div className="assets-select-wrapper">
               <div className="assets-select-wrapper">
                 <Select
@@ -146,8 +144,7 @@ const RepayTab = ({
                     amount *
                       marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
                       0
-                  ),
-                  DOLLAR_DECIMALS
+                  ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
               </small>{" "}
             </div>
@@ -173,8 +170,7 @@ const RepayTab = ({
                           markets,
                           assetMap[selectedAssetId]?.denom
                         ) || 0
-                    ),
-                    DOLLAR_DECIMALS
+                    ).toFixed(DOLLAR_DECIMALS)
                   )}
                 </small>
               </Col>

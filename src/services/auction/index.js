@@ -3,14 +3,35 @@ import Long from "long";
 import { APP_ID } from "../../constants/common";
 import { createQueryClient } from "../helper";
 
+let myClient = null;
+
+const getQueryService = (callback) => {
+  if (myClient) {
+    const queryService = new QueryClientImpl(myClient);
+
+    return callback(null, queryService);
+  } else {
+    createQueryClient((error, client) => {
+      if (error) {
+        return callback(error);
+      }
+
+      myClient = client;
+      const queryService = new QueryClientImpl(client);
+
+      return callback(null, queryService);
+    });
+  }
+};
+
 export const queryAuctionParams = (callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryParams()
       .then((result) => {
         callback(null, result);
@@ -26,13 +47,13 @@ export const queryDutchAuctionList = (
   reverse,
   callback
 ) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryDutchLendAuctions({
         appId: Long.fromNumber(APP_ID),
         pagination: {
@@ -44,7 +65,6 @@ export const queryDutchAuctionList = (
         },
       })
       .then((result) => {
-
         callback(null, result);
       })
       .catch((error) => {
@@ -53,16 +73,14 @@ export const queryDutchAuctionList = (
   });
 };
 
-
-
 export const queryDutchBiddingList = (bidder, callback) => {
-  createQueryClient((error, rpcClient) => {
+  getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
 
-    new QueryClientImpl(rpcClient)
+    queryService
       .QueryDutchLendBiddings({
         bidder,
         appId: Long.fromNumber(APP_ID),
