@@ -216,7 +216,12 @@ const DepositTab = ({
           <ActionButton
             name="Deposit"
             lang={lang}
-            disabled={!Number(amount) || dataInProgress || !selectedAssetId}
+            disabled={
+              !Number(amount) ||
+              validationError?.message ||
+              dataInProgress ||
+              !selectedAssetId
+            }
             amount={amount}
             address={address}
             borrowId={borrowPosition?.borrowingId}
