@@ -68,7 +68,7 @@ const BorrowTab = ({
 
   const availableBalance = lend?.availableToBorrow || 0;
 
-  const borrowableBalance = getAmount(
+  const borrowable = getAmount(
     (Number(inAmount) *
       marketPrice(markets, collateralAssetDenom) *
       (pair?.isInterPool
@@ -82,6 +82,8 @@ const BorrowTab = ({
       0) / marketPrice(markets, borrowAssetDenom)
   );
 
+  const borrowableBalance = Number(borrowable) - 1;
+  
   useEffect(() => {
     if (assetOutPool?.poolId && selectedBorrowValue) {
       setAssetList([
@@ -99,7 +101,7 @@ const BorrowTab = ({
   }, [pool, assetOutPool]);
 
   useEffect(() => {
-    if (pair?.assetOutPoolId !== pool?.poolId) {
+    if ( pair?.assetOutPoolId && pair?.assetOutPoolId?.toNumber() !== pool?.poolId?.toNumber()) {
       queryLendPool(pair?.assetOutPoolId, (error, poolResult) => {
         if (error) {
           message.error(error);
@@ -123,6 +125,7 @@ const BorrowTab = ({
     if (selectedLend?.assetId) {
       setLend(selectedLend);
       setInAmount(0);
+      setOutAmount(0);
       setValidationError();
       setExtendedPairs();
 
@@ -236,6 +239,7 @@ const BorrowTab = ({
       (error, result) => {
         setInProgress(false);
         setInAmount(0);
+        setOutAmount(0);
         if (error) {
           message.error(error);
           return;

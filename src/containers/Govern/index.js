@@ -168,7 +168,7 @@ const Govern = () => {
                           <div className="right-section">
                             <Row>
                               <Col sm="6">
-                                <label>Vote Starts :</label>
+                                <label>Voting Starts :</label>
                                 <p>
                                   {formatTime(item?.voting_start_time) ||
                                     "--/--/--"}

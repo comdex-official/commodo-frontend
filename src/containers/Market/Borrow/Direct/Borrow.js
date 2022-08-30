@@ -116,6 +116,7 @@ const BorrowTab = ({
       setOutPool();
       setAssetToPool({});
       setInAmount(0);
+      setOutAmount(0);
       setValidationError();
       setExtendedPairs();
 
