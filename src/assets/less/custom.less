@@ -1377,10 +1377,18 @@ button.ant-switch {
 .details-wrapper {
   display: flex;
 
+  @media screen and (max-width:991px) {
+    display: block;
+  }
+
   .details-left {
     width: 50%;
     margin-right: 25px;
     padding: 28px 40px;
+    @media screen and (max-width:991px) {
+      width: 100%;
+      margin-right: 0;
+    }
 
     @media screen and (max-width:1400px) {
       padding: 28px 25px;
@@ -1452,6 +1460,12 @@ button.ant-switch {
 
     @media screen and (max-width:1400px) {
       padding-left: 15px;
+    }
+
+    @media screen and (max-width:991px) {
+      width: 100%;
+      padding-left: 0;
+      margin-top: 20px;
     }
 
     .commodo-card {
@@ -1541,6 +1555,42 @@ button.ant-switch {
       }
 
       .ant-list {
+        .ant-row > div:nth-child(1){
+          width: 28%;
+          @media screen and (max-width:1280px) {
+            width: 33.33%;
+          }
+          @media screen and (max-width:991px) {
+            width:50%;
+          }
+        }
+        .ant-row > div:nth-child(2){
+          width: 30%;
+          @media screen and (max-width:1280px) {
+            width: 33.33%;
+          }
+          @media screen and (max-width:991px) {
+            width:50%;
+          }
+        }
+        .ant-row > div:nth-child(3){
+          width: 19%;
+          @media screen and (max-width:1280px) {
+            width: 33.33%;
+          }
+          @media screen and (max-width:991px) {
+            width:50%;
+          }
+        }
+        .ant-row > div:nth-child(4){
+          width: 23%;
+          @media screen and (max-width:1280px) {
+            width: 33.33%;
+          }
+          @media screen and (max-width:991px) {
+            width:50%;
+          }
+        }
         .ant-list-item {
           margin: 10px 0;
           color: @text-color-dark2;
