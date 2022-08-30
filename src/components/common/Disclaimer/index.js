@@ -1,4 +1,4 @@
-import { Button, Modal, Checkbox } from "antd";
+import { Button, Checkbox, Modal } from "antd";
 import React, { useState } from "react";
 import "./index.less";
 
@@ -40,7 +40,7 @@ const Disclaimer = () => {
               responsible for doing your own diligence on those interfaces to
               understand the fees and risks they present. Upgrades and
               modifications to the protocol are managed in a community-driven
-              way by holders of the CMDO governance token. No developer or
+              way by holders of the CMDX governance token. No developer or
               entity involved in creating the Commodo protocol will be liable
               for any claims or damages whatsoever associated with your use,
               inability to use, or your interaction with other users of the

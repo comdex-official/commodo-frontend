@@ -39,7 +39,7 @@ const WithdrawTab = ({
   const [validationError, setValidationError] = useState();
 
   const selectedAssetId = lendPosition?.assetId?.toNumber();
-  const availableBalance = lendPosition?.updatedAmountIn || 0;
+  const availableBalance = lendPosition?.availableToBorrow || 0;
 
   useEffect(() => {
     if (pool?.poolId) {
@@ -70,9 +70,7 @@ const WithdrawTab = ({
   const handleMaxClick = () => {
     // change the number to dynamic.
 
-    return handleInputChange(
-      amountConversion(Number(availableBalance) - 100000)
-    );
+    return handleInputChange(amountConversion(Number(availableBalance) - 1));
   };
 
   return (
@@ -159,7 +157,12 @@ const WithdrawTab = ({
           <ActionButton
             name="Withdraw"
             lang={lang}
-            disabled={!Number(amount) || dataInProgress || !selectedAssetId}
+            disabled={
+              !Number(amount) ||
+              validationError?.message ||
+              dataInProgress ||
+              !selectedAssetId
+            }
             amount={amount}
             address={address}
             lendId={lendPosition?.lendingId}
