@@ -1,16 +1,16 @@
+import { Button, List, message, Select, Spin } from "antd";
 import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../components/common";
-import { connect } from "react-redux";
-import { Button, List, Select, Progress, message, Spin } from "antd";
-import "./index.less";
-import { useNavigate } from "react-router";
-import { fetchRestProposals } from "../../services/govern/query";
 import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { useNavigate } from "react-router";
+import { Col, Row, SvgIcon } from "../../components/common";
 import NoData from "../../components/NoData";
-import { formatTime, getDuration } from "../../utils/date";
+import { comdex } from "../../config/network";
+import { fetchRestProposals } from "../../services/govern/query";
 import { queryStakeTokens } from "../../services/staking/query";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
-import { comdex } from "../../config/network";
+import { formatTime, getDuration } from "../../utils/date";
+import "./index.less";
 
 const { Option } = Select;
 
@@ -157,7 +157,7 @@ const Govern = () => {
                           key={item?.proposal_id}
                           className="governlist-row"
                           onClick={() =>
-                            navigate(`/govern-details/${item?.proposal_id}`)
+                            navigate(`/govern/${item?.proposal_id}`)
                           }
                         >
                           <div className="left-section">

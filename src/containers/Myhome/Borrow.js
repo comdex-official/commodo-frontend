@@ -71,7 +71,7 @@ const Borrow = ({ userBorrowList, inProgress }) => {
           <div className="d-flex">
             <Button
               onClick={() =>
-                navigate(`/borrow/${item?.borrowingId?.toNumber()}`)
+                navigate(`/myhome/borrow/${item?.borrowingId?.toNumber()}`)
               }
               type="primary"
               className="btn-filled"
@@ -82,7 +82,7 @@ const Borrow = ({ userBorrowList, inProgress }) => {
             <Button
               onClick={() =>
                 navigate({
-                  pathname: `/borrow/${item?.borrowingId?.toNumber()}`,
+                  pathname: `/myhome/borrow/${item?.borrowingId?.toNumber()}`,
                   hash: "repay",
                 })
               }

@@ -3,10 +3,10 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { SvgIcon, TooltipIcon } from "../../../components/common";
+import { SvgIcon } from "../../../components/common";
 import {
-  DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE
+    DEFAULT_PAGE_NUMBER,
+    DEFAULT_PAGE_SIZE
 } from "../../../constants/common";
 import { queryLendPools } from "../../../services/lend/query";
 import { denomConversion } from "../../../utils/coin";
@@ -121,7 +121,7 @@ const Borrow = ({ assetMap }) => {
       <div className="card-header d-flex justify-content-between">
         <div>Borrow Markets</div>
         <div>
-          <Link to="/borrow-direct">
+          <Link to="/borrow/direct">
             <Tooltip overlayClassName="commodo-tooltip" title="Lend and Borrow in one click">
               <Button className="back-btn ml-auto" icon={<SvgIcon name="direct-borrow" viewbox="0 0 57.25 54.685" />} type="primary">
                 <span className="pl-1">Direct Borrow</span>

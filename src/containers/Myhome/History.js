@@ -1,17 +1,17 @@
+import { decodeTxRaw } from "@cosmjs/proto-signing";
+import { message, Table } from "antd";
 import * as PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { setTransactionHistory } from "../../actions/account";
 import { Col, Row } from "../../components/common";
 import Copy from "../../components/Copy";
-import { connect } from "react-redux";
-import { Table, message } from "antd";
-import { setTransactionHistory } from "../../actions/account";
-import React, { useEffect, useState } from "react";
 import { comdex } from "../../config/network";
-import { decodeTxRaw } from "@cosmjs/proto-signing";
-import { fetchTxHistory, messageTypeToText } from "../../services/transaction";
+import { abbreviateMessage, fetchTxHistory } from "../../services/transaction";
 import { generateHash, truncateString } from "../../utils/string";
 import Date from "./Date";
-
 import "./index.less";
+
 
 const History = ({ address, setTransactionHistory, history }) => {
   const [inProgress, setInProgress] = useState(false);
@@ -45,7 +45,9 @@ const History = ({ address, setTransactionHistory, history }) => {
       return {
         key: index,
         tx_hash: hash,
-        type: messageTypeToText(decodedTransaction.body.messages[0].typeUrl),
+        type: abbreviateMessage(
+          decodedTransaction.body.messages
+        ),
         block_height: item.height,
         date: item.height,
       };
