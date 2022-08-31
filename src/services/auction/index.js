@@ -56,13 +56,13 @@ export const queryDutchAuctionList = (
     queryService
       .QueryDutchLendAuctions({
         appId: Long.fromNumber(APP_ID),
-        pagination: {
-          key: "",
-          offset: Long.fromNumber(offset),
-          limit: Long.fromNumber(limit),
-          countTotal: countTotal,
-          reverse: reverse,
-        },
+        // pagination: {
+        //   key: "",
+        //   offset: Long.fromNumber(offset),
+        //   limit: Long.fromNumber(limit),
+        //   countTotal: countTotal,
+        //   reverse: reverse,
+        // },
       })
       .then((result) => {
         callback(null, result);
