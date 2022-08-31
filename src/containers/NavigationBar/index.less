@@ -27,7 +27,7 @@
       background: #DEE8F2;
 
       .dark-mode & {
-        background: @background-dark1
+        background: @background-dark1;
       }
     }
   }
@@ -36,7 +36,19 @@
     background: #FFFFFF;
 
     .dark-mode & {
-      background: @bg-dark;
+      background: #000c07;
+      &::after{
+        content: " ";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: url('../../assets/images/body-bg.jpg');
+        background-size: 100%;
+        z-index: -1;
+        opacity: 0.25;
+      }
     }
   }
 
