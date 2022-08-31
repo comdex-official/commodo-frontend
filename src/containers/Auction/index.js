@@ -20,9 +20,6 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [params, setParams] = useState({});
   const [auctions, setAuctions] = useState();
-  const [filterAuctions, setFilterAuctions] = useState([])
-  const [newAuction, setNewAuction] = useState([])
-  const [newAuction2, setNewAuction2] = useState([])
   const [loading, setLoading] = useState(true)
   const [inProgress, setInProgress] = useState(false);
   const [biddings, setBiddings] = useState("");
@@ -114,8 +111,8 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
   ];
 
   const tableData =
-    filterAuctions && filterAuctions.length > 0
-      ? filterAuctions.map((item, index) => {
+    auctions && auctions?.auctions?.length > 0
+      ? auctions?.auctions?.map((item, index) => {
         return {
           key: index,
           auctioned_asset: (
@@ -156,8 +153,15 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
       })
       : [];
 
+
   useEffect(() => {
     fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, false);
+    const interval = setInterval(() => {
+      fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, false)
+    }, 5000)
+    return () => {
+      clearInterval(interval);
+    }
   }, [address])
 
   useEffect(() => {
@@ -178,6 +182,7 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
       setParams(result?.auctionParams);
     });
   };
+
   const fetchAuctions = (offset, limit, isTotal, isReverse) => {
     queryDutchAuctionList(
       offset,
@@ -192,13 +197,11 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
           return;
         }
         if (result?.auctions?.length > 0) {
-          setAuctions(result && result.auctions);
-          setFilterAuctions(result && [...result.auctions])
+          setAuctions(result && result);
           setLoading(false)
         }
         else {
           setAuctions("");
-          setFilterAuctions("");
           setLoading(false)
         }
       }
@@ -221,22 +224,6 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
       }
     });
   };
-
-
-  const auctionfilter = () => {
-    let filteredAuctioned
-    {
-      selectedAuctionedAsset && selectedAuctionedAsset.length > 0 && selectedAuctionedAsset.map((singleSelectedAsset) => {
-        let symbolToDenomAsset = symbolToDenom(singleSelectedAsset)
-        filteredAuctioned = auctions && auctions?.filter((item) => item?.outflowTokenCurrentAmount?.denom === symbolToDenomAsset)
-        setNewAuction([...newAuction, ...filteredAuctioned])
-        setFilterAuctions([...newAuction, ...filteredAuctioned])
-      })
-      if (selectedAuctionedAsset.length === 0) {
-        setFilterAuctions(auctions)
-      }
-    }
-  }
 
   return (
     <div className="app-content-wrapper">
