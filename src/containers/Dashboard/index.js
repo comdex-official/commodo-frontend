@@ -14,8 +14,7 @@ import { DOLLAR_DECIMALS, NUMBER_OF_TOP_ASSETS } from "../../constants/common";
 import {
   queryBorrowStats,
   queryDepositStats,
-  queryTopBorrows,
-  queryTopDeposits,
+  queryTopAssets,
   queryUserDepositStats
 } from "../../services/lend/query";
 import {
@@ -23,7 +22,7 @@ import {
   amountConversionWithComma,
   denomConversion
 } from "../../utils/coin";
-import { decimalConversion, marketPrice } from "../../utils/number";
+import { marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import "./index.less";
 
@@ -69,20 +68,13 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
       setBorrowStats(result?.BorrowStats?.balanceStats);
     });
 
-    queryTopDeposits((error, result) => {
+    queryTopAssets((error, result) => {
       if (error) {
         return;
       }
 
-      setTopDeposits(result?.depositRanking);
-    });
-
-    queryTopBorrows((error, result) => {
-      if (error) {
-        return;
-      }
-
-      setTopBorrows(result?.borrowRanking);
+      setTopDeposits(result?.data?.deposit);
+      setTopBorrows(result?.data?.borrow);
     });
   }, []);
 
@@ -411,25 +403,26 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                 <div className="deposited-list">
                   <p>Deposited</p>
                   <ul>
-                    {topDeposits && Object.values(topDeposits)?.length > 0
-                      ? Object.values(topDeposits)?.map((item) => {
+                    {topDeposits && topDeposits?.length > 0
+                      ? topDeposits?.map((item) => {
                           return (
-                            <li key={item?.assetId}>
+                            <li key={item?.asset_id}>
                               <div className="assets-col">
                                 <div className="assets-icon">
                                   <SvgIcon
                                     name={iconNameFromDenom(
-                                      assetMap[item?.assetId]?.denom
+                                      assetMap[item?.asset_id]?.denom
                                     )}
                                   />
                                 </div>
                                 {denomConversion(
-                                  assetMap[item?.assetId]?.denom
+                                  assetMap[item?.asset_id]?.denom
                                 )}
                               </div>
                               <b>
                                 {Number(
-                                  decimalConversion(item?.apr) * 100
+                                  (Number(item?.apr) || 0) *
+                                    100
                                 ).toFixed(DOLLAR_DECIMALS)}
                                 %
                               </b>
@@ -444,25 +437,25 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                 <div className="deposited-list">
                   <p>Borrowed</p>
                   <ul>
-                    {topBorrows && Object.values(topBorrows)?.length > 0
-                      ? Object.values(topBorrows)?.map((item) => {
+                    {topBorrows && topBorrows.length > 0
+                      ? topBorrows?.map((item) => {
                           return (
-                            <li key={item?.assetId}>
+                            <li key={item?.asset_id}>
                               <div className="assets-col">
                                 <div className="assets-icon">
                                   <SvgIcon
                                     name={iconNameFromDenom(
-                                      assetMap[item?.assetId]?.denom
+                                      assetMap[item?.asset_id]?.denom
                                     )}
                                   />
                                 </div>
                                 {denomConversion(
-                                  assetMap[item?.assetId]?.denom
+                                  assetMap[item?.asset_id]?.denom
                                 )}
                               </div>
                               <b>
                                 {Number(
-                                  decimalConversion(item?.apr) * 100
+                                  (Number(item?.apr)||0) * 100
                                 ).toFixed(DOLLAR_DECIMALS)}
                                 %
                               </b>
