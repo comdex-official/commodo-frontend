@@ -28,19 +28,16 @@ import "./index.less";
 
 const Dashboard = ({ isDarkMode, markets, assetMap }) => {
   const [depositStats, setDepositStats] = useState();
-  const [depositsInProgress, setDepositsInProgress] = useState();
+  const [topAssetsInProgress, setTopAssetsInProgress] = useState();
   const [borrowStats, setBorrowStats] = useState();
-  const [borrowsInProgress, setBorrowsInProgress] = useState();
   const [userDepositStats, setUserDepositStats] = useState();
   const [topDeposits, setTopDeposits] = useState();
   const [topBorrows, setTopBorrows] = useState();
 
   useEffect(() => {
-    setDepositsInProgress(true);
-    setBorrowsInProgress(true);
+    setTopAssetsInProgress(true);
 
     queryDepositStats((error, result) => {
-      setDepositsInProgress(false);
       if (error) {
         message.error(error);
         return;
@@ -59,7 +56,6 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
     });
 
     queryBorrowStats((error, result) => {
-      setBorrowsInProgress(false);
       if (error) {
         message.error(error);
         return;
@@ -69,12 +65,13 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
     });
 
     queryTopAssets((error, result) => {
+      setTopAssetsInProgress(false);
       if (error) {
         return;
       }
 
-      setTopDeposits(result?.data?.deposit);
-      setTopBorrows(result?.data?.borrow);
+      setTopDeposits(result?.data?.deposit?.slice(0, NUMBER_OF_TOP_ASSETS));
+      setTopBorrows(result?.data?.borrow?.slice(0, NUMBER_OF_TOP_ASSETS));
     });
   }, []);
 
@@ -420,16 +417,15 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                                 )}
                               </div>
                               <b>
-                                {Number(
-                                  (Number(item?.apr) || 0) *
-                                    100
-                                ).toFixed(DOLLAR_DECIMALS)}
+                                {((Number(item?.apr) || 0) * 100).toFixed(
+                                  DOLLAR_DECIMALS
+                                )}
                                 %
                               </b>
                             </li>
                           );
                         })
-                      : borrowsInProgress
+                      : topAssetsInProgress
                       ? showSkeletonLoader()
                       : "No data"}
                   </ul>
@@ -454,15 +450,15 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                                 )}
                               </div>
                               <b>
-                                {Number(
-                                  (Number(item?.apr)||0) * 100
-                                ).toFixed(DOLLAR_DECIMALS)}
+                                {((Number(item?.apr) || 0) * 100).toFixed(
+                                  DOLLAR_DECIMALS
+                                )}
                                 %
                               </b>
                             </li>
                           );
                         })
-                      : depositsInProgress
+                      : topAssetsInProgress
                       ? showSkeletonLoader()
                       : ""}
                   </ul>
