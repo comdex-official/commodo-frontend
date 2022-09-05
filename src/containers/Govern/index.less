@@ -13,6 +13,18 @@
     .ant-btn {
       margin: 5px 10px;
     }
+
+    .ant-select{
+      &.ant-select-focused{
+        .ant-select-selector{
+          background: @success-color;
+          border-color: @success-color !important;
+          color: @white;
+          box-shadow: none !important;
+        }
+      }
+    }
+
   }
 
   .govern-card-content {
@@ -21,6 +33,10 @@
       padding: 20px 40px 20px;
       border-bottom: 1px solid rgba(@border-dark, 0.5);
       cursor: pointer;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8.381' height='15' viewBox='0 0 8.381 15'%3E%3Cpath id='Path_39' data-name='Path 39' d='M0 .893A.9.9 0 0 1 .253.261.877.877 0 0 1 1.5.261l6 5.987L13.491.261a.882.882 0 1 1 1.248 1.248l-6.6 6.619a.87.87 0 0 1-.632.253.939.939 0 0 1-.632-.253L.253 1.509A.86.86 0 0 1 0 .893Z' transform='translate(0 15) rotate(-90)' fill='%23fff'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: 98% 50%;
+      transition: all ease-in 0.1s;
 
       &:last-child {
         border: 0;
@@ -36,11 +52,22 @@
 
         h3 {
           font-size: 20px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          margin-bottom: 5px;
 
           .dark-mode & {
             color: @white;
           }
         }
+
+        p{
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
       }
 
       .right-section {
@@ -64,6 +91,14 @@
           }
         }
 
+        .right-col{
+          &:last-child{
+            p{
+              margin-bottom: 0;
+            }
+          }
+        }
+
         label {
           .dark-mode & {
             color: @text-color-light;
@@ -79,6 +114,11 @@
           }
         }
       }
+
+      &:hover{
+        background-position: 98.3% 50%;
+      }
+
     }
   }
 }

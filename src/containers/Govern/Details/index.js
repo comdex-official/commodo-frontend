@@ -280,7 +280,9 @@ const GovernDetails = ({ address }) => {
             <Row>
               <Col>
                 <h3>{proposal?.content?.title}</h3>
-                <p>{proposal?.content?.description} </p>
+                <div className="details-text">
+                  <p>{proposal?.content?.description} </p>
+                </div>
               </Col>
             </Row>
           </div>
