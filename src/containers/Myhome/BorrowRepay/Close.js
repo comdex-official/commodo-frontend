@@ -17,6 +17,8 @@ import { iconNameFromDenom } from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
 
+const { Option } = Select;
+
 const CloseTab = ({
   lang,
   dataInProgress,

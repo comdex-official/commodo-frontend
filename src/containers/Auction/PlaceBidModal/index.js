@@ -1,30 +1,30 @@
+import { Button, message, Modal } from "antd";
+import Long from "long";
 import * as PropTypes from "prop-types";
-import { Button, Input, message, Modal } from "antd";
-import { Row, Col, SvgIcon } from "../../../components/common";
-import { connect } from "react-redux";
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { Col, Row } from "../../../components/common";
+import Snack from "../../../components/common/Snack";
+import CustomInput from "../../../components/CustomInput/index";
+import Timer from "../../../components/Timer";
+import { comdex } from "../../../config/network";
+import { ValidateInputNumber } from "../../../config/_validation";
+import { APP_ID, DOLLAR_DECIMALS } from "../../../constants/common";
+import { signAndBroadcastTransaction } from "../../../services/helper";
+import { defaultFee } from "../../../services/transaction";
+import {
+  amountConversion,
+  amountConversionWithComma,
+  denomConversion,
+  getAmount,
+  orderPriceConversion
+} from "../../../utils/coin";
+import { commaSeparator, decimalConversion } from "../../../utils/number";
+import { toDecimals } from "../../../utils/string";
 import variables from "../../../utils/variables";
 import "./index.less";
-import Timer from "../../../components/Timer";
-import { commaSeparator, decimalConversion } from "../../../utils/number";
-import { amountConversion, amountConversionWithComma, denomConversion, getAmount, orderPriceConversion } from "../../../utils/coin";
-import CustomInput from '../../../components/CustomInput/index'
-import { toDecimals } from "../../../utils/string";
-import { ValidateInputNumber } from "../../../config/_validation";
-import { signAndBroadcastTransaction } from "../../../services/helper";
-import { APP_ID, DEFAULT_FEE, DOLLAR_DECIMALS } from "../../../constants/common";
-import Long from "long";
-import { defaultFee } from "../../../services/transaction";
-import Snack from "../../../components/common/Snack";
-import { comdex } from "../../../config/network";
 
-const PlaceBidModal = ({
-  lang,
-  address,
-  auction,
-  refreshData,
-  params,
-}) => {
+const PlaceBidModal = ({ lang, address, auction, refreshData, params }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [bidAmount, setBidAmount] = useState(0);
   const [inProgress, setInProgress] = useState(false);
@@ -56,11 +56,17 @@ const PlaceBidModal = ({
             auctionId: auction?.auctionId,
             amount: {
               denom: auction?.outflowTokenInitAmount?.denom,
-              amount: getAmount(Number(bidAmount / Number(
-                amountConversion(
-                  decimalConversion(auction?.outflowTokenCurrentPrice) || 0
-                ) || 0
-              ).toFixed(DOLLAR_DECIMALS)).toFixed(6)),
+              amount: getAmount(
+                Number(
+                  bidAmount /
+                    Number(
+                      amountConversion(
+                        decimalConversion(auction?.outflowTokenCurrentPrice) ||
+                          0
+                      ) || 0
+                    ).toFixed(DOLLAR_DECIMALS)
+                ).toFixed(6)
+              ),
             },
             max: orderPriceConversion(maxPrice || 0),
             appId: Long.fromNumber(APP_ID),
@@ -107,22 +113,26 @@ const PlaceBidModal = ({
     setValidationError(
       ValidateInputNumber(
         value,
-        Number(amountConversion(auction?.inflowTokenTargetAmount?.amount) - amountConversion(auction?.inflowTokenCurrentAmount?.amount)).toFixed(6) || 0
+        Number(
+          amountConversion(auction?.inflowTokenTargetAmount?.amount) -
+            amountConversion(auction?.inflowTokenCurrentAmount?.amount)
+        ).toFixed(6) || 0
       )
     );
     setBidAmount(value);
   };
 
   const calculateQuantityBidFor = () => {
-
-    let calculatedAmount = Number(bidAmount / Number(
-      amountConversion(
-        decimalConversion(auction?.outflowTokenCurrentPrice) || 0
-      )
-    )
+    let calculatedAmount = Number(
+      bidAmount /
+        Number(
+          amountConversion(
+            decimalConversion(auction?.outflowTokenCurrentPrice) || 0
+          )
+        )
     ).toFixed(6);
     setCalculatedQuantityBid(calculatedAmount);
-  }
+  };
   const handleMaxPriceChange = (value) => {
     value = toDecimals(value).toString().trim();
 
@@ -131,12 +141,11 @@ const PlaceBidModal = ({
   };
 
   useEffect(() => {
-    calculateQuantityBidFor()
-  }, [bidAmount, auction?.outflowTokenCurrentPrice])
+    calculateQuantityBidFor();
+  }, [bidAmount, auction?.outflowTokenCurrentPrice]);
 
   return (
     <>
-
       <Button type="primary" size="small" className="px-3" onClick={showModal}>
         {" "}
         Place Bid{" "}
@@ -170,14 +179,18 @@ const PlaceBidModal = ({
               <p>Opening Auction Price</p>
             </Col>
             <Col sm="6" className="text-right">
-              <label> $
+              <label>
+                {" "}
+                $
                 {commaSeparator(
                   Number(
                     amountConversionWithComma(
-                      decimalConversion(auction?.outflowTokenInitialPrice) || 0, 4
+                      decimalConversion(auction?.outflowTokenInitialPrice) || 0,
+                      4
                     ) || 0
                   )
-                )}</label>
+                )}
+              </label>
             </Col>
           </Row>
           <Row>
@@ -190,7 +203,8 @@ const PlaceBidModal = ({
                 {commaSeparator(
                   Number(
                     amountConversionWithComma(
-                      decimalConversion(auction?.outflowTokenCurrentPrice) || 0, 4
+                      decimalConversion(auction?.outflowTokenCurrentPrice) || 0,
+                      4
                     ) || 0
                   )
                 )}
@@ -206,22 +220,45 @@ const PlaceBidModal = ({
               <label>
                 {amountConversionWithComma(
                   auction?.outflowTokenCurrentAmount?.amount || 0
-                )} {denomConversion(auction?.outflowTokenCurrentAmount?.denom)}
+                )}{" "}
+                {denomConversion(auction?.outflowTokenCurrentAmount?.denom)}
               </label>
             </Col>
           </Row>
 
           <Row>
             <Col sm="6">
-              <p> Target {denomConversion(auction?.inflowTokenCurrentAmount?.denom)}</p>
+              <p>
+                {" "}
+                Target{" "}
+                {denomConversion(auction?.inflowTokenCurrentAmount?.denom)}
+              </p>
             </Col>
             <Col sm="6" className="text-right">
-              <label style={{ cursor: "pointer" }} onClick={() => {
-                handleChange(Number(amountConversion(auction?.inflowTokenTargetAmount?.amount) - amountConversion(auction?.inflowTokenCurrentAmount?.amount)).toFixed(6) || 0)
-              }}>
+              <label
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  handleChange(
+                    Number(
+                      amountConversion(
+                        auction?.inflowTokenTargetAmount?.amount
+                      ) -
+                        amountConversion(
+                          auction?.inflowTokenCurrentAmount?.amount
+                        )
+                    ).toFixed(6) || 0
+                  );
+                }}
+              >
                 {commaSeparator(
-                  Number(amountConversion(auction?.inflowTokenTargetAmount?.amount) - amountConversion(auction?.inflowTokenCurrentAmount?.amount)).toFixed(6) || 0
-                )} {denomConversion(auction?.inflowTokenCurrentAmount?.denom)}
+                  Number(
+                    amountConversion(auction?.inflowTokenTargetAmount?.amount) -
+                      amountConversion(
+                        auction?.inflowTokenCurrentAmount?.amount
+                      )
+                  ).toFixed(6) || 0
+                )}{" "}
+                {denomConversion(auction?.inflowTokenCurrentAmount?.denom)}
               </label>
             </Col>
           </Row>
@@ -231,7 +268,7 @@ const PlaceBidModal = ({
               <p>Quantity Bid For</p>
             </Col>
             <Col sm="6" className="text-right">
-              <label >
+              <label>
                 {calculatedQuantityBid}{" "}
                 {denomConversion(auction?.outflowTokenCurrentAmount?.denom)}
               </label>
@@ -239,7 +276,10 @@ const PlaceBidModal = ({
           </Row>
           <Row>
             <Col sm="6">
-              <p>Your {denomConversion(auction?.inflowTokenCurrentAmount?.denom)} Bid</p>
+              <p>
+                Your {denomConversion(auction?.inflowTokenCurrentAmount?.denom)}{" "}
+                Bid
+              </p>
             </Col>
             <Col sm="6" className="text-right bid-custom-input">
               <CustomInput
@@ -247,8 +287,11 @@ const PlaceBidModal = ({
                 onChange={(event) => handleChange(event.target.value)}
                 validationError={validationError}
               />
-              <label><div className="input-denom">{denomConversion(auction?.inflowTokenCurrentAmount?.denom)}</div></label>
-
+              <label>
+                <div className="input-denom">
+                  {denomConversion(auction?.inflowTokenCurrentAmount?.denom)}
+                </div>
+              </label>
             </Col>
           </Row>
           <Row>
@@ -261,7 +304,12 @@ const PlaceBidModal = ({
                 onChange={(event) => handleMaxPriceChange(event.target.value)}
                 validationError={maxValidationError}
               />
-              <label><div className="input-denom">{denomConversion(auction?.inflowTokenTargetAmount?.denom)}/{denomConversion(auction?.outflowTokenCurrentAmount?.denom)}</div></label>
+              <label>
+                <div className="input-denom">
+                  {denomConversion(auction?.inflowTokenTargetAmount?.denom)}/
+                  {denomConversion(auction?.outflowTokenCurrentAmount?.denom)}
+                </div>
+              </label>
             </Col>
           </Row>
           <Row className="p-0">
@@ -271,7 +319,11 @@ const PlaceBidModal = ({
                 className="btn-filled px-5"
                 size="large"
                 loading={inProgress}
-                disabled={!Number(bidAmount) || !Number(maxPrice) || validationError?.message}
+                disabled={
+                  !Number(bidAmount) ||
+                  !Number(maxPrice) ||
+                  validationError?.message
+                }
                 onClick={handleClick}
               >
                 Place Bid
@@ -280,10 +332,6 @@ const PlaceBidModal = ({
           </Row>
         </div>
       </Modal>
-
-
-
-
     </>
   );
 };

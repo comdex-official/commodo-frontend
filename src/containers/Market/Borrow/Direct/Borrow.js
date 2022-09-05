@@ -44,7 +44,6 @@ const BorrowTab = ({
   assetMap,
   address,
   markets,
-  poolLendPositions,
   balances,
   assetRatesStatsMap,
 }) => {
@@ -920,20 +919,6 @@ BorrowTab.propTypes = {
       }),
     })
   ),
-  poolLendPositions: PropTypes.arrayOf(
-    PropTypes.shape({
-      assetId: PropTypes.shape({
-        low: PropTypes.number,
-      }),
-      lendingId: PropTypes.shape({
-        low: PropTypes.number,
-      }),
-      amountIn: PropTypes.shape({
-        denom: PropTypes.string,
-        amount: PropTypes.string,
-      }),
-    })
-  ),
 };
 
 const stateToProps = (state) => {
@@ -943,7 +928,6 @@ const stateToProps = (state) => {
     assetMap: state.asset._.map,
     lang: state.language,
     markets: state.oracle.market.list,
-    poolLendPositions: state.lend.poolLends,
     assetRatesStatsMap: state.lend.assetRatesStats.map,
     balances: state.account.balances.list,
   };

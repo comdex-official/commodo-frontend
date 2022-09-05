@@ -2,25 +2,31 @@ import { message, Table } from "antd";
 import moment from "moment";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, DOLLAR_DECIMALS } from "../../constants/common";
-import { queryDutchAuctionList, queryDutchBiddingList } from "../../services/auction";
+import {
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  DOLLAR_DECIMALS
+} from "../../constants/common";
+import {
+  queryDutchAuctionList,
+  queryDutchBiddingList
+} from "../../services/auction";
 import { queryAuctionMippingIdParams } from "../../services/lend/query";
-import { amountConversionWithComma, denomConversion } from '../../utils/coin';
+import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { commaSeparator, decimalConversion } from "../../utils/number";
-import { iconNameFromDenom, symbolToDenom } from "../../utils/string";
+import { iconNameFromDenom } from "../../utils/string";
 import Bidding from "./Bidding";
 import "./index.less";
 import PlaceBidModal from "./PlaceBidModal";
 
-const Auction = ({ address, selectedAuctionedAsset }) => {
-  const auctionedAsset = useSelector((state) => state.auction.auctionedAsset?.auctionedAsset?.[0])
+const Auction = ({ address }) => {
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [params, setParams] = useState({});
   const [auctions, setAuctions] = useState();
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   const [inProgress, setInProgress] = useState(false);
   const [biddings, setBiddings] = useState("");
   const columns = [
@@ -37,7 +43,8 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
     {
       title: (
         <>
-          Bidding Asset <TooltipIcon text="Asset used to buy the auctioned asset" />
+          Bidding Asset{" "}
+          <TooltipIcon text="Asset used to buy the auctioned asset" />
         </>
       ),
       dataIndex: "bidding_asset",
@@ -71,7 +78,8 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
     {
       title: (
         <>
-          Current Auction Price <TooltipIcon text="Current price of auction asset" />
+          Current Auction Price{" "}
+          <TooltipIcon text="Current price of auction asset" />
         </>
       ),
       dataIndex: "current_price",
@@ -90,9 +98,7 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
       ),
     },
     {
-      title: <>
-        Bid
-      </>,
+      title: <>Bid</>,
       dataIndex: "action",
       key: "action",
       width: 140,
@@ -113,56 +119,61 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
   const tableData =
     auctions && auctions?.auctions?.length > 0
       ? auctions?.auctions?.map((item, index) => {
-        return {
-          key: index,
-          auctioned_asset: (
-            <>
-              <div className="assets-with-icon">
-                <div className="assets-icon">
-                  <SvgIcon name={iconNameFromDenom(
-                    item?.outflowTokenInitAmount?.denom
-                  )} />
+          return {
+            key: index,
+            auctioned_asset: (
+              <>
+                <div className="assets-with-icon">
+                  <div className="assets-icon">
+                    <SvgIcon
+                      name={iconNameFromDenom(
+                        item?.outflowTokenInitAmount?.denom
+                      )}
+                    />
+                  </div>
+                  {denomConversion(item?.outflowTokenInitAmount?.denom)}
                 </div>
-                {denomConversion(item?.outflowTokenInitAmount?.denom)}
-              </div>
-            </>
-          ),
-          bidding_asset: (
-            <>
-              <div className="assets-with-icon">
-                <div className="assets-icon">
-                  <SvgIcon
-                    name={iconNameFromDenom(
-                      item?.inflowTokenCurrentAmount?.denom
-                    )} />
+              </>
+            ),
+            bidding_asset: (
+              <>
+                <div className="assets-with-icon">
+                  <div className="assets-icon">
+                    <SvgIcon
+                      name={iconNameFromDenom(
+                        item?.inflowTokenCurrentAmount?.denom
+                      )}
+                    />
+                  </div>
+                  {denomConversion(item?.inflowTokenCurrentAmount?.denom)}
                 </div>
-                {denomConversion(item?.inflowTokenCurrentAmount?.denom)}
-              </div>
-            </>
-          ),
-          quantity: <>
-            {item?.outflowTokenCurrentAmount?.amount &&
-              amountConversionWithComma(
-                item?.outflowTokenCurrentAmount?.amount
-              )} {denomConversion(item?.outflowTokenCurrentAmount?.denom)}
-          </>,
-          end_time: moment(item && item.endTime).format("MMM DD, YYYY HH:mm"),
-          current_price: item?.outflowTokenCurrentPrice,
-          action: item,
-        }
-      })
+              </>
+            ),
+            quantity: (
+              <>
+                {item?.outflowTokenCurrentAmount?.amount &&
+                  amountConversionWithComma(
+                    item?.outflowTokenCurrentAmount?.amount
+                  )}{" "}
+                {denomConversion(item?.outflowTokenCurrentAmount?.denom)}
+              </>
+            ),
+            end_time: moment(item && item.endTime).format("MMM DD, YYYY HH:mm"),
+            current_price: item?.outflowTokenCurrentPrice,
+            action: item,
+          };
+        })
       : [];
-
 
   useEffect(() => {
     fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, false);
     const interval = setInterval(() => {
-      fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, false)
-    }, 5000)
+      fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, false);
+    }, 5000);
     return () => {
       clearInterval(interval);
-    }
-  }, [address])
+    };
+  }, [address]);
 
   useEffect(() => {
     fetchData();
@@ -172,7 +183,6 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
   const fetchData = () => {
     fetchBiddings(address);
   };
-
 
   const queryParams = () => {
     queryAuctionMippingIdParams((error, result) => {
@@ -190,19 +200,18 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
       isTotal,
       isReverse,
       (error, result) => {
-        setLoading(true)
+        setLoading(true);
         if (error) {
-          setLoading(false)
+          setLoading(false);
           message.error(error);
           return;
         }
         if (result?.auctions?.length > 0) {
           setAuctions(result && result);
-          setLoading(false)
-        }
-        else {
+          setLoading(false);
+        } else {
           setAuctions("");
-          setLoading(false)
+          setLoading(false);
         }
       }
     );
@@ -257,14 +266,12 @@ const Auction = ({ address, selectedAuctionedAsset }) => {
 Auction.propTypes = {
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
-  selectedAuctionedAsset: PropTypes.array,
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
     address: state.account.address,
-    selectedAuctionedAsset: state.auction.selectedAuctionedAsset,
   };
 };
 

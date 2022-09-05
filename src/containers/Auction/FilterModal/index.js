@@ -1,13 +1,9 @@
 import { Button, Checkbox, Divider, Form, Modal, Slider } from "antd";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { connect } from "react-redux";
-import { setAuctionedAsset } from "../../../actions/auction";
-import { setSelectedAuctionedAsset } from '../../../actions/auction'
+import React, { useState } from "react";
+import { connect, useDispatch } from "react-redux";
+import { setAuctionedAsset, setSelectedAuctionedAsset } from "../../../actions/auction";
 import { Col, Row, SvgIcon } from "../../../components/common";
-import { SET_AUCTIONED_ASSET } from "../../../constants/auction";
 import "./index.less";
 
 const marks = {
@@ -15,28 +11,27 @@ const marks = {
   100: "3d:00h:00m",
 };
 
-const FilterModal = ({ auctions, setAuctions, selectedAuctionedAsset, setSelectedAuctionedAsset }) => {
-  const dispatch = useDispatch()
-  const auctionedAsset = useSelector((state) => state.auction.auctionedAsset[0])
+const FilterModal = ({ setSelectedAuctionedAsset }) => {
+  const dispatch = useDispatch();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedAsset, setSelectedAsset] = useState([])
-  const [auctionedAsseted, setAuctionedAsseted] = useState([{
-    atom: false,
-    akt: false,
-    cmdx: false,
-    dvpn: false
-  }])
-  let newSelectedAsset = new Array();
+  const [selectedAsset, setSelectedAsset] = useState([]);
+  const [auctionedAsseted, setAuctionedAsseted] = useState([
+    {
+      atom: false,
+      akt: false,
+      cmdx: false,
+      dvpn: false,
+    },
+  ]);
 
   const showModal = () => {
     setIsModalVisible(true);
   };
 
   const handleOk = () => {
-    dispatch(setAuctionedAsset(auctionedAsseted))
-    setSelectedAuctionedAsset(selectedAsset)
+    dispatch(setAuctionedAsset(auctionedAsseted));
+    setSelectedAuctionedAsset(selectedAsset);
     setIsModalVisible(false);
-
   };
 
   const handleCancel = () => {
@@ -45,22 +40,20 @@ const FilterModal = ({ auctions, setAuctions, selectedAuctionedAsset, setSelecte
 
   const onChange = (e) => {
     let removedData;
-    setAuctionedAsseted([{ ...auctionedAsseted[0], [e.target.name]: e.target.checked }])
+    setAuctionedAsseted([
+      { ...auctionedAsseted[0], [e.target.name]: e.target.checked },
+    ]);
     if (e.target.checked) {
-      setSelectedAsset((prev) => [...prev, e.target.name])
-    }
-    else {
-      let name = [e.target.name]
+      setSelectedAsset((prev) => [...prev, e.target.name]);
+    } else {
+      let name = [e.target.name];
       removedData = selectedAsset.filter(function (item) {
-        return item !== name[0]
-      })
+        return item !== name[0];
+      });
 
-      setSelectedAsset(removedData)
+      setSelectedAsset(removedData);
     }
   };
-
-
-
 
   return (
     <>
@@ -90,10 +83,23 @@ const FilterModal = ({ auctions, setAuctions, selectedAuctionedAsset, setSelecte
             <Row>
               <Col sm="12">
                 <label className="labels">Auctioned Asset</label>
-                <Checkbox name="atom" onChange={(e) => { onChange(e) }}>ATOM</Checkbox>
-                <Checkbox name="akt" onChange={onChange}>AKT</Checkbox>
-                <Checkbox name="cmdx" onChange={onChange}>CMDX</Checkbox>
-                <Checkbox name="dvpn" onChange={onChange}>DVPN</Checkbox>
+                <Checkbox
+                  name="atom"
+                  onChange={(e) => {
+                    onChange(e);
+                  }}
+                >
+                  ATOM
+                </Checkbox>
+                <Checkbox name="akt" onChange={onChange}>
+                  AKT
+                </Checkbox>
+                <Checkbox name="cmdx" onChange={onChange}>
+                  CMDX
+                </Checkbox>
+                <Checkbox name="dvpn" onChange={onChange}>
+                  DVPN
+                </Checkbox>
               </Col>
             </Row>
             <Row>

@@ -43,24 +43,6 @@ export const queryAllProposals = (callback) => {
   });
 };
 
-export const queryProposal = (id, callback) => {
-  getQueryService((error, queryService) => {
-    if (error) {
-      callback(error);
-      return;
-    }
-
-    queryService
-      .Proposal({ proposalId: Long.fromNumber(id) })
-      .then((result) => {
-        callback(null, result);
-      })
-      .catch((error) => {
-        callback(error?.message);
-      });
-  });
-};
-
 export const queryUserVote = (address, proposalId, callback) => {
   getQueryService((error, queryService) => {
     if (error) {
