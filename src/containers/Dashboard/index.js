@@ -225,7 +225,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
     ));
   };
 
-  var settings = {
+  const settings = {
     dots: true,
     infinite: true,
     speed: 500,
@@ -433,7 +433,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                 <div className="deposited-list">
                   <p>Borrowed</p>
                   <ul>
-                    {topBorrows && topBorrows.length > 0
+                    {topBorrows && topBorrows?.length > 0
                       ? topBorrows?.map((item) => {
                           return (
                             <li key={item?.asset_id}>

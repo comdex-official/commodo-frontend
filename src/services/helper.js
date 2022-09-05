@@ -1,5 +1,10 @@
 import { LedgerSigner } from "@cosmjs/ledger-amino";
-import { AminoTypes, createProtobufRpcClient, QueryClient, SigningStargateClient } from "@cosmjs/stargate";
+import {
+  AminoTypes,
+  createProtobufRpcClient,
+  QueryClient,
+  SigningStargateClient
+} from "@cosmjs/stargate";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
@@ -169,7 +174,7 @@ export const aminoSignIBCTx = (config, transaction, callback) => {
       )
       .then((result) => {
         if (result?.code !== undefined && result.code !== 0) {
-          callback(result.log || result.rawLog);
+          callback(result?.log || result.rawLog);
         } else {
           callback(null, result);
         }

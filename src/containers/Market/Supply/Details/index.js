@@ -1,11 +1,11 @@
-import { Button, message, Tooltip } from "antd";
+import { Button, message } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { setPool } from "../../../../actions/lend";
-import { Col, Row, SvgIcon } from "../../../../components/common";
+import { Col, Row } from "../../../../components/common";
 import { queryLendPool } from "../../../../services/lend/query";
 import Deposit from "./Deposit";
 import "./index.less";

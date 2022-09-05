@@ -26,6 +26,8 @@ import {
 import ActionButton from "./ActionButton";
 import "./index.less";
 
+const { Option } = Select;
+
 const DepositTab = ({
   lang,
   dataInProgress,
