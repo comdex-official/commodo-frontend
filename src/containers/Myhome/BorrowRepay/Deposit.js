@@ -140,6 +140,7 @@ const DepositTab = ({
           <div className="assets-right">
             <div className="label-right">
               Depositable
+              <TooltipIcon text="Max number of tokens depositable. To get cTokens, deposit more funds in your existing Lend position" />
               <span className="ml-1">
                 {amountConversionWithComma(availableBalance)}{" "}
                 {denomConversion(borrowPosition?.amountIn?.denom)}
@@ -215,7 +216,12 @@ const DepositTab = ({
           <ActionButton
             name="Deposit"
             lang={lang}
-            disabled={!Number(amount) || dataInProgress || !selectedAssetId}
+            disabled={
+              !Number(amount) ||
+              validationError?.message ||
+              dataInProgress ||
+              !selectedAssetId
+            }
             amount={amount}
             address={address}
             borrowId={borrowPosition?.borrowingId}

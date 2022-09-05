@@ -14,8 +14,7 @@ import { DOLLAR_DECIMALS, NUMBER_OF_TOP_ASSETS } from "../../constants/common";
 import {
   queryBorrowStats,
   queryDepositStats,
-  queryTopBorrows,
-  queryTopDeposits,
+  queryTopAssets,
   queryUserDepositStats
 } from "../../services/lend/query";
 import {
@@ -23,25 +22,22 @@ import {
   amountConversionWithComma,
   denomConversion
 } from "../../utils/coin";
-import { decimalConversion, marketPrice } from "../../utils/number";
+import { marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import "./index.less";
 
 const Dashboard = ({ isDarkMode, markets, assetMap }) => {
   const [depositStats, setDepositStats] = useState();
-  const [depositsInProgress, setDepositsInProgress] = useState();
+  const [topAssetsInProgress, setTopAssetsInProgress] = useState();
   const [borrowStats, setBorrowStats] = useState();
-  const [borrowsInProgress, setBorrowsInProgress] = useState();
   const [userDepositStats, setUserDepositStats] = useState();
   const [topDeposits, setTopDeposits] = useState();
   const [topBorrows, setTopBorrows] = useState();
 
   useEffect(() => {
-    setDepositsInProgress(true);
-    setBorrowsInProgress(true);
+    setTopAssetsInProgress(true);
 
     queryDepositStats((error, result) => {
-      setDepositsInProgress(false);
       if (error) {
         message.error(error);
         return;
@@ -60,7 +56,6 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
     });
 
     queryBorrowStats((error, result) => {
-      setBorrowsInProgress(false);
       if (error) {
         message.error(error);
         return;
@@ -69,20 +64,14 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
       setBorrowStats(result?.BorrowStats?.balanceStats);
     });
 
-    queryTopDeposits((error, result) => {
+    queryTopAssets((error, result) => {
+      setTopAssetsInProgress(false);
       if (error) {
         return;
       }
 
-      setTopDeposits(result?.depositRanking);
-    });
-
-    queryTopBorrows((error, result) => {
-      if (error) {
-        return;
-      }
-
-      setTopBorrows(result?.borrowRanking);
+      setTopDeposits(result?.data?.deposit?.slice(0, NUMBER_OF_TOP_ASSETS));
+      setTopBorrows(result?.data?.borrow?.slice(0, NUMBER_OF_TOP_ASSETS));
     });
   }, []);
 
@@ -313,7 +302,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                   <div className="commodo-launch-card-inner">
                     <img
                       className="launch-bg"
-                      alt="CMDO Token Launch"
+                      alt="CMDX Token Launch"
                       src={LaunchImage}
                     />
                     <div className="assets-section">
@@ -359,7 +348,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                   <div className="commodo-launch-card-inner">
                     <img
                       className="launch-bg"
-                      alt="CMDO Token Launch"
+                      alt="CMDX Token Launch"
                       src={LaunchImage}
                     />
                     <div className="assets-section">
@@ -381,7 +370,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                               </div>
                             </div>
                             <h3 className="h3-botttom">
-                              300% <small>High APR</small>
+                              <small>High APR</small>
                             </h3>
                           </div>
                           <div className="comingsoon-text">Coming soon..</div>
@@ -411,32 +400,32 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                 <div className="deposited-list">
                   <p>Deposited</p>
                   <ul>
-                    {topDeposits && Object.values(topDeposits)?.length > 0
-                      ? Object.values(topDeposits)?.map((item) => {
+                    {topDeposits && topDeposits?.length > 0
+                      ? topDeposits?.map((item) => {
                           return (
-                            <li key={item?.assetId}>
+                            <li key={item?.asset_id}>
                               <div className="assets-col">
                                 <div className="assets-icon">
                                   <SvgIcon
                                     name={iconNameFromDenom(
-                                      assetMap[item?.assetId]?.denom
+                                      assetMap[item?.asset_id]?.denom
                                     )}
                                   />
                                 </div>
                                 {denomConversion(
-                                  assetMap[item?.assetId]?.denom
+                                  assetMap[item?.asset_id]?.denom
                                 )}
                               </div>
                               <b>
-                                {Number(
-                                  decimalConversion(item?.apr) * 100
-                                ).toFixed(DOLLAR_DECIMALS)}
+                                {((Number(item?.apr) || 0) * 100).toFixed(
+                                  DOLLAR_DECIMALS
+                                )}
                                 %
                               </b>
                             </li>
                           );
                         })
-                      : borrowsInProgress
+                      : topAssetsInProgress
                       ? showSkeletonLoader()
                       : "No data"}
                   </ul>
@@ -444,32 +433,32 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                 <div className="deposited-list">
                   <p>Borrowed</p>
                   <ul>
-                    {topBorrows && Object.values(topBorrows)?.length > 0
-                      ? Object.values(topBorrows)?.map((item) => {
+                    {topBorrows && topBorrows.length > 0
+                      ? topBorrows?.map((item) => {
                           return (
-                            <li key={item?.assetId}>
+                            <li key={item?.asset_id}>
                               <div className="assets-col">
                                 <div className="assets-icon">
                                   <SvgIcon
                                     name={iconNameFromDenom(
-                                      assetMap[item?.assetId]?.denom
+                                      assetMap[item?.asset_id]?.denom
                                     )}
                                   />
                                 </div>
                                 {denomConversion(
-                                  assetMap[item?.assetId]?.denom
+                                  assetMap[item?.asset_id]?.denom
                                 )}
                               </div>
                               <b>
-                                {Number(
-                                  decimalConversion(item?.apr) * 100
-                                ).toFixed(DOLLAR_DECIMALS)}
+                                {((Number(item?.apr) || 0) * 100).toFixed(
+                                  DOLLAR_DECIMALS
+                                )}
                                 %
                               </b>
                             </li>
                           );
                         })
-                      : depositsInProgress
+                      : topAssetsInProgress
                       ? showSkeletonLoader()
                       : ""}
                   </ul>

@@ -61,7 +61,7 @@ const Deposit = ({ userLendList, inProgress }) => {
           <div className="d-flex">
             <Button
               onClick={() =>
-                navigate(`/deposit/${item?.lendingId?.toNumber()}`)
+                navigate(`/myhome/deposit/${item?.lendingId?.toNumber()}`)
               }
               type="primary"
               className="btn-filled table-btn"
@@ -74,7 +74,7 @@ const Deposit = ({ userLendList, inProgress }) => {
               size="small"
               onClick={() =>
                 navigate({
-                  pathname: `/deposit/${item?.lendingId?.toNumber()}`,
+                  pathname: `/myhome/deposit/${item?.lendingId?.toNumber()}`,
                   hash: "withdraw",
                 })
               }

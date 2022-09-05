@@ -1,21 +1,21 @@
-import * as PropTypes from "prop-types";
-import { Col, Row, SvgIcon } from "../../components/common";
-import { connect } from "react-redux";
 import { List } from "antd";
+import * as PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { Col, Row, SvgIcon } from "../../components/common";
 import "./index.less";
 
 const data = [
   {
     title: "Total Airdrop",
-    counts: "24 CMDO",
+    counts: "24 CMDX",
   },
   {
     title: "Claimed Airdrop",
-    counts: "1 CMDO",
+    counts: "1 CMDX",
   },
   {
     title: "Unclaimed Airdrop",
-    counts: "0 CMDO",
+    counts: "0 CMDX",
   },
   {
     title: "Time to claim Airdrop",

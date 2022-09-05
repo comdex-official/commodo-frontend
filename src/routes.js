@@ -24,11 +24,11 @@ const routes = [
     element: <MyHome />,
   },
   {
-    path: "/borrow/:id",
+    path: "/myhome/borrow/:id",
     element: <BorrowRepay />,
   },
   {
-    path: "/deposit/:id",
+    path: "/myhome/deposit/:id",
     element: <Deposit />,
   },
   {
@@ -40,15 +40,15 @@ const routes = [
     element: <Borrow />,
   },
   {
-    path: "/lend-markets/:id",
+    path: "/lend/:id",
     element: <SupplyDetails />,
   },
   {
-    path: "/borrow-markets/:id",
+    path: "/borrow/:id",
     element: <BorrowDetails />,
   },
   {
-    path: "/borrow-direct",
+    path: "/borrow/direct",
     element: <DirectBorrow />,
   },
   {
@@ -64,7 +64,7 @@ const routes = [
     element: <Govern />,
   },
   {
-    path: "/govern-details/:id",
+    path: "/govern/:id",
     element: <GovernDetails />,
   },
   {

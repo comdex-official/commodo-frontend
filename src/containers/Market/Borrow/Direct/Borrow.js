@@ -116,6 +116,7 @@ const BorrowTab = ({
       setOutPool();
       setAssetToPool({});
       setInAmount(0);
+      setOutAmount(0);
       setValidationError();
       setExtendedPairs();
 
@@ -205,6 +206,7 @@ const BorrowTab = ({
     value = toDecimals(value).toString().trim();
 
     setInAmount(value);
+    setOutAmount(0);
     setValidationError(ValidateInputNumber(getAmount(value), availableBalance));
   };
 

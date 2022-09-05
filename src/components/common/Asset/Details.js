@@ -121,12 +121,6 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
       <List
         grid={{
           gutter: 16,
-          xs: 2,
-          sm: 2,
-          md: 2,
-          lg: 4,
-          xl: 4,
-          xxl: 4,
         }}
         dataSource={data}
         renderItem={(item) => (

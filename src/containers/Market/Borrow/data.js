@@ -106,7 +106,7 @@ export const columns = [
     render: (item) => (
       <ActionButton
         name="Details"
-        path={`/borrow-markets/${item?.poolId?.toNumber()}`}
+        path={`/borrow/${item?.poolId?.toNumber()}`}
       />
     ),
   },

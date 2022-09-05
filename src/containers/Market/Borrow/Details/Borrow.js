@@ -68,7 +68,7 @@ const BorrowTab = ({
 
   const availableBalance = lend?.availableToBorrow || 0;
 
-  const borrowableBalance = getAmount(
+  const borrowable = getAmount(
     (Number(inAmount) *
       marketPrice(markets, collateralAssetDenom) *
       (pair?.isInterPool
@@ -82,18 +82,26 @@ const BorrowTab = ({
       0) / marketPrice(markets, borrowAssetDenom)
   );
 
+  const borrowableBalance = Number(borrowable) - 1;
+  
   useEffect(() => {
-    if (pool?.poolId) {
+    if (assetOutPool?.poolId && selectedBorrowValue) {
+      setAssetList([
+        assetMap[assetOutPool?.mainAssetId?.toNumber()],
+        assetMap[assetOutPool?.firstBridgedAssetId?.toNumber()],
+        assetMap[assetOutPool?.secondBridgedAssetId?.toNumber()],
+      ]);
+    } else if (pool?.poolId && !assetOutPool?.poolId && !selectedBorrowValue) {
       setAssetList([
         assetMap[pool?.mainAssetId?.toNumber()],
         assetMap[pool?.firstBridgedAssetId?.toNumber()],
         assetMap[pool?.secondBridgedAssetId?.toNumber()],
       ]);
     }
-  }, [pool]);
+  }, [pool, assetOutPool]);
 
   useEffect(() => {
-    if (pair?.assetOutPoolId !== pool?.poolId) {
+    if ( pair?.assetOutPoolId && pair?.assetOutPoolId?.toNumber() !== pool?.poolId?.toNumber()) {
       queryLendPool(pair?.assetOutPoolId, (error, poolResult) => {
         if (error) {
           message.error(error);
@@ -117,6 +125,7 @@ const BorrowTab = ({
     if (selectedLend?.assetId) {
       setLend(selectedLend);
       setInAmount(0);
+      setOutAmount(0);
       setValidationError();
       setExtendedPairs();
 
@@ -187,6 +196,7 @@ const BorrowTab = ({
     value = toDecimals(value).toString().trim();
 
     setInAmount(value);
+    setOutAmount(0);
     setValidationError(ValidateInputNumber(getAmount(value), availableBalance));
   };
 
@@ -229,6 +239,7 @@ const BorrowTab = ({
       (error, result) => {
         setInProgress(false);
         setInAmount(0);
+        setOutAmount(0);
         if (error) {
           message.error(error);
           return;
@@ -417,7 +428,10 @@ const BorrowTab = ({
       {!dataInProgress ? (
         <>
           <div className="details-left commodo-card commodo-borrow-page">
-            <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
+            <CustomRow
+              assetList={assetList}
+              poolId={assetOutPool?.poolId?.low || pool?.poolId?.low}
+            />
             <div className="assets-select-card mb-3">
               <div className="assets-left">
                 <label className="left-label">Collateral Asset</label>
@@ -767,14 +781,22 @@ const BorrowTab = ({
           <div className="details-right">
             <div className="commodo-card">
               <Details
-                asset={assetMap[assetOutPool?.firstBridgedAssetId?.toNumber()]}
+                asset={
+                  assetMap[
+                    assetOutPool?.firstBridgedAssetId?.toNumber() ||
+                      pool?.firstBridgedAssetId?.toNumber()
+                  ]
+                }
                 poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
               />
               <div className="mt-5">
                 <Details
                   asset={
-                    assetMap[assetOutPool?.secondBridgedAssetId?.toNumber()]
+                    assetMap[
+                      assetOutPool?.secondBridgedAssetId?.toNumber() ||
+                        pool?.secondBridgedAssetId?.toNumber()
+                    ]
                   }
                   poolId={assetOutPool?.poolId || pool?.poolId}
                   parent="borrow"
@@ -783,7 +805,12 @@ const BorrowTab = ({
             </div>
             <div className="commodo-card">
               <Details
-                asset={assetMap[assetOutPool?.mainAssetId?.toNumber()]}
+                asset={
+                  assetMap[
+                    assetOutPool?.mainAssetId?.toNumber() ||
+                      pool?.mainAssetId?.toNumber()
+                  ]
+                }
                 poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
               />
