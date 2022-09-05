@@ -1,6 +1,8 @@
+import axios from "axios";
 import { QueryClientImpl } from "comdex-codec/build/comdex/lend/v1beta1/query";
 import Long from "long";
 import { APP_ID } from "../../constants/common";
+import { API_URL } from "../../constants/url";
 import { createQueryClient } from "../helper";
 
 let myClient = null;
@@ -15,7 +17,7 @@ const getQueryService = (callback) => {
       if (error) {
         return callback(error);
       }
-      
+
       myClient = client;
       const queryService = new QueryClientImpl(client);
 
@@ -336,20 +338,15 @@ export const queryAuctionMippingIdParams = (callback) => {
   });
 };
 
-export const queryTopDeposits = (callback) => {
-  getQueryService((error, queryService) => {
-    if (error) {
-      callback(error);
-      return;
-    }
-
-    queryService
-      .QueryDepositRanking()
-      .then((result) => {
-        callback(null, result);
-      })
-      .catch((error) => callback(error?.message));
-  });
+export const queryTopAssets = (callback) => {
+  axios
+    .get(`${API_URL}/lend/rankings`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
 };
 
 export const queryTopBorrows = (callback) => {
