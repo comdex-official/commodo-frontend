@@ -1,5 +1,4 @@
 import { QueryClientImpl } from "comdex-codec/build/comdex/vault/v1beta1/query";
-import Long from "long";
 import { createQueryClient } from "../helper";
 
 let myClient = null;
@@ -23,40 +22,6 @@ const getQueryService = (callback) => {
   }
 };
 
-export const queryVaultList = (
-  owner,
-  offset,
-  limit,
-  countTotal,
-  reverse,
-  callback
-) => {
-  getQueryService((error, queryService) => {
-    if (error) {
-      callback(error);
-      return;
-    }
-
-    queryService
-      .QueryVaults({
-        owner,
-        pagination: {
-          key: "",
-          offset: Long.fromNumber(offset),
-          limit: Long.fromNumber(limit),
-          countTotal: countTotal,
-          reverse: reverse,
-        },
-      })
-      .then((result) => {
-        callback(null, result);
-      })
-      .catch((error) => {
-        callback(error?.message);
-      });
-  });
-};
-
 export const queryVault = (id, callback) => {
   getQueryService((error, queryService) => {
     if (error) {
@@ -68,24 +33,6 @@ export const queryVault = (id, callback) => {
       .QueryVault({
         id,
       })
-      .then((result) => {
-        callback(null, result);
-      })
-      .catch((error) => {
-        callback(error?.message);
-      });
-  });
-};
-
-export const queryTotalCollateral = (callback) => {
-  getQueryService((error, queryService) => {
-    if (error) {
-      callback(error);
-      return;
-    }
-
-    queryService
-      .QueryTotalCollaterals({})
       .then((result) => {
         callback(null, result);
       })

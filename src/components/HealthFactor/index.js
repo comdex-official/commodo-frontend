@@ -9,12 +9,10 @@ import { ucDenomToDenom } from "../../utils/string";
 
 const HealthFactor = ({
   parent,
-  size,
   borrow,
   assetRatesStatsMap,
   markets,
   assetMap,
-  name,
   pair,
   inAmount,
   outAmount,
@@ -102,7 +100,9 @@ const HealthFactor = ({
       ) : (
         <>
           <div>{Number(percentage || 0).toFixed(DOLLAR_DECIMALS)}</div>
-          <small className="font-weight-light">{"Liquidation at H.F<1.0"}</small>
+          <small className="font-weight-light">
+            {"Liquidation at H.F<1.0"}
+          </small>
         </>
       )}
     </>
@@ -121,7 +121,6 @@ HealthFactor.propTypes = {
       }),
     })
   ),
-  name: PropTypes.string,
   pair: PropTypes.object,
   parent: PropTypes.string,
   pool: PropTypes.shape({

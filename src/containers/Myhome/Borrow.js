@@ -7,9 +7,10 @@ import HealthFactor from "../../components/HealthFactor";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
+import BorrowInterest from "./Calculate/BorrowInterest";
 import "./index.less";
 
-const Borrow = ({ userBorrowList, inProgress }) => {
+const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
   const navigate = useNavigate();
 
   const columns = [
@@ -17,7 +18,7 @@ const Borrow = ({ userBorrowList, inProgress }) => {
       title: "Asset",
       dataIndex: "asset",
       key: "asset",
-      width: 150,
+      width: 130,
     },
     {
       title: (
@@ -38,12 +39,13 @@ const Borrow = ({ userBorrowList, inProgress }) => {
     {
       title: (
         <>
-          Health Factor <TooltipIcon text="Numeric representation of your position's safety. Liquidation at H.F<1.0" />
+          Health Factor{" "}
+          <TooltipIcon text="Numeric representation of your position's safety. Liquidation at H.F<1.0" />
         </>
       ),
       dataIndex: "health",
       key: "health",
-      width: 130,
+      width: 180,
       align: "center",
       render: (item) => <HealthFactor parent="table" borrow={item} />,
     },
@@ -58,7 +60,10 @@ const Borrow = ({ userBorrowList, inProgress }) => {
       title: "Interest",
       dataIndex: "interest",
       key: "interest",
-      width: 150,
+      width: 350,
+      render: (borrow) => (
+        <BorrowInterest borrowPosition={borrow} lang={lang} address={address} />
+      ),
     },
     {
       title: "",
@@ -128,12 +133,7 @@ const Borrow = ({ userBorrowList, inProgress }) => {
               </>
             ),
             apy: item,
-            interest: (
-              <>
-                {amountConversionWithComma(item?.interestAccumulated)}{" "}
-                {denomConversion(item?.amountOut?.denom)}
-              </>
-            ),
+            interest: item,
             health: item,
             action: item,
           };
@@ -164,6 +164,7 @@ const Borrow = ({ userBorrowList, inProgress }) => {
 };
 
 Borrow.propTypes = {
+  address: PropTypes.string,
   lang: PropTypes.string.isRequired,
   inProgress: PropTypes.bool,
   userBorrowList: PropTypes.arrayOf(
@@ -191,6 +192,7 @@ const stateToProps = (state) => {
   return {
     lang: state.language,
     userBorrowList: state.lend.userBorrows,
+    address: state.account.address,
   };
 };
 

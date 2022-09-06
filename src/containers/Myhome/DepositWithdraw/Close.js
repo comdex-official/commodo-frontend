@@ -15,17 +15,9 @@ import "./index.less";
 
 const { Option } = Select;
 
-const CloseTab = ({
-  lang,
-  lendPosition,
-  pool,
-  assetMap,
-  balances,
-  address,
-}) => {
+const CloseTab = ({ lang, lendPosition, pool, assetMap, address }) => {
   const [assetList, setAssetList] = useState();
   const [amount, setAmount] = useState();
-  const [validationError, setValidationError] = useState();
 
   const selectedAssetId = lendPosition?.assetId?.toNumber();
 
@@ -42,12 +34,10 @@ const CloseTab = ({
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
-        <CustomRow assetList={assetList}  poolId={pool?.poolId?.low}/>
+        <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
         <div className="assets-select-card mb-0">
           <div className="assets-left">
-            <label className="left-label">
-              Close Position
-            </label>
+            <label className="left-label">Close Position</label>
             <div className="assets-select-wrapper">
               <Select
                 className="assets-select"
@@ -141,12 +131,6 @@ CloseTab.propTypes = {
   refreshLendPosition: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
-  balances: PropTypes.arrayOf(
-    PropTypes.shape({
-      denom: PropTypes.string.isRequired,
-      amount: PropTypes.string,
-    })
-  ),
   lendPosition: PropTypes.shape({
     lendingId: PropTypes.shape({
       low: PropTypes.number,
@@ -174,7 +158,6 @@ const stateToProps = (state) => {
     address: state.account.address,
     pool: state.lend.pool._,
     assetMap: state.asset._.map,
-    balances: state.account.balances.list,
     lang: state.language,
   };
 };

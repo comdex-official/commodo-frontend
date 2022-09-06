@@ -5,8 +5,8 @@ import { getAccountNumber } from "../../../utils/number";
 
 const ButtonSubmit = () => {
   const dispatch = useDispatch();
-  const accountIndex = useSelector((state) => state.ledger.accountIndex);
-  const accountNumber = useSelector((state) => state.ledger.accountNumber);
+  const accountIndex = useSelector((state) => state?.ledger.accountIndex);
+  const accountNumber = useSelector((state) => state?.ledger.accountNumber);
 
   const onClick = () => {
     dispatch(
