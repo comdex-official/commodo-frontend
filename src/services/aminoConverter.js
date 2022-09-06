@@ -13,12 +13,12 @@ const omitDefault = (input) => {
     return input.isZero() ? undefined : input;
   }
 
-  if(typeof input === "boolean"){
+  if (typeof input === "boolean") {
     return input;
   }
 
   throw new Error(`Got unsupported type '${typeof input}'`);
-}
+};
 
 export const customAminoTypes = {
   "/comdex.lend.v1beta1.MsgLend": {
@@ -236,6 +236,36 @@ export const customAminoTypes = {
         isStableBorrow: is_stable_borrow,
         amountIn: amount_in,
         amountOut: amount_out,
+      };
+    },
+  },
+  "/comdex.lend.v1beta1.MsgCalculateLendRewards": {
+    aminoType: "comdex/lend/MsgCalculateLendRewards",
+    toAmino: ({ lender, lendId }) => {
+      return {
+        lender: lender,
+        lend_id: String(lendId),
+      };
+    },
+    fromAmino: ({ lender, lend_id }) => {
+      return {
+        lender: lender,
+        lendId: Number(lend_id),
+      };
+    },
+  },
+  "/comdex.lend.v1beta1.MsgCalculateBorrowInterest": {
+    aminoType: "comdex/lend/MsgCalculateBorrowInterest",
+    toAmino: ({ borrower, borrowId }) => {
+      return {
+        borrower: borrower,
+        borrow_id: String(borrowId),
+      };
+    },
+    fromAmino: ({ borrower, borrow_id }) => {
+      return {
+        borrower: borrower,
+        borrowId: Number(borrow_id),
       };
     },
   },

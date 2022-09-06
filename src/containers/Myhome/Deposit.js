@@ -6,9 +6,10 @@ import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
+import LendReward from "./Calculate/LendReward";
 import "./index.less";
 
-const Deposit = ({ userLendList, inProgress }) => {
+const Deposit = ({ lang, userLendList, inProgress }) => {
   const navigate = useNavigate();
 
   const columns = [
@@ -16,7 +17,7 @@ const Deposit = ({ userLendList, inProgress }) => {
       title: "Asset",
       dataIndex: "asset",
       key: "asset",
-      width: 150,
+      width: 130,
     },
     {
       title: (
@@ -32,7 +33,7 @@ const Deposit = ({ userLendList, inProgress }) => {
       title: "cPool",
       dataIndex: "cpool",
       key: "cpool",
-      width: 180,
+      width: 200,
     },
     {
       title: "APY",
@@ -47,8 +48,9 @@ const Deposit = ({ userLendList, inProgress }) => {
       title: "Rewards",
       dataIndex: "rewards",
       key: "rewards",
-      width: 200,
+      width: 350,
       className: "rewards-column",
+      render: (lend) => <LendReward lendPosition={lend} lang={lang} />,
     },
     {
       title: "",
@@ -112,12 +114,7 @@ const Deposit = ({ userLendList, inProgress }) => {
             ),
             cpool: item?.cpoolName,
             apy: item,
-            rewards: (
-              <>
-                {amountConversionWithComma(item?.rewardAccumulated)}{" "}
-                {denomConversion(item?.amountIn?.denom)}
-              </>
-            ),
+            rewards: item,
             action: item,
           };
         })

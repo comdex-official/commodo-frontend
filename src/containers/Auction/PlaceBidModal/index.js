@@ -84,7 +84,6 @@ const PlaceBidModal = ({ lang, address, auction, refreshData, params }) => {
         if (error) {
           setBidAmount(0);
           setMaxPrice(0);
-          console.log(error);
           message.error(error);
           return;
         }
