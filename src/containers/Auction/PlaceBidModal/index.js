@@ -25,7 +25,7 @@ import variables from "../../../utils/variables";
 import "./index.less";
 
 const PlaceBidModal = ({ lang, address, auction, refreshData, params }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [bidAmount, setBidAmount] = useState(0);
   const [inProgress, setInProgress] = useState(false);
   const [validationError, setValidationError] = useState();
@@ -34,15 +34,15 @@ const PlaceBidModal = ({ lang, address, auction, refreshData, params }) => {
   const [calculatedQuantityBid, setCalculatedQuantityBid] = useState();
 
   const showModal = () => {
-    setIsModalVisible(true);
+    setIsModalOpen(true);
   };
 
   const handleOk = () => {
-    setIsModalVisible(false);
+    setIsModalOpen(false);
   };
 
   const handleCancel = () => {
-    setIsModalVisible(false);
+    setIsModalOpen(false);
   };
   const handleClick = () => {
     setInProgress(true);
@@ -79,7 +79,7 @@ const PlaceBidModal = ({ lang, address, auction, refreshData, params }) => {
       address,
       (error, result) => {
         setInProgress(false);
-        setIsModalVisible(false);
+        setIsModalOpen(false);
 
         if (error) {
           setBidAmount(0);
@@ -154,7 +154,7 @@ const PlaceBidModal = ({ lang, address, auction, refreshData, params }) => {
         className="palcebid-modal auction-placebid-modal"
         footer={null}
         header={null}
-        visible={isModalVisible}
+        open={isModalOpen}
         width={550}
         closable={false}
         onOk={handleOk}

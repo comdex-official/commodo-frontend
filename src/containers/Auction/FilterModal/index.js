@@ -2,7 +2,10 @@ import { Button, Checkbox, Divider, Form, Modal, Slider } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import { setAuctionedAsset, setSelectedAuctionedAsset } from "../../../actions/auction";
+import {
+  setAuctionedAsset,
+  setSelectedAuctionedAsset
+} from "../../../actions/auction";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import "./index.less";
 
@@ -13,7 +16,7 @@ const marks = {
 
 const FilterModal = ({ setSelectedAuctionedAsset }) => {
   const dispatch = useDispatch();
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState([]);
   const [auctionedAsseted, setAuctionedAsseted] = useState([
     {
@@ -25,17 +28,17 @@ const FilterModal = ({ setSelectedAuctionedAsset }) => {
   ]);
 
   const showModal = () => {
-    setIsModalVisible(true);
+    setIsModalOpen(true);
   };
 
   const handleOk = () => {
     dispatch(setAuctionedAsset(auctionedAsseted));
     setSelectedAuctionedAsset(selectedAsset);
-    setIsModalVisible(false);
+    setIsModalOpen(false);
   };
 
   const handleCancel = () => {
-    setIsModalVisible(false);
+    setIsModalOpen(false);
   };
 
   const onChange = (e) => {
@@ -71,7 +74,7 @@ const FilterModal = ({ setSelectedAuctionedAsset }) => {
         className="filter-modal"
         footer={null}
         header={null}
-        visible={isModalVisible}
+        open={isModalOpen}
         width={530}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -127,7 +130,7 @@ const FilterModal = ({ setSelectedAuctionedAsset }) => {
                 <Slider
                   marks={marks}
                   defaultValue={37}
-                  tooltipVisible={false}
+                  tooltip={{ open: false }}
                   className="commodo-slider"
                 />
               </Col>

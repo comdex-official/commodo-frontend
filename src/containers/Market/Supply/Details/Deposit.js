@@ -148,7 +148,7 @@ const DepositTab = ({
                 <div className="assets-select-wrapper">
                   <Select
                     className="assets-select"
-                    dropdownClassName="asset-select-dropdown"
+                    popupClassName="asset-select-dropdown"
                     onChange={handleAssetChange}
                     placeholder={
                       <div className="select-placeholder">

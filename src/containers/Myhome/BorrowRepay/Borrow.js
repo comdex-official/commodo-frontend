@@ -15,17 +15,17 @@ import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../utils/number";
 import {
   iconNameFromDenom,
   toDecimals,
-  ucDenomToDenom
+  ucDenomToDenom,
 } from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
@@ -133,7 +133,7 @@ const BorrowTab = ({
               <div className="assets-select-wrapper">
                 <Select
                   className="assets-select"
-                  dropdownClassName="asset-select-dropdown"
+                  popupClassName="asset-select-dropdown"
                   defaultValue="1"
                   placeholder={
                     <div className="select-placeholder">

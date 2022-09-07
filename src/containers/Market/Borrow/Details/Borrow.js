@@ -16,19 +16,19 @@ import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
   queryAssetPairs,
   queryLendPair,
-  queryLendPool
+  queryLendPool,
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
@@ -83,7 +83,7 @@ const BorrowTab = ({
   );
 
   const borrowableBalance = Number(borrowable) - 1;
-  
+
   useEffect(() => {
     if (assetOutPool?.poolId && selectedBorrowValue) {
       setAssetList([
@@ -101,7 +101,10 @@ const BorrowTab = ({
   }, [pool, assetOutPool]);
 
   useEffect(() => {
-    if ( pair?.assetOutPoolId && pair?.assetOutPoolId?.toNumber() !== pool?.poolId?.toNumber()) {
+    if (
+      pair?.assetOutPoolId &&
+      pair?.assetOutPoolId?.toNumber() !== pool?.poolId?.toNumber()
+    ) {
       queryLendPool(pair?.assetOutPoolId, (error, poolResult) => {
         if (error) {
           message.error(error);
@@ -438,7 +441,7 @@ const BorrowTab = ({
                 <div className="assets-select-wrapper">
                   <Select
                     className="assets-select"
-                    dropdownClassName="asset-select-dropdown"
+                    popupClassName="asset-select-dropdown"
                     onChange={handleCollateralAssetChange}
                     placeholder={
                       <div className="select-placeholder">
@@ -522,7 +525,7 @@ const BorrowTab = ({
                 <div className="assets-select-wrapper">
                   <Select
                     className="assets-select"
-                    dropdownClassName="asset-select-dropdown"
+                    popupClassName="asset-select-dropdown"
                     onChange={handleBorrowAssetChange}
                     value={selectedBorrowValue}
                     placeholder={
