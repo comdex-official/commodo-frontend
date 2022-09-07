@@ -13,8 +13,6 @@ import DepositTab from "./Deposit";
 import "./index.less";
 import WithdrawTab from "./Withdraw";
 
-const { TabPane } = Tabs;
-
 const BackButton = {
   right: (
     <Link to="/myhome">

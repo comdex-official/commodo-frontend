@@ -1,7 +1,13 @@
 import {
   ACCOUNT_ADDRESS_SET,
   ACCOUNT_BALANCES_SET,
-  ACCOUNT_CONNECT_MODAL_SHOW, ACCOUNT_NAME_SET, ACCOUNT_POOL_BALANCE_SET, ACCOUNT_VAULTS_SET, ASSET_BALANCE_SET, BALANCE_REFRESH_SET, cASSET_BALANCE_SET, COLLATERAL_BALANCE_SET, DEBT_BALANCE_SET, FORM_MODAL_SHOW,
+  ACCOUNT_CONNECT_MODAL_SHOW,
+  ACCOUNT_NAME_SET,
+  ACCOUNT_POOL_BALANCE_SET,
+  ACCOUNT_VAULTS_SET,
+  ASSET_BALANCE_SET,
+  BALANCE_REFRESH_SET,
+  FORM_MODAL_SHOW,
   TRANSACTION_HISTORY_SET
 } from "../constants/account";
 
@@ -65,30 +71,9 @@ export const setAssetBalance = (value) => {
   };
 };
 
-export const setcAssetBalance = (value) => {
-  return {
-    type: cASSET_BALANCE_SET,
-    value,
-  };
-};
-
 export const setPoolBalance = (value) => {
   return {
     type: ACCOUNT_POOL_BALANCE_SET,
-    value,
-  };
-};
-
-export const setDebtBalance = (value) => {
-  return {
-    type: DEBT_BALANCE_SET,
-    value,
-  };
-};
-
-export const setCollateralBalance = (value) => {
-  return {
-    type: COLLATERAL_BALANCE_SET,
     value,
   };
 };

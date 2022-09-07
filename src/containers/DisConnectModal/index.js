@@ -8,8 +8,13 @@ import {
 } from "../../actions/account";
 import { SvgIcon } from "../../components/common";
 import Copy from "../../components/Copy";
+import { comdex } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
-import { amountConversionWithComma } from "../../utils/coin";
+import {
+  amountConversionWithComma,
+  denomConversion,
+  getDenomBalance
+} from "../../utils/coin";
 import { truncateString } from "../../utils/string";
 import variables from "../../utils/variables";
 
@@ -17,8 +22,8 @@ const DisConnectModal = ({
   setAccountAddress,
   lang,
   address,
-  assetBalance,
   name,
+  balances,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -41,10 +46,6 @@ const DisConnectModal = ({
     window.location.reload();
   };
 
-  const getTotalValue = () => {
-    return assetBalance;
-  };
-
   const WalletConnectedDropdown = (
     <div className="wallet-connect-dropdown">
       <div className="wallet-connect-upper">
@@ -58,8 +59,10 @@ const DisConnectModal = ({
       <div className="px-3">
         <div> {variables[lang].balance_wallet}</div>
         <div className="balance__value__data">
-          {amountConversionWithComma(getTotalValue(), DOLLAR_DECIMALS)}{" "}
-          CMST
+          {amountConversionWithComma(
+            getDenomBalance(balances, comdex?.coinMinimalDenom), DOLLAR_DECIMALS
+          )}{" "}
+          {denomConversion(comdex?.coinMinimalDenom)}
         </div>
       </div>
       <div className="mt-2 px-3">
@@ -139,7 +142,12 @@ DisConnectModal.propTypes = {
   setAccountAddress: PropTypes.func.isRequired,
   showAccountConnectModal: PropTypes.func.isRequired,
   address: PropTypes.string,
-  assetBalance: PropTypes.number,
+  balances: PropTypes.arrayOf(
+    PropTypes.shape({
+      denom: PropTypes.string.isRequired,
+      amount: PropTypes.string,
+    })
+  ),
   name: PropTypes.string,
   show: PropTypes.bool,
 };
@@ -148,8 +156,8 @@ const stateToProps = (state) => {
   return {
     lang: state.language,
     address: state.account.address,
+    balances: state.account.balances.list,
     show: state.account.showModal,
-    assetBalance: state.account.balances.asset,
     name: state.account.name,
   };
 };

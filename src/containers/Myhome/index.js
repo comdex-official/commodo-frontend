@@ -20,8 +20,6 @@ import Deposit from "./Deposit";
 import History from "./History";
 import "./index.less";
 
-const { TabPane } = Tabs;
-
 const Myhome = ({
   address,
   userLendList,
