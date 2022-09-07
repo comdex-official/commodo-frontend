@@ -221,6 +221,20 @@ const Myhome = ({
     },
   ];
 
+  const tabItems = [
+    {
+      label: "Deposit",
+      key: "1",
+      children: <Deposit inProgress={lendsInProgress} />,
+    },
+    {
+      label: "Borrow",
+      key: "2",
+      children: <Borrow inProgress={borrowsInProgress} />,
+    },
+    { label: "History", key: "3", children: <History /> },
+  ];
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -281,17 +295,8 @@ const Myhome = ({
             defaultActiveKey="1"
             onChange={setActiveKey}
             activeKey={activeKey}
-          >
-            <TabPane tab="Deposit" key="1">
-              <Deposit inProgress={lendsInProgress} />
-            </TabPane>
-            <TabPane tab="Borrow" key="2">
-              <Borrow inProgress={borrowsInProgress} />
-            </TabPane>
-            <TabPane tab="History" key="3">
-              <History />
-            </TabPane>
-          </Tabs>
+            items={tabItems}
+          />
         </Col>
       </Row>
     </div>

@@ -1,17 +1,17 @@
-import * as PropTypes from "prop-types";
-import { Col, Row } from "../../../components/common";
-import { connect } from "react-redux";
 import { Button, message, Spin, Tabs } from "antd";
-import WithdrawTab from "./Withdraw";
+import * as PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { useLocation, useParams } from "react-router";
+import { Link } from "react-router-dom";
+import { setPool } from "../../../actions/lend";
+import { Col, Row } from "../../../components/common";
+import { queryLendPool, queryLendPosition } from "../../../services/lend/query";
+import { decode } from "../../../utils/string";
+import CloseTab from "./Close";
 import DepositTab from "./Deposit";
 import "./index.less";
-import { Link } from "react-router-dom";
-import { useLocation, useParams } from "react-router";
-import { useEffect, useState } from "react";
-import { queryLendPool, queryLendPosition } from "../../../services/lend/query";
-import { setPool } from "../../../actions/lend";
-import CloseTab from "./Close";
-import { decode } from "../../../utils/string";
+import WithdrawTab from "./Withdraw";
 
 const { TabPane } = Tabs;
 
@@ -82,6 +82,46 @@ const Deposit = ({ setPool }) => {
     }
   };
 
+  const tabItems = [
+    {
+      label: "Deposit",
+      key: "1",
+      children: inProgress ? (
+        <div className="loader">
+          <Spin />
+        </div>
+      ) : (
+        <DepositTab lendPosition={lendPosition} dataInProgress={inProgress} />
+      ),
+    },
+    {
+      label: "Withdraw",
+      key: "2",
+      children: inProgress ? (
+        <div className="loader">
+          <Spin />
+        </div>
+      ) : (
+        <WithdrawTab
+          lendPosition={lendPosition}
+          dataInProgress={inProgress}
+          refreshLendPosition={refreshLendPosition}
+        />
+      ),
+    },
+    {
+      label: "Close",
+      key: "3",
+      children: inProgress ? (
+        <div className="loader">
+          <Spin />
+        </div>
+      ) : (
+        <CloseTab lendPosition={lendPosition} dataInProgress={inProgress} />
+      ),
+    },
+  ];
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -92,45 +132,8 @@ const Deposit = ({ setPool }) => {
             onChange={setActiveKey}
             activeKey={activeKey}
             tabBarExtraContent={BackButton}
-          >
-            <TabPane tab="Deposit" key="1">
-              {inProgress ? (
-                <div className="loader">
-                  <Spin />
-                </div>
-              ) : (
-                <DepositTab
-                  lendPosition={lendPosition}
-                  dataInProgress={inProgress}
-                />
-              )}
-            </TabPane>
-            <TabPane tab="Withdraw" key="2">
-              {inProgress ? (
-                <div className="loader">
-                  <Spin />
-                </div>
-              ) : (
-                <WithdrawTab
-                  lendPosition={lendPosition}
-                  dataInProgress={inProgress}
-                  refreshLendPosition={refreshLendPosition}
-                />
-              )}
-            </TabPane>
-            <TabPane tab="Close" key="3">
-              {inProgress ? (
-                <div className="loader">
-                  <Spin />
-                </div>
-              ) : (
-                <CloseTab
-                  lendPosition={lendPosition}
-                  dataInProgress={inProgress}
-                />
-              )}
-            </TabPane>
-          </Tabs>
+            items={tabItems}
+          />
         </Col>
       </Row>
     </div>

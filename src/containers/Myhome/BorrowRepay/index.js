@@ -10,11 +10,10 @@ import {
   queryBorrowPosition,
   queryLendPair,
   queryLendPool,
-  queryLendPosition,
+  queryLendPosition
 } from "../../../services/lend/query";
 import { decode } from "../../../utils/string";
 import BorrowTab from "./Borrow";
-import CloseTab from "./Close";
 import DepositTab from "./Deposit";
 import "./index.less";
 import RepayTab from "./Repay";
@@ -126,6 +125,57 @@ const BorrowRepay = ({ setPair, setPool }) => {
     }
   };
 
+  const tabItems = [
+    {
+      label: "Borrow",
+      key: "1",
+      children: inProgress ? (
+        <div className="loader">
+          <Spin />
+        </div>
+      ) : (
+        <BorrowTab
+          borrowPosition={borrowPosition}
+          dataInProgress={inProgress}
+          lendPosition={lendPosition}
+          refreshBorrowPosition={refreshBorrowPosition}
+        />
+      ),
+    },
+    {
+      label: "Deposit",
+      key: "2",
+      children: inProgress ? (
+        <div className="loader">
+          <Spin />
+        </div>
+      ) : (
+        <DepositTab
+          borrowPosition={borrowPosition}
+          dataInProgress={inProgress}
+          lendPosition={lendPosition}
+          lendPool={lendPool}
+          refreshBorrowPosition={refreshBorrowPosition}
+        />
+      ),
+    },
+    {
+      label: "Repay",
+      key: "3",
+      children: inProgress ? (
+        <div className="loader">
+          <Spin />
+        </div>
+      ) : (
+        <RepayTab
+          borrowPosition={borrowPosition}
+          refreshBorrowPosition={refreshBorrowPosition}
+          dataInProgress={inProgress}
+        />
+      ),
+    },
+  ];
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -136,62 +186,8 @@ const BorrowRepay = ({ setPair, setPool }) => {
             onChange={setActiveKey}
             activeKey={activeKey}
             tabBarExtraContent={BackButton}
-          >
-            <TabPane tab="Borrow" key="1">
-              {inProgress ? (
-                <div className="loader">
-                  <Spin />
-                </div>
-              ) : (
-                <BorrowTab
-                  borrowPosition={borrowPosition}
-                  dataInProgress={inProgress}
-                  lendPosition={lendPosition}
-                  refreshBorrowPosition={refreshBorrowPosition}
-                />
-              )}
-            </TabPane>
-            <TabPane tab="Deposit" key="2">
-              {inProgress ? (
-                <div className="loader">
-                  <Spin />
-                </div>
-              ) : (
-                <DepositTab
-                  borrowPosition={borrowPosition}
-                  dataInProgress={inProgress}
-                  lendPosition={lendPosition}
-                  lendPool={lendPool}
-                  refreshBorrowPosition={refreshBorrowPosition}
-                />
-              )}
-            </TabPane>
-            <TabPane tab="Repay" key="3">
-              {inProgress ? (
-                <div className="loader">
-                  <Spin />
-                </div>
-              ) : (
-                <RepayTab
-                  borrowPosition={borrowPosition}
-                  refreshBorrowPosition={refreshBorrowPosition}
-                  dataInProgress={inProgress}
-                />
-              )}
-            </TabPane>
-            <TabPane tab="Close" key="4">
-              {inProgress ? (
-                <div className="loader">
-                  <Spin />
-                </div>
-              ) : (
-                <CloseTab
-                  borrowPosition={borrowPosition}
-                  dataInProgress={inProgress}
-                />
-              )}
-            </TabPane>
-          </Tabs>
+            items={tabItems}
+          />
         </Col>
       </Row>
     </div>
