@@ -43,9 +43,12 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool }) => {
 };
 
 AssetStats.propTypes = {
-  assetId: PropTypes.shape({
-    low: PropTypes.number,
-  }),
+  assetId: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.shape({
+      low: PropTypes.number,
+    }),
+  ]),
   assetRatesStatsMap: PropTypes.object,
   pair: PropTypes.shape({
     id: PropTypes.shape({

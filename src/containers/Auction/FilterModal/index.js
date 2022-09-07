@@ -2,7 +2,10 @@ import { Button, Checkbox, Divider, Form, Modal, Slider } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import { setAuctionedAsset, setSelectedAuctionedAsset } from "../../../actions/auction";
+import {
+  setAuctionedAsset,
+  setSelectedAuctionedAsset
+} from "../../../actions/auction";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import "./index.less";
 
@@ -127,7 +130,7 @@ const FilterModal = ({ setSelectedAuctionedAsset }) => {
                 <Slider
                   marks={marks}
                   defaultValue={37}
-                  tooltipVisible={false}
+                  tooltip={{ open: false }}
                   className="commodo-slider"
                 />
               </Col>
