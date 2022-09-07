@@ -7,7 +7,6 @@ import { connect } from "react-redux";
 import Slider from "react-slick";
 import AssetsIcon from "../../assets/images/assets-icon.png";
 import LaunchImage from "../../assets/images/launch-bg.jpg";
-import LogoIcon from "../../assets/images/logo-icon.svg";
 import "../../assets/less/plugins/slick-slider/slick.less";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { DOLLAR_DECIMALS, NUMBER_OF_TOP_ASSETS } from "../../constants/common";
@@ -306,52 +305,6 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                       src={LaunchImage}
                     />
                     <div className="assets-section">
-                      <p className="upper-title">
-                        A seamless borrowing and lending platform
-                      </p>
-                      <div className="assets-section-inner">
-                        <div className="assets-left">
-                          <div className="mt-2">
-                            <ul className="static-list">
-                              <li>
-                                <label>#cPools</label>
-                                <p>78</p>
-                              </li>
-                              <li>
-                                <label>#Reserves</label>
-                                <p>$1.00M</p>
-                              </li>
-                              <li>
-                                <label>#Lenders</label>
-                                <p>4,128</p>
-                              </li>
-                              <li>
-                                <label>#Borrowers</label>
-                                <p>697</p>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div className="assets-right">
-                          <img
-                            className="commodo-logo"
-                            src={LogoIcon}
-                            alt={LogoIcon}
-                          />
-                          <h2>COMMODO</h2>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div className="commodo-launch-card-inner">
-                    <img
-                      className="launch-bg"
-                      alt="CMDX Token Launch"
-                      src={LaunchImage}
-                    />
-                    <div className="assets-section">
                       <div className="assets-section-inner">
                         <div className="assets-left">
                           <p>
@@ -382,7 +335,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                               aria-label="cswap"
                               target="_blank"
                               rel="noreferrer"
-                              href="https://staging.cswap.one/"
+                              href="https://testnet.cswap.one/"
                             >
                               Take me there!
                             </a>
