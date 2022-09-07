@@ -308,14 +308,14 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
                       <div className="assets-section-inner">
                         <div className="assets-left">
                           <p>
-                            Provide liquidity on CMDX-CMST pool on CSWAP to earn
+                            Provide liquidity on ATOM-CMDX pool on CSWAP to earn
                             external incentives on COMMODO
                           </p>
                           <div className="mt-auto">
                             <div className="small-icons mb-2">
                               <div className="icon-col mr-2">
-                                <SvgIcon name="cmst-icon" />
-                                CMST
+                                <SvgIcon name="atom-icon" />
+                                ATOM
                               </div>{" "}
                               -
                               <div className="icon-col ml-2">
