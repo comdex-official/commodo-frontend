@@ -9,6 +9,7 @@ import {
 import { SvgIcon } from "../../components/common";
 import Copy from "../../components/Copy";
 import { comdex } from "../../config/network";
+import { DOLLAR_DECIMALS } from "../../constants/common";
 import {
   amountConversionWithComma,
   denomConversion,
@@ -59,7 +60,7 @@ const DisConnectModal = ({
         <div> {variables[lang].balance_wallet}</div>
         <div className="balance__value__data">
           {amountConversionWithComma(
-            getDenomBalance(balances, comdex?.coinMinimalDenom)
+            getDenomBalance(balances, comdex?.coinMinimalDenom), DOLLAR_DECIMALS
           )}{" "}
           {denomConversion(comdex?.coinMinimalDenom)}
         </div>
