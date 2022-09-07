@@ -58,7 +58,6 @@ const variables = {
     farming: "Farming",
     total_value: "Total Value",
     current_ltv: "Current LTV",
-    cAsset_balance: "cAsset Balance",
     mint_balance: "Mint Balance",
     farm_balance: "Farm Balance",
     asset_balance: "Asset Balance",
