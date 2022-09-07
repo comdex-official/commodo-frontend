@@ -196,13 +196,10 @@ const ConnectButton = ({
         item.denom === harbor.coinMinimalDenom
     );
 
-    console.log("the balances", assetBalances, balances);
     const value = assetBalances.map((item) => {
-      console.log("the pti", getPrice(item.denom), item.amount);
       return getPrice(item.denom) * item.amount;
     });
 
-    console.log("the valie", value);
     setAssetBalance(Lodash.sum(value));
   };
 
