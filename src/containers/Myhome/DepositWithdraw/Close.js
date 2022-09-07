@@ -41,7 +41,7 @@ const CloseTab = ({ lang, lendPosition, pool, assetMap, address }) => {
             <div className="assets-select-wrapper">
               <Select
                 className="assets-select"
-                dropdownClassName="asset-select-dropdown"
+                popupClassName="asset-select-dropdown"
                 defaultValue="1"
                 placeholder={
                   <div className="select-placeholder">
