@@ -95,19 +95,13 @@ const GovernDetails = ({ address }) => {
   useEffect(() => {
     if (proposal?.proposal_id) {
       calculateVotes();
-      queryUserVote(
-        "comdex1cgv0r6lfyakt44yrj8p4kyrymzpyhwlgqd7ke0",
-        proposal?.proposal_id,
-        (error, result) => {
-          if (error) {
-            console.log("the err", error);
-            return;
-          }
-
-          console.log("the option", result);
-          setVotedOption(result?.vote?.option);
+      queryUserVote(address, proposal?.proposal_id, (error, result) => {
+        if (error) {
+          return;
         }
-      );
+
+        setVotedOption(result?.vote?.option);
+      });
     }
   }, [address, id, proposal]);
 
