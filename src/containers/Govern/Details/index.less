@@ -4,10 +4,10 @@
   &.govern-card2 {
     padding: 26px;
 
-    .details-text{
+    .details-text {
       max-height: 146px;
       overflow-y: auto;
-      p{
+      p {
         margin-bottom: 0;
       }
     }
@@ -25,7 +25,7 @@
     }
 
     .ant-btn {
-      .passed-circle{
+      .passed-circle {
         width: 5px;
         height: 5px;
         border-radius: 5px;
@@ -34,14 +34,23 @@
         height: 11px;
         margin-right: 3px;
       }
-      .failed-circle{
+      .failed-circle {
         width: 5px;
         height: 5px;
         border-radius: 5px;
         background: @secondary-color;
         width: 11px;
         height: 11px;
-        margin-right: 3px; 
+        margin-right: 3px;
+      }
+      .warning-circle {
+        width: 5px;
+        height: 5px;
+        border-radius: 5px;
+        background: @warning-color;
+        width: 11px;
+        height: 11px;
+        margin-right: 3px;
       }
     }
 
@@ -119,25 +128,25 @@
 
             &:nth-child(1) {
               .icon {
-                fill: #52B788;
+                fill: #52b788;
               }
             }
 
             &:nth-child(2) {
               .icon {
-                fill: #F76872;
+                fill: #f76872;
               }
             }
 
             &:nth-child(3) {
               .icon {
-                fill: #AACBB9;
+                fill: #aacbb9;
               }
             }
 
             &:nth-child(4) {
               .icon {
-                fill: #6A7B6C;
+                fill: #6a7b6c;
               }
             }
           }
@@ -157,5 +166,4 @@
       }
     }
   }
-  
 }

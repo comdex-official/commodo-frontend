@@ -1,26 +1,30 @@
-import * as PropTypes from "prop-types";
+import { Button, List, message } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { Col, Row, SvgIcon } from "../../../components/common";
-import { connect } from "react-redux";
-import { Button, List, message } from "antd";
-import "./index.less";
-import VoteNowModal from "../VoteNowModal";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router";
+import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
+import { Col, Row, SvgIcon } from "../../../components/common";
+import Copy from "../../../components/Copy";
+import { comdex } from "../../../config/network";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   fetchRestProposal,
   fetchRestProposer,
-  queryUserVote,
+  queryUserVote
 } from "../../../services/govern/query";
-import { formatTime, getDuration } from "../../../utils/date";
-import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { proposalStatusMap, truncateString } from "../../../utils/string";
 import { denomConversion } from "../../../utils/coin";
+import { formatTime, getDuration } from "../../../utils/date";
 import { formatNumber } from "../../../utils/number";
-import { comdex } from "../../../config/network";
-import Copy from "../../../components/Copy";
+import {
+  proposalOptionMap,
+  proposalStatusMap,
+  truncateString
+} from "../../../utils/string";
+import VoteNowModal from "../VoteNowModal";
+import "./index.less";
 
 const GovernDetails = ({ address }) => {
   const { id } = useParams();
@@ -91,13 +95,19 @@ const GovernDetails = ({ address }) => {
   useEffect(() => {
     if (proposal?.proposal_id) {
       calculateVotes();
-      queryUserVote(address, proposal?.proposal_id, (error, result) => {
-        if (error) {
-          return;
-        }
+      queryUserVote(
+        "comdex1cgv0r6lfyakt44yrj8p4kyrymzpyhwlgqd7ke0",
+        proposal?.proposal_id,
+        (error, result) => {
+          if (error) {
+            console.log("the err", error);
+            return;
+          }
 
-        setVotedOption(result?.vote);
-      });
+          console.log("the option", result);
+          setVotedOption(result?.vote?.option);
+        }
+      );
     }
   }, [address, id, proposal]);
 
@@ -265,14 +275,26 @@ const GovernDetails = ({ address }) => {
           <div className="commodo-card govern-card2 h-100">
             <Row>
               <Col>
-                <h3>#{proposal?.proposal_id}</h3>
+                <h3>#{proposal?.proposal_id || id}</h3>
               </Col>
               <Col className="text-right">
+                <span className=" mr-1">
+                  {votedOption
+                    ? `You voted: ${proposalOptionMap[votedOption]}`
+                    : ""}
+                </span>
+
                 <Button type="primary" className="btn-filled">
-                  {/* Please use below for pass and faild */}
-                  
-                  <span className="passed-circle"></span>
-                  {/* <span className="failed-circle"></span> */}
+                  <span
+                    className={
+                      proposalStatusMap[proposal?.status] === "Rejected" ||
+                      proposalStatusMap[proposal?.status] === "Failed"
+                        ? "failed-circle"
+                        : proposalStatusMap[proposal?.status] === "Passed"
+                        ? "passed-circle"
+                        : "warning-circle"
+                    }
+                  ></span>
                   {proposalStatusMap[proposal?.status]}
                 </Button>
               </Col>
