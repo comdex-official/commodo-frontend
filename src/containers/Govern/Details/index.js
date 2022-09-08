@@ -13,7 +13,7 @@ import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   fetchRestProposal,
   fetchRestProposer,
-  queryUserVote
+  queryUserVote,
 } from "../../../services/govern/query";
 import { denomConversion } from "../../../utils/coin";
 import { formatTime, getDuration } from "../../../utils/date";
@@ -21,7 +21,7 @@ import { formatNumber } from "../../../utils/number";
 import {
   proposalOptionMap,
   proposalStatusMap,
-  truncateString
+  truncateString,
 } from "../../../utils/string";
 import VoteNowModal from "../VoteNowModal";
 import "./index.less";
@@ -139,16 +139,19 @@ const GovernDetails = ({ address }) => {
     let abstain = Number(value?.abstain);
     let totalValue = yes + no + abstain + veto;
 
-    yes = Number((yes / totalValue) * 100).toFixed(DOLLAR_DECIMALS);
-    no = Number((no / totalValue) * 100).toFixed(DOLLAR_DECIMALS);
-    veto = Number((veto / totalValue) * 100).toFixed(DOLLAR_DECIMALS);
-    abstain = Number((abstain / totalValue) * 100).toFixed(DOLLAR_DECIMALS);
+    yes = Number((yes / totalValue || 0) * 100).toFixed(DOLLAR_DECIMALS);
+    no = Number((no / totalValue || 0) * 100).toFixed(DOLLAR_DECIMALS);
+    veto = Number((veto / totalValue || 0) * 100).toFixed(DOLLAR_DECIMALS);
+    abstain = Number((abstain / totalValue || 0) * 100).toFixed(
+      DOLLAR_DECIMALS
+    );
+
     setGetVotes({
       ...getVotes,
-      yes: yes,
-      no: no,
-      veto: veto,
-      abstain: abstain,
+      yes: yes || 0,
+      no: no || 0,
+      veto: veto || 0,
+      abstain: abstain || 0,
     });
   };
 
@@ -210,7 +213,7 @@ const GovernDetails = ({ address }) => {
             color: "#F76872",
           },
           {
-            name: "noWithVeto",
+            name: "NoWithVeto",
             y: Number(getVotes?.veto || 0),
             color: "#AACBB9",
           },
@@ -353,7 +356,7 @@ const GovernDetails = ({ address }) => {
                       <li>
                         <SvgIcon name="rectangle" viewbox="0 0 34 34" />
                         <div>
-                          <label>noWithVeto </label>
+                          <label>NoWithVeto </label>
                           <p>{Number(getVotes?.veto || "0.00")}%</p>
                         </div>
                       </li>
