@@ -82,7 +82,7 @@ const BorrowTab = ({
       0) / marketPrice(markets, borrowAssetDenom)
   );
 
-  const borrowableBalance = Number(borrowable) - 1;
+  const borrowableBalance = Number(borrowable) - 1000;
 
   useEffect(() => {
     if (assetOutPool?.poolId && selectedBorrowValue) {
