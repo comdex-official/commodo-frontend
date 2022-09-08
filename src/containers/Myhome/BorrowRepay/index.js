@@ -172,6 +172,17 @@ const BorrowRepay = ({ setPair, setPool }) => {
         />
       ),
     },
+    {
+      label: "Close",
+      key: "4",
+      children: inProgress ? (
+        <div className="loader">
+          <Spin />
+        </div>
+      ) : (
+        <CloseTab borrowPosition={borrowPosition} dataInProgress={inProgress} />
+      ),
+    },
   ];
 
   return (
