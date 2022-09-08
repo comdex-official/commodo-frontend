@@ -16,19 +16,19 @@ import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
   queryAssetPairs,
   queryLendPair,
-  queryLendPool,
+  queryLendPool
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount,
+  getAmount
 } from "../../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice,
+  marketPrice
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
@@ -227,7 +227,9 @@ const BorrowTab = ({
             amountIn: {
               amount: getAmount(inAmount),
               // Sending uc + denom as per message
-              denom: UC_DENOM.concat(collateralAssetDenom.substring(1)),
+              denom: UC_DENOM.concat(
+                String(assetMap[lend?.assetId]?.name).toLocaleLowerCase()
+              ),
             },
             amountOut: {
               amount: getAmount(outAmount),
