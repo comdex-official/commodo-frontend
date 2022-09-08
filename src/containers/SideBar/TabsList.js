@@ -41,16 +41,4 @@ export const tabsList = [
     langKey: "govern",
     index: 6,
   },
-  // {
-  //   name: "Airdrop",
-  //   value: "airdrop",
-  //   langKey: "airdrop",
-  //   index: 6,
-  // },
-  // {
-  //   name: "Extra",
-  //   value: "extra",
-  //   langKey: "extra",
-  //   index: 7,
-  // }
 ];

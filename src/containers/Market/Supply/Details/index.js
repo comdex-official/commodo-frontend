@@ -39,16 +39,6 @@ const SupplyDetails = ({ setPool }) => {
               Back
             </Button>
           </Link>
-          {/* <Tooltip overlayClassName="commodo-tooltip" title="Previous cPool">
-            <Button className="back-btn px-3 mr-2" type="primary">
-              <SvgIcon className="mx-0 mb-0" name="back-arrow" viewbox="0 0 20.243 13.501" />
-            </Button>
-          </Tooltip>
-          <Tooltip overlayClassName="commodo-tooltip" title="Next cPool">
-            <Button className="back-btn px-3" type="primary">
-              <SvgIcon className="mx-0 mb-0" name="next-arrow" viewbox="0 0 20.243 13.501" />
-            </Button>
-          </Tooltip> */}
         </Col>
       </Row>
       <Deposit dataInProgress={inProgress} />
