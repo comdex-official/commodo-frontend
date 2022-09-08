@@ -7,11 +7,11 @@ import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
-  DOLLAR_DECIMALS
+  DOLLAR_DECIMALS,
 } from "../../constants/common";
 import {
   queryDutchAuctionList,
-  queryDutchBiddingList
+  queryDutchBiddingList,
 } from "../../services/auction";
 import { queryAuctionMippingIdParams } from "../../services/lend/query";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
@@ -167,13 +167,7 @@ const Auction = ({ address }) => {
 
   useEffect(() => {
     fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, false);
-    const interval = setInterval(() => {
-      fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, false);
-    }, 5000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [address]);
+  }, []);
 
   useEffect(() => {
     fetchData();
