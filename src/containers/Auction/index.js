@@ -7,11 +7,11 @@ import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
-  DOLLAR_DECIMALS,
+  DOLLAR_DECIMALS
 } from "../../constants/common";
 import {
   queryDutchAuctionList,
-  queryDutchBiddingList,
+  queryDutchBiddingList
 } from "../../services/auction";
 import { queryAuctionMippingIdParams } from "../../services/lend/query";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
@@ -29,6 +29,7 @@ const Auction = ({ address }) => {
   const [loading, setLoading] = useState(true);
   const [inProgress, setInProgress] = useState(false);
   const [biddings, setBiddings] = useState("");
+
   const columns = [
     {
       title: (
@@ -175,7 +176,9 @@ const Auction = ({ address }) => {
   }, [address]);
 
   const fetchData = () => {
-    fetchBiddings(address);
+    if (address) {
+      fetchBiddings(address);
+    }
   };
 
   const queryParams = () => {
@@ -183,35 +186,37 @@ const Auction = ({ address }) => {
       if (error) {
         return;
       }
+
       setParams(result?.auctionParams);
     });
   };
 
   const fetchAuctions = (offset, limit, isTotal, isReverse) => {
+    setLoading(true);
+
     queryDutchAuctionList(
       offset,
       limit,
       isTotal,
       isReverse,
       (error, result) => {
-        setLoading(true);
+        setLoading(false);
+
         if (error) {
-          setLoading(false);
           message.error(error);
           return;
         }
+
         if (result?.auctions?.length > 0) {
           setAuctions(result && result);
-          setLoading(false);
-        } else {
-          setAuctions("");
-          setLoading(false);
         }
       }
     );
   };
+
   const fetchBiddings = (address) => {
     setInProgress(true);
+
     queryDutchBiddingList(address, (error, result) => {
       setInProgress(false);
 
@@ -222,8 +227,6 @@ const Auction = ({ address }) => {
       if (result?.biddings?.length > 0) {
         let reverseData = (result && result.biddings).reverse();
         setBiddings(reverseData);
-      } else {
-        setBiddings("");
       }
     });
   };
@@ -269,6 +272,4 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {};
-
-export default connect(stateToProps, actionsToProps)(Auction);
+export default connect(stateToProps)(Auction);
