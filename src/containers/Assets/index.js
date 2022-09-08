@@ -18,7 +18,6 @@ import Deposit from "./DepositModal";
 import "./index.less";
 import Withdraw from "./WithdrawModal";
 
-
 const Assets = ({ assetBalance, balances, markets, poolPriceMap }) => {
   const data = [
     {
@@ -103,6 +102,10 @@ const Assets = ({ assetBalance, balances, markets, poolPriceMap }) => {
   ];
 
   const getPrice = (denom) => {
+    if (denom === cmst?.coinMinimalDenom) {
+      return marketPrice(markets, denom);
+    }
+
     return poolPriceMap[denom] || marketPrice(markets, denom) || 0;
   };
 
