@@ -29,6 +29,7 @@ const Auction = ({ address }) => {
   const [loading, setLoading] = useState(true);
   const [inProgress, setInProgress] = useState(false);
   const [biddings, setBiddings] = useState("");
+
   const columns = [
     {
       title: (
@@ -167,13 +168,7 @@ const Auction = ({ address }) => {
 
   useEffect(() => {
     fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, false);
-    const interval = setInterval(() => {
-      fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, false);
-    }, 5000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [address]);
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -181,7 +176,9 @@ const Auction = ({ address }) => {
   }, [address]);
 
   const fetchData = () => {
-    fetchBiddings(address);
+    if (address) {
+      fetchBiddings(address);
+    }
   };
 
   const queryParams = () => {
@@ -189,35 +186,37 @@ const Auction = ({ address }) => {
       if (error) {
         return;
       }
+
       setParams(result?.auctionParams);
     });
   };
 
   const fetchAuctions = (offset, limit, isTotal, isReverse) => {
+    setLoading(true);
+
     queryDutchAuctionList(
       offset,
       limit,
       isTotal,
       isReverse,
       (error, result) => {
-        setLoading(true);
+        setLoading(false);
+
         if (error) {
-          setLoading(false);
           message.error(error);
           return;
         }
+
         if (result?.auctions?.length > 0) {
           setAuctions(result && result);
-          setLoading(false);
-        } else {
-          setAuctions("");
-          setLoading(false);
         }
       }
     );
   };
+
   const fetchBiddings = (address) => {
     setInProgress(true);
+
     queryDutchBiddingList(address, (error, result) => {
       setInProgress(false);
 
@@ -228,8 +227,6 @@ const Auction = ({ address }) => {
       if (result?.biddings?.length > 0) {
         let reverseData = (result && result.biddings).reverse();
         setBiddings(reverseData);
-      } else {
-        setBiddings("");
       }
     });
   };
@@ -275,6 +272,4 @@ const stateToProps = (state) => {
   };
 };
 
-const actionsToProps = {};
-
-export default connect(stateToProps, actionsToProps)(Auction);
+export default connect(stateToProps)(Auction);
