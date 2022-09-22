@@ -68,9 +68,7 @@ const WithdrawTab = ({
   };
 
   const handleMaxClick = () => {
-    // change the number to dynamic.
-
-    return handleInputChange(amountConversion(Number(availableBalance) - 1));
+    return handleInputChange(amountConversion(Number(availableBalance)));
   };
 
   return (

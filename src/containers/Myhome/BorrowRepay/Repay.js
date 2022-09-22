@@ -65,7 +65,6 @@ const RepayTab = ({
       ValidateInputNumber(
         getAmount(value),
         borrowPosition?.updatedAmountOut,
-        "repay"
       )
     );
   };
