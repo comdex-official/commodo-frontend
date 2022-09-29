@@ -25,7 +25,7 @@ export const commaSeparator = (value) => {
 };
 
 export const decimalConversion = (data = 0) => {
-  return Decimal.fromAtomics(data, 18).toString();
+  return Decimal.fromAtomics(data || "0", 18).toString();
 };
 
 export const marketPrice = (array, denom) => {
