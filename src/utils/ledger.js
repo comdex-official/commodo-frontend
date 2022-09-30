@@ -1,13 +1,12 @@
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import {LedgerSigner} from "@cosmjs/ledger-amino";
-import { comdex } from "../config/network";
-import { makeHdPath } from "./string";
+import {comdex} from "../config/network";
+import {makeHdPath} from "./string";
 
 const interactiveTimeout = 120_000;
 
 export async function createTransport() {
-    const ledgerTransport = await TransportWebUSB.create(interactiveTimeout, interactiveTimeout);
-    return ledgerTransport;
+    return await TransportWebUSB.create(interactiveTimeout, interactiveTimeout);
 }
 
 export const fetchAddress = async (accountNumber = "0", addressIndex = "0") => {
