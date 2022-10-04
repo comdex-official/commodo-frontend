@@ -9,7 +9,8 @@ import { comdex } from "../../config/network";
 import { fetchRestProposals } from "../../services/govern/query";
 import { queryStakeTokens } from "../../services/staking/query";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
-import { formatTime, getDuration } from "../../utils/date";
+import { formatTime } from "../../utils/date";
+import { proposalStatusMap } from "../../utils/string";
 import "./index.less";
 
 const { Option } = Select;
@@ -161,34 +162,41 @@ const Govern = () => {
                           }
                         >
                           <div className="left-section">
-                            <h3>#{item?.proposal_id}</h3>
+                            <h3>
+                              #{item?.proposal_id}
+                              <Button type="primary" className="ml-1">
+                                <span
+                                  className={
+                                    proposalStatusMap[item?.status] ===
+                                      "Rejected" ||
+                                    proposalStatusMap[item?.status] === "Failed"
+                                      ? "failed-circle"
+                                      : proposalStatusMap[item?.status] ===
+                                        "Passed"
+                                      ? "passed-circle"
+                                      : "warning-circle"
+                                  }
+                                />
+                                {proposalStatusMap[item?.status]}
+                              </Button>
+                            </h3>{" "}
                             <h3>{item?.content?.title}</h3>
                             <p>{item?.content?.description} </p>
                           </div>
                           <div className="right-section">
                             <Row>
-                              <Col sm="6" className='right-col'>
+                              <Col sm="6" className="right-col">
                                 <label>Voting Starts :</label>
                                 <p>
                                   {formatTime(item?.voting_start_time) ||
                                     "--/--/--"}
                                 </p>
                               </Col>
-                              <Col sm="6" className='right-col'>
+                              <Col sm="6" className="right-col">
                                 <label>Voting Ends :</label>
                                 <p>
                                   {formatTime(item?.voting_end_time) ||
                                     "--/--/--"}
-                                </p>
-                              </Col>
-                              <Col sm="6" className='right-col'>
-                                <label>Duration : </label>
-                                <p>
-                                  {getDuration(
-                                    item?.voting_end_time,
-                                    item?.voting_start_time
-                                  ) || 0}{" "}
-                                  Days
                                 </p>
                               </Col>
                             </Row>

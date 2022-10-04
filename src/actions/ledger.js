@@ -1,12 +1,9 @@
+import { message } from "antd";
 import {
-  SET_LEDGER_ACCOUNT_INDEX,
   SET_LEDGER_ACCOUNT_NUMBER,
-  SET_LEDGER_INFO,
-  SIGN_IN_LEDGER_MODAL_HIDE,
-  SIGN_IN_LEDGER_MODAL_SHOW,
+  SIGN_IN_LEDGER_MODAL_HIDE
 } from "../constants/ledger";
 import { fetchAddress } from "../utils/ledger";
-import { message } from "antd";
 import { setAccountAddress } from "./account";
 
 export const hideLedgerModal = (data) => {
@@ -16,30 +13,9 @@ export const hideLedgerModal = (data) => {
   };
 };
 
-export const showLedgerModal = (data) => {
-  return {
-    type: SIGN_IN_LEDGER_MODAL_SHOW,
-    data,
-  };
-};
-
-export const setLedgerInfo = (data) => {
-  return {
-    type: SET_LEDGER_INFO,
-    data,
-  };
-};
-
 export const setAccountNumber = (data) => {
   return {
     type: SET_LEDGER_ACCOUNT_NUMBER,
-    data,
-  };
-};
-
-export const setAccountIndex = (data) => {
-  return {
-    type: SET_LEDGER_ACCOUNT_INDEX,
     data,
   };
 };
