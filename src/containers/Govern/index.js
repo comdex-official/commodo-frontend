@@ -162,12 +162,9 @@ const Govern = () => {
                           }
                         >
                           <div className="left-section">
-                          <h3>
+                            <h3>
                               #{item?.proposal_id}
-                              <Button
-                                type="primary"
-                                className="ml-1"
-                              >
+                              <Button type="primary" className="ml-1">
                                 <span
                                   className={
                                     proposalStatusMap[item?.status] ===
@@ -179,22 +176,23 @@ const Govern = () => {
                                       ? "passed-circle"
                                       : "warning-circle"
                                   }
-                                ></span>
+                                />
                                 {proposalStatusMap[item?.status]}
                               </Button>
-                            </h3>                            <h3>{item?.content?.title}</h3>
+                            </h3>{" "}
+                            <h3>{item?.content?.title}</h3>
                             <p>{item?.content?.description} </p>
                           </div>
                           <div className="right-section">
                             <Row>
-                              <Col sm="6" className='right-col'>
+                              <Col sm="6" className="right-col">
                                 <label>Voting Starts :</label>
                                 <p>
                                   {formatTime(item?.voting_start_time) ||
                                     "--/--/--"}
                                 </p>
                               </Col>
-                              <Col sm="6" className='right-col'>
+                              <Col sm="6" className="right-col">
                                 <label>Voting Ends :</label>
                                 <p>
                                   {formatTime(item?.voting_end_time) ||

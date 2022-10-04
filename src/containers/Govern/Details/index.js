@@ -13,7 +13,7 @@ import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   fetchRestProposal,
   fetchRestProposer,
-  queryUserVote
+  queryUserVote,
 } from "../../../services/govern/query";
 import { denomConversion } from "../../../utils/coin";
 import { formatTime } from "../../../utils/date";
@@ -21,7 +21,7 @@ import { formatNumber } from "../../../utils/number";
 import {
   proposalOptionMap,
   proposalStatusMap,
-  truncateString
+  truncateString,
 } from "../../../utils/string";
 import VoteNowModal from "../VoteNowModal";
 import "./index.less";
@@ -284,7 +284,7 @@ const GovernDetails = ({ address }) => {
                         ? "passed-circle"
                         : "warning-circle"
                     }
-                  ></span>
+                  />
                   {proposalStatusMap[proposal?.status]}
                 </Button>
               </Col>
