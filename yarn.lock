@@ -2091,12 +2091,21 @@
     secretjs "0.17.7"
     utility-types "^3.10.0"
 
-"@keplr-wallet/common@0.11.6", "@keplr-wallet/common@^0.11.4":
+"@keplr-wallet/common@0.11.6":
   version "0.11.6"
   resolved "https://registry.yarnpkg.com/@keplr-wallet/common/-/common-0.11.6.tgz#2aaddc27170ff55822eb7811dfd5bc7c7268dfe5"
   integrity sha512-5NhSSBVvsWqg1txM1HlAqtsrSjbmOrKQDZza1Wmzy6wE4d313267dCLfQyCFruPBg48I4hn9P5vYktoKrsCPCg==
   dependencies:
     "@keplr-wallet/crypto" "0.11.6"
+    buffer "^6.0.3"
+    delay "^4.4.0"
+
+"@keplr-wallet/common@^0.11.8":
+  version "0.11.8"
+  resolved "https://registry.yarnpkg.com/@keplr-wallet/common/-/common-0.11.8.tgz#ee9503372a7dad1b9fcfee4ac0441a3289699c3d"
+  integrity sha512-HxOmmXT3oWb9rwZGAeZK57+NSh/qVBehV7EME8XjuvUkfV7NwCL8oZiNGfH8GZs22XoYoVXP8MCwEI7DKbLv1g==
+  dependencies:
+    "@keplr-wallet/crypto" "0.11.8"
     buffer "^6.0.3"
     delay "^4.4.0"
 
@@ -2121,6 +2130,19 @@
   version "0.11.6"
   resolved "https://registry.yarnpkg.com/@keplr-wallet/crypto/-/crypto-0.11.6.tgz#96aaa21ff43f5854eb0e4e9b8291e9e3567ca2f2"
   integrity sha512-Ob8R3oaFLbH256T1AnFhObnz52nsbSQ6rz8qyLFAbRd4FRHIqrfDyM07QIPxtYCyH0h8rIcsF1IU6cZco8c2+A==
+  dependencies:
+    bip32 "^2.0.6"
+    bip39 "^3.0.3"
+    bs58check "^2.1.2"
+    buffer "^6.0.3"
+    crypto-js "^4.0.0"
+    elliptic "^6.5.3"
+    sha.js "^2.4.11"
+
+"@keplr-wallet/crypto@0.11.8":
+  version "0.11.8"
+  resolved "https://registry.yarnpkg.com/@keplr-wallet/crypto/-/crypto-0.11.8.tgz#50762d6fe1227e675f92bf812328c7a3e70ab4cb"
+  integrity sha512-csT7D5YxBr4ZmJ7Q1Q3+G5KRAX5/M1Y9qpeTVJTcTIo9l66atBVXgiweLQTx0KHkCma1o16l+zkPtDFnjT/FeA==
   dependencies:
     bip32 "^2.0.6"
     bip39 "^3.0.3"
@@ -13207,10 +13229,10 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
-web-vitals@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-3.0.2.tgz#a484109dc5d64bc4924f174267ce20e7cd4c7934"
-  integrity sha512-YygzeCdGpNrCHIjW14AI4SxMX2IcONhDvwhHc9KswCIixfSeVl08WdKDfzZaypq2ynRIG3lzGO3CO5dXYzc9+w==
+web-vitals@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-3.0.3.tgz#e08cf4d30398baf91984f230a87872d6049e173f"
+  integrity sha512-8K6cl3alkVhwv7RQm3WAWFzvP9dBTH4CwOE7G3DfQDEnBJTdtNgX5XMqgE7aE79wac/kJ8fHWftUfH3AVxxbBw==
 
 webidl-conversions@^5.0.0:
   version "5.0.0"
