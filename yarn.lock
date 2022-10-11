@@ -1145,7 +1145,7 @@
     "@noble/hashes" "^1.0.0"
     protobufjs "^6.8.8"
 
-"@cosmjs/amino@^0.29.0", "@cosmjs/amino@^0.29.1":
+"@cosmjs/amino@^0.29.1":
   version "0.29.1"
   resolved "https://registry.yarnpkg.com/@cosmjs/amino/-/amino-0.29.1.tgz#cdd77fbca4cd4a4d99540f885ceb0666f7afd348"
   integrity sha512-Obw6qMLSUg2YmHOe9cHF9LofeLoz52I+1OUuVg7WdVDWK3kvWYA6oME/21h5XHb18pU5f0Nkcgz1SXTG8/stTQ==
@@ -1241,16 +1241,16 @@
     axios "^0.21.1"
     fast-deep-equal "^3.1.3"
 
-"@cosmjs/ledger-amino@^0.29.0":
-  version "0.29.0"
-  resolved "https://registry.yarnpkg.com/@cosmjs/ledger-amino/-/ledger-amino-0.29.0.tgz#9a5886f05064cc7ca6bcd6dd93a13d052fe64071"
-  integrity sha512-bk/Z2hg9A8VqRhDBenVZKix2mnEy+YA3paVXC9iP/+4xvTTC02WZoUix4BIkPkVsHPSAeSdHinKmu8eqU7wsmQ==
+"@cosmjs/ledger-amino@^0.29.1":
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/@cosmjs/ledger-amino/-/ledger-amino-0.29.1.tgz#325782fc51a1917941834634c97a380632d82037"
+  integrity sha512-whjXoFu8qMhTWs2mj9X+LawS8MzkVj9ygXMTRlfpyJrhG1s08hNocRDQrc5LPMDiehZT1iD1Hd6mDFFXrEmEhw==
   dependencies:
-    "@cosmjs/amino" "^0.29.0"
-    "@cosmjs/crypto" "^0.29.0"
-    "@cosmjs/encoding" "^0.29.0"
-    "@cosmjs/math" "^0.29.0"
-    "@cosmjs/utils" "^0.29.0"
+    "@cosmjs/amino" "^0.29.1"
+    "@cosmjs/crypto" "^0.29.1"
+    "@cosmjs/encoding" "^0.29.1"
+    "@cosmjs/math" "^0.29.1"
+    "@cosmjs/utils" "^0.29.1"
     ledger-cosmos-js "^2.1.8"
     semver "^7.3.2"
 
@@ -1268,7 +1268,7 @@
   dependencies:
     bn.js "^4.11.8"
 
-"@cosmjs/math@^0.29.0", "@cosmjs/math@^0.29.1":
+"@cosmjs/math@^0.29.1":
   version "0.29.1"
   resolved "https://registry.yarnpkg.com/@cosmjs/math/-/math-0.29.1.tgz#d71a6a2e95ac43380cd70c85c7656a6e8204e0e2"
   integrity sha512-IBZHjKXReFIJY902wMFYB5mIQdppQdETbfQFrtXWNvXVOyavgOm60uLUZ2s3n9oAvZNpCiUFLnUulPT7M2LGKw==
@@ -1390,7 +1390,7 @@
   resolved "https://registry.yarnpkg.com/@cosmjs/utils/-/utils-0.24.1.tgz#0adfefe63b7f17222bc2bc12f71296f35e7ad378"
   integrity sha512-VA3WFx1lMFb7esp9BqHWkDgMvHoA3D9w+uDRvWhVRpUpDc7RYHxMbWExASjz+gNblTCg556WJGzF64tXnf9tdQ==
 
-"@cosmjs/utils@^0.29.0", "@cosmjs/utils@^0.29.1":
+"@cosmjs/utils@^0.29.1":
   version "0.29.1"
   resolved "https://registry.yarnpkg.com/@cosmjs/utils/-/utils-0.29.1.tgz#f953bb7c213f257db4766bf30474b741348c9189"
   integrity sha512-Nq0uJqzV7VoviJShtasUm41bDe7BArlkPaToEapGNPhR43pwKMowAMuZdJsKeTzEz9BtUAB/nCG+GO6/yCV1hQ==
