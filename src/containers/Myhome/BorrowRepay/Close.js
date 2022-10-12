@@ -88,7 +88,7 @@ const CloseTab = ({
           <div className="assets-right">
             <div className="label-right">
               Available
-              <span class="ml-1">
+              <span className="ml-1">
                 {amountConversionWithComma(availableBalance)}{" "}
                 {denomConversion(borrowPosition?.amountOut?.denom)}
               </span>

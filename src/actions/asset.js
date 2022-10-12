@@ -1,8 +1,7 @@
 import { message } from "antd";
 import axios from "axios";
 import {
-  ASSETS_SET, IN_ASSET_SET,
-  OUT_AMOUNT_SET, OUT_ASSET_SET, PAIRS_SET,
+  ASSETS_SET, PAIRS_SET,
   PAIR_ID_SET,
   PAIR_SET
 } from "../constants/asset";
@@ -25,27 +24,6 @@ export const setPairId = (value) => {
 export const setPair = (value) => {
   return {
     type: PAIR_SET,
-    value,
-  };
-};
-
-export const setAssetIn = (value) => {
-  return {
-    type: IN_ASSET_SET,
-    value,
-  };
-};
-
-export const setAssetOut = (value) => {
-  return {
-    type: OUT_ASSET_SET,
-    value,
-  };
-};
-
-export const setAmountOut = (value) => {
-  return {
-    type: OUT_AMOUNT_SET,
     value,
   };
 };

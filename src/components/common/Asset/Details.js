@@ -11,7 +11,11 @@ import {
   amountConversionWithComma,
   denomConversion
 } from "../../../utils/coin";
-import { decimalConversion, marketPrice } from "../../../utils/number";
+import {
+  commaSeparator,
+  decimalConversion,
+  marketPrice
+} from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
 import { SvgIcon, TooltipIcon } from "../index";
 
@@ -115,7 +119,10 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
           </div>
         </div>
         <div className="head-right">
-          <span>Oracle Price</span> : ${marketPrice(markets, asset?.denom)}
+          <span>Oracle Price</span> : $
+          {commaSeparator(
+            Number(marketPrice(markets, asset?.denom)).toFixed(DOLLAR_DECIMALS)
+          )}
         </div>
       </div>
       <List

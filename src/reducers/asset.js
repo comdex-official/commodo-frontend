@@ -1,7 +1,6 @@
 import { combineReducers } from "redux";
 import {
-  ASSETS_SET, IN_ASSET_SET,
-  OUT_AMOUNT_SET, OUT_ASSET_SET, PAIRS_SET, PAIR_ID_SET, PAIR_SET
+  ASSETS_SET, PAIRS_SET, PAIR_ID_SET, PAIR_SET
 } from "../constants/asset";
 
 const pairs = (
@@ -58,36 +57,9 @@ const pair = (state = {}, action) => {
   return state;
 };
 
-const inAsset = (state = "", action) => {
-  if (action.type === IN_ASSET_SET) {
-    return action.value || "";
-  }
-
-  return state;
-};
-
-const outAsset = (state = "", action) => {
-  if (action.type === OUT_ASSET_SET) {
-    return action.value || "";
-  }
-
-  return state;
-};
-
-const outAmount = (state = 0, action) => {
-  if (action.type === OUT_AMOUNT_SET) {
-    return action.value || 0;
-  }
-
-  return state;
-};
-
 export default combineReducers({
   pairs,
   pairId,
   pair,
   _,
-  outAsset,
-  inAsset,
-  outAmount,
 });

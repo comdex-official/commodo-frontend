@@ -263,7 +263,10 @@ const Myhome = ({
             <div className="myhome-upper-right">
               <div className="mb-3">
                 Your Borrow Limit
-                <TooltipIcon text="Borrow limit of User" />
+                <TooltipIcon
+                  text="Borrowing limit of user, range 0-105%.
+ If it’s greater than 100% position(s) prone to liquidation"
+                />
               </div>
               <div className="borrow-limit-bar">
                 <div className="borrow-limit-upper">

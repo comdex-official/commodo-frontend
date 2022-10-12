@@ -1,17 +1,12 @@
-import { LedgerSigner } from "@cosmjs/ledger-amino";
-import {
-  AminoTypes,
-  createProtobufRpcClient,
-  QueryClient,
-  SigningStargateClient
-} from "@cosmjs/stargate";
-import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
+import {LedgerSigner} from "@cosmjs/ledger-amino";
+import {AminoTypes, createProtobufRpcClient, QueryClient, SigningStargateClient} from "@cosmjs/stargate";
+import {Tendermint34Client} from "@cosmjs/tendermint-rpc";
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
-import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
-import { comdex } from "../config/network";
-import { makeHdPath } from "../utils/string";
-import { customAminoTypes } from "./aminoConverter";
-import { myRegistry } from "./registry";
+import {TxRaw} from "cosmjs-types/cosmos/tx/v1beta1/tx";
+import {comdex} from "../config/network";
+import {makeHdPath} from "../utils/string";
+import {customAminoTypes} from "./aminoConverter";
+import {myRegistry} from "./registry";
 
 const aminoTypes = new AminoTypes(customAminoTypes);
 
@@ -82,11 +77,10 @@ async function LedgerWallet(hdpath, prefix) {
   const interactiveTimeout = 120_000;
 
   async function createTransport() {
-    const ledgerTransport = await TransportWebUSB.create(
-      interactiveTimeout,
-      interactiveTimeout
+    return await TransportWebUSB.create(
+        interactiveTimeout,
+        interactiveTimeout
     );
-    return ledgerTransport;
   }
 
   const transport = await createTransport();
