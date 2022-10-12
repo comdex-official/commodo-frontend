@@ -24,7 +24,11 @@ export const commaSeparator = (value) => {
   return stringWithComma;
 };
 
-export const decimalConversion = (data = 0) => {
+export const decimalConversion = (data) => {
+  if (Number(data) < 0) {
+    return "0";
+  }
+
   return Decimal.fromAtomics(data || "0", 18).toString();
 };
 
