@@ -1173,7 +1173,7 @@
     sha.js "^2.4.11"
     unorm "^1.5.0"
 
-"@cosmjs/crypto@^0.29.0", "@cosmjs/crypto@^0.29.1":
+"@cosmjs/crypto@^0.29.1":
   version "0.29.1"
   resolved "https://registry.yarnpkg.com/@cosmjs/crypto/-/crypto-0.29.1.tgz#1c5b2fe6de08e43b1ca65c3b33e7a39c9e6f6cb1"
   integrity sha512-H64KHUbp1nndPAJ3DoJs8OSOcpFjn2o/ptGgDaa1xhX4OiT7CF8IFoKyzzbPMLS/l/jWWkByc3uMn9R/LwW/Mg==
@@ -1268,10 +1268,10 @@
   dependencies:
     bn.js "^4.11.8"
 
-"@cosmjs/math@^0.29.1":
-  version "0.29.1"
-  resolved "https://registry.yarnpkg.com/@cosmjs/math/-/math-0.29.1.tgz#d71a6a2e95ac43380cd70c85c7656a6e8204e0e2"
-  integrity sha512-IBZHjKXReFIJY902wMFYB5mIQdppQdETbfQFrtXWNvXVOyavgOm60uLUZ2s3n9oAvZNpCiUFLnUulPT7M2LGKw==
+"@cosmjs/math@^0.29.1", "@cosmjs/math@^0.29.2":
+  version "0.29.2"
+  resolved "https://registry.yarnpkg.com/@cosmjs/math/-/math-0.29.2.tgz#00e7b7d4db8fb79ca1f73aa50d011bba2140bc72"
+  integrity sha512-WhgvinqNauEG0GNF7OMNU/cWqBZQ537Zy5d6FAO1+5lOpLhxxBPshEJIO4l2VPU702/JcC5qa49AxyiV3JuGmA==
   dependencies:
     bn.js "^5.2.0"
 
