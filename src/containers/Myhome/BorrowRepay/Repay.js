@@ -75,6 +75,10 @@ const RepayTab = ({
     setAmount();
   };
 
+  const handleMaxRepay = () => {
+    handleInputChange(amountConversion(borrowPosition?.updatedAmountOut));
+  }
+  
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
@@ -156,7 +160,7 @@ const RepayTab = ({
                 <label>Remaining to Repay</label>
               </Col>
               <Col className="text-right">
-                <div>
+                <div className="cursor-pointer" onClick={handleMaxRepay}>
                   {amountConversionWithComma(borrowPosition?.updatedAmountOut)}{" "}
                   {denomConversion(borrowPosition?.amountOut?.denom)}
                 </div>
