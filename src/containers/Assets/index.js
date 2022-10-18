@@ -18,7 +18,7 @@ import Deposit from "./DepositModal";
 import "./index.less";
 import Withdraw from "./WithdrawModal";
 
-const Assets = ({ assetBalance, balances, markets, poolPriceMap }) => {
+const Assets = ({ assetBalance, balances, markets }) => {
   const data = [
     {
       title: (
@@ -106,7 +106,7 @@ const Assets = ({ assetBalance, balances, markets, poolPriceMap }) => {
       return marketPrice(markets, denom);
     }
 
-    return poolPriceMap[denom] || marketPrice(markets, denom) || 0;
+    return marketPrice(markets, denom) || 0;
   };
 
   let assetsWithoutExternalLinks = AssetList?.tokens?.filter(
@@ -296,7 +296,6 @@ Assets.propTypes = {
       script_id: PropTypes.string,
     })
   ),
-  poolPriceMap: PropTypes.object,
 };
 
 const stateToProps = (state) => {
@@ -305,7 +304,6 @@ const stateToProps = (state) => {
     assetBalance: state.account.balances.asset,
     balances: state.account.balances.list,
     markets: state.oracle.market.list,
-    poolPriceMap: state.liquidity.poolPriceMap,
   };
 };
 
