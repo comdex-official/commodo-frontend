@@ -47,7 +47,7 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
     {
       title: (
         <>
-          Interest <TooltipIcon text="Interest accrued by Depositing" />
+          Interest <TooltipIcon text="Interest accrued by lending" />
         </>
       ),
       dataIndex: "interest",

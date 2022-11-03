@@ -116,13 +116,7 @@ HealthFactor.propTypes = {
   assetDenomMap: PropTypes.object,
   borrow: PropTypes.object,
   inAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        low: PropTypes.number,
-      }),
-    })
-  ),
+    markets: PropTypes.object,
   pair: PropTypes.object,
   parent: PropTypes.string,
   pool: PropTypes.shape({

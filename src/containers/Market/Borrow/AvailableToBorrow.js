@@ -49,13 +49,7 @@ export const AvailableToBorrow = ({ lendPool, markets, assetDenomMap }) => {
 
 AvailableToBorrow.propTypes = {
   assetDenomMap: PropTypes.object,
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        low: PropTypes.number,
-      }),
-    })
-  ),
+    markets: PropTypes.object,
   lendPool: PropTypes.shape({
     mainAssetId: PropTypes.shape({
       low: PropTypes.number,

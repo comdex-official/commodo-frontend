@@ -451,13 +451,7 @@ Dashboard.propTypes = {
   assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
   isDarkMode: PropTypes.bool,
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        low: PropTypes.number,
-      }),
-    })
-  ),
+    markets: PropTypes.object,
 };
 
 const stateToProps = (state) => {
