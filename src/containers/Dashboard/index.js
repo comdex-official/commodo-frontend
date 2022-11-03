@@ -11,28 +11,31 @@ import "../../assets/less/plugins/slick-slider/slick.less";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { DOLLAR_DECIMALS, NUMBER_OF_TOP_ASSETS } from "../../constants/common";
 import {
-  queryTopAssets
+  queryTopAssets,
+  queryTotalBorrowAndDeposit,
+  queryTotalValueLocked
 } from "../../services/lend/query";
-import {
-  amountConversion,
-  amountConversionWithComma,
-  denomConversion
-} from "../../utils/coin";
-import { marketPrice } from "../../utils/number";
+import { denomConversion } from "../../utils/coin";
+import { commaSeparator } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import "./index.less";
 
-const Dashboard = ({ isDarkMode, markets, assetMap, assetDenomMap }) => {
-  const [depositStats, setDepositStats] = useState();
-  const [topAssetsInProgress, setTopAssetsInProgress] = useState();
-  const [borrowStats, setBorrowStats] = useState();
-  const [userDepositStats, setUserDepositStats] = useState();
+const Dashboard = ({ isDarkMode, assetMap }) => {
+  const [topAssetsInProgress, setTopAssetsInProgress] = useState(false);
   const [topDeposits, setTopDeposits] = useState();
   const [topBorrows, setTopBorrows] = useState();
-
+  const [totalValue, setTotalValue] = useState(0);
+  const [totalValueLockedInProgress, setTotalValueLockedInProgress] =
+    useState(false);
+  const [totalBorrowed, setTotalBorrowed] = useState(0);
+  const [totalDeposited, setTotalDeposited] = useState(0);
+  const [totalDepositBorrowInProgress, setTotalDepositBorrowInProgress] =
+    useState(false);
 
   useEffect(() => {
     setTopAssetsInProgress(true);
+    setTotalValueLockedInProgress(true);
+    setTotalDepositBorrowInProgress(true);
 
     queryTopAssets((error, result) => {
       setTopAssetsInProgress(false);
@@ -43,27 +46,28 @@ const Dashboard = ({ isDarkMode, markets, assetMap, assetDenomMap }) => {
       setTopDeposits(result?.data?.deposit?.slice(0, NUMBER_OF_TOP_ASSETS));
       setTopBorrows(result?.data?.borrow?.slice(0, NUMBER_OF_TOP_ASSETS));
     });
+
+    queryTotalValueLocked((error, result) => {
+      setTotalValueLockedInProgress(false);
+      if (error) {
+        return;
+      }
+
+      setTotalValue(result?.data?.total_value);
+    });
+
+    queryTotalBorrowAndDeposit((error, result) => {
+      setTotalDepositBorrowInProgress(false);
+      if (error) {
+        return;
+      }
+
+      setTotalDeposited(result?.data?.total_deposit);
+      setTotalBorrowed(result?.data?.total_borrowed);
+    });
   }, []);
 
-  const calculateTotalValue = (list) => {
-    const values =
-      list?.length > 0
-        ? list.map((item) => {
-            return (
-              marketPrice(markets, assetMap[item?.assetId?.toNumber()]?.denom, item?.assetId?.toNumber()) *
-              item?.amount
-            );
-          })
-        : [];
-
-    const sum = values.reduce((a, b) => a + b, 0);
-
-    return Number(sum || 0);
-  };
-
-  const totalDepositStats = calculateTotalValue(depositStats);
-  const totalBorrowStats = calculateTotalValue(borrowStats);
-  const totalUserDepositStats = calculateTotalValue(userDepositStats);
+  const totalValueLocked = Number(totalValue) + Number(totalBorrowed);
 
   const Options = {
     chart: {
@@ -104,12 +108,12 @@ const Dashboard = ({ isDarkMode, markets, assetMap, assetDenomMap }) => {
         data: [
           {
             name: "Total Available",
-            y: Number(amountConversion(totalDepositStats || 0)),
+            y: Number(totalValue || 0),
             color: "#52B788",
           },
           {
             name: "Total Borrowed",
-            y: Number(amountConversion(totalBorrowStats || 0)),
+            y: Number(totalBorrowed || 0),
 
             color: "#E2F7E5",
           },
@@ -216,13 +220,21 @@ const Dashboard = ({ isDarkMode, markets, assetMap, assetDenomMap }) => {
                   Total Value Locked{" "}
                   <TooltipIcon text="Value of Assets Locked" />
                 </p>
-                <h3>
-                  $
-                  {amountConversionWithComma(
-                    totalDepositStats + totalBorrowStats || 0,
-                    DOLLAR_DECIMALS
-                  )}
-                </h3>{" "}
+                {totalValueLockedInProgress ? (
+                  <Skeleton.Input
+                    key={"totalValue"}
+                    active
+                    size="small"
+                    className="mt-1"
+                  />
+                ) : (
+                  <h3>
+                    $
+                    {commaSeparator(
+                      Number(totalValueLocked || 0).toFixed(DOLLAR_DECIMALS)
+                    )}
+                  </h3>
+                )}
               </div>
               <div className="total-values">
                 <div className="total-values-chart">
@@ -237,13 +249,21 @@ const Dashboard = ({ isDarkMode, markets, assetMap, assetDenomMap }) => {
                       Total Available{" "}
                       <TooltipIcon text="Value of Assets available on platfrom" />
                     </p>
-                    <h3>
-                      $
-                      {amountConversionWithComma(
-                        totalDepositStats || 0,
-                        DOLLAR_DECIMALS
-                      )}
-                    </h3>
+                    {totalDepositBorrowInProgress ? (
+                      <Skeleton.Input
+                        key={"available"}
+                        active
+                        size="small"
+                        className="mt-1"
+                      />
+                    ) : (
+                      <h3>
+                        $
+                        {commaSeparator(
+                          Number(totalValue || 0).toFixed(DOLLAR_DECIMALS)
+                        )}
+                      </h3>
+                    )}
                   </div>
                   <div
                     className="dashboard-statics mb-0"
@@ -253,13 +273,21 @@ const Dashboard = ({ isDarkMode, markets, assetMap, assetDenomMap }) => {
                       Total Borrow{" "}
                       <TooltipIcon text="Value of Assets Borrowed" />
                     </p>
-                    <h3>
-                      $
-                      {amountConversionWithComma(
-                        totalBorrowStats || 0,
-                        DOLLAR_DECIMALS
-                      )}
-                    </h3>{" "}
+                    {totalDepositBorrowInProgress ? (
+                      <Skeleton.Input
+                        key={"borrow"}
+                        active
+                        size="small"
+                        className="mt-1"
+                      />
+                    ) : (
+                      <h3>
+                        $
+                        {commaSeparator(
+                          Number(totalBorrowed || 0).toFixed(DOLLAR_DECIMALS)
+                        )}
+                      </h3>
+                    )}
                   </div>
                 </div>
               </div>
@@ -418,9 +446,8 @@ const Dashboard = ({ isDarkMode, markets, assetMap, assetDenomMap }) => {
                   <p>Total Deposited</p>
                   <h3>
                     $
-                    {amountConversionWithComma(
-                      totalUserDepositStats || 0,
-                      DOLLAR_DECIMALS
+                    {commaSeparator(
+                      Number(totalDeposited || 0).toFixed(DOLLAR_DECIMALS)
                     )}
                   </h3>{" "}
                 </div>
@@ -431,9 +458,8 @@ const Dashboard = ({ isDarkMode, markets, assetMap, assetDenomMap }) => {
                   <p>Total Borrowed</p>
                   <h3>
                     $
-                    {amountConversionWithComma(
-                      totalBorrowStats || 0,
-                      DOLLAR_DECIMALS
+                    {commaSeparator(
+                      Number(totalBorrowed || 0).toFixed(DOLLAR_DECIMALS)
                     )}
                   </h3>{" "}
                 </div>
@@ -449,20 +475,14 @@ const Dashboard = ({ isDarkMode, markets, assetMap, assetDenomMap }) => {
 Dashboard.propTypes = {
   lang: PropTypes.string.isRequired,
   assetMap: PropTypes.object,
-  assetDenomMap: PropTypes.object,
   isDarkMode: PropTypes.bool,
-    markets: PropTypes.object,
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
-     markets: state.oracle.market.map,
     assetMap: state.asset._.map,
-    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 
-const actionsToProps = {};
-
-export default connect(stateToProps, actionsToProps)(Dashboard);
+export default connect(stateToProps)(Dashboard);
