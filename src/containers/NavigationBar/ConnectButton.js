@@ -5,13 +5,13 @@ import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect } from "react";
 import { connect } from "react-redux";
 import {
-  setAccountAddress,
-  setAccountBalances,
-  setAccountName,
-  setAccountVaults,
-  setAssetBalance,
-  setPoolBalance,
-  showAccountConnectModal
+    setAccountAddress,
+    setAccountBalances,
+    setAccountName,
+    setAccountVaults,
+    setAssetBalance,
+    setPoolBalance,
+    showAccountConnectModal
 } from "../../actions/account";
 import { setAssets } from "../../actions/asset";
 import { setAssetRatesStats } from "../../actions/lend";
@@ -19,15 +19,15 @@ import { setPoolPrice } from "../../actions/liquidity";
 import { setMarkets } from "../../actions/oracle";
 import { cmst, comdex, harbor } from "../../config/network";
 import {
-  CMST_POOL_ID_LIST,
-  DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE,
-  HARBOR_POOL_ID_LIST
+    CMST_POOL_ID_LIST,
+    DEFAULT_PAGE_NUMBER,
+    DEFAULT_PAGE_SIZE,
+    HARBOR_POOL_ID_LIST
 } from "../../constants/common";
 import { queryAssets } from "../../services/asset/query";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
-import { queryAssetRatesStats } from "../../services/lend/query";
+import { QueryAssetRatesParams } from "../../services/lend/query";
 import { queryPool } from "../../services/liquidity/query";
 import { queryMarketList } from "../../services/oracle/query";
 import { getPoolPrice, marketPrice } from "../../utils/number";
@@ -97,7 +97,7 @@ const ConnectButton = ({
       }
     );
 
-    queryAssetRatesStats((error, result) => {
+    QueryAssetRatesParams((error, result) => {
       if (error) {
         message.error(error);
         return;
