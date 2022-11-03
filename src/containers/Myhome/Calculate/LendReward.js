@@ -21,10 +21,9 @@ const LendReward = ({ lendPosition, lang }) => {
     signAndBroadcastTransaction(
       {
         message: {
-          typeUrl: "/comdex.lend.v1beta1.MsgCalculateLendRewards",
+          typeUrl: "/comdex.lend.v1beta1.MsgCalculateInterestAndRewards",
           value: {
-            lender: item?.owner,
-            lendId: item?.lendingId,
+            borrower: item?.owner,
           },
         },
         fee: defaultFee(),
