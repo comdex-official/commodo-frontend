@@ -1,19 +1,40 @@
+
+import { assetTransitTypeId } from "../config/network";
 import {
-  POOLS_SET,
-  SPOT_PRICE_SET,
-  POOL_BALANCE_FETCH_IN_PROGRESS,
-  SECOND_RESERVE_COIN_DENOM_SET,
-  POOL_TOKEN_SUPPLY_SET,
-  POOLS_LIQUIDITY_LIST_SET,
-  POOL_SET,
-  PAIR_SET,
   ASSET_RATES_STATES_SET,
-  USER_LENDS_SET,
+  PAIR_SET,
+  POOLS_LIQUIDITY_LIST_SET,
+  POOLS_SET,
+  POOL_BALANCE_FETCH_IN_PROGRESS,
   POOL_LENDS_SET,
+  POOL_SET,
+  POOL_TOKEN_SUPPLY_SET,
+  SECOND_RESERVE_COIN_DENOM_SET,
+  SPOT_PRICE_SET,
   USER_BORROWS_SET,
+  USER_LENDS_SET
 } from "../constants/lend";
 
+
 export const setPools = (list, pagination) => {
+  list?.map((item) => {
+    const assetTransitMap = item?.assetData?.reduce((map, obj) => {
+      map[obj?.assetTransitType] = obj;
+      return map;
+    }, {});
+
+    let transitAssetIds = {
+      main:
+        assetTransitMap[assetTransitTypeId["main"]]?.assetId,
+      first:
+        assetTransitMap[assetTransitTypeId["first"]]?.assetId,
+      second:
+        assetTransitMap[assetTransitTypeId["second"]]?.assetId,
+    };
+
+    return item["transitAssetIds"] = transitAssetIds;
+  });
+
   return {
     type: POOLS_SET,
     list,

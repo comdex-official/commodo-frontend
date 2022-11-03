@@ -27,3 +27,9 @@ export const harbor = {
   coinMinimalDenom: "uharbor",
   coinDecimals: 6,
 };
+
+export const assetTransitTypeId = {
+  main: 1,
+  first: 2,
+  second: 3,
+};
