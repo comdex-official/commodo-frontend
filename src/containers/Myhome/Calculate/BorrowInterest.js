@@ -2,13 +2,12 @@ import { Button, message } from "antd";
 import * as PropTypes from "prop-types";
 import { useState } from "react";
 import Snack from "../../../components/common/Snack";
+import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../services/helper";
 import { queryBorrowPosition } from "../../../services/lend/query";
 import { defaultFee } from "../../../services/transaction";
-import {
-  amountConversionWithComma,
-  denomConversion
-} from "../../../utils/coin";
+import { denomConversion } from "../../../utils/coin";
+import { decimalConversion } from "../../../utils/number";
 import variables from "../../../utils/variables";
 
 const BorrowInterest = ({ borrowPosition, lang, address }) => {
@@ -21,10 +20,9 @@ const BorrowInterest = ({ borrowPosition, lang, address }) => {
     signAndBroadcastTransaction(
       {
         message: {
-          typeUrl: "/comdex.lend.v1beta1.MsgCalculateBorrowInterest",
+          typeUrl: "/comdex.lend.v1beta1.MsgCalculateInterestAndRewards",
           value: {
             borrower: address,
-            borrowId: item?.borrowingId,
           },
         },
         fee: defaultFee(),
@@ -61,7 +59,7 @@ const BorrowInterest = ({ borrowPosition, lang, address }) => {
           message.error(error);
           return;
         }
-        
+
         if (result?.borrow?.pairId) {
           setLatestPosition(result?.borrow);
         }
@@ -72,9 +70,12 @@ const BorrowInterest = ({ borrowPosition, lang, address }) => {
   return (
     <>
       <>
-        {amountConversionWithComma(
-          latestPosition?.interestAccumulated || borrowPosition?.interestAccumulated
-        )}{" "}
+        {Number(
+          decimalConversion(
+            latestPosition?.interestAccumulated ||
+              borrowPosition?.interestAccumulated
+          )
+        ).toFixed(DOLLAR_DECIMALS)}{" "}
         {denomConversion(borrowPosition?.amountOut?.denom)}
       </>
 

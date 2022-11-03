@@ -72,13 +72,7 @@ export const TotalDeposit = ({
 TotalDeposit.propTypes = {
   assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        low: PropTypes.number,
-      }),
-    })
-  ),
+    markets: PropTypes.object,
   lendPool: PropTypes.shape({
     transitAssetIds: PropTypes.shape({
       main: PropTypes.number,

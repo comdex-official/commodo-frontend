@@ -150,13 +150,7 @@ Details.propTypes = {
     denom: PropTypes.string,
   }),
   assetDenomMap: PropTypes.object,
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        low: PropTypes.number,
-      }),
-    })
-  ),
+    markets: PropTypes.object,
   parent: PropTypes.string,
   poolId: PropTypes.shape({
     low: PropTypes.number,

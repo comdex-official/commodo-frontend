@@ -36,7 +36,7 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
       width: 200,
     },
     {
-      title: "APY",
+      title: "Lend APY",
       dataIndex: "apy",
       key: "apy",
       width: 150,
@@ -45,9 +45,13 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
       ),
     },
     {
-      title: "Rewards",
-      dataIndex: "rewards",
-      key: "rewards",
+      title: (
+        <>
+          Interest <TooltipIcon text="Interest accrued by lending" />
+        </>
+      ),
+      dataIndex: "interest",
+      key: "interest",
       width: 350,
       className: "rewards-column",
       render: (lend) => <LendReward lendPosition={lend} lang={lang} />,
@@ -114,7 +118,7 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
             ),
             cpool: item?.cpoolName,
             apy: item,
-            rewards: item,
+            interest: item,
             action: item,
           };
         })

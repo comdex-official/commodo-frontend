@@ -173,7 +173,7 @@ const Myhome = ({
                   Number(
                     decimalConversion(
                       assetRatesStatsMap[
-                        borrowToPool[item?.borrowingId]?.firstBridgedAssetId
+                        borrowToPool[item?.borrowingId]?.transitAssetIds?.first
                       ]?.ltv
                     )
                   )
@@ -314,13 +314,7 @@ Myhome.propTypes = {
   assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        low: PropTypes.number,
-      }),
-    })
-  ),
+    markets: PropTypes.object,
   userBorrowList: PropTypes.arrayOf(
     PropTypes.shape({
       amountOut: PropTypes.shape({

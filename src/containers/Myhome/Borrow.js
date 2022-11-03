@@ -50,14 +50,18 @@ const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
       render: (item) => <HealthFactor parent="table" borrow={item} />,
     },
     {
-      title: "APY",
+      title: "Borrow APY",
       dataIndex: "apy",
       key: "apy",
-      width: 100,
+      width: 150,
       render: (borrow) => <AssetApy borrowPosition={borrow} parent="borrow" />,
     },
     {
-      title: "Interest",
+      title: (
+        <>
+          Interest <TooltipIcon text="Interest accrued by borrowing" />
+        </>
+      ),
       dataIndex: "interest",
       key: "interest",
       width: 350,
