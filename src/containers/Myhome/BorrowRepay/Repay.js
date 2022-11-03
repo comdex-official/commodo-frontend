@@ -18,7 +18,7 @@ import {
   getAmount,
   getDenomBalance
 } from "../../../utils/coin";
-import { commaSeparator, marketPrice } from "../../../utils/number";
+import { commaSeparator, decimalConversion, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
@@ -48,7 +48,7 @@ const RepayTab = ({
     getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
 
   let updatedAmountOut =
-    Number(borrowPosition?.amountIn?.amount) +
+    Number(borrowPosition?.amountOut?.amount) +
     Number(decimalConversion(borrowPosition?.interestAccumulated) * 100);
 
   useEffect(() => {

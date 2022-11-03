@@ -55,7 +55,7 @@ const BorrowTab = ({
   const selectedAssetId = pair?.assetOut?.toNumber();
 
   let updatedAmountOut =
-    Number(borrowPosition?.amountIn?.amount) +
+    Number(borrowPosition?.amountOut?.amount) +
     Number(decimalConversion(borrowPosition?.interestAccumulated) * 100);
 
   const borrowable =

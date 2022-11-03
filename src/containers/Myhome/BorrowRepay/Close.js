@@ -12,7 +12,7 @@ import {
   denomConversion,
   getDenomBalance
 } from "../../../utils/coin";
-import { commaSeparator, marketPrice } from "../../../utils/number";
+import { commaSeparator, decimalConversion, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
@@ -38,8 +38,8 @@ const CloseTab = ({
     getDenomBalance(balances, borrowPosition?.amountOut?.denom) || 0;
 
   let updatedAmountOut =
-    Number(borrow?.amountIn?.amount) +
-    Number(decimalConversion(borrow?.interestAccumulated) * 100);
+    Number(borrowPosition?.amountOut?.amount) +
+    Number(decimalConversion(borrowPosition?.interestAccumulated) * 100);
 
   const handleRefresh = () => {
     setBalanceRefresh(refreshBalance + 1);
