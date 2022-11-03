@@ -121,9 +121,11 @@ export const setPoolLends = (list) => {
 };
 
 export const setUserBorrows = (list) => {
+  let preservedBorrows = list?.filter((item) => !item?.isLiquidated);
+
   return {
     type: USER_BORROWS_SET,
-    list,
+    list: preservedBorrows,
   };
 };
 

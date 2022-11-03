@@ -218,7 +218,7 @@ const Assets = ({ assetBalance, balances, markets, assetDenomMap }) => {
           </>
         ),
         noOfTokens: item?.balance?.amount,
-        price: getPrice(item?.coinMinimalDenom),
+        price: getPrice(item?.ibcDenomHash),
         amount: item.balance,
         ibcdeposit: item,
         ibcwithdraw: item,
