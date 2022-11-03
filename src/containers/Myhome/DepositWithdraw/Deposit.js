@@ -48,9 +48,9 @@ const DepositTab = ({
   useEffect(() => {
     if (pool?.poolId) {
       setAssetList([
-        assetMap[pool?.mainAssetId?.toNumber()],
-        assetMap[pool?.firstBridgedAssetId?.toNumber()],
-        assetMap[pool?.secondBridgedAssetId?.toNumber()],
+        assetMap[pool?.transitAssetIds?.main?.toNumber()],
+        assetMap[pool?.transitAssetIds?.first?.toNumber()],
+        assetMap[pool?.transitAssetIds?.second?.toNumber()],
       ]);
     }
   }, [pool]);
@@ -148,7 +148,7 @@ const DepositTab = ({
                 {commaSeparator(
                   Number(
                     amount *
-                      marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
+                      marketPrice(markets, assetMap[selectedAssetId]?.denom, selectedAssetId) ||
                       0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
@@ -182,13 +182,13 @@ const DepositTab = ({
       <div className="details-right">
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
+            asset={assetMap[pool?.transitAssetIds?.first?.toNumber()]}
             poolId={pool?.poolId}
             parent="lend"
           />
           <div className="mt-5">
             <Details
-              asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
+              asset={assetMap[pool?.transitAssetIds?.second?.toNumber()]}
               poolId={pool?.poolId}
               parent="lend"
             />
@@ -196,7 +196,7 @@ const DepositTab = ({
         </div>
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.mainAssetId?.toNumber()]}
+            asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
             poolId={pool?.poolId}
             parent="lend"
           />
@@ -256,7 +256,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
-    markets: state.oracle.market.list,
+     markets: state.oracle.market.map,
   };
 };
 

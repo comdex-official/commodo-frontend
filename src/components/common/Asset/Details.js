@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
-  queryAssetStats,
-  queryModuleBalance
+  queryModuleBalance, QueryPoolAssetLBMapping
 } from "../../../services/lend/query";
 import {
   amountConversionWithComma,
@@ -19,19 +18,19 @@ import {
 import { iconNameFromDenom } from "../../../utils/string";
 import { SvgIcon, TooltipIcon } from "../index";
 
-const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
+const Details = ({ asset, poolId, markets, refreshBalance, parent, assetDenomMap }) => {
   const [stats, setStats] = useState();
   const [moduleBalanceStats, setModuleBalanceStats] = useState([]);
 
   useEffect(() => {
     if (asset?.id && poolId) {
-      queryAssetStats(asset?.id, poolId, (error, result) => {
+      QueryPoolAssetLBMapping(asset?.id, poolId, (error, result) => {
         if (error) {
           message.error(error);
           return;
         }
 
-        setStats(result?.AssetStats);
+        setStats(result?.PoolAssetLBMapping);
       });
     } else if (stats?.poolId) {
       setStats();
@@ -61,7 +60,7 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
       counts: `$${amountConversionWithComma(
         Number(
           (parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0
-        ) * marketPrice(markets, asset?.denom),
+        ) * marketPrice(markets, asset?.denom, assetDenomMap[asset?.denom]?.id),
         DOLLAR_DECIMALS
       )}`,
       tooltipText:
@@ -70,7 +69,7 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
     {
       title: "Available",
       counts: `$${amountConversionWithComma(
-        marketPrice(markets, assetStats?.balance?.denom) *
+        marketPrice(markets, assetStats?.balance?.denom, assetDenomMap[assetStats?.balance?.denom]?.id) *
           assetStats?.balance.amount || 0,
         DOLLAR_DECIMALS
       )}`,
@@ -121,7 +120,7 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
         <div className="head-right">
           <span>Oracle Price</span> : $
           {commaSeparator(
-            Number(marketPrice(markets, asset?.denom)).toFixed(DOLLAR_DECIMALS)
+            Number(marketPrice(markets, asset?.denom, assetDenomMap[asset?.denom]?.id)).toFixed(DOLLAR_DECIMALS)
           )}
         </div>
       </div>
@@ -150,6 +149,7 @@ Details.propTypes = {
   asset: PropTypes.shape({
     denom: PropTypes.string,
   }),
+  assetDenomMap: PropTypes.object,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
@@ -165,8 +165,9 @@ Details.propTypes = {
 
 const stateToProps = (state) => {
   return {
-    markets: state.oracle.market.list,
+     markets: state.oracle.market.map,
     refreshBalance: state.account.refreshBalance,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

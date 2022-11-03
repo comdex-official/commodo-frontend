@@ -104,7 +104,7 @@ const CloseTab = ({
                 {commaSeparator(
                   Number(
                     amountConversion(borrowPosition?.updatedAmountOut) *
-                      marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
+                      marketPrice(markets, assetMap[selectedAssetId]?.denom, selectedAssetId) ||
                       0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}
@@ -152,13 +152,13 @@ const CloseTab = ({
       <div className="details-right">
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
+            asset={assetMap[pool?.transitAssetIds?.first?.toNumber()]}
             poolId={pool?.poolId}
             parent="borrow"
           />
           <div className="mt-5">
             <Details
-              asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
+              asset={assetMap[pool?.transitAssetIds?.second?.toNumber()]}
               poolId={pool?.poolId}
               parent="borrow"
             />
@@ -166,7 +166,7 @@ const CloseTab = ({
         </div>
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.mainAssetId?.toNumber()]}
+            asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
             poolId={pool?.poolId}
             parent="borrow"
           />
@@ -231,7 +231,7 @@ const stateToProps = (state) => {
     assetMap: state.asset._.map,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
-    markets: state.oracle.market.list,
+     markets: state.oracle.market.map,
   };
 };
 

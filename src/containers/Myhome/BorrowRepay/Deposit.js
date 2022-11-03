@@ -42,6 +42,7 @@ const DepositTab = ({
   refreshBorrowPosition,
   markets,
   pair,
+  assetDenomMap,
 }) => {
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
@@ -55,9 +56,9 @@ const DepositTab = ({
   useEffect(() => {
     if (lendPool?.poolId) {
       setAssetList([
-        assetMap[lendPool?.mainAssetId?.toNumber()],
-        assetMap[lendPool?.firstBridgedAssetId?.toNumber()],
-        assetMap[lendPool?.secondBridgedAssetId?.toNumber()],
+        assetMap[lendPool?.transitAssetIds?.main?.toNumber()],
+        assetMap[lendPool?.transitAssetIds?.first?.toNumber()],
+        assetMap[lendPool?.transitAssetIds?.second?.toNumber()],
       ]);
     }
   }, [lendPool]);
@@ -81,7 +82,11 @@ const DepositTab = ({
 
   let currentLTV = Number(
     ((Number(borrowPosition?.amountOut?.amount) *
-      marketPrice(markets, borrowPosition?.amountOut?.denom)) /
+      marketPrice(
+        markets,
+        borrowPosition?.amountOut?.denom,
+        assetDenomMap[borrowPosition?.amountOut.denom]?.id
+      )) /
       (Number(
         amount
           ? Number(borrowPosition?.amountIn?.amount) + Number(getAmount(amount))
@@ -89,7 +94,8 @@ const DepositTab = ({
       ) *
         marketPrice(
           markets,
-          ucDenomToDenom(borrowPosition?.amountIn?.denom)
+          ucDenomToDenom(borrowPosition?.amountIn?.denom),
+          assetDenomMap[ucDenomToDenom(borrowPosition?.amountIn?.denom)]?.id
         ))) *
       100
   );
@@ -166,8 +172,11 @@ const DepositTab = ({
                 {commaSeparator(
                   Number(
                     amount *
-                      marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
-                      0
+                      marketPrice(
+                        markets,
+                        assetMap[selectedAssetId]?.denom,
+                        selectedAssetId
+                      ) || 0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
               </small>{" "}
@@ -235,13 +244,13 @@ const DepositTab = ({
       <div className="details-right">
         <div className="commodo-card">
           <Details
-            asset={assetMap[lendPool?.firstBridgedAssetId?.toNumber()]}
+            asset={assetMap[lendPool?.transitAssetIds?.first?.toNumber()]}
             poolId={lendPool?.poolId}
             parent="lend"
           />
           <div className="mt-5">
             <Details
-              asset={assetMap[lendPool?.secondBridgedAssetId?.toNumber()]}
+              asset={assetMap[lendPool?.transitAssetIds?.second?.toNumber()]}
               poolId={lendPool?.poolId}
               parent="lend"
             />
@@ -249,7 +258,7 @@ const DepositTab = ({
         </div>
         <div className="commodo-card">
           <Details
-            asset={assetMap[lendPool?.mainAssetId?.toNumber()]}
+            asset={assetMap[lendPool?.transitAssetIds?.main?.toNumber()]}
             poolId={lendPool?.poolId}
             parent="lend"
           />
@@ -266,6 +275,7 @@ DepositTab.propTypes = {
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   borrowPosition: PropTypes.shape({
     lendingId: PropTypes.shape({
       low: PropTypes.number,
@@ -324,7 +334,8 @@ const stateToProps = (state) => {
     assetMap: state.asset._.map,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
-    markets: state.oracle.market.list,
+    markets: state.oracle.market.map,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

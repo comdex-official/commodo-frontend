@@ -1,4 +1,4 @@
-import { Button, message, Skeleton } from "antd";
+import { Button, Skeleton } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import * as PropTypes from "prop-types";
@@ -11,10 +11,7 @@ import "../../assets/less/plugins/slick-slider/slick.less";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { DOLLAR_DECIMALS, NUMBER_OF_TOP_ASSETS } from "../../constants/common";
 import {
-  queryBorrowStats,
-  queryDepositStats,
-  queryTopAssets,
-  queryUserDepositStats
+  queryTopAssets
 } from "../../services/lend/query";
 import {
   amountConversion,
@@ -25,7 +22,7 @@ import { marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import "./index.less";
 
-const Dashboard = ({ isDarkMode, markets, assetMap }) => {
+const Dashboard = ({ isDarkMode, markets, assetMap, assetDenomMap }) => {
   const [depositStats, setDepositStats] = useState();
   const [topAssetsInProgress, setTopAssetsInProgress] = useState();
   const [borrowStats, setBorrowStats] = useState();
@@ -33,35 +30,9 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
   const [topDeposits, setTopDeposits] = useState();
   const [topBorrows, setTopBorrows] = useState();
 
+
   useEffect(() => {
     setTopAssetsInProgress(true);
-
-    queryDepositStats((error, result) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      setDepositStats(result?.DepositStats?.balanceStats);
-    });
-
-    queryUserDepositStats((error, result) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      setUserDepositStats(result?.UserDepositStats?.balanceStats);
-    });
-
-    queryBorrowStats((error, result) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      setBorrowStats(result?.BorrowStats?.balanceStats);
-    });
 
     queryTopAssets((error, result) => {
       setTopAssetsInProgress(false);
@@ -79,7 +50,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
       list?.length > 0
         ? list.map((item) => {
             return (
-              marketPrice(markets, assetMap[item?.assetId?.toNumber()]?.denom) *
+              marketPrice(markets, assetMap[item?.assetId?.toNumber()]?.denom, item?.assetId?.toNumber()) *
               item?.amount
             );
           })
@@ -478,6 +449,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
 Dashboard.propTypes = {
   lang: PropTypes.string.isRequired,
   assetMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   isDarkMode: PropTypes.bool,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
@@ -491,8 +463,9 @@ Dashboard.propTypes = {
 const stateToProps = (state) => {
   return {
     lang: state.language,
-    markets: state.oracle.market.list,
+     markets: state.oracle.market.map,
     assetMap: state.asset._.map,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

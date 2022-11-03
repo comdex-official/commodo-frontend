@@ -50,9 +50,9 @@ const RepayTab = ({
   useEffect(() => {
     if (pool?.poolId) {
       setAssetList([
-        assetMap[pool?.mainAssetId?.toNumber()],
-        assetMap[pool?.firstBridgedAssetId?.toNumber()],
-        assetMap[pool?.secondBridgedAssetId?.toNumber()],
+        assetMap[pool?.transitAssetIds?.main?.toNumber()],
+        assetMap[pool?.transitAssetIds?.first?.toNumber()],
+        assetMap[pool?.transitAssetIds?.second?.toNumber()],
       ]);
     }
   }, [pool]);
@@ -75,6 +75,10 @@ const RepayTab = ({
     setAmount();
   };
 
+  const handleMaxRepay = () => {
+    handleInputChange(amountConversion(borrowPosition?.updatedAmountOut));
+  }
+  
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
@@ -141,7 +145,7 @@ const RepayTab = ({
                 {commaSeparator(
                   Number(
                     amount *
-                      marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
+                      marketPrice(markets, assetMap[selectedAssetId]?.denom, selectedAssetId) ||
                       0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
@@ -156,7 +160,7 @@ const RepayTab = ({
                 <label>Remaining to Repay</label>
               </Col>
               <Col className="text-right">
-                <div>
+                <div className="cursor-pointer" onClick={handleMaxRepay}>
                   {amountConversionWithComma(borrowPosition?.updatedAmountOut)}{" "}
                   {denomConversion(borrowPosition?.amountOut?.denom)}
                 </div>
@@ -167,7 +171,8 @@ const RepayTab = ({
                       amountConversion(borrowPosition?.updatedAmountOut) *
                         marketPrice(
                           markets,
-                          assetMap[selectedAssetId]?.denom
+                          assetMap[selectedAssetId]?.denom,
+                          selectedAssetId
                         ) || 0
                     ).toFixed(DOLLAR_DECIMALS)
                   )}
@@ -218,13 +223,13 @@ const RepayTab = ({
       <div className="details-right">
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
+            asset={assetMap[pool?.transitAssetIds?.first?.toNumber()]}
             poolId={pool?.poolId}
             parent="borrow"
           />
           <div className="mt-5">
             <Details
-              asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
+              asset={assetMap[pool?.transitAssetIds?.second?.toNumber()]}
               poolId={pool?.poolId}
               parent="borrow"
             />
@@ -232,7 +237,7 @@ const RepayTab = ({
         </div>
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.mainAssetId?.toNumber()]}
+            asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
             poolId={pool?.poolId}
             parent="borrow"
           />
@@ -298,7 +303,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
-    markets: state.oracle.market.list,
+     markets: state.oracle.market.map,
   };
 };
 

@@ -76,7 +76,7 @@ export const queryLendPool = (poolId, callback) => {
   });
 };
 
-export const queryAssetStats = (assetId, poolId, callback) => {
+export const QueryPoolAssetLBMapping = (assetId, poolId, callback) => {
   getQueryService((error, queryService) => {
     if (error) {
       callback(error);
@@ -84,7 +84,7 @@ export const queryAssetStats = (assetId, poolId, callback) => {
     }
 
     queryService
-      .QueryAssetStats({
+      .QueryPoolAssetLBMapping({
         assetId: Long.fromNumber(assetId),
         poolId: Long.fromNumber(poolId),
       })
@@ -151,7 +151,7 @@ export const queryBorrowPosition = (id, callback) => {
   });
 };
 
-export const queryAssetRatesStats = (callback) => {
+export const QueryAssetRatesParams = (callback) => {
   getQueryService((error, queryService) => {
     if (error) {
       callback(error);
@@ -159,7 +159,7 @@ export const queryAssetRatesStats = (callback) => {
     }
 
     queryService
-      .QueryAssetRatesStats({})
+      .QueryAssetRatesParams({})
       .then((result) => {
         callback(null, result);
       })

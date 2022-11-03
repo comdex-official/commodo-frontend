@@ -45,6 +45,7 @@ const BorrowTab = ({
   markets,
   poolLendPositions,
   assetRatesStatsMap,
+  assetDenomMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [lend, setLend] = useState();
@@ -70,7 +71,7 @@ const BorrowTab = ({
 
   const borrowable = getAmount(
     (Number(inAmount) *
-      marketPrice(markets, collateralAssetDenom) *
+      marketPrice(markets, collateralAssetDenom, assetDenomMap[collateralAssetDenom]?.id) *
       (pair?.isInterPool
         ? Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv)) *
           Number(
@@ -79,7 +80,7 @@ const BorrowTab = ({
             )
           )
         : Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv))) ||
-      0) / marketPrice(markets, borrowAssetDenom)
+      0) / marketPrice(markets, borrowAssetDenom, assetDenomMap[borrowAssetDenom]?.id)
   );
 
   const borrowableBalance = Number(borrowable) - 1000;
@@ -87,15 +88,15 @@ const BorrowTab = ({
   useEffect(() => {
     if (assetOutPool?.poolId && selectedBorrowValue) {
       setAssetList([
-        assetMap[assetOutPool?.mainAssetId?.toNumber()],
-        assetMap[assetOutPool?.firstBridgedAssetId?.toNumber()],
-        assetMap[assetOutPool?.secondBridgedAssetId?.toNumber()],
+        assetMap[assetOutPool?.transitAssetIds?.main?.toNumber()],
+        assetMap[assetOutPool?.transitAssetIds?.first?.toNumber()],
+        assetMap[assetOutPool?.transitAssetIds?.second?.toNumber()],
       ]);
     } else if (pool?.poolId && !assetOutPool?.poolId && !selectedBorrowValue) {
       setAssetList([
-        assetMap[pool?.mainAssetId?.toNumber()],
-        assetMap[pool?.firstBridgedAssetId?.toNumber()],
-        assetMap[pool?.secondBridgedAssetId?.toNumber()],
+        assetMap[pool?.transitAssetIds?.main?.toNumber()],
+        assetMap[pool?.transitAssetIds?.first?.toNumber()],
+        assetMap[pool?.transitAssetIds?.second?.toNumber()],
       ]);
     }
   }, [pool, assetOutPool]);
@@ -285,8 +286,8 @@ const BorrowTab = ({
     );
 
   let currentLTV = Number(
-    ((outAmount * marketPrice(markets, borrowAssetDenom)) /
-      (inAmount * marketPrice(markets, collateralAssetDenom))) *
+    ((outAmount * marketPrice(markets, borrowAssetDenom, assetDenomMap[borrowAssetDenom]?.id)) /
+      (inAmount * marketPrice(markets, collateralAssetDenom, assetDenomMap[collateralAssetDenom]?.id))) *
       100
   );
 
@@ -513,7 +514,7 @@ const BorrowTab = ({
                     $
                     {commaSeparator(
                       Number(
-                        inAmount * marketPrice(markets, collateralAssetDenom) ||
+                        inAmount * marketPrice(markets, collateralAssetDenom, assetDenomMap[collateralAssetDenom]?.id) ||
                           0
                       ).toFixed(DOLLAR_DECIMALS)
                     )}
@@ -599,7 +600,7 @@ const BorrowTab = ({
                     $
                     {commaSeparator(
                       Number(
-                        outAmount * marketPrice(markets, borrowAssetDenom) || 0
+                        outAmount * marketPrice(markets, borrowAssetDenom, assetDenomMap[borrowAssetDenom]?.id) || 0
                       ).toFixed(DOLLAR_DECIMALS)
                     )}
                   </small>{" "}
@@ -788,8 +789,8 @@ const BorrowTab = ({
               <Details
                 asset={
                   assetMap[
-                    assetOutPool?.firstBridgedAssetId?.toNumber() ||
-                      pool?.firstBridgedAssetId?.toNumber()
+                    assetOutPool?.transitAssetIds?.first?.toNumber() ||
+                      pool?.transitAssetIds?.first?.toNumber()
                   ]
                 }
                 poolId={assetOutPool?.poolId || pool?.poolId}
@@ -799,8 +800,8 @@ const BorrowTab = ({
                 <Details
                   asset={
                     assetMap[
-                      assetOutPool?.secondBridgedAssetId?.toNumber() ||
-                        pool?.secondBridgedAssetId?.toNumber()
+                      assetOutPool?.transitAssetIds?.second?.toNumber() ||
+                        pool?.transitAssetIds?.second?.toNumber()
                     ]
                   }
                   poolId={assetOutPool?.poolId || pool?.poolId}
@@ -812,8 +813,8 @@ const BorrowTab = ({
               <Details
                 asset={
                   assetMap[
-                    assetOutPool?.mainAssetId?.toNumber() ||
-                      pool?.mainAssetId?.toNumber()
+                    assetOutPool?.transitAssetIds?.main?.toNumber() ||
+                      pool?.transitAssetIds?.main?.toNumber()
                   ]
                 }
                 poolId={assetOutPool?.poolId || pool?.poolId}
@@ -870,6 +871,7 @@ BorrowTab.propTypes = {
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
@@ -914,9 +916,10 @@ const stateToProps = (state) => {
     pool: state.lend.pool._,
     assetMap: state.asset._.map,
     lang: state.language,
-    markets: state.oracle.market.list,
+    markets: state.oracle.market.map,
     poolLendPositions: state.lend.poolLends,
     assetRatesStatsMap: state.lend.assetRatesStats.map,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

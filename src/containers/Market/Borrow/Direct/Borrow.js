@@ -46,6 +46,7 @@ const BorrowTab = ({
   markets,
   balances,
   assetRatesStatsMap,
+  assetDenomMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [collateralAssetId, setCollateralAssetId] = useState();
@@ -71,7 +72,7 @@ const BorrowTab = ({
     ? assetMap[pair?.assetOut]?.denom
     : "";
 
-  const availableBalance = getDenomBalance(balances, collateralAssetDenom) || 0;
+  const availableBalance = getDenomBalance(balances, collateralAssetDenom, assetDenomMap[collateralAssetDenom]?.id) || 0;
 
   const borrowableBalance = getAmount(
     (Number(inAmount) *
@@ -87,7 +88,7 @@ const BorrowTab = ({
           )
         : Number(
             decimalConversion(assetRatesStatsMap[collateralAssetId]?.ltv)
-          )) || 0) / marketPrice(markets, borrowAssetDenom)
+          )) || 0) / marketPrice(markets, borrowAssetDenom, assetDenomMap[borrowAssetDenom]?.id)
   );
 
   const borrowList =
@@ -99,9 +100,9 @@ const BorrowTab = ({
   useEffect(() => {
     if (pool?.poolId) {
       setAssetList([
-        assetMap[pool?.mainAssetId?.toNumber()],
-        assetMap[pool?.firstBridgedAssetId?.toNumber()],
-        assetMap[pool?.secondBridgedAssetId?.toNumber()],
+        assetMap[pool?.transitAssetIds?.main?.toNumber()],
+        assetMap[pool?.transitAssetIds?.first?.toNumber()],
+        assetMap[pool?.transitAssetIds?.second?.toNumber()],
       ]);
     }
   }, [pool]);
@@ -284,8 +285,8 @@ const BorrowTab = ({
   };
 
   let currentLTV = Number(
-    ((outAmount * marketPrice(markets, borrowAssetDenom)) /
-      (inAmount * marketPrice(markets, collateralAssetDenom))) *
+    ((outAmount * marketPrice(markets, borrowAssetDenom, assetDenomMap[borrowAssetDenom]?.id)) /
+      (inAmount * marketPrice(markets, collateralAssetDenom, assetDenomMap[collateralAssetDenom]?.id))) *
       100
   );
 
@@ -540,7 +541,7 @@ const BorrowTab = ({
                     $
                     {commaSeparator(
                       Number(
-                        inAmount * marketPrice(markets, collateralAssetDenom) ||
+                        inAmount * marketPrice(markets, collateralAssetDenom, assetDenomMap[collateralAssetDenom]?.id) ||
                           0
                       ).toFixed(DOLLAR_DECIMALS)
                     )}
@@ -626,7 +627,7 @@ const BorrowTab = ({
                     $
                     {commaSeparator(
                       Number(
-                        outAmount * marketPrice(markets, borrowAssetDenom) || 0
+                        outAmount * marketPrice(markets, borrowAssetDenom, assetDenomMap[borrowAssetDenom]?.id) || 0
                       ).toFixed(DOLLAR_DECIMALS)
                     )}
                   </small>{" "}
@@ -817,13 +818,13 @@ const BorrowTab = ({
           <div className="details-right">
             <div className="commodo-card">
               <Details
-                asset={assetMap[outPool?.firstBridgedAssetId?.toNumber()]}
+                asset={assetMap[outPool?.transitAssetIds?.first?.toNumber()]}
                 poolId={outPool?.poolId}
                 parent="borrow"
               />
               <div className="mt-5">
                 <Details
-                  asset={assetMap[outPool?.secondBridgedAssetId?.toNumber()]}
+                  asset={assetMap[outPool?.transitAssetIds?.second?.toNumber()]}
                   poolId={outPool?.poolId}
                   parent="borrow"
                 />
@@ -831,7 +832,7 @@ const BorrowTab = ({
             </div>
             <div className="commodo-card">
               <Details
-                asset={assetMap[outPool?.mainAssetId?.toNumber()]}
+                asset={assetMap[outPool?.transitAssetIds?.main?.toNumber()]}
                 poolId={outPool?.poolId}
                 parent="borrow"
               />
@@ -886,6 +887,7 @@ BorrowTab.propTypes = {
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
@@ -924,9 +926,10 @@ const stateToProps = (state) => {
     pools: state.lend.pool.list,
     assetMap: state.asset._.map,
     lang: state.language,
-    markets: state.oracle.market.list,
+     markets: state.oracle.market.map,
     assetRatesStatsMap: state.lend.assetRatesStats.map,
     balances: state.account.balances.list,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 
