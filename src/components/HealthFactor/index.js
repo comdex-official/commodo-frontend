@@ -17,6 +17,7 @@ const HealthFactor = ({
   inAmount,
   outAmount,
   pool,
+  assetDenomMap,
 }) => {
   const [percentage, setPercentage] = useState(0);
   useEffect(() => {
@@ -37,7 +38,7 @@ const HealthFactor = ({
 
           setPercentage(
             (borrow?.amountIn?.amount *
-              marketPrice(markets, ucDenomToDenom(borrow?.amountIn?.denom)) *
+              marketPrice(markets, ucDenomToDenom(borrow?.amountIn?.denom), assetDenomMap[ucDenomToDenom(borrow?.amountIn?.denom)]?.id) *
               (lendPair?.isInterPool
                 ? Number(
                     decimalConversion(
@@ -58,7 +59,7 @@ const HealthFactor = ({
                     )
                   ))) /
               (borrow?.updatedAmountOut *
-                marketPrice(markets, borrow?.amountOut?.denom))
+                marketPrice(markets, borrow?.amountOut?.denom, assetDenomMap[borrow?.amountOut?.denom]?.id))
           );
         });
       });
@@ -69,7 +70,7 @@ const HealthFactor = ({
     if (pair?.id && Number(inAmount) && Number(outAmount)) {
       setPercentage(
         (Number(inAmount) *
-          marketPrice(markets, assetMap[pair?.assetIn]?.denom) *
+          marketPrice(markets, assetMap[pair?.assetIn]?.denom,pair?.assetIn) *
           (pair?.isInterPool
             ? Number(
                 decimalConversion(
@@ -88,7 +89,7 @@ const HealthFactor = ({
                 )
               ))) /
           (Number(outAmount) *
-            marketPrice(markets, assetMap[pair?.assetOut]?.denom))
+            marketPrice(markets, assetMap[pair?.assetOut]?.denom, pair?.assetOut))
       );
     }
   }, [markets, pair, inAmount, outAmount, pool]);
@@ -112,6 +113,7 @@ const HealthFactor = ({
 HealthFactor.propTypes = {
   assetMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   borrow: PropTypes.object,
   inAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   markets: PropTypes.arrayOf(
@@ -137,8 +139,9 @@ HealthFactor.propTypes = {
 const stateToProps = (state) => {
   return {
     assetRatesStatsMap: state.lend.assetRatesStats.map,
-    markets: state.oracle.market.list,
+     markets: state.oracle.market.map,
     assetMap: state.asset._.map,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

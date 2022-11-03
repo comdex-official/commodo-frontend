@@ -7,7 +7,12 @@ import { QueryPoolAssetLBMapping } from "../../../services/lend/query";
 import { amountConversionWithComma } from "../../../utils/coin";
 import { marketPrice } from "../../../utils/number";
 
-export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
+export const TotalDeposit = ({
+  lendPool,
+  assetMap,
+  markets,
+  assetDenomMap,
+}) => {
   const [assetStats, setAssetStats] = useState({});
 
   useEffect(() => {
@@ -38,21 +43,24 @@ export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
         assetStats[lendPool?.transitAssetIds?.main]?.totalLend *
           marketPrice(
             markets,
-            assetMap?.[lendPool?.transitAssetIds?.main]?.denom
+            assetMap?.[lendPool?.transitAssetIds?.main]?.denom,
+            assetDenomMap[[lendPool?.transitAssetIds?.main]?.denom]?.id
           )
       ) +
       Number(
         assetStats[lendPool?.transitAssetIds?.first]?.totalLend *
           marketPrice(
             markets,
-            assetMap?.[lendPool?.transitAssetIds?.first]?.denom
+            assetMap?.[lendPool?.transitAssetIds?.first]?.denom,
+            assetDenomMap[[lendPool?.transitAssetIds?.first]?.denom]?.id
           )
       ) +
       Number(
         assetStats[lendPool?.transitAssetIds?.second]?.totalLend *
           marketPrice(
             markets,
-            assetMap?.[lendPool?.transitAssetIds?.second]?.denom
+            assetMap?.[lendPool?.transitAssetIds?.second]?.denom,
+            assetDenomMap[[lendPool?.transitAssetIds?.second]?.denom]?.id
           )
       );
 
@@ -63,6 +71,7 @@ export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
 
 TotalDeposit.propTypes = {
   assetMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
@@ -81,8 +90,9 @@ TotalDeposit.propTypes = {
 
 const stateToProps = (state) => {
   return {
-    markets: state.oracle.market.list,
+    markets: state.oracle.market.map,
     assetMap: state.asset._.map,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

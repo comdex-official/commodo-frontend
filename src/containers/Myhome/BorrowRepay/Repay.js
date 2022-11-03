@@ -12,11 +12,11 @@ import HealthFactor from "../../../components/HealthFactor";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
-    amountConversion,
-    amountConversionWithComma,
-    denomConversion,
-    getAmount,
-    getDenomBalance
+  amountConversion,
+  amountConversionWithComma,
+  denomConversion,
+  getAmount,
+  getDenomBalance
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
@@ -145,7 +145,7 @@ const RepayTab = ({
                 {commaSeparator(
                   Number(
                     amount *
-                      marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
+                      marketPrice(markets, assetMap[selectedAssetId]?.denom, selectedAssetId) ||
                       0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
@@ -171,7 +171,8 @@ const RepayTab = ({
                       amountConversion(borrowPosition?.updatedAmountOut) *
                         marketPrice(
                           markets,
-                          assetMap[selectedAssetId]?.denom
+                          assetMap[selectedAssetId]?.denom,
+                          selectedAssetId
                         ) || 0
                     ).toFixed(DOLLAR_DECIMALS)
                   )}
@@ -302,7 +303,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
-    markets: state.oracle.market.list,
+     markets: state.oracle.market.map,
   };
 };
 

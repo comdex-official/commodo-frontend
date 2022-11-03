@@ -3,7 +3,7 @@ import { MARKET_LIST_SET } from "../constants/oracle";
 
 const market = (
   state = {
-    list: [],
+    map: {},
     pagination: {},
   },
   action
@@ -11,7 +11,7 @@ const market = (
   if (action.type === MARKET_LIST_SET) {
     return {
       ...state,
-      list: action.list,
+      map: action.map,
       pagination: action.pagination,
     };
   }
