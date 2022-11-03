@@ -59,7 +59,7 @@ const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
     {
       title: (
         <>
-          Interest <TooltipIcon text="Interest accrued by Borrowing" />
+          Interest <TooltipIcon text="Interest accrued by borrowing" />
         </>
       ),
       dataIndex: "interest",

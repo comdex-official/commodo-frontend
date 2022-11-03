@@ -95,8 +95,8 @@ const ConnectButton = ({
         return;
       }
 
-      if (result?.AssetRatesStats?.length > 0) {
-        setAssetRatesStats(result?.AssetRatesStats);
+      if (result?.AssetRatesParams?.length > 0) {
+        setAssetRatesStats(result?.AssetRatesParams);
       }
     });
   }, []);
@@ -192,13 +192,7 @@ ConnectButton.propTypes = {
       amount: PropTypes.string,
     })
   ),
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        low: PropTypes.number,
-      }),
-    })
-  ),
+    markets: PropTypes.object,
   show: PropTypes.bool,
 };
 

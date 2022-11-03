@@ -204,13 +204,7 @@ WithdrawTab.propTypes = {
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        low: PropTypes.number,
-      }),
-    })
-  ),
+    markets: PropTypes.object,
   lendPosition: PropTypes.shape({
     lendingId: PropTypes.shape({
       low: PropTypes.number,
