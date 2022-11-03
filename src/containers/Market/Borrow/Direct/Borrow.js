@@ -83,7 +83,7 @@ const BorrowTab = ({
           ) *
           Number(
             decimalConversion(
-              assetRatesStatsMap[pool?.firstBridgedAssetId]?.ltv
+              assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv
             )
           )
         : Number(
@@ -303,7 +303,7 @@ const BorrowTab = ({
               ) *
                 Number(
                   decimalConversion(
-                    assetRatesStatsMap[pool?.firstBridgedAssetId]
+                    assetRatesStatsMap[pool?.transitAssetIds?.first]
                       ?.liquidationThreshold
                   )
                 ) *
@@ -361,12 +361,12 @@ const BorrowTab = ({
           <div className="tokencard-icon">
             <SvgIcon
               name={iconNameFromDenom(
-                assetMap[pool?.firstBridgedAssetId]?.denom
+                assetMap[pool?.transitAssetIds?.first]?.denom
               )}
             />
           </div>
           <p>
-            Borrow {denomConversion(assetMap[pool?.firstBridgedAssetId]?.denom)}
+            Borrow {denomConversion(assetMap[pool?.transitAssetIds?.first]?.denom)}
           </p>
         </div>
         <label>#{pool?.poolId?.toNumber()}</label>
@@ -379,13 +379,13 @@ const BorrowTab = ({
           <div className="tokencard-icon">
             <SvgIcon
               name={iconNameFromDenom(
-                assetMap[pool?.firstBridgedAssetId]?.denom
+                assetMap[pool?.transitAssetIds?.first]?.denom
               )}
             />
           </div>
           <p>
             Deposit{" "}
-            {denomConversion(assetMap[pool?.firstBridgedAssetId]?.denom)}{" "}
+            {denomConversion(assetMap[pool?.transitAssetIds?.first]?.denom)}{" "}
           </p>
         </div>
         <SvgIcon
@@ -657,13 +657,13 @@ const BorrowTab = ({
                           <div className="inner-icon">
                             <SvgIcon
                               name={iconNameFromDenom(
-                                assetMap[pool?.firstBridgedAssetId]?.denom
+                                assetMap[pool?.transitAssetIds?.first]?.denom
                               )}
                             />
                           </div>
                           <p>
                             {denomConversion(
-                              assetMap[pool?.firstBridgedAssetId]?.denom
+                              assetMap[pool?.transitAssetIds?.first]?.denom
                             )}
                           </p>
                         </div>
@@ -689,13 +689,13 @@ const BorrowTab = ({
                           <div className="inner-icon">
                             <SvgIcon
                               name={iconNameFromDenom(
-                                assetMap[pool?.firstBridgedAssetId]?.denom
+                                assetMap[pool?.transitAssetIds?.first]?.denom
                               )}
                             />
                           </div>
                           <p>
                             {denomConversion(
-                              assetMap[pool?.firstBridgedAssetId]?.denom
+                              assetMap[pool?.transitAssetIds?.first]?.denom
                             )}
                           </p>
                         </div>

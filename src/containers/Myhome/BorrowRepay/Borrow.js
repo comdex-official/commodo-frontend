@@ -65,7 +65,7 @@ const BorrowTab = ({
             ) *
             Number(
               decimalConversion(
-                assetRatesStatsMap[pool?.firstBridgedAssetId]?.ltv
+                assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv
               )
             )
           : Number(

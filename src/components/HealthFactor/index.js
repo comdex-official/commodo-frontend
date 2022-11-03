@@ -48,7 +48,7 @@ const HealthFactor = ({
                   ) *
                   Number(
                     decimalConversion(
-                      assetRatesStatsMap[result?.pool?.firstBridgedAssetId]
+                      assetRatesStatsMap[result?.pool?.transitAssetIds?.first]
                         ?.liquidationThreshold
                     )
                   )
@@ -79,7 +79,7 @@ const HealthFactor = ({
               ) *
               Number(
                 decimalConversion(
-                  assetRatesStatsMap[pool?.firstBridgedAssetId]
+                  assetRatesStatsMap[pool?.transitAssetIds?.first]
                     ?.liquidationThreshold
                 )
               )

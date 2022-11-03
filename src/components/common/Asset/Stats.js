@@ -25,7 +25,7 @@ const AssetStats = ({ assetId, assetRatesStatsMap, pair, pool }) => {
                 ) *
                   Number(
                     decimalConversion(
-                      assetRatesStatsMap[pool?.firstBridgedAssetId]?.ltv
+                      assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv
                     )
                   ) *
                   100

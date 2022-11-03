@@ -6,6 +6,7 @@ import { useLocation, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { setPair, setPool } from "../../../actions/lend";
 import { Col, Row } from "../../../components/common";
+import { assetTransitTypeId } from "../../../config/network";
 import {
   queryBorrowPosition,
   queryLendPair,
@@ -104,7 +105,21 @@ const BorrowRepay = ({ setPair, setPool }) => {
           message.error(error);
           return;
         }
-        setLendPool(result?.pool);
+        let myPool = result?.pool;
+        const assetTransitMap = myPool?.assetData?.reduce((map, obj) => {
+          map[obj?.assetTransitType] = obj;
+          return map;
+        }, {});
+      
+        let transitAssetIds = {
+          main: assetTransitMap[assetTransitTypeId["main"]]?.assetId,
+          first: assetTransitMap[assetTransitTypeId["first"]]?.assetId,
+          second: assetTransitMap[assetTransitTypeId["second"]]?.assetId,
+        };
+      
+        myPool["transitAssetIds"] = transitAssetIds;
+      
+        setLendPool(myPool);
       });
     }
   }, [lendPosition]);
