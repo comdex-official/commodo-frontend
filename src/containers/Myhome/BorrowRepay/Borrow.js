@@ -64,7 +64,7 @@ const BorrowTab = ({
         marketPrice(
           markets,
           ucDenomToDenom(borrowPosition?.amountIn?.denom),
-          assetDenomMap[ucDenomToDenom(borrowPosition?.amountIn?.denom)]?.id
+          pair?.assetIn
         ) *
         (pair?.isInterPool
           ? Number(
