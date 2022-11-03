@@ -56,7 +56,6 @@ const DepositTab = ({
   useEffect(() => {
     if (lendPool?.poolId) {
 
-      console.log('it is', lendPool, lendPool?.transitAssetIds?.main)
       setAssetList([
         assetMap[lendPool?.transitAssetIds?.main?.toNumber()],
         assetMap[lendPool?.transitAssetIds?.first?.toNumber()],

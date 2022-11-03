@@ -73,7 +73,7 @@ const BorrowTab = ({
             )) || 0
     ) -
       Number(
-        borrowPosition?.updatedAmountOut *
+        borrowPosition?.amountOut?.amount *
           marketPrice(markets, borrowPosition?.amountOut.denom,assetDenomMap[borrowPosition?.amountOut.denom]?.id)
       )) /
     marketPrice(markets, borrowPosition?.amountOut.denom, assetDenomMap[borrowPosition?.amountOut.denom]?.id);
@@ -112,8 +112,8 @@ const BorrowTab = ({
   let currentLTV = Number(
     ((Number(
       amount
-        ? Number(borrowPosition?.updatedAmountOut) + Number(getAmount(amount))
-        : borrowPosition?.updatedAmountOut
+        ? Number(borrowPosition?.amountOut?.amount) + Number(getAmount(amount))
+        : borrowPosition?.amountOut?.amount
     ) *
       marketPrice(markets, borrowPosition?.amountOut?.denom, assetDenomMap[borrowPosition?.amountOut.denom]?.id)) /
       (Number(borrowPosition?.amountIn?.amount) *
