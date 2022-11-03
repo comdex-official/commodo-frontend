@@ -95,8 +95,8 @@ const ConnectButton = ({
         return;
       }
 
-      if (result?.AssetRatesStats?.length > 0) {
-        setAssetRatesStats(result?.AssetRatesStats);
+      if (result?.AssetRatesParams?.length > 0) {
+        setAssetRatesStats(result?.AssetRatesParams);
       }
     });
   }, []);
