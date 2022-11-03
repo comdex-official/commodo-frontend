@@ -21,10 +21,9 @@ const BorrowInterest = ({ borrowPosition, lang, address }) => {
     signAndBroadcastTransaction(
       {
         message: {
-          typeUrl: "/comdex.lend.v1beta1.MsgCalculateBorrowInterest",
+          typeUrl: "/comdex.lend.v1beta1.MsgCalculateInterestAndRewards",
           value: {
             borrower: address,
-            borrowId: item?.borrowingId,
           },
         },
         fee: defaultFee(),

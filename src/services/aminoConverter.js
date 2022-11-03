@@ -239,33 +239,16 @@ export const customAminoTypes = {
       };
     },
   },
-  "/comdex.lend.v1beta1.MsgCalculateLendRewards": {
-    aminoType: "comdex/lend/MsgCalculateLendRewards",
-    toAmino: ({ lender, lendId }) => {
-      return {
-        lender: lender,
-        lend_id: String(lendId),
-      };
-    },
-    fromAmino: ({ lender, lend_id }) => {
-      return {
-        lender: lender,
-        lendId: Number(lend_id),
-      };
-    },
-  },
-  "/comdex.lend.v1beta1.MsgCalculateBorrowInterest": {
-    aminoType: "comdex/lend/MsgCalculateBorrowInterest",
-    toAmino: ({ borrower, borrowId }) => {
+  "/comdex.lend.v1beta1.MsgCalculateInterestAndRewards": {
+    aminoType: "comdex/lend/MsgCalculateInterestAndRewards",
+    toAmino: ({ borrower }) => {
       return {
         borrower: borrower,
-        borrow_id: String(borrowId),
       };
     },
-    fromAmino: ({ borrower, borrow_id }) => {
+    fromAmino: ({ borrower }) => {
       return {
         borrower: borrower,
-        borrowId: Number(borrow_id),
       };
     },
   },
