@@ -34,10 +34,16 @@ export const setAssets = (list, pagination) => {
     return map;
   }, {});
 
+  const assetDenomMap = list.reduce((map, obj) => {
+    map[obj?.denom] = obj;
+    return map;
+  }, {});
+
   return {
     type: ASSETS_SET,
     list,
     map: assetHashMap,
+    assetDenomMap: assetDenomMap,
     pagination,
   };
 };

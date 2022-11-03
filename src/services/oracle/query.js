@@ -47,6 +47,7 @@ export const queryMarketList = (
         },
       })
       .then((result) => {
+        console.log('it is', result)
         callback(null, result);
       })
       .catch((error) => {

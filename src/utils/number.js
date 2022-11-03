@@ -1,7 +1,5 @@
 import { Decimal } from "@cosmjs/math";
-import { cmst } from "../config/network";
 import { DOLLAR_DECIMALS } from "../constants/common";
-import { denomToSymbol } from "./string";
 
 export const formatNumber = (number) => {
   if (number >= 1000 && number < 1000000) {
@@ -32,15 +30,15 @@ export const decimalConversion = (data) => {
   return Decimal.fromAtomics(data || "0", 18).toString();
 };
 
-export const marketPrice = (array, denom) => {
-  if (denom === cmst?.coinMinimalDenom) {
+export const marketPrice = (marketsMap, denom, assetId) => {
+  const value = marketsMap[assetId];
+
+  if (denom === "ucmst") {
     return 1;
   }
 
-  const value = array?.filter((item) => item.symbol === denomToSymbol(denom));
-
-  if (value && value[0]) {
-    return value[0] && value[0].rates / 1000000;
+  if (value && value?.twa) {
+    return value?.twa?.toNumber() / 1000000;
   }
 
   return 0;

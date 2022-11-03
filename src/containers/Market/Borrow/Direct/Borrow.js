@@ -14,22 +14,22 @@ import { ValidateInputNumber } from "../../../../config/_validation";
 import { APP_ID, DOLLAR_DECIMALS } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
-    queryAssetPairs,
-    queryLendPair,
-    queryLendPool
+  queryAssetPairs,
+  queryLendPair,
+  queryLendPool
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
-    amountConversion,
-    amountConversionWithComma,
-    denomConversion,
-    getAmount,
-    getDenomBalance
+  amountConversion,
+  amountConversionWithComma,
+  denomConversion,
+  getAmount,
+  getDenomBalance
 } from "../../../../utils/coin";
 import {
-    commaSeparator,
-    decimalConversion,
-    marketPrice
+  commaSeparator,
+  decimalConversion,
+  marketPrice
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
@@ -46,6 +46,7 @@ const BorrowTab = ({
   markets,
   balances,
   assetRatesStatsMap,
+  assetDenomMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [collateralAssetId, setCollateralAssetId] = useState();
@@ -71,7 +72,7 @@ const BorrowTab = ({
     ? assetMap[pair?.assetOut]?.denom
     : "";
 
-  const availableBalance = getDenomBalance(balances, collateralAssetDenom) || 0;
+  const availableBalance = getDenomBalance(balances, collateralAssetDenom, assetDenomMap[collateralAssetDenom]?.id) || 0;
 
   const borrowableBalance = getAmount(
     (Number(inAmount) *
@@ -87,7 +88,7 @@ const BorrowTab = ({
           )
         : Number(
             decimalConversion(assetRatesStatsMap[collateralAssetId]?.ltv)
-          )) || 0) / marketPrice(markets, borrowAssetDenom)
+          )) || 0) / marketPrice(markets, borrowAssetDenom, assetDenomMap[borrowAssetDenom]?.id)
   );
 
   const borrowList =
@@ -284,8 +285,8 @@ const BorrowTab = ({
   };
 
   let currentLTV = Number(
-    ((outAmount * marketPrice(markets, borrowAssetDenom)) /
-      (inAmount * marketPrice(markets, collateralAssetDenom))) *
+    ((outAmount * marketPrice(markets, borrowAssetDenom, assetDenomMap[borrowAssetDenom]?.id)) /
+      (inAmount * marketPrice(markets, collateralAssetDenom, assetDenomMap[collateralAssetDenom]?.id))) *
       100
   );
 
@@ -540,7 +541,7 @@ const BorrowTab = ({
                     $
                     {commaSeparator(
                       Number(
-                        inAmount * marketPrice(markets, collateralAssetDenom) ||
+                        inAmount * marketPrice(markets, collateralAssetDenom, assetDenomMap[collateralAssetDenom]?.id) ||
                           0
                       ).toFixed(DOLLAR_DECIMALS)
                     )}
@@ -626,7 +627,7 @@ const BorrowTab = ({
                     $
                     {commaSeparator(
                       Number(
-                        outAmount * marketPrice(markets, borrowAssetDenom) || 0
+                        outAmount * marketPrice(markets, borrowAssetDenom, assetDenomMap[borrowAssetDenom]?.id) || 0
                       ).toFixed(DOLLAR_DECIMALS)
                     )}
                   </small>{" "}
@@ -886,6 +887,7 @@ BorrowTab.propTypes = {
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
@@ -924,9 +926,10 @@ const stateToProps = (state) => {
     pools: state.lend.pool.list,
     assetMap: state.asset._.map,
     lang: state.language,
-    markets: state.oracle.market.list,
+     markets: state.oracle.market.map,
     assetRatesStatsMap: state.lend.assetRatesStats.map,
     balances: state.account.balances.list,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

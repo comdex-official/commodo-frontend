@@ -1,15 +1,15 @@
-import * as PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { useEffect, useState } from "react";
-import {
-  queryModuleBalance,
-} from "../../../services/lend/query";
 import { message } from "antd";
-import { marketPrice } from "../../../utils/number";
-import { amountConversionWithComma } from "../../../utils/coin";
+import * as PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
+import {
+  queryModuleBalance
+} from "../../../services/lend/query";
+import { amountConversionWithComma } from "../../../utils/coin";
+import { marketPrice } from "../../../utils/number";
 
-export const AvailableToBorrow = ({ lendPool, markets }) => {
+export const AvailableToBorrow = ({ lendPool, markets, assetDenomMap }) => {
   const [moduleBalanceStats, setModuleBalanceStats] = useState({});
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export const AvailableToBorrow = ({ lendPool, markets }) => {
       moduleBalanceStats?.length > 0
         ? moduleBalanceStats.map((item) => {
             return (
-              marketPrice(markets, item?.balance?.denom) * item?.balance.amount
+              marketPrice(markets, item?.balance?.denom, assetDenomMap[item?.balance?.denom]?.id) * item?.balance.amount
             );
           })
         : [];
@@ -48,6 +48,7 @@ export const AvailableToBorrow = ({ lendPool, markets }) => {
 };
 
 AvailableToBorrow.propTypes = {
+  assetDenomMap: PropTypes.object,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
       rates: PropTypes.shape({
@@ -70,7 +71,8 @@ AvailableToBorrow.propTypes = {
 
 const stateToProps = (state) => {
   return {
-    markets: state.oracle.market.list,
+     markets: state.oracle.market.map,
+     assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

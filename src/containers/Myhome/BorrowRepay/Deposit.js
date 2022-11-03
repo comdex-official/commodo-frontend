@@ -12,16 +12,16 @@ import HealthFactor from "../../../components/HealthFactor";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
-    amountConversion,
-    amountConversionWithComma,
-    denomConversion,
-    getAmount
+  amountConversion,
+  amountConversionWithComma,
+  denomConversion,
+  getAmount
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import {
-    iconNameFromDenom,
-    toDecimals,
-    ucDenomToDenom
+  iconNameFromDenom,
+  toDecimals,
+  ucDenomToDenom
 } from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
@@ -42,6 +42,7 @@ const DepositTab = ({
   refreshBorrowPosition,
   markets,
   pair,
+  assetDenomMap,
 }) => {
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
@@ -81,7 +82,11 @@ const DepositTab = ({
 
   let currentLTV = Number(
     ((Number(borrowPosition?.amountOut?.amount) *
-      marketPrice(markets, borrowPosition?.amountOut?.denom)) /
+      marketPrice(
+        markets,
+        borrowPosition?.amountOut?.denom,
+        assetDenomMap[borrowPosition?.amountOut.denom]?.id
+      )) /
       (Number(
         amount
           ? Number(borrowPosition?.amountIn?.amount) + Number(getAmount(amount))
@@ -89,7 +94,8 @@ const DepositTab = ({
       ) *
         marketPrice(
           markets,
-          ucDenomToDenom(borrowPosition?.amountIn?.denom)
+          ucDenomToDenom(borrowPosition?.amountIn?.denom),
+          assetDenomMap[ucDenomToDenom(borrowPosition?.amountIn?.denom)]?.id
         ))) *
       100
   );
@@ -166,8 +172,11 @@ const DepositTab = ({
                 {commaSeparator(
                   Number(
                     amount *
-                      marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
-                      0
+                      marketPrice(
+                        markets,
+                        assetMap[selectedAssetId]?.denom,
+                        selectedAssetId
+                      ) || 0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
               </small>{" "}
@@ -266,6 +275,7 @@ DepositTab.propTypes = {
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   borrowPosition: PropTypes.shape({
     lendingId: PropTypes.shape({
       low: PropTypes.number,
@@ -324,7 +334,8 @@ const stateToProps = (state) => {
     assetMap: state.asset._.map,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
-    markets: state.oracle.market.list,
+    markets: state.oracle.market.map,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

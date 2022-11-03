@@ -17,10 +17,7 @@ import { setAssets } from "../../actions/asset";
 import { setAssetRatesStats } from "../../actions/lend";
 import { setMarkets } from "../../actions/oracle";
 import { cmst, comdex, harbor } from "../../config/network";
-import {
-  DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE
-} from "../../constants/common";
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
 import { queryAssets } from "../../services/asset/query";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
@@ -44,6 +41,7 @@ const ConnectButton = ({
   setAssets,
   setAssetRatesStats,
   balances,
+  assetDenomMap,
 }) => {
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
@@ -125,12 +123,12 @@ const ConnectButton = ({
         return;
       }
 
-      setMarkets(result.markets, result.pagination);
+      setMarkets(result.timeWeightedAverage, result.pagination);
     });
   };
 
   const getPrice = (denom) => {
-    return marketPrice(markets, denom) || 0;
+    return marketPrice(markets, denom, assetDenomMap[denom]?.id) || 0;
   };
 
   const calculateAssetBalance = (balances) => {
@@ -187,6 +185,7 @@ ConnectButton.propTypes = {
   setMarkets: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
   address: PropTypes.string,
+  assetDenomMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -209,8 +208,9 @@ const stateToProps = (state) => {
     address: state.account.address,
     balances: state.account.balances.list,
     show: state.account.showModal,
-    markets: state.oracle.market.list,
+    markets: state.oracle.market.map,
     refreshBalance: state.account.refreshBalance,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

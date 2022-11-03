@@ -44,6 +44,7 @@ const DepositTab = ({
   markets,
   setBalanceRefresh,
   refreshBalance,
+  assetDenomMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [selectedAssetId, setSelectedAssetId] = useState();
@@ -219,7 +220,8 @@ const DepositTab = ({
                       amount *
                         marketPrice(
                           markets,
-                          assetMap[selectedAssetId]?.denom
+                          assetMap[selectedAssetId]?.denom,
+                          selectedAssetId
                         ) || 0
                     ).toFixed(DOLLAR_DECIMALS)
                   )}{" "}
@@ -291,6 +293,7 @@ DepositTab.propTypes = {
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -328,8 +331,9 @@ const stateToProps = (state) => {
     assetMap: state.asset._.map,
     balances: state.account.balances.list,
     lang: state.language,
-    markets: state.oracle.market.list,
+    markets: state.oracle.market.map,
     refreshBalance: state.account.refreshBalance,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

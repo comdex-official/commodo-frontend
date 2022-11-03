@@ -18,7 +18,7 @@ import Deposit from "./DepositModal";
 import "./index.less";
 import Withdraw from "./WithdrawModal";
 
-const Assets = ({ assetBalance, balances, markets }) => {
+const Assets = ({ assetBalance, balances, markets, assetDenomMap }) => {
   const data = [
     {
       title: (
@@ -102,11 +102,7 @@ const Assets = ({ assetBalance, balances, markets }) => {
   ];
 
   const getPrice = (denom) => {
-    if (denom === cmst?.coinMinimalDenom) {
-      return marketPrice(markets, denom);
-    }
-
-    return marketPrice(markets, denom) || 0;
+    return marketPrice(markets, denom, assetDenomMap[denom]?.id) || 0;
   };
 
   let assetsWithoutExternalLinks = AssetList?.tokens?.filter(
@@ -281,21 +277,14 @@ const Assets = ({ assetBalance, balances, markets }) => {
 Assets.propTypes = {
   lang: PropTypes.string.isRequired,
   assetBalance: PropTypes.number,
+  assetDenomMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
       amount: PropTypes.string,
     })
   ),
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        low: PropTypes.number,
-      }),
-      symbol: PropTypes.string,
-      script_id: PropTypes.string,
-    })
-  ),
+  markets: PropTypes.object,
 };
 
 const stateToProps = (state) => {
@@ -303,7 +292,8 @@ const stateToProps = (state) => {
     lang: state.language,
     assetBalance: state.account.balances.asset,
     balances: state.account.balances.list,
-    markets: state.oracle.market.list,
+    markets: state.oracle.market.map,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 
