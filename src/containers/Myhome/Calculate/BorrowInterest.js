@@ -74,7 +74,7 @@ const BorrowInterest = ({ borrowPosition, lang, address }) => {
           decimalConversion(
             latestPosition?.interestAccumulated ||
               borrowPosition?.interestAccumulated
-          ) * 100
+          )
         ).toFixed(DOLLAR_DECIMALS)}{" "}
         {denomConversion(borrowPosition?.amountOut?.denom)}
       </>

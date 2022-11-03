@@ -39,7 +39,7 @@ const CloseTab = ({
 
   let updatedAmountOut =
     Number(borrowPosition?.amountOut?.amount) +
-    Number(decimalConversion(borrowPosition?.interestAccumulated) * 100);
+    Number(decimalConversion(borrowPosition?.interestAccumulated));
 
   const handleRefresh = () => {
     setBalanceRefresh(refreshBalance + 1);
