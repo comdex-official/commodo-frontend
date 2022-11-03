@@ -29,38 +29,10 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
   const [userDepositStats, setUserDepositStats] = useState();
   const [topDeposits, setTopDeposits] = useState();
   const [topBorrows, setTopBorrows] = useState();
-  const [moduleBalanceStats, setModuleBalanceStats] = useState({});
 
 
   useEffect(() => {
     setTopAssetsInProgress(true);
-
-    // queryDepositStats((error, result) => {
-    //   if (error) {
-    //     message.error(error);
-    //     return;
-    //   }
-
-    //   setDepositStats(result?.DepositStats?.balanceStats);
-    // });
-
-    // queryUserDepositStats((error, result) => {
-    //   if (error) {
-    //     message.error(error);
-    //     return;
-    //   }
-
-    //   setUserDepositStats(result?.UserDepositStats?.balanceStats);
-    // });
-
-    // queryBorrowStats((error, result) => {
-    //   if (error) {
-    //     message.error(error);
-    //     return;
-    //   }
-
-    //   setBorrowStats(result?.BorrowStats?.balanceStats);
-    // });
 
     queryTopAssets((error, result) => {
       setTopAssetsInProgress(false);
