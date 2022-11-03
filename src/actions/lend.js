@@ -1,4 +1,3 @@
-
 import { assetTransitTypeId } from "../config/network";
 import {
   ASSET_RATES_STATES_SET,
@@ -15,7 +14,6 @@ import {
   USER_LENDS_SET
 } from "../constants/lend";
 
-
 export const setPools = (list, pagination) => {
   list?.map((item) => {
     const assetTransitMap = item?.assetData?.reduce((map, obj) => {
@@ -24,15 +22,12 @@ export const setPools = (list, pagination) => {
     }, {});
 
     let transitAssetIds = {
-      main:
-        assetTransitMap[assetTransitTypeId["main"]]?.assetId,
-      first:
-        assetTransitMap[assetTransitTypeId["first"]]?.assetId,
-      second:
-        assetTransitMap[assetTransitTypeId["second"]]?.assetId,
+      main: assetTransitMap[assetTransitTypeId["main"]]?.assetId,
+      first: assetTransitMap[assetTransitTypeId["first"]]?.assetId,
+      second: assetTransitMap[assetTransitTypeId["second"]]?.assetId,
     };
 
-    return item["transitAssetIds"] = transitAssetIds;
+    return (item["transitAssetIds"] = transitAssetIds);
   });
 
   return {
@@ -43,6 +38,19 @@ export const setPools = (list, pagination) => {
 };
 
 export const setPool = (value) => {
+  const assetTransitMap = value?.assetData?.reduce((map, obj) => {
+    map[obj?.assetTransitType] = obj;
+    return map;
+  }, {});
+
+  let transitAssetIds = {
+    main: assetTransitMap[assetTransitTypeId["main"]]?.assetId,
+    first: assetTransitMap[assetTransitTypeId["first"]]?.assetId,
+    second: assetTransitMap[assetTransitTypeId["second"]]?.assetId,
+  };
+
+  value["transitAssetIds"] = transitAssetIds;
+
   return {
     type: POOL_SET,
     value,

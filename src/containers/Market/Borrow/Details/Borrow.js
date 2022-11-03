@@ -87,15 +87,15 @@ const BorrowTab = ({
   useEffect(() => {
     if (assetOutPool?.poolId && selectedBorrowValue) {
       setAssetList([
-        assetMap[assetOutPool?.mainAssetId?.toNumber()],
-        assetMap[assetOutPool?.firstBridgedAssetId?.toNumber()],
-        assetMap[assetOutPool?.secondBridgedAssetId?.toNumber()],
+        assetMap[assetOutPool?.transitAssetIds?.main?.toNumber()],
+        assetMap[assetOutPool?.transitAssetIds?.first?.toNumber()],
+        assetMap[assetOutPool?.transitAssetIds?.second?.toNumber()],
       ]);
     } else if (pool?.poolId && !assetOutPool?.poolId && !selectedBorrowValue) {
       setAssetList([
-        assetMap[pool?.mainAssetId?.toNumber()],
-        assetMap[pool?.firstBridgedAssetId?.toNumber()],
-        assetMap[pool?.secondBridgedAssetId?.toNumber()],
+        assetMap[pool?.transitAssetIds?.main?.toNumber()],
+        assetMap[pool?.transitAssetIds?.first?.toNumber()],
+        assetMap[pool?.transitAssetIds?.second?.toNumber()],
       ]);
     }
   }, [pool, assetOutPool]);
@@ -788,8 +788,8 @@ const BorrowTab = ({
               <Details
                 asset={
                   assetMap[
-                    assetOutPool?.firstBridgedAssetId?.toNumber() ||
-                      pool?.firstBridgedAssetId?.toNumber()
+                    assetOutPool?.transitAssetIds?.first?.toNumber() ||
+                      pool?.transitAssetIds?.first?.toNumber()
                   ]
                 }
                 poolId={assetOutPool?.poolId || pool?.poolId}
@@ -799,8 +799,8 @@ const BorrowTab = ({
                 <Details
                   asset={
                     assetMap[
-                      assetOutPool?.secondBridgedAssetId?.toNumber() ||
-                        pool?.secondBridgedAssetId?.toNumber()
+                      assetOutPool?.transitAssetIds?.second?.toNumber() ||
+                        pool?.transitAssetIds?.second?.toNumber()
                     ]
                   }
                   poolId={assetOutPool?.poolId || pool?.poolId}
@@ -812,8 +812,8 @@ const BorrowTab = ({
               <Details
                 asset={
                   assetMap[
-                    assetOutPool?.mainAssetId?.toNumber() ||
-                      pool?.mainAssetId?.toNumber()
+                    assetOutPool?.transitAssetIds?.main?.toNumber() ||
+                      pool?.transitAssetIds?.main?.toNumber()
                   ]
                 }
                 poolId={assetOutPool?.poolId || pool?.poolId}

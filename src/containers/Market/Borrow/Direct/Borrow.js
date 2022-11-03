@@ -14,22 +14,22 @@ import { ValidateInputNumber } from "../../../../config/_validation";
 import { APP_ID, DOLLAR_DECIMALS } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
-  queryAssetPairs,
-  queryLendPair,
-  queryLendPool
+    queryAssetPairs,
+    queryLendPair,
+    queryLendPool
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
-  amountConversion,
-  amountConversionWithComma,
-  denomConversion,
-  getAmount,
-  getDenomBalance
+    amountConversion,
+    amountConversionWithComma,
+    denomConversion,
+    getAmount,
+    getDenomBalance
 } from "../../../../utils/coin";
 import {
-  commaSeparator,
-  decimalConversion,
-  marketPrice
+    commaSeparator,
+    decimalConversion,
+    marketPrice
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
@@ -99,9 +99,9 @@ const BorrowTab = ({
   useEffect(() => {
     if (pool?.poolId) {
       setAssetList([
-        assetMap[pool?.mainAssetId?.toNumber()],
-        assetMap[pool?.firstBridgedAssetId?.toNumber()],
-        assetMap[pool?.secondBridgedAssetId?.toNumber()],
+        assetMap[pool?.transitAssetIds?.main?.toNumber()],
+        assetMap[pool?.transitAssetIds?.first?.toNumber()],
+        assetMap[pool?.transitAssetIds?.second?.toNumber()],
       ]);
     }
   }, [pool]);
@@ -817,13 +817,13 @@ const BorrowTab = ({
           <div className="details-right">
             <div className="commodo-card">
               <Details
-                asset={assetMap[outPool?.firstBridgedAssetId?.toNumber()]}
+                asset={assetMap[outPool?.transitAssetIds?.first?.toNumber()]}
                 poolId={outPool?.poolId}
                 parent="borrow"
               />
               <div className="mt-5">
                 <Details
-                  asset={assetMap[outPool?.secondBridgedAssetId?.toNumber()]}
+                  asset={assetMap[outPool?.transitAssetIds?.second?.toNumber()]}
                   poolId={outPool?.poolId}
                   parent="borrow"
                 />
@@ -831,7 +831,7 @@ const BorrowTab = ({
             </div>
             <div className="commodo-card">
               <Details
-                asset={assetMap[outPool?.mainAssetId?.toNumber()]}
+                asset={assetMap[outPool?.transitAssetIds?.main?.toNumber()]}
                 poolId={outPool?.poolId}
                 parent="borrow"
               />
