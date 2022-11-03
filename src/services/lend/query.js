@@ -348,3 +348,25 @@ export const queryTopAssets = (callback) => {
       callback(error?.message);
     });
 };
+
+export const queryTotalValueLocked = (callback) => {
+  axios
+    .get(`${API_URL}/lend/modbalance`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
+
+export const queryTotalBorrowAndDeposit = (callback) => {
+  axios
+    .get(`${API_URL}/lend/totallb`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
