@@ -6,8 +6,8 @@ import { SvgIcon } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import {
-  amountConversionWithComma,
-  denomConversion
+    amountConversionWithComma,
+    denomConversion
 } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
 import ActionButton from "./ActionButton";
@@ -24,9 +24,9 @@ const CloseTab = ({ lang, lendPosition, pool, assetMap, address }) => {
   useEffect(() => {
     if (pool?.poolId) {
       setAssetList([
-        assetMap[pool?.mainAssetId?.toNumber()],
-        assetMap[pool?.firstBridgedAssetId?.toNumber()],
-        assetMap[pool?.secondBridgedAssetId?.toNumber()],
+        assetMap[pool?.transitAssetIds?.main?.toNumber()],
+        assetMap[pool?.transitAssetIds?.first?.toNumber()],
+        assetMap[pool?.transitAssetIds?.second?.toNumber()],
       ]);
     }
   }, [pool]);
@@ -101,13 +101,13 @@ const CloseTab = ({ lang, lendPosition, pool, assetMap, address }) => {
       <div className="details-right">
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
+            asset={assetMap[pool?.transitAssetIds?.first?.toNumber()]}
             poolId={pool?.poolId}
             parent="lend"
           />
           <div className="mt-5">
             <Details
-              asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
+              asset={assetMap[pool?.transitAssetIds?.second?.toNumber()]}
               poolId={pool?.poolId}
               parent="lend"
             />
@@ -115,7 +115,7 @@ const CloseTab = ({ lang, lendPosition, pool, assetMap, address }) => {
         </div>
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.mainAssetId?.toNumber()]}
+            asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
             poolId={pool?.poolId}
             parent="lend"
           />

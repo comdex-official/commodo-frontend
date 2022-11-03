@@ -12,16 +12,16 @@ import HealthFactor from "../../../components/HealthFactor";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
-  amountConversion,
-  amountConversionWithComma,
-  denomConversion,
-  getAmount
+    amountConversion,
+    amountConversionWithComma,
+    denomConversion,
+    getAmount
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import {
-  iconNameFromDenom,
-  toDecimals,
-  ucDenomToDenom
+    iconNameFromDenom,
+    toDecimals,
+    ucDenomToDenom
 } from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
@@ -55,9 +55,9 @@ const DepositTab = ({
   useEffect(() => {
     if (lendPool?.poolId) {
       setAssetList([
-        assetMap[lendPool?.mainAssetId?.toNumber()],
-        assetMap[lendPool?.firstBridgedAssetId?.toNumber()],
-        assetMap[lendPool?.secondBridgedAssetId?.toNumber()],
+        assetMap[lendPool?.transitAssetIds?.main?.toNumber()],
+        assetMap[lendPool?.transitAssetIds?.first?.toNumber()],
+        assetMap[lendPool?.transitAssetIds?.second?.toNumber()],
       ]);
     }
   }, [lendPool]);
@@ -235,13 +235,13 @@ const DepositTab = ({
       <div className="details-right">
         <div className="commodo-card">
           <Details
-            asset={assetMap[lendPool?.firstBridgedAssetId?.toNumber()]}
+            asset={assetMap[lendPool?.transitAssetIds?.first?.toNumber()]}
             poolId={lendPool?.poolId}
             parent="lend"
           />
           <div className="mt-5">
             <Details
-              asset={assetMap[lendPool?.secondBridgedAssetId?.toNumber()]}
+              asset={assetMap[lendPool?.transitAssetIds?.second?.toNumber()]}
               poolId={lendPool?.poolId}
               parent="lend"
             />
@@ -249,7 +249,7 @@ const DepositTab = ({
         </div>
         <div className="commodo-card">
           <Details
-            asset={assetMap[lendPool?.mainAssetId?.toNumber()]}
+            asset={assetMap[lendPool?.transitAssetIds?.main?.toNumber()]}
             poolId={lendPool?.poolId}
             parent="lend"
           />

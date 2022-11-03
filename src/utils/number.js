@@ -37,7 +37,7 @@ export const marketPrice = (array, denom) => {
     return 1;
   }
 
-  const value = array.filter((item) => item.symbol === denomToSymbol(denom));
+  const value = array?.filter((item) => item.symbol === denomToSymbol(denom));
 
   if (value && value[0]) {
     return value[0] && value[0].rates / 1000000;

@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
-  queryAssetStats,
-  queryModuleBalance
+  queryModuleBalance, QueryPoolAssetLBMapping
 } from "../../../services/lend/query";
 import {
   amountConversionWithComma,
@@ -25,13 +24,13 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent }) => {
 
   useEffect(() => {
     if (asset?.id && poolId) {
-      queryAssetStats(asset?.id, poolId, (error, result) => {
+      QueryPoolAssetLBMapping(asset?.id, poolId, (error, result) => {
         if (error) {
           message.error(error);
           return;
         }
 
-        setStats(result?.AssetStats);
+        setStats(result?.PoolAssetLBMapping);
       });
     } else if (stats?.poolId) {
       setStats();

@@ -2,6 +2,7 @@ import { message, Table } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { setPools } from '../../../actions/lend';
 import { SvgIcon } from "../../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
@@ -13,11 +14,10 @@ import { iconNameFromDenom } from "../../../utils/string";
 import "../index.less";
 import { columns } from "./data";
 
-const Supply = ({ assetMap }) => {
+const Supply = ({ assetMap, setPools, lendPools }) => {
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [inProgress, setInProgress] = useState(false);
-  const [lendPools, setLendPools] = useState();
 
   useEffect(() => {
     fetchData();
@@ -37,7 +37,7 @@ const Supply = ({ assetMap }) => {
         return;
       }
 
-      setLendPools(result);
+      setPools(result?.pools);
     });
   };
 
@@ -53,8 +53,8 @@ const Supply = ({ assetMap }) => {
   };
 
   const tableData =
-    lendPools?.pools?.length > 0
-      ? lendPools?.pools?.map((item, index) => {
+    lendPools?.length > 0
+      ? lendPools?.map((item, index) => {
           return {
             key: index,
             pool_id: item.poolId?.toNumber(),
@@ -64,12 +64,12 @@ const Supply = ({ assetMap }) => {
                   <div className="assets-icon">
                     <SvgIcon
                       name={iconNameFromDenom(
-                        assetMap[item?.mainAssetId?.toNumber()]?.denom
+                        assetMap[item?.transitAssetIds?.main?.toNumber()]?.denom
                       )}
                     />
                   </div>
                   {denomConversion(
-                    assetMap[item?.mainAssetId?.toNumber()]?.denom
+                    assetMap[item?.transitAssetIds?.main?.toNumber()]?.denom
                   )}
                 </div>
               </>
@@ -80,12 +80,12 @@ const Supply = ({ assetMap }) => {
                   <div className="assets-icon">
                     <SvgIcon
                       name={iconNameFromDenom(
-                        assetMap[item?.firstBridgedAssetId?.toNumber()]?.denom
+                        assetMap[item?.transitAssetIds?.first?.toNumber()]?.denom
                       )}
                     />
                   </div>
                   {denomConversion(
-                    assetMap[item?.firstBridgedAssetId?.toNumber()]?.denom
+                    assetMap[item?.transitAssetIds?.first?.toNumber()]?.denom
                   )}
                 </div>
               </>
@@ -96,12 +96,12 @@ const Supply = ({ assetMap }) => {
                   <div className="assets-icon">
                     <SvgIcon
                       name={iconNameFromDenom(
-                        assetMap[item?.secondBridgedAssetId?.toNumber()]?.denom
+                        assetMap[item?.transitAssetIds?.second?.toNumber()]?.denom
                       )}
                     />
                   </div>
                   {denomConversion(
-                    assetMap[item?.secondBridgedAssetId?.toNumber()]?.denom
+                    assetMap[item?.transitAssetIds?.second?.toNumber()]?.denom
                   )}
                 </div>
               </>
@@ -138,13 +138,19 @@ const Supply = ({ assetMap }) => {
 };
 
 Supply.propTypes = {
+  setPools: PropTypes.func.isRequired,
   assetMap: PropTypes.object,
 };
 
 const stateToProps = (state) => {
   return {
     assetMap: state.asset._.map,
+    lendPools: state.lend.pool.list
   };
 };
 
-export default connect(stateToProps)(Supply);
+const actionsToProps = {
+  setPools,
+};
+
+export default connect(stateToProps, actionsToProps)(Supply);

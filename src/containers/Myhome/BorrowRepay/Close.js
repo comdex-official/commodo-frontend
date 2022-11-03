@@ -7,10 +7,10 @@ import Details from "../../../components/common/Asset/Details";
 import HealthFactor from "../../../components/HealthFactor";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
-  amountConversion,
-  amountConversionWithComma,
-  denomConversion,
-  getDenomBalance
+    amountConversion,
+    amountConversionWithComma,
+    denomConversion,
+    getDenomBalance
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
@@ -152,13 +152,13 @@ const CloseTab = ({
       <div className="details-right">
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.firstBridgedAssetId?.toNumber()]}
+            asset={assetMap[pool?.transitAssetIds?.first?.toNumber()]}
             poolId={pool?.poolId}
             parent="borrow"
           />
           <div className="mt-5">
             <Details
-              asset={assetMap[pool?.secondBridgedAssetId?.toNumber()]}
+              asset={assetMap[pool?.transitAssetIds?.second?.toNumber()]}
               poolId={pool?.poolId}
               parent="borrow"
             />
@@ -166,7 +166,7 @@ const CloseTab = ({
         </div>
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.mainAssetId?.toNumber()]}
+            asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
             poolId={pool?.poolId}
             parent="borrow"
           />

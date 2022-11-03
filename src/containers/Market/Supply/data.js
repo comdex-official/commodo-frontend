@@ -18,7 +18,8 @@ export const columns = [
   {
     title: (
       <>
-        Transit<br /> Asset 1
+        Transit
+        <br /> Asset 1
       </>
     ),
     dataIndex: "bridge_asset",
@@ -28,7 +29,8 @@ export const columns = [
   {
     title: (
       <>
-        Transit<br /> Asset 2
+        Transit
+        <br /> Asset 2
       </>
     ),
     dataIndex: "bridge_asset2",
@@ -58,7 +60,7 @@ export const columns = [
     render: (lendPool) => (
       <AssetApy
         poolId={lendPool?.poolId}
-        assetId={lendPool?.mainAssetId}
+        assetId={lendPool?.transitAssetIds?.main}
         parent="lend"
       />
     ),
@@ -75,7 +77,7 @@ export const columns = [
     render: (lendPool) => (
       <AssetApy
         poolId={lendPool?.poolId}
-        assetId={lendPool?.firstBridgedAssetId}
+        assetId={lendPool?.transitAssetIds?.first}
         parent="lend"
       />
     ),
@@ -92,7 +94,7 @@ export const columns = [
     render: (lendPool) => (
       <AssetApy
         poolId={lendPool?.poolId}
-        assetId={lendPool?.secondBridgedAssetId}
+        assetId={lendPool?.transitAssetIds?.second}
         parent="lend"
       />
     ),
@@ -104,10 +106,7 @@ export const columns = [
     align: "right",
     width: 120,
     render: (item) => (
-      <ActionButton
-        name="Details"
-        path={`/lend/${item?.poolId?.toNumber()}`}
-      />
+      <ActionButton name="Details" path={`/lend/${item?.poolId?.toNumber()}`} />
     ),
   },
 ];

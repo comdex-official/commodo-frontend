@@ -24,7 +24,7 @@ import {
 import { queryAssets } from "../../services/asset/query";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
-import { queryAssetRatesStats } from "../../services/lend/query";
+import { QueryAssetRatesParams } from "../../services/lend/query";
 import { queryMarketList } from "../../services/oracle/query";
 import { marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
@@ -91,7 +91,7 @@ const ConnectButton = ({
       }
     );
 
-    queryAssetRatesStats((error, result) => {
+    QueryAssetRatesParams((error, result) => {
       if (error) {
         message.error(error);
         return;
