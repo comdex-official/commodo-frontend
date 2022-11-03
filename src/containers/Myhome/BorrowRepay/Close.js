@@ -12,7 +12,7 @@ import {
   denomConversion,
   getDenomBalance
 } from "../../../utils/coin";
-import { commaSeparator, marketPrice } from "../../../utils/number";
+import { commaSeparator, decimalConversion, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
@@ -36,6 +36,10 @@ const CloseTab = ({
 
   const availableBalance =
     getDenomBalance(balances, borrowPosition?.amountOut?.denom) || 0;
+
+  let updatedAmountOut =
+    Number(borrowPosition?.amountOut?.amount) +
+    Number(decimalConversion(borrowPosition?.interestAccumulated));
 
   const handleRefresh = () => {
     setBalanceRefresh(refreshBalance + 1);
@@ -96,16 +100,19 @@ const CloseTab = ({
             <div>
               <div className="input-select">
                 <h2 className="mt-3">
-                  {amountConversionWithComma(borrowPosition?.amountOut?.amount)}{" "}
+                  {amountConversionWithComma(updatedAmountOut)}{" "}
                 </h2>
               </div>
               <small className="mt-1">
                 $
                 {commaSeparator(
                   Number(
-                    amountConversion(borrowPosition?.amountOut?.amount) *
-                      marketPrice(markets, assetMap[selectedAssetId]?.denom, selectedAssetId) ||
-                      0
+                    amountConversion(updatedAmountOut) *
+                      marketPrice(
+                        markets,
+                        assetMap[selectedAssetId]?.denom,
+                        selectedAssetId
+                      ) || 0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}
               </small>{" "}
@@ -125,7 +132,7 @@ const CloseTab = ({
                   pair={pair}
                   pool={pool}
                   inAmount={borrowPosition?.amountIn?.amount}
-                  outAmount={Number(borrowPosition?.amountOut?.amount)}
+                  outAmount={Number(updatedAmountOut)}
                 />{" "}
               </Col>
             </Row>
@@ -139,9 +146,9 @@ const CloseTab = ({
               dataInProgress ||
               !selectedAssetId ||
               Number(availableBalance) <
-                Number(borrowPosition?.amountOut?.amount)
+                Number(updatedAmountOut)
             }
-            amount={amountConversion(borrowPosition?.amountOut?.amount)}
+            amount={amountConversion(updatedAmountOut)}
             address={address}
             borrowId={borrowPosition?.borrowingId}
             denom={borrowPosition?.amountOut?.denom}
@@ -231,7 +238,7 @@ const stateToProps = (state) => {
     assetMap: state.asset._.map,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
-     markets: state.oracle.market.map,
+    markets: state.oracle.market.map,
   };
 };
 

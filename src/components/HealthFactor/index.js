@@ -36,9 +36,17 @@ const HealthFactor = ({
             return;
           }
 
+          let updatedAmountOut =
+            Number(borrow?.amountOut?.amount) +
+            Number(decimalConversion(borrow?.interestAccumulated));
+            
           setPercentage(
             (borrow?.amountIn?.amount *
-              marketPrice(markets, ucDenomToDenom(borrow?.amountIn?.denom), assetDenomMap[ucDenomToDenom(borrow?.amountIn?.denom)]?.id) *
+              marketPrice(
+                markets,
+                ucDenomToDenom(borrow?.amountIn?.denom),
+                assetDenomMap[ucDenomToDenom(borrow?.amountIn?.denom)]?.id
+              ) *
               (lendPair?.isInterPool
                 ? Number(
                     decimalConversion(
@@ -58,8 +66,12 @@ const HealthFactor = ({
                         ?.liquidationThreshold
                     )
                   ))) /
-              (borrow?.amountOut?.amount *
-                marketPrice(markets, borrow?.amountOut?.denom, assetDenomMap[borrow?.amountOut?.denom]?.id))
+              (borrow?.amountIn?.amount *
+                marketPrice(
+                  markets,
+                  borrow?.amountOut?.denom,
+                  assetDenomMap[borrow?.amountOut?.denom]?.id
+                ))
           );
         });
       });
@@ -70,7 +82,7 @@ const HealthFactor = ({
     if (pair?.id && Number(inAmount) && Number(outAmount)) {
       setPercentage(
         (Number(inAmount) *
-          marketPrice(markets, assetMap[pair?.assetIn]?.denom,pair?.assetIn) *
+          marketPrice(markets, assetMap[pair?.assetIn]?.denom, pair?.assetIn) *
           (pair?.isInterPool
             ? Number(
                 decimalConversion(
@@ -89,7 +101,11 @@ const HealthFactor = ({
                 )
               ))) /
           (Number(outAmount) *
-            marketPrice(markets, assetMap[pair?.assetOut]?.denom, pair?.assetOut))
+            marketPrice(
+              markets,
+              assetMap[pair?.assetOut]?.denom,
+              pair?.assetOut
+            ))
       );
     }
   }, [markets, pair, inAmount, outAmount, pool]);
@@ -116,7 +132,7 @@ HealthFactor.propTypes = {
   assetDenomMap: PropTypes.object,
   borrow: PropTypes.object,
   inAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    markets: PropTypes.object,
+  markets: PropTypes.object,
   pair: PropTypes.object,
   parent: PropTypes.string,
   pool: PropTypes.shape({
@@ -133,7 +149,7 @@ HealthFactor.propTypes = {
 const stateToProps = (state) => {
   return {
     assetRatesStatsMap: state.lend.assetRatesStats.map,
-     markets: state.oracle.market.map,
+    markets: state.oracle.market.map,
     assetMap: state.asset._.map,
     assetDenomMap: state.asset._.assetDenomMap,
   };

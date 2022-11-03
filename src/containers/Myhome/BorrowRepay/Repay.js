@@ -18,7 +18,7 @@ import {
   getAmount,
   getDenomBalance
 } from "../../../utils/coin";
-import { commaSeparator, marketPrice } from "../../../utils/number";
+import { commaSeparator, decimalConversion, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
@@ -47,6 +47,10 @@ const RepayTab = ({
   const availableBalance =
     getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
 
+  let updatedAmountOut =
+    Number(borrowPosition?.amountOut?.amount) +
+    Number(decimalConversion(borrowPosition?.interestAccumulated));
+
   useEffect(() => {
     if (pool?.poolId) {
       setAssetList([
@@ -61,12 +65,7 @@ const RepayTab = ({
     value = toDecimals(value).toString().trim();
 
     setAmount(value);
-    setValidationError(
-      ValidateInputNumber(
-        getAmount(value),
-        borrowPosition?.amountOut?.amount,
-      )
-    );
+    setValidationError(ValidateInputNumber(getAmount(value), updatedAmountOut));
   };
 
   const handleRefresh = () => {
@@ -76,9 +75,9 @@ const RepayTab = ({
   };
 
   const handleMaxRepay = () => {
-    handleInputChange(amountConversion(borrowPosition?.amountOut?.amount));
-  }
-  
+    handleInputChange(amountConversion(updatedAmountOut));
+  };
+
   return (
     <div className="details-wrapper">
       <div className="details-left commodo-card">
@@ -145,8 +144,11 @@ const RepayTab = ({
                 {commaSeparator(
                   Number(
                     amount *
-                      marketPrice(markets, assetMap[selectedAssetId]?.denom, selectedAssetId) ||
-                      0
+                      marketPrice(
+                        markets,
+                        assetMap[selectedAssetId]?.denom,
+                        selectedAssetId
+                      ) || 0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
               </small>{" "}
@@ -161,14 +163,14 @@ const RepayTab = ({
               </Col>
               <Col className="text-right">
                 <div className="cursor-pointer" onClick={handleMaxRepay}>
-                  {amountConversionWithComma(borrowPosition?.amountOut?.amount)}{" "}
+                  {amountConversionWithComma(updatedAmountOut)}{" "}
                   {denomConversion(borrowPosition?.amountOut?.denom)}
                 </div>
                 <small className="font-weight-light">
                   $
                   {commaSeparator(
                     Number(
-                      amountConversion(borrowPosition?.amountOut?.amount) *
+                      amountConversion(updatedAmountOut) *
                         marketPrice(
                           markets,
                           assetMap[selectedAssetId]?.denom,
@@ -192,9 +194,8 @@ const RepayTab = ({
                   inAmount={borrowPosition?.amountIn?.amount}
                   outAmount={
                     amount
-                      ? Number(borrowPosition?.amountOut?.amount) -
-                        Number(getAmount(amount))
-                      : borrowPosition?.amountOut?.amount
+                      ? Number(updatedAmountOut) - Number(getAmount(amount))
+                      : updatedAmountOut
                   }
                 />{" "}
               </Col>
@@ -303,7 +304,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
-     markets: state.oracle.market.map,
+    markets: state.oracle.market.map,
   };
 };
 

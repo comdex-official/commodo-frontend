@@ -54,11 +54,18 @@ const BorrowTab = ({
 
   const selectedAssetId = pair?.assetOut?.toNumber();
 
+  let updatedAmountOut =
+    Number(borrowPosition?.amountOut?.amount) +
+    Number(decimalConversion(borrowPosition?.interestAccumulated));
+
   const borrowable =
     (Number(
       borrowPosition?.amountIn?.amount *
-        marketPrice(markets, ucDenomToDenom(borrowPosition?.amountIn?.denom),
-        assetDenomMap[ucDenomToDenom(borrowPosition?.amountIn?.denom)]?.id) *
+        marketPrice(
+          markets,
+          ucDenomToDenom(borrowPosition?.amountIn?.denom),
+          assetDenomMap[ucDenomToDenom(borrowPosition?.amountIn?.denom)]?.id
+        ) *
         (pair?.isInterPool
           ? Number(
               decimalConversion(assetRatesStatsMap[lendPosition?.assetId]?.ltv)
@@ -73,10 +80,18 @@ const BorrowTab = ({
             )) || 0
     ) -
       Number(
-        borrowPosition?.amountOut?.amount *
-          marketPrice(markets, borrowPosition?.amountOut.denom,assetDenomMap[borrowPosition?.amountOut.denom]?.id)
+        updatedAmountOut *
+          marketPrice(
+            markets,
+            borrowPosition?.amountOut.denom,
+            assetDenomMap[borrowPosition?.amountOut.denom]?.id
+          )
       )) /
-    marketPrice(markets, borrowPosition?.amountOut.denom, assetDenomMap[borrowPosition?.amountOut.denom]?.id);
+    marketPrice(
+      markets,
+      borrowPosition?.amountOut.denom,
+      assetDenomMap[borrowPosition?.amountOut.denom]?.id
+    );
 
   // Collateral deposited value * Max LTV of collateral minus already Borrowed asset value
 
@@ -112,10 +127,14 @@ const BorrowTab = ({
   let currentLTV = Number(
     ((Number(
       amount
-        ? Number(borrowPosition?.amountOut?.amount) + Number(getAmount(amount))
-        : borrowPosition?.amountOut?.amount
+        ? Number(updatedAmountOut) + Number(getAmount(amount))
+        : updatedAmountOut
     ) *
-      marketPrice(markets, borrowPosition?.amountOut?.denom, assetDenomMap[borrowPosition?.amountOut.denom]?.id)) /
+      marketPrice(
+        markets,
+        borrowPosition?.amountOut?.denom,
+        assetDenomMap[borrowPosition?.amountOut.denom]?.id
+      )) /
       (Number(borrowPosition?.amountIn?.amount) *
         marketPrice(
           markets,
@@ -202,8 +221,11 @@ const BorrowTab = ({
                 {commaSeparator(
                   Number(
                     amount *
-                      marketPrice(markets, assetMap[selectedAssetId]?.denom, selectedAssetId) ||
-                      0
+                      marketPrice(
+                        markets,
+                        assetMap[selectedAssetId]?.denom,
+                        selectedAssetId
+                      ) || 0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
               </small>{" "}
@@ -347,7 +369,7 @@ const stateToProps = (state) => {
     assetMap: state.asset._.map,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
-     markets: state.oracle.market.map,
+    markets: state.oracle.market.map,
     assetRatesStatsMap: state.lend.assetRatesStats.map,
     assetDenomMap: state.asset._.assetDenomMap,
   };
