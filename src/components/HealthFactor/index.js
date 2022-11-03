@@ -48,7 +48,7 @@ const HealthFactor = ({
                   ) *
                   Number(
                     decimalConversion(
-                      assetRatesStatsMap[result?.pool?.firstBridgedAssetId]
+                      assetRatesStatsMap[result?.pool?.transitAssetIds?.first]
                         ?.liquidationThreshold
                     )
                   )
@@ -58,7 +58,7 @@ const HealthFactor = ({
                         ?.liquidationThreshold
                     )
                   ))) /
-              (borrow?.updatedAmountOut *
+              (borrow?.amountOut?.amount *
                 marketPrice(markets, borrow?.amountOut?.denom, assetDenomMap[borrow?.amountOut?.denom]?.id))
           );
         });
@@ -79,7 +79,7 @@ const HealthFactor = ({
               ) *
               Number(
                 decimalConversion(
-                  assetRatesStatsMap[pool?.firstBridgedAssetId]
+                  assetRatesStatsMap[pool?.transitAssetIds?.first]
                     ?.liquidationThreshold
                 )
               )

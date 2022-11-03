@@ -173,7 +173,7 @@ const Myhome = ({
                   Number(
                     decimalConversion(
                       assetRatesStatsMap[
-                        borrowToPool[item?.borrowingId]?.firstBridgedAssetId
+                        borrowToPool[item?.borrowingId]?.transitAssetIds?.first
                       ]?.ltv
                     )
                   )
