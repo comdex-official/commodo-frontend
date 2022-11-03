@@ -22,7 +22,7 @@ import { marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import "./index.less";
 
-const Dashboard = ({ isDarkMode, markets, assetMap }) => {
+const Dashboard = ({ isDarkMode, markets, assetMap, assetDenomMap }) => {
   const [depositStats, setDepositStats] = useState();
   const [topAssetsInProgress, setTopAssetsInProgress] = useState();
   const [borrowStats, setBorrowStats] = useState();
@@ -50,7 +50,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
       list?.length > 0
         ? list.map((item) => {
             return (
-              marketPrice(markets, assetMap[item?.assetId?.toNumber()]?.denom) *
+              marketPrice(markets, assetMap[item?.assetId?.toNumber()]?.denom, item?.assetId?.toNumber()) *
               item?.amount
             );
           })
@@ -449,6 +449,7 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
 Dashboard.propTypes = {
   lang: PropTypes.string.isRequired,
   assetMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   isDarkMode: PropTypes.bool,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
@@ -462,8 +463,9 @@ Dashboard.propTypes = {
 const stateToProps = (state) => {
   return {
     lang: state.language,
-    markets: state.oracle.market.list,
+     markets: state.oracle.market.map,
     assetMap: state.asset._.map,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

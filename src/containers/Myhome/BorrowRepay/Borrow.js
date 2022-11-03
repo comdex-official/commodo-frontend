@@ -12,20 +12,20 @@ import HealthFactor from "../../../components/HealthFactor";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
-    amountConversion,
-    amountConversionWithComma,
-    denomConversion,
-    getAmount
+  amountConversion,
+  amountConversionWithComma,
+  denomConversion,
+  getAmount
 } from "../../../utils/coin";
 import {
-    commaSeparator,
-    decimalConversion,
-    marketPrice
+  commaSeparator,
+  decimalConversion,
+  marketPrice
 } from "../../../utils/number";
 import {
-    iconNameFromDenom,
-    toDecimals,
-    ucDenomToDenom
+  iconNameFromDenom,
+  toDecimals,
+  ucDenomToDenom
 } from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
@@ -46,6 +46,7 @@ const BorrowTab = ({
   markets,
   refreshBorrowPosition,
   pair,
+  assetDenomMap,
 }) => {
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
@@ -56,7 +57,8 @@ const BorrowTab = ({
   const borrowable =
     (Number(
       borrowPosition?.amountIn?.amount *
-        marketPrice(markets, ucDenomToDenom(borrowPosition?.amountIn?.denom)) *
+        marketPrice(markets, ucDenomToDenom(borrowPosition?.amountIn?.denom),
+        assetDenomMap[ucDenomToDenom(borrowPosition?.amountIn?.denom)]?.id) *
         (pair?.isInterPool
           ? Number(
               decimalConversion(assetRatesStatsMap[lendPosition?.assetId]?.ltv)
@@ -72,9 +74,9 @@ const BorrowTab = ({
     ) -
       Number(
         borrowPosition?.updatedAmountOut *
-          marketPrice(markets, borrowPosition?.amountOut.denom)
+          marketPrice(markets, borrowPosition?.amountOut.denom,assetDenomMap[borrowPosition?.amountOut.denom]?.id)
       )) /
-    marketPrice(markets, borrowPosition?.amountOut.denom);
+    marketPrice(markets, borrowPosition?.amountOut.denom, assetDenomMap[borrowPosition?.amountOut.denom]?.id);
 
   // Collateral deposited value * Max LTV of collateral minus already Borrowed asset value
 
@@ -113,11 +115,12 @@ const BorrowTab = ({
         ? Number(borrowPosition?.updatedAmountOut) + Number(getAmount(amount))
         : borrowPosition?.updatedAmountOut
     ) *
-      marketPrice(markets, borrowPosition?.amountOut?.denom)) /
+      marketPrice(markets, borrowPosition?.amountOut?.denom, assetDenomMap[borrowPosition?.amountOut.denom]?.id)) /
       (Number(borrowPosition?.amountIn?.amount) *
         marketPrice(
           markets,
-          ucDenomToDenom(borrowPosition?.amountIn?.denom)
+          ucDenomToDenom(borrowPosition?.amountIn?.denom),
+          assetDenomMap[ucDenomToDenom(borrowPosition?.amountIn?.denom)]?.id
         ))) *
       100
   );
@@ -199,7 +202,7 @@ const BorrowTab = ({
                 {commaSeparator(
                   Number(
                     amount *
-                      marketPrice(markets, assetMap[selectedAssetId]?.denom) ||
+                      marketPrice(markets, assetMap[selectedAssetId]?.denom, selectedAssetId) ||
                       0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
@@ -295,6 +298,7 @@ BorrowTab.propTypes = {
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
   borrowPosition: PropTypes.shape({
     lendingId: PropTypes.shape({
@@ -343,8 +347,9 @@ const stateToProps = (state) => {
     assetMap: state.asset._.map,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
-    markets: state.oracle.market.list,
+     markets: state.oracle.market.map,
     assetRatesStatsMap: state.lend.assetRatesStats.map,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

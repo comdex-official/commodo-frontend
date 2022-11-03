@@ -29,6 +29,7 @@ const Myhome = ({
   markets,
   assetRatesStatsMap,
   assetMap,
+  assetDenomMap,
 }) => {
   const [activeKey, setActiveKey] = useState("1");
   const [lendsInProgress, setLendsInProgress] = useState(false);
@@ -125,7 +126,7 @@ const Myhome = ({
       userLendList?.length > 0
         ? userLendList.map((item) => {
             return (
-              marketPrice(markets, item?.amountIn?.denom) *
+              marketPrice(markets, item?.amountIn?.denom, assetDenomMap[item?.amountIn?.denom]?.id) *
               item?.amountIn.amount
             );
           })
@@ -141,7 +142,7 @@ const Myhome = ({
       userBorrowList?.length > 0
         ? userBorrowList.map((item) => {
             return (
-              marketPrice(markets, item?.amountOut?.denom) *
+              marketPrice(markets, item?.amountOut?.denom, assetDenomMap[item?.amountOut?.denom]?.id) *
               item?.amountOut.amount
             );
           })
@@ -157,7 +158,8 @@ const Myhome = ({
             return (
               marketPrice(
                 markets,
-                assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.denom
+                assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.denom,
+                borrowToPair[item?.borrowingId]?.assetIn
               ) *
               Number(item?.amountIn.amount) *
               (borrowToPair[item?.borrowingId]?.isInterPool
@@ -310,6 +312,7 @@ Myhome.propTypes = {
   setUserLends: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
   markets: PropTypes.arrayOf(
     PropTypes.shape({
@@ -359,9 +362,11 @@ const stateToProps = (state) => {
     address: state.account.address,
     userLendList: state.lend.userLends,
     userBorrowList: state.lend.userBorrows,
-    markets: state.oracle.market.list,
+     markets: state.oracle.market.map,
     assetRatesStatsMap: state.lend.assetRatesStats.map,
     assetMap: state.asset._.map,
+    assetDenomMap: state.asset._.assetDenomMap,
+
   };
 };
 
