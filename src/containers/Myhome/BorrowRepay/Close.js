@@ -96,14 +96,14 @@ const CloseTab = ({
             <div>
               <div className="input-select">
                 <h2 className="mt-3">
-                  {amountConversionWithComma(borrowPosition?.updatedAmountOut)}{" "}
+                  {amountConversionWithComma(borrowPosition?.amountOut?.amount)}{" "}
                 </h2>
               </div>
               <small className="mt-1">
                 $
                 {commaSeparator(
                   Number(
-                    amountConversion(borrowPosition?.updatedAmountOut) *
+                    amountConversion(borrowPosition?.amountOut?.amount) *
                       marketPrice(markets, assetMap[selectedAssetId]?.denom, selectedAssetId) ||
                       0
                   ).toFixed(DOLLAR_DECIMALS)
@@ -125,7 +125,7 @@ const CloseTab = ({
                   pair={pair}
                   pool={pool}
                   inAmount={borrowPosition?.amountIn?.amount}
-                  outAmount={Number(borrowPosition?.updatedAmountOut)}
+                  outAmount={Number(borrowPosition?.amountOut?.amount)}
                 />{" "}
               </Col>
             </Row>
@@ -139,9 +139,9 @@ const CloseTab = ({
               dataInProgress ||
               !selectedAssetId ||
               Number(availableBalance) <
-                Number(borrowPosition?.updatedAmountOut)
+                Number(borrowPosition?.amountOut?.amount)
             }
-            amount={amountConversion(borrowPosition?.updatedAmountOut)}
+            amount={amountConversion(borrowPosition?.amountOut?.amount)}
             address={address}
             borrowId={borrowPosition?.borrowingId}
             denom={borrowPosition?.amountOut?.denom}

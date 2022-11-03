@@ -64,7 +64,7 @@ const RepayTab = ({
     setValidationError(
       ValidateInputNumber(
         getAmount(value),
-        borrowPosition?.updatedAmountOut,
+        borrowPosition?.amountOut?.amount,
       )
     );
   };
@@ -76,7 +76,7 @@ const RepayTab = ({
   };
 
   const handleMaxRepay = () => {
-    handleInputChange(amountConversion(borrowPosition?.updatedAmountOut));
+    handleInputChange(amountConversion(borrowPosition?.amountOut?.amount));
   }
   
   return (
@@ -161,14 +161,14 @@ const RepayTab = ({
               </Col>
               <Col className="text-right">
                 <div className="cursor-pointer" onClick={handleMaxRepay}>
-                  {amountConversionWithComma(borrowPosition?.updatedAmountOut)}{" "}
+                  {amountConversionWithComma(borrowPosition?.amountOut?.amount)}{" "}
                   {denomConversion(borrowPosition?.amountOut?.denom)}
                 </div>
                 <small className="font-weight-light">
                   $
                   {commaSeparator(
                     Number(
-                      amountConversion(borrowPosition?.updatedAmountOut) *
+                      amountConversion(borrowPosition?.amountOut?.amount) *
                         marketPrice(
                           markets,
                           assetMap[selectedAssetId]?.denom,
@@ -192,9 +192,9 @@ const RepayTab = ({
                   inAmount={borrowPosition?.amountIn?.amount}
                   outAmount={
                     amount
-                      ? Number(borrowPosition?.updatedAmountOut) -
+                      ? Number(borrowPosition?.amountOut?.amount) -
                         Number(getAmount(amount))
-                      : borrowPosition?.updatedAmountOut
+                      : borrowPosition?.amountOut?.amount
                   }
                 />{" "}
               </Col>
