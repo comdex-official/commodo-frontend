@@ -873,13 +873,7 @@ BorrowTab.propTypes = {
   assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
-  markets: PropTypes.arrayOf(
-    PropTypes.shape({
-      rates: PropTypes.shape({
-        low: PropTypes.number,
-      }),
-    })
-  ),
+    markets: PropTypes.object,
   pool: PropTypes.shape({
     poolId: PropTypes.shape({
       low: PropTypes.number,
