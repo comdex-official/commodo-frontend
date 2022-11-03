@@ -1,4 +1,4 @@
-import { Button, message, Skeleton } from "antd";
+import { Button, Skeleton } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import * as PropTypes from "prop-types";
@@ -11,10 +11,7 @@ import "../../assets/less/plugins/slick-slider/slick.less";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { DOLLAR_DECIMALS, NUMBER_OF_TOP_ASSETS } from "../../constants/common";
 import {
-  queryBorrowStats,
-  queryDepositStats,
-  queryTopAssets,
-  queryUserDepositStats
+  queryTopAssets
 } from "../../services/lend/query";
 import {
   amountConversion,
@@ -33,35 +30,9 @@ const Dashboard = ({ isDarkMode, markets, assetMap }) => {
   const [topDeposits, setTopDeposits] = useState();
   const [topBorrows, setTopBorrows] = useState();
 
+
   useEffect(() => {
     setTopAssetsInProgress(true);
-
-    queryDepositStats((error, result) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      setDepositStats(result?.DepositStats?.balanceStats);
-    });
-
-    queryUserDepositStats((error, result) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      setUserDepositStats(result?.UserDepositStats?.balanceStats);
-    });
-
-    queryBorrowStats((error, result) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      setBorrowStats(result?.BorrowStats?.balanceStats);
-    });
 
     queryTopAssets((error, result) => {
       setTopAssetsInProgress(false);

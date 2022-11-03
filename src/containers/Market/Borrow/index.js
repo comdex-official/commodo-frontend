@@ -3,10 +3,11 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { setPools } from "../../../actions/lend";
 import { SvgIcon } from "../../../components/common";
 import {
-    DEFAULT_PAGE_NUMBER,
-    DEFAULT_PAGE_SIZE
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE
 } from "../../../constants/common";
 import { queryLendPools } from "../../../services/lend/query";
 import { denomConversion } from "../../../utils/coin";
@@ -14,11 +15,10 @@ import { iconNameFromDenom } from "../../../utils/string";
 import "../index.less";
 import { columns } from "./data";
 
-const Borrow = ({ assetMap }) => {
+const Borrow = ({ assetMap, setPools, lendPools }) => {
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [inProgress, setInProgress] = useState(false);
-  const [lendPools, setLendPools] = useState();
 
   useEffect(() => {
     fetchData();
@@ -38,7 +38,7 @@ const Borrow = ({ assetMap }) => {
         return;
       }
 
-      setLendPools(result);
+      setPools(result?.pools);
     });
   };
 
@@ -54,8 +54,8 @@ const Borrow = ({ assetMap }) => {
   };
 
   const tableData =
-    lendPools?.pools?.length > 0
-      ? lendPools?.pools?.map((item, index) => {
+    lendPools?.length > 0
+      ? lendPools?.map((item, index) => {
           return {
             key: index,
             pool_id: item.poolId?.toNumber(),
@@ -65,12 +65,12 @@ const Borrow = ({ assetMap }) => {
                   <div className="assets-icon">
                     <SvgIcon
                       name={iconNameFromDenom(
-                        assetMap[item?.mainAssetId?.toNumber()]?.denom
+                        assetMap[item?.transitAssetIds?.main?.toNumber()]?.denom
                       )}
                     />
                   </div>
                   {denomConversion(
-                    assetMap[item?.mainAssetId?.toNumber()]?.denom
+                    assetMap[item?.transitAssetIds?.main?.toNumber()]?.denom
                   )}
                 </div>
               </>
@@ -81,12 +81,12 @@ const Borrow = ({ assetMap }) => {
                   <div className="assets-icon">
                     <SvgIcon
                       name={iconNameFromDenom(
-                        assetMap[item?.firstBridgedAssetId?.toNumber()]?.denom
+                        assetMap[item?.transitAssetIds?.first?.toNumber()]?.denom
                       )}
                     />
                   </div>
                   {denomConversion(
-                    assetMap[item?.firstBridgedAssetId?.toNumber()]?.denom
+                    assetMap[item?.transitAssetIds?.first?.toNumber()]?.denom
                   )}
                 </div>
               </>
@@ -97,12 +97,12 @@ const Borrow = ({ assetMap }) => {
                   <div className="assets-icon">
                     <SvgIcon
                       name={iconNameFromDenom(
-                        assetMap[item?.secondBridgedAssetId?.toNumber()]?.denom
+                        assetMap[item?.transitAssetIds?.second?.toNumber()]?.denom
                       )}
                     />
                   </div>
                   {denomConversion(
-                    assetMap[item?.secondBridgedAssetId?.toNumber()]?.denom
+                    assetMap[item?.transitAssetIds?.second?.toNumber()]?.denom
                   )}
                 </div>
               </>
@@ -122,8 +122,17 @@ const Borrow = ({ assetMap }) => {
         <div>Borrow Markets</div>
         <div>
           <Link to="/borrow/direct">
-            <Tooltip overlayClassName="commodo-tooltip" title="Lend and Borrow in one click">
-              <Button className="back-btn ml-auto" icon={<SvgIcon name="direct-borrow" viewbox="0 0 57.25 54.685" />} type="primary">
+            <Tooltip
+              overlayClassName="commodo-tooltip"
+              title="Lend and Borrow in one click"
+            >
+              <Button
+                className="back-btn ml-auto"
+                icon={
+                  <SvgIcon name="direct-borrow" viewbox="0 0 57.25 54.685" />
+                }
+                type="primary"
+              >
                 <span className="pl-1">Direct Borrow</span>
               </Button>
             </Tooltip>
@@ -150,13 +159,19 @@ const Borrow = ({ assetMap }) => {
 };
 
 Borrow.propTypes = {
+  setPools: PropTypes.func.isRequired,
   assetMap: PropTypes.object,
 };
 
 const stateToProps = (state) => {
   return {
     assetMap: state.asset._.map,
+    lendPools: state.lend.pool.list,
   };
 };
 
-export default connect(stateToProps)(Borrow);
+const actionsToProps = {
+  setPools,
+};
+
+export default connect(stateToProps, actionsToProps)(Borrow);

@@ -24,7 +24,11 @@ export const commaSeparator = (value) => {
   return stringWithComma;
 };
 
-export const decimalConversion = (data = 0) => {
+export const decimalConversion = (data) => {
+  if (Number(data) < 0) {
+    return "0";
+  }
+
   return Decimal.fromAtomics(data || "0", 18).toString();
 };
 
@@ -33,7 +37,7 @@ export const marketPrice = (array, denom) => {
     return 1;
   }
 
-  const value = array.filter((item) => item.symbol === denomToSymbol(denom));
+  const value = array?.filter((item) => item.symbol === denomToSymbol(denom));
 
   if (value && value[0]) {
     return value[0] && value[0].rates / 1000000;

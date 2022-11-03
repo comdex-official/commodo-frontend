@@ -2,7 +2,7 @@ import { message } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { DOLLAR_DECIMALS } from "../../constants/common";
-import { queryAssetStats, queryLendPair } from "../../services/lend/query";
+import { queryLendPair, QueryPoolAssetLBMapping } from "../../services/lend/query";
 import { decimalConversion } from "../../utils/number";
 
 const AssetApy = ({ assetId, poolId, parent, borrowPosition }) => {
@@ -10,13 +10,13 @@ const AssetApy = ({ assetId, poolId, parent, borrowPosition }) => {
 
   useEffect(() => {
     if (assetId && poolId) {
-      queryAssetStats(assetId, poolId, (error, result) => {
+      QueryPoolAssetLBMapping(assetId, poolId, (error, result) => {
         if (error) {
           message.error(error);
           return;
         }
 
-        setStats(result?.AssetStats);
+        setStats(result?.PoolAssetLBMapping);
       });
     }
   }, [assetId, poolId]);
@@ -31,7 +31,7 @@ const AssetApy = ({ assetId, poolId, parent, borrowPosition }) => {
 
         const lendPair = pairResult?.ExtendedPair;
 
-        queryAssetStats(
+        QueryPoolAssetLBMapping(
           lendPair?.assetOut,
           lendPair?.assetOutPoolId,
           (error, result) => {
@@ -40,7 +40,7 @@ const AssetApy = ({ assetId, poolId, parent, borrowPosition }) => {
               return;
             }
 
-            setStats(result?.AssetStats);
+            setStats(result?.PoolAssetLBMapping);
           }
         );
       });
