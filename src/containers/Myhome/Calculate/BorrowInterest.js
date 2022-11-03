@@ -2,11 +2,10 @@ import { Button, message } from "antd";
 import * as PropTypes from "prop-types";
 import { useState } from "react";
 import Snack from "../../../components/common/Snack";
-import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../services/helper";
 import { queryBorrowPosition } from "../../../services/lend/query";
 import { defaultFee } from "../../../services/transaction";
-import { denomConversion } from "../../../utils/coin";
+import { amountConversion, denomConversion } from "../../../utils/coin";
 import { decimalConversion } from "../../../utils/number";
 import variables from "../../../utils/variables";
 
@@ -67,15 +66,16 @@ const BorrowInterest = ({ borrowPosition, lang, address }) => {
     }
   };
 
+  console.log("iti", borrowPosition);
   return (
     <>
       <>
-        {Number(
+        {amountConversion(
           decimalConversion(
             latestPosition?.interestAccumulated ||
               borrowPosition?.interestAccumulated
           )
-        ).toFixed(DOLLAR_DECIMALS)}{" "}
+        )}{" "}
         {denomConversion(borrowPosition?.amountOut?.denom)}
       </>
 

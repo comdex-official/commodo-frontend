@@ -76,7 +76,7 @@ const BorrowTab = ({
 
   const borrowableBalance = getAmount(
     (Number(inAmount) *
-      marketPrice(markets, collateralAssetDenom) *
+      marketPrice(markets, collateralAssetDenom, assetDenomMap[collateralAssetDenom]?.id) *
       (pair?.isInterPool
         ? Number(
             decimalConversion(assetRatesStatsMap[collateralAssetId]?.ltv)
