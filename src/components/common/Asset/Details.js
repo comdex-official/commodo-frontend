@@ -16,6 +16,7 @@ import {
   marketPrice
 } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
+import DistributionAPY from "../DistributionAPY";
 import { SvgIcon, TooltipIcon } from "../index";
 
 const Details = ({ asset, poolId, markets, refreshBalance, parent, assetDenomMap }) => {
@@ -93,12 +94,15 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent, assetDenomMap
       title: parent === "lend" ? "Lend APY" : "Borrow APY",
       counts: (
         <>
+        <>
           {Number(
             decimalConversion(
               parent === "lend" ? stats?.lendApr : stats?.borrowApr
             ) * 100
           ).toFixed(DOLLAR_DECIMALS)}
           %
+          </>
+          <DistributionAPY value={1.56} margin={"top"}/>
         </>
       ),
       tooltipText:
