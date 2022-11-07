@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import React from "react";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
@@ -6,9 +6,19 @@ import "./index.less";
 
 const DistributionAPY = ({ value, margin }) => {
   return (
-    <Button type="primary" size="small" className={margin === "top" ? "mt-1 distribution-apy-button" : "ml-1 distribution-apy-button"}>
-      {Number(value || 0).toFixed(DOLLAR_DECIMALS)}%
-    </Button>
+    <Tooltip placement="topLeft" title={"Projected Distribution Reward APY for Borrowing"}>
+      <Button
+        type="primary"
+        size="small"
+        className={
+          margin === "top"
+            ? "mt-1 distribution-apy-button"
+            : "ml-1 distribution-apy-button"
+        }
+      >
+        {Number(value || 0).toFixed(DOLLAR_DECIMALS)}%
+      </Button>
+    </Tooltip>
   );
 };
 
