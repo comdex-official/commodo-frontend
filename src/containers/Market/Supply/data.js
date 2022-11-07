@@ -1,3 +1,4 @@
+import DistributionAPY from "../../../components/common/DistributionAPY";
 import { ActionButton } from "../ActionButton";
 import AssetApy from "../AssetApy";
 import TotalDeposit from "./TotalDeposit";
@@ -56,7 +57,7 @@ export const columns = [
     ),
     dataIndex: "asset_apy",
     key: "asset_apy",
-    width: 110,
+    width: 100,
     render: (lendPool) => (
       <AssetApy
         poolId={lendPool?.poolId}
@@ -73,13 +74,16 @@ export const columns = [
     ),
     dataIndex: "bridge_apy",
     key: "bridge_apy",
-    width: 120,
+    width: 140,
     render: (lendPool) => (
-      <AssetApy
-        poolId={lendPool?.poolId}
-        assetId={lendPool?.transitAssetIds?.first}
-        parent="lend"
-      />
+      <>
+        <AssetApy
+          poolId={lendPool?.poolId}
+          assetId={lendPool?.transitAssetIds?.first}
+          parent="lend"
+        />
+        <DistributionAPY value={1.32} />
+      </>
     ),
   },
   {
@@ -90,13 +94,16 @@ export const columns = [
     ),
     dataIndex: "bridge_apy2",
     key: "bridge_apy2",
-    width: 110,
+    width: 140,
     render: (lendPool) => (
-      <AssetApy
-        poolId={lendPool?.poolId}
-        assetId={lendPool?.transitAssetIds?.second}
-        parent="lend"
-      />
+      <>
+        <AssetApy
+          poolId={lendPool?.poolId}
+          assetId={lendPool?.transitAssetIds?.second}
+          parent="lend"
+        />
+        <DistributionAPY value={1.32} />
+      </>
     ),
   },
   {
