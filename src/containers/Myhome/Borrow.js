@@ -5,12 +5,13 @@ import { useNavigate } from "react-router";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import HealthFactor from "../../components/HealthFactor";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
+import { decimalConversion } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
-import BorrowInterest from "./Calculate/BorrowInterest";
+import InterestAndReward from "./Calculate/InterestAndReward";
 import "./index.less";
 
-const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
+const Borrow = ({ userBorrowList, inProgress, address }) => {
   const navigate = useNavigate();
 
   const columns = [
@@ -59,15 +60,35 @@ const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
     {
       title: (
         <>
+          Distribution APY{" "}
+          <TooltipIcon text="Projected Distribution Reward APY for Borrowing" />
+        </>
+      ),
+      dataIndex: "apy",
+      key: "apy",
+      width: 150,
+      render: (borrow) => <AssetApy borrowPosition={borrow} parent="borrow" />,
+    },
+    {
+      title: (
+        <>
           Interest <TooltipIcon text="Interest accrued by borrowing" />
         </>
       ),
       dataIndex: "interest",
       key: "interest",
       width: 350,
-      render: (borrow) => (
-        <BorrowInterest borrowPosition={borrow} lang={lang} address={address} />
+    },
+    {
+      title: (
+        <>
+          Distribution Reward <TooltipIcon text="Interest accrued by lending" />
+        </>
       ),
+      dataIndex: "interest",
+      key: "interest",
+      width: 350,
+      className: "rewards-column",
     },
     {
       title: "",
@@ -86,20 +107,7 @@ const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
               className="btn-filled"
               size="small"
             >
-              Borrow
-            </Button>
-            <Button
-              onClick={() =>
-                navigate({
-                  pathname: `/myhome/borrow/${item?.borrowingId?.toNumber()}`,
-                  hash: "repay",
-                })
-              }
-              type="primary"
-              size="small"
-              className="ml-2"
-            >
-              Repay
+              Edit
             </Button>
           </div>
         </>
@@ -137,7 +145,14 @@ const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
               </>
             ),
             apy: item,
-            interest: item,
+            interest: (
+              <>
+                {amountConversionWithComma(
+                  decimalConversion(borrow?.interestAccumulated)
+                )}{" "}
+                {denomConversion(borrow?.amountOut?.denom)}
+              </>
+            ),
             health: item,
             action: item,
           };
@@ -149,7 +164,10 @@ const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
       <Row>
         <Col>
           <div className="commodo-card bg-none">
-            <div className="card-header">MY Borrowed AssetS</div>
+            <div className="d-flex align-items-center">
+              <div className="card-header text-left">MY Borrowed AssetS</div>
+              <InterestAndReward parent="borrow" />
+            </div>
             <div className="card-content">
               <Table
                 className="custom-table"

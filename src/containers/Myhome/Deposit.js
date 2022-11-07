@@ -6,7 +6,7 @@ import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
-import LendReward from "./Calculate/LendReward";
+import InterestAndReward from "./Calculate/InterestAndReward";
 import "./index.less";
 
 const Deposit = ({ lang, userLendList, inProgress }) => {
@@ -54,7 +54,6 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
       key: "interest",
       width: 350,
       className: "rewards-column",
-      render: (lend) => <LendReward lendPosition={lend} lang={lang} />,
     },
     {
       title: "",
@@ -73,20 +72,7 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
               className="btn-filled table-btn"
               size="small"
             >
-              Deposit
-            </Button>
-            <Button
-              type="primary"
-              size="small"
-              onClick={() =>
-                navigate({
-                  pathname: `/myhome/deposit/${item?.lendingId?.toNumber()}`,
-                  hash: "withdraw",
-                })
-              }
-              className="ml-2 table-btn"
-            >
-              Withdraw
+              Edit
             </Button>
           </div>
         </>
@@ -118,7 +104,12 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
             ),
             cpool: item?.cpoolName,
             apy: item,
-            interest: item,
+            interest: (
+              <>
+                {amountConversionWithComma(item?.rewardAccumulated)}{" "}
+                {denomConversion(item?.amountIn?.denom)}
+              </>
+            ),
             action: item,
           };
         })
@@ -129,7 +120,10 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
       <Row>
         <Col>
           <div className="commodo-card bg-none">
-            <div className="card-header">MY Deposited Assets</div>
+            <div className="d-flex align-items-center">
+              <div className="card-header text-left">MY Deposited Assets</div>
+              <InterestAndReward parent="lend" />
+            </div>
             <div className="card-content">
               <Table
                 className="custom-table"
