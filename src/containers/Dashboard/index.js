@@ -325,7 +325,6 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                               <small>High APR</small>
                             </h3>
                           </div>
-                          <div className="comingsoon-text">Coming soon..</div>
                         </div>
                         <div className="assets-right">
                           <img alt={AssetsIcon} src={AssetsIcon} />
