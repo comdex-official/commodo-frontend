@@ -66,7 +66,6 @@ const BorrowInterest = ({ borrowPosition, lang, address }) => {
     }
   };
 
-  console.log("iti", borrowPosition);
   return (
     <>
       <>
