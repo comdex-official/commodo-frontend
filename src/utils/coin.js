@@ -1,4 +1,5 @@
 import { comdex } from "../config/network";
+import { DOLLAR_DECIMALS } from "../constants/common";
 import { commaSeparator } from "./number";
 import { ibcDenomToDenom, lowercaseFirstLetter } from "./string";
 
@@ -18,7 +19,7 @@ export const amountConversion = (amount, decimals) => {
 
   const result = Number(finiteAmount) / 10 ** comdex.coinDecimals;
 
-  return result.toFixed(finiteAmount ? decimals || comdex.coinDecimals : 0);
+  return result.toFixed(finiteAmount ? decimals || comdex.coinDecimals : DOLLAR_DECIMALS);
 };
 
 export const orderPriceConversion = (amount) => {
