@@ -1,7 +1,7 @@
 import { Button, message, Table } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { Col, Row, SvgIcon } from "../../components/common";
+import { Col, NoDataIcon, Row, SvgIcon } from "../../components/common";
 import TooltipIcon from "../../components/common/TooltipIcon/index";
 import { DEFAULT_PAGE_NUMBER } from "../../constants/common";
 import { queryDutchBiddingList } from "../../services/auction";
@@ -171,6 +171,7 @@ export const Bidding = ({ address, refreshBalance }) => {
                 pagination={{ defaultPageSize: 5 }}
                 loading={inProgress}
                 scroll={{ x: "100%" }}
+                locale={{emptyText: <NoDataIcon />}}
               />
             </div>
           </div>

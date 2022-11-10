@@ -3,7 +3,7 @@ import moment from "moment";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
@@ -273,6 +273,7 @@ const Auction = ({ address, refreshBalance }) => {
                 }}
                 scroll={{ x: "100%" }}
                 loading={loading}
+                locale={{emptyText: <NoDataIcon />}}
               />
             </div>
           </div>
