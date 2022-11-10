@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
-  queryModuleBalance, QueryPoolAssetLBMapping
+  queryModuleBalance,
+  QueryPoolAssetLBMapping
 } from "../../../services/lend/query";
 import {
   amountConversionWithComma,
@@ -19,7 +20,14 @@ import { iconNameFromDenom } from "../../../utils/string";
 import DistributionAPY from "../DistributionAPY";
 import { SvgIcon, TooltipIcon } from "../index";
 
-const Details = ({ asset, poolId, markets, refreshBalance, parent, assetDenomMap }) => {
+const Details = ({
+  asset,
+  poolId,
+  markets,
+  refreshBalance,
+  parent,
+  assetDenomMap,
+}) => {
   const [stats, setStats] = useState();
   const [moduleBalanceStats, setModuleBalanceStats] = useState([]);
 
@@ -70,8 +78,11 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent, assetDenomMap
     {
       title: "Available",
       counts: `$${amountConversionWithComma(
-        marketPrice(markets, assetStats?.balance?.denom, assetDenomMap[assetStats?.balance?.denom]?.id) *
-          assetStats?.balance.amount || 0,
+        marketPrice(
+          markets,
+          assetStats?.balance?.denom,
+          assetDenomMap[assetStats?.balance?.denom]?.id
+        ) * assetStats?.balance.amount || 0,
         DOLLAR_DECIMALS
       )}`,
       tooltipText:
@@ -94,15 +105,17 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent, assetDenomMap
       title: parent === "lend" ? "Lend APY" : "Borrow APY",
       counts: (
         <>
-        <>
-          {Number(
-            decimalConversion(
-              parent === "lend" ? stats?.lendApr : stats?.borrowApr
-            ) * 100
-          ).toFixed(DOLLAR_DECIMALS)}
-          %
+          <>
+            {Number(
+              decimalConversion(
+                parent === "lend" ? stats?.lendApr : stats?.borrowApr
+              ) * 100
+            ).toFixed(DOLLAR_DECIMALS)}
+            %
           </>
-          <DistributionAPY value={1.56} margin={"top"}/>
+          {parent === "lend" ? null : (
+            <DistributionAPY value={1.56} margin={"top"} />
+          )}
         </>
       ),
       tooltipText:
@@ -124,7 +137,13 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent, assetDenomMap
         <div className="head-right">
           <span>Oracle Price</span> : $
           {commaSeparator(
-            Number(marketPrice(markets, asset?.denom, assetDenomMap[asset?.denom]?.id)).toFixed(DOLLAR_DECIMALS)
+            Number(
+              marketPrice(
+                markets,
+                asset?.denom,
+                assetDenomMap[asset?.denom]?.id
+              )
+            ).toFixed(DOLLAR_DECIMALS)
           )}
         </div>
       </div>
@@ -154,7 +173,7 @@ Details.propTypes = {
     denom: PropTypes.string,
   }),
   assetDenomMap: PropTypes.object,
-    markets: PropTypes.object,
+  markets: PropTypes.object,
   parent: PropTypes.string,
   poolId: PropTypes.shape({
     low: PropTypes.number,
@@ -163,7 +182,7 @@ Details.propTypes = {
 
 const stateToProps = (state) => {
   return {
-     markets: state.oracle.market.map,
+    markets: state.oracle.market.map,
     refreshBalance: state.account.refreshBalance,
     assetDenomMap: state.asset._.assetDenomMap,
   };
