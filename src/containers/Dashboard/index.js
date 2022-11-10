@@ -88,6 +88,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
         size: "110%",
         innerSize: "82%",
         borderWidth: 0,
+        className: "totalvalue-chart",
         dataLabels: {
           enabled: false,
           distance: -14,
@@ -114,7 +115,6 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
           {
             name: "Total Borrowed",
             y: Number(totalBorrowed || 0),
-
             color: "#E2F7E5",
           },
         ],
