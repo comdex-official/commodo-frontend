@@ -2,7 +2,7 @@ import { List, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
@@ -264,6 +264,7 @@ const Assets = ({ assetBalance, balances, markets, assetDenomMap }) => {
                   columns={columns}
                   pagination={false}
                   scroll={{ x: "100%", y: "calc(100vh - 280px)" }}
+                  locale={{emptyText: <NoDataIcon />}}
                 />
               </div>
             </div>

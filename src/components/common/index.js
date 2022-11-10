@@ -4,5 +4,6 @@ import Row from "./grid/Row";
 import SvgIcon from "./svg-icon/svg-icon";
 import Disclaimer from "./Disclaimer";
 import TooltipIcon from "./TooltipIcon";
+import NoDataIcon from "./NoDataIcon";
 
-export { SvgIcon, Container, Row, Col, Disclaimer, TooltipIcon };
+export { SvgIcon, Container, Row, Col, Disclaimer, TooltipIcon, NoDataIcon };
