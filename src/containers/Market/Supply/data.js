@@ -1,4 +1,3 @@
-import DistributionAPY from "../../../components/common/DistributionAPY";
 import { ActionButton } from "../ActionButton";
 import AssetApy from "../AssetApy";
 import TotalDeposit from "./TotalDeposit";
@@ -82,7 +81,6 @@ export const columns = [
           assetId={lendPool?.transitAssetIds?.first}
           parent="lend"
         />
-        <DistributionAPY value={1.32} />
       </>
     ),
   },
@@ -102,7 +100,6 @@ export const columns = [
           assetId={lendPool?.transitAssetIds?.second}
           parent="lend"
         />
-        <DistributionAPY value={1.32} />
       </>
     ),
   },
