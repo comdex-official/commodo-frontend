@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import { setBalanceRefresh } from "../../../../actions/account";
-import { Col, Row, SvgIcon } from "../../../../components/common";
+import { Col, NoDataIcon, Row, SvgIcon } from "../../../../components/common";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
 import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
@@ -163,6 +163,7 @@ const DepositTab = ({
                     suffixIcon={
                       <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                     }
+                    notFoundContent={<NoDataIcon />}
                   >
                     {assetList?.length > 0 &&
                       assetList?.map((record) => {

@@ -3,7 +3,7 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import { Col, Row, SvgIcon } from "../../components/common";
+import { Col, NoDataIcon, Row, SvgIcon } from "../../components/common";
 import NoData from "../../components/NoData";
 import { fetchRestProposals } from "../../services/govern/query";
 import { formatTime } from "../../utils/date";
@@ -78,6 +78,7 @@ const Govern = () => {
                       <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                     }
                     style={{ width: 120 }}
+                    notFoundContent={<NoDataIcon />}
                   >
                     <Option value="all" className="govern-select-option">
                       All
