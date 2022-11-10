@@ -55,7 +55,14 @@ export const queryDutchAuctionList = (
 
     queryService
       .QueryDutchLendAuctions({
-        appId: Long.fromNumber(APP_ID)
+        appId: Long.fromNumber(APP_ID),
+        pagination: {
+          key: "",
+          offset: Long.fromNumber(offset),
+          limit: Long.fromNumber(limit),
+          countTotal: countTotal,
+          reverse: reverse,
+        },
       })
       .then((result) => {
         callback(null, result);
@@ -66,7 +73,13 @@ export const queryDutchAuctionList = (
   });
 };
 
-export const queryDutchBiddingList = (bidder, callback) => {
+export const queryDutchBiddingList = (
+  bidder,
+  offset,
+  limit,
+  countTotal,
+  reverse,
+  callback) => {
   getQueryService((error, queryService) => {
     if (error) {
       callback(error);
@@ -78,6 +91,31 @@ export const queryDutchBiddingList = (bidder, callback) => {
         bidder,
         appId: Long.fromNumber(APP_ID),
         history: false,
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => {
+        callback(error?.message);
+      });
+  });
+};
+
+export const querySingleDutchLendAuction = (
+  auctionId,
+  auctionMappingId,
+  callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryDutchLendAuction({
+        appId: Long.fromNumber(APP_ID),
+        auctionId: Long.fromNumber(auctionId),
+        auctionMappingId: Long.fromNumber(auctionMappingId),
       })
       .then((result) => {
         callback(null, result);

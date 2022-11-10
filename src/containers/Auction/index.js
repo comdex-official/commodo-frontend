@@ -1,4 +1,4 @@
-import { message, Table } from "antd";
+import { Button, message, Table } from "antd";
 import moment from "moment";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
@@ -21,7 +21,7 @@ import Bidding from "./Bidding";
 import "./index.less";
 import PlaceBidModal from "./PlaceBidModal";
 
-const Auction = ({ address }) => {
+const Auction = ({ address, refreshBalance }) => {
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [params, setParams] = useState({});
@@ -29,6 +29,7 @@ const Auction = ({ address }) => {
   const [loading, setLoading] = useState(true);
   const [inProgress, setInProgress] = useState(false);
   const [biddings, setBiddings] = useState("");
+  const [disableFetchBtn, setdisableFetchBtn] = useState(false);
 
   const columns = [
     {
@@ -109,7 +110,6 @@ const Auction = ({ address }) => {
           <PlaceBidModal
             params={params}
             auction={item}
-            refreshData={fetchData}
             discount={params?.auctionDiscountPercent}
           />
         </>
@@ -167,19 +167,13 @@ const Auction = ({ address }) => {
       : [];
 
   useEffect(() => {
-    fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, false);
-  }, []);
+    fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, true);
+  }, [address, refreshBalance]);
 
   useEffect(() => {
-    fetchData();
     queryParams();
   }, [address]);
 
-  const fetchData = () => {
-    if (address) {
-      fetchBiddings(address);
-    }
-  };
 
   const queryParams = () => {
     queryAuctionMippingIdParams((error, result) => {
@@ -206,7 +200,6 @@ const Auction = ({ address }) => {
           message.error(error);
           return;
         }
-
         if (result?.auctions?.length > 0) {
           setAuctions(result && result);
         }
@@ -214,25 +207,54 @@ const Auction = ({ address }) => {
     );
   };
 
-  const fetchBiddings = (address) => {
-    setInProgress(true);
+  const fetchLatestPrice = () => {
+    setdisableFetchBtn(true)
+    fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, true);
+  }
 
-    queryDutchBiddingList(address, (error, result) => {
-      setInProgress(false);
+  useEffect(() => {
+    const interval = setTimeout(() => {
+      setdisableFetchBtn(false)
+    }, 6000);
+    return () => {
+      clearInterval(interval);
+    }
+  }, [disableFetchBtn])
 
-      if (error) {
-        message.error(error);
-        return;
-      }
-      if (result?.biddings?.length > 0) {
-        let reverseData = (result && result.biddings).reverse();
-        setBiddings(reverseData);
-      }
-    });
+  const handleChange = (value) => {
+    setPageNumber(value.current);
+    setPageSize(value.pageSize);
+    fetchAuctions(
+      (value.current - 1) * value.pageSize,
+      value.pageSize,
+      true,
+      true
+    );
   };
+
 
   return (
     <div className="app-content-wrapper">
+      <Row>
+        <div className="update-btn-main-container">
+
+          <div className="locker-up-main-container">
+            <div className="locker-up-container mr-4">
+              <div className="claim-container ">
+                <div className="claim-btn">
+                  <Button
+                    type="primary"
+                    className="btn-filled mr-1"
+                    disabled={disableFetchBtn}
+                    onClick={() => fetchLatestPrice()}
+                  >Update Auction Price </Button> <TooltipIcon text="The price of the auction changes every block, click on the button to update the price for placing accurate bids." />
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
       <Row>
         <Col>
           <div className="commodo-card py-3 bg-none">
@@ -241,7 +263,14 @@ const Auction = ({ address }) => {
                 className="custom-table auction-table"
                 dataSource={tableData}
                 columns={columns}
-                pagination={{ defaultPageSize: 10 }}
+                onChange={(event) => handleChange(event)}
+                pagination={{
+                  total:
+                    auctions &&
+                    auctions.pagination &&
+                    auctions.pagination?.total?.low,
+                  pageSize,
+                }}
                 scroll={{ x: "100%" }}
                 loading={loading}
               />
@@ -251,7 +280,7 @@ const Auction = ({ address }) => {
           <div className="more-bottom">
             <h3 className="title">Bidding History</h3>
             <div className="more-bottom-card">
-              <Bidding biddingList={biddings} inProgress={inProgress} />
+              <Bidding address={address} refreshBalance={refreshBalance} />
             </div>
           </div>
         </Col>
@@ -263,12 +292,14 @@ const Auction = ({ address }) => {
 Auction.propTypes = {
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
+  refreshBalance: PropTypes.number.isRequired,
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
     address: state.account.address,
+    refreshBalance: state.account.refreshBalance,
   };
 };
 

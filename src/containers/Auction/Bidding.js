@@ -1,11 +1,20 @@
-import { Button, Table } from "antd";
+import { Button, message, Table } from "antd";
 import moment from "moment";
+import { useEffect, useState } from "react";
 import { Col, Row, SvgIcon } from "../../components/common";
 import TooltipIcon from "../../components/common/TooltipIcon/index";
+import { DEFAULT_PAGE_NUMBER } from "../../constants/common";
+import { queryDutchBiddingList } from "../../services/auction";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
 
-export const Bidding = ({ biddingList, inProgress }) => {
+export const Bidding = ({ address, refreshBalance }) => {
+
+  const [inProgress, setInProgress] = useState(false);
+  const [biddingList, setBiddingList] = useState("");
+  const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
+  const [pageSize, setPageSize] = useState(5);
+
   const columnsBidding = [
     {
       title: (
@@ -101,8 +110,8 @@ export const Bidding = ({ biddingList, inProgress }) => {
               item?.auctionStatus === "active"
                 ? "biddin-btn bid-btn-success"
                 : item?.auctionStatus === "inactive"
-                ? "biddin-btn bid-btn-rejected"
-                : ""
+                  ? "biddin-btn bid-btn-rejected"
+                  : ""
             }
           >
             {item?.auctionStatus}
@@ -115,10 +124,10 @@ export const Bidding = ({ biddingList, inProgress }) => {
               item?.biddingStatus === "placed"
                 ? "biddin-btn bid-btn-placed"
                 : item?.biddingStatus === "success"
-                ? "biddin-btn bid-btn-success"
-                : item?.biddingStatus === "rejected"
-                ? "biddin-btn bid-btn-rejected"
-                : ""
+                  ? "biddin-btn bid-btn-success"
+                  : item?.biddingStatus === "rejected"
+                    ? "biddin-btn bid-btn-rejected"
+                    : ""
             }
           >
             {item?.biddingStatus}
@@ -126,6 +135,28 @@ export const Bidding = ({ biddingList, inProgress }) => {
         ),
       };
     });
+
+  const fetchBiddings = (address, offset, limit, countTotal, reverse,) => {
+    setInProgress(true);
+
+    queryDutchBiddingList(address, offset, limit, countTotal, reverse, (error, result) => {
+      setInProgress(false);
+
+      if (error) {
+        message.error(error);
+        return;
+      }
+      if (result?.biddings?.length > 0) {
+        let reverseData = (result && result.biddings).reverse();
+        setBiddingList(reverseData);
+      }
+    });
+  };
+
+  useEffect(() => {
+    fetchBiddings(address, (pageNumber - 1) * pageSize, pageSize, true, true);
+  }, [address, refreshBalance])
+
 
   return (
     <div className="app-content-wrapper">
