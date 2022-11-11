@@ -3,7 +3,7 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
-import { SvgIcon } from "../../../components/common";
+import { NoDataIcon, SvgIcon } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import CustomInput from "../../../components/CustomInput";
@@ -97,6 +97,7 @@ const WithdrawTab = ({
                 suffixIcon={
                   <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                 }
+                notFoundContent={<NoDataIcon />}
               >
                 <Option key="1">
                   <div className="select-inner">

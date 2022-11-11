@@ -3,7 +3,7 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setPools } from '../../../actions/lend';
-import { SvgIcon } from "../../../components/common";
+import { NoDataIcon, SvgIcon } from "../../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE
@@ -131,6 +131,7 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
             pageSize,
           }}
           scroll={{ x: "100%", y: "30vh" }}
+          locale={{emptyText: <NoDataIcon />}}
         />
       </div>
     </div>

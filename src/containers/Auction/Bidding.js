@@ -1,6 +1,6 @@
 import { Button, Table } from "antd";
 import moment from "moment";
-import { Col, Row, SvgIcon } from "../../components/common";
+import { Col, NoDataIcon, Row, SvgIcon } from "../../components/common";
 import TooltipIcon from "../../components/common/TooltipIcon/index";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
@@ -140,6 +140,7 @@ export const Bidding = ({ biddingList, inProgress }) => {
                 pagination={{ defaultPageSize: 5 }}
                 loading={inProgress}
                 scroll={{ x: "100%" }}
+                locale={{emptyText: <NoDataIcon />}}
               />
             </div>
           </div>

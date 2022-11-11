@@ -3,13 +3,14 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
+import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
 import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
 import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
 import HealthFactor from "../../../../components/HealthFactor";
+import { assetTransitTypeId } from "../../../../config/network";
 import { ValidateInputNumber } from "../../../../config/_validation";
 import { DOLLAR_DECIMALS, UC_DENOM } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
@@ -121,7 +122,21 @@ const BorrowTab = ({
           return;
         }
 
-        setAssetOutPool(poolResult?.pool);
+        let myPool = poolResult?.pool;
+        const assetTransitMap = myPool?.assetData?.reduce((map, obj) => {
+          map[obj?.assetTransitType] = obj;
+          return map;
+        }, {});
+      
+        let transitAssetIds = {
+          main: assetTransitMap[assetTransitTypeId["main"]]?.assetId,
+          first: assetTransitMap[assetTransitTypeId["first"]]?.assetId,
+          second: assetTransitMap[assetTransitTypeId["second"]]?.assetId,
+        };
+      
+        myPool["transitAssetIds"] = transitAssetIds;
+      
+        setAssetOutPool(myPool);
       });
     }
   }, [pair]);
@@ -478,6 +493,7 @@ const BorrowTab = ({
                     suffixIcon={
                       <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                     }
+                    notFoundContent={<NoDataIcon />}
                   >
                     {poolLendPositions?.length > 0 &&
                       poolLendPositions?.map((record) => {
@@ -568,6 +584,7 @@ const BorrowTab = ({
                     suffixIcon={
                       <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                     }
+                    notFoundContent={<NoDataIcon />}
                   >
                     {borrowList?.length > 0 &&
                       borrowList?.map((record) => {
