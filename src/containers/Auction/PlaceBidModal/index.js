@@ -216,7 +216,7 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
                 $
                 {commaSeparator(
                   Number(
-                    amountConversionWithComma(
+                    amountConversion(
                       decimalConversion(newCurrentAuction?.outflowTokenInitialPrice) || 0,
                       4
                     ) || 0
@@ -234,7 +234,7 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
                 $
                 {commaSeparator(
                   Number(
-                    amountConversionWithComma(
+                    amountConversion(
                       decimalConversion(newCurrentAuction?.outflowTokenCurrentPrice) || 0,
                       4
                     ) || 0
