@@ -2,7 +2,7 @@ import { Select } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import Details from "../../../components/common/Asset/Details";
 import HealthFactor from "../../../components/HealthFactor";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
@@ -68,6 +68,7 @@ const CloseTab = ({
                   defaultActiveFirstOption={true}
                   showArrow={false}
                   disabled
+                  notFoundContent={<NoDataIcon />}
                 >
                   <Option key="1">
                     <div className="select-inner">

@@ -4,7 +4,7 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
+import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
 import Snack from "../../../../components/common/Snack";
@@ -474,6 +474,7 @@ const BorrowTab = ({
                     suffixIcon={
                       <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                     }
+                    notFoundContent={<NoDataIcon />}
                   >
                     {pools?.length > 0 &&
                       pools?.map((record) => {
@@ -514,6 +515,7 @@ const BorrowTab = ({
                     suffixIcon={
                       <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                     }
+                    notFoundContent={<NoDataIcon />}
                   >
                     {assetList?.length > 0 &&
                       assetList?.map((record) => {
@@ -601,6 +603,7 @@ const BorrowTab = ({
                     suffixIcon={
                       <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                     }
+                    notFoundContent={<NoDataIcon />}
                   >
                     {borrowList?.length > 0 &&
                       borrowList?.map((record) => {
