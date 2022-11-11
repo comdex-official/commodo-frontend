@@ -43,8 +43,8 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
         return;
       }
 
-      setTopDeposits(result?.data?.deposit?.slice(0, NUMBER_OF_TOP_ASSETS));
-      setTopBorrows(result?.data?.borrow?.slice(0, NUMBER_OF_TOP_ASSETS));
+      setTopDeposits(result?.data?.deposit);
+      setTopBorrows(result?.data?.borrow);
     });
 
     queryTotalValueLocked((error, result) => {
@@ -209,6 +209,35 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
     autoplaySpeed: 2800,
   };
 
+  const showTopAssets = (assets) => {
+    let reversedArray = assets?.slice("")?.reverse();
+    let uniqueValues = [
+      ...new Map(
+        reversedArray?.map((item) => [item["asset_id"], item])
+      ).values(),
+    ]; // this will pick the last duplicated item in the list i.e highest value here.
+
+    let finalTopValues = uniqueValues.sort((a, b) => {
+      return b.total - a.total; // sort descending.
+    });
+
+    return finalTopValues?.slice(0, NUMBER_OF_TOP_ASSETS)?.map((item) => {
+      return (
+        <li key={item?.asset_id}>
+          <div className="assets-col">
+            <div className="assets-icon">
+              <SvgIcon
+                name={iconNameFromDenom(assetMap[item?.asset_id]?.denom)}
+              />
+            </div>
+            {denomConversion(assetMap[item?.asset_id]?.denom)}
+          </div>
+          <b>{((Number(item?.apr) || 0) * 100).toFixed(DOLLAR_DECIMALS)}%</b>
+        </li>
+      );
+    });
+  };
+  
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -352,30 +381,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                   <p>Deposited</p>
                   <ul>
                     {topDeposits && topDeposits?.length > 0
-                      ? topDeposits?.map((item) => {
-                          return (
-                            <li key={item?.asset_id}>
-                              <div className="assets-col">
-                                <div className="assets-icon">
-                                  <SvgIcon
-                                    name={iconNameFromDenom(
-                                      assetMap[item?.asset_id]?.denom
-                                    )}
-                                  />
-                                </div>
-                                {denomConversion(
-                                  assetMap[item?.asset_id]?.denom
-                                )}
-                              </div>
-                              <b>
-                                {((Number(item?.apr) || 0) * 100).toFixed(
-                                  DOLLAR_DECIMALS
-                                )}
-                                %
-                              </b>
-                            </li>
-                          );
-                        })
+                      ? showTopAssets(topDeposits)
                       : topAssetsInProgress
                       ? showSkeletonLoader()
                       : "No data"}
@@ -385,30 +391,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                   <p>Borrowed</p>
                   <ul>
                     {topBorrows && topBorrows?.length > 0
-                      ? topBorrows?.map((item) => {
-                          return (
-                            <li key={item?.asset_id}>
-                              <div className="assets-col">
-                                <div className="assets-icon">
-                                  <SvgIcon
-                                    name={iconNameFromDenom(
-                                      assetMap[item?.asset_id]?.denom
-                                    )}
-                                  />
-                                </div>
-                                {denomConversion(
-                                  assetMap[item?.asset_id]?.denom
-                                )}
-                              </div>
-                              <b>
-                                {((Number(item?.apr) || 0) * 100).toFixed(
-                                  DOLLAR_DECIMALS
-                                )}
-                                %
-                              </b>
-                            </li>
-                          );
-                        })
+                      ? showTopAssets(topBorrows)
                       : topAssetsInProgress
                       ? showSkeletonLoader()
                       : ""}
