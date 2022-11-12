@@ -552,6 +552,19 @@ button.ant-switch {
             background: @card-bg-light;
             border-radius: 15px;
 
+            &.ant-table-measure-row{
+              background: none !important;
+              height: 0;
+              overflow: hidden;
+              border: 0 !important;
+              td{
+                padding: 0 !important;
+                height: 0 !important;
+                min-height: 0 !important;
+                max-height: 0 !important;
+              }
+            }
+
             &:hover {
               background: rgba(@card-bg-light, 0.8);
             }

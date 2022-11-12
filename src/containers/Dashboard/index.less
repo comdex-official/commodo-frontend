@@ -83,6 +83,11 @@
       .total-values-chart {
         width: 50%;
         text-align: left;
+        .totalvalue-chart{
+          .highcharts-empty-series {
+            fill: #17372a;
+          }
+        }
       }
 
       .total-values-right {
@@ -436,7 +441,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
+        padding-left: 10%;
 
         @media screen and (max-width: 576px) {
           width: 100%;

@@ -2,7 +2,7 @@ import { Button, Table } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import HealthFactor from "../../components/HealthFactor";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { decimalConversion } from "../../utils/number";
@@ -176,6 +176,7 @@ const Borrow = ({ userBorrowList, inProgress, address }) => {
                 columns={columns}
                 pagination={false}
                 scroll={{ x: "100%" }}
+                locale={{emptyText: <NoDataIcon />}}
               />
             </div>
           </div>

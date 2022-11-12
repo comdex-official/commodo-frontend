@@ -114,7 +114,7 @@ export const columns = [
     width: 120,
     render: (item) => (
       <ActionButton
-        name="Details"
+        name="Borrow"
         path={`/borrow/${item?.poolId?.toNumber()}`}
       />
     ),

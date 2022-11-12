@@ -3,13 +3,14 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
+import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
 import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
 import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
 import HealthFactor from "../../../../components/HealthFactor";
+import { assetTransitTypeId } from "../../../../config/network";
 import { ValidateInputNumber } from "../../../../config/_validation";
 import { DOLLAR_DECIMALS, UC_DENOM } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
@@ -71,7 +72,11 @@ const BorrowTab = ({
 
   const borrowable = getAmount(
     (Number(inAmount) *
-      marketPrice(markets, collateralAssetDenom, assetDenomMap[collateralAssetDenom]?.id) *
+      marketPrice(
+        markets,
+        collateralAssetDenom,
+        assetDenomMap[collateralAssetDenom]?.id
+      ) *
       (pair?.isInterPool
         ? Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv)) *
           Number(
@@ -80,7 +85,12 @@ const BorrowTab = ({
             )
           )
         : Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv))) ||
-      0) / marketPrice(markets, borrowAssetDenom, assetDenomMap[borrowAssetDenom]?.id)
+      0) /
+      marketPrice(
+        markets,
+        borrowAssetDenom,
+        assetDenomMap[borrowAssetDenom]?.id
+      )
   );
 
   const borrowableBalance = Number(borrowable) - 1000;
@@ -112,7 +122,21 @@ const BorrowTab = ({
           return;
         }
 
-        setAssetOutPool(poolResult?.pool);
+        let myPool = poolResult?.pool;
+        const assetTransitMap = myPool?.assetData?.reduce((map, obj) => {
+          map[obj?.assetTransitType] = obj;
+          return map;
+        }, {});
+      
+        let transitAssetIds = {
+          main: assetTransitMap[assetTransitTypeId["main"]]?.assetId,
+          first: assetTransitMap[assetTransitTypeId["first"]]?.assetId,
+          second: assetTransitMap[assetTransitTypeId["second"]]?.assetId,
+        };
+      
+        myPool["transitAssetIds"] = transitAssetIds;
+      
+        setAssetOutPool(myPool);
       });
     }
   }, [pair]);
@@ -286,8 +310,18 @@ const BorrowTab = ({
     );
 
   let currentLTV = Number(
-    ((outAmount * marketPrice(markets, borrowAssetDenom, assetDenomMap[borrowAssetDenom]?.id)) /
-      (inAmount * marketPrice(markets, collateralAssetDenom, assetDenomMap[collateralAssetDenom]?.id))) *
+    ((outAmount *
+      marketPrice(
+        markets,
+        borrowAssetDenom,
+        assetDenomMap[borrowAssetDenom]?.id
+      )) /
+      (inAmount *
+        marketPrice(
+          markets,
+          collateralAssetDenom,
+          assetDenomMap[collateralAssetDenom]?.id
+        ))) *
       100
   );
 
@@ -366,7 +400,8 @@ const BorrowTab = ({
             />
           </div>
           <p>
-            Borrow {denomConversion(assetMap[pool?.transitAssetIds?.first]?.denom)}
+            Borrow{" "}
+            {denomConversion(assetMap[pool?.transitAssetIds?.first]?.denom)}
           </p>
         </div>
         <label>#{lend?.poolId?.toNumber()}</label>
@@ -458,6 +493,7 @@ const BorrowTab = ({
                     suffixIcon={
                       <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                     }
+                    notFoundContent={<NoDataIcon />}
                   >
                     {poolLendPositions?.length > 0 &&
                       poolLendPositions?.map((record) => {
@@ -514,8 +550,12 @@ const BorrowTab = ({
                     $
                     {commaSeparator(
                       Number(
-                        inAmount * marketPrice(markets, collateralAssetDenom, assetDenomMap[collateralAssetDenom]?.id) ||
-                          0
+                        inAmount *
+                          marketPrice(
+                            markets,
+                            collateralAssetDenom,
+                            assetDenomMap[collateralAssetDenom]?.id
+                          ) || 0
                       ).toFixed(DOLLAR_DECIMALS)
                     )}
                   </small>
@@ -527,6 +567,7 @@ const BorrowTab = ({
                 <label className="left-label">Borrow Asset</label>
                 <div className="assets-select-wrapper">
                   <Select
+                    disabled={!collateralAssetDenom}
                     className="assets-select"
                     popupClassName="asset-select-dropdown"
                     onChange={handleBorrowAssetChange}
@@ -543,6 +584,7 @@ const BorrowTab = ({
                     suffixIcon={
                       <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                     }
+                    notFoundContent={<NoDataIcon />}
                   >
                     {borrowList?.length > 0 &&
                       borrowList?.map((record) => {
@@ -600,7 +642,12 @@ const BorrowTab = ({
                     $
                     {commaSeparator(
                       Number(
-                        outAmount * marketPrice(markets, borrowAssetDenom, assetDenomMap[borrowAssetDenom]?.id) || 0
+                        outAmount *
+                          marketPrice(
+                            markets,
+                            borrowAssetDenom,
+                            assetDenomMap[borrowAssetDenom]?.id
+                          ) || 0
                       ).toFixed(DOLLAR_DECIMALS)
                     )}
                   </small>{" "}
@@ -873,7 +920,7 @@ BorrowTab.propTypes = {
   assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
-    markets: PropTypes.object,
+  markets: PropTypes.object,
   pool: PropTypes.shape({
     poolId: PropTypes.shape({
       low: PropTypes.number,

@@ -3,7 +3,7 @@ import * as PropTypes from "prop-types";
 import React from "react";
 import { denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
-import { SvgIcon } from "../common";
+import { NoDataIcon, SvgIcon } from "../common";
 
 const Option = Select.Option;
 
@@ -24,6 +24,7 @@ const CustomSelect = ({ value, onChange, list }) => {
       onChange={onChange}
       defaultActiveFirstOption={true}
       suffixIcon={<SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />}
+      notFoundContent={<NoDataIcon />}
     >
       {list &&
         list.map((record) => {
