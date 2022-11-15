@@ -113,7 +113,7 @@ const History = ({ address, setTransactionHistory, history }) => {
       <Row>
         <Col>
           <div className="commodo-card bg-none">
-            <div className="card-header">TRANSACTION HISTORY</div>
+            <div className="card-header text-left">TRANSACTION HISTORY</div>
             <div className="card-content">
               <Table
                 className="custom-table"

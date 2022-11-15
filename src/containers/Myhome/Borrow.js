@@ -1,4 +1,4 @@
-import { Button, Table } from "antd";
+import { Button, Table, Dropdown, Menu } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
@@ -11,9 +11,15 @@ import AssetApy from "../Market/AssetApy";
 import InterestAndReward from "./Calculate/InterestAndReward";
 import "./index.less";
 
+const editItems = (
+  <Menu>
+    <Menu.Item>Borrow </Menu.Item>
+    <Menu.Item>Repay</Menu.Item>
+  </Menu>
+)
+
 const Borrow = ({ userBorrowList, inProgress, address }) => {
   const navigate = useNavigate();
-
   const columns = [
     {
       title: "Asset",
@@ -46,7 +52,7 @@ const Borrow = ({ userBorrowList, inProgress, address }) => {
       ),
       dataIndex: "health",
       key: "health",
-      width: 180,
+      width: 260,
       align: "center",
       render: (item) => <HealthFactor parent="table" borrow={item} />,
     },
@@ -99,7 +105,7 @@ const Borrow = ({ userBorrowList, inProgress, address }) => {
       render: (item) => (
         <>
           <div className="d-flex">
-            <Button
+            {/* <Button
               onClick={() =>
                 navigate(`/myhome/borrow/${item?.borrowingId?.toNumber()}`)
               }
@@ -108,7 +114,16 @@ const Borrow = ({ userBorrowList, inProgress, address }) => {
               size="small"
             >
               Edit
-            </Button>
+            </Button> */}
+            <Dropdown overlayClassName="edit-btn-dorp" trigger={["click"]} overlay={editItems}>
+              <Button
+                type="primary"
+                className="btn-filled"
+                size="small"
+              >
+                Edit
+              </Button>
+            </Dropdown>
           </div>
         </>
       ),
@@ -164,7 +179,7 @@ const Borrow = ({ userBorrowList, inProgress, address }) => {
       <Row>
         <Col>
           <div className="commodo-card bg-none">
-            <div className="d-flex align-items-center">
+            <div className="d-flex w-100 align-items-center justify-content-beetwen">
               <div className="card-header text-left">MY Borrowed AssetS</div>
               <InterestAndReward parent="borrow" />
             </div>
