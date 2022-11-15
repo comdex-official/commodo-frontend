@@ -1,4 +1,4 @@
-import { Button, Table } from "antd";
+import { Button, Table, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
@@ -99,16 +99,24 @@ const Borrow = ({ userBorrowList, inProgress, address }) => {
       render: (item) => (
         <>
           <div className="d-flex">
-            <Button
-              onClick={() =>
-                navigate(`/myhome/borrow/${item?.borrowingId?.toNumber()}`)
+            <Tooltip
+              overlayClassName="commodo-tooltip"
+              title={
+                item?.isLiquidated ? "Position has been sent for Auction." : ""
               }
-              type="primary"
-              className="btn-filled"
-              size="small"
             >
-              Edit
-            </Button>
+              <Button
+                disabled={item?.isLiquidated}
+                onClick={() =>
+                  navigate(`/myhome/borrow/${item?.borrowingId?.toNumber()}`)
+                }
+                type="primary"
+                className="btn-filled"
+                size="small"
+              >
+                <span>Edit</span>
+              </Button>
+            </Tooltip>
           </div>
         </>
       ),
