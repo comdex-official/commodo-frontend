@@ -1,4 +1,4 @@
-import { Button, Table, Dropdown, Menu } from "antd";
+import { Button, Table, Dropdown, Menu, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
@@ -108,22 +108,36 @@ const Borrow = ({ userBorrowList, inProgress, address }) => {
             {/* <Button
               onClick={() =>
                 navigate(`/myhome/borrow/${item?.borrowingId?.toNumber()}`)
+            <Tooltip
+              overlayClassName="commodo-tooltip"
+              title={
+                item?.isLiquidated ? "Position has been sent for Auction." : ""
               }
-              type="primary"
-              className="btn-filled"
-              size="small"
             >
               Edit
             </Button> */}
             <Dropdown overlayClassName="edit-btn-dorp" trigger={["click"]} overlay={editItems}>
               <Button
+                disabled={item?.isLiquidated}
+                onClick={() =>
+                  navigate(`/myhome/borrow/${item?.borrowingId?.toNumber()}`)
+                }
                 type="primary"
                 className="btn-filled"
                 size="small"
               >
+                 <Tooltip
+              overlayClassName="commodo-tooltip"
+              title={
+                item?.isLiquidated ? "Position has been sent for Auction." : ""
+              }
+            >
                 Edit
+                </Tooltip>
               </Button>
             </Dropdown>
+                <span>Edit</span>
+            
           </div>
         </>
       ),
