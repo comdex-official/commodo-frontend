@@ -13,7 +13,7 @@ const BorrowInterest = ({ borrowPosition, lang, address }) => {
   const [inProgress, setInProgress] = useState(false);
   const [latestPosition, setLatestPosition] = useState();
 
-  const handleClick = (item) => {
+  const handleClick = () => {
     setInProgress(true);
 
     signAndBroadcastTransaction(
