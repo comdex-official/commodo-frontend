@@ -36,10 +36,6 @@ const HealthFactor = ({
             return;
           }
 
-          let updatedAmountOut =
-            Number(borrow?.amountOut?.amount) +
-            Number(decimalConversion(borrow?.interestAccumulated));
-            
           setPercentage(
             (borrow?.amountIn?.amount *
               marketPrice(
