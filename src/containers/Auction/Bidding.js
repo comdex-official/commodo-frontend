@@ -11,7 +11,7 @@ import { iconNameFromDenom } from "../../utils/string";
 export const Bidding = ({ address, refreshBalance }) => {
 
   const [inProgress, setInProgress] = useState(false);
-  const [biddingList, setBiddingList] = useState("");
+  const [biddingList, setBiddingList] = useState();
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(5);
   const [biddingsTotalCount, setBiddingsTotalCounts] = useState(0);
@@ -185,7 +185,6 @@ export const Bidding = ({ address, refreshBalance }) => {
                 onChange={(event) => handleChange(event)}
                 pagination={{
                   total:
-                    biddingsTotalCount &&
                     biddingsTotalCount,
                   pageSize,
                 }}
