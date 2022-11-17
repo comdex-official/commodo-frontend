@@ -14,6 +14,8 @@ export const Bidding = ({ address, refreshBalance }) => {
   const [biddingList, setBiddingList] = useState("");
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(5);
+  const [biddingsTotalCount, setBiddingsTotalCounts] = useState(0);
+
 
   const columnsBidding = [
     {
@@ -147,10 +149,22 @@ export const Bidding = ({ address, refreshBalance }) => {
         return;
       }
       if (result?.biddings?.length > 0) {
-        let reverseData = (result && result.biddings).reverse();
+        let reverseData = result && result.biddings;
         setBiddingList(reverseData);
+        setBiddingsTotalCounts(result?.pagination?.total?.toNumber());
       }
     });
+  };
+
+  const handleChange = (value) => {
+    setPageNumber(value.current);
+    setPageSize(value.pageSize);
+    fetchBiddings(address,
+      (value.current - 1) * value.pageSize,
+      value.pageSize,
+      true,
+      true
+    );
   };
 
   useEffect(() => {
@@ -168,10 +182,16 @@ export const Bidding = ({ address, refreshBalance }) => {
                 className="custom-table auction-table  bidding-bottom-table "
                 dataSource={tableBiddingData}
                 columns={columnsBidding}
-                pagination={{ defaultPageSize: 5 }}
+                onChange={(event) => handleChange(event)}
+                pagination={{
+                  total:
+                    biddingsTotalCount &&
+                    biddingsTotalCount,
+                  pageSize,
+                }}
                 loading={inProgress}
                 scroll={{ x: "100%" }}
-                locale={{emptyText: <NoDataIcon />}}
+                locale={{ emptyText: <NoDataIcon /> }}
               />
             </div>
           </div>

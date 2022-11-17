@@ -90,6 +90,13 @@ export const queryDutchBiddingList = (
       .QueryDutchLendBiddings({
         bidder,
         appId: Long.fromNumber(APP_ID),
+        pagination: {
+          key: "",
+          offset: Long.fromNumber(offset),
+          limit: Long.fromNumber(limit),
+          countTotal: countTotal,
+          reverse: reverse,
+        },
         history: false,
       })
       .then((result) => {
