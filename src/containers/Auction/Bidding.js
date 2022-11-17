@@ -1,11 +1,22 @@
-import { Button, Table } from "antd";
+import { Button, message, Table } from "antd";
 import moment from "moment";
+import { useEffect, useState } from "react";
 import { Col, NoDataIcon, Row, SvgIcon } from "../../components/common";
 import TooltipIcon from "../../components/common/TooltipIcon/index";
+import { DEFAULT_BIDDING_PAGE_SIZE, DEFAULT_PAGE_NUMBER } from "../../constants/common";
+import { queryDutchBiddingList } from "../../services/auction";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
 
-export const Bidding = ({ biddingList, inProgress }) => {
+export const Bidding = ({ address, refreshBalance }) => {
+
+  const [inProgress, setInProgress] = useState(false);
+  const [biddingList, setBiddingList] = useState();
+  const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
+  const [pageSize, setPageSize] = useState(DEFAULT_BIDDING_PAGE_SIZE);
+  const [biddingsTotalCount, setBiddingsTotalCounts] = useState(0);
+
+
   const columnsBidding = [
     {
       title: (
@@ -101,8 +112,8 @@ export const Bidding = ({ biddingList, inProgress }) => {
               item?.auctionStatus === "active"
                 ? "biddin-btn bid-btn-success"
                 : item?.auctionStatus === "inactive"
-                ? "biddin-btn bid-btn-rejected"
-                : ""
+                  ? "biddin-btn bid-btn-rejected"
+                  : ""
             }
           >
             {item?.auctionStatus}
@@ -115,10 +126,10 @@ export const Bidding = ({ biddingList, inProgress }) => {
               item?.biddingStatus === "placed"
                 ? "biddin-btn bid-btn-placed"
                 : item?.biddingStatus === "success"
-                ? "biddin-btn bid-btn-success"
-                : item?.biddingStatus === "rejected"
-                ? "biddin-btn bid-btn-rejected"
-                : ""
+                  ? "biddin-btn bid-btn-success"
+                  : item?.biddingStatus === "rejected"
+                    ? "biddin-btn bid-btn-rejected"
+                    : ""
             }
           >
             {item?.biddingStatus}
@@ -126,6 +137,40 @@ export const Bidding = ({ biddingList, inProgress }) => {
         ),
       };
     });
+
+  const fetchBiddings = (address, offset, limit, countTotal, reverse,) => {
+    setInProgress(true);
+
+    queryDutchBiddingList(address, offset, limit, countTotal, reverse, (error, result) => {
+      setInProgress(false);
+
+      if (error) {
+        message.error(error);
+        return;
+      }
+      if (result?.biddings?.length > 0) {
+        let reverseData = result && result.biddings;
+        setBiddingList(reverseData);
+        setBiddingsTotalCounts(result?.pagination?.total?.toNumber());
+      }
+    });
+  };
+
+  const handleChange = (value) => {
+    setPageNumber(value.current);
+    setPageSize(value.pageSize);
+    fetchBiddings(address,
+      (value.current - 1) * value.pageSize,
+      value.pageSize,
+      true,
+      true
+    );
+  };
+
+  useEffect(() => {
+    fetchBiddings(address, (pageNumber - 1) * pageSize, pageSize, true, true);
+  }, [address, refreshBalance])
+
 
   return (
     <div className="app-content-wrapper">
@@ -137,10 +182,15 @@ export const Bidding = ({ biddingList, inProgress }) => {
                 className="custom-table auction-table  bidding-bottom-table "
                 dataSource={tableBiddingData}
                 columns={columnsBidding}
-                pagination={{ defaultPageSize: 5 }}
+                onChange={(event) => handleChange(event)}
+                pagination={{
+                  total:
+                    biddingsTotalCount,
+                  pageSize,
+                }}
                 loading={inProgress}
                 scroll={{ x: "100%" }}
-                locale={{emptyText: <NoDataIcon />}}
+                locale={{ emptyText: <NoDataIcon /> }}
               />
             </div>
           </div>
