@@ -144,10 +144,10 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
 
   const calculateQuantityBidFor = () => {
     let calculatedAmount = Number(
-      bidAmount /
+      bidAmount *
       Number(
         amountConversion(
-          decimalConversion(auction?.outflowTokenCurrentPrice) || 0
+          decimalConversion(newCurrentAuction?.outflowTokenCurrentPrice) || 0
         )
       )
     ).toFixed(6);
@@ -174,7 +174,7 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
 
   useEffect(() => {
     calculateQuantityBidFor();
-  }, [bidAmount, auction?.outflowTokenCurrentPrice]);
+  }, [bidAmount, newCurrentAuction?.outflowTokenCurrentPrice]);
 
   return (
     <>
@@ -263,7 +263,7 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
               <p>
                 {" "}
                 Target{" "}
-                CMST
+                {denomConversion(newCurrentAuction?.inflowTokenCurrentAmount?.denom)}
               </p>
             </Col>
             <Col sm="6" className="text-right">
@@ -305,7 +305,7 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
           </Row>
           <Row>
             <Col sm="6">
-              <p>Your CMST Bid</p>
+              <p>Your  {denomConversion(newCurrentAuction?.inflowTokenCurrentAmount?.denom)} Bid</p>
             </Col>
             <Col sm="6" className="text-right">
               <label >

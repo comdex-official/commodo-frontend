@@ -29,7 +29,7 @@ const Auction = ({ address, refreshBalance }) => {
   const [loading, setLoading] = useState(true);
   const [inProgress, setInProgress] = useState(false);
   const [biddings, setBiddings] = useState("");
-  const [disableFetchBtn, setdisableFetchBtn] = useState(false);
+  const [disableFetchButton, setdisableFetchButton] = useState(false);
 
   const columns = [
     {
@@ -208,18 +208,18 @@ const Auction = ({ address, refreshBalance }) => {
   };
 
   const fetchLatestPrice = () => {
-    setdisableFetchBtn(true)
+    setdisableFetchButton(true)
     fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, true);
   }
 
   useEffect(() => {
     const interval = setTimeout(() => {
-      setdisableFetchBtn(false)
+      setdisableFetchButton(false)
     }, 6000);
     return () => {
       clearInterval(interval);
     }
-  }, [disableFetchBtn])
+  }, [disableFetchButton])
 
   const handleChange = (value) => {
     setPageNumber(value.current);
@@ -245,7 +245,7 @@ const Auction = ({ address, refreshBalance }) => {
                   <Button
                     type="primary"
                     className="btn-filled mr-1"
-                    disabled={disableFetchBtn}
+                    disabled={disableFetchButton}
                     onClick={() => fetchLatestPrice()}
                   >Update Auction Price </Button> <TooltipIcon text="The price of the auction changes every block, click on the button to update the price for placing accurate bids." />
                 </div>
@@ -268,7 +268,7 @@ const Auction = ({ address, refreshBalance }) => {
                   total:
                     auctions &&
                     auctions.pagination &&
-                    auctions.pagination?.total?.low,
+                    auctions.pagination?.total?.toNumber(),
                   pageSize,
                 }}
                 scroll={{ x: "100%" }}

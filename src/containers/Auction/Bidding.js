@@ -3,7 +3,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { Col, NoDataIcon, Row, SvgIcon } from "../../components/common";
 import TooltipIcon from "../../components/common/TooltipIcon/index";
-import { DEFAULT_PAGE_NUMBER } from "../../constants/common";
+import { DEFAULT_BIDDING_PAGE_SIZE, DEFAULT_PAGE_NUMBER } from "../../constants/common";
 import { queryDutchBiddingList } from "../../services/auction";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
@@ -13,7 +13,7 @@ export const Bidding = ({ address, refreshBalance }) => {
   const [inProgress, setInProgress] = useState(false);
   const [biddingList, setBiddingList] = useState();
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(DEFAULT_BIDDING_PAGE_SIZE);
   const [biddingsTotalCount, setBiddingsTotalCounts] = useState(0);
 
 
