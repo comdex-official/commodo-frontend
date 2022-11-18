@@ -138,9 +138,9 @@ export const Bidding = ({ biddingList, inProgress }) => {
                 dataSource={tableBiddingData}
                 columns={columnsBidding}
                 pagination={{ defaultPageSize: 5 }}
-                loading={inProgress}
+                loading={inProgress && !biddingList?.length}
                 scroll={{ x: "100%" }}
-                locale={{emptyText: <NoDataIcon />}}
+                locale={{ emptyText: <NoDataIcon /> }}
               />
             </div>
           </div>

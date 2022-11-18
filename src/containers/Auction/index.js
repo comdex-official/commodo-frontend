@@ -243,7 +243,7 @@ const Auction = ({ address }) => {
                 columns={columns}
                 pagination={{ defaultPageSize: 10 }}
                 scroll={{ x: "100%" }}
-                loading={loading}
+                loading={loading && !auctions?.auctions?.length}
                 locale={{emptyText: <NoDataIcon />}}
               />
             </div>
