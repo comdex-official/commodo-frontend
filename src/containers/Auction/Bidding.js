@@ -76,8 +76,8 @@ export const Bidding = ({ setBiddings, biddings, address, refreshBalance }) => {
   ];
 
   const tableBiddingData =
-    biddings.length > 0 &&
-    biddings.map((item, index) => {
+    biddings?.length > 0 &&
+    biddings?.map((item, index) => {
       return {
         key: index,
         outflowToken: (
@@ -166,12 +166,12 @@ export const Bidding = ({ setBiddings, biddings, address, refreshBalance }) => {
   };
 
   const handleChange = (value) => {
-    setPageNumber(value.current);
-    setPageSize(value.pageSize);
+    setPageNumber(value?.current);
+    setPageSize(value?.pageSize);
     fetchBiddings(
       address,
-      (value.current - 1) * value.pageSize,
-      value.pageSize,
+      (value?.current - 1) * value?.pageSize,
+      value?.pageSize,
       true,
       true
     );

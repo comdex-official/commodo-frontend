@@ -4,7 +4,7 @@ import {
   BIDDING_LIST_SET,
   BID_AMOUNT_SET,
   SET_AUCTIONED_ASSET,
-  SET_SELECTED_AUCTIONED_ASSET,
+  SET_SELECTED_AUCTIONED_ASSET
 } from "../constants/auction";
 
 const data = (
@@ -27,7 +27,7 @@ const data = (
 
 const bidAmount = (state = 0, action) => {
   if (action.type === BID_AMOUNT_SET) {
-    return action.value;
+    return action?.value;
   }
 
   return state;
@@ -39,7 +39,7 @@ const auctionedAsset = (state = [{
   dvpn: false
 }], action) => {
   if (action.type === SET_AUCTIONED_ASSET) {
-    return action.value;
+    return action?.value;
   }
 
   return state;
@@ -67,7 +67,7 @@ const bidding = (
 
 const selectedAuctionedAsset = (state = [], action) => {
   if (action.type === SET_SELECTED_AUCTIONED_ASSET) {
-    return action.value;
+    return action?.value;
   }
 
   return state;

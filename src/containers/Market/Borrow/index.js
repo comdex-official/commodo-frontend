@@ -43,11 +43,11 @@ const Borrow = ({ assetMap, setPools, lendPools }) => {
   };
 
   const handleChange = (value) => {
-    setPageNumber(value.current - 1);
-    setPageSize(value.pageSize);
+    setPageNumber(value?.current - 1);
+    setPageSize(value?.pageSize);
     fetchLendPools(
-      (value.current - 1) * value.pageSize,
-      value.pageSize,
+      (value?.current - 1) * value?.pageSize,
+      value?.pageSize,
       true,
       false
     );
@@ -146,7 +146,7 @@ const Borrow = ({ assetMap, setPools, lendPools }) => {
           className="custom-table market-table1"
           dataSource={tableData}
           columns={columns}
-          loading={inProgress && lendPools?.length}
+          loading={inProgress && !lendPools?.length}
           onChange={(event) => handleChange(event)}
           pagination={{
             total:

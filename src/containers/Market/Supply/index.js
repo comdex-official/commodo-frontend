@@ -42,11 +42,11 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
   };
 
   const handleChange = (value) => {
-    setPageNumber(value.current - 1);
-    setPageSize(value.pageSize);
+    setPageNumber(value?.current - 1);
+    setPageSize(value?.pageSize);
     fetchLendPools(
-      (value.current - 1) * value.pageSize,
-      value.pageSize,
+      (value?.current - 1) * value?.pageSize,
+      value?.pageSize,
       true,
       false
     );
