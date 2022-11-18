@@ -184,6 +184,7 @@ const GovernDetails = ({  address,
         size: "120%",
         innerSize: "75%",
         borderWidth: 0,
+        className: "votes-chart",
         dataLabels: {
           enabled: false,
           distance: -14,
