@@ -123,7 +123,7 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
           className="custom-table market-table1"
           dataSource={tableData}
           columns={columns}
-          loading={inProgress}
+          loading={inProgress && !lendPools?.length}
           onChange={(event) => handleChange(event)}
           pagination={{
             total:

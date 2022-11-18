@@ -7,15 +7,14 @@ import { Col, NoDataIcon, Row, SvgIcon } from "../../components/common";
 import { fetchRestProposals } from "../../services/govern/query";
 import { formatTime } from "../../utils/date";
 import { proposalStatusMap } from "../../utils/string";
+import { setAllProposals, setProposals } from "../../actions/govern";
 import "./index.less";
 
 const { Option } = Select;
 
-const Govern = () => {
+const Govern = ({setAllProposals, allProposals, setProposals, proposals}) => {
   const navigate = useNavigate();
-  const [proposals, setProposals] = useState();
   const [inProgress, setInProgress] = useState(false);
-  const [allProposals, setAllProposals] = useState();
 
   useEffect(() => {
     fetchAllProposals();
@@ -49,8 +48,8 @@ const Govern = () => {
 
   return (
     <div className="app-content-wrapper">
-      {inProgress ? (
-        <div className="loader">
+      {inProgress && !proposals?.length ? (
+                <div className="loader">
           <Spin />
         </div>
       ) : (
@@ -160,14 +159,22 @@ const Govern = () => {
 
 Govern.propTypes = {
   lang: PropTypes.string.isRequired,
+  setAllProposals: PropTypes.func.isRequired,
+  setProposals: PropTypes.func.isRequired,
+  allProposals: PropTypes.array,
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
+    allProposals: state.govern.allProposals,
+    proposals: state.govern.proposals,
   };
 };
 
-const actionsToProps = {};
+const actionsToProps = {
+  setAllProposals,
+  setProposals,
+};
 
 export default connect(stateToProps, actionsToProps)(Govern);

@@ -1,21 +1,24 @@
 import { Button, message, Table } from "antd";
 import moment from "moment";
+import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { setBiddings } from "../../actions/auction";
 import { Col, NoDataIcon, Row, SvgIcon } from "../../components/common";
 import TooltipIcon from "../../components/common/TooltipIcon/index";
-import { DEFAULT_BIDDING_PAGE_SIZE, DEFAULT_PAGE_NUMBER } from "../../constants/common";
+import {
+  DEFAULT_BIDDING_PAGE_SIZE,
+  DEFAULT_PAGE_NUMBER
+} from "../../constants/common";
 import { queryDutchBiddingList } from "../../services/auction";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
 
-export const Bidding = ({ address, refreshBalance }) => {
-
+export const Bidding = ({ setBiddings, biddings, address, refreshBalance }) => {
   const [inProgress, setInProgress] = useState(false);
-  const [biddingList, setBiddingList] = useState();
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_BIDDING_PAGE_SIZE);
   const [biddingsTotalCount, setBiddingsTotalCounts] = useState(0);
-
 
   const columnsBidding = [
     {
@@ -73,9 +76,8 @@ export const Bidding = ({ address, refreshBalance }) => {
   ];
 
   const tableBiddingData =
-    biddingList &&
-    biddingList.length > 0 &&
-    biddingList.map((item, index) => {
+    biddings.length > 0 &&
+    biddings.map((item, index) => {
       return {
         key: index,
         outflowToken: (
@@ -112,8 +114,8 @@ export const Bidding = ({ address, refreshBalance }) => {
               item?.auctionStatus === "active"
                 ? "biddin-btn bid-btn-success"
                 : item?.auctionStatus === "inactive"
-                  ? "biddin-btn bid-btn-rejected"
-                  : ""
+                ? "biddin-btn bid-btn-rejected"
+                : ""
             }
           >
             {item?.auctionStatus}
@@ -126,10 +128,10 @@ export const Bidding = ({ address, refreshBalance }) => {
               item?.biddingStatus === "placed"
                 ? "biddin-btn bid-btn-placed"
                 : item?.biddingStatus === "success"
-                  ? "biddin-btn bid-btn-success"
-                  : item?.biddingStatus === "rejected"
-                    ? "biddin-btn bid-btn-rejected"
-                    : ""
+                ? "biddin-btn bid-btn-success"
+                : item?.biddingStatus === "rejected"
+                ? "biddin-btn bid-btn-rejected"
+                : ""
             }
           >
             {item?.biddingStatus}
@@ -138,28 +140,36 @@ export const Bidding = ({ address, refreshBalance }) => {
       };
     });
 
-  const fetchBiddings = (address, offset, limit, countTotal, reverse,) => {
+  const fetchBiddings = (address, offset, limit, countTotal, reverse) => {
     setInProgress(true);
 
-    queryDutchBiddingList(address, offset, limit, countTotal, reverse, (error, result) => {
-      setInProgress(false);
+    queryDutchBiddingList(
+      address,
+      offset,
+      limit,
+      countTotal,
+      reverse,
+      (error, result) => {
+        setInProgress(false);
 
-      if (error) {
-        message.error(error);
-        return;
+        if (error) {
+          message.error(error);
+          return;
+        }
+        if (result?.biddings?.length > 0) {
+          let reverseData = result && result.biddings;
+          setBiddings(reverseData);
+          setBiddingsTotalCounts(result?.pagination?.total?.toNumber());
+        }
       }
-      if (result?.biddings?.length > 0) {
-        let reverseData = result && result.biddings;
-        setBiddingList(reverseData);
-        setBiddingsTotalCounts(result?.pagination?.total?.toNumber());
-      }
-    });
+    );
   };
 
   const handleChange = (value) => {
     setPageNumber(value.current);
     setPageSize(value.pageSize);
-    fetchBiddings(address,
+    fetchBiddings(
+      address,
       (value.current - 1) * value.pageSize,
       value.pageSize,
       true,
@@ -169,8 +179,7 @@ export const Bidding = ({ address, refreshBalance }) => {
 
   useEffect(() => {
     fetchBiddings(address, (pageNumber - 1) * pageSize, pageSize, true, true);
-  }, [address, refreshBalance])
-
+  }, [address, refreshBalance]);
 
   return (
     <div className="app-content-wrapper">
@@ -184,11 +193,10 @@ export const Bidding = ({ address, refreshBalance }) => {
                 columns={columnsBidding}
                 onChange={(event) => handleChange(event)}
                 pagination={{
-                  total:
-                    biddingsTotalCount,
+                  total: biddingsTotalCount,
                   pageSize,
                 }}
-                loading={inProgress}
+                loading={inProgress && !biddings?.length}
                 scroll={{ x: "100%" }}
                 locale={{ emptyText: <NoDataIcon /> }}
               />
@@ -200,4 +208,21 @@ export const Bidding = ({ address, refreshBalance }) => {
   );
 };
 
-export default Bidding;
+Bidding.propTypes = {
+  setBiddings: PropTypes.func.isRequired,
+  address: PropTypes.string,
+  biddings: PropTypes.array,
+  refreshBalance: PropTypes.number.isRequired,
+};
+
+const stateToProps = (state) => {
+  return {
+    biddings: state.auction.bidding.list,
+  };
+};
+
+const actionsToProps = {
+  setBiddings,
+};
+
+export default connect(stateToProps, actionsToProps)(Bidding);
