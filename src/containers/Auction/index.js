@@ -222,11 +222,11 @@ const Auction = ({ address, setAuctions, auctions, refreshBalance }) => {
   }, [disableFetchButton]);
 
   const handleChange = (value) => {
-    setPageNumber(value.current);
-    setPageSize(value.pageSize);
+    setPageNumber(value?.current);
+    setPageSize(value?.pageSize);
     fetchAuctions(
-      (value.current - 1) * value.pageSize,
-      value.pageSize,
+      (value?.current - 1) * value?.pageSize,
+      value?.pageSize,
       true,
       true
     );

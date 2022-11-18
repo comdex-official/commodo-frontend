@@ -1,18 +1,6 @@
 import { combineReducers } from "redux";
 import {
-  POOLS_SET,
-  POOL_SET,
-  PAIR_SET,
-  POOL_DEPOSITS_SET,
-  SPOT_PRICE_SET,
-  POOL_BALANCE_FETCH_IN_PROGRESS,
-  SECOND_RESERVE_COIN_DENOM_SET,
-  POOL_TOKEN_SUPPLY_SET,
-  POOLS_LIQUIDITY_LIST_SET,
-  ASSET_RATES_STATES_SET,
-  USER_LENDS_SET,
-  POOL_LENDS_SET,
-  USER_BORROWS_SET,
+    ASSET_RATES_STATES_SET, PAIR_SET, POOLS_LIQUIDITY_LIST_SET, POOLS_SET, POOL_BALANCE_FETCH_IN_PROGRESS, POOL_DEPOSITS_SET, POOL_LENDS_SET, POOL_SET, POOL_TOKEN_SUPPLY_SET, SECOND_RESERVE_COIN_DENOM_SET, SPOT_PRICE_SET, USER_BORROWS_SET, USER_LENDS_SET
 } from "../constants/lend";
 
 const pool = (
@@ -34,7 +22,7 @@ const pool = (
     case POOL_SET:
       return {
         ...state,
-        _: action.value,
+        _: action?.value,
       };
     default:
       return state;
@@ -60,7 +48,7 @@ const poolDeposit = (
 
 const spotPrice = (state = 0, action) => {
   if (action.type === SPOT_PRICE_SET) {
-    return action.value;
+    return action?.value;
   }
 
   return state;
@@ -68,7 +56,7 @@ const spotPrice = (state = 0, action) => {
 
 const inProgress = (state = false, action) => {
   if (action.type === POOL_BALANCE_FETCH_IN_PROGRESS) {
-    return action.value;
+    return action?.value;
   }
 
   return state;
@@ -76,7 +64,7 @@ const inProgress = (state = false, action) => {
 
 const secondReserveCoinDenom = (state = "", action) => {
   if (action.type === SECOND_RESERVE_COIN_DENOM_SET) {
-    return action.value;
+    return action?.value;
   }
 
   return state;
@@ -84,16 +72,16 @@ const secondReserveCoinDenom = (state = "", action) => {
 
 const poolTokenSupply = (state = {}, action) => {
   if (action.type === POOL_TOKEN_SUPPLY_SET) {
-    return action.value;
+    return action?.value;
   }
 
   return state;
 };
 
 const list = (state = [], action) => {
-  if (action.type === POOLS_LIQUIDITY_LIST_SET && action.value) {
+  if (action.type === POOLS_LIQUIDITY_LIST_SET && action?.value) {
     const array = state;
-    array[action.index] = action.value;
+    array[action.index] = action?.value;
     return array;
   }
 
@@ -143,7 +131,7 @@ const userBorrows = (state = [], action) => {
 
 const pair = (state = {}, action) => {
   if (action.type === PAIR_SET) {
-    return action.value;
+    return action?.value;
   }
 
   return state;

@@ -4,7 +4,7 @@ import { TOGGLE_DARK_THEME } from "../constants/theme";
 const theme = (state = { darkThemeEnabled: true }, action) => {
   switch (action.type) {
     case TOGGLE_DARK_THEME:
-      return { ...state, darkThemeEnabled: action.value };
+      return { ...state, darkThemeEnabled: action?.value };
 
     default:
       return state;

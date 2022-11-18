@@ -54,9 +54,9 @@ const History = ({ address, setTransactionHistory, history }) => {
     });
 
   const handleChange = (value) => {
-    setPageNumber(value.current);
-    setPageSize(value.pageSize);
-    getTransactions(address, value.current, value.pageSize);
+    setPageNumber(value?.current);
+    setPageSize(value?.pageSize);
+    getTransactions(address, value?.current, value?.pageSize);
   };
 
   const columns = [
