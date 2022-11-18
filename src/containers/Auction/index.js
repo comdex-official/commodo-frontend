@@ -3,7 +3,14 @@ import moment from "moment";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import { setAuctions, setBiddings } from "../../actions/auction";
+import {
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon
+} from "../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
@@ -21,14 +28,12 @@ import Bidding from "./Bidding";
 import "./index.less";
 import PlaceBidModal from "./PlaceBidModal";
 
-const Auction = ({ address }) => {
+const Auction = ({ address, setAuctions, auctions, setBiddings, biddings }) => {
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [params, setParams] = useState({});
-  const [auctions, setAuctions] = useState();
   const [loading, setLoading] = useState(true);
   const [inProgress, setInProgress] = useState(false);
-  const [biddings, setBiddings] = useState("");
 
   const columns = [
     {
@@ -117,9 +122,10 @@ const Auction = ({ address }) => {
     },
   ];
 
+  console.log('the auctions', auctions)
   const tableData =
-    auctions && auctions?.auctions?.length > 0
-      ? auctions?.auctions?.map((item, index) => {
+    auctions && auctions?.length > 0
+      ? auctions?.map((item, index) => {
           return {
             key: index,
             auctioned_asset: (
@@ -208,7 +214,7 @@ const Auction = ({ address }) => {
         }
 
         if (result?.auctions?.length > 0) {
-          setAuctions(result && result);
+          setAuctions(result?.auctions);
         }
       }
     );
@@ -243,8 +249,8 @@ const Auction = ({ address }) => {
                 columns={columns}
                 pagination={{ defaultPageSize: 10 }}
                 scroll={{ x: "100%" }}
-                loading={loading && !auctions?.auctions?.length}
-                locale={{emptyText: <NoDataIcon />}}
+                loading={loading && !auctions?.length}
+                locale={{ emptyText: <NoDataIcon /> }}
               />
             </div>
           </div>
@@ -263,14 +269,25 @@ const Auction = ({ address }) => {
 
 Auction.propTypes = {
   lang: PropTypes.string.isRequired,
+  setAuctions: PropTypes.func.isRequired,
+  setBiddings: PropTypes.func.isRequired,
   address: PropTypes.string,
+  auctions: PropTypes.array,
+  biddings: PropTypes.array,
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
     address: state.account.address,
+    auctions: state.auction.data.list,
+    biddings: state.auction.bidding.list
   };
 };
 
-export default connect(stateToProps)(Auction);
+const actionsToProps = {
+  setAuctions,
+  setBiddings,
+};
+
+export default connect(stateToProps, actionsToProps)(Auction);
