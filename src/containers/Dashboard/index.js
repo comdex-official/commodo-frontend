@@ -357,16 +357,16 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                         </div>
                         <div className="assets-right">
                           <img alt={AssetsIcon} src={AssetsIcon} />
-                          <Button type="primary" className="btn-filled">
-                            <a
+                          <a
                               aria-label="cswap"
                               target="_blank"
                               rel="noreferrer"
                               href="https://testnet.cswap.one/"
                             >
-                              Take me there!
-                            </a>
+                          <Button type="primary" className="btn-filled">
+                            Take me there!
                           </Button>
+                          </a>
                         </div>
                       </div>
                     </div>
