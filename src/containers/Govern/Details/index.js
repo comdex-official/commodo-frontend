@@ -7,14 +7,19 @@ import { connect } from "react-redux";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import {
-  setProposal, setProposalTally, setProposer
+  setProposal,
+  setProposalTally,
+  setProposer
 } from "../../../actions/govern";
 import { Col, Row, SvgIcon } from "../../../components/common";
 import Copy from "../../../components/Copy";
 import { comdex } from "../../../config/network";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
-  fetchRestProposal, fetchRestProposalTally, fetchRestProposer, queryUserVote
+  fetchRestProposal,
+  fetchRestProposalTally,
+  fetchRestProposer,
+  queryUserVote
 } from "../../../services/govern/query";
 import { denomConversion } from "../../../utils/coin";
 import { formatTime } from "../../../utils/date";
@@ -97,10 +102,12 @@ const GovernDetails = ({
           return;
         }
 
-        setProposer(
-          result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer,
-          id
-        );
+        if (result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer) {
+          setProposer(
+            result?.tx_responses?.[0]?.tx?.body?.messages?.[0]?.proposer,
+            id
+          );
+        }
       });
     }
   }, [id]);
@@ -296,12 +303,6 @@ const GovernDetails = ({
                 <h3>#{proposal?.proposal_id || id}</h3>
               </Col>
               <Col className="text-right">
-                <span className=" mr-1">
-                  {votedOption
-                    ? `You voted: ${proposalOptionMap[votedOption]}`
-                    : ""}
-                </span>
-
                 <Button type="primary">
                   <span
                     className={
@@ -330,9 +331,26 @@ const GovernDetails = ({
         <Col md="6">
           <div className="commodo-card govern-card2">
             <Row>
-              <Col className="text-right">
-                <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
-              </Col>
+              {address && proposalOptionMap[votedOption] ? (
+                <div className="user-vote-container">
+                  {proposalOptionMap?.[votedOption] && (
+                    <div>
+                      Your Vote :{" "}
+                      <span className="vote_msg">
+                        {" "}
+                        {proposalOptionMap[votedOption]}{" "}
+                      </span>{" "}
+                    </div>
+                  )}
+                  <Col className="text-right">
+                    <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
+                  </Col>
+                </div>
+              ) : (
+                <Col className="text-right">
+                  <VoteNowModal refreshVote={fetchVote} proposal={proposal} />
+                </Col>
+              )}
             </Row>
             <Row>
               <Col>
@@ -409,7 +427,6 @@ GovernDetails.propTypes = {
   proposalMap: PropTypes.object,
   proposerMap: PropTypes.object,
   proposalTallyMap: PropTypes.object,
-
 };
 
 const stateToProps = (state) => {
