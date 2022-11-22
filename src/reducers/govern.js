@@ -3,7 +3,8 @@ import {
     ALL_PROPOSALS_SET,
     PROPOSALS_SET,
     PROPOSAL_SET,
-    PROPOSER_SET
+    PROPOSER_SET,
+    PROPOSAL_TALLY_SET
 } from "../constants/govern";
 
 const allProposals = (state = [], action) => {
@@ -42,9 +43,21 @@ const proposerMap = (state = {}, action) => {
     return state;
   };
 
+  const proposalTallyMap = (state = {}, action) => {
+    if (action.type === PROPOSAL_TALLY_SET) {
+      return {
+        ...state,
+        [action?.proposalId]: action.value || {},
+      };
+    }
+  
+    return state;
+  };
+
 export default combineReducers({
   proposals,
   allProposals,
   proposalMap,
-  proposerMap
+  proposerMap,
+  proposalTallyMap
 });
