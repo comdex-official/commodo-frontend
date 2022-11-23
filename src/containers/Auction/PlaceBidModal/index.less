@@ -29,6 +29,15 @@
         background: @background-dark2;
         background: #1D3129;
         border-color: @background-dark2;
+        &::placeholder {
+          color: @white;
+        }
+        &::-moz-placeholder {
+          color: @white;
+        }
+        &::-webkit-placeholder {
+          color: @white;
+        }
       }
       &::-webkit-outer-spin-button,
       &::-webkit-inner-spin-button {
