@@ -10,10 +10,11 @@ import LaunchImage from "../../assets/images/launch-bg.jpg";
 import "../../assets/less/plugins/slick-slider/slick.less";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { DOLLAR_DECIMALS, NUMBER_OF_TOP_ASSETS } from "../../constants/common";
+import { CSWAP_URL, REWARDS_URL } from "../../constants/url";
 import {
   queryTopAssets,
   queryTotalBorrowAndDeposit,
-  queryTotalValueLocked
+  queryTotalValueLocked,
 } from "../../services/lend/query";
 import { denomConversion } from "../../utils/coin";
 import { commaSeparator } from "../../utils/number";
@@ -237,7 +238,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
       );
     });
   };
-  
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -351,7 +352,16 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                               </div>
                             </div>
                             <h3 className="h3-botttom">
-                              <small>High APR</small>
+                              <Button type="primary">
+                                <a
+                                  aria-label="learn"
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  href={REWARDS_URL}
+                                >
+                                  Learn more
+                                </a>
+                              </Button>
                             </h3>
                           </div>
                         </div>
@@ -362,7 +372,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                               aria-label="cswap"
                               target="_blank"
                               rel="noreferrer"
-                              href="https://testnet.cswap.one/"
+                              href={CSWAP_URL}
                             >
                               Take me there!
                             </a>
