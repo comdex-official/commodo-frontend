@@ -1,4 +1,4 @@
-import { ALL_PROPOSALS_SET, PROPOSALS_SET, PROPOSAL_SET, PROPOSER_SET } from "../constants/govern";
+import { ALL_PROPOSALS_SET, PROPOSALS_SET, PROPOSAL_SET, PROPOSER_SET, PROPOSAL_TALLY_SET } from "../constants/govern";
 
 export const setAllProposals = (list) => {
   return {
@@ -24,6 +24,14 @@ export const setProposals = (list) => {
   export const setProposer = (value, proposalId) => {
     return {
       type: PROPOSER_SET,
+      proposalId,
+      value,
+    };
+  };
+
+  export const setProposalTally = (value, proposalId) => {
+    return {
+      type: PROPOSAL_TALLY_SET,
       proposalId,
       value,
     };
