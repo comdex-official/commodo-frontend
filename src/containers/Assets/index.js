@@ -109,6 +109,7 @@ const Assets = ({ assetBalance, balances, markets, assetDenomMap }) => {
     (item) => !item.hasOwnProperty("depositUrlOverride")
   );
 
+  console.log('the assets', assetsWithoutExternalLinks)
   let ibcBalances = assetsWithoutExternalLinks?.map((token) => {
     const ibcBalance = balances.find(
       (item) => item.denom === token?.ibcDenomHash

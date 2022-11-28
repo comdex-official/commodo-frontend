@@ -1,3 +1,4 @@
+import axios from "axios";
 import { QueryClientImpl } from "comdex-codec/build/comdex/market/v1beta1/query";
 import Long from "long";
 import { createQueryClient } from "../helper";
@@ -53,4 +54,30 @@ export const queryMarketList = (
         callback(error?.message);
       });
   });
+};
+
+export const fetchCoinPrices = () => {
+  axios
+    .get(``)
+    .then((result) => {
+      console.log("tiss", result?.data?.comdex.usd, denom, value);
+      return result?.data?.comdex.usd;
+    })
+    .catch((error) => {
+      console.log("err", error);
+      callback(error?.message);
+    });
+};
+
+export const fetchCoingeckoPrices = (callback) => {
+  axios
+    .get(
+      `https://api.coingecko.com/api/v3/simple/price?vs_currencies=usd&ids=cosmos,comdex,osmosis`
+    )
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
 };

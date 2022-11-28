@@ -1,10 +1,11 @@
 import { combineReducers } from "redux";
-import { MARKET_LIST_SET } from "../constants/oracle";
+import { COINGECKO_PRICES_SET, MARKET_LIST_SET } from "../constants/oracle";
 
 const market = (
   state = {
     map: {},
     pagination: {},
+    coingecko: {},
   },
   action
 ) => {
@@ -13,6 +14,13 @@ const market = (
       ...state,
       map: action.map,
       pagination: action.pagination,
+    };
+  }
+
+  if (action.type === COINGECKO_PRICES_SET) {
+    return {
+      ...state,
+      coingecko: action.value,
     };
   }
 

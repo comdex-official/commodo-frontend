@@ -15,14 +15,14 @@ import {
 } from "../../actions/account";
 import { setAssets } from "../../actions/asset";
 import { setAssetRatesStats } from "../../actions/lend";
-import { setMarkets } from "../../actions/oracle";
+import { setCoinPrices, setMarkets } from "../../actions/oracle";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
 import { queryAssets } from "../../services/asset/query";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
 import { QueryAssetRatesParams } from "../../services/lend/query";
-import { queryMarketList } from "../../services/oracle/query";
+import { fetchCoingeckoPrices, queryMarketList } from "../../services/oracle/query";
 import { marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
@@ -37,6 +37,7 @@ const ConnectButton = ({
   markets,
   refreshBalance,
   setMarkets,
+  setCoinPrices,
   setAccountName,
   setAssets,
   setAssetRatesStats,
@@ -48,6 +49,7 @@ const ConnectButton = ({
     const userAddress = savedAddress ? decode(savedAddress) : address;
 
     fetchMarkets();
+    fetchCoinPrices();
 
     if (userAddress) {
       setAccountAddress(userAddress);
@@ -127,6 +129,17 @@ const ConnectButton = ({
     });
   };
 
+  const fetchCoinPrices = () =>{
+    fetchCoingeckoPrices((error, result)=>{
+      if(error){
+        return;
+      }
+
+      setCoinPrices(result);
+      console.log('the prices', result)
+    })
+  }
+
   const getPrice = (denom) => {
     return marketPrice(markets, denom, assetDenomMap[denom]?.id) || 0;
   };
@@ -185,6 +198,7 @@ ConnectButton.propTypes = {
   setAccountName: PropTypes.func.isRequired,
   setAssetBalance: PropTypes.func.isRequired,
   setAccountVaults: PropTypes.func.isRequired,
+  setCoinPrices: PropTypes.func.isRequired,
   setMarkets: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
   address: PropTypes.string,
@@ -219,6 +233,7 @@ const actionsToProps = {
   setAssetBalance,
   setAccountVaults,
   setMarkets,
+  setCoinPrices,
   setAccountName,
   setAssets,
   setAssetRatesStats,
