@@ -14,7 +14,7 @@ import { CSWAP_URL, REWARDS_URL } from "../../constants/url";
 import {
   queryTopAssets,
   queryTotalBorrowAndDeposit,
-  queryTotalValueLocked,
+  queryTotalValueLocked
 } from "../../services/lend/query";
 import { denomConversion } from "../../utils/coin";
 import { commaSeparator } from "../../utils/number";
@@ -352,31 +352,24 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                               </div>
                             </div>
                             <h3 className="h3-botttom">
-                              <Button type="primary">
-                                <a
-                                  aria-label="learn"
-                                  target="_blank"
-                                  rel="noreferrer"
-                                  href={REWARDS_URL}
-                                >
-                                  Learn more
-                                </a>
+                              <Button
+                                type="primary"
+                                onClick={() => window.open(REWARDS_URL)}
+                              >
+                                Learn more
                               </Button>
                             </h3>
                           </div>
                         </div>
                         <div className="assets-right">
                           <img alt={AssetsIcon} src={AssetsIcon} />
-                          <a
-                              aria-label="cswap"
-                              target="_blank"
-                              rel="noreferrer"
-                              href={CSWAP_URL}
-                            >
-                          <Button type="primary" className="btn-filled">
+                          <Button
+                            type="primary"
+                            className="btn-filled"
+                            onClick={() => window.open(CSWAP_URL)}
+                          >
                             Take me there!
                           </Button>
-                          </a>
                         </div>
                       </div>
                     </div>

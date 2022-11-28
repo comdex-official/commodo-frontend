@@ -53,7 +53,7 @@ const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
       title: "Borrow APY",
       dataIndex: "apy",
       key: "apy",
-      width: 150,
+      width: 130,
       render: (borrow) => <AssetApy borrowPosition={borrow} parent="borrow" />,
     },
     {
