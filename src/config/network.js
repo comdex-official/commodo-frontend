@@ -13,8 +13,8 @@ export const comdex = {
 };
 
 export const ibcDenoms = {
-  uatom: "uatom",
-  uosmo: "uosmo",
+  uatom: process.env.REACT_APP_ATOM_IBC_DENOM,
+  uosmo: process.env.REACT_APP_OSMO_IBC_DENOM,
 };
 
 export const cmst = {
