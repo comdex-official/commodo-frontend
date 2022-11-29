@@ -41,7 +41,7 @@ export const marketPrice = (marketsMap, denom, assetId) => {
     return value?.twa?.toNumber() / 1000000;
   }
 
-  return 1; // showing 1 for testing.
+  return 0;
 };
 
 export const getAccountNumber = (value) => {
