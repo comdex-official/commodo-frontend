@@ -95,3 +95,14 @@ export const fetchRestProposer = (id, callback) => {
       callback(error?.message);
     });
 };
+
+export const fetchRestProposalTally = (id, callback) => {
+  axios
+    .get(`${comdex?.rest}/cosmos/gov/v1beta1/proposals/${id}/tally`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};

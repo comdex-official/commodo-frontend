@@ -1,11 +1,25 @@
-import { Button, Table } from "antd";
+import { Button, message, Table } from "antd";
 import moment from "moment";
-import { Col, Row, SvgIcon } from "../../components/common";
+import * as PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { setBiddings } from "../../actions/auction";
+import { Col, NoDataIcon, Row, SvgIcon } from "../../components/common";
 import TooltipIcon from "../../components/common/TooltipIcon/index";
+import {
+  DEFAULT_BIDDING_PAGE_SIZE,
+  DEFAULT_PAGE_NUMBER
+} from "../../constants/common";
+import { queryDutchBiddingList } from "../../services/auction";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
 
-export const Bidding = ({ biddingList, inProgress }) => {
+export const Bidding = ({ setBiddings, biddings, address, refreshBalance }) => {
+  const [inProgress, setInProgress] = useState(false);
+  const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
+  const [pageSize, setPageSize] = useState(DEFAULT_BIDDING_PAGE_SIZE);
+  const [biddingsTotalCount, setBiddingsTotalCounts] = useState(0);
+
   const columnsBidding = [
     {
       title: (
@@ -62,9 +76,8 @@ export const Bidding = ({ biddingList, inProgress }) => {
   ];
 
   const tableBiddingData =
-    biddingList &&
-    biddingList.length > 0 &&
-    biddingList.map((item, index) => {
+    biddings?.length > 0 &&
+    biddings?.map((item, index) => {
       return {
         key: index,
         outflowToken: (
@@ -127,6 +140,47 @@ export const Bidding = ({ biddingList, inProgress }) => {
       };
     });
 
+  const fetchBiddings = (address, offset, limit, countTotal, reverse) => {
+    setInProgress(true);
+
+    queryDutchBiddingList(
+      address,
+      offset,
+      limit,
+      countTotal,
+      reverse,
+      (error, result) => {
+        setInProgress(false);
+
+        if (error) {
+          message.error(error);
+          return;
+        }
+        if (result?.biddings?.length > 0) {
+          let reverseData = result && result.biddings;
+          setBiddings(reverseData);
+          setBiddingsTotalCounts(result?.pagination?.total?.toNumber());
+        }
+      }
+    );
+  };
+
+  const handleChange = (value) => {
+    setPageNumber(value?.current);
+    setPageSize(value?.pageSize);
+    fetchBiddings(
+      address,
+      (value?.current - 1) * value?.pageSize,
+      value?.pageSize,
+      true,
+      true
+    );
+  };
+
+  useEffect(() => {
+    fetchBiddings(address, (pageNumber - 1) * pageSize, pageSize, true, true);
+  }, [address, refreshBalance]);
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -137,9 +191,14 @@ export const Bidding = ({ biddingList, inProgress }) => {
                 className="custom-table auction-table  bidding-bottom-table "
                 dataSource={tableBiddingData}
                 columns={columnsBidding}
-                pagination={{ defaultPageSize: 5 }}
-                loading={inProgress}
+                onChange={(event) => handleChange(event)}
+                pagination={{
+                  total: biddingsTotalCount,
+                  pageSize,
+                }}
+                loading={inProgress && !biddings?.length}
                 scroll={{ x: "100%" }}
+                locale={{ emptyText: <NoDataIcon /> }}
               />
             </div>
           </div>
@@ -149,4 +208,21 @@ export const Bidding = ({ biddingList, inProgress }) => {
   );
 };
 
-export default Bidding;
+Bidding.propTypes = {
+  setBiddings: PropTypes.func.isRequired,
+  address: PropTypes.string,
+  biddings: PropTypes.array,
+  refreshBalance: PropTypes.number.isRequired,
+};
+
+const stateToProps = (state) => {
+  return {
+    biddings: state.auction.bidding.list,
+  };
+};
+
+const actionsToProps = {
+  setBiddings,
+};
+
+export default connect(stateToProps, actionsToProps)(Bidding);

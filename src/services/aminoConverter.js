@@ -252,4 +252,51 @@ export const customAminoTypes = {
       };
     },
   },
+  "/comdex.auction.v1beta1.MsgPlaceDutchLendBidRequest": {
+    aminoType: "comdex/auction/MsgPlaceDutchLendBidRequest",
+    toAmino: ({ bidder, max, amount, auctionId, appId, auctionMappingId }) => {
+      return {
+        bidder,
+        max,
+        amount: amount,
+        auction_id: String(auctionId),
+        app_id: String(appId),
+        auction_mapping_id: String(auctionMappingId),
+      };
+    },
+    fromAmino: ({
+      bidder,
+      max,
+      amount,
+      auction_id,
+      app_id,
+      auction_mapping_id,
+    }) => {
+      return {
+        bidder,
+        max,
+        amount: amount,
+        auctionId: Number(auction_id),
+        appId: Number(app_id),
+        auctionMappingId: Number(auction_mapping_id),
+      };
+    },
+  },
+  "/cosmos.gov.v1beta1.MsgVote": {
+    aminoType: "cosmos-sdk/MsgVote",
+    toAmino: ({ proposalId, voter, option }) => {
+      return {
+        proposal_id: String(proposalId),
+        voter,
+        option,
+      };
+    },
+    fromAmino: ({ proposal_id, voter, option }) => {
+      return {
+        proposalId: Number(proposal_id),
+        voter,
+        option,
+      };
+    },
+  },
 };

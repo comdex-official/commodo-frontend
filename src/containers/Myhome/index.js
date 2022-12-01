@@ -223,7 +223,7 @@ const Myhome = ({
 
   const tabItems = [
     {
-      label: "Deposit",
+      label: "Lend",
       key: "1",
       children: <Deposit inProgress={lendsInProgress} />,
     },

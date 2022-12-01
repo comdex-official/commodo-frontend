@@ -1,18 +1,22 @@
-import { message, Table } from "antd";
+import { Button, message, Table } from "antd";
 import moment from "moment";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import { setAuctions } from "../../actions/auction";
+import {
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon
+} from "../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   DOLLAR_DECIMALS
 } from "../../constants/common";
-import {
-  queryDutchAuctionList,
-  queryDutchBiddingList
-} from "../../services/auction";
+import { queryDutchAuctionList } from "../../services/auction";
 import { queryAuctionMippingIdParams } from "../../services/lend/query";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { commaSeparator, decimalConversion } from "../../utils/number";
@@ -21,14 +25,12 @@ import Bidding from "./Bidding";
 import "./index.less";
 import PlaceBidModal from "./PlaceBidModal";
 
-const Auction = ({ address }) => {
+const Auction = ({ address, setAuctions, auctions, refreshBalance }) => {
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [params, setParams] = useState({});
-  const [auctions, setAuctions] = useState();
   const [loading, setLoading] = useState(true);
-  const [inProgress, setInProgress] = useState(false);
-  const [biddings, setBiddings] = useState("");
+  const [disableFetchButton, setdisableFetchButton] = useState(false);
 
   const columns = [
     {
@@ -109,7 +111,6 @@ const Auction = ({ address }) => {
           <PlaceBidModal
             params={params}
             auction={item}
-            refreshData={fetchData}
             discount={params?.auctionDiscountPercent}
           />
         </>
@@ -118,8 +119,8 @@ const Auction = ({ address }) => {
   ];
 
   const tableData =
-    auctions && auctions?.auctions?.length > 0
-      ? auctions?.auctions?.map((item, index) => {
+    auctions && auctions?.length > 0
+      ? auctions?.map((item, index) => {
           return {
             key: index,
             auctioned_asset: (
@@ -167,19 +168,12 @@ const Auction = ({ address }) => {
       : [];
 
   useEffect(() => {
-    fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, false);
-  }, []);
+    fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, true);
+  }, [address, refreshBalance]);
 
   useEffect(() => {
-    fetchData();
     queryParams();
   }, [address]);
-
-  const fetchData = () => {
-    if (address) {
-      fetchBiddings(address);
-    }
-  };
 
   const queryParams = () => {
     queryAuctionMippingIdParams((error, result) => {
@@ -206,33 +200,61 @@ const Auction = ({ address }) => {
           message.error(error);
           return;
         }
-
         if (result?.auctions?.length > 0) {
-          setAuctions(result && result);
+          setAuctions(result?.auctions);
         }
       }
     );
   };
 
-  const fetchBiddings = (address) => {
-    setInProgress(true);
+  const fetchLatestPrice = () => {
+    setdisableFetchButton(true);
+    fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, true);
+  };
 
-    queryDutchBiddingList(address, (error, result) => {
-      setInProgress(false);
+  useEffect(() => {
+    const interval = setTimeout(() => {
+      setdisableFetchButton(false);
+    }, 6000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [disableFetchButton]);
 
-      if (error) {
-        message.error(error);
-        return;
-      }
-      if (result?.biddings?.length > 0) {
-        let reverseData = (result && result.biddings).reverse();
-        setBiddings(reverseData);
-      }
-    });
+  const handleChange = (value) => {
+    setPageNumber(value?.current);
+    setPageSize(value?.pageSize);
+    fetchAuctions(
+      (value?.current - 1) * value?.pageSize,
+      value?.pageSize,
+      true,
+      true
+    );
   };
 
   return (
     <div className="app-content-wrapper">
+      <Row>
+        <div className="update-btn-main-container">
+          <div className="locker-up-main-container">
+            <div className="locker-up-container mr-4">
+              <div className="claim-container ">
+                <div className="claim-btn">
+                  <Button
+                    type="primary"
+                    className="btn-filled mr-1"
+                    disabled={disableFetchButton}
+                    onClick={() => fetchLatestPrice()}
+                  >
+                    Update Auction Price{" "}
+                  </Button>{" "}
+                  <TooltipIcon text="The price of the auction changes every block, click on the button to update the price for placing accurate bids." />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Row>
       <Row>
         <Col>
           <div className="commodo-card py-3 bg-none">
@@ -241,9 +263,17 @@ const Auction = ({ address }) => {
                 className="custom-table auction-table"
                 dataSource={tableData}
                 columns={columns}
-                pagination={{ defaultPageSize: 10 }}
+                onChange={(event) => handleChange(event)}
+                pagination={{
+                  total:
+                    auctions &&
+                    auctions.pagination &&
+                    auctions.pagination?.total?.toNumber(),
+                  pageSize,
+                }}
                 scroll={{ x: "100%" }}
-                loading={loading}
+                loading={loading && !auctions?.length}
+                locale={{ emptyText: <NoDataIcon /> }}
               />
             </div>
           </div>
@@ -251,7 +281,7 @@ const Auction = ({ address }) => {
           <div className="more-bottom">
             <h3 className="title">Bidding History</h3>
             <div className="more-bottom-card">
-              <Bidding biddingList={biddings} inProgress={inProgress} />
+              <Bidding address={address} refreshBalance={refreshBalance} />
             </div>
           </div>
         </Col>
@@ -262,14 +292,23 @@ const Auction = ({ address }) => {
 
 Auction.propTypes = {
   lang: PropTypes.string.isRequired,
+  setAuctions: PropTypes.func.isRequired,
   address: PropTypes.string,
+  auctions: PropTypes.array,
+  refreshBalance: PropTypes.number.isRequired,
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
     address: state.account.address,
+    auctions: state.auction.data.list,
+    refreshBalance: state.account.refreshBalance,
   };
 };
 
-export default connect(stateToProps)(Auction);
+const actionsToProps = {
+  setAuctions,
+};
+
+export default connect(stateToProps, actionsToProps)(Auction);

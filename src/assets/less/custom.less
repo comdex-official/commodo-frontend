@@ -19,6 +19,8 @@ body {
   font-weight: 400;
   background: @body-background-light  !important;
   height: auto !important;
+  padding: 0;
+  margin: 0;
 
   &.dark-mode {
     background: #000c07 !important;
@@ -551,6 +553,19 @@ button.ant-switch {
             border: 1px solid rgba(@bg-dark, 0.5);
             background: @card-bg-light;
             border-radius: 15px;
+
+            &.ant-table-measure-row{
+              background: none !important;
+              height: 0;
+              overflow: hidden;
+              border: 0 !important;
+              td{
+                padding: 0 !important;
+                height: 0 !important;
+                min-height: 0 !important;
+                max-height: 0 !important;
+              }
+            }
 
             &:hover {
               background: rgba(@card-bg-light, 0.8);
@@ -1322,8 +1337,9 @@ button.ant-switch {
     }
 
     &.ant-pagination-item-active {
+      border-color: @dark-color;
       a {
-        color: @white;
+        color: @dark-color;
       }
     }
   }
@@ -1863,6 +1879,19 @@ button.ant-switch {
   .ant-empty-description {
     .dark-mode & {
       color: @white;
+    }
+  }
+}
+
+.dropconnect-overlay{
+  padding: 0;
+  .ant-dropdown-menu{
+    padding: 0;
+    background: none;
+    .ant-dropdown-menu-item{
+      padding: 0;
+      background: none !important;
+      cursor: default;
     }
   }
 }

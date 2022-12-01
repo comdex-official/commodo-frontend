@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import { setBalanceRefresh } from "../../../../actions/account";
-import { Col, Row, SvgIcon } from "../../../../components/common";
+import { Col, NoDataIcon, Row, SvgIcon } from "../../../../components/common";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
 import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
@@ -44,7 +44,6 @@ const DepositTab = ({
   markets,
   setBalanceRefresh,
   refreshBalance,
-  assetDenomMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [selectedAssetId, setSelectedAssetId] = useState();
@@ -163,6 +162,7 @@ const DepositTab = ({
                     suffixIcon={
                       <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                     }
+                    notFoundContent={<NoDataIcon />}
                   >
                     {assetList?.length > 0 &&
                       assetList?.map((record) => {
@@ -293,7 +293,6 @@ DepositTab.propTypes = {
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
-  assetDenomMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -327,7 +326,6 @@ const stateToProps = (state) => {
     lang: state.language,
     markets: state.oracle.market.map,
     refreshBalance: state.account.refreshBalance,
-    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

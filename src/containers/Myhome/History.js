@@ -4,7 +4,7 @@ import * as PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setTransactionHistory } from "../../actions/account";
-import { Col, Row } from "../../components/common";
+import { Col, NoDataIcon, Row } from "../../components/common";
 import Copy from "../../components/Copy";
 import { comdex } from "../../config/network";
 import { abbreviateMessage, fetchTxHistory } from "../../services/transaction";
@@ -54,9 +54,9 @@ const History = ({ address, setTransactionHistory, history }) => {
     });
 
   const handleChange = (value) => {
-    setPageNumber(value.current);
-    setPageSize(value.pageSize);
-    getTransactions(address, value.current, value.pageSize);
+    setPageNumber(value?.current);
+    setPageSize(value?.pageSize);
+    getTransactions(address, value?.current, value?.pageSize);
   };
 
   const columns = [
@@ -129,6 +129,7 @@ const History = ({ address, setTransactionHistory, history }) => {
                 }}
                 total={history && history.count}
                 onChange={(event) => handleChange(event)}
+                locale={{emptyText: <NoDataIcon />}}
               />
             </div>
           </div>

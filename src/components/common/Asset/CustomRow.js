@@ -1,4 +1,5 @@
 import * as PropTypes from "prop-types";
+import uuid from "react-uuid";
 import { denomConversion } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
 import { SvgIcon } from "../index";
@@ -10,7 +11,7 @@ const CustomRow = ({ assetList, poolId }) => {
       <div className="deposit-head-left">
         {assetList?.length > 0 &&
           assetList?.map((item) => (
-            <div className="assets-col mr-3" key={item?.denom}>
+            <div className="assets-col mr-3" key={uuid()}>
               <div className="assets-icon">
                 <SvgIcon name={iconNameFromDenom(item?.denom)} />
               </div>

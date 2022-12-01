@@ -2,7 +2,7 @@ import { Button, Table } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
@@ -132,6 +132,7 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
                 columns={columns}
                 pagination={false}
                 scroll={{ x: "100%" }}
+                locale={{emptyText: <NoDataIcon />}}
               />
             </div>
           </div>

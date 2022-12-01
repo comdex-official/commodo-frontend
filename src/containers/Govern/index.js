@@ -1,57 +1,24 @@
-import { Button, List, message, Select, Spin } from "antd";
+import { Button, message, Select, Spin } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import { Col, Row, SvgIcon } from "../../components/common";
-import NoData from "../../components/NoData";
-import { comdex } from "../../config/network";
+import { Col, NoDataIcon, Row, SvgIcon } from "../../components/common";
 import { fetchRestProposals } from "../../services/govern/query";
-import { queryStakeTokens } from "../../services/staking/query";
-import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { formatTime } from "../../utils/date";
 import { proposalStatusMap } from "../../utils/string";
+import { setAllProposals, setProposals } from "../../actions/govern";
 import "./index.less";
 
 const { Option } = Select;
 
-const Govern = () => {
+const Govern = ({setAllProposals, allProposals, setProposals, proposals}) => {
   const navigate = useNavigate();
-  const [proposals, setProposals] = useState();
   const [inProgress, setInProgress] = useState(false);
-  const [allProposals, setAllProposals] = useState();
-  const [stakedTokens, setStakedTokens] = useState();
 
   useEffect(() => {
     fetchAllProposals();
-    fetchStakeTokens();
   }, []);
-
-  const fetchStakeTokens = () => {
-    queryStakeTokens((error, result) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
-
-      setStakedTokens(result?.pool?.bondedTokens);
-    });
-  };
-  const data = [
-    {
-      title: "Total Staked",
-      counts: (
-        <>
-          {amountConversionWithComma(stakedTokens)}{" "}
-          {denomConversion(comdex.coinMinimalDenom)}
-        </>
-      ),
-    },
-    {
-      title: "Total Proposals",
-      counts: allProposals?.length || 0,
-    },
-  ];
 
   const fetchAllProposals = () => {
     setInProgress(true);
@@ -81,40 +48,12 @@ const Govern = () => {
 
   return (
     <div className="app-content-wrapper">
-      {inProgress ? (
-        <div className="loader">
+      {inProgress && !proposals?.length ? (
+                <div className="loader">
           <Spin />
         </div>
       ) : (
         <>
-          <Row>
-            <Col>
-              <div className="commodo-card myhome-upper d-block">
-                <div className="myhome-upper-left w-100">
-                  <List
-                    grid={{
-                      gutter: 16,
-                      xs: 1,
-                      sm: 2,
-                      md: 2,
-                      lg: 2,
-                      xl: 2,
-                      xxl: 2,
-                    }}
-                    dataSource={data}
-                    renderItem={(item) => (
-                      <List.Item>
-                        <div>
-                          <p>{item.title}</p>
-                          <h3>{item.counts}</h3>
-                        </div>
-                      </List.Item>
-                    )}
-                  />
-                </div>
-              </div>
-            </Col>
-          </Row>
           <Row className="mt-3">
             <Col>
               <div className="commodo-card govern-card">
@@ -137,6 +76,7 @@ const Govern = () => {
                       <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
                     }
                     style={{ width: 120 }}
+                    notFoundContent={<NoDataIcon />}
                   >
                     <Option value="all" className="govern-select-option">
                       All
@@ -205,7 +145,7 @@ const Govern = () => {
                       );
                     })
                   ) : (
-                    <NoData />
+                    <NoDataIcon />
                   )}
                 </div>
               </div>
@@ -219,14 +159,22 @@ const Govern = () => {
 
 Govern.propTypes = {
   lang: PropTypes.string.isRequired,
+  setAllProposals: PropTypes.func.isRequired,
+  setProposals: PropTypes.func.isRequired,
+  allProposals: PropTypes.array,
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
+    allProposals: state.govern.allProposals,
+    proposals: state.govern.proposals,
   };
 };
 
-const actionsToProps = {};
+const actionsToProps = {
+  setAllProposals,
+  setProposals,
+};
 
 export default connect(stateToProps, actionsToProps)(Govern);
