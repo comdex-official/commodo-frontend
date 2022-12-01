@@ -78,7 +78,7 @@ const Myhome = ({
     setBorrowsInProgress(true);
     queryUserBorrows(address, (error, result) => {
       setBorrowsInProgress(false);
-
+      
       if (error) {
         message.error(error);
         return;
@@ -126,8 +126,11 @@ const Myhome = ({
       userLendList?.length > 0
         ? userLendList.map((item) => {
             return (
-              marketPrice(markets, item?.amountIn?.denom, assetDenomMap[item?.amountIn?.denom]?.id) *
-              item?.amountIn.amount
+              marketPrice(
+                markets,
+                item?.amountIn?.denom,
+                assetDenomMap[item?.amountIn?.denom]?.id
+              ) * item?.amountIn.amount
             );
           })
         : [];
@@ -142,8 +145,11 @@ const Myhome = ({
       userBorrowList?.length > 0
         ? userBorrowList.map((item) => {
             return (
-              marketPrice(markets, item?.amountOut?.denom, assetDenomMap[item?.amountOut?.denom]?.id) *
-              item?.amountOut.amount
+              marketPrice(
+                markets,
+                item?.amountOut?.denom,
+                assetDenomMap[item?.amountOut?.denom]?.id
+              ) * item?.amountOut.amount
             );
           })
         : [];
@@ -225,12 +231,19 @@ const Myhome = ({
     {
       label: "Lend",
       key: "1",
-      children: <Deposit inProgress={lendsInProgress} />,
+      children: <Deposit 
+      fetchUserLends={fetchUserLends}
+      inProgress={lendsInProgress} />,
     },
     {
       label: "Borrow",
       key: "2",
-      children: <Borrow inProgress={borrowsInProgress} />,
+      children: (
+        <Borrow
+          fetchUserBorrows={fetchUserBorrows}
+          inProgress={borrowsInProgress}
+        />
+      ),
     },
     { label: "History", key: "3", children: <History /> },
   ];
@@ -314,7 +327,7 @@ Myhome.propTypes = {
   assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
-    markets: PropTypes.object,
+  markets: PropTypes.object,
   userBorrowList: PropTypes.arrayOf(
     PropTypes.shape({
       amountOut: PropTypes.shape({
@@ -356,11 +369,10 @@ const stateToProps = (state) => {
     address: state.account.address,
     userLendList: state.lend.userLends,
     userBorrowList: state.lend.userBorrows,
-     markets: state.oracle.market.map,
+    markets: state.oracle.market.map,
     assetRatesStatsMap: state.lend.assetRatesStats.map,
     assetMap: state.asset._.map,
     assetDenomMap: state.asset._.assetDenomMap,
-
   };
 };
 
