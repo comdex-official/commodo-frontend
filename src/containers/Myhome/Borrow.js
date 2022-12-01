@@ -1,4 +1,4 @@
-import { Button, Table, Tooltip } from "antd";
+import { Button, Dropdown, Menu, Table, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
@@ -11,9 +11,15 @@ import AssetApy from "../Market/AssetApy";
 import InterestAndReward from "./Calculate/InterestAndReward";
 import "./index.less";
 
+const editItems = (
+  <Menu>
+    <Menu.Item>Borrow </Menu.Item>
+    <Menu.Item>Repay</Menu.Item>
+  </Menu>
+)
+
 const Borrow = ({ userBorrowList, inProgress, address }) => {
   const navigate = useNavigate();
-
   const columns = [
     {
       title: "Asset",
@@ -46,7 +52,7 @@ const Borrow = ({ userBorrowList, inProgress, address }) => {
       ),
       dataIndex: "health",
       key: "health",
-      width: 180,
+      width: 260,
       align: "center",
       render: (item) => <HealthFactor parent="table" borrow={item} />,
     },
@@ -54,7 +60,7 @@ const Borrow = ({ userBorrowList, inProgress, address }) => {
       title: "Borrow APY",
       dataIndex: "apy",
       key: "apy",
-      width: 130,
+      width: 180,
       render: (borrow) => <AssetApy borrowPosition={borrow} parent="borrow" />,
     },
     {
@@ -66,7 +72,7 @@ const Borrow = ({ userBorrowList, inProgress, address }) => {
       ),
       dataIndex: "apy",
       key: "apy",
-      width: 150,
+      width: 300,
       render: (borrow) => <AssetApy borrowPosition={borrow} parent="borrow" />,
     },
     {
@@ -99,12 +105,18 @@ const Borrow = ({ userBorrowList, inProgress, address }) => {
       render: (item) => (
         <>
           <div className="d-flex">
+            {/* <Button
+              onClick={() =>
+                navigate(`/myhome/borrow/${item?.borrowingId?.toNumber()}`)
             <Tooltip
               overlayClassName="commodo-tooltip"
               title={
                 item?.isLiquidated ? "Position has been sent for Auction." : ""
               }
             >
+              Edit
+            </Button> */}
+            <Dropdown overlayClassName="edit-btn-dorp" trigger={["click"]} overlay={editItems}>
               <Button
                 disabled={item?.isLiquidated}
                 onClick={() =>
@@ -114,9 +126,18 @@ const Borrow = ({ userBorrowList, inProgress, address }) => {
                 className="btn-filled"
                 size="small"
               >
-                <span>Edit</span>
+                 <Tooltip
+              overlayClassName="commodo-tooltip"
+              title={
+                item?.isLiquidated ? "Position has been sent for Auction." : ""
+              }
+            >
+                Edit
+                </Tooltip>
               </Button>
-            </Tooltip>
+            </Dropdown>
+                <span>Edit</span>
+            
           </div>
         </>
       ),
@@ -172,7 +193,7 @@ const Borrow = ({ userBorrowList, inProgress, address }) => {
       <Row>
         <Col>
           <div className="commodo-card bg-none">
-            <div className="d-flex align-items-center">
+            <div className="d-flex w-100 align-items-center justify-content-beetwen">
               <div className="card-header text-left">MY Borrowed AssetS</div>
               <InterestAndReward parent="borrow" />
             </div>

@@ -1,4 +1,4 @@
-import { Button, Table } from "antd";
+import { Button, Table, Dropdown, Menu } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
@@ -8,6 +8,13 @@ import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
 import InterestAndReward from "./Calculate/InterestAndReward";
 import "./index.less";
+
+const editItems = (
+  <Menu>
+    <Menu.Item>Deposit</Menu.Item>
+    <Menu.Item>Withdraw</Menu.Item>
+  </Menu>
+)
 
 const Deposit = ({ lang, userLendList, inProgress }) => {
   const navigate = useNavigate();
@@ -64,7 +71,7 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
       render: (item) => (
         <>
           <div className="d-flex">
-            <Button
+            {/* <Button
               onClick={() =>
                 navigate(`/myhome/deposit/${item?.lendingId?.toNumber()}`)
               }
@@ -73,7 +80,16 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
               size="small"
             >
               Edit
-            </Button>
+            </Button> */}
+            <Dropdown overlayClassName="edit-btn-dorp" trigger={["click"]} overlay={editItems}>
+              <Button
+                type="primary"
+                className="btn-filled"
+                size="small"
+              >
+                Edit
+              </Button>
+            </Dropdown>
           </div>
         </>
       ),

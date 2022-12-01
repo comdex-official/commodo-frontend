@@ -57,7 +57,7 @@ const InterestAndReward = ({ parent, lang, address }) => {
       type="primary"
       loading={inProgress}
       disabled={inProgress}
-      className="btn-filled table-btn ml-1"
+      className="btn-outline caclulate-btn"
       size="small"
     >
       Calculate
