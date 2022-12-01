@@ -234,6 +234,9 @@
                   margin-right: 4px;
                 }
               }
+              .icon-col-2{
+                transform: translateX(-9px);
+              }
             }
             h3 {
               color: @white;
@@ -262,18 +265,30 @@
           }
           .assets-right {
             text-align: center;
+            .asset-right-overlap-icon-main-container{
+              .asset-right-overlap-icon-container{
+                display: flex;
+                .overlap-icon-1{
+                  transform: translateX(12px);
+                }
+                .overlap-icon-2{
+                  transform: translateX(-12px);
+                }
+              }
+            }
             img {
-              width: 120px;
+              width: 75px;
               margin-bottom: 0.5rem;
               margin-left: auto;
               margin-right: auto;
               display: block;
+              margin-bottom: 1.5rem;
               &.commodo-logo{
                 width: 90px;
                 margin-top: 1.2rem;
               }
               @media screen and (max-width: 1367px) {
-                width: 100px;
+                width: 80px;
               }
             }
             h2{
