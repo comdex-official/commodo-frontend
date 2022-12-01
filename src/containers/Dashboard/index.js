@@ -5,11 +5,12 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Slider from "react-slick";
-import AssetsIcon from "../../assets/images/assets-icon.png";
+import AtomIcon from "../../assets/images/atom.png";
+import ComdexIcon from "../../assets/images/comdex.png";
 import LaunchImage from "../../assets/images/launch-bg.jpg";
 import "../../assets/less/plugins/slick-slider/slick.less";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
-import { DOLLAR_DECIMALS, NUMBER_OF_TOP_ASSETS } from "../../constants/common";
+import { ATOM_CMDX_POOL_ID, DOLLAR_DECIMALS, NUMBER_OF_TOP_ASSETS } from "../../constants/common";
 import { CSWAP_URL, REWARDS_URL } from "../../constants/url";
 import {
   queryTopAssets,
@@ -364,14 +365,22 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                         <div className="assets-right">
                           <div className="asset-right-overlap-icon-main-container">
                             <div className="asset-right-overlap-icon-container">
-                              <img alt={AssetsIcon} src={AssetsIcon} className="overlap-icon-1"/>
-                              <img alt={AssetsIcon} src={AssetsIcon} className="overlap-icon-2"/>
+                              <img
+                                alt={"atom"}
+                                src={AtomIcon}
+                                className="overlap-icon-1"
+                              />
+                              <img
+                                alt={"comdex"}
+                                src={ComdexIcon}
+                                className="overlap-icon-2"
+                              />
                             </div>
                           </div>
                           <Button
                             type="primary"
                             className="btn-filled"
-                            onClick={() => window.open(CSWAP_URL)}
+                            onClick={() => window.open(`${CSWAP_URL}/farm/${ATOM_CMDX_POOL_ID}`)}
                           >
                             Take me there!
                           </Button>
@@ -391,8 +400,8 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                     {topDeposits && topDeposits?.length > 0
                       ? showTopAssets(topDeposits)
                       : topAssetsInProgress
-                        ? showSkeletonLoader()
-                        : "No data"}
+                      ? showSkeletonLoader()
+                      : "No data"}
                   </ul>
                 </div>
                 <div className="deposited-list">
@@ -401,8 +410,8 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                     {topBorrows && topBorrows?.length > 0
                       ? showTopAssets(topBorrows)
                       : topAssetsInProgress
-                        ? showSkeletonLoader()
-                        : ""}
+                      ? showSkeletonLoader()
+                      : ""}
                   </ul>
                 </div>
               </div>
