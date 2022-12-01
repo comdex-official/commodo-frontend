@@ -5,11 +5,15 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Slider from "react-slick";
-import AssetsIcon from "../../assets/images/assets-icon.png";
+import ComdexAtomIcon from "../../assets/images/cmdx_atom.png";
 import LaunchImage from "../../assets/images/launch-bg.jpg";
 import "../../assets/less/plugins/slick-slider/slick.less";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
-import { DOLLAR_DECIMALS, NUMBER_OF_TOP_ASSETS } from "../../constants/common";
+import {
+  ATOM_CMDX_POOL_ID,
+  DOLLAR_DECIMALS,
+  NUMBER_OF_TOP_ASSETS
+} from "../../constants/common";
 import { CSWAP_URL, REWARDS_URL } from "../../constants/url";
 import {
   queryTopAssets,
@@ -343,12 +347,11 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                           <div className="mt-auto">
                             <div className="small-icons mb-2">
                               <div className="icon-col mr-2">
-                                <SvgIcon name="atom-icon" />
-                                ATOM
+                                <SvgIcon name="cmdx-icon" /> CMDX
                               </div>{" "}
                               -
                               <div className="icon-col ml-2">
-                                <SvgIcon name="cmdx-icon" /> CMDX
+                                <SvgIcon name="atom-icon" /> ATOM
                               </div>
                             </div>
                             <h3 className="h3-botttom">
@@ -362,11 +365,19 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                           </div>
                         </div>
                         <div className="assets-right">
-                          <img alt={AssetsIcon} src={AssetsIcon} />
+                          <img
+                            alt={"atom"}
+                            src={ComdexAtomIcon}
+                            className="overlap-icon-1"
+                          />
                           <Button
                             type="primary"
                             className="btn-filled"
-                            onClick={() => window.open(CSWAP_URL)}
+                            onClick={() =>
+                              window.open(
+                                `${CSWAP_URL}/farm/${ATOM_CMDX_POOL_ID}`
+                              )
+                            }
                           >
                             Take me there!
                           </Button>
