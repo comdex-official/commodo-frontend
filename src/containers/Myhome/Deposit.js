@@ -1,8 +1,14 @@
-import { Button, Table, Dropdown, Menu } from "antd";
+import { Button, Dropdown, Menu, Table } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import {
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon
+} from "../../components/common";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
@@ -14,9 +20,15 @@ const editItems = (
     <Menu.Item>Deposit</Menu.Item>
     <Menu.Item>Withdraw</Menu.Item>
   </Menu>
-)
+);
 
-const Deposit = ({ lang, userLendList, inProgress }) => {
+const Deposit = ({
+  lang,
+  userLendList,
+  inProgress,
+  address,
+  fetchUserLends,
+}) => {
   const navigate = useNavigate();
 
   const columns = [
@@ -71,18 +83,15 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
       render: (item) => (
         <>
           <div className="d-flex">
-            {/* <Button
-              onClick={() =>
-                navigate(`/myhome/deposit/${item?.lendingId?.toNumber()}`)
-              }
-              type="primary"
-              className="btn-filled table-btn"
-              size="small"
+            <Dropdown
+              overlayClassName="edit-btn-dorp"
+              trigger={["click"]}
+              overlay={editItems}
             >
-              Edit
-            </Button> */}
-            <Dropdown overlayClassName="edit-btn-dorp" trigger={["click"]} overlay={editItems}>
               <Button
+                onClick={() =>
+                  navigate(`/myhome/deposit/${item?.lendingId?.toNumber()}`)
+                }
                 type="primary"
                 className="btn-filled"
                 size="small"
@@ -138,7 +147,11 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
           <div className="commodo-card bg-none">
             <div className="d-flex align-items-center">
               <div className="card-header text-left">MY Deposited Assets</div>
-              <InterestAndReward parent="lend" />
+              <InterestAndReward
+                lang={lang}
+                address={address}
+                updateDetails={fetchUserLends}
+              />
             </div>
             <div className="card-content">
               <Table
@@ -148,7 +161,7 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
                 columns={columns}
                 pagination={false}
                 scroll={{ x: "100%" }}
-                locale={{emptyText: <NoDataIcon />}}
+                locale={{ emptyText: <NoDataIcon /> }}
               />
             </div>
           </div>
@@ -159,7 +172,9 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
 };
 
 Deposit.propTypes = {
+  fetchUserLends: PropTypes.func.isRequired,
   lang: PropTypes.string.isRequired,
+  address: PropTypes.string,
   userLendList: PropTypes.arrayOf(
     PropTypes.shape({
       amountIn: PropTypes.shape({
@@ -182,6 +197,7 @@ const stateToProps = (state) => {
   return {
     lang: state.language,
     userLendList: state.lend.userLends,
+    address: state.account.address,
   };
 };
 

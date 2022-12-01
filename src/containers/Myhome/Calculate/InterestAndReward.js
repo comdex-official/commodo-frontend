@@ -6,7 +6,7 @@ import { signAndBroadcastTransaction } from "../../../services/helper";
 import { defaultFee } from "../../../services/transaction";
 import variables from "../../../utils/variables";
 
-const InterestAndReward = ({ parent, lang, address }) => {
+const InterestAndReward = ({ lang, address, updateDetails }) => {
   const [inProgress, setInProgress] = useState(false);
 
   const handleClick = () => {
@@ -36,7 +36,7 @@ const InterestAndReward = ({ parent, lang, address }) => {
           return;
         }
 
-        updateDetails();
+        refreshData();
         message.success(
           <Snack
             message={variables[lang].tx_success}
@@ -47,13 +47,13 @@ const InterestAndReward = ({ parent, lang, address }) => {
     );
   };
 
-  const updateDetails = () => {
-    // TODO: based on parent call the borrow or lend list of user and update redux.
-  }
-  
+  const refreshData = () => {
+    updateDetails();
+  };
+
   return (
     <Button
-      onClick={() => handleClick(borrowPosition)}
+      onClick={() => handleClick()}
       type="primary"
       loading={inProgress}
       disabled={inProgress}
@@ -66,6 +66,7 @@ const InterestAndReward = ({ parent, lang, address }) => {
 };
 
 InterestAndReward.propTypes = {
+  updateDetails: PropTypes.func.isRequired,
   address: PropTypes.string,
   lang: PropTypes.string,
   parent: PropTypes.string,
