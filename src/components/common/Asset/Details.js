@@ -46,6 +46,7 @@ const Details = ({
     }
   }, [asset, poolId, refreshBalance]);
 
+  console.log("asset", asset);
   useEffect(() => {
     if (poolId) {
       queryModuleBalance(poolId, (error, result) => {
@@ -113,9 +114,11 @@ const Details = ({
             ).toFixed(DOLLAR_DECIMALS)}
             %
           </>
-          {parent === "lend" ? null : (
+          {/* TODO: take the condition dynamically */}
+          {parent === "lend" ? null : asset?.denom === "uatom" ||
+            asset?.denom === "ucmst" ? (
             <DistributionAPY value={1.56} margin={"top"} />
-          )}
+          ) : null}
         </>
       ),
       tooltipText:
