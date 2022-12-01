@@ -362,7 +362,12 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                           </div>
                         </div>
                         <div className="assets-right">
-                          <img alt={AssetsIcon} src={AssetsIcon} />
+                          <div className="asset-right-overlap-icon-main-container">
+                            <div className="asset-right-overlap-icon-container">
+                              <img alt={AssetsIcon} src={AssetsIcon} className="overlap-icon-1"/>
+                              <img alt={AssetsIcon} src={AssetsIcon} className="overlap-icon-2"/>
+                            </div>
+                          </div>
                           <Button
                             type="primary"
                             className="btn-filled"
@@ -386,8 +391,8 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                     {topDeposits && topDeposits?.length > 0
                       ? showTopAssets(topDeposits)
                       : topAssetsInProgress
-                      ? showSkeletonLoader()
-                      : "No data"}
+                        ? showSkeletonLoader()
+                        : "No data"}
                   </ul>
                 </div>
                 <div className="deposited-list">
@@ -396,8 +401,8 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                     {topBorrows && topBorrows?.length > 0
                       ? showTopAssets(topBorrows)
                       : topAssetsInProgress
-                      ? showSkeletonLoader()
-                      : ""}
+                        ? showSkeletonLoader()
+                        : ""}
                   </ul>
                 </div>
               </div>
