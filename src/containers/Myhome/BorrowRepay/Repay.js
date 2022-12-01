@@ -1,9 +1,15 @@
-import { Select } from "antd";
+import { Button, Select } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
-import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import {
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon
+} from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import AssetStats from "../../../components/common/Asset/Stats";
@@ -18,7 +24,11 @@ import {
   getAmount,
   getDenomBalance
 } from "../../../utils/coin";
-import { commaSeparator, decimalConversion, marketPrice } from "../../../utils/number";
+import {
+  commaSeparator,
+  decimalConversion,
+  marketPrice
+} from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
@@ -163,9 +173,21 @@ const RepayTab = ({
                 <label>Remaining to Repay</label>
               </Col>
               <Col className="text-right">
-                <div className="cursor-pointer" onClick={handleMaxRepay}>
-                  {amountConversionWithComma(updatedAmountOut)}{" "}
-                  {denomConversion(borrowPosition?.amountOut?.denom)}
+                <div className="d-flex justify-content-end">
+                  <div className="cursor-pointer" onClick={handleMaxRepay}>
+                    {amountConversionWithComma(updatedAmountOut)}{" "}
+                    {denomConversion(borrowPosition?.amountOut?.denom)}
+                  </div>
+                  <div className="max-half ml-1">
+                    <Button
+                      className="active"
+                      size="small"
+                      type="primary"
+                      onClick={handleMaxRepay}
+                    >
+                      Max
+                    </Button>
+                  </div>
                 </div>
                 <small className="font-weight-light">
                   $
