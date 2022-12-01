@@ -1,8 +1,21 @@
 
 @import "../../../assets/less/variables.less";
 
-.distribution-apy-button{
-  min-width: 50px !important;
+.ant-btn {
+  &.distribution-apy-button{
+    min-width: 30px;
+    padding: 0 6px;
+    height: 21px;
+    font-weight: 500;
+    font-size: @font-size-sm;
+    line-height: 20px;
+    border-radius: 3px;
+    margin-left: 6px;
+    .dark-mode & {
+      border: 1px solid @success-color;
+      color: @white;
+    }
+  }  
 }
 
 .ant-tooltip .ant-tooltip-inner{

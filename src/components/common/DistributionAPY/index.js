@@ -9,7 +9,6 @@ const DistributionAPY = ({ value, margin }) => {
     <Tooltip placement="topLeft" title={"Projected Distribution Reward APY for Borrowing"}>
       <Button
         type="primary"
-        size="small"
         className={
           margin === "top"
             ? "mt-1 distribution-apy-button"
