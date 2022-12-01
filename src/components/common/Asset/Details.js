@@ -46,7 +46,6 @@ const Details = ({
     }
   }, [asset, poolId, refreshBalance]);
 
-  console.log("asset", asset);
   useEffect(() => {
     if (poolId) {
       queryModuleBalance(poolId, (error, result) => {
