@@ -116,7 +116,7 @@ const Details = ({
           {/* TODO: take the condition dynamically */}
           {parent === "lend" ? null : asset?.denom === "uatom" ||
             asset?.denom === "ucmst" ? (
-            <DistributionAPY value={1.56} margin={"top"} />
+            <DistributionAPY value={0} margin={"top"} />
           ) : null}
         </>
       ),
