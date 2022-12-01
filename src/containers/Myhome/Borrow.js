@@ -1,18 +1,31 @@
-import { Button, Table } from "antd";
+import { Button, Dropdown, Menu, Table, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import {
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon
+} from "../../components/common";
 import HealthFactor from "../../components/HealthFactor";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
+import { decimalConversion } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
-import BorrowInterest from "./Calculate/BorrowInterest";
+import InterestAndReward from "./Calculate/InterestAndReward";
 import "./index.less";
 
-const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
-  const navigate = useNavigate();
+const editItems = (
+  <Menu>
+    <Menu.Item>Borrow </Menu.Item>
+    <Menu.Item>Repay</Menu.Item>
+  </Menu>
+);
 
+const Borrow = ({ lang, userBorrowList, inProgress, address, fetchUserBorrows }) => {
+  const navigate = useNavigate();
   const columns = [
     {
       title: "Asset",
@@ -45,7 +58,7 @@ const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
       ),
       dataIndex: "health",
       key: "health",
-      width: 180,
+      width: 260,
       align: "center",
       render: (item) => <HealthFactor parent="table" borrow={item} />,
     },
@@ -53,7 +66,19 @@ const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
       title: "Borrow APY",
       dataIndex: "apy",
       key: "apy",
-      width: 130,
+      width: 180,
+      render: (borrow) => <AssetApy borrowPosition={borrow} parent="borrow" />,
+    },
+    {
+      title: (
+        <>
+          Distribution APY{" "}
+          <TooltipIcon text="Projected Distribution Reward APY for Borrowing" />
+        </>
+      ),
+      dataIndex: "apy",
+      key: "apy",
+      width: 300,
       render: (borrow) => <AssetApy borrowPosition={borrow} parent="borrow" />,
     },
     {
@@ -65,9 +90,17 @@ const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
       dataIndex: "interest",
       key: "interest",
       width: 350,
-      render: (borrow) => (
-        <BorrowInterest borrowPosition={borrow} lang={lang} address={address} />
+    },
+    {
+      title: (
+        <>
+          Distribution Reward <TooltipIcon text="Interest accrued by lending" />
+        </>
       ),
+      dataIndex: "interest",
+      key: "interest",
+      width: 350,
+      className: "rewards-column",
     },
     {
       title: "",
@@ -78,29 +111,32 @@ const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
       render: (item) => (
         <>
           <div className="d-flex">
-            <Button
-              onClick={() =>
-                navigate(`/myhome/borrow/${item?.borrowingId?.toNumber()}`)
-              }
-              type="primary"
-              className="btn-filled"
-              size="small"
+            <Dropdown
+              overlayClassName="edit-btn-dorp"
+              trigger={["click"]}
+              overlay={editItems}
             >
-              Borrow
-            </Button>
-            <Button
-              onClick={() =>
-                navigate({
-                  pathname: `/myhome/borrow/${item?.borrowingId?.toNumber()}`,
-                  hash: "repay",
-                })
-              }
-              type="primary"
-              size="small"
-              className="ml-2"
-            >
-              Repay
-            </Button>
+              <Button
+                disabled={item?.isLiquidated}
+                onClick={() =>
+                  navigate(`/myhome/borrow/${item?.borrowingId?.toNumber()}`)
+                }
+                type="primary"
+                className="btn-filled"
+                size="small"
+              >
+                <Tooltip
+                  overlayClassName="commodo-tooltip"
+                  title={
+                    item?.isLiquidated
+                      ? "Position has been sent for Auction."
+                      : ""
+                  }
+                >
+                  Edit
+                </Tooltip>
+              </Button>
+            </Dropdown>
           </div>
         </>
       ),
@@ -137,7 +173,14 @@ const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
               </>
             ),
             apy: item,
-            interest: item,
+            interest: (
+              <>
+                {amountConversionWithComma(
+                  decimalConversion(borrow?.interestAccumulated)
+                )}{" "}
+                {denomConversion(borrow?.amountOut?.denom)}
+              </>
+            ),
             health: item,
             action: item,
           };
@@ -149,7 +192,10 @@ const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
       <Row>
         <Col>
           <div className="commodo-card bg-none">
-            <div className="card-header">MY Borrowed AssetS</div>
+            <div className="d-flex w-100 align-items-center justify-content-beetwen">
+              <div className="card-header text-left">MY Borrowed AssetS</div>
+              <InterestAndReward lang={lang} address={address} updateDetails={fetchUserBorrows} />
+            </div>
             <div className="card-content">
               <Table
                 className="custom-table"
@@ -158,7 +204,7 @@ const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
                 columns={columns}
                 pagination={false}
                 scroll={{ x: "100%" }}
-                locale={{emptyText: <NoDataIcon />}}
+                locale={{ emptyText: <NoDataIcon /> }}
               />
             </div>
           </div>
@@ -169,8 +215,9 @@ const Borrow = ({ lang, userBorrowList, inProgress, address }) => {
 };
 
 Borrow.propTypes = {
-  address: PropTypes.string,
+  fetchUserBorrows: PropTypes.func.isRequired,
   lang: PropTypes.string.isRequired,
+  address: PropTypes.string,
   inProgress: PropTypes.bool,
   userBorrowList: PropTypes.arrayOf(
     PropTypes.shape({
