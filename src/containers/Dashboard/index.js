@@ -10,6 +10,7 @@ import LaunchImage from "../../assets/images/launch-bg.jpg";
 import "../../assets/less/plugins/slick-slider/slick.less";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import { DOLLAR_DECIMALS, NUMBER_OF_TOP_ASSETS } from "../../constants/common";
+import { CSWAP_URL, REWARDS_URL } from "../../constants/url";
 import {
   queryTopAssets,
   queryTotalBorrowAndDeposit,
@@ -237,7 +238,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
       );
     });
   };
-  
+
   return (
     <div className="app-content-wrapper">
       <Row>
@@ -351,22 +352,24 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                               </div>
                             </div>
                             <h3 className="h3-botttom">
-                              <small>High APR</small>
+                              <Button
+                                type="primary"
+                                onClick={() => window.open(REWARDS_URL)}
+                              >
+                                Learn more
+                              </Button>
                             </h3>
                           </div>
                         </div>
                         <div className="assets-right">
                           <img alt={AssetsIcon} src={AssetsIcon} />
-                          <a
-                              aria-label="cswap"
-                              target="_blank"
-                              rel="noreferrer"
-                              href="https://testnet.cswap.one/"
-                            >
-                          <Button type="primary" className="btn-filled">
+                          <Button
+                            type="primary"
+                            className="btn-filled"
+                            onClick={() => window.open(CSWAP_URL)}
+                          >
                             Take me there!
                           </Button>
-                          </a>
                         </div>
                       </div>
                     </div>
