@@ -37,6 +37,7 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
         return;
       }
 
+      console.log('set the pools', result?.pools)
       setPools(result?.pools);
     });
   };
@@ -52,6 +53,7 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
     );
   };
 
+  console.log('lend pools', lendPools)
   const tableData =
     lendPools?.length > 0
       ? lendPools?.map((item, index) => {

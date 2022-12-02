@@ -38,6 +38,7 @@ const Borrow = ({ assetMap, setPools, lendPools }) => {
         return;
       }
 
+      console.log('setting borrow pools', result?.pools)
       setPools(result?.pools);
     });
   };
@@ -53,6 +54,7 @@ const Borrow = ({ assetMap, setPools, lendPools }) => {
     );
   };
 
+  console.log('borrow lend pools', lendPools)
   const tableData =
     lendPools?.length > 0
       ? lendPools?.map((item, index) => {
