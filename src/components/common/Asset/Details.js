@@ -2,6 +2,7 @@ import { List, message } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { ibcDenoms } from "../../../config/network";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   queryModuleBalance,
@@ -115,6 +116,7 @@ const Details = ({
           </>
           {/* TODO: take the condition dynamically */}
           {parent === "lend" ? null : asset?.denom === "uatom" ||
+            asset?.denom === ibcDenoms["uatom"] ||
             asset?.denom === "ucmst" ? (
             <DistributionAPY value={0} margin={"top"} />
           ) : null}
