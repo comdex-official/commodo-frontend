@@ -2,7 +2,7 @@ import { message, Table } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { setPools } from '../../../actions/lend';
+import { setPools } from "../../../actions/lend";
 import { NoDataIcon, SvgIcon } from "../../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
@@ -37,7 +37,6 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
         return;
       }
 
-      console.log('set the pools', result?.pools)
       setPools(result?.pools);
     });
   };
@@ -53,7 +52,6 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
     );
   };
 
-  console.log('lend pools', lendPools)
   const tableData =
     lendPools?.length > 0
       ? lendPools?.map((item, index) => {
@@ -82,7 +80,8 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
                   <div className="assets-icon">
                     <SvgIcon
                       name={iconNameFromDenom(
-                        assetMap[item?.transitAssetIds?.first?.toNumber()]?.denom
+                        assetMap[item?.transitAssetIds?.first?.toNumber()]
+                          ?.denom
                       )}
                     />
                   </div>
@@ -98,7 +97,8 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
                   <div className="assets-icon">
                     <SvgIcon
                       name={iconNameFromDenom(
-                        assetMap[item?.transitAssetIds?.second?.toNumber()]?.denom
+                        assetMap[item?.transitAssetIds?.second?.toNumber()]
+                          ?.denom
                       )}
                     />
                   </div>
@@ -133,7 +133,7 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
             pageSize,
           }}
           scroll={{ x: "100%", y: "30vh" }}
-          locale={{emptyText: <NoDataIcon />}}
+          locale={{ emptyText: <NoDataIcon /> }}
         />
       </div>
     </div>
@@ -148,7 +148,7 @@ Supply.propTypes = {
 const stateToProps = (state) => {
   return {
     assetMap: state.asset._.map,
-    lendPools: state.lend.pool.list
+    lendPools: state.lend.pool.list,
   };
 };
 
