@@ -3,7 +3,13 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
+import {
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon
+} from "../../../../components/common";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
 import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
@@ -127,15 +133,15 @@ const BorrowTab = ({
           map[obj?.assetTransitType] = obj;
           return map;
         }, {});
-      
+
         let transitAssetIds = {
           main: assetTransitMap[assetTransitTypeId["main"]]?.assetId,
           first: assetTransitMap[assetTransitTypeId["first"]]?.assetId,
           second: assetTransitMap[assetTransitTypeId["second"]]?.assetId,
         };
-      
+
         myPool["transitAssetIds"] = transitAssetIds;
-      
+
         setAssetOutPool(myPool);
       });
     }
@@ -233,7 +239,19 @@ const BorrowTab = ({
 
     setOutAmount(value);
     setBorrowValidationError(
-      ValidateInputNumber(getAmount(value), borrowableBalance)
+      ValidateInputNumber(
+        getAmount(value),
+        borrowableBalance,
+        "dollar",
+        Number(
+          value *
+            marketPrice(
+              markets,
+              borrowAssetDenom,
+              assetDenomMap[borrowAssetDenom]?.id
+            ) || 0
+        )
+      )
     );
   };
 
