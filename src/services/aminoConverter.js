@@ -97,7 +97,6 @@ export const customAminoTypes = {
       borrower,
       lendId,
       pairId,
-      isStableBorrow,
       amountIn,
       amountOut,
     }) => {
@@ -105,7 +104,6 @@ export const customAminoTypes = {
         borrower: borrower,
         lend_id: String(lendId),
         pair_id: String(pairId),
-        is_stable_borrow: omitDefault(isStableBorrow)?.toString(),
         amount_in: amountIn,
         amount_out: amountOut,
       };
@@ -114,7 +112,6 @@ export const customAminoTypes = {
       borrower,
       lend_id,
       pair_id,
-      is_stable_borrow,
       amount_in,
       amount_out,
     }) => {
@@ -122,7 +119,6 @@ export const customAminoTypes = {
         borrower: borrower,
         lendId: Number(lend_id),
         pairId: Number(pair_id),
-        isStableBorrow: is_stable_borrow,
         amountIn: amount_in,
         amountOut: amount_out,
       };
@@ -201,7 +197,6 @@ export const customAminoTypes = {
       assetId,
       pairId,
       poolId,
-      isStableBorrow,
       amountIn,
       amountOut,
       appId,
@@ -212,7 +207,6 @@ export const customAminoTypes = {
         pool_id: String(poolId),
         app_id: String(appId),
         pair_id: String(pairId),
-        is_stable_borrow: omitDefault(isStableBorrow)?.toString(),
         amount_in: amountIn,
         amount_out: amountOut,
       };
@@ -222,7 +216,6 @@ export const customAminoTypes = {
       asset_id,
       pool_id,
       pair_id,
-      is_stable_borrow,
       amount_in,
       amount_out,
       app_id,
@@ -233,7 +226,6 @@ export const customAminoTypes = {
         poolId: Number(pool_id),
         pairId: Number(pair_id),
         appId: Number(app_id),
-        isStableBorrow: is_stable_borrow,
         amountIn: amount_in,
         amountOut: amount_out,
       };

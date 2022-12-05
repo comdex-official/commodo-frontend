@@ -131,7 +131,7 @@ const Deposit = ({
             apy: item,
             interest: (
               <>
-                {amountConversionWithComma(item?.rewardAccumulated)}{" "}
+                {amountConversionWithComma(item?.totalRewards)}{" "}
                 {denomConversion(item?.amountIn?.denom)}
               </>
             ),

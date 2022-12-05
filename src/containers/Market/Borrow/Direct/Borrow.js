@@ -4,7 +4,13 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
+import {
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon
+} from "../../../../components/common";
 import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
 import Snack from "../../../../components/common/Snack";
@@ -228,8 +234,21 @@ const BorrowTab = ({
     value = toDecimals(value).toString().trim();
 
     setOutAmount(value);
+    
     setBorrowValidationError(
-      ValidateInputNumber(getAmount(value), borrowableBalance)
+      ValidateInputNumber(
+        getAmount(value),
+        borrowableBalance,
+        "dollar",
+        Number(
+          value *
+            marketPrice(
+              markets,
+              borrowAssetDenom,
+              assetDenomMap[borrowAssetDenom]?.id
+            ) || 0
+        )
+      )
     );
   };
 

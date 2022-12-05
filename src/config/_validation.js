@@ -1,6 +1,6 @@
 import { amountConversion } from "../utils/coin";
 
-export const ValidateInputNumber = (value, max, key) => {
+export const ValidateInputNumber = (value, max, key, dollarValue) => {
   if (value < 0) {
     return new Error("Input must be positive number");
   }
@@ -8,7 +8,7 @@ export const ValidateInputNumber = (value, max, key) => {
   if (max === 0) {
     return new Error("No available balance");
   }
-  
+
   if (max && Number(max) < value) {
     return new Error("Insufficient funds");
   }
@@ -18,6 +18,10 @@ export const ValidateInputNumber = (value, max, key) => {
   }
   if (key === "whole" && !Number.isInteger(Number(value))) {
     return new Error("Input must be a whole number");
+  }
+
+  if (key === "dollar" && Number(dollarValue) < 1) {
+    return new Error("Min. borrowable amount is 1$");
   }
 
   return new Error("");
