@@ -15,7 +15,7 @@
     "@ledgerhq/hw-transport-webusb": "^6.27.7",
     "@restart/context": "^2.1.4",
     "antd": "^5.0.0",
-    "axios": "^1.2.0",
+    "axios": "^1.2.1",
     "babel-plugin-import": "^1.13.0",
     "classnames": "^2.3.2",
     "coingecko-api": "^1.0.10",
