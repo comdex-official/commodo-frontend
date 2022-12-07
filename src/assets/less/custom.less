@@ -1399,7 +1399,6 @@ button.ant-switch {
 
   .details-left {
     width: 50%;
-    margin-right: 25px;
     padding: 28px 40px;
 
     @media screen and (max-width:991px) {
@@ -1473,15 +1472,15 @@ button.ant-switch {
 
   .details-right {
     width: 50%;
-    padding-left: 15px;
+    margin-left: 35px;
 
     @media screen and (max-width:1400px) {
-      padding-left: 15px;
+      margin-left: 15px;
     }
 
     @media screen and (max-width:991px) {
       width: 100%;
-      padding-left: 0;
+      margin-left: 0;
       margin-top: 20px;
     }
 
@@ -1641,7 +1640,7 @@ button.ant-switch {
             align-items: flex-start;
 
             @media screen and (max-width:1380px) {
-              font-size: @font-size-sm;
+              font-size: @font-size-sm - 1;
             }
 
             @media screen and (max-width:1280px) {
@@ -1668,6 +1667,10 @@ button.ant-switch {
             line-height: 1;
             margin-top: 8px;
             color: @text-color-dark;
+
+            @media screen and (max-width:1400px) {
+              font-size: @font-size-base;
+            }
 
             .dark-mode & {
               color: @white;
