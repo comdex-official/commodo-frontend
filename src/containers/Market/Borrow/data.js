@@ -82,7 +82,7 @@ export const columns = [
           assetId={lendPool?.transitAssetIds?.first}
           parent="borrow"
         />
-        <DistributionAPY value={1.72} />
+        <DistributionAPY value={0} />
       </>
     ),
   },
@@ -102,7 +102,7 @@ export const columns = [
           assetId={lendPool?.transitAssetIds?.second}
           parent="borrow"
         />
-        <DistributionAPY value={1.32} />
+        <DistributionAPY value={0} />
       </>
     ),
   },
@@ -114,7 +114,7 @@ export const columns = [
     width: 120,
     render: (item) => (
       <ActionButton
-        name="Details"
+        name="Borrow"
         path={`/borrow/${item?.poolId?.toNumber()}`}
       />
     ),

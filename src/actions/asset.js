@@ -1,7 +1,8 @@
 import { message } from "antd";
 import axios from "axios";
 import {
-  ASSETS_SET, PAIRS_SET,
+  ASSETS_SET,
+  PAIRS_SET,
   PAIR_ID_SET,
   PAIR_SET
 } from "../constants/asset";

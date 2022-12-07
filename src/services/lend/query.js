@@ -266,60 +266,6 @@ export const queryUserBorrows = (address, callback) => {
   });
 };
 
-export const queryDepositStats = (callback) => {
-  getQueryService((error, queryService) => {
-    if (error) {
-      callback(error);
-      return;
-    }
-
-    queryService
-      .QueryDepositStats()
-      .then((result) => {
-        callback(null, result);
-      })
-      .catch((error) => {
-        callback(error?.message);
-      });
-  });
-};
-
-export const queryUserDepositStats = (callback) => {
-  getQueryService((error, queryService) => {
-    if (error) {
-      callback(error);
-      return;
-    }
-
-    queryService
-      .QueryUserDepositStats()
-      .then((result) => {
-        callback(null, result);
-      })
-      .catch((error) => {
-        callback(error?.message);
-      });
-  });
-};
-
-export const queryBorrowStats = (callback) => {
-  getQueryService((error, queryService) => {
-    if (error) {
-      callback(error);
-      return;
-    }
-
-    queryService
-      .QueryBorrowStats()
-      .then((result) => {
-        callback(null, result);
-      })
-      .catch((error) => {
-        callback(error?.message);
-      });
-  });
-};
-
 export const queryAuctionMippingIdParams = (callback) => {
   getQueryService((error, queryService) => {
     if (error) {

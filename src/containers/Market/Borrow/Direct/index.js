@@ -7,7 +7,7 @@ import { setPools } from "../../../../actions/lend";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE
+  DEFAULT_PAGE_SIZE,
 } from "../../../../constants/common";
 import { queryLendPools } from "../../../../services/lend/query";
 import Borrow from "./Borrow";
@@ -39,7 +39,12 @@ const Direct = ({ setPools }) => {
     <div className="app-content-wrapper">
       <Row className="align-items-center">
         <Col className="dborrow-heading-left">
-          <SvgIcon className="dborrow-iconhead" name="direct-borrow" viewbox="0 0 57.25 54.685" /> Direct Borrow <TooltipIcon text="Lend and Borrow in one click" />
+          <SvgIcon
+            className="dborrow-iconhead"
+            name="direct-borrow"
+            viewbox="0 0 57.25 54.685"
+          />{" "}
+          Direct Borrow <TooltipIcon text="Lend and Borrow in one click" />
         </Col>
         <Col className="text-right mb-3">
           <Link to="/borrow">

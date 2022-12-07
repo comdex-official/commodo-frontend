@@ -3,7 +3,7 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setPools } from '../../../actions/lend';
-import { SvgIcon } from "../../../components/common";
+import { NoDataIcon, SvgIcon } from "../../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE
@@ -42,11 +42,11 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
   };
 
   const handleChange = (value) => {
-    setPageNumber(value.current - 1);
-    setPageSize(value.pageSize);
+    setPageNumber(value?.current - 1);
+    setPageSize(value?.pageSize);
     fetchLendPools(
-      (value.current - 1) * value.pageSize,
-      value.pageSize,
+      (value?.current - 1) * value?.pageSize,
+      value?.pageSize,
       true,
       false
     );
@@ -123,7 +123,7 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
           className="custom-table market-table1"
           dataSource={tableData}
           columns={columns}
-          loading={inProgress}
+          loading={inProgress && !lendPools?.length}
           onChange={(event) => handleChange(event)}
           pagination={{
             total:
@@ -131,6 +131,7 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
             pageSize,
           }}
           scroll={{ x: "100%", y: "30vh" }}
+          locale={{emptyText: <NoDataIcon />}}
         />
       </div>
     </div>

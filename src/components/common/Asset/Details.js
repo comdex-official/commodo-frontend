@@ -113,9 +113,11 @@ const Details = ({
             ).toFixed(DOLLAR_DECIMALS)}
             %
           </>
-          {parent === "lend" ? null : (
-            <DistributionAPY value={1.56} margin={"top"} />
-          )}
+          {/* TODO: take the condition dynamically */}
+          {parent === "lend" ? null : asset?.denom === "uatom" ||
+            asset?.denom === "ucmst" ? (
+            <DistributionAPY value={0} margin={"top"} />
+          ) : null}
         </>
       ),
       tooltipText:
