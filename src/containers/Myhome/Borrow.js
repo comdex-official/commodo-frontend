@@ -24,7 +24,13 @@ const editItems = (
   </Menu>
 );
 
-const Borrow = ({ lang, userBorrowList, inProgress, address, fetchUserBorrows }) => {
+const Borrow = ({
+  lang,
+  userBorrowList,
+  inProgress,
+  address,
+  fetchUserBorrows,
+}) => {
   const navigate = useNavigate();
   const columns = [
     {
@@ -41,13 +47,13 @@ const Borrow = ({ lang, userBorrowList, inProgress, address, fetchUserBorrows })
       ),
       dataIndex: "debt",
       key: "debt",
-      width: 200,
+      width: 300,
     },
     {
       title: "Collateral",
       dataIndex: "collateral",
       key: "collateral",
-      width: 200,
+      width: 300,
     },
     {
       title: (
@@ -58,7 +64,7 @@ const Borrow = ({ lang, userBorrowList, inProgress, address, fetchUserBorrows })
       ),
       dataIndex: "health",
       key: "health",
-      width: 260,
+      width: 250,
       align: "center",
       render: (item) => <HealthFactor parent="table" borrow={item} />,
     },
@@ -76,9 +82,9 @@ const Borrow = ({ lang, userBorrowList, inProgress, address, fetchUserBorrows })
           <TooltipIcon text="Projected Distribution Reward APY for Borrowing" />
         </>
       ),
-      dataIndex: "apy",
-      key: "apy",
-      width: 300,
+      dataIndex: "distributionApy",
+      key: "distributionApy",
+      width: 250,
       render: (borrow) => <AssetApy borrowPosition={borrow} parent="borrow" />,
     },
     {
@@ -89,25 +95,14 @@ const Borrow = ({ lang, userBorrowList, inProgress, address, fetchUserBorrows })
       ),
       dataIndex: "interest",
       key: "interest",
-      width: 350,
-    },
-    {
-      title: (
-        <>
-          Distribution Reward <TooltipIcon text="Interest accrued by lending" />
-        </>
-      ),
-      dataIndex: "interest",
-      key: "interest",
-      width: 350,
-      className: "rewards-column",
+      width: 250,
     },
     {
       title: "",
       dataIndex: "action",
       key: "action",
       align: "right",
-      width: 200,
+      width: 120,
       render: (item) => (
         <>
           <div className="d-flex">
@@ -172,13 +167,15 @@ const Borrow = ({ lang, userBorrowList, inProgress, address, fetchUserBorrows })
                 {denomConversion(item?.amountIn?.denom)}
               </>
             ),
+            distributionApy: 0,
+            // TODO: update apy values from BE
             apy: item,
             interest: (
               <>
                 {amountConversionWithComma(
-                  decimalConversion(borrow?.interestAccumulated)
+                  decimalConversion(item?.interestAccumulated)
                 )}{" "}
-                {denomConversion(borrow?.amountOut?.denom)}
+                {denomConversion(item?.amountOut?.denom)}
               </>
             ),
             health: item,
@@ -194,7 +191,11 @@ const Borrow = ({ lang, userBorrowList, inProgress, address, fetchUserBorrows })
           <div className="commodo-card bg-none">
             <div className="d-flex w-100 align-items-center justify-content-beetwen">
               <div className="card-header text-left">MY Borrowed AssetS</div>
-              <InterestAndReward lang={lang} address={address} updateDetails={fetchUserBorrows} />
+              <InterestAndReward
+                lang={lang}
+                address={address}
+                updateDetails={fetchUserBorrows}
+              />
             </div>
             <div className="card-content">
               <Table
