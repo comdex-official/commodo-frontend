@@ -78,18 +78,6 @@ const Borrow = ({
     {
       title: (
         <>
-          Distribution APY{" "}
-          <TooltipIcon text="Projected Distribution Reward APY for Borrowing" />
-        </>
-      ),
-      dataIndex: "distributionApy",
-      key: "distributionApy",
-      width: 250,
-      render: (borrow) => <AssetApy borrowPosition={borrow} parent="borrow" />,
-    },
-    {
-      title: (
-        <>
           Interest <TooltipIcon text="Interest accrued by borrowing" />
         </>
       ),
@@ -167,8 +155,6 @@ const Borrow = ({
                 {denomConversion(item?.amountIn?.denom)}
               </>
             ),
-            distributionApy: 0,
-            // TODO: update apy values from BE
             apy: item,
             interest: (
               <>
