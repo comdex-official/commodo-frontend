@@ -79,7 +79,7 @@ const HealthFactor = ({
 
   useEffect(() => {
     if (pair?.id && Number(inAmount) && Number(outAmount)) {
-      let percentag =
+      let percentage =
         (Number(inAmount) *
           marketPrice(markets, assetMap[pair?.assetIn]?.denom, pair?.assetIn) *
           (pair?.isInterPool
