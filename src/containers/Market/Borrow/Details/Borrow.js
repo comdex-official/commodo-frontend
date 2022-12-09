@@ -18,7 +18,11 @@ import CustomInput from "../../../../components/CustomInput";
 import HealthFactor from "../../../../components/HealthFactor";
 import { assetTransitTypeId } from "../../../../config/network";
 import { ValidateInputNumber } from "../../../../config/_validation";
-import { DOLLAR_DECIMALS, UC_DENOM } from "../../../../constants/common";
+import {
+  DOLLAR_DECIMALS,
+  MAX_LTV_DEDUCTION,
+  UC_DENOM
+} from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
   queryAssetPairs,
@@ -84,14 +88,17 @@ const BorrowTab = ({
         assetDenomMap[collateralAssetDenom]?.id
       ) *
       (pair?.isInterPool
-        ? Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv)) *
+        ? (Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv)) -
+            MAX_LTV_DEDUCTION) *
           Number(
             decimalConversion(
               assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv
             )
           )
-        : Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv))) ||
-      0) /
+        : Number(
+            decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv) -
+              MAX_LTV_DEDUCTION
+          )) || 0) /
       marketPrice(
         markets,
         borrowAssetDenom,

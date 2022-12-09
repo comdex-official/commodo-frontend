@@ -9,7 +9,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../../../components/common";
 import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
@@ -17,12 +17,16 @@ import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
 import HealthFactor from "../../../../components/HealthFactor";
 import { ValidateInputNumber } from "../../../../config/_validation";
-import { APP_ID, DOLLAR_DECIMALS } from "../../../../constants/common";
+import {
+  APP_ID,
+  DOLLAR_DECIMALS,
+  MAX_LTV_DEDUCTION,
+} from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
   queryAssetPairs,
   queryLendPair,
-  queryLendPool
+  queryLendPool,
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
@@ -30,12 +34,12 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
@@ -93,9 +97,10 @@ const BorrowTab = ({
         assetDenomMap[collateralAssetDenom]?.id
       ) *
       (pair?.isInterPool
-        ? Number(
+        ? (Number(
             decimalConversion(assetRatesStatsMap[collateralAssetId]?.ltv)
-          ) *
+          ) -
+            MAX_LTV_DEDUCTION) *
           Number(
             decimalConversion(
               assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv
@@ -103,7 +108,7 @@ const BorrowTab = ({
           )
         : Number(
             decimalConversion(assetRatesStatsMap[collateralAssetId]?.ltv)
-          )) || 0) /
+          ) - MAX_LTV_DEDUCTION) || 0) /
       marketPrice(
         markets,
         borrowAssetDenom,
@@ -234,7 +239,7 @@ const BorrowTab = ({
     value = toDecimals(value).toString().trim();
 
     setOutAmount(value);
-    
+
     setBorrowValidationError(
       ValidateInputNumber(
         getAmount(value),
