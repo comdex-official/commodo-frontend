@@ -2,9 +2,11 @@ import { List, message } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { ibcDenoms } from "../../../config/network";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
-  queryModuleBalance, QueryPoolAssetLBMapping
+  queryModuleBalance,
+  QueryPoolAssetLBMapping
 } from "../../../services/lend/query";
 import {
   amountConversionWithComma,
@@ -16,9 +18,17 @@ import {
   marketPrice
 } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
+import DistributionAPY from "../DistributionAPY";
 import { SvgIcon, TooltipIcon } from "../index";
 
-const Details = ({ asset, poolId, markets, refreshBalance, parent, assetDenomMap }) => {
+const Details = ({
+  asset,
+  poolId,
+  markets,
+  refreshBalance,
+  parent,
+  assetDenomMap,
+}) => {
   const [stats, setStats] = useState();
   const [moduleBalanceStats, setModuleBalanceStats] = useState([]);
 
@@ -69,8 +79,11 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent, assetDenomMap
     {
       title: "Available",
       counts: `$${amountConversionWithComma(
-        marketPrice(markets, assetStats?.balance?.denom, assetDenomMap[assetStats?.balance?.denom]?.id) *
-          assetStats?.balance.amount || 0,
+        marketPrice(
+          markets,
+          assetStats?.balance?.denom,
+          assetDenomMap[assetStats?.balance?.denom]?.id
+        ) * assetStats?.balance.amount || 0,
         DOLLAR_DECIMALS
       )}`,
       tooltipText:
@@ -93,12 +106,20 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent, assetDenomMap
       title: parent === "lend" ? "Lend APY" : "Borrow APY",
       counts: (
         <>
-          {Number(
-            decimalConversion(
-              parent === "lend" ? stats?.lendApr : stats?.borrowApr
-            ) * 100
-          ).toFixed(DOLLAR_DECIMALS)}
-          %
+          <>
+            {Number(
+              decimalConversion(
+                parent === "lend" ? stats?.lendApr : stats?.borrowApr
+              ) * 100
+            ).toFixed(DOLLAR_DECIMALS)}
+            %
+          </>
+          {/* TODO: take the condition dynamically */}
+          {parent === "lend" ? null : asset?.denom === "uatom" ||
+            asset?.denom === ibcDenoms["uatom"] ||
+            asset?.denom === "ucmst" ? (
+            <DistributionAPY value={0} margin={"top"} />
+          ) : null}
         </>
       ),
       tooltipText:
@@ -120,7 +141,13 @@ const Details = ({ asset, poolId, markets, refreshBalance, parent, assetDenomMap
         <div className="head-right">
           <span>Oracle Price</span> : $
           {commaSeparator(
-            Number(marketPrice(markets, asset?.denom, assetDenomMap[asset?.denom]?.id)).toFixed(DOLLAR_DECIMALS)
+            Number(
+              marketPrice(
+                markets,
+                asset?.denom,
+                assetDenomMap[asset?.denom]?.id
+              )
+            ).toFixed(DOLLAR_DECIMALS)
           )}
         </div>
       </div>
@@ -150,7 +177,7 @@ Details.propTypes = {
     denom: PropTypes.string,
   }),
   assetDenomMap: PropTypes.object,
-    markets: PropTypes.object,
+  markets: PropTypes.object,
   parent: PropTypes.string,
   poolId: PropTypes.shape({
     low: PropTypes.number,
@@ -159,7 +186,7 @@ Details.propTypes = {
 
 const stateToProps = (state) => {
   return {
-     markets: state.oracle.market.map,
+    markets: state.oracle.market.map,
     refreshBalance: state.account.refreshBalance,
     assetDenomMap: state.asset._.assetDenomMap,
   };

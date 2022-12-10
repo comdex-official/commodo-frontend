@@ -1,8 +1,14 @@
 import { List, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import { connect, useDispatch } from "react-redux";
+import {
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon
+} from "../../components/common";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
@@ -18,7 +24,24 @@ import Deposit from "./DepositModal";
 import "./index.less";
 import Withdraw from "./WithdrawModal";
 
-const Assets = ({ assetBalance, balances, markets, assetDenomMap }) => {
+const Assets = ({
+  assetBalance,
+  balances,
+  markets,
+  assetDenomMap,
+  refreshBalance,
+}) => {
+  const dispatch = useDispatch();
+
+  const handleBalanceRefresh = () => {
+    dispatch({
+      type: "BALANCE_REFRESH_SET",
+      value: refreshBalance + 1,
+    });
+
+    updatePrices();
+  };
+
   const data = [
     {
       title: (
@@ -83,7 +106,13 @@ const Assets = ({ assetBalance, balances, markets, assetDenomMap }) => {
       align: "center",
       render: (value) => {
         if (value) {
-          return <Deposit chain={value} />;
+          return (
+            <Deposit
+              chain={value}
+              balances={balances}
+              handleRefresh={handleBalanceRefresh}
+            />
+          );
         }
       },
     },
@@ -95,7 +124,13 @@ const Assets = ({ assetBalance, balances, markets, assetDenomMap }) => {
       align: "center",
       render: (value) => {
         if (value) {
-          return <Withdraw chain={value} />;
+          return (
+            <Withdraw
+              chain={value}
+              balances={balances}
+              handleRefresh={handleBalanceRefresh}
+            />
+          );
         }
       },
     },
@@ -264,7 +299,7 @@ const Assets = ({ assetBalance, balances, markets, assetDenomMap }) => {
                   columns={columns}
                   pagination={false}
                   scroll={{ x: "100%", y: "calc(100vh - 280px)" }}
-                  locale={{emptyText: <NoDataIcon />}}
+                  locale={{ emptyText: <NoDataIcon /> }}
                 />
               </div>
             </div>
@@ -277,6 +312,7 @@ const Assets = ({ assetBalance, balances, markets, assetDenomMap }) => {
 
 Assets.propTypes = {
   lang: PropTypes.string.isRequired,
+  refreshBalance: PropTypes.number.isRequired,
   assetBalance: PropTypes.number,
   assetDenomMap: PropTypes.object,
   balances: PropTypes.arrayOf(
@@ -294,6 +330,7 @@ const stateToProps = (state) => {
     assetBalance: state.account.balances.asset,
     balances: state.account.balances.list,
     markets: state.oracle.market.map,
+    refreshBalance: state.account.refreshBalance,
     assetDenomMap: state.asset._.assetDenomMap,
   };
 };

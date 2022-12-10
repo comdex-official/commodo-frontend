@@ -27,7 +27,17 @@
       text-align: right;
       .dark-mode & {
         background: @background-dark2;
+        background: #1D3129;
         border-color: @background-dark2;
+        &::placeholder {
+          color: @white;
+        }
+        &::-moz-placeholder {
+          color: @white;
+        }
+        &::-webkit-placeholder {
+          color: @white;
+        }
       }
       &::-webkit-outer-spin-button,
       &::-webkit-inner-spin-button {
@@ -45,4 +55,32 @@
 }
 .bid-custom-input .ant-input {
   color: white !important;
+}
+.auction-quantity-max-btn-main-container {
+  position: relative;
+  .auction-quantity-max-btn {
+    position: absolute;
+    top: -46%;
+    right: 7%;
+    button {
+      outline: none;
+      border: 2px solid @success-color;
+      color: white;
+      font-size: 11px;
+      padding: 1px 0;
+      margin-left: 4px;
+      line-height: 1;
+      text-align: center;
+      width: 30px;
+      height: 15px;
+      border: 0;
+      cursor: pointer;
+      border-radius: 2px;
+      background: @success-color;
+      text-transform: capitalize;
+      .dark-mode & {
+        background: @success-color;
+      }
+    }
+  }
 }

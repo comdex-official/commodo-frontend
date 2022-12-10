@@ -3,7 +3,13 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
+import {
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon
+} from "../../../../components/common";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
 import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
@@ -12,7 +18,11 @@ import CustomInput from "../../../../components/CustomInput";
 import HealthFactor from "../../../../components/HealthFactor";
 import { assetTransitTypeId } from "../../../../config/network";
 import { ValidateInputNumber } from "../../../../config/_validation";
-import { DOLLAR_DECIMALS, UC_DENOM } from "../../../../constants/common";
+import {
+  DOLLAR_DECIMALS,
+  MAX_LTV_DEDUCTION,
+  UC_DENOM
+} from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
   queryAssetPairs,
@@ -78,14 +88,17 @@ const BorrowTab = ({
         assetDenomMap[collateralAssetDenom]?.id
       ) *
       (pair?.isInterPool
-        ? Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv)) *
+        ? (Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv)) -
+            MAX_LTV_DEDUCTION) *
           Number(
             decimalConversion(
               assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv
             )
           )
-        : Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv))) ||
-      0) /
+        : Number(
+            decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv) -
+              MAX_LTV_DEDUCTION
+          )) || 0) /
       marketPrice(
         markets,
         borrowAssetDenom,
@@ -127,15 +140,15 @@ const BorrowTab = ({
           map[obj?.assetTransitType] = obj;
           return map;
         }, {});
-      
+
         let transitAssetIds = {
           main: assetTransitMap[assetTransitTypeId["main"]]?.assetId,
           first: assetTransitMap[assetTransitTypeId["first"]]?.assetId,
           second: assetTransitMap[assetTransitTypeId["second"]]?.assetId,
         };
-      
+
         myPool["transitAssetIds"] = transitAssetIds;
-      
+
         setAssetOutPool(myPool);
       });
     }
@@ -233,7 +246,19 @@ const BorrowTab = ({
 
     setOutAmount(value);
     setBorrowValidationError(
-      ValidateInputNumber(getAmount(value), borrowableBalance)
+      ValidateInputNumber(
+        getAmount(value),
+        borrowableBalance,
+        "dollar",
+        Number(
+          value *
+            marketPrice(
+              markets,
+              borrowAssetDenom,
+              assetDenomMap[borrowAssetDenom]?.id
+            ) || 0
+        )
+      )
     );
   };
 

@@ -6,8 +6,8 @@ import { NoDataIcon, SvgIcon } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import {
-    amountConversionWithComma,
-    denomConversion
+  amountConversionWithComma,
+  denomConversion
 } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
 import ActionButton from "./ActionButton";
@@ -20,6 +20,7 @@ const CloseTab = ({ lang, lendPosition, pool, assetMap, address }) => {
   const [amount, setAmount] = useState();
 
   const selectedAssetId = lendPosition?.assetId?.toNumber();
+  const availableBalance = lendPosition?.availableToBorrow || 0;
 
   useEffect(() => {
     if (pool?.poolId) {
@@ -82,7 +83,7 @@ const CloseTab = ({ lang, lendPosition, pool, assetMap, address }) => {
             <div className="label-right">
               Available
               <span className="ml-1">
-                {amountConversionWithComma(lendPosition?.updatedAmountIn || 0)}{" "}
+                {amountConversionWithComma(availableBalance)}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
               </span>
             </div>

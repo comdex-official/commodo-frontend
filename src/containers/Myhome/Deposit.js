@@ -1,15 +1,34 @@
-import { Button, Table } from "antd";
+import { Button, Dropdown, Menu, Table } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
-import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../components/common";
+import {
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon
+} from "../../components/common";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
-import LendReward from "./Calculate/LendReward";
+import InterestAndReward from "./Calculate/InterestAndReward";
 import "./index.less";
 
-const Deposit = ({ lang, userLendList, inProgress }) => {
+const editItems = (
+  <Menu>
+    <Menu.Item>Deposit</Menu.Item>
+    <Menu.Item>Withdraw</Menu.Item>
+  </Menu>
+);
+
+const Deposit = ({
+  lang,
+  userLendList,
+  inProgress,
+  address,
+  fetchUserLends,
+}) => {
   const navigate = useNavigate();
 
   const columns = [
@@ -54,7 +73,6 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
       key: "interest",
       width: 350,
       className: "rewards-column",
-      render: (lend) => <LendReward lendPosition={lend} lang={lang} />,
     },
     {
       title: "",
@@ -65,29 +83,22 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
       render: (item) => (
         <>
           <div className="d-flex">
-            <Button
-              onClick={() =>
-                navigate(`/myhome/deposit/${item?.lendingId?.toNumber()}`)
-              }
-              type="primary"
-              className="btn-filled table-btn"
-              size="small"
+            <Dropdown
+              overlayClassName="edit-btn-dorp"
+              trigger={["click"]}
+              overlay={editItems}
             >
-              Deposit
-            </Button>
-            <Button
-              type="primary"
-              size="small"
-              onClick={() =>
-                navigate({
-                  pathname: `/myhome/deposit/${item?.lendingId?.toNumber()}`,
-                  hash: "withdraw",
-                })
-              }
-              className="ml-2 table-btn"
-            >
-              Withdraw
-            </Button>
+              <Button
+                onClick={() =>
+                  navigate(`/myhome/deposit/${item?.lendingId?.toNumber()}`)
+                }
+                type="primary"
+                className="btn-filled"
+                size="small"
+              >
+                Edit
+              </Button>
+            </Dropdown>
           </div>
         </>
       ),
@@ -118,7 +129,12 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
             ),
             cpool: item?.cpoolName,
             apy: item,
-            interest: item,
+            interest: (
+              <>
+                {amountConversionWithComma(item?.totalRewards)}{" "}
+                {denomConversion(item?.amountIn?.denom)}
+              </>
+            ),
             action: item,
           };
         })
@@ -129,7 +145,14 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
       <Row>
         <Col>
           <div className="commodo-card bg-none">
-            <div className="card-header">MY Deposited Assets</div>
+            <div className="d-flex align-items-center">
+              <div className="card-header text-left">MY Deposited Assets</div>
+              <InterestAndReward
+                lang={lang}
+                address={address}
+                updateDetails={fetchUserLends}
+              />
+            </div>
             <div className="card-content">
               <Table
                 className="custom-table"
@@ -138,7 +161,7 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
                 columns={columns}
                 pagination={false}
                 scroll={{ x: "100%" }}
-                locale={{emptyText: <NoDataIcon />}}
+                locale={{ emptyText: <NoDataIcon /> }}
               />
             </div>
           </div>
@@ -149,7 +172,9 @@ const Deposit = ({ lang, userLendList, inProgress }) => {
 };
 
 Deposit.propTypes = {
+  fetchUserLends: PropTypes.func.isRequired,
   lang: PropTypes.string.isRequired,
+  address: PropTypes.string,
   userLendList: PropTypes.arrayOf(
     PropTypes.shape({
       amountIn: PropTypes.shape({
@@ -172,6 +197,7 @@ const stateToProps = (state) => {
   return {
     lang: state.language,
     userLendList: state.lend.userLends,
+    address: state.account.address,
   };
 };
 

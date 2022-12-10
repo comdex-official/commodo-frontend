@@ -54,9 +54,9 @@ const History = ({ address, setTransactionHistory, history }) => {
     });
 
   const handleChange = (value) => {
-    setPageNumber(value.current);
-    setPageSize(value.pageSize);
-    getTransactions(address, value.current, value.pageSize);
+    setPageNumber(value?.current);
+    setPageSize(value?.pageSize);
+    getTransactions(address, value?.current, value?.pageSize);
   };
 
   const columns = [
@@ -113,7 +113,7 @@ const History = ({ address, setTransactionHistory, history }) => {
       <Row>
         <Col>
           <div className="commodo-card bg-none">
-            <div className="card-header">TRANSACTION HISTORY</div>
+            <div className="card-header text-left">TRANSACTION HISTORY</div>
             <div className="card-content">
               <Table
                 className="custom-table"

@@ -2,7 +2,7 @@ import { message, Table } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { setPools } from '../../../actions/lend';
+import { setPools } from "../../../actions/lend";
 import { NoDataIcon, SvgIcon } from "../../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
@@ -42,11 +42,11 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
   };
 
   const handleChange = (value) => {
-    setPageNumber(value.current - 1);
-    setPageSize(value.pageSize);
+    setPageNumber(value?.current - 1);
+    setPageSize(value?.pageSize);
     fetchLendPools(
-      (value.current - 1) * value.pageSize,
-      value.pageSize,
+      (value?.current - 1) * value?.pageSize,
+      value?.pageSize,
       true,
       false
     );
@@ -80,7 +80,8 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
                   <div className="assets-icon">
                     <SvgIcon
                       name={iconNameFromDenom(
-                        assetMap[item?.transitAssetIds?.first?.toNumber()]?.denom
+                        assetMap[item?.transitAssetIds?.first?.toNumber()]
+                          ?.denom
                       )}
                     />
                   </div>
@@ -96,7 +97,8 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
                   <div className="assets-icon">
                     <SvgIcon
                       name={iconNameFromDenom(
-                        assetMap[item?.transitAssetIds?.second?.toNumber()]?.denom
+                        assetMap[item?.transitAssetIds?.second?.toNumber()]
+                          ?.denom
                       )}
                     />
                   </div>
@@ -123,7 +125,7 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
           className="custom-table market-table1"
           dataSource={tableData}
           columns={columns}
-          loading={inProgress}
+          loading={inProgress && !lendPools?.length}
           onChange={(event) => handleChange(event)}
           pagination={{
             total:
@@ -131,7 +133,7 @@ const Supply = ({ assetMap, setPools, lendPools }) => {
             pageSize,
           }}
           scroll={{ x: "100%", y: "30vh" }}
-          locale={{emptyText: <NoDataIcon />}}
+          locale={{ emptyText: <NoDataIcon /> }}
         />
       </div>
     </div>
@@ -146,7 +148,7 @@ Supply.propTypes = {
 const stateToProps = (state) => {
   return {
     assetMap: state.asset._.map,
-    lendPools: state.lend.pool.list
+    lendPools: state.lend.pool.list,
   };
 };
 

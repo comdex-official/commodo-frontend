@@ -36,7 +36,7 @@ const HealthFactor = ({
             return;
           }
 
-          setPercentage(
+          let percentage =
             (borrow?.amountIn?.amount *
               marketPrice(
                 markets,
@@ -62,13 +62,16 @@ const HealthFactor = ({
                         ?.liquidationThreshold
                     )
                   ))) /
-              (borrow?.amountIn?.amount *
-                marketPrice(
-                  markets,
-                  borrow?.amountOut?.denom,
-                  assetDenomMap[borrow?.amountOut?.denom]?.id
-                ))
-          );
+            (borrow?.amountIn?.amount *
+              marketPrice(
+                markets,
+                borrow?.amountOut?.denom,
+                assetDenomMap[borrow?.amountOut?.denom]?.id
+              ));
+
+          if (isFinite(percentage)) {
+            setPercentage(percentage);
+          }
         });
       });
     }
@@ -76,7 +79,7 @@ const HealthFactor = ({
 
   useEffect(() => {
     if (pair?.id && Number(inAmount) && Number(outAmount)) {
-      setPercentage(
+      let percentage =
         (Number(inAmount) *
           marketPrice(markets, assetMap[pair?.assetIn]?.denom, pair?.assetIn) *
           (pair?.isInterPool
@@ -96,13 +99,15 @@ const HealthFactor = ({
                   assetRatesStatsMap[pair?.assetIn]?.liquidationThreshold
                 )
               ))) /
-          (Number(outAmount) *
-            marketPrice(
-              markets,
-              assetMap[pair?.assetOut]?.denom,
-              pair?.assetOut
-            ))
-      );
+        (Number(outAmount) *
+          marketPrice(
+            markets,
+            assetMap[pair?.assetOut]?.denom,
+            pair?.assetOut
+          ));
+      if (isFinite(percentage)) {
+        setPercentage(percentage);
+      }
     }
   }, [markets, pair, inAmount, outAmount, pool]);
 

@@ -37,7 +37,7 @@ export const marketPrice = (marketsMap, denom, assetId) => {
     return 1;
   }
 
-  if (value && value?.twa) {
+  if (value && value?.twa && value?.isPriceActive) {
     return value?.twa?.toNumber() / 1000000;
   }
 

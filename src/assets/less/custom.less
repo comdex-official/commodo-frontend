@@ -19,11 +19,21 @@ body {
   font-weight: 400;
   background: @body-background-light  !important;
   height: auto !important;
+  padding: 0;
+  margin: 0;
 
   &.dark-mode {
     background: #000c07 !important;
     color: @white;
   }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+p{
+  margin: 0;
 }
 
 ::-webkit-scrollbar {
@@ -716,6 +726,9 @@ button.ant-switch {
           background: @menu-active-dark;
           color: @white;
           box-shadow: @box-shadow-input-dark;
+          &::placeholder {
+            color:@white;
+          }
         }
       }
     }
@@ -1335,8 +1348,9 @@ button.ant-switch {
     }
 
     &.ant-pagination-item-active {
+      border-color: @dark-color;
       a {
-        color: @white;
+        color: @dark-color;
       }
     }
   }
@@ -1486,7 +1500,7 @@ button.ant-switch {
 
   .details-right {
     width: 50%;
-    padding-left: 25px;
+    padding-left: 15px;
 
     @media screen and (max-width:1400px) {
       padding-left: 15px;
@@ -1586,7 +1600,7 @@ button.ant-switch {
 
       .ant-list {
         .ant-row>div:nth-child(1) {
-          width: 28%;
+          width: 27%;
 
           @media screen and (max-width:1280px) {
             width: 33.33%;
@@ -1598,7 +1612,7 @@ button.ant-switch {
         }
 
         .ant-row>div:nth-child(2) {
-          width: 30%;
+          width: 28%;
 
           @media screen and (max-width:1280px) {
             width: 33.33%;
@@ -1610,7 +1624,7 @@ button.ant-switch {
         }
 
         .ant-row>div:nth-child(3) {
-          width: 19%;
+          width: 20%;
 
           @media screen and (max-width:1280px) {
             width: 33.33%;
@@ -1622,7 +1636,7 @@ button.ant-switch {
         }
 
         .ant-row>div:nth-child(4) {
-          width: 23%;
+          width: 25%;
 
           @media screen and (max-width:1280px) {
             width: 33.33%;
@@ -1637,10 +1651,11 @@ button.ant-switch {
           margin: 10px 0;
           color: @text-color-dark2;
           border-left: 1px solid @success-color;
-          padding-left: 15px;
+          padding-left: 12px;
+          padding-right: 5px;
 
-          @media screen and (max-width:1380px) {
-            padding-left: 12px;
+          @media screen and (max-width:1500px) {
+            padding-left: 10px;
           }
 
           .dark-mode & {
@@ -1676,11 +1691,13 @@ button.ant-switch {
 
           h3 {
             margin-bottom: 0;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             line-height: 1;
             margin-top: 8px;
             color: @text-color-dark;
+            display: flex;
+            align-items: center;
 
             .dark-mode & {
               color: @white;
@@ -1876,6 +1893,19 @@ button.ant-switch {
   .ant-empty-description {
     .dark-mode & {
       color: @white;
+    }
+  }
+}
+
+.dropconnect-overlay{
+  padding: 0;
+  .ant-dropdown-menu{
+    padding: 0;
+    background: none;
+    .ant-dropdown-menu-item{
+      padding: 0;
+      background: none !important;
+      cursor: default;
     }
   }
 }
