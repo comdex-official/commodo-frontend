@@ -62,7 +62,7 @@ const HealthFactor = ({
                         ?.liquidationThreshold
                     )
                   ))) /
-            (borrow?.amountIn?.amount *
+            (borrow?.amountOut?.amount *
               marketPrice(
                 markets,
                 borrow?.amountOut?.denom,
