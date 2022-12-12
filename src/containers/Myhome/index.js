@@ -10,7 +10,7 @@ import {
   queryLendPair,
   queryLendPool,
   queryUserBorrows,
-  queryUserLends
+  queryUserLends,
 } from "../../services/lend/query";
 import { amountConversionWithComma } from "../../utils/coin";
 import { decimalConversion, marketPrice } from "../../utils/number";
@@ -78,7 +78,7 @@ const Myhome = ({
     setBorrowsInProgress(true);
     queryUserBorrows(address, (error, result) => {
       setBorrowsInProgress(false);
-      
+
       if (error) {
         message.error(error);
         return;
@@ -231,9 +231,9 @@ const Myhome = ({
     {
       label: "Lend",
       key: "1",
-      children: <Deposit 
-      fetchUserLends={fetchUserLends}
-      inProgress={lendsInProgress} />,
+      children: (
+        <Deposit fetchUserLends={fetchUserLends} inProgress={lendsInProgress} />
+      ),
     },
     {
       label: "Borrow",
