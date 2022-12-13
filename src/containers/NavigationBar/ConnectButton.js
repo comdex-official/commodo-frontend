@@ -15,14 +15,14 @@ import {
 } from "../../actions/account";
 import { setAssets } from "../../actions/asset";
 import { setAssetRatesStats } from "../../actions/lend";
-import { setMarkets } from "../../actions/oracle";
+import { setMarkets, setCoingekoPrice, } from "../../actions/oracle";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
 import { queryAssets } from "../../services/asset/query";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
 import { QueryAssetRatesParams } from "../../services/lend/query";
-import { queryMarketList } from "../../services/oracle/query";
+import { fetchCoingeckoPrices, queryMarketList } from "../../services/oracle/query";
 import { marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
@@ -42,12 +42,14 @@ const ConnectButton = ({
   setAssetRatesStats,
   balances,
   assetDenomMap,
+  setCoingekoPrice,
 }) => {
   useEffect(() => {
     const savedAddress = localStorage.getItem("ac");
     const userAddress = savedAddress ? decode(savedAddress) : address;
 
     fetchMarkets();
+    fetchCoingeckoPrice();
 
     if (userAddress) {
       setAccountAddress(userAddress);
@@ -127,6 +129,17 @@ const ConnectButton = ({
     });
   };
 
+  const fetchCoingeckoPrice = () => {
+    fetchCoingeckoPrices((error, result) => {
+      if (error) {
+        return;
+      }
+      if (result) {
+        setCoingekoPrice(result)
+      }
+    });
+  };
+
   const getPrice = (denom) => {
     return marketPrice(markets, denom, assetDenomMap[denom]?.id) || 0;
   };
@@ -195,7 +208,7 @@ ConnectButton.propTypes = {
       amount: PropTypes.string,
     })
   ),
-    markets: PropTypes.object,
+  markets: PropTypes.object,
   show: PropTypes.bool,
 };
 
@@ -205,7 +218,7 @@ const stateToProps = (state) => {
     address: state.account.address,
     balances: state.account.balances.list,
     show: state.account.showModal,
-    markets: state.oracle.market.map,
+    markets: state.oracle.market,
     refreshBalance: state.account.refreshBalance,
     assetDenomMap: state.asset._.assetDenomMap,
   };
@@ -222,6 +235,7 @@ const actionsToProps = {
   setAccountName,
   setAssets,
   setAssetRatesStats,
+  setCoingekoPrice,
 };
 
 export default connect(stateToProps, actionsToProps)(ConnectButton);

@@ -144,8 +144,8 @@ const WithdrawTab = ({
                 {commaSeparator(
                   Number(
                     amount *
-                      marketPrice(markets, assetMap[selectedAssetId]?.denom, selectedAssetId) ||
-                      0
+                    marketPrice(markets, assetMap[selectedAssetId]?.denom, selectedAssetId) ||
+                    0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}
               </small>
@@ -205,7 +205,7 @@ WithdrawTab.propTypes = {
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
-    markets: PropTypes.object,
+  markets: PropTypes.object,
   lendPosition: PropTypes.shape({
     lendingId: PropTypes.shape({
       low: PropTypes.number,
@@ -236,7 +236,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     refreshBalance: state.account.refreshBalance,
     lang: state.language,
-     markets: state.oracle.market.map,
+    markets: state.oracle.market,
   };
 };
 

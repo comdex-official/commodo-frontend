@@ -218,11 +218,11 @@ const DepositTab = ({
                   {commaSeparator(
                     Number(
                       amount *
-                        marketPrice(
-                          markets,
-                          assetMap[selectedAssetId]?.denom,
-                          selectedAssetId
-                        ) || 0
+                      marketPrice(
+                        markets,
+                        assetMap[selectedAssetId]?.denom,
+                        selectedAssetId
+                      ) || 0
                     ).toFixed(DOLLAR_DECIMALS)
                   )}{" "}
                 </div>
@@ -299,7 +299,7 @@ DepositTab.propTypes = {
       amount: PropTypes.string,
     })
   ),
-    markets: PropTypes.object,
+  markets: PropTypes.object,
   pool: PropTypes.shape({
     poolId: PropTypes.shape({
       low: PropTypes.number,
@@ -324,7 +324,7 @@ const stateToProps = (state) => {
     assetMap: state.asset._.map,
     balances: state.account.balances.list,
     lang: state.language,
-    markets: state.oracle.market.map,
+    markets: state.oracle.market,
     refreshBalance: state.account.refreshBalance,
   };
 };

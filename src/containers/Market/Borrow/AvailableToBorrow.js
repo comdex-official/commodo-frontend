@@ -33,10 +33,10 @@ export const AvailableToBorrow = ({ lendPool, markets, assetDenomMap }) => {
     const values =
       moduleBalanceStats?.length > 0
         ? moduleBalanceStats.map((item) => {
-            return (
-              marketPrice(markets, item?.balance?.denom, assetDenomMap[item?.balance?.denom]?.id) * item?.balance.amount
-            );
-          })
+          return (
+            marketPrice(markets, item?.balance?.denom, assetDenomMap[item?.balance?.denom]?.id) * item?.balance.amount
+          );
+        })
         : [];
 
     const sum = values.reduce((a, b) => a + b, 0);
@@ -49,7 +49,7 @@ export const AvailableToBorrow = ({ lendPool, markets, assetDenomMap }) => {
 
 AvailableToBorrow.propTypes = {
   assetDenomMap: PropTypes.object,
-    markets: PropTypes.object,
+  markets: PropTypes.object,
   lendPool: PropTypes.shape({
     mainAssetId: PropTypes.shape({
       low: PropTypes.number,
@@ -65,8 +65,8 @@ AvailableToBorrow.propTypes = {
 
 const stateToProps = (state) => {
   return {
-     markets: state.oracle.market.map,
-     assetDenomMap: state.asset._.assetDenomMap,
+    markets: state.oracle.market,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 
