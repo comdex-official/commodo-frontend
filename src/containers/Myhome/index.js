@@ -125,14 +125,14 @@ const Myhome = ({
     const values =
       userLendList?.length > 0
         ? userLendList.map((item) => {
-            return (
-              marketPrice(
-                markets,
-                item?.amountIn?.denom,
-                assetDenomMap[item?.amountIn?.denom]?.id
-              ) * item?.amountIn.amount
-            );
-          })
+          return (
+            marketPrice(
+              markets,
+              item?.amountIn?.denom,
+              assetDenomMap[item?.amountIn?.denom]?.id
+            ) * item?.amountIn.amount
+          );
+        })
         : [];
 
     const sum = values.reduce((a, b) => a + b, 0);
@@ -144,14 +144,14 @@ const Myhome = ({
     const values =
       userBorrowList?.length > 0
         ? userBorrowList.map((item) => {
-            return (
-              marketPrice(
-                markets,
-                item?.amountOut?.denom,
-                assetDenomMap[item?.amountOut?.denom]?.id
-              ) * item?.amountOut.amount
-            );
-          })
+          return (
+            marketPrice(
+              markets,
+              item?.amountOut?.denom,
+              assetDenomMap[item?.amountOut?.denom]?.id
+            ) * item?.amountOut.amount
+          );
+        })
         : [];
 
     return values.reduce((a, b) => a + b, 0);
@@ -161,37 +161,37 @@ const Myhome = ({
     const values =
       userBorrowList?.length > 0
         ? userBorrowList.map((item) => {
-            return (
-              marketPrice(
-                markets,
-                assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.denom,
-                borrowToPair[item?.borrowingId]?.assetIn
+          return (
+            marketPrice(
+              markets,
+              assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.denom,
+              borrowToPair[item?.borrowingId]?.assetIn
+            ) *
+            Number(item?.amountIn.amount) *
+            (borrowToPair[item?.borrowingId]?.isInterPool
+              ? Number(
+                decimalConversion(
+                  assetRatesStatsMap[
+                    borrowToPair[item?.borrowingId]?.assetIn
+                  ]?.ltv
+                )
               ) *
-              Number(item?.amountIn.amount) *
-              (borrowToPair[item?.borrowingId]?.isInterPool
-                ? Number(
-                    decimalConversion(
-                      assetRatesStatsMap[
-                        borrowToPair[item?.borrowingId]?.assetIn
-                      ]?.ltv
-                    )
-                  ) *
-                  Number(
-                    decimalConversion(
-                      assetRatesStatsMap[
-                        borrowToPool[item?.borrowingId]?.transitAssetIds?.first
-                      ]?.ltv
-                    )
-                  )
-                : Number(
-                    decimalConversion(
-                      assetRatesStatsMap[
-                        borrowToPair[item?.borrowingId]?.assetIn
-                      ]?.ltv
-                    ) || 0
-                  ))
-            );
-          })
+              Number(
+                decimalConversion(
+                  assetRatesStatsMap[
+                    borrowToPool[item?.borrowingId]?.transitAssetIds?.first
+                  ]?.ltv
+                )
+              )
+              : Number(
+                decimalConversion(
+                  assetRatesStatsMap[
+                    borrowToPair[item?.borrowingId]?.assetIn
+                  ]?.ltv
+                ) || 0
+              ))
+          );
+        })
         : [];
 
     return values.reduce((a, b) => a + b, 0);
@@ -369,7 +369,7 @@ const stateToProps = (state) => {
     address: state.account.address,
     userLendList: state.lend.userLends,
     userBorrowList: state.lend.userBorrows,
-    markets: state.oracle.market.map,
+    markets: state.oracle.market,
     assetRatesStatsMap: state.lend.assetRatesStats.map,
     assetMap: state.asset._.map,
     assetDenomMap: state.asset._.assetDenomMap,

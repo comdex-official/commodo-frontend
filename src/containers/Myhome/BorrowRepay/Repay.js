@@ -155,11 +155,11 @@ const RepayTab = ({
                 {commaSeparator(
                   Number(
                     amount *
-                      marketPrice(
-                        markets,
-                        assetMap[selectedAssetId]?.denom,
-                        selectedAssetId
-                      ) || 0
+                    marketPrice(
+                      markets,
+                      assetMap[selectedAssetId]?.denom,
+                      selectedAssetId
+                    ) || 0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
               </small>{" "}
@@ -194,11 +194,11 @@ const RepayTab = ({
                   {commaSeparator(
                     Number(
                       amountConversion(updatedAmountOut) *
-                        marketPrice(
-                          markets,
-                          assetMap[selectedAssetId]?.denom,
-                          selectedAssetId
-                        ) || 0
+                      marketPrice(
+                        markets,
+                        assetMap[selectedAssetId]?.denom,
+                        selectedAssetId
+                      ) || 0
                     ).toFixed(DOLLAR_DECIMALS)
                   )}
                 </small>
@@ -327,7 +327,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
-    markets: state.oracle.market.map,
+    markets: state.oracle.market,
   };
 };
 
