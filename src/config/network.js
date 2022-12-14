@@ -15,6 +15,9 @@ export const comdex = {
 export const ibcDenoms = {
   uatom: process.env.REACT_APP_ATOM_IBC_DENOM,
   uosmo: process.env.REACT_APP_OSMO_IBC_DENOM,
+  uusdc: process.env.REACT_APP_USDC_IBC_DENOM,
+  "weth-wei": process.env.REACT_APP_WETH_IBC_DENOM,
+  ujuno: process.env.REACT_APP_JUNO_IBC_DENOM,
 };
 
 export const cmst = {
