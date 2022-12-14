@@ -140,11 +140,7 @@ const Assets = ({
     return marketPrice(markets, denom, assetDenomMap[denom]?.id) || 0;
   };
 
-  let assetsWithoutExternalLinks = AssetList?.tokens?.filter(
-    (item) => !item.hasOwnProperty("depositUrlOverride")
-  );
-
-  let ibcBalances = assetsWithoutExternalLinks?.map((token) => {
+  let ibcBalances = AssetList?.tokens?.map((token) => {
     const ibcBalance = balances.find(
       (item) => item.denom === token?.ibcDenomHash
     );
