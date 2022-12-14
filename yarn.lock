@@ -4780,6 +4780,14 @@ cosmjs-types@^0.5.2:
     long "^4.0.0"
     protobufjs "~6.11.2"
 
+cosmjs-types@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/cosmjs-types/-/cosmjs-types-0.6.0.tgz#8cff6f3ef5a6abd453358c8fb0874e54922c0dbb"
+  integrity sha512-KfJkR7OuheVIavhyNN5GX+lmu9875vVgr48GtkleUomtvQqtv1RyRvsU4Ezpy6T/Wq0FWHnw2y3GoZ+c+rkrMw==
+  dependencies:
+    long "^4.0.0"
+    protobufjs "~6.11.2"
+
 craco-less@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/craco-less/-/craco-less-2.0.0.tgz#a2df18c32e97ebf00f62c3f2ea4cd97035f5f640"
