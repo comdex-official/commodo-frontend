@@ -64,6 +64,7 @@ export const denomToCoingeckoTokenId = (key) => {
     case "uusdc":
     case ibcDenoms["uusdc"]:
       return "axlusdc";
+    case ibcDenoms["weth-wei"]:
     case "weth-wei":
     case "uweth":
     case ibcDenoms["weth-wei"]:
@@ -115,13 +116,13 @@ export const iconNameFromDenom = (key) => {
     case ibcDenoms["uosmo"]:
       return "osmosis-icon";
     case "uusdc":
-    case [ibcDenoms["uusdc"]]:
+    case ibcDenoms["uusdc"]:
       return "usdc-icon";
     case "weth-wei":
-    case [ibcDenoms["weth-wei"]]:
+    case ibcDenoms["weth-wei"]:
       return "weth-icon";
     case "ujuno":
-    case [ibcDenoms["ujuno"]]:
+    case ibcDenoms["ujuno"]:
       return "juno-icon";
     default:
       return "";
