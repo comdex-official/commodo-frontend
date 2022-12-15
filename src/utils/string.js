@@ -13,12 +13,14 @@ export const ibcDenomToDenom = (key) => {
   switch (key) {
     case ibcDenoms["uatom"]:
       return "uatom";
-    case ibcDenoms["uusd"]:
-      return "uust";
-    case ibcDenoms["uluna"]:
-      return "uluna";
     case ibcDenoms["uosmo"]:
       return "uosmo";
+    case ibcDenoms["uusdc"]:
+      return "USDC";
+    case ibcDenoms["weth-wei"]:
+      return "WETH";
+    case ibcDenoms["ujuno"]:
+      return "ujuno";
     default:
       return "";
   }
@@ -62,10 +64,13 @@ export const denomToCoingeckoTokenId = (key) => {
     case "uusdc":
     case ibcDenoms["uusdc"]:
       return "axlusdc";
+    case ibcDenoms["weth-wei"]:
     case "weth-wei":
     case "uweth":
     case ibcDenoms["weth-wei"]:
       return "axlweth";
+    case ibcDenoms["ujuno"]:
+      return "juno-network";
     default:
       return "";
   }
@@ -110,6 +115,15 @@ export const iconNameFromDenom = (key) => {
     case "uosmo":
     case ibcDenoms["uosmo"]:
       return "osmosis-icon";
+    case "uusdc":
+    case ibcDenoms["uusdc"]:
+      return "usdc-icon";
+    case "weth-wei":
+    case ibcDenoms["weth-wei"]:
+      return "weth-icon";
+    case "ujuno":
+    case ibcDenoms["ujuno"]:
+      return "juno-icon";
     default:
       return "";
   }
