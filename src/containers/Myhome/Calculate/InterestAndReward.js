@@ -60,7 +60,7 @@ const InterestAndReward = ({ lang, address, updateDetails }) => {
       className="btn-outline caclulate-btn"
       size="small"
     >
-      Calculate
+      Fetch Interest
     </Button>
   );
 };
