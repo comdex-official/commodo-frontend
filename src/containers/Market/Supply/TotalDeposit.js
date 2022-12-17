@@ -7,12 +7,7 @@ import { QueryPoolAssetLBMapping } from "../../../services/lend/query";
 import { amountConversionWithComma } from "../../../utils/coin";
 import { marketPrice } from "../../../utils/number";
 
-export const TotalDeposit = ({
-  lendPool,
-  assetMap,
-  markets,
-  assetDenomMap,
-}) => {
+export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
   const [assetStats, setAssetStats] = useState({});
 
   useEffect(() => {
@@ -41,27 +36,27 @@ export const TotalDeposit = ({
     const sum =
       Number(
         assetStats[lendPool?.transitAssetIds?.main]?.totalLend *
-        marketPrice(
-          markets,
-          assetMap?.[lendPool?.transitAssetIds?.main]?.denom,
-          assetDenomMap[[lendPool?.transitAssetIds?.main]?.denom]?.id
-        )
+          marketPrice(
+            markets,
+            assetMap?.[lendPool?.transitAssetIds?.main]?.denom,
+            lendPool?.transitAssetIds?.main
+          )
       ) +
       Number(
         assetStats[lendPool?.transitAssetIds?.first]?.totalLend *
-        marketPrice(
-          markets,
-          assetMap?.[lendPool?.transitAssetIds?.first]?.denom,
-          assetDenomMap[[lendPool?.transitAssetIds?.first]?.denom]?.id
-        )
+          marketPrice(
+            markets,
+            assetMap?.[lendPool?.transitAssetIds?.first]?.denom,
+            lendPool?.transitAssetIds?.first
+          )
       ) +
       Number(
         assetStats[lendPool?.transitAssetIds?.second]?.totalLend *
-        marketPrice(
-          markets,
-          assetMap?.[lendPool?.transitAssetIds?.second]?.denom,
-          assetDenomMap[[lendPool?.transitAssetIds?.second]?.denom]?.id
-        )
+          marketPrice(
+            markets,
+            assetMap?.[lendPool?.transitAssetIds?.second]?.denom,
+            lendPool?.transitAssetIds?.second
+          )
       );
 
     return `$${amountConversionWithComma(sum || 0, DOLLAR_DECIMALS)}`;
@@ -71,7 +66,6 @@ export const TotalDeposit = ({
 
 TotalDeposit.propTypes = {
   assetMap: PropTypes.object,
-  assetDenomMap: PropTypes.object,
   markets: PropTypes.object,
   lendPool: PropTypes.shape({
     transitAssetIds: PropTypes.shape({
@@ -86,7 +80,6 @@ const stateToProps = (state) => {
   return {
     markets: state.oracle.market,
     assetMap: state.asset._.map,
-    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

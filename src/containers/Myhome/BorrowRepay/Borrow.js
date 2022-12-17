@@ -3,7 +3,13 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
-import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import {
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon
+} from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import AssetStats from "../../../components/common/Asset/Stats";
@@ -61,31 +67,31 @@ const BorrowTab = ({
   const borrowable =
     (Number(
       borrowPosition?.amountIn?.amount *
-      marketPrice(
-        markets,
-        ucDenomToDenom(borrowPosition?.amountIn?.denom),
-        pair?.assetIn
-      ) *
-      (pair?.isInterPool
-        ? Number(
-          decimalConversion(assetRatesStatsMap[lendPosition?.assetId]?.ltv)
+        marketPrice(
+          markets,
+          ucDenomToDenom(borrowPosition?.amountIn?.denom),
+          pair?.assetIn
         ) *
-        Number(
-          decimalConversion(
-            assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv
-          )
-        )
-        : Number(
-          decimalConversion(assetRatesStatsMap[lendPosition?.assetId]?.ltv)
-        )) || 0
+        (pair?.isInterPool
+          ? Number(
+              decimalConversion(assetRatesStatsMap[lendPosition?.assetId]?.ltv)
+            ) *
+            Number(
+              decimalConversion(
+                assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv
+              )
+            )
+          : Number(
+              decimalConversion(assetRatesStatsMap[lendPosition?.assetId]?.ltv)
+            )) || 0
     ) -
       Number(
         updatedAmountOut *
-        marketPrice(
-          markets,
-          borrowPosition?.amountOut.denom,
-          assetDenomMap[borrowPosition?.amountOut.denom]?.id
-        )
+          marketPrice(
+            markets,
+            borrowPosition?.amountOut.denom,
+            assetDenomMap[borrowPosition?.amountOut.denom]?.id
+          )
       )) /
     marketPrice(
       markets,
@@ -107,7 +113,6 @@ const BorrowTab = ({
 
   const handleInputChange = (value) => {
     value = toDecimals(value).toString().trim();
-
     setAmount(value);
     setValidationError(
       ValidateInputNumber(value, amountConversion(borrowable))
@@ -115,7 +120,9 @@ const BorrowTab = ({
   };
 
   const handleMaxClick = () => {
-    return handleInputChange(amountConversion(borrowable));
+    if (borrowable >= 0) {
+      return handleInputChange(amountConversion(borrowable));
+    }
   };
 
   const handleRefresh = () => {
@@ -141,7 +148,7 @@ const BorrowTab = ({
           ucDenomToDenom(borrowPosition?.amountIn?.denom),
           assetDenomMap[ucDenomToDenom(borrowPosition?.amountIn?.denom)]?.id
         ))) *
-    100
+      100
   );
 
   return (
@@ -222,11 +229,11 @@ const BorrowTab = ({
                 {commaSeparator(
                   Number(
                     amount *
-                    marketPrice(
-                      markets,
-                      assetMap[selectedAssetId]?.denom,
-                      selectedAssetId
-                    ) || 0
+                      marketPrice(
+                        markets,
+                        assetMap[selectedAssetId]?.denom,
+                        selectedAssetId
+                      ) || 0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
               </small>{" "}
@@ -249,7 +256,7 @@ const BorrowTab = ({
                   outAmount={
                     amount
                       ? Number(borrowPosition?.amountOut?.amount) +
-                      Number(getAmount(amount))
+                        Number(getAmount(amount))
                       : borrowPosition?.amountOut?.amount
                   }
                 />
