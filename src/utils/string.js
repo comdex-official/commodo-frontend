@@ -21,6 +21,8 @@ export const ibcDenomToDenom = (key) => {
       return "WETH";
     case ibcDenoms["ujuno"]:
       return "ujuno";
+    case ibcDenoms["wbtc-satoshi"]:
+      return "wbtc-satoshi";
     case ibcDenoms["stuatom"]:
       return "stuatom";
     default:
@@ -74,6 +76,9 @@ export const denomToCoingeckoTokenId = (key) => {
       return "axlweth";
     case ibcDenoms["ujuno"]:
       return "juno-network";
+    case "wbtc-satoshi":
+    case ibcDenoms["wbtc-satoshi"]:
+      return "wrapped-bitcoin";
     case "stuatom":
     case ibcDenoms["stuatom"]:
       return "stride-staked-atom";
@@ -133,6 +138,9 @@ export const iconNameFromDenom = (key) => {
     case "stuatom":
     case ibcDenoms["stuatom"]:
       return "statom-icon";
+    case "wbtc-satoshi":
+    case ibcDenoms["wbtc-satoshi"]:
+      return "wbtc-icon";
     default:
       return "";
   }
