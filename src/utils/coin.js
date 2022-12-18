@@ -18,7 +18,7 @@ export const amountConversionWithComma = (amount, decimals) => {
 };
 
 export const commaSeparatorWithRounding = (amount, round) => {
-  return commaSeparator(amount.toFixed(getExponent(round)));
+  return commaSeparator(Number(amount).toFixed(getExponent(round) + 1));
 };
 
 export const amountConversion = (amount, decimals) => {

@@ -15,7 +15,14 @@ import "./index.less";
 
 const { Option } = Select;
 
-const CloseTab = ({ lang, lendPosition, pool, assetMap, address }) => {
+const CloseTab = ({
+  lang,
+  lendPosition,
+  pool,
+  assetMap,
+  address,
+  assetDenomMap,
+}) => {
   const [assetList, setAssetList] = useState();
   const [amount, setAmount] = useState();
 
@@ -83,7 +90,10 @@ const CloseTab = ({ lang, lendPosition, pool, assetMap, address }) => {
             <div className="label-right">
               Available
               <span className="ml-1">
-                {amountConversionWithComma(availableBalance)}{" "}
+                {amountConversionWithComma(
+                  availableBalance,
+                  assetMap[selectedAssetId]?.decimals
+                )}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
               </span>
             </div>
@@ -97,6 +107,7 @@ const CloseTab = ({ lang, lendPosition, pool, assetMap, address }) => {
             address={address}
             lendId={lendPosition?.lendingId}
             denom={lendPosition?.amountIn?.denom}
+            assetDenomMap={assetDenomMap}
           />
         </div>
       </div>
@@ -132,6 +143,7 @@ CloseTab.propTypes = {
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   lendPosition: PropTypes.shape({
     lendingId: PropTypes.shape({
       low: PropTypes.number,
@@ -160,6 +172,7 @@ const stateToProps = (state) => {
     pool: state.lend.pool._,
     assetMap: state.asset._.map,
     lang: state.language,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

@@ -3,10 +3,11 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
+import { queryModuleBalance } from "../../../services/lend/query";
 import {
-  queryModuleBalance
-} from "../../../services/lend/query";
-import { amountConversionWithComma } from "../../../utils/coin";
+  amountConversion,
+  commaSeparatorWithRounding
+} from "../../../utils/coin";
 import { marketPrice } from "../../../utils/number";
 
 export const AvailableToBorrow = ({ lendPool, markets, assetDenomMap }) => {
@@ -33,15 +34,23 @@ export const AvailableToBorrow = ({ lendPool, markets, assetDenomMap }) => {
     const values =
       moduleBalanceStats?.length > 0
         ? moduleBalanceStats.map((item) => {
-          return (
-            marketPrice(markets, item?.balance?.denom, assetDenomMap[item?.balance?.denom]?.id) * item?.balance.amount
-          );
-        })
+            return (
+              marketPrice(
+                markets,
+                item?.balance?.denom,
+                assetDenomMap[item?.balance?.denom]?.id
+              ) *
+              amountConversion(
+                item?.balance.amount,
+                assetDenomMap[item?.balance?.denom]?.decimals
+              )
+            );
+          })
         : [];
 
     const sum = values.reduce((a, b) => a + b, 0);
 
-    return `$${amountConversionWithComma(sum || 0, DOLLAR_DECIMALS)}`;
+    return `$${commaSeparatorWithRounding(sum || 0, DOLLAR_DECIMALS)}`;
   };
 
   return <div>{showAvailableToBorrow()}</div>;

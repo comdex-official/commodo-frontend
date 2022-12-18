@@ -8,7 +8,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
@@ -21,17 +21,17 @@ import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../utils/number";
 import {
   iconNameFromDenom,
   toDecimals,
-  ucDenomToDenom
+  ucDenomToDenom,
 } from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
@@ -112,16 +112,23 @@ const BorrowTab = ({
   }, [pool]);
 
   const handleInputChange = (value) => {
-    value = toDecimals(value).toString().trim();
+    value = toDecimals(value, assetMap[selectedAssetId]?.decimals)
+      .toString()
+      .trim();
     setAmount(value);
     setValidationError(
-      ValidateInputNumber(value, amountConversion(borrowable))
+      ValidateInputNumber(
+        value,
+        amountConversion(borrowable, assetMap[selectedAssetId]?.decimals)
+      )
     );
   };
 
   const handleMaxClick = () => {
     if (borrowable >= 0) {
-      return handleInputChange(amountConversion(borrowable));
+      return handleInputChange(
+        amountConversion(borrowable, assetMap[selectedAssetId]?.decimals)
+      );
     }
   };
 
@@ -134,7 +141,13 @@ const BorrowTab = ({
   let currentLTV = Number(
     ((Number(
       amount
-        ? Number(updatedAmountOut) + Number(getAmount(amount))
+        ? Number(updatedAmountOut) +
+            Number(
+              getAmount(
+                amount,
+                assetDenomMap[borrowPosition?.amountOut.denom]?.decimals
+              )
+            )
         : updatedAmountOut
     ) *
       marketPrice(
@@ -206,7 +219,8 @@ const BorrowTab = ({
                     ? borrowable >= 0
                       ? borrowable
                       : 0
-                    : 0
+                    : 0,
+                  assetMap[selectedAssetId]?.decimals
                 )}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
               </span>
@@ -256,7 +270,13 @@ const BorrowTab = ({
                   outAmount={
                     amount
                       ? Number(borrowPosition?.amountOut?.amount) +
-                        Number(getAmount(amount))
+                        Number(
+                          getAmount(
+                            amount,
+                            assetDenomMap[borrowPosition?.amountOut.denom]
+                              ?.decimals
+                          )
+                        )
                       : borrowPosition?.amountOut?.amount
                   }
                 />
@@ -290,6 +310,7 @@ const BorrowTab = ({
             address={address}
             borrowId={borrowPosition?.borrowingId}
             denom={borrowPosition?.amountOut?.denom}
+            assetDenomMap={assetDenomMap}
             refreshData={handleRefresh}
           />
         </div>

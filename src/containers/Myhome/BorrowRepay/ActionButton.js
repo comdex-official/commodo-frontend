@@ -16,6 +16,7 @@ export const ActionButton = ({
   amount,
   denom,
   refreshData,
+  assetDenomMap,
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ export const ActionButton = ({
             borrower: address,
             borrowId: borrowId,
             amount: {
-              amount: getAmount(amount),
+              amount: getAmount(amount, assetDenomMap[denom]?.dcimals),
               denom: denom,
             },
           },

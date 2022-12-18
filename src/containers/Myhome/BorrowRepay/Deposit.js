@@ -3,7 +3,13 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
-import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import {
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon
+} from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import AssetStats from "../../../components/common/Asset/Stats";
@@ -55,7 +61,6 @@ const DepositTab = ({
 
   useEffect(() => {
     if (lendPool?.poolId) {
-
       setAssetList([
         assetMap[lendPool?.transitAssetIds?.main?.toNumber()],
         assetMap[lendPool?.transitAssetIds?.first?.toNumber()],
@@ -65,14 +70,32 @@ const DepositTab = ({
   }, [lendPool]);
 
   const handleInputChange = (value) => {
-    value = toDecimals(value).toString().trim();
+    value = toDecimals(
+      value,
+      assetDenomMap[borrowPosition?.amountIn?.denom]?.decimals
+    )
+      .toString()
+      .trim();
 
     setAmount(value);
-    setValidationError(ValidateInputNumber(getAmount(value), availableBalance));
+    setValidationError(
+      ValidateInputNumber(
+        getAmount(
+          value,
+          assetDenomMap[borrowPosition?.amountIn?.denom]?.decimals
+        ),
+        availableBalance
+      )
+    );
   };
 
   const handleMaxClick = () => {
-    return handleInputChange(amountConversion(availableBalance));
+    return handleInputChange(
+      amountConversion(
+        availableBalance,
+        assetDenomMap[borrowPosition?.amountIn?.denom]?.decimals
+      )
+    );
   };
 
   const handleRefresh = () => {
@@ -90,7 +113,13 @@ const DepositTab = ({
       )) /
       (Number(
         amount
-          ? Number(borrowPosition?.amountIn?.amount) + Number(getAmount(amount))
+          ? Number(borrowPosition?.amountIn?.amount) +
+              Number(
+                getAmount(
+                  amount,
+                  assetDenomMap[borrowPosition?.amountIn?.denom]?.decimals
+                )
+              )
           : borrowPosition?.amountIn?.amount
       ) *
         marketPrice(
@@ -98,7 +127,7 @@ const DepositTab = ({
           ucDenomToDenom(borrowPosition?.amountIn?.denom),
           assetDenomMap[ucDenomToDenom(borrowPosition?.amountIn?.denom)]?.id
         ))) *
-    100
+      100
   );
 
   return (
@@ -152,7 +181,10 @@ const DepositTab = ({
               Depositable
               <TooltipIcon text="Max number of tokens depositable. To get cTokens, deposit more funds in your existing Lend position" />
               <span className="ml-1">
-                {amountConversionWithComma(availableBalance)}{" "}
+                {amountConversionWithComma(
+                  availableBalance,
+                  assetDenomMap[borrowPosition?.amountIn?.denom]?.decimals
+                )}{" "}
                 {denomConversion(borrowPosition?.amountIn?.denom)}
               </span>
               <div className="max-half">
@@ -174,11 +206,11 @@ const DepositTab = ({
                 {commaSeparator(
                   Number(
                     amount *
-                    marketPrice(
-                      markets,
-                      assetMap[selectedAssetId]?.denom,
-                      selectedAssetId
-                    ) || 0
+                      marketPrice(
+                        markets,
+                        assetMap[selectedAssetId]?.denom,
+                        selectedAssetId
+                      ) || 0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
               </small>{" "}
@@ -200,7 +232,13 @@ const DepositTab = ({
                   inAmount={
                     amount
                       ? Number(borrowPosition?.amountIn?.amount) +
-                      Number(getAmount(amount))
+                        Number(
+                          getAmount(
+                            amount,
+                            assetDenomMap[borrowPosition?.amountIn?.denom]
+                              ?.decimals
+                          )
+                        )
                       : borrowPosition?.amountIn?.amount
                   }
                   outAmount={borrowPosition?.amountOut?.amount}
@@ -240,6 +278,7 @@ const DepositTab = ({
             borrowId={borrowPosition?.borrowingId}
             denom={borrowPosition?.amountIn?.denom}
             refreshData={handleRefresh}
+            assetDenomMap={assetDenomMap}
           />
         </div>
       </div>
