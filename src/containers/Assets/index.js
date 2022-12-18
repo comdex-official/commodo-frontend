@@ -7,17 +7,13 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../components/common";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
-import {
-  amountConversion,
-  amountConversionWithComma,
-  denomConversion
-} from "../../utils/coin";
+import { amountConversion, denomConversion } from "../../utils/coin";
 import { commaSeparator, marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import Deposit from "./DepositModal";
@@ -49,7 +45,9 @@ const Assets = ({
           Total Asset Balance <TooltipIcon text="Value of total Asset" />
         </>
       ),
-      counts: `$${amountConversionWithComma(assetBalance, DOLLAR_DECIMALS)}`,
+      counts: `$${commaSeparator(
+        Number(assetBalance || 0).toFixed(DOLLAR_DECIMALS)
+      )}`,
     },
   ];
 
@@ -173,14 +171,25 @@ const Assets = ({
       (item) => item.denom === token?.ibcDenomHash
     );
 
-    const value = getPrice(ibcBalance?.denom) * ibcBalance?.amount;
+    const value =
+      getPrice(ibcBalance?.denom) *
+      amountConversion(
+        ibcBalance?.amount,
+        assetDenomMap[ibcBalance?.denom]?.decimals
+      );
 
     return {
       chainInfo: getChainConfig(token),
       coinMinimalDenom: token?.coinMinimalDenom,
       balance: {
-        amount: ibcBalance?.amount ? amountConversion(ibcBalance.amount) : 0,
+        amount: ibcBalance?.amount
+          ? amountConversion(
+              ibcBalance.amount,
+              assetDenomMap[ibcBalance?.denom]?.decimals
+            )
+          : 0,
         value: value || 0,
+        denom: ibcBalance?.denom,
       },
       sourceChannelId: token.comdexChannel,
       destChannelId: token.channel,
@@ -222,7 +231,7 @@ const Assets = ({
       noOfTokens: nativeCoin?.amount ? amountConversion(nativeCoin.amount) : 0,
       price: getPrice(comdex?.coinMinimalDenom),
       amount: {
-        value: nativeCoinValue || 0,
+        value: amountConversion(nativeCoinValue || 0),
       },
     },
     {
@@ -240,7 +249,7 @@ const Assets = ({
       noOfTokens: cmstCoin?.amount ? amountConversion(cmstCoin.amount) : 0,
       price: getPrice(cmst?.coinMinimalDenom),
       amount: {
-        value: cmstCoinValue || 0,
+        value: amountConversion(cmstCoinValue || 0),
       },
     },
     {
@@ -258,7 +267,7 @@ const Assets = ({
       noOfTokens: harborCoin?.amount ? amountConversion(harborCoin.amount) : 0,
       price: getPrice(harbor?.coinMinimalDenom),
       amount: {
-        value: harborCoinValue || 0,
+        value: amountConversion(harborCoinValue || 0),
       },
     },
   ];
@@ -278,7 +287,9 @@ const Assets = ({
             </div>
           </>
         ),
-        noOfTokens: item?.balance?.amount,
+        noOfTokens: Number(item?.balance?.amount || 0)?.toFixed(
+          comdex?.coinDecimals
+        ),
         price: getPrice(item?.ibcDenomHash),
         amount: item.balance,
         ibcdeposit: item,

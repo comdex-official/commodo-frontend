@@ -22,7 +22,11 @@ import { queryAssets } from "../../services/asset/query";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName } from "../../services/keplr";
 import { QueryAssetRatesParams } from "../../services/lend/query";
-import { fetchCoingeckoPrices, queryMarketList } from "../../services/oracle/query";
+import {
+  fetchCoingeckoPrices,
+  queryMarketList
+} from "../../services/oracle/query";
+import { amountConversion } from "../../utils/coin";
 import { marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
@@ -135,7 +139,7 @@ const ConnectButton = ({
         return;
       }
       if (result) {
-        setCoingekoPrice(result)
+        setCoingekoPrice(result);
       }
     });
   };
@@ -154,15 +158,16 @@ const ConnectButton = ({
     );
 
     const value = assetBalances.map((item) => {
-      return getPrice(item.denom) * item.amount;
+      return (
+        getPrice(item.denom) *
+        amountConversion(item.amount, assetDenomMap[item?.denom]?.decimals)
+      );
     });
 
     setAssetBalance(Lodash.sum(value));
   };
 
-  const items = [
-    { label: <ConnectModal />, key: 'item-1' }
-  ];
+  const items = [{ label: <ConnectModal />, key: "item-1" }];
 
   return (
     <>
