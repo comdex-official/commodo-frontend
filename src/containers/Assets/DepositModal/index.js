@@ -16,7 +16,7 @@ import { fetchTxHash } from "../../../services/transaction";
 import {
   amountConversion,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../utils/coin";
 import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
@@ -232,8 +232,13 @@ const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
 
   return (
     <>
-      <Button type="primary" size="small" onClick={showModal}>
-        {variables[lang].deposit}
+      <Button
+        type="primary"
+        size="small"
+        className="asset-ibc-btn-container"
+        onClick={showModal}
+      >
+        {variables[lang].deposit} <span className="asset-ibc-btn"> &#62;</span>
       </Button>
       <Modal
         className="assets-modal"
