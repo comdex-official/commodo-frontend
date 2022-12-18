@@ -21,10 +21,13 @@ export const ibcDenomToDenom = (key) => {
       return "WETH";
     case ibcDenoms["ujuno"]:
       return "ujuno";
+    case ibcDenoms["stuatom"]:
+      return "stuatom";
     default:
       return "";
   }
 };
+
 export const symbolToDenom = (key) => {
   switch (key) {
     case "atom":
@@ -71,6 +74,9 @@ export const denomToCoingeckoTokenId = (key) => {
       return "axlweth";
     case ibcDenoms["ujuno"]:
       return "juno-network";
+    case "stuatom":
+    case ibcDenoms["stuatom"]:
+      return "stride-staked-atom";
     default:
       return "";
   }
@@ -124,6 +130,9 @@ export const iconNameFromDenom = (key) => {
     case "ujuno":
     case ibcDenoms["ujuno"]:
       return "juno-icon";
+    case "stuatom":
+    case ibcDenoms["stuatom"]:
+      return "statom-icon";
     default:
       return "";
   }
