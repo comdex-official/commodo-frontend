@@ -14,34 +14,24 @@ export const columns = [
     title: "cPool Asset",
     dataIndex: "asset",
     key: "asset",
-    width: 120,
+    width: 100,
   },
   {
-    title: (
-      <>
-        Transit
-        <br /> Asset 1
-      </>
-    ),
+    title: <>CMST</>,
     dataIndex: "bridge_asset",
     key: "bridge_asset",
-    width: 120,
+    width: 100,
   },
   {
-    title: (
-      <>
-        Transit
-        <br /> Asset 2
-      </>
-    ),
+    title: <>ATOM</>,
     dataIndex: "bridge_asset2",
     key: "bridge_asset2",
-    width: 120,
+    width: 100,
   },
   {
     title: (
       <>
-        Available to <br /> Borrow
+        Available to Borrow
       </>
     ),
     dataIndex: "available_to_borrow",
@@ -50,14 +40,10 @@ export const columns = [
     render: (lendPool) => <AvailableToBorrow lendPool={lendPool} />,
   },
   {
-    title: (
-      <>
-        Main Asset <br /> APY
-      </>
-    ),
+    title: <>cPool Asset APY</>,
     dataIndex: "asset_apy",
     key: "asset_apy",
-    width: 100,
+    width: 140,
     render: (lendPool) => (
       <AssetApy
         poolId={lendPool?.poolId}
@@ -67,14 +53,10 @@ export const columns = [
     ),
   },
   {
-    title: (
-      <>
-        Transit Asset 1 <br /> APY
-      </>
-    ),
+    title: <>CMST APY</>,
     dataIndex: "bridge_apy",
     key: "bridge_apy",
-    width: 140,
+    width: 120,
     render: (lendPool) => (
       <>
         <AssetApy
@@ -87,14 +69,10 @@ export const columns = [
     ),
   },
   {
-    title: (
-      <>
-        Transit Asset 2 <br /> APY
-      </>
-    ),
+    title: <>ATOM APY</>,
     dataIndex: "bridge_apy2",
     key: "bridge_apy2",
-    width: 140,
+    width: 120,
     render: (lendPool) => (
       <>
         <AssetApy

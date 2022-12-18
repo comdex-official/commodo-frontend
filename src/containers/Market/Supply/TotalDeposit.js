@@ -7,12 +7,7 @@ import { QueryPoolAssetLBMapping } from "../../../services/lend/query";
 import { amountConversionWithComma } from "../../../utils/coin";
 import { marketPrice } from "../../../utils/number";
 
-export const TotalDeposit = ({
-  lendPool,
-  assetMap,
-  markets,
-  assetDenomMap,
-}) => {
+export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
   const [assetStats, setAssetStats] = useState({});
 
   useEffect(() => {
@@ -44,7 +39,7 @@ export const TotalDeposit = ({
           marketPrice(
             markets,
             assetMap?.[lendPool?.transitAssetIds?.main]?.denom,
-            assetDenomMap[[lendPool?.transitAssetIds?.main]?.denom]?.id
+            lendPool?.transitAssetIds?.main
           )
       ) +
       Number(
@@ -52,7 +47,7 @@ export const TotalDeposit = ({
           marketPrice(
             markets,
             assetMap?.[lendPool?.transitAssetIds?.first]?.denom,
-            assetDenomMap[[lendPool?.transitAssetIds?.first]?.denom]?.id
+            lendPool?.transitAssetIds?.first
           )
       ) +
       Number(
@@ -60,7 +55,7 @@ export const TotalDeposit = ({
           marketPrice(
             markets,
             assetMap?.[lendPool?.transitAssetIds?.second]?.denom,
-            assetDenomMap[[lendPool?.transitAssetIds?.second]?.denom]?.id
+            lendPool?.transitAssetIds?.second
           )
       );
 
@@ -71,8 +66,7 @@ export const TotalDeposit = ({
 
 TotalDeposit.propTypes = {
   assetMap: PropTypes.object,
-  assetDenomMap: PropTypes.object,
-    markets: PropTypes.object,
+  markets: PropTypes.object,
   lendPool: PropTypes.shape({
     transitAssetIds: PropTypes.shape({
       main: PropTypes.number,
@@ -84,9 +78,8 @@ TotalDeposit.propTypes = {
 
 const stateToProps = (state) => {
   return {
-    markets: state.oracle.market.map,
+    markets: state.oracle.market,
     assetMap: state.asset._.map,
-    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

@@ -62,7 +62,7 @@ const HealthFactor = ({
                         ?.liquidationThreshold
                     )
                   ))) /
-            (borrow?.amountIn?.amount *
+            (borrow?.amountOut?.amount *
               marketPrice(
                 markets,
                 borrow?.amountOut?.denom,
@@ -150,7 +150,7 @@ HealthFactor.propTypes = {
 const stateToProps = (state) => {
   return {
     assetRatesStatsMap: state.lend.assetRatesStats.map,
-    markets: state.oracle.market.map,
+    markets: state.oracle.market,
     assetMap: state.asset._.map,
     assetDenomMap: state.asset._.assetDenomMap,
   };

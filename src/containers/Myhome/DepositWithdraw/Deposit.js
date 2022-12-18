@@ -126,7 +126,7 @@ const DepositTab = ({
               <span className="ml-1">
                 {amountConversionWithComma(
                   getDenomBalance(balances, assetMap[selectedAssetId]?.denom) ||
-                    0
+                  0
                 )}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
               </span>
@@ -149,8 +149,8 @@ const DepositTab = ({
                 {commaSeparator(
                   Number(
                     amount *
-                      marketPrice(markets, assetMap[selectedAssetId]?.denom, selectedAssetId) ||
-                      0
+                    marketPrice(markets, assetMap[selectedAssetId]?.denom, selectedAssetId) ||
+                    0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
               </small>
@@ -228,7 +228,7 @@ DepositTab.propTypes = {
       amount: PropTypes.string,
     }),
   }),
-    markets: PropTypes.object,
+  markets: PropTypes.object,
   pool: PropTypes.shape({
     poolId: PropTypes.shape({
       low: PropTypes.number,
@@ -251,7 +251,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
-     markets: state.oracle.market.map,
+    markets: state.oracle.market,
   };
 };
 

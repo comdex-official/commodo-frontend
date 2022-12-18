@@ -16,23 +16,13 @@ export const columns = [
     width: 120,
   },
   {
-    title: (
-      <>
-        Transit
-        <br /> Asset 1
-      </>
-    ),
+    title: <>CMST</>,
     dataIndex: "bridge_asset",
     key: "bridge_asset",
     width: 120,
   },
   {
-    title: (
-      <>
-        Transit
-        <br /> Asset 2
-      </>
-    ),
+    title: <>ATOM</>,
     dataIndex: "bridge_asset2",
     key: "bridge_asset2",
     width: 120,
@@ -40,7 +30,7 @@ export const columns = [
   {
     title: (
       <>
-        Total <br /> Deposited
+        Total Deposited
       </>
     ),
     dataIndex: "total_deposited",
@@ -49,14 +39,10 @@ export const columns = [
     render: (lendPool) => <TotalDeposit lendPool={lendPool} />,
   },
   {
-    title: (
-      <>
-        Main Asset <br /> APY
-      </>
-    ),
+    title: <>cPool Asset APY</>,
     dataIndex: "asset_apy",
     key: "asset_apy",
-    width: 100,
+    width: 150,
     render: (lendPool) => (
       <AssetApy
         poolId={lendPool?.poolId}
@@ -66,11 +52,7 @@ export const columns = [
     ),
   },
   {
-    title: (
-      <>
-        Transit Asset 1 <br /> APY
-      </>
-    ),
+    title: <>CMST APY</>,
     dataIndex: "bridge_apy",
     key: "bridge_apy",
     width: 140,
@@ -85,11 +67,7 @@ export const columns = [
     ),
   },
   {
-    title: (
-      <>
-        Transit Asset 2 <br /> APY
-      </>
-    ),
+    title: <>ATOM APY</>,
     dataIndex: "bridge_apy2",
     key: "bridge_apy2",
     width: 140,

@@ -186,7 +186,7 @@ Details.propTypes = {
 
 const stateToProps = (state) => {
   return {
-    markets: state.oracle.market.map,
+    markets: state.oracle.market,
     refreshBalance: state.account.refreshBalance,
     assetDenomMap: state.asset._.assetDenomMap,
   };

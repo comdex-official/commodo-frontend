@@ -1,4 +1,4 @@
-import { List, Table } from "antd";
+import { Button, List, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import { connect, useDispatch } from "react-redux";
@@ -106,7 +106,21 @@ const Assets = ({
       align: "center",
       render: (value) => {
         if (value) {
-          return (
+          return value?.depositUrlOverride ? (
+            <Button type="primary" size="small" className="external-btn">
+              <a
+                href={value?.depositUrlOverride}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Deposit{" "}
+                <span className="hyperlink-icon">
+                  {" "}
+                  <SvgIcon name="hyperlink" />
+                </span>
+              </a>
+            </Button>
+          ) : (
             <Deposit
               chain={value}
               balances={balances}
@@ -124,7 +138,21 @@ const Assets = ({
       align: "center",
       render: (value) => {
         if (value) {
-          return (
+          return value?.withdrawUrlOverride ? (
+            <Button type="primary" size="small" className="external-btn">
+              <a
+                href={value?.withdrawUrlOverride}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Withdraw{" "}
+                <span className="hyperlink-icon">
+                  {" "}
+                  <SvgIcon name="hyperlink" />
+                </span>
+              </a>
+            </Button>
+          ) : (
             <Withdraw
               chain={value}
               balances={balances}
@@ -140,11 +168,7 @@ const Assets = ({
     return marketPrice(markets, denom, assetDenomMap[denom]?.id) || 0;
   };
 
-  let assetsWithoutExternalLinks = AssetList?.tokens?.filter(
-    (item) => !item.hasOwnProperty("depositUrlOverride")
-  );
-
-  let ibcBalances = assetsWithoutExternalLinks?.map((token) => {
+  let ibcBalances = AssetList?.tokens?.map((token) => {
     const ibcBalance = balances.find(
       (item) => item.denom === token?.ibcDenomHash
     );
@@ -162,6 +186,8 @@ const Assets = ({
       destChannelId: token.channel,
       ibcDenomHash: token?.ibcDenomHash,
       explorerUrlToTx: token?.explorerUrlToTx,
+      depositUrlOverride: token?.depositUrlOverride,
+      withdrawUrlOverride: token?.withdrawUrlOverride,
     };
   });
 
@@ -329,7 +355,7 @@ const stateToProps = (state) => {
     lang: state.language,
     assetBalance: state.account.balances.asset,
     balances: state.account.balances.list,
-    markets: state.oracle.market.map,
+    markets: state.oracle.market,
     refreshBalance: state.account.refreshBalance,
     assetDenomMap: state.asset._.assetDenomMap,
   };
