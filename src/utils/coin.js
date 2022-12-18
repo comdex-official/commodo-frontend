@@ -2,8 +2,10 @@ import { comdex, ibcDenoms } from "../config/network";
 import { commaSeparator, getExponent } from "./number";
 import { ibcDenomToDenom, lowercaseFirstLetter } from "./string";
 
-export const getAmount = (selectedAmount) =>
-  (selectedAmount * 10 ** comdex.coinDecimals).toFixed(0).toString();
+export const getAmount = (selectedAmount, decimal) =>
+  (selectedAmount * (decimal || 10 ** comdex.coinDecimals))
+    .toFixed(0)
+    .toString();
 
 export const amountConversionWithComma = (amount, decimals) => {
   let finiteAmount = isFinite(Number(amount)) ? Number(amount) : 0;

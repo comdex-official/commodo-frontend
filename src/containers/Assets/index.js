@@ -7,7 +7,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon,
+  TooltipIcon
 } from "../../components/common";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
@@ -90,7 +90,7 @@ const Assets = ({
           <p>
             $
             {commaSeparator(
-              amountConversion(balance?.value || 0, DOLLAR_DECIMALS)
+              Number(balance?.value || 0).toFixed(DOLLAR_DECIMALS)
             )}
           </p>
         </>
@@ -204,7 +204,7 @@ const Assets = ({
     (item) => item.denom === comdex?.coinMinimalDenom
   )[0];
   const nativeCoinValue = getPrice(nativeCoin?.denom) * nativeCoin?.amount;
-
+  
   const cmstCoin = balances.filter(
     (item) => item.denom === cmst?.coinMinimalDenom
   )[0];

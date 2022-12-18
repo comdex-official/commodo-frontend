@@ -16,13 +16,20 @@ import { fetchTxHash } from "../../../services/transaction";
 import {
   amountConversion,
   denomConversion,
-  getAmount,
+  getAmount
 } from "../../../utils/coin";
 import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
 import "./index.less";
 
-const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
+const Deposit = ({
+  lang,
+  chain,
+  address,
+  handleRefresh,
+  balances,
+  assetDenomMap,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [sourceAddress, setSourceAddress] = useState("");
   const [inProgress, setInProgress] = useState(false);
@@ -33,7 +40,7 @@ const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
   const [balanceInProgress, setBalanceInProgress] = useState(false);
 
   const onChange = (value) => {
-    value = toDecimals(value).toString().trim();
+    value = toDecimals(value, assetDenomMap[chain?.coinMinimalDenom]?.decimals);
 
     setAmount(value);
     setValidationError(
@@ -90,7 +97,10 @@ const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
           source_channel: chain.destChannelId,
           token: {
             denom: chain?.coinMinimalDenom,
-            amount: getAmount(amount),
+            amount: getAmount(
+              amount,
+              assetDenomMap[chain?.coinMinimalDenom]?.decimals
+            ),
           },
           sender: sourceAddress,
           receiver: address,
@@ -285,7 +295,10 @@ const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
                     <span className="ml-1">
                       {(availableBalance &&
                         availableBalance.amount &&
-                        amountConversion(availableBalance.amount)) ||
+                        amountConversion(
+                          availableBalance.amount,
+                          assetDenomMap[availableBalance?.denom]?.decimals
+                        )) ||
                         0}{" "}
                       {denomConversion(chain?.coinMinimalDenom || "")}
                     </span>
@@ -296,9 +309,15 @@ const Deposit = ({ lang, chain, address, handleRefresh, balances }) => {
                           setAmount(
                             availableBalance?.amount > DEFAULT_FEE
                               ? amountConversion(
-                                  availableBalance?.amount - DEFAULT_FEE
+                                  availableBalance?.amount - DEFAULT_FEE,
+                                  assetDenomMap[availableBalance?.denom]
+                                    ?.decimals
                                 )
-                              : amountConversion(availableBalance?.amount)
+                              : amountConversion(
+                                  availableBalance?.amount,
+                                  assetDenomMap[availableBalance?.denom]
+                                    ?.decimals
+                                )
                           );
                         }}
                       >
@@ -342,6 +361,7 @@ Deposit.propTypes = {
   handleRefresh: PropTypes.func.isRequired,
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
+  assetDenomMap: PropTypes.object,
   chain: PropTypes.any,
 };
 
@@ -349,6 +369,7 @@ const stateToProps = (state) => {
   return {
     lang: state.language,
     address: state.account.address,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 
