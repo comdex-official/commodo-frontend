@@ -10,7 +10,7 @@ import {
   queryLendPair,
   queryLendPool,
   queryUserBorrows,
-  queryUserLends,
+  queryUserLends
 } from "../../services/lend/query";
 import { amountConversionWithComma } from "../../utils/coin";
 import { decimalConversion, marketPrice } from "../../utils/number";
@@ -35,6 +35,7 @@ const Myhome = ({
   const [lendsInProgress, setLendsInProgress] = useState(false);
   const [borrowsInProgress, setBorrowsInProgress] = useState(false);
   const [borrowToPair, setBorrowToPair] = useState({});
+  const [borrowToLend, setBorrowToLend] = useState({});
   const [borrowToPool, setBorrowToPool] = useState({});
 
   const location = useLocation();
@@ -105,6 +106,11 @@ const Myhome = ({
         ...prevState,
       }));
 
+      setBorrowToLend((prevState) => ({
+        [borrow?.lendingId?.toNumber()]: borrow?.lendingId?.toNumber(),
+        ...prevState,
+      }));
+
       queryLendPool(
         result?.ExtendedPair?.assetOutPoolId,
         (error, poolResult) => {
@@ -125,14 +131,14 @@ const Myhome = ({
     const values =
       userLendList?.length > 0
         ? userLendList.map((item) => {
-          return (
-            marketPrice(
-              markets,
-              item?.amountIn?.denom,
-              assetDenomMap[item?.amountIn?.denom]?.id
-            ) * item?.amountIn.amount
-          );
-        })
+            return (
+              marketPrice(
+                markets,
+                item?.amountIn?.denom,
+                assetDenomMap[item?.amountIn?.denom]?.id
+              ) * item?.amountIn.amount
+            );
+          })
         : [];
 
     const sum = values.reduce((a, b) => a + b, 0);
@@ -144,14 +150,14 @@ const Myhome = ({
     const values =
       userBorrowList?.length > 0
         ? userBorrowList.map((item) => {
-          return (
-            marketPrice(
-              markets,
-              item?.amountOut?.denom,
-              assetDenomMap[item?.amountOut?.denom]?.id
-            ) * item?.amountOut.amount
-          );
-        })
+            return (
+              marketPrice(
+                markets,
+                item?.amountOut?.denom,
+                assetDenomMap[item?.amountOut?.denom]?.id
+              ) * item?.amountOut.amount
+            );
+          })
         : [];
 
     return values.reduce((a, b) => a + b, 0);
@@ -161,44 +167,68 @@ const Myhome = ({
     const values =
       userBorrowList?.length > 0
         ? userBorrowList.map((item) => {
-          return (
-            marketPrice(
-              markets,
-              assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.denom,
-              borrowToPair[item?.borrowingId]?.assetIn
-            ) *
-            Number(item?.amountIn.amount) *
-            (borrowToPair[item?.borrowingId]?.isInterPool
-              ? Number(
-                decimalConversion(
-                  assetRatesStatsMap[
-                    borrowToPair[item?.borrowingId]?.assetIn
-                  ]?.ltv
-                )
+            return (
+              marketPrice(
+                markets,
+                assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.denom,
+                borrowToPair[item?.borrowingId]?.assetIn
               ) *
-              Number(
-                decimalConversion(
-                  assetRatesStatsMap[
-                    borrowToPool[item?.borrowingId]?.transitAssetIds?.first
-                  ]?.ltv
-                )
-              )
-              : Number(
-                decimalConversion(
-                  assetRatesStatsMap[
-                    borrowToPair[item?.borrowingId]?.assetIn
-                  ]?.ltv
-                ) || 0
-              ))
-          );
-        })
+              Number(item?.amountIn.amount) *
+              (borrowToPair[item?.borrowingId]?.isInterPool
+                ? Number(
+                    decimalConversion(
+                      assetRatesStatsMap[
+                        borrowToPair[item?.borrowingId]?.assetIn
+                      ]?.ltv
+                    )
+                  ) *
+                  Number(
+                    decimalConversion(
+                      assetRatesStatsMap[
+                        borrowToPool[item?.borrowingId]?.transitAssetIds?.first
+                      ]?.ltv
+                    )
+                  )
+                : Number(
+                    decimalConversion(
+                      assetRatesStatsMap[
+                        borrowToPair[item?.borrowingId]?.assetIn
+                      ]?.ltv
+                    ) || 0
+                  ))
+            );
+          })
         : [];
+    return values.reduce((a, b) => a + b, 0);
+  };
 
+  const calculateTotalLendBorrowLimit = () => {
+    let borrowsWithLend = Object?.keys(borrowToLend);
+    const values =
+      userLendList?.length > 0 && borrowsWithLend?.length
+        ? userLendList.map((item) => {
+            if (!borrowsWithLend.includes(item?.lendingId?.toNumber()))
+              // considering lend positions which don;t have borrow position opend.
+              return (
+                marketPrice(
+                  markets,
+                  item?.amountIn?.denom,
+                  assetDenomMap[item?.amountIn?.denom]?.id
+                ) *
+                item?.amountIn.amount *
+                Number(
+                  decimalConversion(assetRatesStatsMap[item?.assetId]?.ltv)
+                )
+              );
+          })
+        : [];
     return values.reduce((a, b) => a + b, 0);
   };
 
   const totalBorrow = Number(calculateTotalBorrow());
-  const borrowLimit = Number(calculateTotalBorrowLimit());
+  const borrowLimit =
+    Number(calculateTotalBorrowLimit()) +
+    Number(calculateTotalLendBorrowLimit());
   const currentLimit = (
     (borrowLimit ? totalBorrow / borrowLimit : 0) * 100
   ).toFixed(DOLLAR_DECIMALS);

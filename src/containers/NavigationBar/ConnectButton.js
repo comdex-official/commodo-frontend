@@ -15,7 +15,7 @@ import {
 } from "../../actions/account";
 import { setAssets } from "../../actions/asset";
 import { setAssetRatesStats } from "../../actions/lend";
-import { setMarkets, setCoingekoPrice, } from "../../actions/oracle";
+import { setCoingekoPrice, setMarkets } from "../../actions/oracle";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
 import { queryAssets } from "../../services/asset/query";
@@ -76,7 +76,7 @@ const ConnectButton = ({
   useEffect(() => {
     queryAssets(
       (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
-      DEFAULT_PAGE_SIZE,
+      DEFAULT_PAGE_SIZE * 2,
       true,
       false,
       (error, result) => {
