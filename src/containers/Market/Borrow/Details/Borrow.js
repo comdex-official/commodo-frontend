@@ -89,21 +89,21 @@ const BorrowTab = ({
       ) *
       (pair?.isInterPool
         ? (Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv)) -
-            MAX_LTV_DEDUCTION) *
-          Number(
-            decimalConversion(
-              assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv
-            )
+          MAX_LTV_DEDUCTION) *
+        Number(
+          decimalConversion(
+            assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv
           )
+        )
         : Number(
-            decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv) -
-              MAX_LTV_DEDUCTION
-          )) || 0) /
-      marketPrice(
-        markets,
-        borrowAssetDenom,
-        assetDenomMap[borrowAssetDenom]?.id
-      )
+          decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv) -
+          MAX_LTV_DEDUCTION
+        )) || 0) /
+    marketPrice(
+      markets,
+      borrowAssetDenom,
+      assetDenomMap[borrowAssetDenom]?.id
+    )
   );
 
   const borrowableBalance = Number(borrowable) - 1000;
@@ -252,11 +252,11 @@ const BorrowTab = ({
         "dollar",
         Number(
           value *
-            marketPrice(
-              markets,
-              borrowAssetDenom,
-              assetDenomMap[borrowAssetDenom]?.id
-            ) || 0
+          marketPrice(
+            markets,
+            borrowAssetDenom,
+            assetDenomMap[borrowAssetDenom]?.id
+          ) || 0
         )
       )
     );
@@ -347,34 +347,33 @@ const BorrowTab = ({
           collateralAssetDenom,
           assetDenomMap[collateralAssetDenom]?.id
         ))) *
-      100
+    100
   );
 
   let data = [
     {
       title: "Threshold",
-      counts: `${
-        pair?.isInterPool
-          ? Number(
-              Number(
-                decimalConversion(
-                  assetRatesStatsMap[lend?.assetId]?.liquidationThreshold
-                )
-              ) *
-                Number(
-                  decimalConversion(
-                    assetRatesStatsMap[pool?.transitAssetIds?.first]
-                      ?.liquidationThreshold
-                  )
-                ) *
-                100
-            ).toFixed(DOLLAR_DECIMALS)
-          : Number(
-              decimalConversion(
-                assetRatesStatsMap[lend?.assetId]?.liquidationThreshold
-              ) * 100
-            ).toFixed(DOLLAR_DECIMALS)
-      }
+      counts: `${pair?.isInterPool
+        ? Number(
+          Number(
+            decimalConversion(
+              assetRatesStatsMap[lend?.assetId]?.liquidationThreshold
+            )
+          ) *
+          Number(
+            decimalConversion(
+              assetRatesStatsMap[pool?.transitAssetIds?.first]
+                ?.liquidationThreshold
+            )
+          ) *
+          100
+        ).toFixed(DOLLAR_DECIMALS)
+        : Number(
+          decimalConversion(
+            assetRatesStatsMap[lend?.assetId]?.liquidationThreshold
+          ) * 100
+        ).toFixed(DOLLAR_DECIMALS)
+        }
       %
 `,
       tooltipText:
@@ -394,7 +393,7 @@ const BorrowTab = ({
       title: "Bonus",
       counts: `${Number(
         decimalConversion(assetRatesStatsMap[lend?.assetId]?.liquidationBonus) *
-          100
+        100
       ).toFixed(DOLLAR_DECIMALS)}
       %
 `,
@@ -576,11 +575,11 @@ const BorrowTab = ({
                     {commaSeparator(
                       Number(
                         inAmount *
-                          marketPrice(
-                            markets,
-                            collateralAssetDenom,
-                            assetDenomMap[collateralAssetDenom]?.id
-                          ) || 0
+                        marketPrice(
+                          markets,
+                          collateralAssetDenom,
+                          assetDenomMap[collateralAssetDenom]?.id
+                        ) || 0
                       ).toFixed(DOLLAR_DECIMALS)
                     )}
                   </small>
@@ -668,11 +667,11 @@ const BorrowTab = ({
                     {commaSeparator(
                       Number(
                         outAmount *
-                          marketPrice(
-                            markets,
-                            borrowAssetDenom,
-                            assetDenomMap[borrowAssetDenom]?.id
-                          ) || 0
+                        marketPrice(
+                          markets,
+                          borrowAssetDenom,
+                          assetDenomMap[borrowAssetDenom]?.id
+                        ) || 0
                       ).toFixed(DOLLAR_DECIMALS)
                     )}
                   </small>{" "}
@@ -861,8 +860,8 @@ const BorrowTab = ({
               <Details
                 asset={
                   assetMap[
-                    assetOutPool?.transitAssetIds?.first?.toNumber() ||
-                      pool?.transitAssetIds?.first?.toNumber()
+                  assetOutPool?.transitAssetIds?.first?.toNumber() ||
+                  pool?.transitAssetIds?.first?.toNumber()
                   ]
                 }
                 poolId={assetOutPool?.poolId || pool?.poolId}
@@ -872,8 +871,8 @@ const BorrowTab = ({
                 <Details
                   asset={
                     assetMap[
-                      assetOutPool?.transitAssetIds?.second?.toNumber() ||
-                        pool?.transitAssetIds?.second?.toNumber()
+                    assetOutPool?.transitAssetIds?.second?.toNumber() ||
+                    pool?.transitAssetIds?.second?.toNumber()
                     ]
                   }
                   poolId={assetOutPool?.poolId || pool?.poolId}
@@ -885,8 +884,8 @@ const BorrowTab = ({
               <Details
                 asset={
                   assetMap[
-                    assetOutPool?.transitAssetIds?.main?.toNumber() ||
-                      pool?.transitAssetIds?.main?.toNumber()
+                  assetOutPool?.transitAssetIds?.main?.toNumber() ||
+                  pool?.transitAssetIds?.main?.toNumber()
                   ]
                 }
                 poolId={assetOutPool?.poolId || pool?.poolId}
@@ -982,7 +981,7 @@ const stateToProps = (state) => {
     pool: state.lend.pool._,
     assetMap: state.asset._.map,
     lang: state.language,
-    markets: state.oracle.market.map,
+    markets: state.oracle.market,
     poolLendPositions: state.lend.poolLends,
     assetRatesStatsMap: state.lend.assetRatesStats.map,
     assetDenomMap: state.asset._.assetDenomMap,

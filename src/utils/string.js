@@ -13,16 +13,23 @@ export const ibcDenomToDenom = (key) => {
   switch (key) {
     case ibcDenoms["uatom"]:
       return "uatom";
-    case ibcDenoms["uusd"]:
-      return "uust";
-    case ibcDenoms["uluna"]:
-      return "uluna";
     case ibcDenoms["uosmo"]:
       return "uosmo";
+    case ibcDenoms["uusdc"]:
+      return "USDC";
+    case ibcDenoms["weth-wei"]:
+      return "WETH";
+    case ibcDenoms["ujuno"]:
+      return "ujuno";
+    case ibcDenoms["wbtc-satoshi"]:
+      return "wbtc-satoshi";
+    case ibcDenoms["stuatom"]:
+      return "stuatom";
     default:
       return "";
   }
 };
+
 export const symbolToDenom = (key) => {
   switch (key) {
     case "atom":
@@ -48,6 +55,38 @@ export const symbolToDenom = (key) => {
       return "";
   }
 };
+
+export const denomToCoingeckoTokenId = (key) => {
+  switch (key) {
+    case "uatom":
+    case ibcDenoms["uatom"]:
+      return "cosmos";
+    case "uosmo":
+    case ibcDenoms["uosmo"]:
+      return "osmosis";
+    case "ucmdx":
+      return "comdex";
+    case "uusdc":
+    case ibcDenoms["uusdc"]:
+      return "axlusdc";
+    case ibcDenoms["weth-wei"]:
+    case "weth-wei":
+    case "uweth":
+    case ibcDenoms["weth-wei"]:
+      return "axlweth";
+    case ibcDenoms["ujuno"]:
+      return "juno-network";
+    case "wbtc-satoshi":
+    case ibcDenoms["wbtc-satoshi"]:
+      return "wrapped-bitcoin";
+    case "stuatom":
+    case ibcDenoms["stuatom"]:
+      return "stride-staked-atom";
+    default:
+      return "";
+  }
+};
+
 export const denomToSymbol = (key) => {
   switch (key) {
     case "ucmst":
@@ -87,6 +126,21 @@ export const iconNameFromDenom = (key) => {
     case "uosmo":
     case ibcDenoms["uosmo"]:
       return "osmosis-icon";
+    case "uusdc":
+    case ibcDenoms["uusdc"]:
+      return "usdc-icon";
+    case "weth-wei":
+    case ibcDenoms["weth-wei"]:
+      return "weth-icon";
+    case "ujuno":
+    case ibcDenoms["ujuno"]:
+      return "juno-icon";
+    case "stuatom":
+    case ibcDenoms["stuatom"]:
+      return "statom-icon";
+    case "wbtc-satoshi":
+    case ibcDenoms["wbtc-satoshi"]:
+      return "wbtc-icon";
     default:
       return "";
   }
@@ -152,4 +206,16 @@ export const makeHdPath = (
 
 export const ucDenomToDenom = (denom) => {
   return denom?.slice(0, 1) + denom?.slice(2); //example uccmdx => ucmdx
+};
+
+export const stringTagParser = (input) => {
+  const lines = input.split("\n");
+  const output = [];
+  lines.forEach((d, i) => {
+    if (i > 0) {
+      output.push(<br />);
+    }
+    output.push(d);
+  });
+  return output;
 };

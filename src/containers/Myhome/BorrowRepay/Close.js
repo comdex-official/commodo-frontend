@@ -109,11 +109,11 @@ const CloseTab = ({
                 {commaSeparator(
                   Number(
                     amountConversion(updatedAmountOut) *
-                      marketPrice(
-                        markets,
-                        assetMap[selectedAssetId]?.denom,
-                        selectedAssetId
-                      ) || 0
+                    marketPrice(
+                      markets,
+                      assetMap[selectedAssetId]?.denom,
+                      selectedAssetId
+                    ) || 0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}
               </small>{" "}
@@ -147,7 +147,7 @@ const CloseTab = ({
               dataInProgress ||
               !selectedAssetId ||
               Number(availableBalance) <
-                Number(updatedAmountOut)
+              Number(updatedAmountOut)
             }
             amount={amountConversion(updatedAmountOut)}
             address={address}
@@ -239,7 +239,7 @@ const stateToProps = (state) => {
     assetMap: state.asset._.map,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
-    markets: state.oracle.market.map,
+    markets: state.oracle.market,
   };
 };
 

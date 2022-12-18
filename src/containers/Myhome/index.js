@@ -35,6 +35,7 @@ const Myhome = ({
   const [lendsInProgress, setLendsInProgress] = useState(false);
   const [borrowsInProgress, setBorrowsInProgress] = useState(false);
   const [borrowToPair, setBorrowToPair] = useState({});
+  const [borrowToLend, setBorrowToLend] = useState({});
   const [borrowToPool, setBorrowToPool] = useState({});
 
   const location = useLocation();
@@ -78,7 +79,7 @@ const Myhome = ({
     setBorrowsInProgress(true);
     queryUserBorrows(address, (error, result) => {
       setBorrowsInProgress(false);
-      
+
       if (error) {
         message.error(error);
         return;
@@ -102,6 +103,11 @@ const Myhome = ({
 
       setBorrowToPair((prevState) => ({
         [borrow?.borrowingId]: result?.ExtendedPair,
+        ...prevState,
+      }));
+
+      setBorrowToLend((prevState) => ({
+        [borrow?.lendingId?.toNumber()]: borrow?.lendingId?.toNumber(),
         ...prevState,
       }));
 
@@ -193,12 +199,36 @@ const Myhome = ({
             );
           })
         : [];
+    return values.reduce((a, b) => a + b, 0);
+  };
 
+  const calculateTotalLendBorrowLimit = () => {
+    let borrowsWithLend = Object?.keys(borrowToLend);
+    const values =
+      userLendList?.length > 0 && borrowsWithLend?.length
+        ? userLendList.map((item) => {
+            if (!borrowsWithLend.includes(item?.lendingId?.toNumber()))
+              // considering lend positions which don;t have borrow position opend.
+              return (
+                marketPrice(
+                  markets,
+                  item?.amountIn?.denom,
+                  assetDenomMap[item?.amountIn?.denom]?.id
+                ) *
+                item?.amountIn.amount *
+                Number(
+                  decimalConversion(assetRatesStatsMap[item?.assetId]?.ltv)
+                )
+              );
+          })
+        : [];
     return values.reduce((a, b) => a + b, 0);
   };
 
   const totalBorrow = Number(calculateTotalBorrow());
-  const borrowLimit = Number(calculateTotalBorrowLimit());
+  const borrowLimit =
+    Number(calculateTotalBorrowLimit()) +
+    Number(calculateTotalLendBorrowLimit());
   const currentLimit = (
     (borrowLimit ? totalBorrow / borrowLimit : 0) * 100
   ).toFixed(DOLLAR_DECIMALS);
@@ -231,9 +261,9 @@ const Myhome = ({
     {
       label: "Lend",
       key: "1",
-      children: <Deposit 
-      fetchUserLends={fetchUserLends}
-      inProgress={lendsInProgress} />,
+      children: (
+        <Deposit fetchUserLends={fetchUserLends} inProgress={lendsInProgress} />
+      ),
     },
     {
       label: "Borrow",
@@ -369,7 +399,7 @@ const stateToProps = (state) => {
     address: state.account.address,
     userLendList: state.lend.userLends,
     userBorrowList: state.lend.userBorrows,
-    markets: state.oracle.market.map,
+    markets: state.oracle.market,
     assetRatesStatsMap: state.lend.assetRatesStats.map,
     assetMap: state.asset._.map,
     assetDenomMap: state.asset._.assetDenomMap,

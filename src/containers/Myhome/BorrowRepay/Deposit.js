@@ -98,7 +98,7 @@ const DepositTab = ({
           ucDenomToDenom(borrowPosition?.amountIn?.denom),
           assetDenomMap[ucDenomToDenom(borrowPosition?.amountIn?.denom)]?.id
         ))) *
-      100
+    100
   );
 
   return (
@@ -174,11 +174,11 @@ const DepositTab = ({
                 {commaSeparator(
                   Number(
                     amount *
-                      marketPrice(
-                        markets,
-                        assetMap[selectedAssetId]?.denom,
-                        selectedAssetId
-                      ) || 0
+                    marketPrice(
+                      markets,
+                      assetMap[selectedAssetId]?.denom,
+                      selectedAssetId
+                    ) || 0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}{" "}
               </small>{" "}
@@ -200,7 +200,7 @@ const DepositTab = ({
                   inAmount={
                     amount
                       ? Number(borrowPosition?.amountIn?.amount) +
-                        Number(getAmount(amount))
+                      Number(getAmount(amount))
                       : borrowPosition?.amountIn?.amount
                   }
                   outAmount={borrowPosition?.amountOut?.amount}
@@ -336,7 +336,7 @@ const stateToProps = (state) => {
     assetMap: state.asset._.map,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
-    markets: state.oracle.market.map,
+    markets: state.oracle.market,
     assetDenomMap: state.asset._.assetDenomMap,
   };
 };

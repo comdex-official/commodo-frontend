@@ -392,7 +392,10 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
               <div className="card-head">Top {NUMBER_OF_TOP_ASSETS} Assets</div>
               <div className="card-content">
                 <div className="deposited-list">
-                  <p>Deposited</p>
+                  <div className="d-flex justify-content-between">
+                    <div>Deposited</div>
+                    <div>Lend APY</div>
+                  </div>
                   <ul>
                     {topDeposits && topDeposits?.length > 0
                       ? showTopAssets(topDeposits)
@@ -402,7 +405,10 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                   </ul>
                 </div>
                 <div className="deposited-list">
-                  <p>Borrowed</p>
+                  <div className="d-flex justify-content-between">
+                    <div>Borrowed</div>
+                    <div>Borrow APY</div>
+                  </div>
                   <ul>
                     {topBorrows && topBorrows?.length > 0
                       ? showTopAssets(topBorrows)

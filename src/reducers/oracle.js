@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { MARKET_LIST_SET } from "../constants/oracle";
+import { MARKET_LIST_SET, SET_COINGEKO_PRICE } from "../constants/oracle";
 
 const market = (
   state = {
@@ -8,15 +8,21 @@ const market = (
   },
   action
 ) => {
-  if (action.type === MARKET_LIST_SET) {
-    return {
-      ...state,
-      map: action.map,
-      pagination: action.pagination,
-    };
+  switch (action.type) {
+    case MARKET_LIST_SET:
+      return {
+        ...state,
+        map: action.map,
+        pagination: action.pagination,
+      };
+    case SET_COINGEKO_PRICE:
+      return {
+        ...state,
+        coingekoPrice: action.value,
+      };
+    default:
+      return state;
   }
-
-  return state;
 };
 
 export default combineReducers({

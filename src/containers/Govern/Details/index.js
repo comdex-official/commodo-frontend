@@ -26,8 +26,7 @@ import { formatTime } from "../../../utils/date";
 import { formatNumber } from "../../../utils/number";
 import {
   proposalOptionMap,
-  proposalStatusMap,
-  truncateString
+  proposalStatusMap, stringTagParser, truncateString
 } from "../../../utils/string";
 import VoteNowModal from "../VoteNowModal";
 import "./index.less";
@@ -322,7 +321,9 @@ const GovernDetails = ({
               <Col>
                 <h3>{proposal?.content?.title}</h3>
                 <div className="details-text">
-                  <p>{proposal?.content?.description} </p>
+                  <p>
+                    {stringTagParser(proposal?.content?.description || " ")}{" "}
+                  </p>
                 </div>
               </Col>
             </Row>

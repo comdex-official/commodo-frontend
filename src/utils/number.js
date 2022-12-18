@@ -1,5 +1,6 @@
 import { Decimal } from "@cosmjs/math";
 import { DOLLAR_DECIMALS } from "../constants/common";
+import { denomToCoingeckoTokenId } from "./string";
 
 export const formatNumber = (number) => {
   if (number >= 1000 && number < 1000000) {
@@ -31,7 +32,7 @@ export const decimalConversion = (data) => {
 };
 
 export const marketPrice = (marketsMap, denom, assetId) => {
-  const value = marketsMap[assetId];
+  const value = marketsMap?.map && marketsMap?.map[assetId]
 
   if (denom === "ucmst") {
     return 1;
@@ -39,6 +40,13 @@ export const marketPrice = (marketsMap, denom, assetId) => {
 
   if (value && value?.twa && value?.isPriceActive) {
     return value?.twa?.toNumber() / 1000000;
+  }
+
+  else if (marketsMap?.coingekoPrice) {
+    let price = marketsMap?.coingekoPrice[denomToCoingeckoTokenId(denom)];
+    if (price) {
+      return price?.usd;
+    }
   }
 
   return 0;

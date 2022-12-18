@@ -3,7 +3,13 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
-import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import {
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon
+} from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import AssetStats from "../../../components/common/Asset/Stats";
@@ -107,7 +113,6 @@ const BorrowTab = ({
 
   const handleInputChange = (value) => {
     value = toDecimals(value).toString().trim();
-
     setAmount(value);
     setValidationError(
       ValidateInputNumber(value, amountConversion(borrowable))
@@ -115,7 +120,9 @@ const BorrowTab = ({
   };
 
   const handleMaxClick = () => {
-    return handleInputChange(amountConversion(borrowable));
+    if (borrowable >= 0) {
+      return handleInputChange(amountConversion(borrowable));
+    }
   };
 
   const handleRefresh = () => {
@@ -370,7 +377,7 @@ const stateToProps = (state) => {
     assetMap: state.asset._.map,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
-    markets: state.oracle.market.map,
+    markets: state.oracle.market,
     assetRatesStatsMap: state.lend.assetRatesStats.map,
     assetDenomMap: state.asset._.assetDenomMap,
   };

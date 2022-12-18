@@ -54,13 +54,13 @@ const InterestAndReward = ({ lang, address, updateDetails }) => {
   return (
     <Button
       onClick={() => handleClick()}
-      type="primary"
+      type="primary btn-filled"
       loading={inProgress}
       disabled={inProgress}
       className="btn-outline caclulate-btn"
       size="small"
     >
-      Calculate
+      Fetch Interest
     </Button>
   );
 };
