@@ -1,4 +1,4 @@
-import { comdex } from "../config/network";
+import { comdex, ibcDenoms } from "../config/network";
 import { DOLLAR_DECIMALS } from "../constants/common";
 import { commaSeparator } from "./number";
 import { ibcDenomToDenom, lowercaseFirstLetter } from "./string";
@@ -19,7 +19,9 @@ export const amountConversion = (amount, decimals) => {
 
   const result = Number(finiteAmount) / 10 ** comdex.coinDecimals;
 
-  return result.toFixed(finiteAmount ? decimals || comdex.coinDecimals : DOLLAR_DECIMALS);
+  return result.toFixed(
+    finiteAmount ? decimals || comdex.coinDecimals : DOLLAR_DECIMALS
+  );
 };
 
 export const orderPriceConversion = (amount) => {
@@ -28,6 +30,18 @@ export const orderPriceConversion = (amount) => {
 };
 
 export const denomConversion = (denom) => {
+  if (denom === "weth-wei" || denom === ibcDenoms["weth-wei"]) {
+    return "WETH";
+  }
+
+  if (denom === "wbtc-satoshi" || denom === ibcDenoms["wbtc-satoshi"]) {
+    return "WBTC";
+  }
+
+  if (denom === "stuatom" || denom === ibcDenoms["stuatom"]) {
+    return "stATOM";
+  }
+
   if (denom && denom.substr(0, 1) === "u") {
     if (
       denom &&
