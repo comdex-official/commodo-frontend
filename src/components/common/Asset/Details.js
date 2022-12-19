@@ -9,7 +9,7 @@ import {
   QueryPoolAssetLBMapping
 } from "../../../services/lend/query";
 import {
-  amountConversionWithComma,
+  amountConversion, commaSeparatorWithRounding,
   denomConversion
 } from "../../../utils/coin";
 import {
@@ -67,10 +67,14 @@ const Details = ({
   let data = [
     {
       title: parent === "lend" ? "Deposited" : "Borrowed",
-      counts: `$${amountConversionWithComma(
+      counts: `$${commaSeparatorWithRounding(
         Number(
-          (parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0
-        ) * marketPrice(markets, asset?.denom, assetDenomMap[asset?.denom]?.id),
+          amountConversion(
+            (parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0
+          ) *
+            marketPrice(markets, asset?.denom, assetDenomMap[asset?.denom]?.id),
+          assetDenomMap[asset?.denom]?.decimals
+        ),
         DOLLAR_DECIMALS
       )}`,
       tooltipText:
@@ -78,12 +82,15 @@ const Details = ({
     },
     {
       title: "Available",
-      counts: `$${amountConversionWithComma(
-        marketPrice(
-          markets,
-          assetStats?.balance?.denom,
-          assetDenomMap[assetStats?.balance?.denom]?.id
-        ) * assetStats?.balance.amount || 0,
+      counts: `$${commaSeparatorWithRounding(
+        amountConversion(
+          marketPrice(
+            markets,
+            assetStats?.balance?.denom,
+            assetDenomMap[assetStats?.balance?.denom]?.id
+          ) * assetStats?.balance.amount || 0,
+          assetDenomMap[assetStats?.balance?.denom]?.decimals
+        ),
         DOLLAR_DECIMALS
       )}`,
       tooltipText:

@@ -17,7 +17,14 @@ import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
 import "./index.less";
 
-const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
+const Withdraw = ({
+  lang,
+  chain,
+  address,
+  balances,
+  handleRefresh,
+  assetDenomMap,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [destinationAddress, setDestinationAddress] = useState("");
   const [inProgress, setInProgress] = useState(false);
@@ -26,7 +33,9 @@ const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
   const [validationError, setValidationError] = useState();
 
   const onChange = (value) => {
-    value = toDecimals(value).toString().trim();
+    value = toDecimals(value, assetDenomMap[chain?.ibcDenomHash]?.decimals)
+      .toString()
+      .trim();
 
     setAmount(value);
     setValidationError(ValidateInputNumber(value, chain?.balance?.amount));
@@ -69,7 +78,10 @@ const Withdraw = ({ lang, chain, address, balances, handleRefresh }) => {
           source_channel: chain?.sourceChannelId,
           token: {
             denom: chain?.ibcDenomHash,
-            amount: getAmount(amount),
+            amount: getAmount(
+              amount,
+              assetDenomMap[chain?.ibcDenomHash]?.decimals
+            ),
           },
           sender: address,
           receiver: destinationAddress,
@@ -305,6 +317,7 @@ Withdraw.propTypes = {
   handleRefresh: PropTypes.func.isRequired,
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
+  assetDenomMap: PropTypes.object,
   chain: PropTypes.any,
 };
 
@@ -312,6 +325,7 @@ const stateToProps = (state) => {
   return {
     lang: state.language,
     address: state.account.address,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

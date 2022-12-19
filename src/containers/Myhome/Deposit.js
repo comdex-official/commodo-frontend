@@ -28,6 +28,7 @@ const Deposit = ({
   inProgress,
   address,
   fetchUserLends,
+  assetDenomMap,
 }) => {
   const navigate = useNavigate();
 
@@ -123,7 +124,10 @@ const Deposit = ({
             available: (
               <>
                 {" "}
-                {amountConversionWithComma(item?.amountIn?.amount)}{" "}
+                {amountConversionWithComma(
+                  item?.amountIn?.amount,
+                  assetDenomMap[item?.amountIn?.denom]?.decimals
+                )}{" "}
                 {denomConversion(item?.amountIn?.denom)}
               </>
             ),
@@ -131,7 +135,10 @@ const Deposit = ({
             apy: item,
             interest: (
               <>
-                {amountConversionWithComma(item?.totalRewards)}{" "}
+                {amountConversionWithComma(
+                  item?.totalRewards,
+                  assetDenomMap[item?.amountIn?.denom]?.decimals
+                )}{" "}
                 {denomConversion(item?.amountIn?.denom)}
               </>
             ),
@@ -175,6 +182,7 @@ Deposit.propTypes = {
   fetchUserLends: PropTypes.func.isRequired,
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
+  assetDenomMap: PropTypes.object,
   userLendList: PropTypes.arrayOf(
     PropTypes.shape({
       amountIn: PropTypes.shape({
@@ -198,6 +206,7 @@ const stateToProps = (state) => {
     lang: state.language,
     userLendList: state.lend.userLends,
     address: state.account.address,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

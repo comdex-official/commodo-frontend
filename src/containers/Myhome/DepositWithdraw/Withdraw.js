@@ -33,6 +33,7 @@ const WithdrawTab = ({
   refreshBalance,
   setBalanceRefresh,
   markets,
+  assetDenomMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [amount, setAmount] = useState();
@@ -61,14 +62,26 @@ const WithdrawTab = ({
     setBalanceRefresh(refreshBalance + 1);
   };
   const handleInputChange = (value) => {
-    value = toDecimals(value).toString().trim();
+    value = toDecimals(value, assetMap[selectedAssetId]?.decimals)
+      .toString()
+      .trim();
 
     setAmount(value);
-    setValidationError(ValidateInputNumber(getAmount(value), availableBalance));
+    setValidationError(
+      ValidateInputNumber(
+        getAmount(value, assetMap[selectedAssetId]?.decimals),
+        availableBalance
+      )
+    );
   };
 
   const handleMaxClick = () => {
-    return handleInputChange(amountConversion(Number(availableBalance)));
+    return handleInputChange(
+      amountConversion(
+        Number(availableBalance),
+        assetMap[selectedAssetId]?.decimals
+      )
+    );
   };
 
   return (
@@ -122,7 +135,10 @@ const WithdrawTab = ({
             <div className="label-right">
               Available
               <span className="ml-1">
-                {amountConversionWithComma(availableBalance)}{" "}
+                {amountConversionWithComma(
+                  availableBalance,
+                  assetMap[selectedAssetId]?.decimals
+                )}{" "}
                 {denomConversion(assetMap[selectedAssetId]?.denom)}
               </span>
               <div className="max-half">
@@ -144,8 +160,11 @@ const WithdrawTab = ({
                 {commaSeparator(
                   Number(
                     amount *
-                    marketPrice(markets, assetMap[selectedAssetId]?.denom, selectedAssetId) ||
-                    0
+                      marketPrice(
+                        markets,
+                        assetMap[selectedAssetId]?.denom,
+                        selectedAssetId
+                      ) || 0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}
               </small>
@@ -167,6 +186,7 @@ const WithdrawTab = ({
             lendId={lendPosition?.lendingId}
             denom={lendPosition?.amountIn?.denom}
             refreshData={() => refreshData()}
+            assetDenomMap={assetDenomMap}
           />
         </div>
       </div>
@@ -205,6 +225,7 @@ WithdrawTab.propTypes = {
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   markets: PropTypes.object,
   lendPosition: PropTypes.shape({
     lendingId: PropTypes.shape({
@@ -237,6 +258,7 @@ const stateToProps = (state) => {
     refreshBalance: state.account.refreshBalance,
     lang: state.language,
     markets: state.oracle.market,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 
