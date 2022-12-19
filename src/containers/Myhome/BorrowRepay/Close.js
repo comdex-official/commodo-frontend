@@ -2,7 +2,13 @@ import { Select } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
-import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import {
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon
+} from "../../../components/common";
 import Details from "../../../components/common/Asset/Details";
 import HealthFactor from "../../../components/HealthFactor";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
@@ -12,7 +18,11 @@ import {
   denomConversion,
   getDenomBalance
 } from "../../../utils/coin";
-import { commaSeparator, decimalConversion, marketPrice } from "../../../utils/number";
+import {
+  commaSeparator,
+  decimalConversion,
+  marketPrice
+} from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
 import ActionButton from "./ActionButton";
 import "./index.less";
@@ -31,6 +41,7 @@ const CloseTab = ({
   markets,
   balances,
   pair,
+  assetDenomMap,
 }) => {
   const selectedAssetId = pair?.assetOut?.toNumber();
 
@@ -94,26 +105,35 @@ const CloseTab = ({
             <div className="label-right">
               Available
               <span className="ml-1">
-                {amountConversionWithComma(availableBalance)}{" "}
+                {amountConversionWithComma(
+                  availableBalance,
+                  assetDenomMap[borrowPosition?.amountOut?.denom]?.decimals
+                )}{" "}
                 {denomConversion(borrowPosition?.amountOut?.denom)}
               </span>
             </div>
             <div>
               <div className="input-select">
                 <h2 className="mt-3">
-                  {amountConversionWithComma(updatedAmountOut)}{" "}
+                  {amountConversionWithComma(
+                    updatedAmountOut,
+                    assetDenomMap[borrowPosition?.amountOut?.denom]?.decimals
+                  )}{" "}
                 </h2>
               </div>
               <small className="mt-1">
                 $
                 {commaSeparator(
                   Number(
-                    amountConversion(updatedAmountOut) *
-                    marketPrice(
-                      markets,
-                      assetMap[selectedAssetId]?.denom,
-                      selectedAssetId
-                    ) || 0
+                    amountConversion(
+                      updatedAmountOut,
+                      assetMap[selectedAssetId]?.decimals
+                    ) *
+                      marketPrice(
+                        markets,
+                        assetMap[selectedAssetId]?.denom,
+                        selectedAssetId
+                      ) || 0
                   ).toFixed(DOLLAR_DECIMALS)
                 )}
               </small>{" "}
@@ -146,14 +166,17 @@ const CloseTab = ({
             disabled={
               dataInProgress ||
               !selectedAssetId ||
-              Number(availableBalance) <
-              Number(updatedAmountOut)
+              Number(availableBalance) < Number(updatedAmountOut)
             }
-            amount={amountConversion(updatedAmountOut)}
+            amount={amountConversion(
+              updatedAmountOut,
+              assetMap[selectedAssetId]?.decimals
+            )}
             address={address}
             borrowId={borrowPosition?.borrowingId}
             denom={borrowPosition?.amountOut?.denom}
             refreshData={handleRefresh}
+            assetDenomMap={assetDenomMap}
           />
         </div>
       </div>
@@ -185,6 +208,7 @@ const CloseTab = ({
 };
 
 CloseTab.propTypes = {
+  assetDenomMap: PropTypes.object,
   dataInProgress: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
   setBalanceRefresh: PropTypes.func.isRequired,
@@ -240,6 +264,7 @@ const stateToProps = (state) => {
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
     markets: state.oracle.market,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

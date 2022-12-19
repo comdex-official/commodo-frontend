@@ -44,6 +44,7 @@ const DepositTab = ({
   markets,
   setBalanceRefresh,
   refreshBalance,
+  assetDenomMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [selectedAssetId, setSelectedAssetId] = useState();
@@ -72,10 +73,17 @@ const DepositTab = ({
   };
 
   const handleInputChange = (value) => {
-    value = toDecimals(value).toString().trim();
+    value = toDecimals(value, assetMap[selectedAssetId]?.decimals)
+      .toString()
+      .trim();
 
     setAmount(value);
-    setValidationError(ValidateInputNumber(getAmount(value), availableBalance));
+    setValidationError(
+      ValidateInputNumber(
+        getAmount(value, assetMap[selectedAssetId]?.decimals),
+        availableBalance
+      )
+    );
   };
 
   const handleClick = () => {
@@ -91,7 +99,7 @@ const DepositTab = ({
             poolId: pool?.poolId,
             assetId: Long.fromNumber(selectedAssetId),
             amount: {
-              amount: getAmount(amount),
+              amount: getAmount(amount, assetMap[selectedAssetId]?.decimals),
               denom: assetMap[selectedAssetId]?.denom,
             },
           },
@@ -129,10 +137,20 @@ const DepositTab = ({
   const handleMaxClick = () => {
     if (assetMap[selectedAssetId]?.denom === comdex.coinMinimalDenom) {
       return Number(availableBalance) > DEFAULT_FEE
-        ? handleInputChange(amountConversion(availableBalance - DEFAULT_FEE))
+        ? handleInputChange(
+            amountConversion(
+              availableBalance - DEFAULT_FEE,
+              assetDenomMap[assetMap[selectedAssetId]?.denom]?.decimals
+            )
+          )
         : handleInputChange();
     } else {
-      return handleInputChange(amountConversion(availableBalance));
+      return handleInputChange(
+        amountConversion(
+          availableBalance,
+          assetDenomMap[assetMap[selectedAssetId]?.denom]?.decimals
+        )
+      );
     }
   };
 
@@ -218,11 +236,11 @@ const DepositTab = ({
                   {commaSeparator(
                     Number(
                       amount *
-                      marketPrice(
-                        markets,
-                        assetMap[selectedAssetId]?.denom,
-                        selectedAssetId
-                      ) || 0
+                        marketPrice(
+                          markets,
+                          assetMap[selectedAssetId]?.denom,
+                          selectedAssetId
+                        ) || 0
                     ).toFixed(DOLLAR_DECIMALS)
                   )}{" "}
                 </div>
@@ -293,6 +311,7 @@ DepositTab.propTypes = {
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetMap: PropTypes.object,
+  assetDenomMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -326,6 +345,7 @@ const stateToProps = (state) => {
     lang: state.language,
     markets: state.oracle.market,
     refreshBalance: state.account.refreshBalance,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 
