@@ -12,7 +12,7 @@ import {
   queryUserBorrows,
   queryUserLends
 } from "../../services/lend/query";
-import { amountConversionWithComma } from "../../utils/coin";
+import { amountConversion, commaSeparatorWithRounding } from "../../utils/coin";
 import { decimalConversion, marketPrice } from "../../utils/number";
 import { decode } from "../../utils/string";
 import Borrow from "./Borrow";
@@ -136,14 +136,18 @@ const Myhome = ({
                 markets,
                 item?.amountIn?.denom,
                 assetDenomMap[item?.amountIn?.denom]?.id
-              ) * item?.amountIn.amount
+              ) *
+              amountConversion(
+                item?.amountIn.amount,
+                assetDenomMap[item?.amountIn?.denom]?.decimals
+              )
             );
           })
         : [];
 
     const sum = values.reduce((a, b) => a + b, 0);
 
-    return `$${amountConversionWithComma(sum || 0, DOLLAR_DECIMALS)}`;
+    return `$${commaSeparatorWithRounding(sum || 0, DOLLAR_DECIMALS)}`;
   };
 
   const calculateTotalBorrow = () => {
@@ -155,7 +159,11 @@ const Myhome = ({
                 markets,
                 item?.amountOut?.denom,
                 assetDenomMap[item?.amountOut?.denom]?.id
-              ) * item?.amountOut.amount
+              ) *
+              amountConversion(
+                item?.amountOut.amount,
+                assetDenomMap[item?.amountOut?.denom]?.decimals
+              )
             );
           })
         : [];
@@ -173,7 +181,12 @@ const Myhome = ({
                 assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.denom,
                 borrowToPair[item?.borrowingId]?.assetIn
               ) *
-              Number(item?.amountIn.amount) *
+              Number(
+                amountConversion(
+                  item?.amountIn.amount,
+                  assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.decimals
+                )
+              ) *
               (borrowToPair[item?.borrowingId]?.isInterPool
                 ? Number(
                     decimalConversion(
@@ -215,7 +228,10 @@ const Myhome = ({
                   item?.amountIn?.denom,
                   assetDenomMap[item?.amountIn?.denom]?.id
                 ) *
-                item?.amountIn.amount *
+                amountConversion(
+                  item?.amountIn.amount,
+                  assetDenomMap[item?.amountIn?.denom]?.decimals
+                ) *
                 Number(
                   decimalConversion(assetRatesStatsMap[item?.assetId]?.ltv)
                 )
@@ -250,7 +266,7 @@ const Myhome = ({
           <TooltipIcon text="Value of total Asset Borrowed by User" />
         </>
       ),
-      counts: `$${amountConversionWithComma(
+      counts: `$${commaSeparatorWithRounding(
         totalBorrow || 0,
         DOLLAR_DECIMALS
       )}`,
@@ -320,7 +336,7 @@ const Myhome = ({
                   </div>
                   <div className="small-text">
                     Borrow Limit :$
-                    {amountConversionWithComma(
+                    {commaSeparatorWithRounding(
                       borrowLimit || 0,
                       DOLLAR_DECIMALS
                     )}

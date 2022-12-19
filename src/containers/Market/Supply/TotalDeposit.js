@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { QueryPoolAssetLBMapping } from "../../../services/lend/query";
-import { amountConversionWithComma } from "../../../utils/coin";
+import {
+  amountConversion, commaSeparatorWithRounding
+} from "../../../utils/coin";
 import { marketPrice } from "../../../utils/number";
 
 export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
@@ -35,7 +37,10 @@ export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
   const getTotalDeposited = () => {
     const sum =
       Number(
-        assetStats[lendPool?.transitAssetIds?.main]?.totalLend *
+        amountConversion(
+          assetStats[lendPool?.transitAssetIds?.main]?.totalLend,
+          assetMap?.[lendPool?.transitAssetIds?.main]?.decimals
+        ) *
           marketPrice(
             markets,
             assetMap?.[lendPool?.transitAssetIds?.main]?.denom,
@@ -43,7 +48,10 @@ export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
           )
       ) +
       Number(
-        assetStats[lendPool?.transitAssetIds?.first]?.totalLend *
+        amountConversion(
+          assetStats[lendPool?.transitAssetIds?.first]?.totalLend,
+          assetMap?.[lendPool?.transitAssetIds?.first]?.decimals
+        ) *
           marketPrice(
             markets,
             assetMap?.[lendPool?.transitAssetIds?.first]?.denom,
@@ -51,7 +59,10 @@ export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
           )
       ) +
       Number(
-        assetStats[lendPool?.transitAssetIds?.second]?.totalLend *
+        amountConversion(
+          assetStats[lendPool?.transitAssetIds?.second]?.totalLend,
+          assetMap?.[lendPool?.transitAssetIds?.second]?.decimals
+        ) *
           marketPrice(
             markets,
             assetMap?.[lendPool?.transitAssetIds?.second]?.denom,
@@ -59,7 +70,7 @@ export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
           )
       );
 
-    return `$${amountConversionWithComma(sum || 0, DOLLAR_DECIMALS)}`;
+    return `$${commaSeparatorWithRounding(sum || 0, DOLLAR_DECIMALS)}`;
   };
   return <div>{getTotalDeposited()}</div>;
 };

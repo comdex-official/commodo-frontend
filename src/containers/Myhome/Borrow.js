@@ -30,6 +30,7 @@ const Borrow = ({
   inProgress,
   address,
   fetchUserBorrows,
+  assetDenomMap,
 }) => {
   const navigate = useNavigate();
   const columns = [
@@ -144,14 +145,20 @@ const Borrow = ({
             debt: (
               <>
                 {" "}
-                {amountConversionWithComma(item?.amountOut?.amount)}{" "}
+                {amountConversionWithComma(
+                  item?.amountOut?.amount,
+                  assetDenomMap[item?.amountOut?.denom]?.decimals
+                )}{" "}
                 {denomConversion(item?.amountOut?.denom)}
               </>
             ),
             collateral: (
               <>
                 {" "}
-                {amountConversionWithComma(item?.amountIn?.amount)}{" "}
+                {amountConversionWithComma(
+                  item?.amountIn?.amount,
+                  assetDenomMap[item?.amountIn?.denom]?.decimals
+                )}{" "}
                 {denomConversion(item?.amountIn?.denom)}
               </>
             ),
@@ -159,7 +166,10 @@ const Borrow = ({
             interest: (
               <>
                 {amountConversionWithComma(
-                  decimalConversion(item?.interestAccumulated)
+                  decimalConversion(
+                    item?.interestAccumulated,
+                    assetDenomMap[item?.amountOut?.denom]?.decimals
+                  )
                 )}{" "}
                 {denomConversion(item?.amountOut?.denom)}
               </>
@@ -205,6 +215,7 @@ Borrow.propTypes = {
   fetchUserBorrows: PropTypes.func.isRequired,
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
+  assetDenomMap: PropTypes.object,
   inProgress: PropTypes.bool,
   userBorrowList: PropTypes.arrayOf(
     PropTypes.shape({
@@ -232,6 +243,7 @@ const stateToProps = (state) => {
     lang: state.language,
     userBorrowList: state.lend.userBorrows,
     address: state.account.address,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

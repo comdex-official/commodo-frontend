@@ -9,7 +9,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon,
+  TooltipIcon
 } from "../../../../components/common";
 import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
@@ -20,13 +20,13 @@ import { ValidateInputNumber } from "../../../../config/_validation";
 import {
   APP_ID,
   DOLLAR_DECIMALS,
-  MAX_LTV_DEDUCTION,
+  MAX_LTV_DEDUCTION
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
   queryAssetPairs,
   queryLendPair,
-  queryLendPool,
+  queryLendPool
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
@@ -34,12 +34,12 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice,
+  marketPrice
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
@@ -98,22 +98,23 @@ const BorrowTab = ({
       ) *
       (pair?.isInterPool
         ? (Number(
-          decimalConversion(assetRatesStatsMap[collateralAssetId]?.ltv)
-        ) -
-          MAX_LTV_DEDUCTION) *
-        Number(
-          decimalConversion(
-            assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv
+            decimalConversion(assetRatesStatsMap[collateralAssetId]?.ltv)
+          ) -
+            MAX_LTV_DEDUCTION) *
+          Number(
+            decimalConversion(
+              assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv
+            )
           )
-        )
         : Number(
-          decimalConversion(assetRatesStatsMap[collateralAssetId]?.ltv)
-        ) - MAX_LTV_DEDUCTION) || 0) /
-    marketPrice(
-      markets,
-      borrowAssetDenom,
-      assetDenomMap[borrowAssetDenom]?.id
-    )
+            decimalConversion(assetRatesStatsMap[collateralAssetId]?.ltv)
+          ) - MAX_LTV_DEDUCTION) || 0) /
+      marketPrice(
+        markets,
+        borrowAssetDenom,
+        assetDenomMap[borrowAssetDenom]?.id
+      ),
+    assetDenomMap[borrowAssetDenom]?.decimals
   );
 
   const borrowList =
@@ -228,30 +229,39 @@ const BorrowTab = ({
   };
 
   const handleInAmountChange = (value) => {
-    value = toDecimals(value).toString().trim();
+    value = toDecimals(value, assetDenomMap[collateralAssetDenom]?.decimals)
+      .toString()
+      .trim();
 
     setInAmount(value);
     setOutAmount(0);
-    setValidationError(ValidateInputNumber(getAmount(value), availableBalance));
+    setValidationError(
+      ValidateInputNumber(
+        getAmount(value, assetDenomMap[collateralAssetDenom]?.decimals),
+        availableBalance
+      )
+    );
   };
 
   const handleOutAmountChange = (value) => {
-    value = toDecimals(value).toString().trim();
+    value = toDecimals(value, assetDenomMap[borrowAssetDenom]?.decimals)
+      .toString()
+      .trim();
 
     setOutAmount(value);
 
     setBorrowValidationError(
       ValidateInputNumber(
-        getAmount(value),
+        getAmount(value, assetDenomMap[borrowAssetDenom]?.decimals),
         borrowableBalance,
         "dollar",
         Number(
           value *
-          marketPrice(
-            markets,
-            borrowAssetDenom,
-            assetDenomMap[borrowAssetDenom]?.id
-          ) || 0
+            marketPrice(
+              markets,
+              borrowAssetDenom,
+              assetDenomMap[borrowAssetDenom]?.id
+            ) || 0
         )
       )
     );
@@ -272,11 +282,17 @@ const BorrowTab = ({
             isStableBorrow: false,
             appId: Long.fromNumber(APP_ID),
             amountIn: {
-              amount: getAmount(inAmount),
+              amount: getAmount(
+                inAmount,
+                assetDenomMap[collateralAssetDenom]?.decimals
+              ),
               denom: collateralAssetDenom,
             },
             amountOut: {
-              amount: getAmount(outAmount),
+              amount: getAmount(
+                outAmount,
+                assetDenomMap[borrowAssetDenom]?.decimals
+              ),
               denom: borrowAssetDenom,
             },
           },
@@ -315,11 +331,21 @@ const BorrowTab = ({
   };
 
   const handleMaxClick = () => {
-    return handleInAmountChange(amountConversion(availableBalance));
+    return handleInAmountChange(
+      amountConversion(
+        availableBalance,
+        assetDenomMap[collateralAssetDenom]?.decimals
+      )
+    );
   };
 
   const handleBorrowMaxClick = () => {
-    return handleOutAmountChange(amountConversion(borrowableBalance));
+    return handleOutAmountChange(
+      amountConversion(
+        borrowableBalance,
+        assetDenomMap[borrowAssetDenom]?.decimals
+      )
+    );
   };
 
   let currentLTV = Number(
@@ -335,33 +361,34 @@ const BorrowTab = ({
           collateralAssetDenom,
           assetDenomMap[collateralAssetDenom]?.id
         ))) *
-    100
+      100
   );
 
   let data = [
     {
       title: "Threshold",
-      counts: `${pair?.isInterPool
-        ? Number(
-          Number(
-            decimalConversion(
-              assetRatesStatsMap[collateralAssetId]?.liquidationThreshold
-            )
-          ) *
-          Number(
-            decimalConversion(
-              assetRatesStatsMap[pool?.transitAssetIds?.first]
-                ?.liquidationThreshold
-            )
-          ) *
-          100
-        ).toFixed(DOLLAR_DECIMALS)
-        : Number(
-          decimalConversion(
-            assetRatesStatsMap[collateralAssetId]?.liquidationThreshold
-          ) * 100
-        ).toFixed(DOLLAR_DECIMALS)
-        }
+      counts: `${
+        pair?.isInterPool
+          ? Number(
+              Number(
+                decimalConversion(
+                  assetRatesStatsMap[collateralAssetId]?.liquidationThreshold
+                )
+              ) *
+                Number(
+                  decimalConversion(
+                    assetRatesStatsMap[pool?.transitAssetIds?.first]
+                      ?.liquidationThreshold
+                  )
+                ) *
+                100
+            ).toFixed(DOLLAR_DECIMALS)
+          : Number(
+              decimalConversion(
+                assetRatesStatsMap[collateralAssetId]?.liquidationThreshold
+              ) * 100
+            ).toFixed(DOLLAR_DECIMALS)
+      }
       %
 `,
       tooltipText:
@@ -569,7 +596,10 @@ const BorrowTab = ({
                 <div className="label-right">
                   Available
                   <span className="ml-1">
-                    {amountConversionWithComma(availableBalance)}{" "}
+                    {amountConversionWithComma(
+                      availableBalance,
+                      assetDenomMap[collateralAssetDenom]?.decimals
+                    )}{" "}
                     {denomConversion(collateralAssetDenom)}
                   </span>
                   <div className="max-half">
@@ -593,11 +623,11 @@ const BorrowTab = ({
                     {commaSeparator(
                       Number(
                         inAmount *
-                        marketPrice(
-                          markets,
-                          collateralAssetDenom,
-                          assetDenomMap[collateralAssetDenom]?.id
-                        ) || 0
+                          marketPrice(
+                            markets,
+                            collateralAssetDenom,
+                            assetDenomMap[collateralAssetDenom]?.id
+                          ) || 0
                       ).toFixed(DOLLAR_DECIMALS)
                     )}
                   </small>
@@ -659,7 +689,8 @@ const BorrowTab = ({
                     Borrowable
                     <span className="ml-1">
                       {amountConversionWithComma(
-                        borrowableBalance >= 0 ? borrowableBalance : 0
+                        borrowableBalance >= 0 ? borrowableBalance : 0,
+                        assetDenomMap[borrowAssetDenom]?.decimals
                       )}{" "}
                       {denomConversion(borrowAssetDenom)}
                     </span>
@@ -685,11 +716,11 @@ const BorrowTab = ({
                     {commaSeparator(
                       Number(
                         outAmount *
-                        marketPrice(
-                          markets,
-                          borrowAssetDenom,
-                          assetDenomMap[borrowAssetDenom]?.id
-                        ) || 0
+                          marketPrice(
+                            markets,
+                            borrowAssetDenom,
+                            assetDenomMap[borrowAssetDenom]?.id
+                          ) || 0
                       ).toFixed(DOLLAR_DECIMALS)
                     )}
                   </small>{" "}
