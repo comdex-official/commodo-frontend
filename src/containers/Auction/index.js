@@ -25,7 +25,13 @@ import Bidding from "./Bidding";
 import "./index.less";
 import PlaceBidModal from "./PlaceBidModal";
 
-const Auction = ({ address, setAuctions, auctions, refreshBalance }) => {
+const Auction = ({
+  address,
+  setAuctions,
+  auctions,
+  refreshBalance,
+  assetDenomMap,
+}) => {
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [params, setParams] = useState({});
@@ -89,12 +95,15 @@ const Auction = ({ address, setAuctions, auctions, refreshBalance }) => {
       key: "current_price",
       width: 160,
       align: "center",
-      render: (price) => (
+      render: (item) => (
         <>
           $
           {commaSeparator(
             Number(
-              amountConversionWithComma(decimalConversion(price) || 0) || 0
+              amountConversionWithComma(
+                decimalConversion(item?.outflowTokenCurrentPrice) || 0,
+                assetDenomMap[item?.outflowTokenCurrentAmount?.denom]?.decimals
+              ) || 0
             ).toFixed(DOLLAR_DECIMALS)
           )}
         </>
@@ -155,13 +164,15 @@ const Auction = ({ address, setAuctions, auctions, refreshBalance }) => {
               <>
                 {item?.outflowTokenCurrentAmount?.amount &&
                   amountConversionWithComma(
-                    item?.outflowTokenCurrentAmount?.amount
+                    item?.outflowTokenCurrentAmount?.amount,
+                    assetDenomMap[item?.outflowTokenCurrentAmount?.denom]
+                      ?.decimals
                   )}{" "}
                 {denomConversion(item?.outflowTokenCurrentAmount?.denom)}
               </>
             ),
             end_time: moment(item && item.endTime).format("MMM DD, YYYY HH:mm"),
-            current_price: item?.outflowTokenCurrentPrice,
+            current_price: item,
             action: item,
           };
         })
@@ -294,6 +305,7 @@ Auction.propTypes = {
   lang: PropTypes.string.isRequired,
   setAuctions: PropTypes.func.isRequired,
   address: PropTypes.string,
+  assetDenomMap: PropTypes.object,
   auctions: PropTypes.array,
   refreshBalance: PropTypes.number.isRequired,
 };
@@ -304,6 +316,7 @@ const stateToProps = (state) => {
     address: state.account.address,
     auctions: state.auction.data.list,
     refreshBalance: state.account.refreshBalance,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

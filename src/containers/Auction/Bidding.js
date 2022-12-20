@@ -8,13 +8,19 @@ import { Col, NoDataIcon, Row, SvgIcon } from "../../components/common";
 import TooltipIcon from "../../components/common/TooltipIcon/index";
 import {
   DEFAULT_BIDDING_PAGE_SIZE,
-  DEFAULT_PAGE_NUMBER
+  DEFAULT_PAGE_NUMBER,
 } from "../../constants/common";
 import { queryDutchBiddingList } from "../../services/auction";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { iconNameFromDenom } from "../../utils/string";
 
-export const Bidding = ({ setBiddings, biddings, address, refreshBalance }) => {
+export const Bidding = ({
+  setBiddings,
+  biddings,
+  address,
+  refreshBalance,
+  assetDenomMap,
+}) => {
   const [inProgress, setInProgress] = useState(false);
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_BIDDING_PAGE_SIZE);
@@ -88,7 +94,10 @@ export const Bidding = ({ setBiddings, biddings, address, refreshBalance }) => {
                   name={iconNameFromDenom(item?.outflowTokenAmount?.denom)}
                 />
               </div>
-              {amountConversionWithComma(item?.outflowTokenAmount?.amount || 0)}{" "}
+              {amountConversionWithComma(
+                item?.outflowTokenAmount?.amount || 0,
+                assetDenomMap[item?.outflowTokenAmount?.denom]?.decimals
+              )}{" "}
               {denomConversion(item?.outflowTokenAmount?.denom)}
             </div>
           </>
@@ -101,7 +110,10 @@ export const Bidding = ({ setBiddings, biddings, address, refreshBalance }) => {
                   name={iconNameFromDenom(item?.inflowTokenAmount?.denom)}
                 />
               </div>
-              {amountConversionWithComma(item?.inflowTokenAmount?.amount || 0)}{" "}
+              {amountConversionWithComma(
+                item?.inflowTokenAmount?.amount || 0,
+                assetDenomMap[item?.inflowTokenAmount?.denom]?.decimals
+              )}{" "}
               {denomConversion(item?.inflowTokenAmount?.denom)}
             </div>
           </>
@@ -211,6 +223,7 @@ export const Bidding = ({ setBiddings, biddings, address, refreshBalance }) => {
 Bidding.propTypes = {
   setBiddings: PropTypes.func.isRequired,
   address: PropTypes.string,
+  assetDenomMap: PropTypes.object,
   biddings: PropTypes.array,
   refreshBalance: PropTypes.number.isRequired,
 };
@@ -218,6 +231,7 @@ Bidding.propTypes = {
 const stateToProps = (state) => {
   return {
     biddings: state.auction.bidding.list,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 

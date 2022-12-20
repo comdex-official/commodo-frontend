@@ -18,7 +18,7 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  orderPriceConversion
+  orderPriceConversion,
 } from "../../../utils/coin";
 import { commaSeparator, decimalConversion } from "../../../utils/number";
 import { toDecimals } from "../../../utils/string";
@@ -295,8 +295,9 @@ const PlaceBidModal = ({
               <label>
                 {amountConversionWithComma(
                   newCurrentAuction?.outflowTokenCurrentAmount?.amount || 0,
-                  assetDenomMap[auction?.outflowTokenCurrentAmount?.denom]
-                    ?.decimals
+                  assetDenomMap[
+                    newCurrentAuction?.outflowTokenCurrentAmount?.denom
+                  ]?.decimals
                 )}{" "}
                 {denomConversion(
                   newCurrentAuction?.outflowTokenCurrentAmount?.denom
@@ -321,13 +322,15 @@ const PlaceBidModal = ({
                   Number(
                     amountConversion(
                       newCurrentAuction?.inflowTokenTargetAmount?.amount,
-                      assetDenomMap[auction?.inflowTokenTargetAmount?.denom]
-                        ?.decimals
+                      assetDenomMap[
+                        newCurrentAuction?.inflowTokenTargetAmount?.denom
+                      ]?.decimals
                     ) -
                       amountConversion(
                         newCurrentAuction?.inflowTokenCurrentAmount?.amount,
-                        assetDenomMap[auction?.inflowTokenCurrentAmount?.denom]
-                          ?.decimals
+                        assetDenomMap[
+                          newCurrentAuction?.inflowTokenCurrentAmount?.denom
+                        ]?.decimals
                       )
                   ).toFixed(6) || 0
                 )}{" "}
@@ -365,13 +368,15 @@ const PlaceBidModal = ({
                       Number(
                         amountConversion(
                           newCurrentAuction?.inflowTokenTargetAmount?.amount,
-                          assetDenomMap[auction?.inflowTokenTargetAmount?.denom]
+                          assetDenomMap[
+                            newCurrentAuction?.inflowTokenTargetAmount?.denom
+                          ]?.decimals
                         ) -
                           amountConversion(
                             newCurrentAuction?.inflowTokenCurrentAmount?.amount,
                             assetDenomMap[
-                              auction?.inflowTokenCurrentAmount?.denom
-                            ]
+                              newCurrentAuction?.inflowTokenCurrentAmount?.denom
+                            ]?.decimals
                           )
                       ).toFixed(6) || 0
                     );
