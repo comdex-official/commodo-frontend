@@ -302,17 +302,16 @@ const GovernDetails = ({
                 <h3>#{proposal?.proposal_id || id}</h3>
               </Col>
               <Col className="text-right">
-                <Button type="primary">
-                  <span
-                    className={
-                      proposalStatusMap[proposal?.status] === "Rejected" ||
-                      proposalStatusMap[proposal?.status] === "Failed"
-                        ? "failed-circle"
-                        : proposalStatusMap[proposal?.status] === "Passed"
-                        ? "passed-circle"
-                        : "warning-circle"
-                    }
-                  />
+                <Button type="primary"
+                  className={
+                    proposalStatusMap[proposal?.status] === "Rejected" ||
+                    proposalStatusMap[proposal?.status] === "Failed"
+                      ? "failed-btn"
+                      : proposalStatusMap[proposal?.status] === "Passed"
+                      ? "passed-btn"
+                      : "warning-btn"
+                  }
+                >
                   {proposalStatusMap[proposal?.status]}
                 </Button>
               </Col>
