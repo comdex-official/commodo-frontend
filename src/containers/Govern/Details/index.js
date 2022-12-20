@@ -306,10 +306,10 @@ const GovernDetails = ({
                   className={
                     proposalStatusMap[proposal?.status] === "Rejected" ||
                     proposalStatusMap[proposal?.status] === "Failed"
-                      ? "failed-btn"
+                      ? "failed-btn govern-status-btn"
                       : proposalStatusMap[proposal?.status] === "Passed"
-                      ? "passed-btn"
-                      : "warning-btn"
+                      ? "passed-btn govern-status-btn"
+                      : "warning-btn govern-status-btn"
                   }
                 >
                   {proposalStatusMap[proposal?.status]}

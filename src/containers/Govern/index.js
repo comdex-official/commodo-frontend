@@ -109,11 +109,11 @@ const Govern = ({setAllProposals, allProposals, setProposals, proposals}) => {
                                   proposalStatusMap[item?.status] ===
                                     "Rejected" ||
                                   proposalStatusMap[item?.status] === "Failed"
-                                    ? "failed-btn"
+                                    ? "failed-btn govern-status-btn"
                                     : proposalStatusMap[item?.status] ===
                                       "Passed"
-                                    ? "passed-btn"
-                                    : "warning-btn"
+                                    ? "passed-btn govern-status-btn"
+                                    : "warning-btn govern-status-btn"
                                 }
                               >
                                 {proposalStatusMap[item?.status]}

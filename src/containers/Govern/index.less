@@ -148,28 +148,30 @@
 }
 
 .ant-btn {
-  margin-left: auto;
-  float: right;
-  padding: 0 30px;
-  font-weight: 600;
-  min-width: 130px;
-  pointer-events: none;
-  &.passed-btn{
-    .dark-mode & {
-      border-color:#00875A;
-      background: rgba(#00875A, 0.20);
+  &.govern-status-btn{
+    margin-left: auto;
+    float: right;
+    padding: 0 30px;
+    font-weight: 600;
+    min-width: 130px;
+    pointer-events: none;
+    &.passed-btn{
+      .dark-mode & {
+        border-color:#00875A;
+        background: rgba(#00875A, 0.20);
+      }
     }
-  }
-  &.failed-btn{
-    .dark-mode & {
-      border-color: #D14141;
-      background: rgba(#D14141, 0.20);
+    &.failed-btn{
+      .dark-mode & {
+        border-color: #D14141;
+        background: rgba(#D14141, 0.20);
+      }
     }
-  }
-  &.warning-btn{
-    .dark-mode & {
-      border-color: #01B0FE;
-      background: rgba(#01B0FE, 0.20);
+    &.warning-btn{
+      .dark-mode & {
+        border-color: #01B0FE;
+        background: rgba(#01B0FE, 0.20);
+      }
     }
   }
 }
