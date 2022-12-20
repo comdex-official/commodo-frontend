@@ -25,7 +25,14 @@ import { toDecimals } from "../../../utils/string";
 import variables from "../../../utils/variables";
 import "./index.less";
 
-const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
+const PlaceBidModal = ({
+  lang,
+  address,
+  auction,
+  refreshBalance,
+  params,
+  assetDenomMap,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bidAmount, setBidAmount] = useState(0);
   const [inProgress, setInProgress] = useState(false);
@@ -33,10 +40,9 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
   const [maxPrice, setMaxPrice] = useState();
   const [maxValidationError, setMaxValidationError] = useState();
   const [calculatedQuantityBid, setCalculatedQuantityBid] = useState();
-  const [newCurrentAuction, setNewCurrentAuction] = useState(auction)
+  const [newCurrentAuction, setNewCurrentAuction] = useState(auction);
 
   const dispatch = useDispatch();
-
 
   const fetchSingleDutchAuctions = (auctionId, auctionMappingId) => {
     querySingleDutchLendAuction(auctionId, auctionMappingId, (error, data) => {
@@ -44,7 +50,7 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
         message.error(error);
         return;
       }
-      setNewCurrentAuction(data?.auction)
+      setNewCurrentAuction(data?.auction);
     });
   };
 
@@ -76,12 +82,14 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
               amount: getAmount(
                 Number(
                   bidAmount /
-                  Number(
-                    amountConversion(
-                      decimalConversion(auction?.outflowTokenCurrentPrice) ||
-                      0
-                    ) || 0
-                  ).toFixed(DOLLAR_DECIMALS)
+                    Number(
+                      amountConversion(
+                        decimalConversion(auction?.outflowTokenCurrentPrice) ||
+                          0
+                      ) || 0,
+                      assetDenomMap[auction?.outflowTokenInitAmount?.denom]
+                        ?.decimals
+                    ).toFixed(DOLLAR_DECIMALS)
                 ).toFixed(6)
               ),
             },
@@ -128,14 +136,25 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
   };
 
   const handleChange = (value) => {
-    value = toDecimals(value).toString().trim();
+    value = toDecimals(
+      value,
+      assetDenomMap[auction?.inflowTokenTargetAmount?.denom]?.decimals
+    )
+      .toString()
+      .trim();
 
     setValidationError(
       ValidateInputNumber(
         value,
         Number(
-          amountConversion(auction?.inflowTokenTargetAmount?.amount) -
-          amountConversion(auction?.inflowTokenCurrentAmount?.amount)
+          amountConversion(
+            auction?.inflowTokenTargetAmount?.amount,
+            assetDenomMap[auction?.inflowTokenTargetAmount?.denom]?.decimals
+          ) -
+            amountConversion(
+              auction?.inflowTokenCurrentAmount?.amount,
+              assetDenomMap[auction?.inflowTokenCurrentAmount?.denom]?.decimals
+            )
         ).toFixed(6) || 0
       )
     );
@@ -145,11 +164,12 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
   const calculateQuantityBidFor = () => {
     let calculatedAmount = Number(
       bidAmount *
-      Number(
-        amountConversion(
-          decimalConversion(newCurrentAuction?.outflowTokenCurrentPrice) || 0
+        Number(
+          amountConversion(
+            decimalConversion(newCurrentAuction?.outflowTokenCurrentPrice) || 0,
+            assetDenomMap[auction?.outflowTokenInitAmount?.denom]?.decimals
+          )
         )
-      )
     ).toFixed(6);
     setCalculatedQuantityBid(calculatedAmount);
   };
@@ -157,18 +177,31 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
   useEffect(() => {
     if (isModalOpen) {
       const interval = setInterval(() => {
-        fetchSingleDutchAuctions(auction?.auctionId, auction?.auctionMappingId)
-      }, 5000)
+        fetchSingleDutchAuctions(auction?.auctionId, auction?.auctionMappingId);
+      }, 5000);
       return () => {
         clearInterval(interval);
-      }
+      };
     }
-  }, [isModalOpen])
+  }, [isModalOpen]);
 
   const handleMaxPriceChange = (value) => {
-    value = toDecimals(value).toString().trim();
+    value = toDecimals(
+      value,
+      assetDenomMap[newCurrentAuction?.inflowTokenTargetAmount?.denom]?.decimals
+    )
+      .toString()
+      .trim();
 
-    setMaxValidationError(ValidateInputNumber(getAmount(value)));
+    setMaxValidationError(
+      ValidateInputNumber(
+        getAmount(
+          value,
+          assetDenomMap[newCurrentAuction?.inflowTokenTargetAmount?.denom]
+            ?.decimals
+        )
+      )
+    );
     setMaxPrice(value);
   };
 
@@ -201,7 +234,11 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
             </Col>
             <Col sm="6" className="text-right">
               <label>
-                <Timer expiryTimestamp={newCurrentAuction && newCurrentAuction.endTime} />
+                <Timer
+                  expiryTimestamp={
+                    newCurrentAuction && newCurrentAuction.endTime
+                  }
+                />
               </label>
             </Col>
           </Row>
@@ -217,8 +254,11 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
                 {commaSeparator(
                   Number(
                     amountConversion(
-                      decimalConversion(newCurrentAuction?.outflowTokenInitialPrice) || 0,
-                      4
+                      decimalConversion(
+                        newCurrentAuction?.outflowTokenInitialPrice
+                      ) || 0,
+                      assetDenomMap[auction?.outflowTokenInitAmount?.denom]
+                        ?.decimals
                     ) || 0
                   )
                 )}
@@ -235,8 +275,11 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
                 {commaSeparator(
                   Number(
                     amountConversion(
-                      decimalConversion(newCurrentAuction?.outflowTokenCurrentPrice) || 0,
-                      4
+                      decimalConversion(
+                        newCurrentAuction?.outflowTokenCurrentPrice
+                      ) || 0,
+                      assetDenomMap[auction?.outflowTokenInitAmount?.denom]
+                        ?.decimals
                     ) || 0
                   )
                 )}
@@ -251,9 +294,13 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
             <Col sm="6" className="text-right">
               <label>
                 {amountConversionWithComma(
-                  newCurrentAuction?.outflowTokenCurrentAmount?.amount || 0
+                  newCurrentAuction?.outflowTokenCurrentAmount?.amount || 0,
+                  assetDenomMap[auction?.outflowTokenCurrentAmount?.denom]
+                    ?.decimals
                 )}{" "}
-                {denomConversion(newCurrentAuction?.outflowTokenCurrentAmount?.denom)}
+                {denomConversion(
+                  newCurrentAuction?.outflowTokenCurrentAmount?.denom
+                )}
               </label>
             </Col>
           </Row>
@@ -263,20 +310,30 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
               <p>
                 {" "}
                 Target{" "}
-                {denomConversion(newCurrentAuction?.inflowTokenCurrentAmount?.denom)}
+                {denomConversion(
+                  newCurrentAuction?.inflowTokenCurrentAmount?.denom
+                )}
               </p>
             </Col>
             <Col sm="6" className="text-right">
               <label>
                 {commaSeparator(
                   Number(
-                    amountConversion(newCurrentAuction?.inflowTokenTargetAmount?.amount) -
                     amountConversion(
-                      newCurrentAuction?.inflowTokenCurrentAmount?.amount
-                    )
+                      newCurrentAuction?.inflowTokenTargetAmount?.amount,
+                      assetDenomMap[auction?.inflowTokenTargetAmount?.denom]
+                        ?.decimals
+                    ) -
+                      amountConversion(
+                        newCurrentAuction?.inflowTokenCurrentAmount?.amount,
+                        assetDenomMap[auction?.inflowTokenCurrentAmount?.denom]
+                          ?.decimals
+                      )
                   ).toFixed(6) || 0
                 )}{" "}
-                {denomConversion(newCurrentAuction?.inflowTokenCurrentAmount?.denom)}
+                {denomConversion(
+                  newCurrentAuction?.inflowTokenCurrentAmount?.denom
+                )}
               </label>
             </Col>
           </Row>
@@ -285,32 +342,62 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
             <Col sm="6">
               <p>Quantity Bid For</p>
             </Col>
-            <Col sm="6" className="text-right auction-quantity-max-btn-main-container">
+            <Col
+              sm="6"
+              className="text-right auction-quantity-max-btn-main-container"
+            >
               <CustomInput
                 value={bidAmount}
                 onChange={(event) => handleChange(event.target.value)}
                 validationError={validationError}
               />
-              <label><div className="input-denom">{denomConversion(newCurrentAuction?.outflowTokenCurrentAmount?.denom)}</div></label>
-              <div className="auction-quantity-max-btn"><button
-                onClick={() => {
-                  handleChange(
-                    Number(amountConversion(newCurrentAuction?.inflowTokenTargetAmount?.amount) - amountConversion(newCurrentAuction?.inflowTokenCurrentAmount?.amount)).toFixed(6) || 0
-                  );
-                }}>
-                Max
-              </button>
+              <label>
+                <div className="input-denom">
+                  {denomConversion(
+                    newCurrentAuction?.outflowTokenCurrentAmount?.denom
+                  )}
+                </div>
+              </label>
+              <div className="auction-quantity-max-btn">
+                <button
+                  onClick={() => {
+                    handleChange(
+                      Number(
+                        amountConversion(
+                          newCurrentAuction?.inflowTokenTargetAmount?.amount,
+                          assetDenomMap[auction?.inflowTokenTargetAmount?.denom]
+                        ) -
+                          amountConversion(
+                            newCurrentAuction?.inflowTokenCurrentAmount?.amount,
+                            assetDenomMap[
+                              auction?.inflowTokenCurrentAmount?.denom
+                            ]
+                          )
+                      ).toFixed(6) || 0
+                    );
+                  }}
+                >
+                  Max
+                </button>
               </div>
             </Col>
           </Row>
           <Row>
             <Col sm="6">
-              <p>Your  {denomConversion(newCurrentAuction?.inflowTokenCurrentAmount?.denom)} Bid</p>
+              <p>
+                Your{" "}
+                {denomConversion(
+                  newCurrentAuction?.inflowTokenCurrentAmount?.denom
+                )}{" "}
+                Bid
+              </p>
             </Col>
             <Col sm="6" className="text-right">
-              <label >
+              <label>
                 {calculatedQuantityBid}{" "}
-                {denomConversion(newCurrentAuction?.inflowTokenCurrentAmount?.denom)}
+                {denomConversion(
+                  newCurrentAuction?.inflowTokenCurrentAmount?.denom
+                )}
               </label>
             </Col>
           </Row>
@@ -326,8 +413,13 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
               />
               <label>
                 <div className="input-denom">
-                  {denomConversion(newCurrentAuction?.inflowTokenTargetAmount?.denom)}/
-                  {denomConversion(newCurrentAuction?.outflowTokenCurrentAmount?.denom)}
+                  {denomConversion(
+                    newCurrentAuction?.inflowTokenTargetAmount?.denom
+                  )}
+                  /
+                  {denomConversion(
+                    newCurrentAuction?.outflowTokenCurrentAmount?.denom
+                  )}
                 </div>
               </label>
             </Col>
@@ -359,6 +451,7 @@ const PlaceBidModal = ({ lang, address, auction, refreshBalance, params }) => {
 PlaceBidModal.propTypes = {
   lang: PropTypes.string.isRequired,
   address: PropTypes.string.isRequired,
+  assetDenomMap: PropTypes.object,
   refreshBalance: PropTypes.number.isRequired,
   auction: PropTypes.shape({
     minBid: PropTypes.shape({
@@ -383,6 +476,7 @@ const stateToProps = (state) => {
     lang: state.language,
     address: state.account.address,
     refreshBalance: state.account.refreshBalance,
+    assetDenomMap: state.asset._.assetDenomMap,
   };
 };
 
