@@ -30,18 +30,18 @@
   .govern-card-content {
     .governlist-row {
       display: flex;
-      padding: 20px 40px 20px;
+      padding: 28px 40px 28px;
       border-bottom: 1px solid rgba(@border-dark, 0.5);
       cursor: pointer;
       background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8.381' height='15' viewBox='0 0 8.381 15'%3E%3Cpath id='Path_39' data-name='Path 39' d='M0 .893A.9.9 0 0 1 .253.261.877.877 0 0 1 1.5.261l6 5.987L13.491.261a.882.882 0 1 1 1.248 1.248l-6.6 6.619a.87.87 0 0 1-.632.253.939.939 0 0 1-.632-.253L.253 1.509A.86.86 0 0 1 0 .893Z' transform='translate(0 15) rotate(-90)' fill='%23fff'/%3E%3C/svg%3E") no-repeat 98% 50%;
       transition: all ease-in 0.1s;
 
-      &:last-child {
-        border: 0;
-      }
-
       .dark-mode & {
         border-bottom: 1px solid rgba(@white, 0.2);
+      }
+
+      &:last-child {
+        border-bottom: 0;
       }
 
       .left-section {
@@ -144,5 +144,34 @@
     width: 11px;
     height: 11px;
     margin-right: 3px;
+  }
+}
+
+.ant-btn {
+  &.govern-status-btn{
+    margin-left: auto;
+    float: right;
+    padding: 0 30px;
+    font-weight: 600;
+    min-width: 130px;
+    pointer-events: none;
+    &.passed-btn{
+      .dark-mode & {
+        border-color:#00875A;
+        background: rgba(#00875A, 0.20);
+      }
+    }
+    &.failed-btn{
+      .dark-mode & {
+        border-color: #D14141;
+        background: rgba(#D14141, 0.20);
+      }
+    }
+    &.warning-btn{
+      .dark-mode & {
+        border-color: #01B0FE;
+        background: rgba(#01B0FE, 0.20);
+      }
+    }
   }
 }
