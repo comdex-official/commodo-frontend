@@ -126,8 +126,8 @@ export const Bidding = ({
               item?.auctionStatus === "active"
                 ? "biddin-btn bid-btn-success"
                 : item?.auctionStatus === "inactive"
-                ? "biddin-btn bid-btn-rejected"
-                : ""
+                  ? "biddin-btn bid-btn-rejected"
+                  : ""
             }
           >
             {item?.auctionStatus}
@@ -140,10 +140,10 @@ export const Bidding = ({
               item?.biddingStatus === "placed"
                 ? "biddin-btn bid-btn-placed"
                 : item?.biddingStatus === "success"
-                ? "biddin-btn bid-btn-success"
-                : item?.biddingStatus === "rejected"
-                ? "biddin-btn bid-btn-rejected"
-                : ""
+                  ? "biddin-btn bid-btn-success"
+                  : item?.biddingStatus === "rejected"
+                    ? "biddin-btn bid-btn-rejected"
+                    : ""
             }
           >
             {item?.biddingStatus}
@@ -152,7 +152,7 @@ export const Bidding = ({
       };
     });
 
-  const fetchBiddings = (address, offset, limit, countTotal, reverse) => {
+  const fetchBiddings = (address, offset, limit, countTotal, reverse, history) => {
     setInProgress(true);
 
     queryDutchBiddingList(
@@ -161,6 +161,7 @@ export const Bidding = ({
       limit,
       countTotal,
       reverse,
+      history,
       (error, result) => {
         setInProgress(false);
 
@@ -185,19 +186,20 @@ export const Bidding = ({
       (value?.current - 1) * value?.pageSize,
       value?.pageSize,
       true,
-      true
+      true,
+      false
     );
   };
 
   useEffect(() => {
-    fetchBiddings(address, (pageNumber - 1) * pageSize, pageSize, true, true);
+    fetchBiddings(address, (pageNumber - 1) * pageSize, pageSize, true, true, false);
   }, [address, refreshBalance]);
 
   return (
     <div className="app-content-wrapper">
       <Row>
         <Col>
-          <div className="commodo-card py-3 bg-none">
+          <div className="commodo-card pb-3 bg-none">
             <div className="card-content">
               <Table
                 className="custom-table auction-table  bidding-bottom-table "
