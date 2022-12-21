@@ -1,4 +1,4 @@
-import { Button, message, Table } from "antd";
+import { Button, message, Table, Tabs  } from "antd";
 import moment from "moment";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
@@ -19,13 +19,34 @@ import {
 import { queryDutchAuctionList } from "../../services/auction";
 import { queryAuctionMippingIdParams } from "../../services/lend/query";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
-import { commaSeparator, decimalConversion } from "../../utils/number";
+import { commaSeparator, decimalConversion, marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import Bidding from "./Bidding";
+import { InActiveBidding } from "./inActiveBidding";
 import "./index.less";
 import PlaceBidModal from "./PlaceBidModal";
 
-const Auction = ({ address, setAuctions, auctions, refreshBalance }) => {
+const Auction = ({
+  address,
+  setAuctions,
+  auctions,
+  refreshBalance,
+  assetDenomMap,
+  markets,
+}) => {
+  const { TabPane } = Tabs;
+
+  const tabItems =
+    [
+      { label: "Active", key: "1", children: <Bidding address={address} refreshBalance={refreshBalance} />},
+      { label: "Completed", key: "2", children: <InActiveBidding address={address} refreshBalance={refreshBalance} assetDenomMap={assetDenomMap} /> }
+    ]
+
+  const callback = (key) => {
+    setActiveKey(key);
+  };
+
+  const [activeKey, setActiveKey] = useState("1");
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [params, setParams] = useState({});
@@ -81,6 +102,16 @@ const Auction = ({ address, setAuctions, auctions, refreshBalance }) => {
     {
       title: (
         <>
+          Oracle Price
+        </>
+      ),
+      dataIndex: "oracle_price",
+      key: "oracle_price",
+      width: 120,
+    },
+    {
+      title: (
+        <>
           Current Auction Price{" "}
           <TooltipIcon text="Current price of auction asset" />
         </>
@@ -89,12 +120,15 @@ const Auction = ({ address, setAuctions, auctions, refreshBalance }) => {
       key: "current_price",
       width: 160,
       align: "center",
-      render: (price) => (
+      render: (item) => (
         <>
           $
           {commaSeparator(
             Number(
-              amountConversionWithComma(decimalConversion(price) || 0) || 0
+              amountConversionWithComma(
+                decimalConversion(item?.outflowTokenCurrentPrice) || 0,
+                assetDenomMap[item?.outflowTokenCurrentAmount?.denom]?.decimals
+              ) || 0
             ).toFixed(DOLLAR_DECIMALS)
           )}
         </>
@@ -155,13 +189,16 @@ const Auction = ({ address, setAuctions, auctions, refreshBalance }) => {
               <>
                 {item?.outflowTokenCurrentAmount?.amount &&
                   amountConversionWithComma(
-                    item?.outflowTokenCurrentAmount?.amount
+                    item?.outflowTokenCurrentAmount?.amount,
+                    assetDenomMap[item?.outflowTokenCurrentAmount?.denom]
+                      ?.decimals
                   )}{" "}
                 {denomConversion(item?.outflowTokenCurrentAmount?.denom)}
               </>
             ),
             end_time: moment(item && item.endTime).format("MMM DD, YYYY HH:mm"),
-            current_price: item?.outflowTokenCurrentPrice,
+            oracle_price: "$" + commaSeparator(Number(marketPrice(markets, item?.outflowTokenCurrentAmount?.denom, assetDenomMap[item?.outflowTokenCurrentAmount?.denom]?.decimals) || 0).toFixed(DOLLAR_DECIMALS)),
+            current_price: item,
             action: item,
           };
         })
@@ -281,7 +318,16 @@ const Auction = ({ address, setAuctions, auctions, refreshBalance }) => {
           <div className="more-bottom">
             <h3 className="title">Bidding History</h3>
             <div className="more-bottom-card">
-              <Bidding address={address} refreshBalance={refreshBalance} />
+              <Row>
+                <Col>
+                  <Tabs
+                    className="commodo-tabs mt-3"
+                    onChange={callback}
+                    activeKey={activeKey}
+                    items={tabItems}
+                  />
+                </Col>
+              </Row>
             </div>
           </div>
         </Col>
@@ -294,8 +340,10 @@ Auction.propTypes = {
   lang: PropTypes.string.isRequired,
   setAuctions: PropTypes.func.isRequired,
   address: PropTypes.string,
+  assetDenomMap: PropTypes.object,
   auctions: PropTypes.array,
   refreshBalance: PropTypes.number.isRequired,
+  markets: PropTypes.object,
 };
 
 const stateToProps = (state) => {
@@ -304,6 +352,8 @@ const stateToProps = (state) => {
     address: state.account.address,
     auctions: state.auction.data.list,
     refreshBalance: state.account.refreshBalance,
+    assetDenomMap: state.asset._.assetDenomMap,
+    markets: state.oracle.market,
   };
 };
 
