@@ -3,7 +3,7 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { QueryPoolAssetLBMapping } from "../../../services/lend/query";
+import { queryAssetPoolFundBalance, QueryPoolAssetLBMapping } from "../../../services/lend/query";
 import {
   amountConversion, commaSeparatorWithRounding
 } from "../../../utils/coin";
@@ -11,6 +11,7 @@ import { marketPrice } from "../../../utils/number";
 
 export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
   const [assetStats, setAssetStats] = useState({});
+  const [assetPoolFunds, setAssetPoolFunds] = useState({});
 
   useEffect(() => {
     if (lendPool?.poolId) {
@@ -29,6 +30,18 @@ export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
 
       setAssetStats((prevState) => ({
         [assetId]: result?.PoolAssetLBMapping,
+        ...prevState,
+      }));
+    });
+
+    queryAssetPoolFundBalance(assetId, poolId, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setAssetPoolFunds((prevState) => ({
+        [assetId]: result?.amount,
         ...prevState,
       }));
     });

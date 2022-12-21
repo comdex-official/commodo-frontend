@@ -284,7 +284,7 @@ export const queryAuctionMippingIdParams = (callback) => {
   });
 };
 
-export const queryFundModuleBalance = (assetId, poolId, callback) => {
+export const queryAssetPoolFundBalance = (assetId, poolId, callback) => {
   getQueryService((error, queryService) => {
     if (error) {
       callback(error);
