@@ -104,19 +104,18 @@ const Govern = ({setAllProposals, allProposals, setProposals, proposals}) => {
                           <div className="left-section">
                             <h3>
                               #{item?.proposal_id}
-                              <Button type="primary" className="ml-1">
-                                <span
-                                  className={
-                                    proposalStatusMap[item?.status] ===
-                                      "Rejected" ||
-                                    proposalStatusMap[item?.status] === "Failed"
-                                      ? "failed-circle"
-                                      : proposalStatusMap[item?.status] ===
-                                        "Passed"
-                                      ? "passed-circle"
-                                      : "warning-circle"
-                                  }
-                                />
+                              <Button type="primary" 
+                                className={
+                                  proposalStatusMap[item?.status] ===
+                                    "Rejected" ||
+                                  proposalStatusMap[item?.status] === "Failed"
+                                    ? "failed-btn govern-status-btn"
+                                    : proposalStatusMap[item?.status] ===
+                                      "Passed"
+                                    ? "passed-btn govern-status-btn"
+                                    : "warning-btn govern-status-btn"
+                                }
+                              >
                                 {proposalStatusMap[item?.status]}
                               </Button>
                             </h3>{" "}
