@@ -5,11 +5,13 @@ import { connect } from "react-redux";
 import { ibcDenoms } from "../../../config/network";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
+  queryAssetPoolFundBalance,
   queryModuleBalance,
   QueryPoolAssetLBMapping
 } from "../../../services/lend/query";
 import {
-  amountConversion, commaSeparatorWithRounding,
+  amountConversion,
+  commaSeparatorWithRounding,
   denomConversion
 } from "../../../utils/coin";
 import {
@@ -31,6 +33,7 @@ const Details = ({
 }) => {
   const [stats, setStats] = useState();
   const [moduleBalanceStats, setModuleBalanceStats] = useState([]);
+  const [assetPoolFunds, setAssetPoolFunds] = useState({});
 
   useEffect(() => {
     if (asset?.id && poolId) {
@@ -41,6 +44,15 @@ const Details = ({
         }
 
         setStats(result?.PoolAssetLBMapping);
+      });
+
+      queryAssetPoolFundBalance(asset?.id, poolId, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setAssetPoolFunds(result?.amount);
       });
     } else if (stats?.poolId) {
       setStats();
@@ -74,7 +86,20 @@ const Details = ({
           ) *
             marketPrice(markets, asset?.denom, assetDenomMap[asset?.denom]?.id),
           assetDenomMap[asset?.denom]?.decimals
-        ),
+        ) +
+          (parent === "lend"
+            ? Number(
+                amountConversion(
+                  assetPoolFunds?.amount,
+                  assetDenomMap[assetPoolFunds?.denom]?.decimals
+                ) *
+                  marketPrice(
+                    markets,
+                    assetPoolFunds?.denom,
+                    assetDenomMap[assetPoolFunds?.denom]?.id
+                  )
+              )
+            : 0),
         DOLLAR_DECIMALS
       )}`,
       tooltipText:
@@ -83,13 +108,15 @@ const Details = ({
     {
       title: "Available",
       counts: `$${commaSeparatorWithRounding(
-        amountConversion(
-          marketPrice(
-            markets,
-            assetStats?.balance?.denom,
-            assetDenomMap[assetStats?.balance?.denom]?.id
-          ) * assetStats?.balance.amount || 0,
-          assetDenomMap[assetStats?.balance?.denom]?.decimals
+        Number(
+          amountConversion(
+            marketPrice(
+              markets,
+              assetStats?.balance?.denom,
+              assetDenomMap[assetStats?.balance?.denom]?.id
+            ) * assetStats?.balance.amount || 0,
+            assetDenomMap[assetStats?.balance?.denom]?.decimals
+          )
         ),
         DOLLAR_DECIMALS
       )}`,

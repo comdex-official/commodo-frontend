@@ -3,9 +3,13 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { queryAssetPoolFundBalance, QueryPoolAssetLBMapping } from "../../../services/lend/query";
 import {
-  amountConversion, commaSeparatorWithRounding
+  queryAssetPoolFundBalance,
+  QueryPoolAssetLBMapping
+} from "../../../services/lend/query";
+import {
+  amountConversion,
+  commaSeparatorWithRounding
 } from "../../../utils/coin";
 import { marketPrice } from "../../../utils/number";
 
@@ -48,7 +52,7 @@ export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
   };
 
   const getTotalDeposited = () => {
-    const sum =
+    const depositSum =
       Number(
         amountConversion(
           assetStats[lendPool?.transitAssetIds?.main]?.totalLend,
@@ -83,7 +87,45 @@ export const TotalDeposit = ({ lendPool, assetMap, markets }) => {
           )
       );
 
-    return `$${commaSeparatorWithRounding(sum || 0, DOLLAR_DECIMALS)}`;
+    const bootstrappingAmountSum =
+      Number(
+        amountConversion(
+          assetPoolFunds[lendPool?.transitAssetIds?.main]?.amount,
+          assetMap?.[lendPool?.transitAssetIds?.main]?.decimals
+        ) *
+          marketPrice(
+            markets,
+            assetMap?.[lendPool?.transitAssetIds?.main]?.denom,
+            lendPool?.transitAssetIds?.main
+          )
+      ) +
+      Number(
+        amountConversion(
+          assetPoolFunds[lendPool?.transitAssetIds?.first]?.amount,
+          assetMap?.[lendPool?.transitAssetIds?.first]?.decimals
+        ) *
+          marketPrice(
+            markets,
+            assetMap?.[lendPool?.transitAssetIds?.first]?.denom,
+            lendPool?.transitAssetIds?.first
+          )
+      ) +
+      Number(
+        amountConversion(
+          assetPoolFunds[lendPool?.transitAssetIds?.second]?.amount,
+          assetMap?.[lendPool?.transitAssetIds?.second]?.decimals
+        ) *
+          marketPrice(
+            markets,
+            assetMap?.[lendPool?.transitAssetIds?.second]?.denom,
+            lendPool?.transitAssetIds?.second
+          )
+      );
+
+    return `$${commaSeparatorWithRounding(
+      depositSum + bootstrappingAmountSum || 0,
+      DOLLAR_DECIMALS
+    )}`;
   };
   return <div>{getTotalDeposited()}</div>;
 };
