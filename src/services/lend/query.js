@@ -284,6 +284,25 @@ export const queryAuctionMippingIdParams = (callback) => {
   });
 };
 
+export const queryAssetPoolFundBalance = (assetId, poolId, callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryFundModBalByAssetPool({
+        assetId: Long.fromNumber(assetId),
+        poolId: Long.fromNumber(poolId),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+
 export const queryTopAssets = (callback) => {
   axios
     .get(`${API_URL}/lend/rankings`)
