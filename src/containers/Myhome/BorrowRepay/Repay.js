@@ -8,7 +8,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
@@ -22,12 +22,12 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "./ActionButton";
@@ -245,7 +245,7 @@ const RepayTab = ({
                   inAmount={borrowPosition?.amountIn?.amount}
                   outAmount={
                     amount
-                      ? Number(updatedAmountOut) -
+                      ? Number(updatedAmountOut)?.toFixed(0) -
                         Number(
                           getAmount(
                             amount,
@@ -253,7 +253,7 @@ const RepayTab = ({
                               ?.decimals
                           )
                         )
-                      : updatedAmountOut
+                      : Number(updatedAmountOut)?.toFixed(0)
                   }
                 />{" "}
               </Col>
