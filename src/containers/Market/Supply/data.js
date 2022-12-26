@@ -82,7 +82,7 @@ export const columns = [
     ),
   },
   {
-    title: "Action",
+    title: "",
     dataIndex: "action",
     key: "action",
     align: "right",

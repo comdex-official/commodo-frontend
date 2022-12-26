@@ -76,7 +76,7 @@ const Deposit = ({
       className: "rewards-column",
     },
     {
-      title: "Action",
+      title: "",
       dataIndex: "action",
       key: "action",
       align: "right",
