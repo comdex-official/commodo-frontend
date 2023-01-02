@@ -170,7 +170,7 @@ export const toDecimals = (value, decimal) =>
         value.indexOf("."),
         Number(decimal)
           ? Number(getExponent(decimal)) + 1
-          : comdex?.coinDecimals
+          : comdex?.coinDecimals + 1   // characters from start to end (exclusive) that's why we add 1 here.
       )
     : value;
 

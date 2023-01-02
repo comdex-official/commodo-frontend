@@ -79,6 +79,7 @@ export const queryDutchBiddingList = (
   limit,
   countTotal,
   reverse,
+  history,
   callback) => {
   getQueryService((error, queryService) => {
     if (error) {
@@ -97,7 +98,7 @@ export const queryDutchBiddingList = (
           countTotal: countTotal,
           reverse: reverse,
         },
-        history: false,
+        history: history,
       })
       .then((result) => {
         callback(null, result);

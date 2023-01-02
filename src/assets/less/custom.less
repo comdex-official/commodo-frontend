@@ -1909,3 +1909,48 @@ button.ant-switch {
     }
   }
 }
+
+.max-half {
+  display: flex;
+  align-items: center;
+  margin-left: 4px;
+
+  button.ant-btn {
+    font-size: @font-size-sm - 1;
+    padding: 1px 0;
+    margin-left: 4px;
+    line-height: 1;
+    text-align: center;
+    width: 34px;
+    height: 15px;
+    border: 0;
+    cursor: pointer;
+    border-radius: 3px;
+    background: #001e11;
+    font-weight: lighter;
+    text-transform: uppercase;
+    border: 0;
+
+    span {
+      color: @white;
+    }
+
+    .dark-mode & {
+      background: #132239;
+      color: @white;
+    }
+
+    &.active {
+      .dark-mode & {
+        background: @white;
+        border: 0;
+      }
+
+      span {
+        .dark-mode & {
+          color: #032517;
+        }
+      }
+    }
+  }
+}
