@@ -340,12 +340,14 @@ const BorrowTab = ({
   };
 
   const handleBorrowMaxClick = () => {
-    return handleOutAmountChange(
-      amountConversion(
-        borrowableBalance,
-        assetDenomMap[borrowAssetDenom]?.decimals
-      )
-    );
+    if (borrowableBalance > 0) {
+      return handleOutAmountChange(
+        amountConversion(
+          borrowableBalance,
+          assetDenomMap[borrowAssetDenom]?.decimals
+        )
+      );
+    }
   };
 
   let currentLTV = Number(
