@@ -24,5 +24,9 @@ export const ValidateInputNumber = (value, max, key, dollarValue) => {
     return new Error("Min. borrowable amount is 1$");
   }
 
+  if (key === "repay" && Number(dollarValue) < value) {
+    return new Error("Input is greater than max repayable");
+  }
+
   return new Error("");
 };
