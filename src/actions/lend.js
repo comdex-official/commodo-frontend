@@ -121,9 +121,15 @@ export const setPoolLends = (list) => {
 };
 
 export const setUserBorrows = (list) => {
+  const borrowToLendMap = list.reduce((map, obj) => {
+    map[obj?.lendingId?.toNumber()] = obj;
+    return map;
+  }, {});
+
   return {
     type: USER_BORROWS_SET,
     list,
+    borrowToLendMap,
   };
 };
 

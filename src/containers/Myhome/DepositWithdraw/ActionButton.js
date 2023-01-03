@@ -1,4 +1,4 @@
-import { Button, message } from "antd";
+import { Button, message, Tooltip } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import Snack from "../../../components/common/Snack";
@@ -17,6 +17,7 @@ export const ActionButton = ({
   denom,
   refreshData,
   assetDenomMap,
+  tooltipText,
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const navigate = useNavigate();
@@ -83,7 +84,9 @@ export const ActionButton = ({
       disabled={disabled}
       onClick={handleClick}
     >
-      {name}
+      <Tooltip overlayClassName="commodo-tooltip" title={tooltipText || ""}>
+        {name}
+      </Tooltip>
     </Button>
   );
 };
