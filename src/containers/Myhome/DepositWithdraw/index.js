@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useLocation, useParams } from "react-router";
 import { Link } from "react-router-dom";
-import { setPool } from "../../../actions/lend";
+import { setPool, setUserBorrows } from "../../../actions/lend";
 import { Col, Row } from "../../../components/common";
-import { queryLendPool, queryLendPosition } from "../../../services/lend/query";
+import { queryLendPool, queryLendPosition, queryUserBorrows } from "../../../services/lend/query";
 import { decode } from "../../../utils/string";
 import CloseTab from "./Close";
 import DepositTab from "./Deposit";
@@ -23,7 +23,7 @@ const BackButton = {
   ),
 };
 
-const Deposit = ({ setPool }) => {
+const Deposit = ({ setPool, address, setUserBorrows }) => {
   const [inProgress, setInProgress] = useState(false);
   const [lendPosition, setLendPosition] = useState();
   const [activeKey, setActiveKey] = useState("1");
@@ -38,6 +38,25 @@ const Deposit = ({ setPool }) => {
       setActiveKey("2");
     }
   }, []);
+
+  useEffect(() => {
+    if (address) {
+      fetchUserBorrows();
+    }
+  }, [address]);
+
+  const fetchUserBorrows = () => {
+    queryUserBorrows(address, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      if (result?.borrows?.length > 0) {
+        setUserBorrows(result?.borrows);
+      }
+    });
+  };
 
   useEffect(() => {
     if (id) {
@@ -141,16 +160,20 @@ const Deposit = ({ setPool }) => {
 Deposit.propTypes = {
   lang: PropTypes.string.isRequired,
   setPool: PropTypes.func.isRequired,
+  setUserBorrows: PropTypes.func.isRequired,
+  address: PropTypes.string,
 };
 
 const stateToProps = (state) => {
   return {
     lang: state.language,
+    address: state.account.address,
   };
 };
 
 const actionsToProps = {
   setPool,
+  setUserBorrows,
 };
 
 export default connect(stateToProps, actionsToProps)(Deposit);

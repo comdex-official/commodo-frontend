@@ -22,6 +22,7 @@ const CloseTab = ({
   assetMap,
   address,
   assetDenomMap,
+  borrowToLendMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [amount, setAmount] = useState();
@@ -38,6 +39,9 @@ const CloseTab = ({
       ]);
     }
   }, [pool]);
+
+  let isBorrowPositionOpen =
+    !!borrowToLendMap[lendPosition?.lendingId]?.borrowingId?.toNumber();
 
   return (
     <div className="details-wrapper">
@@ -104,10 +108,12 @@ const CloseTab = ({
             name="Close"
             lang={lang}
             amount={amount}
+            disabled={isBorrowPositionOpen}
             address={address}
             lendId={lendPosition?.lendingId}
             denom={lendPosition?.amountIn?.denom}
             assetDenomMap={assetDenomMap}
+            tooltipText={isBorrowPositionOpen ? "Borrow position open" : ""}
           />
         </div>
       </div>
@@ -144,6 +150,7 @@ CloseTab.propTypes = {
   address: PropTypes.string,
   assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
+  borrowToLendMap: PropTypes.object,
   lendPosition: PropTypes.shape({
     lendingId: PropTypes.shape({
       low: PropTypes.number,
@@ -173,6 +180,7 @@ const stateToProps = (state) => {
     assetMap: state.asset._.map,
     lang: state.language,
     assetDenomMap: state.asset._.assetDenomMap,
+    borrowToLendMap: state.lend.borrowToLendMap,
   };
 };
 

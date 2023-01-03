@@ -1,10 +1,8 @@
 import { message } from "antd";
 import axios from "axios";
 import {
-  ASSETS_SET,
-  PAIRS_SET,
-  PAIR_ID_SET,
-  PAIR_SET
+  ASSETS_SET, ASSET_STAT_MAP_SET, PAIRS_SET,
+  PAIR_ID_SET, PAIR_SET
 } from "../constants/asset";
 
 export const setPairs = (list, pagination) => {
@@ -66,4 +64,12 @@ export const fetchProofHeight = (rest, channel, callback) => {
       message.error(error?.message);
       callback(error?.message);
     });
+};
+
+export const setAssetStatMap = (assetId, value) => {
+  return {
+    type: ASSET_STAT_MAP_SET,
+    assetId,
+    value,
+  };
 };

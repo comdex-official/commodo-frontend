@@ -2,6 +2,7 @@ import { List, message } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { setAssetStatMap } from "../../../actions/asset";
 import { ibcDenoms } from "../../../config/network";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
@@ -30,6 +31,7 @@ const Details = ({
   refreshBalance,
   parent,
   assetDenomMap,
+  setAssetStatMap,
 }) => {
   const [stats, setStats] = useState();
   const [moduleBalanceStats, setModuleBalanceStats] = useState([]);
@@ -75,6 +77,10 @@ const Details = ({
   let assetStats = moduleBalanceStats?.filter(
     (item) => item?.assetId?.toNumber() === asset?.id?.toNumber()
   )[0];
+
+  useEffect(() => {
+    setAssetStatMap(asset?.id, assetStats?.balance);
+  }, [assetStats]);
 
   let data = [
     {
@@ -207,6 +213,7 @@ const Details = ({
 
 Details.propTypes = {
   refreshBalance: PropTypes.number.isRequired,
+  setAssetStatMap: PropTypes.func.isRequired,
   asset: PropTypes.shape({
     denom: PropTypes.string,
   }),
@@ -226,4 +233,8 @@ const stateToProps = (state) => {
   };
 };
 
-export default connect(stateToProps)(Details);
+const actionsToProps = {
+  setAssetStatMap,
+};
+
+export default connect(stateToProps, actionsToProps)(Details);
