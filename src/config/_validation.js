@@ -28,5 +28,17 @@ export const ValidateInputNumber = (value, max, key, dollarValue) => {
     return new Error("Input is greater than max repayable");
   }
 
+  if (key === "maxBorrow" && Number(max) < Number(value)) {
+    return new Error("Can't borrow more than available");
+  }
+
+  return new Error("");
+};
+
+export const ValidateMaxBorrow = (value, max, key) => {
+  if (key === "maxBorrow" && Number(max) < Number(value)) {
+    return new Error("Can't borrow more than available");
+  }
+
   return new Error("");
 };
