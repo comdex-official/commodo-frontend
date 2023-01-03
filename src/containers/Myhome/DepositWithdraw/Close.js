@@ -113,7 +113,7 @@ const CloseTab = ({
             lendId={lendPosition?.lendingId}
             denom={lendPosition?.amountIn?.denom}
             assetDenomMap={assetDenomMap}
-            tooltipText={isBorrowPositionOpen ? "Borrowing position open" : ""}
+            tooltipText={isBorrowPositionOpen ? "Borrow position open" : ""}
           />
         </div>
       </div>
