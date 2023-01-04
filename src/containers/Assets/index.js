@@ -65,7 +65,7 @@ const Assets = ({
       width: 150,
       render: (tokens) => (
         <>
-          <p>{commaSeparator(Number(tokens || 0))}</p>
+          {commaSeparator(Number(tokens || 0))}
         </>
       ),
     },
