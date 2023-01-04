@@ -52,18 +52,18 @@ const InterestAndReward = ({ lang, address, updateDetails }) => {
   };
 
   return (
-    <Tooltip title="Fetch Interest accrued for open positions">
-      <Button
-        onClick={() => handleClick()}
-        type="primary btn-filled"
-        loading={inProgress}
-        disabled={inProgress}
-        className="btn-outline caclulate-btn"
-        size="small"
-      >
+    <Button
+      onClick={() => handleClick()}
+      type="primary btn-filled"
+      loading={inProgress}
+      disabled={inProgress}
+      className="btn-outline caclulate-btn"
+      size="small"
+    >
+      <Tooltip title="Fetch Interest accrued for open positions">
         Fetch Interest
-      </Button>
-    </Tooltip>
+      </Tooltip>
+    </Button>
   );
 };
 

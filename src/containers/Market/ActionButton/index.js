@@ -14,7 +14,7 @@ export const ActionButton = ({ name, path }) => {
         })
       }
     >
-      {name || "action"}
+      {name || "Action"}
     </Button>
   );
 };
