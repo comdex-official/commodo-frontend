@@ -1,6 +1,18 @@
 import { combineReducers } from "redux";
 import {
-    ASSET_RATES_STATES_SET, PAIR_SET, POOLS_LIQUIDITY_LIST_SET, POOLS_SET, POOL_BALANCE_FETCH_IN_PROGRESS, POOL_DEPOSITS_SET, POOL_LENDS_SET, POOL_SET, POOL_TOKEN_SUPPLY_SET, SECOND_RESERVE_COIN_DENOM_SET, SPOT_PRICE_SET, USER_BORROWS_SET, USER_LENDS_SET
+  ASSET_RATES_STATES_SET,
+  PAIR_SET,
+  POOLS_LIQUIDITY_LIST_SET,
+  POOLS_SET,
+  POOL_BALANCE_FETCH_IN_PROGRESS,
+  POOL_DEPOSITS_SET,
+  POOL_LENDS_SET,
+  POOL_SET,
+  POOL_TOKEN_SUPPLY_SET,
+  SECOND_RESERVE_COIN_DENOM_SET,
+  SPOT_PRICE_SET,
+  USER_BORROWS_SET,
+  USER_LENDS_SET
 } from "../constants/lend";
 
 const pool = (
@@ -129,6 +141,14 @@ const userBorrows = (state = [], action) => {
   return state;
 };
 
+const borrowToLendMap = (state = {}, action) => {
+  if (action.type === USER_BORROWS_SET) {
+    return action.borrowToLendMap;
+  }
+
+  return state;
+};
+
 const pair = (state = {}, action) => {
   if (action.type === PAIR_SET) {
     return action?.value;
@@ -149,4 +169,5 @@ export default combineReducers({
   poolLends,
   userBorrows,
   pair,
+  borrowToLendMap
 });

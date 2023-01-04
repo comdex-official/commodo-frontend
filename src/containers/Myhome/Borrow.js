@@ -185,7 +185,7 @@ const Borrow = ({
       <Row>
         <Col>
           <div className="commodo-card bg-none">
-            <div className="d-flex w-100 align-items-center justify-content-beetwen">
+            <div className="d-flex w-100 align-items-center justify-content-between">
               <div className="card-header text-left">MY Borrowed AssetS</div>
               <InterestAndReward
                 lang={lang}

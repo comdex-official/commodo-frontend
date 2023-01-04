@@ -8,7 +8,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon,
+  TooltipIcon
 } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
@@ -22,12 +22,12 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice,
+  marketPrice
 } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "./ActionButton";
@@ -87,6 +87,8 @@ const RepayTab = ({
           value,
           assetDenomMap[borrowPosition?.amountOut?.denom]?.decimals
         ),
+        availableBalance,
+        "repay",
         updatedAmountOut
       )
     );
