@@ -524,6 +524,10 @@ button.ant-switch {
 
         .ant-table-cell-scrollbar {
           box-shadow: none;
+          background: none !important;
+          &::before {
+            display: none !important;
+          }
         }
 
         .ant-table-thead {
@@ -540,6 +544,16 @@ button.ant-switch {
                 color: @text-color-light;
                 font-weight: 400;
               }
+            }
+
+            .ant-table-cell{
+              background: none !important;
+              border: 0 !important;
+            }
+
+            td {
+              background: none !important;
+              border: 0 !important;
             }
 
             th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
