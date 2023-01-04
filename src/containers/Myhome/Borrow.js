@@ -87,7 +87,7 @@ const Borrow = ({
       width: 250,
     },
     {
-      title: "action",
+      title: "Action",
       dataIndex: "action",
       key: "action",
       align: "right",
