@@ -335,3 +335,14 @@ export const queryTotalBorrowAndDeposit = (callback) => {
       callback(error?.message);
     });
 };
+
+export const queryBorrowDepositHistory = (range, callback) => {
+  axios
+    .get(`${API_URL}/api/v2/commodo/lb/history/${range}`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
