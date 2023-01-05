@@ -204,7 +204,7 @@ const Assets = ({
     (item) => item.denom === comdex?.coinMinimalDenom
   )[0];
   const nativeCoinValue = getPrice(nativeCoin?.denom) * nativeCoin?.amount;
-  
+
   const cmstCoin = balances.filter(
     (item) => item.denom === cmst?.coinMinimalDenom
   )[0];
@@ -305,17 +305,16 @@ const Assets = ({
         <Col>
           <div className="asset-wrapper">
             <div className="commodo-card assets-upper">
-              <div className="assets-upper-left">
-                Asset
-              </div>
+              <div className="assets-upper-left">Asset</div>
               <div className="assets-upper-right">
                 <div className="mr-2">
-                  Total Asset Balance 
+                  Total Asset Balance
                   {/* <TooltipIcon text="Value of total Asset" /> */}
                 </div>
                 {commaSeparator(
                   Number(assetBalance || 0).toFixed(DOLLAR_DECIMALS)
-                )}
+                )}{" "}
+                USD
               </div>
             </div>
             <div className="commodo-card py-3 bg-none">
