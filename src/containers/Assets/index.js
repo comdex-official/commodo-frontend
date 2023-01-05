@@ -1,4 +1,4 @@
-import { Button, List, Table } from "antd";
+import { Button, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import { connect, useDispatch } from "react-redux";
@@ -281,9 +281,9 @@ const Assets = ({
           <>
             <div className="assets-with-icon">
               <div className="assets-icon">
-                <SvgIcon name={iconNameFromDenom(item?.coinMinimalDenom)} />
+                <SvgIcon name={iconNameFromDenom(item?.ibcDenomHash)} />
               </div>{" "}
-              {denomConversion(item?.coinMinimalDenom)}{" "}
+              {denomConversion(item?.ibcDenomHash)}{" "}
             </div>
           </>
         ),
