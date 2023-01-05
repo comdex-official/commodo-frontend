@@ -315,7 +315,7 @@ const Assets = ({
                 </div>
                 {commaSeparator(
                   Number(assetBalance || 0).toFixed(DOLLAR_DECIMALS)
-                )}
+                )} USD
               </div>
             </div>
             <div className="commodo-card py-3 bg-none">
