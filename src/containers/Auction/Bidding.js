@@ -8,7 +8,7 @@ import { Col, NoDataIcon, Row, SvgIcon } from "../../components/common";
 import TooltipIcon from "../../components/common/TooltipIcon/index";
 import {
   DEFAULT_BIDDING_PAGE_SIZE,
-  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_NUMBER
 } from "../../constants/common";
 import { queryDutchBiddingList } from "../../services/auction";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
@@ -81,6 +81,14 @@ export const Bidding = ({
     },
   ];
 
+  const auctionStatusConverter = (status) => {
+    if (status === "inactive") {
+      return "Completed";
+    } else {
+      return status;
+    }
+  };
+
   const tableBiddingData =
     biddings?.length > 0 &&
     biddings?.map((item, index) => {
@@ -126,11 +134,11 @@ export const Bidding = ({
               item?.auctionStatus === "active"
                 ? "biddin-btn bid-btn-success"
                 : item?.auctionStatus === "inactive"
-                  ? "biddin-btn bid-btn-rejected"
-                  : ""
+                ? "biddin-btn bid-btn-completed"
+                : ""
             }
           >
-            {item?.auctionStatus}
+            {auctionStatusConverter(item?.auctionStatus)}
           </Button>
         ),
         action: (
@@ -140,10 +148,10 @@ export const Bidding = ({
               item?.biddingStatus === "placed"
                 ? "biddin-btn bid-btn-placed"
                 : item?.biddingStatus === "success"
-                  ? "biddin-btn bid-btn-success"
-                  : item?.biddingStatus === "rejected"
-                    ? "biddin-btn bid-btn-rejected"
-                    : ""
+                ? "biddin-btn bid-btn-success"
+                : item?.biddingStatus === "rejected"
+                ? "biddin-btn bid-btn-rejected"
+                : ""
             }
           >
             {item?.biddingStatus}
@@ -152,7 +160,14 @@ export const Bidding = ({
       };
     });
 
-  const fetchBiddings = (address, offset, limit, countTotal, reverse, history) => {
+  const fetchBiddings = (
+    address,
+    offset,
+    limit,
+    countTotal,
+    reverse,
+    history
+  ) => {
     setInProgress(true);
 
     queryDutchBiddingList(
@@ -192,7 +207,14 @@ export const Bidding = ({
   };
 
   useEffect(() => {
-    fetchBiddings(address, (pageNumber - 1) * pageSize, pageSize, true, true, false);
+    fetchBiddings(
+      address,
+      (pageNumber - 1) * pageSize,
+      pageSize,
+      true,
+      true,
+      false
+    );
   }, [address, refreshBalance]);
 
   return (
