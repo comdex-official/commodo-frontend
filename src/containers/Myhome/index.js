@@ -3,6 +3,7 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useLocation } from "react-router";
+import { setBalanceRefresh } from "../../actions/account";
 import { setUserBorrows, setUserLends } from "../../actions/lend";
 import { Col, Row, TooltipIcon } from "../../components/common";
 import { DOLLAR_DECIMALS } from "../../constants/common";
@@ -10,7 +11,7 @@ import {
   queryLendPair,
   queryLendPool,
   queryUserBorrows,
-  queryUserLends,
+  queryUserLends
 } from "../../services/lend/query";
 import { amountConversion, commaSeparatorWithRounding } from "../../utils/coin";
 import { decimalConversion, marketPrice } from "../../utils/number";
@@ -30,6 +31,8 @@ const Myhome = ({
   assetRatesStatsMap,
   assetMap,
   assetDenomMap,
+  setBalanceRefresh,
+  refreshBalance,
 }) => {
   const [activeKey, setActiveKey] = useState("1");
   const [lendsInProgress, setLendsInProgress] = useState(false);
@@ -45,6 +48,8 @@ const Myhome = ({
     if (type && type === "borrow") {
       setActiveKey("2");
     }
+
+    setBalanceRefresh(refreshBalance + 1);
   }, []);
 
   useEffect(() => {
@@ -375,6 +380,7 @@ const Myhome = ({
 
 Myhome.propTypes = {
   lang: PropTypes.string.isRequired,
+  refreshBalance: PropTypes.number.isRequired,
   setUserBorrows: PropTypes.func.isRequired,
   setUserLends: PropTypes.func.isRequired,
   address: PropTypes.string,
@@ -427,12 +433,14 @@ const stateToProps = (state) => {
     assetRatesStatsMap: state.lend.assetRatesStats.map,
     assetMap: state.asset._.map,
     assetDenomMap: state.asset._.assetDenomMap,
+    refreshBalance: state.account.refreshBalance,
   };
 };
 
 const actionsToProps = {
   setUserBorrows,
   setUserLends,
+  setBalanceRefresh,
 };
 
 export default connect(stateToProps, actionsToProps)(Myhome);
