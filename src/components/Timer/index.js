@@ -5,7 +5,7 @@ const Timer = ({ expiryTimestamp }) => {
 
   return (
     <div>
-      <span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span>
+      <span>{hours}</span> H <span>{minutes}</span> m <span>{seconds}</span> s
     </div>
   );
 };
