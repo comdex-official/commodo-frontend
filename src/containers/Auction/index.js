@@ -18,11 +18,7 @@ import {
 } from "../../constants/common";
 import { queryDutchAuctionList } from "../../services/auction";
 import { queryAuctionMippingIdParams } from "../../services/lend/query";
-import {
-  amountConversionWithComma,
-  commaSeparatorWithRounding,
-  denomConversion
-} from "../../utils/coin";
+import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
@@ -216,15 +212,12 @@ const Auction = ({
             end_time: moment(item && item.endTime).format("MMM DD, YYYY HH:mm"),
             oracle_price:
               "$" +
-              commaSeparatorWithRounding(
-                Number(
-                  marketPrice(
-                    markets,
-                    item?.outflowTokenCurrentAmount?.denom,
-                    assetDenomMap[item?.outflowTokenCurrentAmount?.denom]
-                      ?.decimals
-                  ) || 0
-                ).toFixed(DOLLAR_DECIMALS)
+              Number(
+                marketPrice(
+                  markets,
+                  item?.outflowTokenCurrentAmount?.denom,
+                  assetDenomMap[item?.outflowTokenCurrentAmount?.denom]?.id
+                ) || 0
               ),
             current_price: item,
             action: item,
