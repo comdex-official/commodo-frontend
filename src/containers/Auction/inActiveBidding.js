@@ -130,7 +130,7 @@ export const InActiveBidding = ({ address, refreshBalance, assetDenomMap }) => {
               item?.auctionStatus === "active"
                 ? "biddin-btn bid-btn-success"
                 : item?.auctionStatus === "inactive"
-                ? "biddin-btn bid-btn-rejected"
+                ? "biddin-btn bid-btn-completed"
                 : ""
             }
           >
