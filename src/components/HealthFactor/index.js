@@ -75,7 +75,7 @@ const HealthFactor = ({
         });
       });
     }
-  }, [markets, borrow]);
+  }, [markets, borrow, assetRatesStatsMap, assetDenomMap]);
 
   useEffect(() => {
     if (pair?.id && Number(inAmount) && Number(outAmount)) {

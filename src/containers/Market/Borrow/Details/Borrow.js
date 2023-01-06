@@ -8,7 +8,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon,
+  TooltipIcon
 } from "../../../../components/common";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
 import Details from "../../../../components/common/Asset/Details";
@@ -17,29 +17,32 @@ import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
 import HealthFactor from "../../../../components/HealthFactor";
 import { assetTransitTypeId } from "../../../../config/network";
-import { ValidateInputNumber } from "../../../../config/_validation";
+import {
+  ValidateInputNumber,
+  ValidateMaxBorrow
+} from "../../../../config/_validation";
 import {
   DOLLAR_DECIMALS,
   MAX_LTV_DEDUCTION,
-  UC_DENOM,
+  UC_DENOM
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
   queryAssetPairs,
   queryLendPair,
-  queryLendPool,
+  queryLendPool
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount,
+  getAmount
 } from "../../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice,
+  marketPrice
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
@@ -57,6 +60,7 @@ const BorrowTab = ({
   poolLendPositions,
   assetRatesStatsMap,
   assetDenomMap,
+  assetStatMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [lend, setLend] = useState();
@@ -65,6 +69,7 @@ const BorrowTab = ({
   const [outAmount, setOutAmount] = useState();
   const [validationError, setValidationError] = useState();
   const [borrowValidationError, setBorrowValidationError] = useState();
+  const [maxBorrowValidationError, setMaxBorrowValidationError] = useState();
   const [inProgress, setInProgress] = useState(false);
   const [extendedPairs, setExtendedPairs] = useState({});
   const [assetToPool, setAssetToPool] = useState({});
@@ -231,6 +236,7 @@ const BorrowTab = ({
     setPair(selectedPair);
     setOutAmount(0);
     setBorrowValidationError();
+    setMaxBorrowValidationError();
   };
 
   const handleInAmountChange = (value) => {
@@ -255,6 +261,7 @@ const BorrowTab = ({
       .trim();
 
     setOutAmount(value);
+    checkMaxBorrow(value);
     setBorrowValidationError(
       ValidateInputNumber(
         getAmount(value, assetDenomMap[borrowAssetDenom]?.decimals),
@@ -272,6 +279,24 @@ const BorrowTab = ({
     );
   };
 
+  const checkMaxBorrow = (value) => {
+    setMaxBorrowValidationError(
+      ValidateMaxBorrow(
+        value,
+        Number(
+          amountConversion(
+            marketPrice(
+              markets,
+              borrowAssetDenom,
+              assetDenomMap[borrowAssetDenom]?.id
+            ) * assetStatMap[assetDenomMap[borrowAssetDenom]?.id]?.amount || 0,
+            assetDenomMap[borrowAssetDenom]?.decimals
+          )
+        ),
+        "maxBorrow"
+      )
+    );
+  };
   const handleClick = () => {
     setInProgress(true);
 
@@ -343,12 +368,14 @@ const BorrowTab = ({
   };
 
   const handleBorrowMaxClick = () => {
-    return handleOutAmountChange(
-      amountConversion(
-        borrowableBalance,
-        assetDenomMap[borrowAssetDenom]?.decimals
-      )
-    );
+    if (borrowableBalance > 0) {
+      return handleOutAmountChange(
+        amountConversion(
+          borrowableBalance,
+          assetDenomMap[borrowAssetDenom]?.decimals
+        )
+      );
+    }
   };
 
   const borrowList =
@@ -687,7 +714,11 @@ const BorrowTab = ({
                       onChange={(event) =>
                         handleOutAmountChange(event.target.value)
                       }
-                      validationError={borrowValidationError}
+                      validationError={
+                        borrowValidationError?.message
+                          ? borrowValidationError
+                          : maxBorrowValidationError
+                      }
                     />{" "}
                   </div>
                   <small>
@@ -873,6 +904,7 @@ const BorrowTab = ({
                   validationError?.message ||
                   collateralAssetDenom === borrowAssetDenom ||
                   borrowValidationError?.message ||
+                  maxBorrowValidationError?.message ||
                   inProgress ||
                   !lend?.lendingId ||
                   !pair?.id
@@ -971,6 +1003,7 @@ BorrowTab.propTypes = {
   address: PropTypes.string,
   assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
+  assetStatMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
   markets: PropTypes.object,
   pool: PropTypes.shape({
@@ -1013,6 +1046,7 @@ const stateToProps = (state) => {
     poolLendPositions: state.lend.poolLends,
     assetRatesStatsMap: state.lend.assetRatesStats.map,
     assetDenomMap: state.asset._.assetDenomMap,
+    assetStatMap: state.asset.assetStatMap,
   };
 };
 

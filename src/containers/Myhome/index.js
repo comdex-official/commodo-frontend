@@ -10,7 +10,7 @@ import {
   queryLendPair,
   queryLendPool,
   queryUserBorrows,
-  queryUserLends
+  queryUserLends,
 } from "../../services/lend/query";
 import { amountConversion, commaSeparatorWithRounding } from "../../utils/coin";
 import { decimalConversion, marketPrice } from "../../utils/number";
@@ -172,7 +172,8 @@ const Myhome = ({
   };
 
   const calculateTotalBorrowLimit = () => {
-    const values =
+    // calculate borrow limit of all borrow positions.
+    const borrowValues =
       userBorrowList?.length > 0
         ? userBorrowList.map((item) => {
             return (
@@ -212,12 +213,13 @@ const Myhome = ({
             );
           })
         : [];
-    return values.reduce((a, b) => a + b, 0);
-  };
 
-  const calculateTotalLendBorrowLimit = () => {
-    let borrowsWithLend = Object?.keys(borrowToLend);
-    const values =
+    let borrowValue = borrowValues.reduce((a, b) => a + b, 0);
+
+    // calculate borrow limit value only lend positions which don't have borrow position.
+    let borrowsWithLend = Object?.values(borrowToLend);
+
+    const lendValues =
       userLendList?.length > 0 && borrowsWithLend?.length
         ? userLendList.map((item) => {
             if (!borrowsWithLend.includes(item?.lendingId?.toNumber()))
@@ -236,15 +238,21 @@ const Myhome = ({
                   decimalConversion(assetRatesStatsMap[item?.assetId]?.ltv)
                 )
               );
+            else {
+              return 0;
+            }
           })
         : [];
-    return values.reduce((a, b) => a + b, 0);
+
+    let lendValue = lendValues.reduce((a, b) => a + b, 0);
+
+    // borrow limit = sum of all collateral deposited * its LTV of all borrow positions and lends positions without borrow postion
+
+    return Number(borrowValue || 0) + Number(lendValue || 0);
   };
 
   const totalBorrow = Number(calculateTotalBorrow());
-  const borrowLimit =
-    Number(calculateTotalBorrowLimit()) +
-    Number(calculateTotalLendBorrowLimit());
+  const borrowLimit = Number(calculateTotalBorrowLimit());
   const currentLimit = (
     (borrowLimit ? totalBorrow / borrowLimit : 0) * 100
   ).toFixed(DOLLAR_DECIMALS);

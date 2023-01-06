@@ -1,4 +1,4 @@
-import { Button, List, Table } from "antd";
+import { Button, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import { connect, useDispatch } from "react-redux";
@@ -204,7 +204,7 @@ const Assets = ({
     (item) => item.denom === comdex?.coinMinimalDenom
   )[0];
   const nativeCoinValue = getPrice(nativeCoin?.denom) * nativeCoin?.amount;
-  
+
   const cmstCoin = balances.filter(
     (item) => item.denom === cmst?.coinMinimalDenom
   )[0];
@@ -281,9 +281,9 @@ const Assets = ({
           <>
             <div className="assets-with-icon">
               <div className="assets-icon">
-                <SvgIcon name={iconNameFromDenom(item?.coinMinimalDenom)} />
+                <SvgIcon name={iconNameFromDenom(item?.ibcDenomHash)} />
               </div>{" "}
-              {denomConversion(item?.coinMinimalDenom)}{" "}
+              {denomConversion(item?.ibcDenomHash)}{" "}
             </div>
           </>
         ),
@@ -304,28 +304,17 @@ const Assets = ({
       <Row>
         <Col>
           <div className="asset-wrapper">
-            <div className="commodo-card myhome-upper d-block">
-              <div className="myhome-upper-left w-100">
-                <List
-                  grid={{
-                    gutter: 16,
-                    xs: 1,
-                    sm: 2,
-                    md: 1,
-                    lg: 1,
-                    xl: 1,
-                    xxl: 1,
-                  }}
-                  dataSource={data}
-                  renderItem={(item) => (
-                    <List.Item>
-                      <div>
-                        <p>{item.title}</p>
-                        <h3>{item.counts}</h3>
-                      </div>
-                    </List.Item>
-                  )}
-                />
+            <div className="commodo-card assets-upper">
+              <div className="assets-upper-left">Asset</div>
+              <div className="assets-upper-right">
+                <div className="mr-2">
+                  Total Asset Balance
+                  {/* <TooltipIcon text="Value of total Asset" /> */}
+                </div>
+                {commaSeparator(
+                  Number(assetBalance || 0).toFixed(DOLLAR_DECIMALS)
+                )}{" "}
+                USD
               </div>
             </div>
             <div className="commodo-card py-3 bg-none">

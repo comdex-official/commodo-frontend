@@ -1,8 +1,39 @@
 import { sha256, stringToPath } from "@cosmjs/crypto";
+import AssetList from "../config/ibc_assets.json";
 import { comdex, ibcDenoms } from "../config/network";
 import { getExponent } from "./number";
 
 const encoding = require("@cosmjs/encoding");
+
+const getIbcDenomToDenomMap = () => {
+  let myMap = {};
+
+  for (let i = 0; i < AssetList?.tokens?.length; i++) {
+    if (myMap[AssetList?.tokens[i].ibcDenomHash] === undefined) {
+      myMap[AssetList?.tokens[i].ibcDenomHash] =
+        AssetList?.tokens[i]?.coinMinimalDenom;
+    }
+  }
+
+  return myMap;
+};
+
+let ibcDenomToDenomMap = getIbcDenomToDenomMap();
+
+const getIbcDenomToCoinGeckoIdMap = () => {
+  let myMap = {};
+
+  for (let i = 0; i < AssetList?.tokens?.length; i++) {
+    if (myMap[AssetList?.tokens[i].ibcDenomHash] === undefined) {
+      myMap[AssetList?.tokens[i].ibcDenomHash] =
+        AssetList?.tokens[i]?.coinGeckoId;
+    }
+  }
+
+  return myMap;
+};
+
+let ibcDenomToCoingeckoIdMap = getIbcDenomToCoinGeckoIdMap();
 
 export const decode = (hash) =>
   decodeURIComponent(hash.replace("#", "")) || undefined;
@@ -10,140 +41,27 @@ export const decode = (hash) =>
 export const generateHash = (txBytes) =>
   encoding.toHex(sha256(txBytes)).toUpperCase();
 
-export const ibcDenomToDenom = (key) => {
-  switch (key) {
-    case ibcDenoms["uatom"]:
-      return "uatom";
-    case ibcDenoms["uosmo"]:
-      return "uosmo";
-    case ibcDenoms["uusdc"]:
-      return "USDC";
-    case ibcDenoms["weth-wei"]:
-      return "WETH";
-    case ibcDenoms["ujuno"]:
-      return "ujuno";
-    case ibcDenoms["wbtc-satoshi"]:
-      return "wbtc-satoshi";
-    case ibcDenoms["stuatom"]:
-      return "stuatom";
-    default:
-      return "";
-  }
+export const ibcDenomToDenom = (key) => ibcDenomToDenomMap?.[key];
+
+export const denomToCoingeckoTokenId = (key) => ibcDenomToCoingeckoIdMap?.[key];
+
+const iconMap = {
+  ucmdx: "cmdx-icon",
+  ucmst: "cmst-icon",
+  uharbor: "harbor-icon",
+  // taking coinMinimalDenom to match ibc denom and fetch icon.
+  [ibcDenoms["uatom"]]: "atom-icon",
+  [ibcDenoms["uosmo"]]: "osmosis-icon",
+  [ibcDenoms["uusdc"]]: "usdc-icon",
+  [ibcDenoms["weth-wei"]]: "weth-icon",
+  [ibcDenoms["ujuno"]]: "juno-icon",
+  [ibcDenoms["wbtc-satoshi"]]: "wbtc-icon",
+  [ibcDenoms["stuatom"]]: "statom-icon",
 };
 
-export const symbolToDenom = (key) => {
-  switch (key) {
-    case "atom":
-    case ibcDenoms["atom"]:
-      return "uatom";
-    case "xprt":
-    case ibcDenoms["xprt"]:
-      return "uxprt";
-    case "osmo":
-    case ibcDenoms["osmo"]:
-      return "uosmo";
-    case "cmdx":
-      return "ucmdx";
-    case "cmst":
-      return "ucmst";
-    case "akt":
-      return "uakt";
-    case "dvpn":
-      return "udvpn";
-    case "harbor":
-      return "uharbor";
-    default:
-      return "";
-  }
-};
-
-export const denomToCoingeckoTokenId = (key) => {
-  switch (key) {
-    case "uatom":
-    case ibcDenoms["uatom"]:
-      return "cosmos";
-    case "uosmo":
-    case ibcDenoms["uosmo"]:
-      return "osmosis";
-    case "ucmdx":
-      return "comdex";
-    case "uusdc":
-    case ibcDenoms["uusdc"]:
-      return "axlusdc";
-    case ibcDenoms["weth-wei"]:
-    case "weth-wei":
-    case "uweth":
-    case ibcDenoms["weth-wei"]:
-      return "axlweth";
-    case ibcDenoms["ujuno"]:
-      return "juno-network";
-    case "wbtc-satoshi":
-    case ibcDenoms["wbtc-satoshi"]:
-      return "wrapped-bitcoin";
-    case "stuatom":
-    case ibcDenoms["stuatom"]:
-      return "stride-staked-atom";
-    default:
-      return "";
-  }
-};
-
-export const denomToSymbol = (key) => {
-  switch (key) {
-    case "ucmst":
-      return "CMST";
-    case "uharbor":
-      return "HARBOR";
-    case "uatom":
-    case ibcDenoms["uatom"]:
-      return "ATOM";
-    case "uosmo":
-    case ibcDenoms["uosmo"]:
-      return "OSMO";
-    case "ucmdx":
-      return "CMDX";
-    default:
-      return "";
-  }
-};
-
-export const iconNameFromDenom = (key) => {
-  switch (key) {
-    case "ucgold":
-      return "gold-icon";
-    case "ucsilver":
-      return "silver-icon";
-    case "ucoil":
-      return "crude-oil";
-    case "uatom":
-    case ibcDenoms["uatom"]:
-      return "atom-icon";
-    case "ucmdx":
-      return "cmdx-icon";
-    case "ucmst":
-      return "cmst-icon";
-    case "uharbor":
-      return "harbor-icon";
-    case "uosmo":
-    case ibcDenoms["uosmo"]:
-      return "osmosis-icon";
-    case "uusdc":
-    case ibcDenoms["uusdc"]:
-      return "usdc-icon";
-    case "weth-wei":
-    case ibcDenoms["weth-wei"]:
-      return "weth-icon";
-    case "ujuno":
-    case ibcDenoms["ujuno"]:
-      return "juno-icon";
-    case "stuatom":
-    case ibcDenoms["stuatom"]:
-      return "statom-icon";
-    case "wbtc-satoshi":
-    case ibcDenoms["wbtc-satoshi"]:
-      return "wbtc-icon";
-    default:
-      return "";
+export const iconNameFromDenom = (denom) => {
+  if (denom) {
+    return iconMap[denom];
   }
 };
 
@@ -170,7 +88,7 @@ export const toDecimals = (value, decimal) =>
         value.indexOf("."),
         Number(decimal)
           ? Number(getExponent(decimal)) + 1
-          : comdex?.coinDecimals
+          : comdex?.coinDecimals + 1 // characters from start to end (exclusive) that's why we add 1 here.
       )
     : value;
 

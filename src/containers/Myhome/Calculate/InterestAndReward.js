@@ -1,4 +1,4 @@
-import { Button, message } from "antd";
+import { Button, message, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import { useState } from "react";
 import Snack from "../../../components/common/Snack";
@@ -60,7 +60,9 @@ const InterestAndReward = ({ lang, address, updateDetails }) => {
       className="btn-outline caclulate-btn"
       size="small"
     >
-      Fetch Interest
+      <Tooltip title="Fetch Interest accrued for open positions">
+        Fetch Interest
+      </Tooltip>
     </Button>
   );
 };

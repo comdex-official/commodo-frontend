@@ -87,6 +87,8 @@ const RepayTab = ({
           value,
           assetDenomMap[borrowPosition?.amountOut?.denom]?.decimals
         ),
+        availableBalance,
+        "repay",
         updatedAmountOut
       )
     );
@@ -245,7 +247,7 @@ const RepayTab = ({
                   inAmount={borrowPosition?.amountIn?.amount}
                   outAmount={
                     amount
-                      ? Number(updatedAmountOut) -
+                      ? Number(updatedAmountOut)?.toFixed(0) -
                         Number(
                           getAmount(
                             amount,
@@ -253,7 +255,7 @@ const RepayTab = ({
                               ?.decimals
                           )
                         )
-                      : updatedAmountOut
+                      : Number(updatedAmountOut)?.toFixed(0)
                   }
                 />{" "}
               </Col>

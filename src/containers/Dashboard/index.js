@@ -1,6 +1,7 @@
 import { Button, Skeleton } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import moment from "moment";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -16,6 +17,7 @@ import {
 } from "../../constants/common";
 import { CSWAP_URL, REWARDS_URL } from "../../constants/url";
 import {
+  queryBorrowDepositHistory,
   queryTopAssets,
   queryTotalBorrowAndDeposit,
   queryTotalValueLocked
@@ -36,11 +38,14 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
   const [totalDeposited, setTotalDeposited] = useState(0);
   const [totalDepositBorrowInProgress, setTotalDepositBorrowInProgress] =
     useState(false);
+  const [graphDataInProgress, setgraphDataInProgress] = useState(false);
+  const [graphData, setgraphData] = useState([]);
 
   useEffect(() => {
     setTopAssetsInProgress(true);
     setTotalValueLockedInProgress(true);
     setTotalDepositBorrowInProgress(true);
+    setgraphDataInProgress(true);
 
     queryTopAssets((error, result) => {
       setTopAssetsInProgress(false);
@@ -69,6 +74,17 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
 
       setTotalDeposited(result?.data?.total_deposit);
       setTotalBorrowed(result?.data?.total_borrowed);
+    });
+
+    //24hr: 86400
+    queryBorrowDepositHistory(86400, (error, result) => {
+      if (error) {
+        return;
+      }
+
+      if (result?.data?.length) {
+        setgraphData(result?.data);
+      }
     });
   }, []);
 
@@ -103,6 +119,21 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
         },
       },
     },
+    tooltip: {
+      useHTML: true,
+      formatter: function () {
+        return (
+          '<div class="chart-value-tooltip">' +
+          "$" +
+          Number(this.y)?.toFixed(DOLLAR_DECIMALS) +
+          "<br />" +
+          '<small style="font-size: 10px;">' +
+          this.key +
+          "</small>" +
+          "</div>"
+        );
+      },
+    },
     series: [
       {
         states: {
@@ -131,8 +162,8 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
     chart: {
       type: "spline",
       backgroundColor: null,
-      height: 150,
-      marginBottom: 30,
+      height: 200,
+      marginBottom: 60,
     },
     credits: {
       enabled: false,
@@ -163,25 +194,36 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
       },
       gridLineWidth: 1,
       gridLineColor: isDarkMode ? "#E2F7E5" : "#999",
-      categories: [
-        "JAN",
-        "FEB",
-        "MAR",
-        "APR",
-        "MAY",
-        "JUN",
-        "JUL",
-        "AUG",
-        "SEP",
-        "OCT",
-        "NOV",
-        "DEC",
-      ],
+      categories:
+        graphData && graphData.length > 0
+          ? graphData.map((item) =>
+              moment(item?.timestamp).format("MMM DD, HH:mm")
+            )
+          : [],
     },
+    tooltip: {
+      useHTML: true,
+      formatter: function () {
+        return (
+          '<div class="chart-value-tooltip">' +
+          "$" +
+          Number(this.y)?.toFixed(DOLLAR_DECIMALS) +
+          "<br />" +
+          '<small style="font-size: 10px;">' +
+          moment(this.x).format("MMM DD, HH:mm") +
+          "</small>" +
+          "</div>"
+        );
+      },
+    },
+
     series: [
       {
         name: "Deposited",
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        data:
+          graphData && graphData.length > 0
+            ? graphData.map((item) => item?.total_deposit)
+            : [],
         lineWidth: 2,
         lineColor: "#52B788",
         marker: false,
@@ -189,7 +231,10 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
       },
       {
         name: "Borrowed",
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        data:
+          graphData && graphData.length > 0
+            ? graphData.map((item) => item?.total_borrow)
+            : [],
         lineWidth: 2,
         lineColor: "#D8F3DC",
         marker: false,

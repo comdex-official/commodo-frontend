@@ -76,7 +76,7 @@ const Deposit = ({
       className: "rewards-column",
     },
     {
-      title: "",
+      title: "Action",
       dataIndex: "action",
       key: "action",
       align: "right",
@@ -152,7 +152,7 @@ const Deposit = ({
       <Row>
         <Col>
           <div className="commodo-card bg-none">
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center justify-content-between">
               <div className="card-header text-left">MY Deposited Assets</div>
               <InterestAndReward
                 lang={lang}

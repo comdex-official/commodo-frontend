@@ -2,14 +2,17 @@ import { List, message } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { setAssetStatMap } from "../../../actions/asset";
 import { ibcDenoms } from "../../../config/network";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
+  queryAssetPoolFundBalance,
   queryModuleBalance,
   QueryPoolAssetLBMapping
 } from "../../../services/lend/query";
 import {
-  amountConversion, commaSeparatorWithRounding,
+  amountConversion,
+  commaSeparatorWithRounding,
   denomConversion
 } from "../../../utils/coin";
 import {
@@ -28,9 +31,11 @@ const Details = ({
   refreshBalance,
   parent,
   assetDenomMap,
+  setAssetStatMap,
 }) => {
   const [stats, setStats] = useState();
   const [moduleBalanceStats, setModuleBalanceStats] = useState([]);
+  const [assetPoolFunds, setAssetPoolFunds] = useState({});
 
   useEffect(() => {
     if (asset?.id && poolId) {
@@ -41,6 +46,15 @@ const Details = ({
         }
 
         setStats(result?.PoolAssetLBMapping);
+      });
+
+      queryAssetPoolFundBalance(asset?.id, poolId, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setAssetPoolFunds(result?.amount);
       });
     } else if (stats?.poolId) {
       setStats();
@@ -64,6 +78,10 @@ const Details = ({
     (item) => item?.assetId?.toNumber() === asset?.id?.toNumber()
   )[0];
 
+  useEffect(() => {
+    setAssetStatMap(asset?.id, assetStats?.balance);
+  }, [assetStats]);
+
   let data = [
     {
       title: parent === "lend" ? "Deposited" : "Borrowed",
@@ -74,7 +92,20 @@ const Details = ({
           ) *
             marketPrice(markets, asset?.denom, assetDenomMap[asset?.denom]?.id),
           assetDenomMap[asset?.denom]?.decimals
-        ),
+        ) +
+          (parent === "lend"
+            ? Number(
+                amountConversion(
+                  assetPoolFunds?.amount,
+                  assetDenomMap[assetPoolFunds?.denom]?.decimals
+                ) *
+                  marketPrice(
+                    markets,
+                    assetPoolFunds?.denom,
+                    assetDenomMap[assetPoolFunds?.denom]?.id
+                  )
+              )
+            : 0),
         DOLLAR_DECIMALS
       )}`,
       tooltipText:
@@ -83,13 +114,15 @@ const Details = ({
     {
       title: "Available",
       counts: `$${commaSeparatorWithRounding(
-        amountConversion(
-          marketPrice(
-            markets,
-            assetStats?.balance?.denom,
-            assetDenomMap[assetStats?.balance?.denom]?.id
-          ) * assetStats?.balance.amount || 0,
-          assetDenomMap[assetStats?.balance?.denom]?.decimals
+        Number(
+          amountConversion(
+            marketPrice(
+              markets,
+              assetStats?.balance?.denom,
+              assetDenomMap[assetStats?.balance?.denom]?.id
+            ) * assetStats?.balance.amount || 0,
+            assetDenomMap[assetStats?.balance?.denom]?.decimals
+          )
         ),
         DOLLAR_DECIMALS
       )}`,
@@ -180,6 +213,7 @@ const Details = ({
 
 Details.propTypes = {
   refreshBalance: PropTypes.number.isRequired,
+  setAssetStatMap: PropTypes.func.isRequired,
   asset: PropTypes.shape({
     denom: PropTypes.string,
   }),
@@ -199,4 +233,8 @@ const stateToProps = (state) => {
   };
 };
 
-export default connect(stateToProps)(Details);
+const actionsToProps = {
+  setAssetStatMap,
+};
+
+export default connect(stateToProps, actionsToProps)(Details);

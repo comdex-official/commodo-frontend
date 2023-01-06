@@ -1,7 +1,6 @@
 import { assetTransitTypeId } from "../config/network";
 import {
-  ASSET_RATES_STATES_SET,
-  PAIR_SET,
+  ASSET_RATES_STATES_SET, PAIR_SET,
   POOLS_LIQUIDITY_LIST_SET,
   POOLS_SET,
   POOL_BALANCE_FETCH_IN_PROGRESS,
@@ -121,9 +120,15 @@ export const setPoolLends = (list) => {
 };
 
 export const setUserBorrows = (list) => {
+  const borrowToLendMap = list.reduce((map, obj) => {
+    map[obj?.lendingId?.toNumber()] = obj;
+    return map;
+  }, {});
+
   return {
     type: USER_BORROWS_SET,
     list,
+    borrowToLendMap,
   };
 };
 
@@ -133,3 +138,4 @@ export const setPair = (value) => {
     value,
   };
 };
+

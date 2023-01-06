@@ -524,6 +524,10 @@ button.ant-switch {
 
         .ant-table-cell-scrollbar {
           box-shadow: none;
+          background: none !important;
+          &::before {
+            display: none !important;
+          }
         }
 
         .ant-table-thead {
@@ -540,6 +544,16 @@ button.ant-switch {
                 color: @text-color-light;
                 font-weight: 400;
               }
+            }
+
+            .ant-table-cell{
+              background: none !important;
+              border: 0 !important;
+            }
+
+            td {
+              background: none !important;
+              border: 0 !important;
             }
 
             th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
@@ -1906,6 +1920,51 @@ button.ant-switch {
       padding: 0;
       background: none !important;
       cursor: default;
+    }
+  }
+}
+
+.max-half {
+  display: flex;
+  align-items: center;
+  margin-left: 4px;
+
+  button.ant-btn {
+    font-size: @font-size-sm - 1;
+    padding: 1px 0;
+    margin-left: 4px;
+    line-height: 1;
+    text-align: center;
+    width: 34px;
+    height: 15px;
+    border: 0;
+    cursor: pointer;
+    border-radius: 3px;
+    background: #001e11;
+    font-weight: lighter;
+    text-transform: uppercase;
+    border: 0;
+
+    span {
+      color: @white;
+    }
+
+    .dark-mode & {
+      background: #132239;
+      color: @white;
+    }
+
+    &.active {
+      .dark-mode & {
+        background: @white;
+        border: 0;
+      }
+
+      span {
+        .dark-mode & {
+          color: #032517;
+        }
+      }
     }
   }
 }

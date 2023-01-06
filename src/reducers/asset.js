@@ -1,9 +1,7 @@
 import { combineReducers } from "redux";
 import {
-  ASSETS_SET,
-  PAIRS_SET,
-  PAIR_ID_SET,
-  PAIR_SET
+  ASSETS_SET, ASSET_STAT_MAP_SET, PAIRS_SET,
+  PAIR_ID_SET, PAIR_SET
 } from "../constants/asset";
 
 const pairs = (
@@ -62,9 +60,21 @@ const pair = (state = {}, action) => {
   return state;
 };
 
+const assetStatMap = (state = {}, action) => {
+  if (action.type === ASSET_STAT_MAP_SET) {
+    return {
+      ...state,
+      [action.assetId]: action?.value,
+    };
+  }
+
+  return state;
+};
+
 export default combineReducers({
   pairs,
   pairId,
   pair,
   _,
+  assetStatMap,
 });

@@ -16,7 +16,10 @@ import AssetStats from "../../../../components/common/Asset/Stats";
 import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
 import HealthFactor from "../../../../components/HealthFactor";
-import { ValidateInputNumber } from "../../../../config/_validation";
+import {
+  ValidateInputNumber,
+  ValidateMaxBorrow
+} from "../../../../config/_validation";
 import {
   APP_ID,
   DOLLAR_DECIMALS,
@@ -57,6 +60,7 @@ const BorrowTab = ({
   balances,
   assetRatesStatsMap,
   assetDenomMap,
+  assetStatMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [collateralAssetId, setCollateralAssetId] = useState();
@@ -65,6 +69,7 @@ const BorrowTab = ({
   const [outAmount, setOutAmount] = useState();
   const [validationError, setValidationError] = useState();
   const [borrowValidationError, setBorrowValidationError] = useState();
+  const [maxBorrowValidationError, setMaxBorrowValidationError] = useState();
   const [inProgress, setInProgress] = useState(false);
   const [extendedPairs, setExtendedPairs] = useState({});
   const [assetToPool, setAssetToPool] = useState({});
@@ -212,6 +217,7 @@ const BorrowTab = ({
     }
     setOutAmount(0);
     setBorrowValidationError();
+    setMaxBorrowValidationError();
   };
 
   const handlePoolChange = (value) => {
@@ -249,7 +255,7 @@ const BorrowTab = ({
       .trim();
 
     setOutAmount(value);
-
+    checkMaxBorrow(value);
     setBorrowValidationError(
       ValidateInputNumber(
         getAmount(value, assetDenomMap[borrowAssetDenom]?.decimals),
@@ -263,6 +269,25 @@ const BorrowTab = ({
               assetDenomMap[borrowAssetDenom]?.id
             ) || 0
         )
+      )
+    );
+  };
+
+  const checkMaxBorrow = (value) => {
+    setMaxBorrowValidationError(
+      ValidateMaxBorrow(
+        value,
+        Number(
+          amountConversion(
+            marketPrice(
+              markets,
+              borrowAssetDenom,
+              assetDenomMap[borrowAssetDenom]?.id
+            ) * assetStatMap[assetDenomMap[borrowAssetDenom]?.id]?.amount || 0,
+            assetDenomMap[borrowAssetDenom]?.decimals
+          )
+        ),
+        "maxBorrow"
       )
     );
   };
@@ -340,12 +365,14 @@ const BorrowTab = ({
   };
 
   const handleBorrowMaxClick = () => {
-    return handleOutAmountChange(
-      amountConversion(
-        borrowableBalance,
-        assetDenomMap[borrowAssetDenom]?.decimals
-      )
-    );
+    if (borrowableBalance > 0) {
+      return handleOutAmountChange(
+        amountConversion(
+          borrowableBalance,
+          assetDenomMap[borrowAssetDenom]?.decimals
+        )
+      );
+    }
   };
 
   let currentLTV = Number(
@@ -708,7 +735,11 @@ const BorrowTab = ({
                       onChange={(event) =>
                         handleOutAmountChange(event.target.value)
                       }
-                      validationError={borrowValidationError}
+                      validationError={
+                        borrowValidationError?.message
+                          ? borrowValidationError
+                          : maxBorrowValidationError
+                      }
                     />{" "}
                   </div>
                   <small>
@@ -898,6 +929,7 @@ const BorrowTab = ({
                   validationError?.message ||
                   collateralAssetDenom === borrowAssetDenom ||
                   borrowValidationError?.message ||
+                  maxBorrowValidationError?.message ||
                   inProgress ||
                   !collateralAssetId ||
                   !pair?.id
@@ -982,6 +1014,7 @@ BorrowTab.propTypes = {
   assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
+  assetStatMap: PropTypes.object,
   balances: PropTypes.arrayOf(
     PropTypes.shape({
       denom: PropTypes.string.isRequired,
@@ -1017,6 +1050,7 @@ const stateToProps = (state) => {
     assetRatesStatsMap: state.lend.assetRatesStats.map,
     balances: state.account.balances.list,
     assetDenomMap: state.asset._.assetDenomMap,
+    assetStatMap: state.asset.assetStatMap,
   };
 };
 

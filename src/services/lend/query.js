@@ -284,9 +284,28 @@ export const queryAuctionMippingIdParams = (callback) => {
   });
 };
 
+export const queryAssetPoolFundBalance = (assetId, poolId, callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryFundModBalByAssetPool({
+        assetId: Long.fromNumber(assetId),
+        poolId: Long.fromNumber(poolId),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+
 export const queryTopAssets = (callback) => {
   axios
-    .get(`${API_URL}/lend/rankings`)
+    .get(`${API_URL}/api/v2/commodo/rankings`)
     .then((result) => {
       callback(null, result?.data);
     })
@@ -297,7 +316,7 @@ export const queryTopAssets = (callback) => {
 
 export const queryTotalValueLocked = (callback) => {
   axios
-    .get(`${API_URL}/lend/modbalance`)
+    .get(`${API_URL}/api/v2/commodo/total/modbalance`)
     .then((result) => {
       callback(null, result?.data);
     })
@@ -308,7 +327,18 @@ export const queryTotalValueLocked = (callback) => {
 
 export const queryTotalBorrowAndDeposit = (callback) => {
   axios
-    .get(`${API_URL}/lend/totallb`)
+    .get(`${API_URL}/api/v2/commodo/total/lb`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
+
+export const queryBorrowDepositHistory = (range, callback) => {
+  axios
+    .get(`${API_URL}/api/v2/commodo/lb/history/${range}`)
     .then((result) => {
       callback(null, result?.data);
     })
