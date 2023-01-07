@@ -74,9 +74,7 @@ const Myhome = ({
         return;
       }
 
-      if (result?.lends?.length > 0) {
-        setUserLends(result?.lends);
-      }
+      setUserLends(result?.lends);
     });
   };
 
@@ -90,8 +88,9 @@ const Myhome = ({
         return;
       }
 
+      setUserBorrows(result?.borrows);
+
       if (result?.borrows?.length > 0) {
-        setUserBorrows(result?.borrows);
         for (let i = 0; i < result?.borrows?.length; i++) {
           fetchPair(result?.borrows[i]);
         }
