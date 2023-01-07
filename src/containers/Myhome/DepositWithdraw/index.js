@@ -6,7 +6,11 @@ import { useLocation, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { setPool, setUserBorrows } from "../../../actions/lend";
 import { Col, Row } from "../../../components/common";
-import { queryLendPool, queryLendPosition, queryUserBorrows } from "../../../services/lend/query";
+import {
+  queryLendPool,
+  queryLendPosition,
+  queryUserBorrows
+} from "../../../services/lend/query";
 import { decode } from "../../../utils/string";
 import CloseTab from "./Close";
 import DepositTab from "./Deposit";
@@ -52,9 +56,7 @@ const Deposit = ({ setPool, address, setUserBorrows }) => {
         return;
       }
 
-      if (result?.borrows?.length > 0) {
-        setUserBorrows(result?.borrows);
-      }
+      setUserBorrows(result?.borrows || []);
     });
   };
 

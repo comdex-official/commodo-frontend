@@ -3,6 +3,7 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useLocation } from "react-router";
+import { setBalanceRefresh } from "../../actions/account";
 import { setUserBorrows, setUserLends } from "../../actions/lend";
 import { Col, Row, TooltipIcon } from "../../components/common";
 import { DOLLAR_DECIMALS } from "../../constants/common";
@@ -30,6 +31,8 @@ const Myhome = ({
   assetRatesStatsMap,
   assetMap,
   assetDenomMap,
+  setBalanceRefresh,
+  refreshBalance,
 }) => {
   const [activeKey, setActiveKey] = useState("1");
   const [lendsInProgress, setLendsInProgress] = useState(false);
@@ -45,6 +48,8 @@ const Myhome = ({
     if (type && type === "borrow") {
       setActiveKey("2");
     }
+
+    setBalanceRefresh(refreshBalance + 1);
   }, []);
 
   useEffect(() => {
@@ -69,9 +74,7 @@ const Myhome = ({
         return;
       }
 
-      if (result?.lends?.length > 0) {
-        setUserLends(result?.lends);
-      }
+      setUserLends(result?.lends || []);
     });
   };
 
@@ -85,8 +88,9 @@ const Myhome = ({
         return;
       }
 
+      setUserBorrows(result?.borrows || []);
+
       if (result?.borrows?.length > 0) {
-        setUserBorrows(result?.borrows);
         for (let i = 0; i < result?.borrows?.length; i++) {
           fetchPair(result?.borrows[i]);
         }
@@ -375,6 +379,7 @@ const Myhome = ({
 
 Myhome.propTypes = {
   lang: PropTypes.string.isRequired,
+  refreshBalance: PropTypes.number.isRequired,
   setUserBorrows: PropTypes.func.isRequired,
   setUserLends: PropTypes.func.isRequired,
   address: PropTypes.string,
@@ -427,12 +432,14 @@ const stateToProps = (state) => {
     assetRatesStatsMap: state.lend.assetRatesStats.map,
     assetMap: state.asset._.map,
     assetDenomMap: state.asset._.assetDenomMap,
+    refreshBalance: state.account.refreshBalance,
   };
 };
 
 const actionsToProps = {
   setUserBorrows,
   setUserLends,
+  setBalanceRefresh,
 };
 
 export default connect(stateToProps, actionsToProps)(Myhome);
