@@ -11,7 +11,7 @@ import {
   queryLendPair,
   queryLendPool,
   queryUserBorrows,
-  queryUserLends
+  queryUserLends,
 } from "../../services/lend/query";
 import { amountConversion, commaSeparatorWithRounding } from "../../utils/coin";
 import { decimalConversion, marketPrice } from "../../utils/number";
@@ -74,7 +74,7 @@ const Myhome = ({
         return;
       }
 
-      setUserLends(result?.lends);
+      setUserLends(result?.lends || []);
     });
   };
 
@@ -88,7 +88,7 @@ const Myhome = ({
         return;
       }
 
-      setUserBorrows(result?.borrows);
+      setUserBorrows(result?.borrows || []);
 
       if (result?.borrows?.length > 0) {
         for (let i = 0; i < result?.borrows?.length; i++) {
