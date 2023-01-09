@@ -8,6 +8,7 @@ import {
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
+import { strideAccountParser } from "stridejs";
 import { comdex } from "../config/network";
 import { makeHdPath } from "../utils/string";
 import { customAminoTypes } from "./aminoConverter";
