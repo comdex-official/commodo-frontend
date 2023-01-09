@@ -23,6 +23,7 @@ import {
 import {
   commaSeparator,
   decimalConversion,
+  getExponent,
   marketPrice
 } from "../../../utils/number";
 import { toDecimals } from "../../../utils/string";
@@ -149,16 +150,34 @@ const PlaceBidModal = ({
   };
 
   const calculateQuantityBidFor = () => {
-    let calculatedAmount = Number(
-      bidAmount *
-        Number(
-          amountConversion(
-            decimalConversion(newCurrentAuction?.outflowTokenCurrentPrice) || 0,
-            assetDenomMap[auction?.outflowTokenInitAmount?.denom]?.decimals
+    let calculatedAmount =
+      Number(
+        bidAmount *
+          Number(
+            amountConversion(
+              decimalConversion(newCurrentAuction?.outflowTokenCurrentPrice) ||
+                0,
+              assetDenomMap[newCurrentAuction?.inflowTokenCurrentAmount?.denom]
+                ?.decimals
+            )
           )
+      ) /
+      Number(
+        marketPrice(
+          markets,
+          newCurrentAuction?.inflowTokenCurrentAmount?.denom,
+          assetDenomMap[newCurrentAuction?.inflowTokenCurrentAmount?.denom]?.id
+        ) || 0
+      );
+
+    setCalculatedQuantityBid(
+      Number(calculatedAmount).toFixed(
+        getExponent(
+          assetDenomMap[newCurrentAuction?.inflowTokenCurrentAmount?.denom]
+            ?.decimals
         )
-    ).toFixed(6);
-    setCalculatedQuantityBid(calculatedAmount);
+      )
+    );
   };
 
   useEffect(() => {
