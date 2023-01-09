@@ -1,11 +1,10 @@
-import { Button, message, Spin, Tabs } from "antd";
+import { message, Spin, Tabs } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useLocation, useParams } from "react-router";
-import { Link } from "react-router-dom";
 import { setPair, setPool } from "../../../actions/lend";
-import { Col, Row } from "../../../components/common";
+import { BackButton, Col, Row } from "../../../components/common";
 import { assetTransitTypeId } from "../../../config/network";
 import {
   queryBorrowPosition,
@@ -20,14 +19,8 @@ import DepositTab from "./Deposit";
 import "./index.less";
 import RepayTab from "./Repay";
 
-const BackButton = {
-  right: (
-    <Link to="/myhome#borrow">
-      <Button className="back-btn" type="primary">
-        Back
-      </Button>
-    </Link>
-  ),
+const PageBackButton = {
+  right: <BackButton />,
 };
 
 const BorrowRepay = ({ setPair, setPool }) => {
@@ -110,15 +103,15 @@ const BorrowRepay = ({ setPair, setPool }) => {
           map[obj?.assetTransitType] = obj;
           return map;
         }, {});
-      
+
         let transitAssetIds = {
           main: assetTransitMap[assetTransitTypeId["main"]]?.assetId,
           first: assetTransitMap[assetTransitTypeId["first"]]?.assetId,
           second: assetTransitMap[assetTransitTypeId["second"]]?.assetId,
         };
-      
+
         myPool["transitAssetIds"] = transitAssetIds;
-      
+
         setLendPool(myPool);
       });
     }
@@ -210,7 +203,7 @@ const BorrowRepay = ({ setPair, setPool }) => {
             defaultActiveKey="1"
             onChange={setActiveKey}
             activeKey={activeKey}
-            tabBarExtraContent={BackButton}
+            tabBarExtraContent={PageBackButton}
             items={tabItems}
           />
         </Col>

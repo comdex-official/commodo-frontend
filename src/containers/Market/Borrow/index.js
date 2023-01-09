@@ -12,13 +12,15 @@ import {
 import { queryLendPools } from "../../../services/lend/query";
 import { denomConversion } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
+import { ActionButton } from "../ActionButton";
 import "../index.less";
 import { columns } from "./data";
 
-const Borrow = ({ assetMap, setPools, lendPools }) => {
+const Borrow = ({ assetMap, setPools, lendPools, userLendList }) => {
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [inProgress, setInProgress] = useState(false);
+  const [isLended, setIsLended] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -52,6 +54,10 @@ const Borrow = ({ assetMap, setPools, lendPools }) => {
       false
     );
   };
+
+  useEffect(() => {
+    setIsLended(!!userLendList?.length);
+  }, [userLendList]);
 
   const tableData =
     lendPools?.length > 0
@@ -113,7 +119,14 @@ const Borrow = ({ assetMap, setPools, lendPools }) => {
             asset_apy: item,
             bridge_apy: item,
             bridge_apy2: item,
-            action: item,
+            action: (
+              <ActionButton
+                name="Borrow"
+                text={!isLended ? "Lend assets to open borrow positions" : ""}
+                isDisabled={!isLended}
+                path={`/borrow/${item?.poolId?.toNumber()}`}
+              />
+            ),
           };
         })
       : [];
@@ -164,12 +177,28 @@ const Borrow = ({ assetMap, setPools, lendPools }) => {
 Borrow.propTypes = {
   setPools: PropTypes.func.isRequired,
   assetMap: PropTypes.object,
+  userLendList: PropTypes.arrayOf(
+    PropTypes.shape({
+      amountIn: PropTypes.shape({
+        denom: PropTypes.string.isRequired,
+        amount: PropTypes.string,
+      }),
+      assetId: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+      poolId: PropTypes.shape({
+        low: PropTypes.number,
+      }),
+      rewardAccumulated: PropTypes.string,
+    })
+  ),
 };
 
 const stateToProps = (state) => {
   return {
     assetMap: state.asset._.map,
     lendPools: state.lend.pool.list,
+    userLendList: state.lend.userLends,
   };
 };
 
