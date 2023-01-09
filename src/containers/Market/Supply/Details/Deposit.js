@@ -270,7 +270,7 @@ const DepositTab = ({
                 {!!currentLendingId ? (
                   <div>
                     {" "}
-                    Lend position exists!, try{" "}
+                    Lend position exists, try{" "}
                     <Button
                       onClick={() =>
                         navigate(`/myhome/deposit/${currentLendingId}`)
