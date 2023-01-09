@@ -1,5 +1,4 @@
 import DistributionAPY from "../../../components/common/DistributionAPY";
-import { ActionButton } from "../ActionButton";
 import AssetApy from "../AssetApy";
 import AvailableToBorrow from "./AvailableToBorrow";
 
@@ -29,11 +28,7 @@ export const columns = [
     width: 100,
   },
   {
-    title: (
-      <>
-        Available to Borrow
-      </>
-    ),
+    title: <>Available to Borrow</>,
     dataIndex: "available_to_borrow",
     key: "available_to_borrow",
     width: 130,
@@ -90,11 +85,5 @@ export const columns = [
     key: "action",
     align: "right",
     width: 120,
-    render: (item) => (
-      <ActionButton
-        name="Borrow"
-        path={`/borrow/${item?.poolId?.toNumber()}`}
-      />
-    ),
   },
 ];
