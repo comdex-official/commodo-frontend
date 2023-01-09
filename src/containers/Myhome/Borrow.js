@@ -1,4 +1,4 @@
-import { Button, Dropdown, Menu, Table, Tooltip } from "antd";
+import { Button, Table, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
@@ -16,13 +16,6 @@ import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
 import InterestAndReward from "./Calculate/InterestAndReward";
 import "./index.less";
-
-const editItems = (
-  <Menu>
-    <Menu.Item>Borrow </Menu.Item>
-    <Menu.Item>Repay</Menu.Item>
-  </Menu>
-);
 
 const Borrow = ({
   lang,
@@ -95,10 +88,11 @@ const Borrow = ({
       render: (item) => (
         <>
           <div className="d-flex">
-            <Dropdown
-              overlayClassName="edit-btn-dorp"
-              trigger={["click"]}
-              overlay={editItems}
+            <Tooltip
+              overlayClassName="commodo-tooltip"
+              title={
+                item?.isLiquidated ? "Position has been sent for Auction." : ""
+              }
             >
               <Button
                 disabled={item?.isLiquidated}
@@ -109,18 +103,9 @@ const Borrow = ({
                 className="btn-filled"
                 size="small"
               >
-                <Tooltip
-                  overlayClassName="commodo-tooltip"
-                  title={
-                    item?.isLiquidated
-                      ? "Position has been sent for Auction."
-                      : ""
-                  }
-                >
-                  Edit
-                </Tooltip>
+                Edit
               </Button>
-            </Dropdown>
+            </Tooltip>
           </div>
         </>
       ),

@@ -16,7 +16,7 @@ import { ValidateInputNumber } from "../../../../config/_validation";
 import {
   APP_ID,
   DEFAULT_FEE,
-  DOLLAR_DECIMALS,
+  DOLLAR_DECIMALS
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { defaultFee } from "../../../../services/transaction";
@@ -25,7 +25,7 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
@@ -270,7 +270,7 @@ const DepositTab = ({
                 {!!currentLendingId ? (
                   <div>
                     {" "}
-                    Lend postion exists!, try{" "}
+                    Lend position exists!, try{" "}
                     <Button
                       onClick={() =>
                         navigate(`/myhome/deposit/${currentLendingId}`)
@@ -278,7 +278,7 @@ const DepositTab = ({
                       type="primary"
                       size="small"
                     >
-                      deposit
+                      Deposit
                     </Button>
                   </div>
                 ) : null}
