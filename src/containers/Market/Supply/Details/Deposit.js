@@ -278,7 +278,7 @@ const DepositTab = ({
                       type="primary"
                       size="small"
                     >
-                      deposit
+                      Deposit
                     </Button>
                   </div>
                 ) : null}
