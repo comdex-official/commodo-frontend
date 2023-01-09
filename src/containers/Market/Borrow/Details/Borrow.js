@@ -8,7 +8,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon,
+  TooltipIcon
 } from "../../../../components/common";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
 import Details from "../../../../components/common/Asset/Details";
@@ -19,30 +19,30 @@ import HealthFactor from "../../../../components/HealthFactor";
 import { assetTransitTypeId } from "../../../../config/network";
 import {
   ValidateInputNumber,
-  ValidateMaxBorrow,
+  ValidateMaxBorrow
 } from "../../../../config/_validation";
 import {
   DOLLAR_DECIMALS,
   MAX_LTV_DEDUCTION,
-  UC_DENOM,
+  UC_DENOM
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
   queryAssetPairs,
   queryLendPair,
-  queryLendPool,
+  queryLendPool
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount,
+  getAmount
 } from "../../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice,
+  marketPrice
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
@@ -162,7 +162,6 @@ const BorrowTab = ({
   }, [pair]);
 
   useEffect(() => {
-    console.log("there me", poolLendPositions[0]?.lendingId?.toNumber());
     if (poolLendPositions[0]?.lendingId?.toNumber()) {
       handleCollateralAssetChange(poolLendPositions[0]?.lendingId?.toNumber());
     }
