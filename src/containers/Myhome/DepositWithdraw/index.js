@@ -1,11 +1,10 @@
-import { Button, message, Spin, Tabs } from "antd";
+import { message, Spin, Tabs } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useLocation, useParams } from "react-router";
-import { Link } from "react-router-dom";
 import { setPool, setUserBorrows } from "../../../actions/lend";
-import { Col, Row } from "../../../components/common";
+import { BackButton, Col, Row } from "../../../components/common";
 import {
   queryLendPool,
   queryLendPosition,
@@ -17,14 +16,8 @@ import DepositTab from "./Deposit";
 import "./index.less";
 import WithdrawTab from "./Withdraw";
 
-const BackButton = {
-  right: (
-    <Link to="/myhome">
-      <Button className="back-btn" type="primary">
-        Back
-      </Button>
-    </Link>
-  ),
+const PageBackButton = {
+  right: <BackButton />,
 };
 
 const Deposit = ({ setPool, address, setUserBorrows }) => {
@@ -150,7 +143,7 @@ const Deposit = ({ setPool, address, setUserBorrows }) => {
             defaultActiveKey="1"
             onChange={setActiveKey}
             activeKey={activeKey}
-            tabBarExtraContent={BackButton}
+            tabBarExtraContent={PageBackButton}
             items={tabItems}
           />
         </Col>

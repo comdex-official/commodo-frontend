@@ -1,13 +1,18 @@
-import { Button, message } from "antd";
+import { message } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import { setPools } from "../../../../actions/lend";
-import { Col, Row, SvgIcon, TooltipIcon } from "../../../../components/common";
+import {
+  BackButton,
+  Col,
+  Row,
+  SvgIcon,
+  TooltipIcon
+} from "../../../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE,
+  DEFAULT_PAGE_SIZE
 } from "../../../../constants/common";
 import { queryLendPools } from "../../../../services/lend/query";
 import Borrow from "./Borrow";
@@ -47,11 +52,7 @@ const Direct = ({ setPools }) => {
           Direct Borrow <TooltipIcon text="Lend and Borrow in one click" />
         </Col>
         <Col className="text-right mb-3">
-          <Link to="/borrow">
-            <Button className="back-btn" type="primary">
-              Back
-            </Button>
-          </Link>
+          <BackButton />
         </Col>
       </Row>
       <Borrow dataInProgress={inProgress} />
