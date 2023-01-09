@@ -13,6 +13,7 @@ import { comdex } from "../config/network";
 import { makeHdPath } from "../utils/string";
 import { customAminoTypes } from "./aminoConverter";
 import { myRegistry } from "./registry";
+import { strideAccountParser } from "./parser";
 
 const aminoTypes = new AminoTypes(customAminoTypes);
 
