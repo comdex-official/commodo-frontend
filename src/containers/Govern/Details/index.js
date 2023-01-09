@@ -5,13 +5,12 @@ import * as PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router";
-import { Link } from "react-router-dom";
 import {
   setProposal,
   setProposalTally,
   setProposer
 } from "../../../actions/govern";
-import { Col, Row, SvgIcon } from "../../../components/common";
+import { BackButton, Col, Row, SvgIcon } from "../../../components/common";
 import Copy from "../../../components/Copy";
 import { comdex } from "../../../config/network";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
@@ -26,7 +25,9 @@ import { formatTime } from "../../../utils/date";
 import { formatNumber } from "../../../utils/number";
 import {
   proposalOptionMap,
-  proposalStatusMap, stringTagParser, truncateString
+  proposalStatusMap,
+  stringTagParser,
+  truncateString
 } from "../../../utils/string";
 import VoteNowModal from "../VoteNowModal";
 import "./index.less";
@@ -258,11 +259,7 @@ const GovernDetails = ({
     <div className="app-content-wrapper">
       <Row>
         <Col className="text-right mb-3">
-          <Link to="/govern">
-            <Button className="back-btn" type="primary">
-              Back
-            </Button>
-          </Link>
+          <BackButton />
         </Col>
       </Row>
       <Row>
@@ -302,7 +299,8 @@ const GovernDetails = ({
                 <h3>#{proposal?.proposal_id || id}</h3>
               </Col>
               <Col className="text-right">
-                <Button type="primary"
+                <Button
+                  type="primary"
                   className={
                     proposalStatusMap[proposal?.status] === "Rejected" ||
                     proposalStatusMap[proposal?.status] === "Failed"

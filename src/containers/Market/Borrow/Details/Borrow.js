@@ -75,6 +75,8 @@ const BorrowTab = ({
   const [assetToPool, setAssetToPool] = useState({});
   const [selectedBorrowValue, setSelectedBorrowValue] = useState();
   const [assetOutPool, setAssetOutPool] = useState();
+  const [selectedCollateralLendingId, setSelectedCollateralLendingId] =
+    useState();
 
   const navigate = useNavigate();
 
@@ -159,7 +161,14 @@ const BorrowTab = ({
     }
   }, [pair]);
 
+  useEffect(() => {
+    if (poolLendPositions[0]?.lendingId?.toNumber()) {
+      handleCollateralAssetChange(poolLendPositions[0]?.lendingId?.toNumber());
+    }
+  }, [poolLendPositions]);
+
   const handleCollateralAssetChange = (lendingId) => {
+    setSelectedCollateralLendingId(lendingId);
     setSelectedBorrowValue();
     setPair();
     setAssetToPool({});
@@ -555,6 +564,7 @@ const BorrowTab = ({
                   <Select
                     className="assets-select"
                     popupClassName="asset-select-dropdown"
+                    value={selectedCollateralLendingId}
                     onChange={handleCollateralAssetChange}
                     placeholder={
                       <div className="select-placeholder">

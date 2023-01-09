@@ -11,20 +11,23 @@ import {
   setAccountVaults,
   setAssetBalance,
   setPoolBalance,
-  showAccountConnectModal
+  showAccountConnectModal,
 } from "../../actions/account";
 import { setAssets } from "../../actions/asset";
-import { setAssetRatesStats } from "../../actions/lend";
+import { setAssetRatesStats, setUserLends } from "../../actions/lend";
 import { setCoingekoPrice, setMarkets } from "../../actions/oracle";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../constants/common";
 import { queryAssets } from "../../services/asset/query";
 import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName, initializeChain } from "../../services/keplr";
-import { QueryAssetRatesParams } from "../../services/lend/query";
+import {
+  QueryAssetRatesParams,
+  queryUserLends,
+} from "../../services/lend/query";
 import {
   fetchCoingeckoPrices,
-  queryMarketList
+  queryMarketList,
 } from "../../services/oracle/query";
 import { amountConversion } from "../../utils/coin";
 import { marketPrice } from "../../utils/number";
@@ -47,6 +50,7 @@ const ConnectButton = ({
   balances,
   assetDenomMap,
   setCoingekoPrice,
+  setUserLends,
 }) => {
   const [addressFromLocal, setAddressFromLocal] = useState();
 
@@ -102,7 +106,6 @@ const ConnectButton = ({
       false
     );
   }, [markets]);
-  ``;
 
   useEffect(() => {
     queryAssets(
@@ -157,6 +160,23 @@ const ConnectButton = ({
       }
 
       setMarkets(result.timeWeightedAverage, result.pagination);
+    });
+  };
+
+  useEffect(() => {
+    if (address) {
+      fetchUserLends();
+    }
+  }, [address]);
+
+  const fetchUserLends = () => {
+    queryUserLends(address, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setUserLends(result?.lends || []);
     });
   };
 
@@ -232,6 +252,7 @@ ConnectButton.propTypes = {
   setAccountVaults: PropTypes.func.isRequired,
   setMarkets: PropTypes.func.isRequired,
   setPoolBalance: PropTypes.func.isRequired,
+  setUserLends: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetDenomMap: PropTypes.object,
   balances: PropTypes.arrayOf(
@@ -268,6 +289,7 @@ const actionsToProps = {
   setAssets,
   setAssetRatesStats,
   setCoingekoPrice,
+  setUserLends,
 };
 
 export default connect(stateToProps, actionsToProps)(ConnectButton);
