@@ -25,7 +25,7 @@ export const comdex = {
   coinMinimalDenom: envConfig?.coinMinimalDenom,
   coinDecimals: envConfig?.coinDecimals,
   prefix: envConfig?.prefix,
-  coinType: envConfig?.coinDenom,
+  coinType: envConfig?.coinType,
 };
 
 export const ibcDenoms = getIbcDenomsMap() || {};
