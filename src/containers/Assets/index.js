@@ -76,7 +76,7 @@ const Assets = ({
       width: 150,
       render: (price) => (
         <>
-          <p>${commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}</p>
+          ${commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}
         </>
       ),
     },
@@ -87,12 +87,10 @@ const Assets = ({
       width: 150,
       render: (balance) => (
         <>
-          <p>
-            $
-            {commaSeparator(
-              Number(balance?.value || 0).toFixed(DOLLAR_DECIMALS)
-            )}
-          </p>
+          $
+          {commaSeparator(
+            Number(balance?.value || 0).toFixed(DOLLAR_DECIMALS)
+          )}
         </>
       ),
     },
