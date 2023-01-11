@@ -87,26 +87,24 @@ const Borrow = ({
       width: 120,
       render: (item) => (
         <>
-          <div className="d-flex">
-            <Tooltip
-              overlayClassName="commodo-tooltip"
-              title={
-                item?.isLiquidated ? "Position has been sent for Auction." : ""
+          <Tooltip
+            overlayClassName="commodo-tooltip"
+            title={
+              item?.isLiquidated ? "Position has been sent for Auction." : ""
+            }
+          >
+            <Button
+              disabled={item?.isLiquidated}
+              onClick={() =>
+                navigate(`/myhome/borrow/${item?.borrowingId?.toNumber()}`)
               }
+              type="primary"
+              className="btn-filled"
+              size="small"
             >
-              <Button
-                disabled={item?.isLiquidated}
-                onClick={() =>
-                  navigate(`/myhome/borrow/${item?.borrowingId?.toNumber()}`)
-                }
-                type="primary"
-                className="btn-filled"
-                size="small"
-              >
-                Edit
-              </Button>
-            </Tooltip>
-          </div>
+              Edit
+            </Button>
+          </Tooltip>
         </>
       ),
     },
