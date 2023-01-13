@@ -88,7 +88,8 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
     });
   }, []);
 
-  const totalValueLocked = Number(totalValue) + Number(totalBorrowed);
+  const totalValueLocked = Number(totalDeposited);
+  const available = totalValueLocked - Number(totalBorrowed);
 
   const Options = {
     chart: {
@@ -145,7 +146,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
         data: [
           {
             name: "Total Available",
-            y: Number(totalValue || 0),
+            y: Number(available || 0),
             color: "#52B788",
           },
           {
@@ -339,7 +340,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                       <h3>
                         $
                         {commaSeparator(
-                          Number(totalValue || 0).toFixed(DOLLAR_DECIMALS)
+                          Number(available || 0).toFixed(DOLLAR_DECIMALS)
                         )}
                       </h3>
                     )}
