@@ -2,7 +2,7 @@ import { Button, Dropdown, message } from "antd";
 import { decode, encode } from "js-base64";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
   setAccountAddress,
@@ -83,29 +83,37 @@ const ConnectButton = ({
     const savedAddress = localStorage.getItem("ac");
     const userAddress = savedAddress ? decode(savedAddress) : address;
 
-    fetchMarkets();
-    fetchCoingeckoPrice();
-
     if (userAddress) {
       setAccountAddress(userAddress);
 
       fetchKeplrAccountName().then((name) => {
         setAccountName(name);
       });
-
-      fetchBalances(address);
     }
   }, [address, refreshBalance]);
 
   useEffect(() => {
-    fetchBalances(
-      address,
-      (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
-      DEFAULT_PAGE_SIZE,
-      true,
-      false
-    );
-  }, [markets]);
+    fetchMarkets();
+    fetchCoingeckoPrice();
+  }, []);
+
+  const fetchBalances = useCallback(
+    (address) => {
+      queryAllBalances(address, (error, result) => {
+        if (error) {
+          return;
+        }
+        setAccountBalances(result.balances, result.pagination);
+      });
+    },
+    [setAccountBalances]
+  );
+
+  useEffect(() => {
+    if (address) {
+      fetchBalances(address);
+    }
+  }, [address, refreshBalance, markets, fetchBalances]);
 
   useEffect(() => {
     queryAssets(
@@ -142,16 +150,6 @@ const ConnectButton = ({
       calculateAssetBalance(balances);
     }
   }, [balances]);
-
-  const fetchBalances = (address) => {
-    queryAllBalances(address, (error, result) => {
-      if (error) {
-        return;
-      }
-
-      setAccountBalances(result.balances, result.pagination);
-    });
-  };
 
   const fetchMarkets = (offset, limit, isTotal, isReverse) => {
     queryMarketList(offset, limit, isTotal, isReverse, (error, result) => {
