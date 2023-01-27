@@ -340,3 +340,4 @@ const stateToProps = (state) => {
 };
 
 export default connect(stateToProps)(Withdraw);
+

@@ -16,7 +16,7 @@ import { fetchTxHash } from "../../../services/transaction";
 import {
   amountConversion,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../utils/coin";
 import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
@@ -85,10 +85,10 @@ const Deposit = ({
   }, [chain?.chainInfo, chain?.coinMinimalDenom, chain?.sourceChannelId]);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isModalOpen) {
       initialize();
     }
-  }, [address, initialize, isOpen]);
+  }, [address, initialize, isModalOpen]);
 
   const showModal = () => {
     initialize();

@@ -52,7 +52,6 @@ const DepositTab = ({
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
   const [inProgress, setInProgress] = useState(false);
-  const [lendToAssetIdMap, setLendToAssetIdMap] = useState(false);
   const navigate = useNavigate();
 
   const availableBalance =
@@ -71,15 +70,6 @@ const DepositTab = ({
       }
     }
   }, [pool, assetMap]);
-
-  useEffect(() => {
-    const lendAssetIdMap = userLendList?.reduce((map, obj) => {
-      map[obj?.assetId?.toNumber()] = obj;
-      return map;
-    }, {});
-
-    setLendToAssetIdMap(lendAssetIdMap);
-  }, [userLendList]);
 
   const handleAssetChange = (value) => {
     setSelectedAssetId(value);
@@ -168,9 +158,6 @@ const DepositTab = ({
       );
     }
   };
-
-  let currentLendingId =
-    lendToAssetIdMap[selectedAssetId]?.lendingId?.toNumber();
 
   return (
     <div className="details-wrapper">
@@ -267,25 +254,6 @@ const DepositTab = ({
             </div>
             <Row>
               <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-                {!!currentLendingId ? (
-                  <div>
-                    {" "}
-                    Lend position exists, try{" "}
-                    <Button
-                      onClick={() =>
-                        navigate(`/myhome/deposit/${currentLendingId}`)
-                      }
-                      type="primary"
-                      size="small"
-                    >
-                      Deposit
-                    </Button>
-                  </div>
-                ) : null}
-              </Col>
-            </Row>
-            <Row>
-              <Col sm="12" className="mt-3 mx-auto card-bottom-details">
                 <AssetStats
                   assetId={selectedAssetId}
                   pool={pool}
@@ -302,8 +270,7 @@ const DepositTab = ({
                   !Number(amount) ||
                   validationError?.message ||
                   inProgress ||
-                  !selectedAssetId ||
-                  currentLendingId
+                  !selectedAssetId
                 }
                 onClick={handleClick}
               >
