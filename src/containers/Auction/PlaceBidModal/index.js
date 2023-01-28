@@ -17,8 +17,7 @@ import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount,
-  orderPriceConversion
+  getAmount
 } from "../../../utils/coin";
 import {
   commaSeparator,
@@ -43,8 +42,6 @@ const PlaceBidModal = ({
   const [bidAmount, setBidAmount] = useState(0);
   const [inProgress, setInProgress] = useState(false);
   const [validationError, setValidationError] = useState();
-  const [maxPrice, setMaxPrice] = useState();
-  const [maxValidationError, setMaxValidationError] = useState();
   const [calculatedQuantityBid, setCalculatedQuantityBid] = useState();
   const [newCurrentAuction, setNewCurrentAuction] = useState(auction);
 
@@ -116,7 +113,6 @@ const PlaceBidModal = ({
                 assetDenomMap[auction?.outflowTokenInitAmount?.denom]?.decimals
               ),
             },
-            max: orderPriceConversion(maxPrice || 0),
             appId: Long.fromNumber(APP_ID),
             auctionMappingId: params?.dutchId,
           },
@@ -131,7 +127,6 @@ const PlaceBidModal = ({
 
         if (error) {
           setBidAmount(0);
-          setMaxPrice(0);
           message.error(error);
           return;
         }
@@ -142,7 +137,6 @@ const PlaceBidModal = ({
         }
 
         setBidAmount(0);
-        setMaxPrice(0);
         message.success(
           <Snack
             message={variables[lang].tx_success}
@@ -218,26 +212,6 @@ const PlaceBidModal = ({
     }
   }, [isModalOpen]);
 
-  const handleMaxPriceChange = (value) => {
-    value = toDecimals(
-      value,
-      assetDenomMap[newCurrentAuction?.inflowTokenTargetAmount?.denom]?.decimals
-    )
-      .toString()
-      .trim();
-
-    setMaxValidationError(
-      ValidateInputNumber(
-        getAmount(
-          value,
-          assetDenomMap[newCurrentAuction?.inflowTokenTargetAmount?.denom]
-            ?.decimals
-        )
-      )
-    );
-    setMaxPrice(value);
-  };
-
   useEffect(() => {
     calculateQuantityBidFor();
   }, [bidAmount, newCurrentAuction?.outflowTokenCurrentPrice]);
@@ -254,7 +228,7 @@ const PlaceBidModal = ({
         footer={null}
         header={null}
         open={isModalOpen}
-        width={550}
+        width={500}
         closable={width < 650 ? true : null}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -454,29 +428,6 @@ const PlaceBidModal = ({
               </label>
             </Col>
           </Row>
-          <Row>
-            <Col sm="6">
-              <p>Acceptable Max Price</p>
-            </Col>
-            <Col sm="6" className="text-right bid-custom-input">
-              <CustomInput
-                value={maxPrice}
-                onChange={(event) => handleMaxPriceChange(event.target.value)}
-                validationError={maxValidationError}
-              />
-              <label>
-                <div className="input-denom">
-                  {denomConversion(
-                    newCurrentAuction?.inflowTokenTargetAmount?.denom
-                  )}
-                  /
-                  {denomConversion(
-                    newCurrentAuction?.outflowTokenCurrentAmount?.denom
-                  )}
-                </div>
-              </label>
-            </Col>
-          </Row>
           <Row className="p-0">
             <Col className="text-center mt-3">
               <Button
@@ -484,11 +435,7 @@ const PlaceBidModal = ({
                 className="btn-filled px-5"
                 size="large"
                 loading={inProgress}
-                disabled={
-                  !Number(bidAmount) ||
-                  !Number(maxPrice) ||
-                  validationError?.message
-                }
+                disabled={!Number(bidAmount) || validationError?.message}
                 onClick={handleClick}
               >
                 Place Bid
