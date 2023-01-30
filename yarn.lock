@@ -2267,10 +2267,10 @@
     big-integer "^1.6.48"
     utility-types "^3.10.0"
 
-"@ledgerhq/cryptoassets@^7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/cryptoassets/-/cryptoassets-7.0.0.tgz#9f700ef022e65c25b73377ac2513cd012e6aebfb"
-  integrity sha512-mjx5rcmYtZdgHGQlSy8KVKGUNWwmdFeFWDkyBluvXX9/lruuAXrUMai2eAz4EaZ2S48bPpxWpLKloEA1KEo4Yw==
+"@ledgerhq/cryptoassets@^7.0.0", "@ledgerhq/cryptoassets@^7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/cryptoassets/-/cryptoassets-7.3.0.tgz#29c47825679319570d0af961d62f06b274db7b34"
+  integrity sha512-NydYitmJss8bEgnYA1ncirDWS9qlXNyMKC/k0X+mGuNFJmgo1EGBo6K+GK81DsSxiXUON8KO0OSLFF07WRX3XQ==
   dependencies:
     invariant "2"
 
