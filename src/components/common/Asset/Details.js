@@ -158,7 +158,11 @@ const Details = ({
           {parent === "lend" ? null : asset?.denom === "uatom" ||
             asset?.denom === ibcDenoms["uatom"] ||
             asset?.denom === "ucmst" ? (
-            <DistributionAPY value={0} margin={"top"} />
+            <DistributionAPY
+              assetId={asset?.id}
+              poolId={poolId}
+              margin={"top"}
+            />
           ) : null}
         </>
       ),
