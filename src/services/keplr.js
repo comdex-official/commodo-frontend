@@ -76,10 +76,13 @@ export const getChainConfig = (chain = comdex) => {
   };
 };
 
-export const initializeChain = (callback) => {
+export const initializeChain = (walletType, callback) => {
   (async () => {
-    if (!window?.leap?.getOfflineSigner || !window.wallet) {
-      const error = "Please install leap extension extension";
+    let isNoExtensionExists = walletType === "keplr" ?!window.getOfflineSigner || !window.keplr :
+    !window?.leap?.getOfflineSigner || !window.wallet;
+
+    if (isNoExtensionExists) {
+      const error = `Please install ${walletType} wallet extension`;
       callback(error);
     } else {
       if (window.leap.experimentalSuggestChain) {
