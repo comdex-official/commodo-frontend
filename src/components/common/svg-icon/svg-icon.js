@@ -1,6 +1,6 @@
+import classNames from "classnames";
 import PropTypes from "prop-types";
 import React from "react";
-import classNames from "classnames";
 
 const SvgIcon = ({
   name,
@@ -32,7 +32,7 @@ SvgIcon.propTypes = {
   /**
    * Icon Id name for svg sprite.
    */
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   className: PropTypes.string,
   /**
    * Icon color.
