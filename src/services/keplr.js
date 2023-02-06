@@ -96,9 +96,9 @@ export const initializeChain = (type, callback) => {
 
       if (suggestChain) {
         try {
-          (await walletType) === "keplr"
-            ? window.keplr.experimentalSuggestChain(getChainConfig())
-            : window.leap.experimentalSuggestChain(getChainConfig());
+          walletType === "keplr"
+            ? await window.keplr.experimentalSuggestChain(getChainConfig())
+            : await window.leap.experimentalSuggestChain(getChainConfig());
           const offlineSigner =
             walletType === "keplr"
               ? window.getOfflineSigner(comdex?.chainId)
@@ -137,9 +137,9 @@ export const initializeIBCChain = (config, callback) => {
 
       if (suggestChain) {
         try {
-          (await walletType) === "keplr"
-            ? window.keplr.experimentalSuggestChain(config)
-            : window.leap.experimentalSuggestChain(config);
+          walletType === "keplr"
+            ? await window.keplr.experimentalSuggestChain(config)
+            : await window.leap.experimentalSuggestChain(config);
           const offlineSigner =
             walletType === "keplr"
               ? window.getOfflineSigner(config?.chainId)

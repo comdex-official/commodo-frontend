@@ -3,7 +3,7 @@ import {
   AminoTypes,
   createProtobufRpcClient,
   QueryClient,
-  SigningStargateClient
+  SigningStargateClient,
 } from "@cosmjs/stargate";
 import { HttpBatchClient, Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
@@ -40,9 +40,9 @@ export const newQueryClientRPC = (rpc, callback) => {
 export const KeplrWallet = async (chainID = comdex.chainId) => {
   let walletType = localStorage.getItem("loginType");
 
-  (await walletType) === "keplr"
-    ? window.keplr.enable(chainID)
-    : window.leap.enable(chainID);
+  walletType === "keplr"
+    ? await window.keplr.enable(chainID)
+    : await window.leap.enable(chainID);
 
   const offlineSigner =
     walletType === "keplr"
@@ -163,7 +163,7 @@ export const aminoSignIBCTx = (config, transaction, callback) => {
   (async () => {
     let walletType = localStorage.getItem("loginType");
 
-    ((await walletType) === "keplr" ? window.keplr : window.wallet) &&
+    (walletType === "keplr" ? await window.keplr : await window.wallet) &&
     walletType === "keplr"
       ? window.keplr.enable(config.chainId)
       : window.leap.enable(config.chainId);
