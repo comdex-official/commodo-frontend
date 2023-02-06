@@ -21,7 +21,9 @@ const NavTabs = ({ setAccountAddress, lang, setAccountName, onClick }) => {
   });
 
   const handleConnectToWallet = () => {
-    initializeChain((error, account) => {
+    let walletType = localStorage.getItem("loginType");
+
+    initializeChain(walletType, (error, account) => {
       if (error) {
         message.error(error);
         return;
@@ -33,7 +35,7 @@ const NavTabs = ({ setAccountAddress, lang, setAccountName, onClick }) => {
 
       setAccountAddress(account.address);
       localStorage.setItem("ac", encode(account.address));
-      localStorage.setItem("loginType", "keplr");
+      localStorage.setItem("loginType", walletType || "keplr");
     });
   };
 
