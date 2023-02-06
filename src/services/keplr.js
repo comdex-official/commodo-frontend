@@ -78,14 +78,14 @@ export const getChainConfig = (chain = comdex) => {
 
 export const initializeChain = (callback) => {
   (async () => {
-    if (!window.getOfflineSigner || !window.keplr) {
-      const error = "Please install keplr extension";
+    if (!window?.leap?.getOfflineSigner || !window.wallet) {
+      const error = "Please install leap extension extension";
       callback(error);
     } else {
-      if (window.keplr.experimentalSuggestChain) {
+      if (window.leap.experimentalSuggestChain) {
         try {
-          await window.keplr.experimentalSuggestChain(getChainConfig());
-          const offlineSigner = window.getOfflineSigner(comdex?.chainId);
+          await window.leap.experimentalSuggestChain(getChainConfig());
+          const offlineSigner = window?.leap?.getOfflineSigner(comdex?.chainId);
           const accounts = await offlineSigner.getAccounts();
 
           callback(null, accounts[0]);
@@ -102,15 +102,15 @@ export const initializeChain = (callback) => {
 
 export const initializeIBCChain = (config, callback) => {
   (async () => {
-    if (!window.getOfflineSigner || !window.keplr) {
-      const error = "Please install keplr extension";
+    if (!window?.leap?.getOfflineSigner || !window.wallet) {
+      const error = "Please install leap extension extension";
 
       callback(error);
     } else {
-      if (window.keplr.experimentalSuggestChain) {
+      if (window.leap.experimentalSuggestChain) {
         try {
-          await window.keplr.experimentalSuggestChain(config);
-          const offlineSigner = window.getOfflineSigner(config?.chainId);
+          await window.leap.experimentalSuggestChain(config);
+          const offlineSigner = window?.leap?.getOfflineSigner(config?.chainId);
           const accounts = await offlineSigner.getAccounts();
           callback(null, accounts[0]);
         } catch (error) {

@@ -38,8 +38,8 @@ export const newQueryClientRPC = (rpc, callback) => {
 };
 
 export const KeplrWallet = async (chainID = comdex.chainId) => {
-  await window.keplr.enable(chainID);
-  const offlineSigner = await window.getOfflineSignerAuto(chainID);
+  await window.leap.enable(chainID);
+  const offlineSigner = await window?.leap?.getOfflineSignerAuto(chainID);
   const accounts = await offlineSigner.getAccounts();
   return [offlineSigner, accounts];
 };
@@ -153,10 +153,10 @@ async function Transaction(wallet, signerAddress, msgs, fee, memo = "") {
 
 export const aminoSignIBCTx = (config, transaction, callback) => {
   (async () => {
-    (await window.keplr) && window.keplr.enable(config.chainId);
+    (await window.wallet) && window.leap.enable(config.chainId);
     const offlineSigner =
-      window.getOfflineSignerOnlyAmino &&
-      window.getOfflineSignerOnlyAmino(config.chainId);
+      window?.leap?.getOfflineSignerOnlyAmino &&
+      window?.leap?.getOfflineSignerOnlyAmino(config.chainId);
     const client = await SigningStargateClient.connectWithSigner(
       config.rpc,
       offlineSigner,
