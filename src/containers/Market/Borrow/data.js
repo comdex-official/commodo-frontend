@@ -59,7 +59,10 @@ export const columns = [
           assetId={lendPool?.transitAssetIds?.first}
           parent="borrow"
         />
-        <DistributionAPY value={0} />
+        <DistributionAPY
+          poolId={lendPool?.poolId}
+          assetId={lendPool?.transitAssetIds?.first}
+        />
       </>
     ),
   },
@@ -75,7 +78,10 @@ export const columns = [
           assetId={lendPool?.transitAssetIds?.second}
           parent="borrow"
         />
-        <DistributionAPY value={0} />
+        <DistributionAPY
+          poolId={lendPool?.poolId}
+          assetId={lendPool?.transitAssetIds?.second}
+        />
       </>
     ),
   },
