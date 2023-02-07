@@ -1,4 +1,4 @@
-import { Button, Table } from "antd";
+import { Button, Table, Switch, Input } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
 import { connect, useDispatch } from "react-redux";
@@ -315,6 +315,18 @@ const Assets = ({
                 USD
               </div>
             </div>
+            <Row>
+              <Col className="assets-search-section">
+                <div className="text">
+                  Hide 0 Balances
+                  <Switch />
+                </div>
+                <Input
+                  placeholder="Search Asset.."
+                  suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
+                />
+              </Col>
+            </Row>
             <div className="commodo-card py-3 bg-none">
               <div className="card-content">
                 <Table
