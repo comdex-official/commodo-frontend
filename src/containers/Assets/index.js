@@ -1,13 +1,14 @@
-import { Button, Table, Switch, Input } from "antd";
+import { Button, Input, Switch, Table } from "antd";
 import Lodash from "lodash";
 import * as PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import {
   Col,
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../components/common";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
@@ -27,6 +28,9 @@ const Assets = ({
   assetDenomMap,
   refreshBalance,
 }) => {
+  const [isHideToggleOn, setHideToggle] = useState(false);
+  const [searchKey, setSearchKey] = useState();
+
   const dispatch = useDispatch();
 
   const handleBalanceRefresh = () => {
@@ -51,6 +55,19 @@ const Assets = ({
     },
   ];
 
+  useEffect(() => {
+    setHideToggle(localStorage.getItem("hideToggle") === "true");
+  }, []);
+
+  const handleHideSwitchChange = (value) => {
+    localStorage.setItem("hideToggle", value);
+    setHideToggle(value);
+  };
+
+  const onSearchChange = (searchKey) => {
+    setSearchKey(searchKey.trim().toLowerCase());
+  };
+
   const columns = [
     {
       title: "Asset",
@@ -63,11 +80,7 @@ const Assets = ({
       dataIndex: "noOfTokens",
       key: "noOfTokens",
       width: 150,
-      render: (tokens) => (
-        <>
-          {commaSeparator(Number(tokens || 0))}
-        </>
-      ),
+      render: (tokens) => <>{commaSeparator(Number(tokens || 0))}</>,
     },
     {
       title: "Oracle Price",
@@ -75,9 +88,7 @@ const Assets = ({
       key: "price",
       width: 150,
       render: (price) => (
-        <>
-          ${commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}
-        </>
+        <>${commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}</>
       ),
     },
     {
@@ -88,9 +99,7 @@ const Assets = ({
       render: (balance) => (
         <>
           $
-          {commaSeparator(
-            Number(balance?.value || 0).toFixed(DOLLAR_DECIMALS)
-          )}
+          {commaSeparator(Number(balance?.value || 0).toFixed(DOLLAR_DECIMALS))}
         </>
       ),
     },
@@ -179,6 +188,7 @@ const Assets = ({
     return {
       chainInfo: getChainConfig(token),
       coinMinimalDenom: token?.coinMinimalDenom,
+      symbol: token?.symbol,
       balance: {
         amount: ibcBalance?.amount
           ? amountConversion(
@@ -216,6 +226,7 @@ const Assets = ({
   const currentChainData = [
     {
       key: comdex.chainId,
+      symbol: comdex?.symbol,
       asset: (
         <>
           <div className="assets-with-icon">
@@ -234,6 +245,7 @@ const Assets = ({
     },
     {
       key: cmst.coinMinimalDenom,
+      symbol: cmst?.symbol,
       asset: (
         <>
           <div className="assets-with-icon">
@@ -252,6 +264,7 @@ const Assets = ({
     },
     {
       key: harbor.coinMinimalDenom,
+      symbol: harbor?.symbol,
       asset: (
         <>
           <div className="assets-with-icon">
@@ -275,6 +288,7 @@ const Assets = ({
     ibcBalances.map((item) => {
       return {
         key: item?.coinMinimalDenom,
+        symbol: item?.symbol,
         asset: (
           <>
             <div className="assets-with-icon">
@@ -295,7 +309,21 @@ const Assets = ({
       };
     });
 
-  const tableData = Lodash.concat(currentChainData, tableIBCData);
+  let allTableData = Lodash.concat(currentChainData, tableIBCData);
+
+  let tableData = isHideToggleOn
+    ? allTableData?.filter((item) => Number(item?.noOfTokens) > 0)
+    : allTableData;
+
+  tableData = searchKey
+    ? tableData?.filter((item) => {
+        return item?.symbol?.toLowerCase().includes(searchKey?.toLowerCase());
+      })
+    : tableData;
+
+  let balanceExists = allTableData?.find(
+    (item) => Number(item?.noOfTokens) > 0
+  );
 
   return (
     <div className="app-content-wrapper">
@@ -319,10 +347,15 @@ const Assets = ({
               <Col className="assets-search-section">
                 <div className="text">
                   Hide 0 Balances
-                  <Switch />
+                  <Switch
+                    disabled={!balanceExists}
+                    onChange={(value) => handleHideSwitchChange(value)}
+                    checked={isHideToggleOn}
+                  />
                 </div>
                 <Input
                   placeholder="Search Asset.."
+                  onChange={(event) => onSearchChange(event.target.value)}
                   suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
                 />
               </Col>
