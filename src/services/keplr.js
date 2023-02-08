@@ -110,7 +110,7 @@ export const initializeChain = (type, callback) => {
           callback(error?.message);
         }
       } else {
-        const versionError = "Please use the recent version of keplr extension";
+        const versionError = `Please use the recent version of ${walletType} wallet extension`;
         callback(versionError);
       }
     }
