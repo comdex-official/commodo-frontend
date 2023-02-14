@@ -243,7 +243,7 @@ const Withdraw = ({
         className="asset-ibc-btn-container"
         onClick={showModal}
       >
-        {variables[lang].withdraw} <span className="asset-ibc-btn"> &#62;</span>
+        {variables[lang].withdraw} <span className="asset-ibc-btn"><SvgIcon name='chevron-right' viewbox='0 0 2.558 4.473' /></span>
       </Button>
       <Modal
         className="assets-modal"
