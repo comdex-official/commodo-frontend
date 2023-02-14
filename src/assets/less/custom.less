@@ -1380,10 +1380,27 @@ button.ant-switch {
       }
     }
 
+    .ant-pagination-item {
+      &:hover{
+        border-color: @success-color;
+        a{
+          color: @success-color;
+        }
+      }
+    }
+
     &.ant-pagination-item-active {
       border-color: @dark-color;
+      background: none;
+      color: @text-color-light;
       a {
-        color: @dark-color;
+        color: @text-color-light;
+      }
+      &:hover{
+        border-color: @success-color;
+        a{
+          color: @success-color;
+        }
       }
     }
   }
