@@ -30,7 +30,6 @@ let data = [
         counts: (
             <>
                 10%
-                <DistributionAPY />
             </>
         ),
         tooltipText: "Borrow APY of Asset",

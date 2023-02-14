@@ -30,7 +30,12 @@ let data = [
         counts: (
             <>
                 10%
-                <DistributionAPY />
+                <div className="distribution-btn-row">
+                    <Button type="primary" className="distribution-apy-button">
+                        200.98%
+                    </Button>
+                    <TooltipIcon text="Boosted rewards for Borrowing" />
+                </div>
             </>
         ),
         tooltipText: "Lend APY of Asset",

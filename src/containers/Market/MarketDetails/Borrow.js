@@ -1,6 +1,5 @@
 import { Button, Select, Slider, List } from "antd";
 import { SvgIcon, NoDataIcon, Row, Col, TooltipIcon } from "../../../components/common";
-import DistributionAPY from "../../../components/common/DistributionAPY";
 import CustomInput from "../../../components/CustomInput";
 
 const marks = {
@@ -29,7 +28,12 @@ let data = [
         counts: (
             <>
                 10%
-                <DistributionAPY />
+                <div className="distribution-btn-row">
+                    <Button type="primary" className="distribution-apy-button">
+                        200.98%
+                    </Button>
+                    <TooltipIcon text="Boosted rewards for Borrowing" />
+                </div>
             </>
         ),
         tooltipText: "Lend APY of Asset",
