@@ -198,7 +198,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
       categories:
         graphData && graphData.length > 0
           ? graphData.map((item) =>
-              moment(item?.timestamp).format("MMM DD, HH:mm")
+              moment(item?.timestamp).format("MMM DD")
             )
           : [],
     },

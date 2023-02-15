@@ -8,6 +8,8 @@ import GovernDetails from "./containers/Govern/Details";
 import Borrow from "./containers/Market/Borrow";
 import BorrowDetails from "./containers/Market/Borrow/Details";
 import DirectBorrow from "./containers/Market/Borrow/Direct";
+import MarketDetails from "./containers/Market/MarketDetails";
+import MarketList from "./containers/Market/MarketList";
 import Lend from "./containers/Market/Supply";
 import SupplyDetails from "./containers/Market/Supply/Details";
 import MyHome from "./containers/Myhome";
@@ -74,6 +76,14 @@ const routes = [
   {
     path: "/extra",
     element: <Extra />,
+  },
+  {
+    path: "/market-details",
+    element: <MarketDetails />,
+  },
+  {
+    path: "/market",
+    element: <MarketList />,
   },
 ];
 

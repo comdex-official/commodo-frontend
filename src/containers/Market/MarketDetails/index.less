@@ -1,0 +1,107 @@
+@import "../../../assets/less/variables.less";
+
+.market-details-wrapper{
+    .deposit-head {
+        .deposit-head-left {
+            .assets-col {
+                min-width: 95px;
+            }
+        }
+    }
+    .healthf-right{
+        line-height: 1.1;
+    }
+    .assets-select-card{
+        padding: 12px 25px;
+    }
+    .details-left{
+        padding-top: 22px;
+        padding-bottom: 22px    ;
+    }
+    .ant-slider {
+        &.market-slider {
+            height: 16px;
+            margin-left: 0;
+            margin-right: 0;
+            .ant-slider-rail{
+                height: 16px;
+                border-radius: 16px;
+                background: rgba(51, 81, 60, 0.5);
+            }
+            .ant-slider-track{
+                background: linear-gradient(90deg, #52B788 67.35%, #FE777F 100%);
+                height: 16px;
+                border-radius: 16px;
+            }
+            .ant-slider-handle{
+                width: 27px;
+                height: 27px;
+                border-radius: 27px;
+                background: @white;
+                margin-top: -4px;
+                &::after {
+                    display: none;
+                }
+                &::before {
+                    display: none;
+                }
+            }
+            .ant-slider-mark{
+                width: calc(100% - 26px);
+                left: 10px;
+                top: 24px;
+            }
+            &:hover {
+                .ant-slider-track{
+                    background: linear-gradient(90deg, #52B788 67.35%, #FE777F 100%);
+                }
+            }
+        }
+    }
+    .assets-form-btn{
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        width: calc(100% + 80px);
+        margin-left: -40px;
+        padding-top: 30px;
+        margin-top: 15px;
+    }
+    .details-right{
+        .commodo-card{
+            margin-bottom: 40px;
+            padding: 0;
+            .card-head{
+                padding: 22px 20px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                margin-bottom: 0;
+            }
+            .ant-list{
+                padding: 18px 20px;
+                min-height: 105px;
+                .ant-list-item {
+                    h3 {
+                        display: block;
+                        margin-top: 6px;
+                    }
+                    .distribution-btn-row{
+                        position: absolute;
+                    }
+                    .distribution-apy-button{
+                        margin-top: 3px !important;
+                        margin-right: 3px;
+                        margin-left: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.ant-btn {
+    &.details-btn{
+        height: 48px;
+        line-height: 48px;
+        border-radius: 48px;
+        font-size: @font-size-lg + 1;
+        min-width: 250px;
+    }
+}
