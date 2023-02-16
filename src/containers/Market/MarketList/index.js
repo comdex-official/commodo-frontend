@@ -1,9 +1,11 @@
 import { Button, message, Table, Tooltip } from "antd";
 import { Link } from "react-router-dom";
 import { SvgIcon } from "../../../components/common";
+import { useNavigate } from "react-router";
 import "./index.less";
 
 const MarketList = () => {
+  const navigate = useNavigate();
   return (
     <div className="commodo-card bg-none">
       <div className="card-header d-flex align-items-center justify-content-between mb-3 ">
@@ -29,7 +31,7 @@ const MarketList = () => {
       </div>
       <div className="card-content">
         <div className="market-list">
-          <div className="market-list-item">
+          <div className="market-list-item" onClick={() => navigate({ pathname: "/market-details", })}>
             <div className="commodo-card">
               <div className="header1">
                 <div className="assets-col mr-3">
@@ -95,7 +97,7 @@ const MarketList = () => {
               </div>
             </div>
           </div>
-          <div className="market-list-item">
+          <div className="market-list-item" onClick={() => navigate({ pathname: "/market-details", })}>
             <div className="commodo-card">
               <div className="header1">
                 <div className="assets-col mr-3">
@@ -161,7 +163,7 @@ const MarketList = () => {
               </div>
             </div>
           </div>
-          <div className="market-list-item">
+          <div className="market-list-item" onClick={() => navigate({ pathname: "/market-details", })}>
             <div className="commodo-card">
               <div className="header1">
                 <div className="assets-col mr-3">
