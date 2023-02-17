@@ -380,6 +380,10 @@ button {
   .ant-tabs-nav {
     margin-bottom: 20px !important;
 
+    @media screen and (max-width:1367px) {
+      margin-bottom: 14px !important;
+    }
+
     &:before {
       display: none;
     }
@@ -411,6 +415,11 @@ button {
           border-radius: 20px;
           background: none;
           border: 0;
+
+          @media screen and (max-width:1367px) {
+            padding: 2px 15px;
+            font-size: @font-size-sm - 1;
+          }
 
           .ant-tabs-tab-btn {
             width: 100%;
@@ -784,6 +793,10 @@ button.ant-switch {
   position: relative;
   margin-top: 14px;
 
+  @media screen and (max-width:1441px) {
+    margin-top: 8px;
+  }
+
   .ant-select {
     background: none;
     width: 100%;
@@ -805,6 +818,10 @@ button.ant-switch {
           color: @text-color-dark;
           font-weight: 600;
 
+          @media screen and (max-width: 1441px) {
+            font-size: @font-size-lg - 1;
+          }
+
           .dark-mode & {
             color: @white;
           }
@@ -816,6 +833,18 @@ button.ant-switch {
             padding: 1px;
             background: @primary-gradient;
             margin-right: 12px;
+
+            @media screen and (max-width: 1441px) {
+              width: 34px;
+              height: 34px;
+              border-radius: 34px;
+              margin-right: 8px;
+            }
+
+            @media screen and (max-width: 1367px) {
+              width: 28px;
+              height: 28px;
+            }
 
             .circle-icon-inner {
               background: @white;
@@ -864,6 +893,13 @@ button.ant-switch {
               border-radius: 40px;
               margin-right: 15px;
 
+              @media screen and (max-width: 1441px) {
+                width: 34px;
+                height: 34px;
+                border-radius: 34px;
+                margin-right: 8px;
+              }
+
               .svg-icon-inner {
                 width: 100%;
                 height: 100%;
@@ -886,15 +922,21 @@ button.ant-switch {
 
             .name {
               line-height: 1.35;
+              font-size: @font-size-lg + 1;
+              @media screen and (max-width: 1441px) {
+                font-size: @font-size-lg - 1;
+              }
               label {
                 display: block;
                 margin: 0;
                 font-size: @font-size-sm;
                 font-weight: 400;
+                @media screen and (max-width: 1441px) {
+                  font-size: @font-size-sm - 1;
+                }
               }
               .dark-mode & {
                 color: @white;
-                font-size: @font-size-lg + 1;
               }
             }
           }
@@ -908,6 +950,11 @@ button.ant-switch {
           fill: @text-color-dark;
           width: 13px;
           height: 16px;
+
+          @media screen and (max-width:1367px) {
+            width: 11px;
+            height: 12px;
+          }
 
           .dark-mode & {
             fill: @white;
@@ -1076,6 +1123,10 @@ button.ant-switch {
     padding: 20px 24px;
   }
 
+  @media screen and (max-width: 1367px) {
+    min-height: 86px;
+  }
+
   @media screen and (max-width: 480px) {
     display: block;
   }
@@ -1097,6 +1148,14 @@ button.ant-switch {
       user-select: none;
       font-size: @font-size-lg + 2;
       font-weight: 500;
+
+      @media screen and (max-width: 1440px) {
+        font-size: @font-size-lg + 1;
+      }
+
+      @media screen and (max-width: 1367px) {
+        font-size: @font-size-lg - 1;
+      }
 
       .dark-mode & {
         color: @white;
@@ -1130,6 +1189,14 @@ button.ant-switch {
       color: @text-color-dark2;
       padding: 0;
       font-weight: 600;
+
+      @media screen and (max-width: 1441px) {
+        font-size: 1.4rem;
+      }
+
+      @media screen and (max-width: 1367px) {
+        font-size: 1.2rem;
+      }
 
       &::-webkit-placeholder {
         color: @text-color-dark2;
@@ -1173,6 +1240,10 @@ button.ant-switch {
       font-size: @font-size-base;
       color: @text-color-dark;
       font-weight: 600;
+
+      @media screen and (max-width:1367px) {
+        font-size: @font-size-base - 1;
+      }
 
       .dark-mode & {
         color: @white;
@@ -1410,6 +1481,10 @@ button.ant-switch {
   font-size: @font-size-lg;
   font-weight: 500;
 
+  @media screen and (max-width:1367px) {
+    font-size: @font-size-lg - 3;
+  }
+
   .dark-mode & {
     color: @white;
   }
@@ -1469,6 +1544,7 @@ button.ant-switch {
 
 .details-wrapper {
   display: flex;
+  align-items: flex-start;
 
   @media screen and (max-width:991px) {
     display: block;
@@ -1516,6 +1592,10 @@ button.ant-switch {
           font-weight: 500;
           font-size: 17px;
 
+          @media screen and (max-width:1367px) {
+            font-size: @font-size-base;
+          }
+
           .dark-mode & {
             color: @white;
           }
@@ -1526,9 +1606,24 @@ button.ant-switch {
             border-radius: 32px;
             margin-right: 10px;
 
+            @media screen and (max-width:1441px) {
+              width: 28px;
+              height: 28px;
+              border-radius: 28px;
+            }
+
+            @media screen and (max-width:1367px) {
+              width: 22px;
+              height: 22px;
+              margin-right: 6px;
+            }
+
             .icon {
               width: 100%;
               height: 32px;
+              @media screen and (max-width:1367px) {
+                height: 22px;
+              }
             }
           }
         }
@@ -1586,6 +1681,10 @@ button.ant-switch {
             font-weight: 500;
             font-size: 17px;
 
+            @media screen and (max-width:1367px) {
+              font-size: @font-size-base;
+            }
+
             .dark-mode & {
               color: @white;
             }
@@ -1595,6 +1694,11 @@ button.ant-switch {
               height: 32px;
               border-radius: 38px;
               margin-right: 10px;
+
+              @media screen and (max-width:1367px) {
+                width: 28px;
+                height: 28px;
+              }
 
               .icon {
                 width: 100%;

@@ -11,9 +11,69 @@ const marks = {
 
 let data = [
     {
-        title: "Lent",
+        title: "Borrowed",
         counts: `$00`,
-        tooltipText: "Total funds Lent",
+        tooltipText: "Total funds Borrowed",
+    },
+    {
+        title: "Available",
+        counts: `$100`,
+        tooltipText: "Total funds Available",
+    },
+    {
+        title: "Utilization",
+        counts: "20%",
+        tooltipText: "Asset Utilization",
+    },
+    {
+        title: "Lend APY",
+        counts: (
+            <>
+                10%
+            </>
+        ),
+        tooltipText: "Lend APY of Asset",
+    },
+];
+
+let data2 = [
+    {
+        title: "Borrowed",
+        counts: `$00`,
+        tooltipText: "Total funds Borrowed",
+    },
+    {
+        title: "Available",
+        counts: `$100`,
+        tooltipText: "Total funds Available",
+    },
+    {
+        title: "Utilization",
+        counts: "20%",
+        tooltipText: "Asset Utilization",
+    },
+    {
+        title: "Lend APY",
+        counts: (
+            <>
+                10%
+                <div className="distribution-btn-row">
+                    <Button type="primary" className="distribution-apy-button">
+                        200.98%
+                    </Button>
+                    <TooltipIcon text="Boosted rewards for Borrowing" />
+                </div>
+            </>
+        ),
+        tooltipText: "Lend APY of Asset",
+    },
+];
+
+let data3 = [
+    {
+        title: "Borrowed",
+        counts: `$00`,
+        tooltipText: "Total funds Borrowed",
     },
     {
         title: "Available",
@@ -154,11 +214,11 @@ const Repay = () => {
                                         marks={marks}
                                         defaultValue={37}
                                         tooltip={{ open: false }}
-                                        className="commodo-slider market-slider"
+                                        className="commodo-slider market-slider-1 repay-slider"
                                     />
                                 </Col>
                             </Row>
-                            <Row className="mt-1">
+                            <Row className="mt-2">
                                 <Col>
                                     <label>&nbsp;</label>
                                 </Col>
@@ -222,7 +282,7 @@ const Repay = () => {
                             grid={{
                                 gutter: 16,
                             }}
-                            dataSource={data}
+                            dataSource={data2}
                             renderItem={(item) => (
                                 <List.Item>
                                     <div>
@@ -253,7 +313,7 @@ const Repay = () => {
                             grid={{
                                 gutter: 16,
                             }}
-                            dataSource={data}
+                            dataSource={data3}
                             renderItem={(item) => (
                                 <List.Item>
                                     <div>
