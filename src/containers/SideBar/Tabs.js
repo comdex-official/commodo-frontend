@@ -1,16 +1,15 @@
-import * as PropTypes from "prop-types";
-import { SvgIcon } from "../../components/common";
-import { connect } from "react-redux";
-import { tabsList } from "./TabsList";
-import React from "react";
-import variables from "../../utils/variables";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router";
-import { initializeChain } from "../../services/keplr";
 import { message } from "antd";
 import { encode } from "js-base64";
-import { fetchKeplrAccountName } from "../../services/keplr";
+import * as PropTypes from "prop-types";
+import React from "react";
+import { connect } from "react-redux";
+import { useNavigate } from "react-router";
+import { useLocation } from "react-router-dom";
 import { setAccountAddress, setAccountName } from "../../actions/account";
+import { SvgIcon } from "../../components/common";
+import { fetchKeplrAccountName, initializeChain } from "../../services/keplr";
+import variables from "../../utils/variables";
+import { tabsList } from "./TabsList";
 
 const NavTabs = ({ setAccountAddress, lang, setAccountName, onClick }) => {
   const location = useLocation();
@@ -18,11 +17,17 @@ const NavTabs = ({ setAccountAddress, lang, setAccountName, onClick }) => {
   const route = location.pathname && location.pathname.split("/")[1];
 
   window.addEventListener("keplr_keystorechange", () => {
-    handleConnectToKeplr();
+    handleConnectToWallet();
   });
 
-  const handleConnectToKeplr = () => {
-    initializeChain((error, account) => {
+  window.addEventListener("leap_keystorechange", () => {
+    handleConnectToWallet();
+  });
+
+  const handleConnectToWallet = () => {
+    let walletType = localStorage.getItem("loginType");
+
+    initializeChain(walletType, (error, account) => {
       if (error) {
         message.error(error);
         return;
@@ -34,7 +39,7 @@ const NavTabs = ({ setAccountAddress, lang, setAccountName, onClick }) => {
 
       setAccountAddress(account.address);
       localStorage.setItem("ac", encode(account.address));
-      localStorage.setItem("loginType", "keplr");
+      localStorage.setItem("loginType", walletType || "keplr");
     });
   };
 

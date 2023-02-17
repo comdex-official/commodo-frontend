@@ -11,7 +11,7 @@ import {
   setAccountVaults,
   setAssetBalance,
   setPoolBalance,
-  showAccountConnectModal,
+  showAccountConnectModal
 } from "../../actions/account";
 import { setAssets } from "../../actions/asset";
 import { setAssetRatesStats, setUserLends } from "../../actions/lend";
@@ -23,11 +23,11 @@ import { queryAllBalances } from "../../services/bank/query";
 import { fetchKeplrAccountName, initializeChain } from "../../services/keplr";
 import {
   QueryAssetRatesParams,
-  queryUserLends,
+  queryUserLends
 } from "../../services/lend/query";
 import {
   fetchCoingeckoPrices,
-  queryMarketList,
+  queryMarketList
 } from "../../services/oracle/query";
 import { amountConversion } from "../../utils/coin";
 import { marketPrice } from "../../utils/number";
@@ -63,8 +63,10 @@ const ConnectButton = ({
   }, []);
 
   useEffect(() => {
+    let walletType = localStorage.getItem("loginType");
+
     if (addressFromLocal) {
-      initializeChain((error, account) => {
+      initializeChain(walletType, (error, account) => {
         if (error) {
           message.error(error);
           return;
@@ -74,7 +76,7 @@ const ConnectButton = ({
           setAccountName(name);
         });
         localStorage.setItem("ac", encode(account.address));
-        localStorage.setItem("loginType", "keplr");
+        localStorage.setItem("loginType", walletType || "keplr");
       });
     }
   }, [addressFromLocal]);
@@ -118,7 +120,7 @@ const ConnectButton = ({
   useEffect(() => {
     queryAssets(
       (DEFAULT_PAGE_NUMBER - 1) * DEFAULT_PAGE_SIZE,
-      DEFAULT_PAGE_SIZE * 2,
+      DEFAULT_PAGE_SIZE * 10,
       true,
       false,
       (error, result) => {
