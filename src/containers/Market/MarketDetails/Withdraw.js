@@ -11,7 +11,7 @@ const marks = {
 
 let data = [
     {
-        title: "Borrowed",
+        title: "Lent",
         counts: `$00`,
         tooltipText: "Total funds Lent",
     },
@@ -147,7 +147,7 @@ const Withdraw = () => {
                                         marks={marks}
                                         defaultValue={37}
                                         tooltip={{ open: false }}
-                                        className="commodo-slider market-slider"
+                                        className="commodo-slider market-slider-1"
                                     />
                                 </Col>
                             </Row>

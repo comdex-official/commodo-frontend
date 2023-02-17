@@ -4,10 +4,71 @@ import CustomInput from "../../../components/CustomInput";
 
 const marks = {
     0: " ",
+    80: "Safe",
     100: "Riskier",
 };
 
 let data = [
+    {
+        title: "Borrowed",
+        counts: `$00`,
+        tooltipText: "Total funds Lent",
+    },
+    {
+        title: "Available",
+        counts: `$100`,
+        tooltipText: "Total funds Available",
+    },
+    {
+        title: "Utilization",
+        counts: "20%",
+        tooltipText: "Asset Utilization",
+    },
+    {
+        title: "Borrow APY",
+        counts: (
+            <>
+                10%
+            </>
+        ),
+        tooltipText: "Lend APY of Asset",
+    },
+];
+
+let data2 = [
+    {
+        title: "Borrowed",
+        counts: `$00`,
+        tooltipText: "Total funds Lent",
+    },
+    {
+        title: "Available",
+        counts: `$100`,
+        tooltipText: "Total funds Available",
+    },
+    {
+        title: "Utilization",
+        counts: "20%",
+        tooltipText: "Asset Utilization",
+    },
+    {
+        title: "Borrow APY",
+        counts: (
+            <>
+                10%
+                <div className="distribution-btn-row">
+                    <Button type="primary" className="distribution-apy-button">
+                        200.98%
+                    </Button>
+                    <TooltipIcon text="Boosted rewards for Borrowing" />
+                </div>
+            </>
+        ),
+        tooltipText: "Lend APY of Asset",
+    },
+];
+
+let data3 = [
     {
         title: "Borrowed",
         counts: `$00`,
@@ -215,7 +276,7 @@ const Borrow = () => {
                                         marks={marks}
                                         defaultValue={37}
                                         tooltip={{ open: false }}
-                                        className="commodo-slider market-slider"
+                                        className="commodo-slider market-slider borrow-slider"
                                     />
                                 </Col>
                             </Row>
@@ -307,7 +368,7 @@ const Borrow = () => {
                             grid={{
                                 gutter: 16,
                             }}
-                            dataSource={data}
+                            dataSource={data2}
                             renderItem={(item) => (
                                 <List.Item>
                                     <div>
@@ -338,7 +399,7 @@ const Borrow = () => {
                             grid={{
                                 gutter: 16,
                             }}
-                            dataSource={data}
+                            dataSource={data3}
                             renderItem={(item) => (
                                 <List.Item>
                                     <div>

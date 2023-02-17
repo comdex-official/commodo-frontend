@@ -147,7 +147,7 @@ const Lend = () => {
                                         marks={marks}
                                         defaultValue={37}
                                         tooltip={{ open: false }}
-                                        className="commodo-slider market-slider"
+                                        className="commodo-slider market-slider-1"
                                     />
                                 </Col>
                             </Row>
