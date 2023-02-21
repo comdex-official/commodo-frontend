@@ -1,4 +1,4 @@
-import { Button, message, Select, Spin } from "antd";
+import { Button, message, Select, Slider, Spin } from "antd";
 import Long from "long";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
@@ -143,11 +143,11 @@ const DepositTab = ({
     if (assetMap[selectedAssetId]?.denom === comdex.coinMinimalDenom) {
       return Number(availableBalance) > DEFAULT_FEE
         ? handleInputChange(
-            amountConversion(
-              availableBalance - DEFAULT_FEE,
-              assetDenomMap[assetMap[selectedAssetId]?.denom]?.decimals
-            )
+          amountConversion(
+            availableBalance - DEFAULT_FEE,
+            assetDenomMap[assetMap[selectedAssetId]?.denom]?.decimals
           )
+        )
         : handleInputChange();
     } else {
       return handleInputChange(
@@ -159,11 +159,17 @@ const DepositTab = ({
     }
   };
 
+  const marks = {
+    0: "0%",
+    50: '50%',
+    100: "100%",
+  };
+
   return (
-    <div className="details-wrapper">
+    <div className="details-wrapper market-details-wrapper">
       {!dataInProgress ? (
         <>
-          <div className="details-left commodo-card">
+          <div className="details-left commodo-card commodo-borrow-page">
             <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
             <div className="assets-select-card mb-0">
               <div className="assets-left">
@@ -242,11 +248,11 @@ const DepositTab = ({
                   {commaSeparator(
                     Number(
                       amount *
-                        marketPrice(
-                          markets,
-                          assetMap[selectedAssetId]?.denom,
-                          selectedAssetId
-                        ) || 0
+                      marketPrice(
+                        markets,
+                        assetMap[selectedAssetId]?.denom,
+                        selectedAssetId
+                      ) || 0
                     ).toFixed(DOLLAR_DECIMALS)
                   )}{" "}
                 </div>
@@ -261,6 +267,30 @@ const DepositTab = ({
                 />
               </Col>
             </Row>
+
+            <Row className="mt-1">
+              <Col sm="12">
+                <Slider
+                  marks={marks}
+                  defaultValue={37}
+                  tooltip={{ open: false }}
+                  className="commodo-slider market-slider-1"
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col sm="12" className="mx-auto card-bottom-details">
+                <Row className="mt-2">
+                  <Col>
+                    <label>Current LTV</label>
+                  </Col>
+                  <Col className="text-right">
+                    20%
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+
             <div className="assets-form-btn">
               <Button
                 type="primary"
@@ -285,7 +315,9 @@ const DepositTab = ({
                 poolId={pool?.poolId}
                 parent="lend"
               />
-              <div className="mt-5">
+            </div>
+            <div className="commodo-card">
+              <div>
                 <Details
                   asset={assetMap[pool?.transitAssetIds?.second?.toNumber()]}
                   poolId={pool?.poolId}

@@ -47,11 +47,11 @@ const BorrowDetails = ({ address, setPool, setPoolLends }) => {
 
   return (
     <div className="app-content-wrapper">
-      <Row>
+      {/* <Row>
         <Col className="text-right mb-3">
           <BackButton />
         </Col>
-      </Row>
+      </Row> */}
       <Borrow dataInProgress={inProgress} />
     </div>
   );
