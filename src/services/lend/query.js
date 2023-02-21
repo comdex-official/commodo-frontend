@@ -302,6 +302,24 @@ export const queryAssetPoolFundBalance = (assetId, poolId, callback) => {
       .catch((error) => callback(error?.message));
   });
 };
+export const queryAllLendByOwnerAndPool = (address, poolId, callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryAllLendByOwnerAndPool({
+        owner: address,
+        poolId: Long.fromNumber(poolId),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
 
 export const queryTopAssets = (callback) => {
   axios

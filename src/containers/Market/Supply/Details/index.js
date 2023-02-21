@@ -12,7 +12,6 @@ import "./index.less";
 
 const SupplyDetails = ({ setPool }) => {
   const [inProgress, setInProgress] = useState(false);
-
   let { id } = useParams();
 
   useEffect(() => {
@@ -32,7 +31,7 @@ const SupplyDetails = ({ setPool }) => {
 
   return (
     <div className="app-content-wrapper">
-      <Row>
+      {/* <Row>
         <Col className="text-right mb-3">
           <Link to="/lend">
             <Button className="back-btn" type="primary">
@@ -40,7 +39,7 @@ const SupplyDetails = ({ setPool }) => {
             </Button>
           </Link>
         </Col>
-      </Row>
+      </Row> */}
       <Deposit dataInProgress={inProgress} />
     </div>
   );

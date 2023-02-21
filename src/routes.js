@@ -78,7 +78,7 @@ const routes = [
     element: <Extra />,
   },
   {
-    path: "/market-details",
+    path: "/market-details/:id",
     element: <MarketDetails />,
   },
   {
