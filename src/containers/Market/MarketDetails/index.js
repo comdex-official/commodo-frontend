@@ -10,6 +10,7 @@ import BorrowDetails from "../../Market/Borrow/Details";
 import DepositWithdraw from "../../Myhome/DepositWithdraw";
 import BorrowRepay from "../../Myhome/BorrowRepay";
 import Withdraw_2 from "./Withdraw_2";
+import Repay_2 from "./Repay_2";
 // import BorrowDetails from "./containers/Market/Borrow/Details";
 
 const PageBackButton = {
@@ -40,8 +41,9 @@ const MarketDetails = () => {
         {
             label: "Repay",
             key: "4",
-            children: <Repay />
+            // children: <Repay />
             // children: <BorrowRepay />
+            children: <Repay_2 />
         },
     ];
     return (
