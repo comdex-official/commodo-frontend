@@ -321,6 +321,25 @@ export const queryAllLendByOwnerAndPool = (address, poolId, callback) => {
   });
 };
 
+export const queryAllBorrowByOwnerAndPool = (address, poolId, callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryAllBorrowByOwnerAndPool({
+        owner: address,
+        poolId: Long.fromNumber(poolId),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+
 export const queryTopAssets = (callback) => {
   axios
     .get(`${API_URL}/api/v2/commodo/rankings`)
