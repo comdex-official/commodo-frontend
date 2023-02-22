@@ -53,7 +53,7 @@ let data2 = [
         tooltipText: "Asset Utilization",
     },
     {
-        title: "Lend APY",
+        title: "Borrowed APY",
         counts: (
             <>
                 10%
