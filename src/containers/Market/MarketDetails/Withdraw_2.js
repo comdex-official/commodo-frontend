@@ -9,16 +9,17 @@ import Details from "../../../components/common/Asset/Details";
 import CustomInput from "../../../components/CustomInput";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { queryAllLendByOwnerAndPool } from "../../../services/lend/query";
+import { queryAllLendByOwnerAndPool, QueryPoolAssetLBMapping } from "../../../services/lend/query";
 import {
     amountConversion,
     amountConversionWithComma,
     denomConversion,
     getAmount
 } from "../../../utils/coin";
-import { commaSeparator, marketPrice } from "../../../utils/number";
+import { commaSeparator, decimalConversion, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "../../Myhome/DepositWithdraw/ActionButton";
+import AssetStats from "../../../components/common/Asset/Stats";
 // import { ActionButton } from "../ActionButton";
 // import ActionButton from "./ActionButton";
 import "./index.less";
@@ -44,6 +45,7 @@ const WithdrawTab = ({
     const [selectedAssetId, setSelectedAssetId] = useState(0)
     const [availableBalance, setAvailableBalance] = useState(0)
     const [lendPosition, setLendPosition] = useState()
+    const [lendApy, setLendApy] = useState(0);
 
     // const selectedAssetId = lendPosition?.assetId?.toNumber();
     console.log(lendPosition, "lendPosition");
@@ -108,19 +110,41 @@ const WithdrawTab = ({
         );
     };
 
+    const fetchPoolAssetLBMapping = (assetId, poolId) => {
+        QueryPoolAssetLBMapping(assetId, poolId, (error, result) => {
+            if (error) {
+                message.error(error);
+                return;
+            }
+            setLendApy(Number(decimalConversion(result?.PoolAssetLBMapping?.lendApr || 0) * 100).toFixed(DOLLAR_DECIMALS))
+        });
+    }
+
     const handleAssetChange = (value) => {
         console.log(value, "Selected asset");
         setLendPosition(allLendByOwner[value])
         setSelectedAssetId(allLendByOwner[value]?.assetId?.toNumber());
         setAvailableBalance(allLendByOwner[value]?.availableToBorrow)
+        fetchPoolAssetLBMapping(value, pool?.poolId)
         // setAmount(0);
         // setValidationError();
     };
 
+    const handleSliderChange = (value) => {
+        handleInputChange(String(value))
+    }
+
+    useEffect(() => {
+        fetchPoolAssetLBMapping(selectedAssetId, pool?.poolId)
+    }, [selectedAssetId, pool])
+
     const marks = {
         0: "0%",
-        50: '50%',
-        100: "100%",
+        // 50: '50%',
+        [selectedAssetId && amountConversion(
+            availableBalance,
+            assetMap[selectedAssetId]?.decimals
+        ) || 100]: "100%",
     };
 
     return (
@@ -169,7 +193,7 @@ const WithdrawTab = ({
                                                     </div>
                                                     <div className="name">
                                                         {denomConversion(assetMap[item?.assetId]?.denom)}
-                                                        <label>(cPool-{denomConversion(assetMap[item?.assetId]?.denom)})</label>
+                                                        {/* <label>(cPool-{denomConversion(assetMap[item?.assetId]?.denom)})</label> */}
                                                     </div>
                                                 </div>
                                             </Option>
@@ -225,22 +249,32 @@ const WithdrawTab = ({
                 <Row>
                     <Col sm="12" className="mx-auto card-bottom-details">
                         <Row className="mt-2">
-                            <Col>
+                            {/* <Col>
                                 <label>
                                     Max LTV
                                     <TooltipIcon text="The maximum borrowing power of the collateral" />
                                 </label>
-                            </Col>
-                            <Col className="text-right">
+                            </Col> */}
+                            {/* <Col className="text-right">
                                 -
+                            </Col> */}
+                            <Col>
+                                <AssetStats
+                                    assetId={selectedAssetId}
+                                    pool={pool}
+                                    parent="lend"
+                                />
                             </Col>
                         </Row>
                         <Row className="mt-1">
                             <Col sm="12">
                                 <Slider
                                     marks={marks}
-                                    defaultValue={37}
+                                    defaultValue={amount}
+                                    value={amount}
                                     tooltip={{ open: false }}
+                                    onChange={handleSliderChange}
+                                    max={amountConversion(availableBalance)}
                                     className="commodo-slider market-slider-1"
                                 />
                             </Col>
@@ -250,7 +284,7 @@ const WithdrawTab = ({
                                 <label>Lend APY</label>
                             </Col>
                             <Col className="text-right">
-                                -
+                                {lendApy}%
                             </Col>
                         </Row>
                     </Col>
@@ -278,6 +312,13 @@ const WithdrawTab = ({
             <div className="details-right">
                 <div className="commodo-card">
                     <Details
+                        asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
+                        poolId={pool?.poolId}
+                        parent="lend"
+                    />
+                </div>
+                <div className="commodo-card">
+                    <Details
                         asset={assetMap[pool?.transitAssetIds?.first?.toNumber()]}
                         poolId={pool?.poolId}
                         parent="lend"
@@ -290,13 +331,7 @@ const WithdrawTab = ({
                         parent="lend"
                     />
                 </div>
-                <div className="commodo-card">
-                    <Details
-                        asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
-                        poolId={pool?.poolId}
-                        parent="lend"
-                    />
-                </div>
+
             </div>
         </div>
     );

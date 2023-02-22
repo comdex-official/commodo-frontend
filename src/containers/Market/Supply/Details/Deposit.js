@@ -19,6 +19,7 @@ import {
   DOLLAR_DECIMALS
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
+import { QueryPoolAssetLBMapping } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
@@ -27,7 +28,7 @@ import {
   getAmount,
   getDenomBalance
 } from "../../../../utils/coin";
-import { commaSeparator, marketPrice } from "../../../../utils/number";
+import { commaSeparator, decimalConversion, marketPrice } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import "./index.less";
@@ -52,6 +53,7 @@ const DepositTab = ({
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
   const [inProgress, setInProgress] = useState(false);
+  const [lendApy, setLendApy] = useState(0);
   const navigate = useNavigate();
 
   const availableBalance =
@@ -71,11 +73,28 @@ const DepositTab = ({
     }
   }, [pool, assetMap]);
 
+  const fetchPoolAssetLBMapping = (assetId, poolId) => {
+    QueryPoolAssetLBMapping(assetId, poolId, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+      setLendApy(Number(decimalConversion(result?.PoolAssetLBMapping?.lendApr || 0) * 100).toFixed(DOLLAR_DECIMALS))
+    });
+  }
+
   const handleAssetChange = (value) => {
     setSelectedAssetId(value);
     setAmount(0);
     setValidationError();
+    fetchPoolAssetLBMapping(value, pool?.poolId)
+
   };
+
+  useEffect(() => {
+    fetchPoolAssetLBMapping(selectedAssetId, pool?.poolId)
+  }, [selectedAssetId, pool])
+
 
   const handleInputChange = (value) => {
     value = toDecimals(value, assetMap[selectedAssetId]?.decimals)
@@ -159,10 +178,14 @@ const DepositTab = ({
     }
   };
 
+  const handleSliderChange = (value) => {
+    handleInputChange(String(value))
+  }
+
   const marks = {
     0: "0%",
-    50: '50%',
-    100: "100%",
+    // 50: '50%',
+    [amountConversion(availableBalance)]: "100%",
   };
 
   return (
@@ -272,8 +295,11 @@ const DepositTab = ({
               <Col sm="12">
                 <Slider
                   marks={marks}
-                  defaultValue={37}
+                  defaultValue={amount}
+                  value={amount}
                   tooltip={{ open: false }}
+                  max={amountConversion(availableBalance)}
+                  onChange={handleSliderChange}
                   className="commodo-slider market-slider-1"
                 />
               </Col>
@@ -282,10 +308,10 @@ const DepositTab = ({
               <Col sm="12" className="mx-auto card-bottom-details">
                 <Row className="mt-2">
                   <Col>
-                    <label>Current LTV</label>
+                    <label>Lend APY</label>
                   </Col>
                   <Col className="text-right">
-                    20%
+                    {lendApy}%
                   </Col>
                 </Row>
               </Col>
@@ -311,6 +337,13 @@ const DepositTab = ({
           <div className="details-right">
             <div className="commodo-card">
               <Details
+                asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
+                poolId={pool?.poolId}
+                parent="lend"
+              />
+            </div>
+            <div className="commodo-card">
+              <Details
                 asset={assetMap[pool?.transitAssetIds?.first?.toNumber()]}
                 poolId={pool?.poolId}
                 parent="lend"
@@ -324,13 +357,6 @@ const DepositTab = ({
                   parent="lend"
                 />
               </div>
-            </div>
-            <div className="commodo-card">
-              <Details
-                asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
-                poolId={pool?.poolId}
-                parent="lend"
-              />
             </div>
           </div>
         </>

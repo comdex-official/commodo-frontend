@@ -30,7 +30,7 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
         message.error(error);
         return;
       }
-      console.log(result?.pools, "result?.pools");
+
       setPools(result?.pools);
     });
   };
@@ -48,6 +48,8 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
   if (inProgress) {
     return <Spin />
   }
+
+
   return (
     <div className="commodo-card bg-none">
       <div className="card-header d-flex align-items-center justify-content-between mb-3 ">
@@ -117,7 +119,7 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
                               return (
                                 <React.Fragment key={objectIndex}>
                                   <tr>
-                                    <th>Asset name</th>
+                                    <th>{denomConversion(assetMap?.[item?.transitAssetIds[key]]?.denom)}</th>
                                     <td>
                                       <AssetApy
                                         poolId={item?.poolId}
