@@ -30,7 +30,8 @@ import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
   queryAssetPairs,
   queryLendPair,
-  queryLendPool
+  queryLendPool,
+  QueryPoolAssetLBMapping
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
@@ -77,6 +78,8 @@ const BorrowTab = ({
   const [assetOutPool, setAssetOutPool] = useState();
   const [selectedCollateralLendingId, setSelectedCollateralLendingId] =
     useState();
+  const [borrowApy, setBorrowApy] = useState(0);
+
 
   const navigate = useNavigate();
 
@@ -167,6 +170,20 @@ const BorrowTab = ({
     }
   }, [poolLendPositions]);
 
+  const fetchPoolAssetLBMapping = (assetId, poolId) => {
+    QueryPoolAssetLBMapping(assetId, poolId, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+      setBorrowApy(Number(decimalConversion(result?.PoolAssetLBMapping?.borrowApr || 0) * 100).toFixed(DOLLAR_DECIMALS))
+    });
+  }
+
+  useEffect(() => {
+    fetchPoolAssetLBMapping(pair?.assetOut?.toNumber(), pair?.assetOutPoolId?.toNumber())
+  }, [pair, pool, assetOutPool])
+
   const handleCollateralAssetChange = (lendingId) => {
     setSelectedCollateralLendingId(lendingId);
     setSelectedBorrowValue();
@@ -235,6 +252,7 @@ const BorrowTab = ({
   };
 
   const handleBorrowAssetChange = (value) => {
+    console.log(value, "change borrow value");
     setSelectedBorrowValue(value);
     const selectedPair =
       extendedPairs &&
@@ -246,6 +264,7 @@ const BorrowTab = ({
     setOutAmount(0);
     setBorrowValidationError();
     setMaxBorrowValidationError();
+    fetchPoolAssetLBMapping(pair?.assetOut?.toNumber(), assetOutPool?.poolId?.toNumber())
   };
 
   const handleInAmountChange = (value) => {
@@ -907,7 +926,7 @@ const BorrowTab = ({
                     />
                   </Col>
                 </Row>
-                {/* <Row className="mt-2">
+                <Row className="mt-2">
                   <Col>
                     <label>Current LTV</label>
                   </Col>
@@ -917,14 +936,14 @@ const BorrowTab = ({
                     )}
                     %
                   </Col>
-                </Row> */}
+                </Row>
                 <Row className="mt-2">
                   <Col>
                     <label>Borrow APY</label>
                     <TooltipIcon />
                   </Col>
                   <Col className="text-right">
-                    -
+                    {borrowApy || "-"}%
                   </Col>
                 </Row>
                 <Row className="mt-2">

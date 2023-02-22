@@ -71,10 +71,6 @@ const RepayTab_2 = ({
     //   Number(borrowPosition?.amountOut?.amount) +
     //   Number(decimalConversion(borrowPosition?.interestAccumulated));
 
-    console.log(borrowPosition, "borrowPosition");
-    console.log(selectedBorrowPosition, "selectedBorrowPosition");
-    // console.log(pair, "pair");
-    // console.log(assetDenomMap, "assetDenomMap");
 
     const fetchAllBorrowByOwnerAndPool = (address, poolId,) => {
         queryAllBorrowByOwnerAndPool(address, poolId, (error, result) => {
@@ -167,10 +163,18 @@ const RepayTab_2 = ({
         // setValidationError();
     };
 
+    const handleSliderChange = (value) => {
+        handleInputChange(String(value))
+    }
+
+
     const marks = {
         0: "0%",
-        50: '50%',
-        100: "100%",
+        // 50: '50%',
+        [amountConversionWithComma(
+            updatedAmountOut,
+            assetDenomMap[selectedBorrowPosition?.amountOut?.denom]?.decimals
+        )]: "100%",
     };
 
     return (
@@ -320,8 +324,14 @@ const RepayTab_2 = ({
                             <Col sm="12">
                                 <Slider
                                     marks={marks}
-                                    defaultValue={37}
+                                    defaultValue={amount}
+                                    value={amount}
                                     tooltip={{ open: false }}
+                                    onChange={handleSliderChange}
+                                    max={amountConversionWithComma(
+                                        updatedAmountOut,
+                                        assetDenomMap[selectedBorrowPosition?.amountOut?.denom]?.decimals
+                                    )}
                                     className="commodo-slider market-slider-1 repay-slider"
                                 />
                             </Col>
@@ -355,7 +365,7 @@ const RepayTab_2 = ({
                                 />{" "}
                             </Col>
                         </Row>
-                        <AssetStats pair={pair} pool={pool} />
+                        {/* <AssetStats pair={pair} pool={pool} /> */}
                     </Col>
                 </Row>
                 <div className="assets-form-btn">
@@ -382,25 +392,26 @@ const RepayTab_2 = ({
             <div className="details-right">
                 <div className="commodo-card">
                     <Details
-                        asset={assetMap[pool?.transitAssetIds?.first?.toNumber()]}
-                        poolId={pool?.poolId}
-                        parent="borrow"
-                    />
-                    <div className="mt-5">
-                        <Details
-                            asset={assetMap[pool?.transitAssetIds?.second?.toNumber()]}
-                            poolId={pool?.poolId}
-                            parent="borrow"
-                        />
-                    </div>
-                </div>
-                <div className="commodo-card">
-                    <Details
                         asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
                         poolId={pool?.poolId}
                         parent="borrow"
                     />
                 </div>
+                <div className="commodo-card">
+                    <Details
+                        asset={assetMap[pool?.transitAssetIds?.first?.toNumber()]}
+                        poolId={pool?.poolId}
+                        parent="borrow"
+                    />
+                </div>
+                <div className="commodo-card">
+                    <Details
+                        asset={assetMap[pool?.transitAssetIds?.second?.toNumber()]}
+                        poolId={pool?.poolId}
+                        parent="borrow"
+                    />
+                </div>
+
             </div>
         </div>
     );
