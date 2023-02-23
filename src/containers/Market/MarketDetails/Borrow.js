@@ -31,7 +31,7 @@ let data = [
                 10%
             </>
         ),
-        tooltipText: "Lend APY of Asset",
+        tooltipText: "Borrow APY of Asset",
     },
 ];
 
@@ -64,7 +64,7 @@ let data2 = [
                 </div>
             </>
         ),
-        tooltipText: "Lend APY of Asset",
+        tooltipText: "Borrow APY of Asset",
     },
 ];
 
@@ -97,7 +97,7 @@ let data3 = [
                 </div>
             </>
         ),
-        tooltipText: "Lend APY of Asset",
+        tooltipText: "Borrow APY of Asset",
     },
 ];
 
