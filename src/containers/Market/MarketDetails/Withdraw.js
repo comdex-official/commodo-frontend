@@ -26,13 +26,13 @@ let data = [
         tooltipText: "Asset Utilization",
     },
     {
-        title: "Borrow APY",
+        title: "Lend APY",
         counts: (
             <>
                 10%
             </>
         ),
-        tooltipText: "Borrow APY of Asset",
+        tooltipText: "Lend APY of Asset",
     },
 ];
 

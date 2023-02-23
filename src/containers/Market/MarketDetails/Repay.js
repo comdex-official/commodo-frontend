@@ -26,13 +26,13 @@ let data = [
         tooltipText: "Asset Utilization",
     },
     {
-        title: "Lend APY",
+        title: "Borrow APY",
         counts: (
             <>
                 10%
             </>
         ),
-        tooltipText: "Lend APY of Asset",
+        tooltipText: "Borrow APY of Asset",
     },
 ];
 
@@ -53,7 +53,7 @@ let data2 = [
         tooltipText: "Asset Utilization",
     },
     {
-        title: "Lend APY",
+        title: "Borrow APY",
         counts: (
             <>
                 10%
@@ -65,7 +65,7 @@ let data2 = [
                 </div>
             </>
         ),
-        tooltipText: "Lend APY of Asset",
+        tooltipText: "Borrow APY of Asset",
     },
 ];
 
@@ -86,7 +86,7 @@ let data3 = [
         tooltipText: "Asset Utilization",
     },
     {
-        title: "Lend APY",
+        title: "Borrow APY",
         counts: (
             <>
                 10%
@@ -98,7 +98,7 @@ let data3 = [
                 </div>
             </>
         ),
-        tooltipText: "Lend APY of Asset",
+        tooltipText: "Borrow APY of Asset",
     },
 ];
 

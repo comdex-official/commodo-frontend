@@ -9,7 +9,7 @@ const ThemeToggle = ({ isDarkMode, setDarkTheme }) => {
   }, []);
 
   const initialTheme = () => {
-    if (localStorage.getItem("isDarkMode") === "false") {
+    if (localStorage.getItem("isDarkMode") === "true") {
       document.body.classList.remove("dark-mode");
       setDarkTheme(false);
     } else {
