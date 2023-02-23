@@ -1,4 +1,4 @@
-import { Button, message, Select, Spin } from "antd";
+import { Button, message, Select, Slider, Spin } from "antd";
 import Long from "long";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
@@ -19,6 +19,7 @@ import {
   DOLLAR_DECIMALS
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
+import { QueryPoolAssetLBMapping } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
@@ -27,7 +28,7 @@ import {
   getAmount,
   getDenomBalance
 } from "../../../../utils/coin";
-import { commaSeparator, marketPrice } from "../../../../utils/number";
+import { commaSeparator, decimalConversion, marketPrice } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import "./index.less";
@@ -52,6 +53,7 @@ const DepositTab = ({
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
   const [inProgress, setInProgress] = useState(false);
+  const [lendApy, setLendApy] = useState(0);
   const navigate = useNavigate();
 
   const availableBalance =
@@ -71,11 +73,28 @@ const DepositTab = ({
     }
   }, [pool, assetMap]);
 
+  const fetchPoolAssetLBMapping = (assetId, poolId) => {
+    QueryPoolAssetLBMapping(assetId, poolId, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+      setLendApy(Number(decimalConversion(result?.PoolAssetLBMapping?.lendApr || 0) * 100).toFixed(DOLLAR_DECIMALS))
+    });
+  }
+
   const handleAssetChange = (value) => {
     setSelectedAssetId(value);
     setAmount(0);
     setValidationError();
+    fetchPoolAssetLBMapping(value, pool?.poolId)
+
   };
+
+  useEffect(() => {
+    fetchPoolAssetLBMapping(selectedAssetId, pool?.poolId)
+  }, [selectedAssetId, pool])
+
 
   const handleInputChange = (value) => {
     value = toDecimals(value, assetMap[selectedAssetId]?.decimals)
@@ -143,11 +162,11 @@ const DepositTab = ({
     if (assetMap[selectedAssetId]?.denom === comdex.coinMinimalDenom) {
       return Number(availableBalance) > DEFAULT_FEE
         ? handleInputChange(
-            amountConversion(
-              availableBalance - DEFAULT_FEE,
-              assetDenomMap[assetMap[selectedAssetId]?.denom]?.decimals
-            )
+          amountConversion(
+            availableBalance - DEFAULT_FEE,
+            assetDenomMap[assetMap[selectedAssetId]?.denom]?.decimals
           )
+        )
         : handleInputChange();
     } else {
       return handleInputChange(
@@ -159,11 +178,20 @@ const DepositTab = ({
     }
   };
 
+  const handleSliderChange = (value) => {
+    handleInputChange(String(value))
+  }
+
+  const marks = {
+    0: "0%",
+    [amountConversion(availableBalance)]: "100%",
+  };
+
   return (
-    <div className="details-wrapper">
+    <div className="details-wrapper market-details-wrapper">
       {!dataInProgress ? (
         <>
-          <div className="details-left commodo-card">
+          <div className="details-left commodo-card commodo-borrow-page">
             <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
             <div className="assets-select-card mb-0">
               <div className="assets-left">
@@ -242,11 +270,11 @@ const DepositTab = ({
                   {commaSeparator(
                     Number(
                       amount *
-                        marketPrice(
-                          markets,
-                          assetMap[selectedAssetId]?.denom,
-                          selectedAssetId
-                        ) || 0
+                      marketPrice(
+                        markets,
+                        assetMap[selectedAssetId]?.denom,
+                        selectedAssetId
+                      ) || 0
                     ).toFixed(DOLLAR_DECIMALS)
                   )}{" "}
                 </div>
@@ -261,6 +289,33 @@ const DepositTab = ({
                 />
               </Col>
             </Row>
+
+            <Row className="mt-1">
+              <Col sm="12">
+                <Slider
+                  marks={marks}
+                  defaultValue={amount}
+                  value={amount}
+                  tooltip={{ open: false }}
+                  max={amountConversion(availableBalance)}
+                  onChange={handleSliderChange}
+                  className="commodo-slider market-slider-1"
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col sm="12" className="mx-auto card-bottom-details">
+                <Row className="mt-2">
+                  <Col>
+                    <label>Lend APY</label>
+                  </Col>
+                  <Col className="text-right">
+                    {lendApy}%
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+
             <div className="assets-form-btn">
               <Button
                 type="primary"
@@ -281,24 +336,26 @@ const DepositTab = ({
           <div className="details-right">
             <div className="commodo-card">
               <Details
+                asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
+                poolId={pool?.poolId}
+                parent="lend"
+              />
+            </div>
+            <div className="commodo-card">
+              <Details
                 asset={assetMap[pool?.transitAssetIds?.first?.toNumber()]}
                 poolId={pool?.poolId}
                 parent="lend"
               />
-              <div className="mt-5">
+            </div>
+            <div className="commodo-card">
+              <div>
                 <Details
                   asset={assetMap[pool?.transitAssetIds?.second?.toNumber()]}
                   poolId={pool?.poolId}
                   parent="lend"
                 />
               </div>
-            </div>
-            <div className="commodo-card">
-              <Details
-                asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
-                poolId={pool?.poolId}
-                parent="lend"
-              />
             </div>
           </div>
         </>

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router";
 import { setPool, setPoolLends } from "../../../../actions/lend";
-import { BackButton, Col, Row } from "../../../../components/common";
 import {
   queryLendPool,
   queryUserPoolLends
@@ -47,11 +46,6 @@ const BorrowDetails = ({ address, setPool, setPoolLends }) => {
 
   return (
     <div className="app-content-wrapper">
-      <Row>
-        <Col className="text-right mb-3">
-          <BackButton />
-        </Col>
-      </Row>
       <Borrow dataInProgress={inProgress} />
     </div>
   );
