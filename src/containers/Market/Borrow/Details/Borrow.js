@@ -437,6 +437,20 @@ const BorrowTab = ({
       100
   );
 
+  let maxLTV = pair?.isInterPool
+    ? Number(
+        Number(decimalConversion(assetRatesStatsMap[pair?.assetIn]?.ltv)) *
+          Number(
+            decimalConversion(
+              assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv
+            )
+          ) *
+          100
+      ).toFixed(DOLLAR_DECIMALS)
+    : Number(
+        decimalConversion(assetRatesStatsMap[pair?.assetIn]?.ltv) * 100
+      ).toFixed(DOLLAR_DECIMALS);
+
   let data = [
     {
       title: "Threshold",
@@ -489,6 +503,33 @@ const BorrowTab = ({
     },
   ];
 
+  const handleSliderChange = (value) => {
+    console.log("the slider value", value);
+    let outValue =
+      (value *
+        Number(
+          inAmount *
+            marketPrice(
+              markets,
+              collateralAssetDenom,
+              assetDenomMap[collateralAssetDenom]?.id
+            )
+        )) /
+      marketPrice(
+        markets,
+        borrowAssetDenom,
+        assetDenomMap[borrowAssetDenom]?.id
+      ) /
+      100;
+
+    let borrowValue = toDecimals(String(outValue), assetDenomMap[borrowAssetDenom]?.decimals)
+      .toString()
+      .trim();
+
+    setOutAmount(borrowValue || 0);
+
+    console.log("out value", borrowValue);
+  };
   const TooltipContent = (
     <div className="token-details">
       <div className="tokencard-col">
@@ -789,6 +830,9 @@ const BorrowTab = ({
                   <Col sm="12">
                     <Slider
                       marks={marks}
+                      max={maxLTV}
+                      value={currentLTV}
+                      onChange={handleSliderChange}
                       defaultValue={37}
                       tooltip={{ open: false }}
                       className="commodo-slider market-slider borrow-slider"
