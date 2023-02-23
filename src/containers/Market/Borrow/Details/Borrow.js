@@ -857,19 +857,8 @@ const BorrowTab = ({
                 </Row>
                 <Row className="mt-2">
                   <Col>
-                    <label>Current LTV</label>
-                  </Col>
-                  <Col className="text-right">
-                    {(isFinite(currentLTV) ? currentLTV : 0).toFixed(
-                      DOLLAR_DECIMALS
-                    )}
-                    %
-                  </Col>
-                </Row>
-                <Row className="mt-2">
-                  <Col>
                     <label>Borrow APY</label>
-                    <TooltipIcon />
+                    <TooltipIcon text={"Borrow APY of Asset"}/>
                   </Col>
                   <Col className="text-right">
                     <AssetApy poolId={pool?.poolId} assetId={pair?.assetOut} />
