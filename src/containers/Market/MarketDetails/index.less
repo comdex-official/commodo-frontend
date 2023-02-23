@@ -27,6 +27,14 @@
         @media screen and (max-width:1367px) {
             padding: 15px 22px;
         }
+        .card-bottom-details{
+            @media screen and (max-width:1441px) {
+                font-size: @font-size-base;
+            }
+            @media screen and (max-width:1367px) {
+                font-size: @font-size-base - 2;
+            }
+        }
     }
     .ant-slider {
         &.market-slider-1 {
@@ -64,8 +72,10 @@
                 width: 27px;
                 height: 27px;
                 border-radius: 27px;
-                background: @white;
                 margin-top: -3px;
+                .dark-mode & {
+                    background: @white;
+                }
                 @media screen and (max-width:1560px) {
                     height: 20px;
                     width: 20px;
@@ -125,8 +135,10 @@
                 width: 27px;
                 height: 27px;
                 border-radius: 27px;
-                background: @white;
                 margin-top: -4px;
+                .dark-mode & {
+                    background: @white;
+                }
                 @media screen and (max-width:1560px) {
                     height: 20px;
                     width: 20px;
@@ -196,6 +208,8 @@
         }
         @media screen and (max-width:1441px) {
             width: calc(100% + 60px);
+            padding-top: 16px;
+            margin-left: -30px;
         }
         @media screen and (max-width:1367px) {
             width: calc(100% + 44px);
