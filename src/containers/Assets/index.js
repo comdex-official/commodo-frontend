@@ -8,14 +8,14 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon,
+  TooltipIcon
 } from "../../components/common";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
 import { amountConversion, denomConversion } from "../../utils/coin";
-import { commaSeparator, marketPrice } from "../../utils/number";
+import { commaSeparator, formateNumberDecimalsAuto, marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import Deposit from "./DepositModal";
 import "./index.less";
@@ -88,7 +88,7 @@ const Assets = ({
       key: "price",
       width: 150,
       render: (price) => (
-        <>${commaSeparator(Number(price || 0).toFixed(DOLLAR_DECIMALS))}</>
+        <>${formateNumberDecimalsAuto({ price: Number(price) || 0 })}</>
       ),
     },
     {
