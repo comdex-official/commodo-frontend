@@ -47,6 +47,7 @@ import {
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
+import AssetApy from "../../AssetApy";
 import "./index.less";
 
 const { Option } = Select;
@@ -826,7 +827,9 @@ const BorrowTab = ({
                     <label>Borrow APY</label>
                     <TooltipIcon />
                   </Col>
-                  <Col className="text-right">{borrowApy || "-"}%</Col>
+                  <Col className="text-right">
+                    <AssetApy poolId={pool?.poolId} assetId={pair?.assetOut} />
+                  </Col>
                 </Row>
                 <Row className="mt-2">
                   <Col>
