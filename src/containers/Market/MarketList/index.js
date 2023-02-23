@@ -1,18 +1,18 @@
-import { Button, message, Spin, Table, Tooltip } from "antd";
+import { Button, message, Spin, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { SvgIcon } from "../../../components/common";
 import { useNavigate } from "react-router";
-import "./index.less";
+import { Link } from "react-router-dom";
+import { setPools } from "../../../actions/lend";
+import { SvgIcon } from "../../../components/common";
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from "../../../constants/common";
 import { queryLendPools } from "../../../services/lend/query";
-import React, { useEffect, useState } from "react";
-import { setPools } from "../../../actions/lend";
 import { denomConversion } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
-import { AvailableToBorrow } from "../Borrow/AvailableToBorrow";
 import AssetApy from "../AssetApy";
+import { AvailableToBorrow } from "../Borrow/AvailableToBorrow";
+import "./index.less";
 
 const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
 
@@ -140,23 +140,6 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
                             })
                             }
                           </tbody>
-                          {/* <tbody>
-                            <tr>
-                              <th>CMDX</th>
-                              <td>1.25 %</td>
-                              <td>2.20 %</td>
-                            </tr>
-                            <tr>
-                              <th>CMST</th>
-                              <td>1.25 %</td>
-                              <td>2.20 %</td>
-                            </tr>
-                            <tr>
-                              <th>ATOM</th>
-                              <td>1.25 %</td>
-                              <td>2.20 %</td>
-                            </tr>
-                          </tbody> */}
                         </table>
                       </div>
                     </div>

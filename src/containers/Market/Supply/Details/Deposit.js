@@ -184,7 +184,6 @@ const DepositTab = ({
 
   const marks = {
     0: "0%",
-    // 50: '50%',
     [amountConversion(availableBalance)]: "100%",
   };
 

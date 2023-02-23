@@ -3,9 +3,10 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
-import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import { Col, NoDataIcon, Row, SvgIcon } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
+import AssetStats from "../../../components/common/Asset/Stats";
 import CustomInput from "../../../components/CustomInput";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
@@ -19,9 +20,6 @@ import {
 import { commaSeparator, decimalConversion, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "../../Myhome/DepositWithdraw/ActionButton";
-import AssetStats from "../../../components/common/Asset/Stats";
-// import { ActionButton } from "../ActionButton";
-// import ActionButton from "./ActionButton";
 import "./index.less";
 
 const { Option } = Select;
@@ -47,10 +45,6 @@ const WithdrawTab = ({
     const [lendPosition, setLendPosition] = useState()
     const [lendApy, setLendApy] = useState(0);
 
-    // const selectedAssetId = lendPosition?.assetId?.toNumber();
-    console.log(lendPosition, "lendPosition");
-    // const availableBalance = lendPosition?.availableToBorrow || 0;
-
     useEffect(() => {
         if (pool?.poolId) {
             setAssetList([
@@ -68,7 +62,6 @@ const WithdrawTab = ({
                 return;
             }
 
-            console.log(result, "AllLendByOwnerAndPool");
             setAllLendByOwner(result?.lends)
         });
     };
@@ -77,13 +70,7 @@ const WithdrawTab = ({
         fetchAllLendByOwnerAndPool(address, pool?.poolId)
     }, [address, pool])
 
-
-    useEffect(() => {
-        // refreshLendPosition();
-    }, [refreshBalance]);
-
     const refreshData = () => {
-        // refreshLendPosition();
         setAmount();
         setBalanceRefresh(refreshBalance + 1);
     };
@@ -121,13 +108,10 @@ const WithdrawTab = ({
     }
 
     const handleAssetChange = (value) => {
-        console.log(value, "Selected asset");
         setLendPosition(allLendByOwner[value])
         setSelectedAssetId(allLendByOwner[value]?.assetId?.toNumber());
         setAvailableBalance(allLendByOwner[value]?.availableToBorrow)
         fetchPoolAssetLBMapping(value, pool?.poolId)
-        // setAmount(0);
-        // setValidationError();
     };
 
     const handleSliderChange = (value) => {
@@ -140,7 +124,6 @@ const WithdrawTab = ({
 
     const marks = {
         0: "0%",
-        // 50: '50%',
         [selectedAssetId && amountConversion(
             availableBalance,
             assetMap[selectedAssetId]?.decimals
@@ -158,8 +141,6 @@ const WithdrawTab = ({
                             <Select
                                 className="assets-select"
                                 popupClassName="asset-select-dropdown"
-                                // defaultValue="1"
-                                // value={selectedAssetId}
                                 onChange={handleAssetChange}
                                 placeholder={
                                     <div className="select-placeholder">
@@ -193,7 +174,6 @@ const WithdrawTab = ({
                                                     </div>
                                                     <div className="name">
                                                         {denomConversion(assetMap[item?.assetId]?.denom)}
-                                                        {/* <label>(cPool-{denomConversion(assetMap[item?.assetId]?.denom)})</label> */}
                                                     </div>
                                                 </div>
                                             </Option>
@@ -249,15 +229,6 @@ const WithdrawTab = ({
                 <Row>
                     <Col sm="12" className="mx-auto card-bottom-details">
                         <Row className="mt-2">
-                            {/* <Col>
-                                <label>
-                                    Max LTV
-                                    <TooltipIcon text="The maximum borrowing power of the collateral" />
-                                </label>
-                            </Col> */}
-                            {/* <Col className="text-right">
-                                -
-                            </Col> */}
                             <Col>
                                 <AssetStats
                                     assetId={selectedAssetId}
@@ -340,7 +311,6 @@ const WithdrawTab = ({
 WithdrawTab.propTypes = {
     dataInProgress: PropTypes.bool.isRequired,
     lang: PropTypes.string.isRequired,
-    // refreshLendPosition: PropTypes.func.isRequired,
     refreshBalance: PropTypes.number.isRequired,
     setBalanceRefresh: PropTypes.func.isRequired,
     address: PropTypes.string,
