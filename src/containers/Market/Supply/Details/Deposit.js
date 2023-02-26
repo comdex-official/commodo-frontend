@@ -266,17 +266,19 @@ const DepositTab = ({
                       validationError={validationError}
                     />
                   </div>
-                  $
-                  {commaSeparator(
-                    Number(
-                      amount *
-                      marketPrice(
-                        markets,
-                        assetMap[selectedAssetId]?.denom,
-                        selectedAssetId
-                      ) || 0
-                    ).toFixed(DOLLAR_DECIMALS)
-                  )}{" "}
+                  <small>
+                    $
+                    {commaSeparator(
+                      Number(
+                        amount *
+                        marketPrice(
+                          markets,
+                          assetMap[selectedAssetId]?.denom,
+                          selectedAssetId
+                        ) || 0
+                      ).toFixed(DOLLAR_DECIMALS)
+                    )}{" "}
+                  </small>
                 </div>
               </div>
             </div>
