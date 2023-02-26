@@ -823,7 +823,7 @@ const BorrowTab = ({
               </div>
             </div>
             <Row>
-              <Col sm="12" className="mt-3 mx-auto card-bottom-details">
+              <Col sm="12" className="mx-auto card-bottom-details">
                 <AssetStats assetId={lend?.assetId} pool={pool} pair={pair} />
 
                 <Row className="mt-1">
