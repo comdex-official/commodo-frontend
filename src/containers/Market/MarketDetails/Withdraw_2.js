@@ -250,7 +250,7 @@ const WithdrawTab = ({
                                 />
                             </Col>
                         </Row>
-                        <Row className="mt-2">
+                        <Row className="mt-2 lastrow-market-dtl">
                             <Col>
                                 <label>Lend APY</label>
                             </Col>

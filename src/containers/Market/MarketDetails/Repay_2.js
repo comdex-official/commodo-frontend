@@ -161,7 +161,7 @@ const RepayTab_2 = ({
         <div className="details-wrapper market-details-wrapper">
             <div className="details-left commodo-card">
                 <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
-                <div className="assets-select-card mb-3">
+                <div className="assets-select-card mb-2">
                     <div className="assets-left">
                         <label className="left-label">Repay Asset</label>
                         <div className="assets-select-wrapper">
@@ -252,7 +252,7 @@ const RepayTab_2 = ({
                             <Col>
                                 <label>Remaining to Repay</label>
                             </Col>
-                            <Col className="text-right">
+                            <Col className="text-right repay-remain-right">
                                 <div className="d-flex justify-content-end">
                                     <div className="cursor-pointer" onClick={handleMaxRepay}>
                                         {amountConversionWithComma(
@@ -308,12 +308,12 @@ const RepayTab_2 = ({
                             </Col>
                         </Row>
 
-                        <Row className="mt-2">
+                        <Row className="mt-2 lastrow-market-dtl">
                             <Col>
                                 <label>Health Factor</label>
                                 <TooltipIcon text="Numeric representation of your position's safety" />
                             </Col>
-                            <Col className="text-right">
+                            <Col className="text-right health-right-repay">
                                 <HealthFactor
                                     borrow={selectedBorrowPosition}
                                     pair={pair}
