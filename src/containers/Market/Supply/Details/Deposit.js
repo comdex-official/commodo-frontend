@@ -281,7 +281,7 @@ const DepositTab = ({
               </div>
             </div>
             <Row>
-              <Col sm="12" className="mt-3 mx-auto card-bottom-details">
+              <Col sm="12" className="mt-2 mx-auto card-bottom-details">
                 <AssetStats
                   assetId={selectedAssetId}
                   pool={pool}
@@ -303,7 +303,7 @@ const DepositTab = ({
                 />
               </Col>
             </Row>
-            <Row>
+            <Row className="lastrow-market-dtl">
               <Col sm="12" className="mx-auto card-bottom-details">
                 <Row className="mt-2">
                   <Col>
