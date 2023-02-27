@@ -1,5 +1,6 @@
 import { Button, Table, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
+import { useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import {
@@ -10,6 +11,7 @@ import {
   TooltipIcon
 } from "../../components/common";
 import HealthFactor from "../../components/HealthFactor";
+import { queryLendPair, queryLendPool } from "../../services/lend/query";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { decimalConversion } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
@@ -26,6 +28,35 @@ const Borrow = ({
   assetDenomMap,
 }) => {
   const navigate = useNavigate();
+  const [navigateInProgress, setNavigateInProgress] = useState(false);
+
+  const handleNavigate = (borrow) => {
+    setNavigateInProgress(true);
+
+    queryLendPair(borrow?.pairId, (error, pairResult) => {
+      if (error) {
+        setNavigateInProgress(false);
+        return;
+      }
+
+      const lendPair = pairResult?.ExtendedPair;
+
+      queryLendPool(lendPair?.assetOutPoolId, (error, result) => {
+        setNavigateInProgress(false);
+        if (error) {
+          return;
+        }
+
+        navigate(`/market-details/${result?.pool?.poolId}/#borrow`, {
+          state: {
+            lendingIdFromRoute: borrow?.lendingId?.toNumber(),
+            borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
+            pairIdFromRoute: borrow?.pairId,
+          },
+        });
+      });
+    });
+  };
   const columns = [
     {
       title: "Asset",
@@ -94,15 +125,8 @@ const Borrow = ({
             }
           >
             <Button
-              disabled={item?.isLiquidated}
-              onClick={() =>
-                navigate(`/market-details/${item?.lendingId?.toNumber()}/#borrow`, {
-                  state: {
-                    lendingIdFromRoute: item?.lendingId?.toNumber(),
-                    borrowAssetMinimalDenomFromRoute: item?.amountOut?.denom,
-                  },
-                })
-              }
+              disabled={item?.isLiquidated || navigateInProgress}
+              onClick={() => handleNavigate(item)}
               type="primary"
               className="btn-filled"
               size="small"
@@ -118,7 +142,6 @@ const Borrow = ({
   const tableData =
     userBorrowList?.length > 0
       ? userBorrowList?.map((item, index) => {
-          console.log("the item", item);
           return {
             key: index,
             asset: (
