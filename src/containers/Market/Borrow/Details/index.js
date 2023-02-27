@@ -2,7 +2,7 @@ import { message } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { setPool, setPoolLends } from "../../../../actions/lend";
 import {
   queryLendPool,
@@ -15,6 +15,7 @@ const BorrowDetails = ({ address, setPool, setPoolLends }) => {
   const [inProgress, setInProgress] = useState(false);
 
   let { id } = useParams();
+
 
   useEffect(() => {
     if (address && id) {

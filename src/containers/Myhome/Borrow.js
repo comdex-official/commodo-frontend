@@ -96,7 +96,12 @@ const Borrow = ({
             <Button
               disabled={item?.isLiquidated}
               onClick={() =>
-                navigate(`/myhome/borrow/${item?.borrowingId?.toNumber()}`)
+                navigate(`/market-details/${item?.lendingId?.toNumber()}/#borrow`, {
+                  state: {
+                    lendingIdFromRoute: item?.lendingId?.toNumber(),
+                    borrowAssetMinimalDenomFromRoute: item?.amountOut?.denom,
+                  },
+                })
               }
               type="primary"
               className="btn-filled"
@@ -113,6 +118,7 @@ const Borrow = ({
   const tableData =
     userBorrowList?.length > 0
       ? userBorrowList?.map((item, index) => {
+          console.log("the item", item);
           return {
             key: index,
             asset: (

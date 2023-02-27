@@ -2,7 +2,7 @@ import { Button, message, Select, Slider, Spin } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import {
   Col,
   NoDataIcon,
@@ -81,6 +81,11 @@ const BorrowTab = ({
     useState();
   const [borrowApy, setBorrowApy] = useState(0);
 
+  const { state } = useLocation();
+  const lendingIdFromRoute = state?.lendingIdFromRoute;
+  const borrowAssetMinimalDenomFromRoute =
+    state?.borrowAssetMinimalDenomFromRoute;
+
   const navigate = useNavigate();
 
   let collateralAssetDenom = assetMap[lend?.assetId]?.denom;
@@ -90,6 +95,7 @@ const BorrowTab = ({
 
   const availableBalance = lend?.availableToBorrow || 0;
 
+  console.log('collateralm borr', collateralAssetDenom, borrowAssetDenom)
   const borrowable = getAmount(
     (Number(inAmount) *
       marketPrice(
@@ -165,10 +171,19 @@ const BorrowTab = ({
   }, [pair]);
 
   useEffect(() => {
-    if (poolLendPositions[0]?.lendingId?.toNumber()) {
-      handleCollateralAssetChange(poolLendPositions[0]?.lendingId?.toNumber());
+    let lendId =
+      lendingIdFromRoute || poolLendPositions[0]?.lendingId?.toNumber();
+
+    if (lendId) {
+      handleCollateralAssetChange(lendId, true);
     }
-  }, [poolLendPositions]);
+  }, [poolLendPositions, lendingIdFromRoute]);
+
+  useEffect(() => {
+    if (borrowAssetMinimalDenomFromRoute && extendedPairs &&  Object.values(extendedPairs)?.length) {
+      handleBorrowAssetChange(borrowAssetMinimalDenomFromRoute);
+    }
+  }, [borrowAssetMinimalDenomFromRoute, extendedPairs]);
 
   const fetchPoolAssetLBMapping = (assetId, poolId) => {
     QueryPoolAssetLBMapping(assetId, poolId, (error, result) => {
@@ -191,9 +206,11 @@ const BorrowTab = ({
     );
   }, [pair, pool, assetOutPool]);
 
-  const handleCollateralAssetChange = (lendingId) => {
+  const handleCollateralAssetChange = (lendingId, fromRoute) => {
     setSelectedCollateralLendingId(lendingId);
-    setSelectedBorrowValue();
+    if (!fromRoute) {
+      setSelectedBorrowValue();
+    }
     setPair();
     setAssetToPool({});
     setAssetOutPool();
@@ -224,6 +241,9 @@ const BorrowTab = ({
               fetchPair(pairMapping?.pairId[i]);
             }
           }
+
+          if(fromRoute && borrowAssetMinimalDenomFromRoute)
+            handleBorrowAssetChange(borrowAssetMinimalDenomFromRoute);
         }
       );
     }
@@ -267,6 +287,7 @@ const BorrowTab = ({
       )[0];
 
     setPair(selectedPair);
+    console.log('the setting pair', pair, value, extendedPairs)
     setOutAmount(0);
     setBorrowValidationError();
     setMaxBorrowValidationError();
@@ -600,7 +621,7 @@ const BorrowTab = ({
                     className="assets-select"
                     popupClassName="asset-select-dropdown"
                     onChange={handleBorrowAssetChange}
-                    value={selectedBorrowValue}
+                    value={borrowList?.length ? selectedBorrowValue: ""}
                     placeholder={
                       <div className="select-placeholder">
                         <div className="circle-icon">
@@ -628,10 +649,18 @@ const BorrowTab = ({
                                 </div>
                               </div>
                               <div className="name">
-                                {denomConversion(item)} (
-                                {"cPool-" +
-                                  assetToPool[item]?.cpoolName?.split("-")?.[0]}
-                                )
+                                {iconNameFromDenom(item) ? (
+                                  <>
+                                    {denomConversion(item)} (
+                                    {"cPool-" +
+                                      assetToPool[item]?.cpoolName?.split(
+                                        "-"
+                                      )?.[0]}
+                                    )
+                                  </>
+                                ) : (
+                                  ""
+                                )}
                               </div>
                             </div>
                           </Option>
