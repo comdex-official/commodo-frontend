@@ -83,6 +83,7 @@ const BorrowTab = ({
 
   const { state } = useLocation();
   const lendingIdFromRoute = state?.lendingIdFromRoute;
+  const pairIdFromRoute = state?.pairIdFromRoute;
   const borrowAssetMinimalDenomFromRoute =
     state?.borrowAssetMinimalDenomFromRoute;
 
@@ -95,7 +96,6 @@ const BorrowTab = ({
 
   const availableBalance = lend?.availableToBorrow || 0;
 
-  console.log('collateralm borr', collateralAssetDenom, borrowAssetDenom)
   const borrowable = getAmount(
     (Number(inAmount) *
       marketPrice(
@@ -184,6 +184,12 @@ const BorrowTab = ({
       handleBorrowAssetChange(borrowAssetMinimalDenomFromRoute);
     }
   }, [borrowAssetMinimalDenomFromRoute, extendedPairs]);
+
+  useEffect(() => {
+    if (pairIdFromRoute) {
+      fetchPair(pairIdFromRoute);
+    }
+  }, [pairIdFromRoute]);
 
   const fetchPoolAssetLBMapping = (assetId, poolId) => {
     QueryPoolAssetLBMapping(assetId, poolId, (error, result) => {
@@ -287,7 +293,6 @@ const BorrowTab = ({
       )[0];
 
     setPair(selectedPair);
-    console.log('the setting pair', pair, value, extendedPairs)
     setOutAmount(0);
     setBorrowValidationError();
     setMaxBorrowValidationError();
