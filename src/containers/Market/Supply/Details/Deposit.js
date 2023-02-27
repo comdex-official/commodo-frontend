@@ -3,7 +3,7 @@ import Long from "long";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { setBalanceRefresh } from "../../../../actions/account";
 import { Col, NoDataIcon, Row, SvgIcon } from "../../../../components/common";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
@@ -28,7 +28,11 @@ import {
   getAmount,
   getDenomBalance
 } from "../../../../utils/coin";
-import { commaSeparator, decimalConversion, marketPrice } from "../../../../utils/number";
+import {
+  commaSeparator,
+  decimalConversion,
+  marketPrice
+} from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import "./index.less";
@@ -56,6 +60,9 @@ const DepositTab = ({
   const [lendApy, setLendApy] = useState(0);
   const navigate = useNavigate();
 
+  const { state } = useLocation();
+  const collateralAssetIdFromRoute = state?.collateralAssetIdFromRoute;
+
   const availableBalance =
     getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
 
@@ -67,11 +74,21 @@ const DepositTab = ({
         assetMap[pool?.transitAssetIds?.second?.toNumber()],
       ]);
 
-      if (assetMap[pool?.transitAssetIds?.main?.toNumber()]?.id?.toNumber()) {
+      // not selecting first value as default when coming from my home.
+      if (
+        assetMap[pool?.transitAssetIds?.main?.toNumber()]?.id?.toNumber() &&
+        !collateralAssetIdFromRoute
+      ) {
         handleAssetChange(pool?.transitAssetIds?.main?.toNumber());
       }
     }
   }, [pool, assetMap]);
+
+  useEffect(() => {
+    if (collateralAssetIdFromRoute) {
+      handleAssetChange(collateralAssetIdFromRoute);
+    }
+  }, [collateralAssetIdFromRoute]);
 
   const fetchPoolAssetLBMapping = (assetId, poolId) => {
     QueryPoolAssetLBMapping(assetId, poolId, (error, result) => {
@@ -79,22 +96,24 @@ const DepositTab = ({
         message.error(error);
         return;
       }
-      setLendApy(Number(decimalConversion(result?.PoolAssetLBMapping?.lendApr || 0) * 100).toFixed(DOLLAR_DECIMALS))
+      setLendApy(
+        Number(
+          decimalConversion(result?.PoolAssetLBMapping?.lendApr || 0) * 100
+        ).toFixed(DOLLAR_DECIMALS)
+      );
     });
-  }
+  };
 
   const handleAssetChange = (value) => {
     setSelectedAssetId(value);
     setAmount(0);
     setValidationError();
-    fetchPoolAssetLBMapping(value, pool?.poolId)
-
+    fetchPoolAssetLBMapping(value, pool?.poolId);
   };
 
   useEffect(() => {
-    fetchPoolAssetLBMapping(selectedAssetId, pool?.poolId)
-  }, [selectedAssetId, pool])
-
+    fetchPoolAssetLBMapping(selectedAssetId, pool?.poolId);
+  }, [selectedAssetId, pool]);
 
   const handleInputChange = (value) => {
     value = toDecimals(value, assetMap[selectedAssetId]?.decimals)
@@ -162,11 +181,11 @@ const DepositTab = ({
     if (assetMap[selectedAssetId]?.denom === comdex.coinMinimalDenom) {
       return Number(availableBalance) > DEFAULT_FEE
         ? handleInputChange(
-          amountConversion(
-            availableBalance - DEFAULT_FEE,
-            assetDenomMap[assetMap[selectedAssetId]?.denom]?.decimals
+            amountConversion(
+              availableBalance - DEFAULT_FEE,
+              assetDenomMap[assetMap[selectedAssetId]?.denom]?.decimals
+            )
           )
-        )
         : handleInputChange();
     } else {
       return handleInputChange(
@@ -179,8 +198,8 @@ const DepositTab = ({
   };
 
   const handleSliderChange = (value) => {
-    handleInputChange(String(value))
-  }
+    handleInputChange(String(value));
+  };
 
   const marks = {
     0: "0%",
@@ -271,11 +290,11 @@ const DepositTab = ({
                     {commaSeparator(
                       Number(
                         amount *
-                        marketPrice(
-                          markets,
-                          assetMap[selectedAssetId]?.denom,
-                          selectedAssetId
-                        ) || 0
+                          marketPrice(
+                            markets,
+                            assetMap[selectedAssetId]?.denom,
+                            selectedAssetId
+                          ) || 0
                       ).toFixed(DOLLAR_DECIMALS)
                     )}{" "}
                   </small>
@@ -312,9 +331,7 @@ const DepositTab = ({
                   <Col>
                     <label>Lend APY</label>
                   </Col>
-                  <Col className="text-right">
-                    {lendApy}%
-                  </Col>
+                  <Col className="text-right">{lendApy}%</Col>
                 </Row>
               </Col>
             </Row>
