@@ -2,7 +2,7 @@ import { Button, message, Select, Slider, Spin } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import {
   Col,
   NoDataIcon,
@@ -80,6 +80,12 @@ const BorrowTab = ({
   const [selectedCollateralLendingId, setSelectedCollateralLendingId] =
     useState();
   const [borrowApy, setBorrowApy] = useState(0);
+
+  const { state } = useLocation();
+  const lendingIdFromRoute = state?.lendingIdFromRoute;
+  const pairIdFromRoute = state?.pairIdFromRoute;
+  const borrowAssetMinimalDenomFromRoute =
+    state?.borrowAssetMinimalDenomFromRoute;
 
   const navigate = useNavigate();
 
@@ -165,10 +171,25 @@ const BorrowTab = ({
   }, [pair]);
 
   useEffect(() => {
-    if (poolLendPositions[0]?.lendingId?.toNumber()) {
-      handleCollateralAssetChange(poolLendPositions[0]?.lendingId?.toNumber());
+    let lendId =
+      lendingIdFromRoute || poolLendPositions[0]?.lendingId?.toNumber();
+
+    if (lendId) {
+      handleCollateralAssetChange(lendId, true);
     }
-  }, [poolLendPositions]);
+  }, [poolLendPositions, lendingIdFromRoute]);
+
+  useEffect(() => {
+    if (borrowAssetMinimalDenomFromRoute && extendedPairs &&  Object.values(extendedPairs)?.length) {
+      handleBorrowAssetChange(borrowAssetMinimalDenomFromRoute);
+    }
+  }, [borrowAssetMinimalDenomFromRoute, extendedPairs]);
+
+  useEffect(() => {
+    if (pairIdFromRoute) {
+      fetchPair(pairIdFromRoute);
+    }
+  }, [pairIdFromRoute]);
 
   const fetchPoolAssetLBMapping = (assetId, poolId) => {
     QueryPoolAssetLBMapping(assetId, poolId, (error, result) => {
@@ -191,9 +212,11 @@ const BorrowTab = ({
     );
   }, [pair, pool, assetOutPool]);
 
-  const handleCollateralAssetChange = (lendingId) => {
+  const handleCollateralAssetChange = (lendingId, fromRoute) => {
     setSelectedCollateralLendingId(lendingId);
-    setSelectedBorrowValue();
+    if (!fromRoute) {
+      setSelectedBorrowValue();
+    }
     setPair();
     setAssetToPool({});
     setAssetOutPool();
@@ -224,6 +247,9 @@ const BorrowTab = ({
               fetchPair(pairMapping?.pairId[i]);
             }
           }
+
+          if(fromRoute && borrowAssetMinimalDenomFromRoute)
+            handleBorrowAssetChange(borrowAssetMinimalDenomFromRoute);
         }
       );
     }
@@ -451,60 +477,11 @@ const BorrowTab = ({
         decimalConversion(assetRatesStatsMap[pair?.assetIn]?.ltv) * 100
       ).toFixed(DOLLAR_DECIMALS);
 
-  let data = [
-    {
-      title: "Threshold",
-      counts: `${
-        pair?.isInterPool
-          ? Number(
-              Number(
-                decimalConversion(
-                  assetRatesStatsMap[lend?.assetId]?.liquidationThreshold
-                )
-              ) *
-                Number(
-                  decimalConversion(
-                    assetRatesStatsMap[pool?.transitAssetIds?.first]
-                      ?.liquidationThreshold
-                  )
-                ) *
-                100
-            ).toFixed(DOLLAR_DECIMALS)
-          : Number(
-              decimalConversion(
-                assetRatesStatsMap[lend?.assetId]?.liquidationThreshold
-              ) * 100
-            ).toFixed(DOLLAR_DECIMALS)
-      }
-      %
-`,
-      tooltipText:
-        "The threshold at which a loan is defined as undercollateralised and subject to liquidation of collateral",
-    },
-    {
-      title: "Penalty",
-      counts: `${Number(
-        decimalConversion(
-          assetRatesStatsMap[lend?.assetId]?.liquidationPenalty
-        ) * 100
-      ).toFixed(DOLLAR_DECIMALS)}
-      %`,
-      tooltipText: "Fee paid by vault owners on liquidation",
-    },
-    {
-      title: "Bonus",
-      counts: `${Number(
-        decimalConversion(assetRatesStatsMap[lend?.assetId]?.liquidationBonus) *
-          100
-      ).toFixed(DOLLAR_DECIMALS)}
-      %
-`,
-      tooltipText: "Discount on the collateral unlocked to liquidators",
-    },
-  ];
-
   const handleSliderChange = (value) => {
-    console.log("the slider value", value);
+    if (value >= maxLTV) {
+      return handleBorrowMaxClick();
+    }
+
     let outValue =
       (value *
         Number(
@@ -522,100 +499,15 @@ const BorrowTab = ({
       ) /
       100;
 
-    let borrowValue = toDecimals(String(outValue), assetDenomMap[borrowAssetDenom]?.decimals)
+    let borrowValue = toDecimals(
+      String(outValue),
+      assetDenomMap[borrowAssetDenom]?.decimals
+    )
       .toString()
       .trim();
 
     setOutAmount(borrowValue || 0);
-
-    console.log("out value", borrowValue);
   };
-  const TooltipContent = (
-    <div className="token-details">
-      <div className="tokencard-col">
-        <div className="tokencard">
-          <div className="tokencard-icon">
-            <SvgIcon name={iconNameFromDenom(collateralAssetDenom)} />
-          </div>
-          <p>Deposit {denomConversion(collateralAssetDenom)}</p>
-        </div>
-        <SvgIcon
-          className="token-down-arrow"
-          name="tokenarrow-down"
-          viewbox="0 0 9.774 45.02"
-        />
-        <div className="tokencard with-shadow">
-          <div className="tokencard-icon">
-            <SvgIcon
-              name={iconNameFromDenom(
-                assetMap[pool?.transitAssetIds?.first]?.denom
-              )}
-            />
-          </div>
-          <p>
-            Borrow{" "}
-            {denomConversion(assetMap[pool?.transitAssetIds?.first]?.denom)}
-          </p>
-        </div>
-        <label>#{lend?.poolId?.toNumber()}</label>
-      </div>
-      <div className="middle-arrow">
-        <SvgIcon name="token-arrow" viewbox="0 0 159 80.387" />
-      </div>
-      <div className="tokencard-col">
-        <div className="tokencard with-shadow">
-          <div className="tokencard-icon">
-            <SvgIcon
-              name={iconNameFromDenom(
-                assetMap[pool?.transitAssetIds?.first]?.denom
-              )}
-            />
-          </div>
-          <p>
-            Deposit{" "}
-            {denomConversion(assetMap[pool?.transitAssetIds?.first]?.denom)}{" "}
-          </p>
-        </div>
-        <SvgIcon
-          className="token-down-arrow"
-          name="tokenarrow-down"
-          viewbox="0 0 9.774 45.02"
-        />
-        <div className="tokencard">
-          <div className="tokencard-icon">
-            <SvgIcon name={iconNameFromDenom(borrowAssetDenom)} />
-          </div>
-          <p>Borrow {denomConversion(borrowAssetDenom)}</p>
-        </div>
-        <label>#{pair?.assetOutPoolId?.toNumber()}</label>
-      </div>
-    </div>
-  );
-
-  const TooltipContent2 = (
-    <div className="token-details token-details-small">
-      <div className="tokencard-col">
-        <div className="tokencard">
-          <div className="tokencard-icon">
-            <SvgIcon name={iconNameFromDenom(collateralAssetDenom)} />
-          </div>
-          <p>Deposit {denomConversion(collateralAssetDenom)}</p>
-        </div>
-        <SvgIcon
-          className="token-down-arrow"
-          name="tokenarrow-down"
-          viewbox="0 0 9.774 45.02"
-        />
-        <div className="tokencard with-shadow">
-          <div className="tokencard-icon">
-            <SvgIcon name={iconNameFromDenom(borrowAssetDenom)} />
-          </div>
-          <p>Borrow {denomConversion(borrowAssetDenom)}</p>
-        </div>
-        <label>#{lend?.poolId?.toNumber()}</label>
-      </div>
-    </div>
-  );
 
   const marks = {
     0: " ",
@@ -734,7 +626,7 @@ const BorrowTab = ({
                     className="assets-select"
                     popupClassName="asset-select-dropdown"
                     onChange={handleBorrowAssetChange}
-                    value={selectedBorrowValue}
+                    value={borrowList?.length ? selectedBorrowValue: ""}
                     placeholder={
                       <div className="select-placeholder">
                         <div className="circle-icon">
@@ -762,10 +654,18 @@ const BorrowTab = ({
                                 </div>
                               </div>
                               <div className="name">
-                                {denomConversion(item)} (
-                                {"cPool-" +
-                                  assetToPool[item]?.cpoolName?.split("-")?.[0]}
-                                )
+                                {iconNameFromDenom(item) ? (
+                                  <>
+                                    {denomConversion(item)} (
+                                    {"cPool-" +
+                                      assetToPool[item]?.cpoolName?.split(
+                                        "-"
+                                      )?.[0]}
+                                    )
+                                  </>
+                                ) : (
+                                  ""
+                                )}
                               </div>
                             </div>
                           </Option>
@@ -858,7 +758,7 @@ const BorrowTab = ({
                 <Row className="mt-2">
                   <Col>
                     <label>Borrow APY</label>
-                    <TooltipIcon text={"Borrow APY of Asset"}/>
+                    <TooltipIcon text={"Borrow APY of Asset"} />
                   </Col>
                   <Col className="text-right">
                     <AssetApy poolId={pool?.poolId} assetId={pair?.assetOut} />

@@ -211,7 +211,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
           Number(this.y)?.toFixed(DOLLAR_DECIMALS) +
           "<br />" +
           '<small style="font-size: 10px;">' +
-          moment(this.x).format("MMM DD, HH:mm") +
+          moment(this.x).format("MMM DD") +
           "</small>" +
           "</div>"
         );
