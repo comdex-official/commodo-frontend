@@ -266,46 +266,49 @@ const DepositTab = ({
                       validationError={validationError}
                     />
                   </div>
-                  $
-                  {commaSeparator(
-                    Number(
-                      amount *
-                      marketPrice(
-                        markets,
-                        assetMap[selectedAssetId]?.denom,
-                        selectedAssetId
-                      ) || 0
-                    ).toFixed(DOLLAR_DECIMALS)
-                  )}{" "}
+                  <small>
+                    $
+                    {commaSeparator(
+                      Number(
+                        amount *
+                        marketPrice(
+                          markets,
+                          assetMap[selectedAssetId]?.denom,
+                          selectedAssetId
+                        ) || 0
+                      ).toFixed(DOLLAR_DECIMALS)
+                    )}{" "}
+                  </small>
                 </div>
               </div>
             </div>
-            <Row>
-              <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-                <AssetStats
-                  assetId={selectedAssetId}
-                  pool={pool}
-                  parent="lend"
-                />
-              </Col>
-            </Row>
 
-            <Row className="mt-1">
-              <Col sm="12">
-                <Slider
-                  marks={marks}
-                  defaultValue={amount}
-                  value={amount}
-                  tooltip={{ open: false }}
-                  max={amountConversion(availableBalance)}
-                  onChange={handleSliderChange}
-                  className="commodo-slider market-slider-1"
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col sm="12" className="mx-auto card-bottom-details">
-                <Row className="mt-2">
+            <Row className="card-bottom-details">
+              <Col>
+                <Row>
+                  <Col sm="12" className="mt-2">
+                    <AssetStats
+                      assetId={selectedAssetId}
+                      pool={pool}
+                      parent="lend"
+                    />
+                  </Col>
+                </Row>
+
+                <Row className="mt-1">
+                  <Col sm="12">
+                    <Slider
+                      marks={marks}
+                      defaultValue={amount}
+                      value={amount}
+                      tooltip={{ open: false }}
+                      max={amountConversion(availableBalance)}
+                      onChange={handleSliderChange}
+                      className="commodo-slider market-slider-1"
+                    />
+                  </Col>
+                </Row>
+                <Row className="mt-2 lastrow-market-dtl">
                   <Col>
                     <label>Lend APY</label>
                   </Col>
