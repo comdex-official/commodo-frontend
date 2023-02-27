@@ -31,29 +31,6 @@ export const AvailableToBorrow = ({ lendPool, markets, assetDenomMap }) => {
     });
   };
 
-  // const showAvailableToBorrow = () => {
-  //   const values =
-  //     moduleBalanceStats?.length > 0
-  //       ? moduleBalanceStats.map((item) => {
-  //         return (
-  //           marketPrice(
-  //             markets,
-  //             item?.balance?.denom,
-  //             assetDenomMap?.[item?.balance?.denom]?.id
-  //           ) *
-  //           amountConversion(
-  //             item?.balance.amount,
-  //             assetDenomMap?.[item?.balance?.denom]?.decimals
-  //           )
-  //         );
-  //       })
-  //       : [];
-
-  //   const sum = values.reduce((a, b) => a + b, 0);
-
-  //   return `$${commaSeparatorWithRounding(sum || 0, DOLLAR_DECIMALS)}`;
-  // };
-
   if (loading) {
     return (
       <div className="d-flex justify-content-center w-100">
