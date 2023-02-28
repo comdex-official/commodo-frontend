@@ -30,8 +30,7 @@ import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
   queryAssetPairs,
   queryLendPair,
-  queryLendPool,
-  QueryPoolAssetLBMapping
+  queryLendPool
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
@@ -79,8 +78,7 @@ const BorrowTab = ({
   const [assetOutPool, setAssetOutPool] = useState();
   const [selectedCollateralLendingId, setSelectedCollateralLendingId] =
     useState();
-  const [borrowApy, setBorrowApy] = useState(0);
-
+    
   const { state } = useLocation();
   const lendingIdFromRoute = state?.lendingIdFromRoute;
   const pairIdFromRoute = state?.pairIdFromRoute;
@@ -191,27 +189,6 @@ const BorrowTab = ({
     }
   }, [pairIdFromRoute]);
 
-  const fetchPoolAssetLBMapping = (assetId, poolId) => {
-    QueryPoolAssetLBMapping(assetId, poolId, (error, result) => {
-      if (error) {
-        message.error(error);
-        return;
-      }
-      setBorrowApy(
-        Number(
-          decimalConversion(result?.PoolAssetLBMapping?.borrowApr || 0) * 100
-        ).toFixed(DOLLAR_DECIMALS)
-      );
-    });
-  };
-
-  useEffect(() => {
-    fetchPoolAssetLBMapping(
-      pair?.assetOut?.toNumber(),
-      pair?.assetOutPoolId?.toNumber()
-    );
-  }, [pair, pool, assetOutPool]);
-
   const handleCollateralAssetChange = (lendingId, fromRoute) => {
     setSelectedCollateralLendingId(lendingId);
     if (!fromRoute) {
@@ -296,10 +273,6 @@ const BorrowTab = ({
     setOutAmount(0);
     setBorrowValidationError();
     setMaxBorrowValidationError();
-    fetchPoolAssetLBMapping(
-      pair?.assetOut?.toNumber(),
-      assetOutPool?.poolId?.toNumber()
-    );
   };
 
   const handleInAmountChange = (value) => {
