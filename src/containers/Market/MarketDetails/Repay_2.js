@@ -135,13 +135,6 @@ const RepayTab_2 = ({
   };
 
   const handleAssetChange = (value) => {
-    console.log(
-      "the asset",
-      value,
-      borrowPosition,
-      userBorrowsMap,
-      userBorrowsMap?.[value]
-    );
     setAvailableBalance(
       getDenomBalance(balances, userBorrowsMap[value]?.amountOut?.denom) || 0
     );
