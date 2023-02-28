@@ -172,7 +172,7 @@ const WithdrawTab = ({
                 value={
                   allLendByOwner?.length > 0 && selectedAssetId
                     ? selectedAssetId
-                    : ""
+                    : null
                 }
                 onChange={handleAssetChange}
                 placeholder={
