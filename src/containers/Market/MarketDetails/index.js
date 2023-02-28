@@ -1,4 +1,4 @@
-import { Tabs } from "antd";
+import { message, Tabs } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -6,6 +6,7 @@ import { useLocation, useParams } from "react-router";
 import { setPool, setPoolLends } from "../../../actions/lend";
 import { BackButton } from "../../../components/common";
 import {
+  queryAllBorrowByOwnerAndPool,
   queryLendPool,
   queryUserPoolLends
 } from "../../../services/lend/query";
@@ -27,6 +28,8 @@ const MarketDetails = ({
   poolLendPositions,
 }) => {
   const [inProgress, setInProgress] = useState(false);
+  const [userBorrowPositions, setUserBorrowPositions] = useState([]);
+  const [userBorrowsMap, setUserBorrowsMap] = useState({});
 
   let { id } = useParams();
 
@@ -72,6 +75,29 @@ const MarketDetails = ({
     }
   }, [address]);
 
+  useEffect(() => {
+    if (address && id) {
+      fetchAllBorrowByOwnerAndPool(address, id);
+    }
+  }, [address, id]);
+
+  const fetchAllBorrowByOwnerAndPool = (address, poolId) => {
+    queryAllBorrowByOwnerAndPool(address, poolId, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      const userBorrowsMap = result?.borrows?.reduce((map, obj) => {
+        map[obj?.amountOut?.denom] = obj;
+        return map;
+      }, {});
+
+      setUserBorrowPositions(result?.borrows);
+      setUserBorrowsMap(userBorrowsMap);
+    });
+  };
+
   const tabItems = [
     {
       label: "Lend",
@@ -88,11 +114,13 @@ const MarketDetails = ({
       label: "Withdraw",
       key: "3",
       children: <Withdraw_2 />,
+      disabled: !poolLendPositions?.length,
     },
     {
       label: "Repay",
       key: "4",
       children: <Repay_2 />,
+      disabled: !userBorrowPositions?.length,
     },
   ];
   return (
