@@ -192,7 +192,7 @@ const RepayTab_2 = ({
                   value={
                     borrowPosition?.length && selectedAssetId
                       ? assetMap[selectedAssetId]?.denom
-                      : ""
+                      : null
                   }
                   // disabled
                   notFoundContent={<NoDataIcon />}
