@@ -42,10 +42,10 @@ export const AvailableToBorrow = ({ lendPool, markets, assetDenomMap }) => {
   return (
     <div className="header2-inner w-100">
       {moduleBalanceStats?.length > 0
-        ? moduleBalanceStats.map((item, index) => {
+        ? moduleBalanceStats.map((item) => {
             return (
               <>
-                <div className="assets-col mr-3" key={index}>
+                <div className="assets-col mr-3" key={item?.balance?.denom}>
                   <div className="assets-icon">
                     <SvgIcon name={iconNameFromDenom(item?.balance?.denom)} />
                   </div>

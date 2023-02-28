@@ -67,11 +67,8 @@ export const ActionButton = ({
             hash={result?.transactionHash}
           />
         );
-        if (name !== "Close") {
-          refreshData();
-        } else {
-          navigate("/myhome#borrow");
-        }
+        
+        navigate("/myhome#borrow");
       }
     );
   };
