@@ -8,7 +8,7 @@ import { setPools } from "../../../actions/lend";
 import { SvgIcon } from "../../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE,
+  DEFAULT_PAGE_SIZE
 } from "../../../constants/common";
 import { queryLendPools } from "../../../services/lend/query";
 import { denomConversion } from "../../../utils/coin";
@@ -78,7 +78,7 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
         <div className="market-list">
           {pools?.length > 0 ? (
             pools &&
-            pools?.map((item, index) => {
+            pools?.map((item) => {
               return (
                 <div
                   className="market-list-item"
@@ -87,7 +87,7 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
                       pathname: `/market-details/${item.poolId?.toNumber()}`,
                     })
                   }
-                  key={index}
+                  key={item.poolId?.toNumber()}
                 >
                   <div className="commodo-card">
                     <div className="header1">
