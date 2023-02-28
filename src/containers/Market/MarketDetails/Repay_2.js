@@ -56,8 +56,6 @@ const RepayTab_2 = ({
   const [pair, setPair] = useState();
 
   const { state } = useLocation();
-  const lendingIdFromRoute = state?.lendingIdFromRoute;
-  const pairIdFromRoute = state?.pairIdFromRoute;
   const borrowAssetMinimalDenomFromRoute =
     state?.borrowAssetMinimalDenomFromRoute;
 
