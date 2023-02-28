@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useLocation } from "react-router";
 import { setBalanceRefresh } from "../../../actions/account";
-import { Col, NoDataIcon, Row, SvgIcon } from "../../../components/common";
+import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import AssetStats from "../../../components/common/Asset/Stats";
@@ -221,6 +221,7 @@ const WithdrawTab = ({
           <div className="assets-right">
             <div className="label-right">
               Available
+              <TooltipIcon text="Available to withdraw" />
               <span className="ml-1">
                 {amountConversionWithComma(
                   availableBalance,
