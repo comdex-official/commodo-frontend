@@ -18,9 +18,13 @@ const MarketDetails = () => {
 
   const location = useLocation();
   const type = decode(location.hash);
+  
   useEffect(() => {
-    if (type && type === "borrow") {
-      setActiveKey("2");
+    if (type && type === "withdraw") {
+      setActiveKey("3");
+    }
+    if (type && type === "repay") {
+      setActiveKey("4");
     }
   }, []);
 

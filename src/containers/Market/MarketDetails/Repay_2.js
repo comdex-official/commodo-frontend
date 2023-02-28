@@ -184,9 +184,9 @@ const RepayTab_2 = ({
                                     notFoundContent={<NoDataIcon />}
                                 >
                                     {
-                                        borrowPosition?.length > 0 && borrowPosition?.map((item, index) => {
+                                        borrowPosition?.length > 0 && borrowPosition?.map((item) => {
                                             return (
-                                                <Option key={index}>
+                                                <Option key={item?.amountOut?.denom}>
                                                     <div className="select-inner">
                                                         <div className="svg-icon">
                                                             <div className="svg-icon-inner">

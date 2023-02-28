@@ -47,7 +47,7 @@ const Borrow = ({
           return;
         }
 
-        navigate(`/market-details/${result?.pool?.poolId}/#borrow`, {
+        navigate(`/market-details/${result?.pool?.poolId}/#repay`, {
           state: {
             lendingIdFromRoute: borrow?.lendingId?.toNumber(),
             borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
