@@ -90,9 +90,15 @@ const Deposit = ({
           >
             <Button
               onClick={() =>
-                navigate(`/market-details/${item?.poolId?.toNumber()}/#withdraw`, {
-                  state: { collateralAssetIdFromRoute: item?.assetId?.toNumber() },
-                })
+                navigate(
+                  `/market-details/${item?.poolId?.toNumber()}/#withdraw`,
+                  {
+                    state: {
+                      collateralAssetIdFromRoute: item?.assetId?.toNumber(),
+                      lendingIdFromRoute: item?.lendingId?.toNumber(),
+                    },
+                  }
+                )
               }
               type="primary"
               className="btn-filled"

@@ -52,6 +52,7 @@ const Borrow = ({
             lendingIdFromRoute: borrow?.lendingId?.toNumber(),
             borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
             pairIdFromRoute: borrow?.pairId,
+            collateralAssetIdFromRoute: lendPair?.assetIn?.toNumber()
           },
         });
       });
