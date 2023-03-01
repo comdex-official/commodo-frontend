@@ -29,7 +29,6 @@ const MarketDetails = ({
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const [userBorrowPositions, setUserBorrowPositions] = useState([]);
-  const [userBorrowsMap, setUserBorrowsMap] = useState({});
 
   let { id } = useParams();
 
@@ -64,12 +63,13 @@ const MarketDetails = ({
 
   useEffect(() => {
     if (address) {
-      queryUserPoolLends(address, (error, result) => {
+      queryUserPoolLends(address, id, (error, result) => {
         setInProgress(false);
         if (error) {
           message.error(error);
           return;
         }
+        
         setPoolLends(result?.lends);
       });
     }
@@ -88,13 +88,7 @@ const MarketDetails = ({
         return;
       }
 
-      const userBorrowsMap = result?.borrows?.reduce((map, obj) => {
-        map[obj?.amountOut?.denom] = obj;
-        return map;
-      }, {});
-
       setUserBorrowPositions(result?.borrows);
-      setUserBorrowsMap(userBorrowsMap);
     });
   };
 
