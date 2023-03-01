@@ -941,6 +941,13 @@ const BorrowTab = ({
             </div>
           </div>
           <div className="details-right">
+          <div className="commodo-card">
+              <Details
+                asset={assetMap[outPool?.transitAssetIds?.main?.toNumber()]}
+                poolId={outPool?.poolId}
+                parent="borrow"
+              />
+            </div>
             <div className="commodo-card">
               <Details
                 asset={assetMap[outPool?.transitAssetIds?.first?.toNumber()]}
@@ -954,13 +961,6 @@ const BorrowTab = ({
                   parent="borrow"
                 />
               </div>
-            </div>
-            <div className="commodo-card">
-              <Details
-                asset={assetMap[outPool?.transitAssetIds?.main?.toNumber()]}
-                poolId={outPool?.poolId}
-                parent="borrow"
-              />
             </div>
             <div className="commodo-card">
               <div className="card-head">
