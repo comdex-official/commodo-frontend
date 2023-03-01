@@ -1,4 +1,4 @@
-import { message, Tabs } from "antd";
+import { message, Tabs, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -105,19 +105,58 @@ const MarketDetails = ({
       children: <SupplyDetails />,
     },
     {
-      label: "Borrow",
+      label: (
+        <>
+          <Tooltip
+            overlayClassName="commodo-tooltip"
+            title={
+              !poolLendPositions?.length
+                ? "Lend assets to open borrow position"
+                : ""
+            }
+          >
+            Borrow
+          </Tooltip>
+        </>
+      ),
       key: "2",
       children: <BorrowDetails />,
       disabled: !poolLendPositions?.length,
     },
     {
-      label: "Withdraw",
+      label: (
+        <>
+          <Tooltip
+            overlayClassName="commodo-tooltip"
+            title={
+              !poolLendPositions?.length
+                ? "No assets lent in this market to withdraw"
+                : ""
+            }
+          >
+            Withdraw
+          </Tooltip>
+        </>
+      ),
       key: "3",
       children: <Withdraw_2 />,
       disabled: !poolLendPositions?.length,
     },
     {
-      label: "Repay",
+      label: (
+        <>
+          <Tooltip
+            overlayClassName="commodo-tooltip"
+            title={
+              !userBorrowPositions?.length
+                ? "No debt to repay in this market"
+                : ""
+            }
+          >
+            Repay
+          </Tooltip>
+        </>
+      ),
       key: "4",
       children: <Repay_2 />,
       disabled: !userBorrowPositions?.length,

@@ -67,7 +67,7 @@ const Borrow = ({
     {
       title: (
         <>
-          Debt <TooltipIcon text="Current Outstanding Debt" />
+          Debt <TooltipIcon text="Current outstanding debt" />
         </>
       ),
       dataIndex: "debt",
@@ -75,7 +75,11 @@ const Borrow = ({
       width: 300,
     },
     {
-      title: "Collateral",
+      title: (
+        <>
+          Collateral <TooltipIcon text="cTokens are the collateral tokens locked in the debt" />
+        </>
+      ),
       dataIndex: "collateral",
       key: "collateral",
       width: 300,
