@@ -701,9 +701,8 @@ const BorrowTab = ({
             </div>
             <Row>
               <Col sm="12" className="mx-auto card-bottom-details">
-                <AssetStats assetId={lend?.assetId} pool={pool} pair={pair} />
 
-                <Row className="mt-1">
+                <Row className="mt-2">
                   <Col sm="12">
                     <Slider
                       marks={marks}
@@ -714,6 +713,12 @@ const BorrowTab = ({
                       tooltip={{ open: false }}
                       className="commodo-slider market-slider borrow-slider"
                     />
+                  </Col>
+                </Row>
+                
+                <Row className='mt-1'>
+                  <Col>
+                      <AssetStats assetId={lend?.assetId} pool={pool} pair={pair} />
                   </Col>
                 </Row>
 

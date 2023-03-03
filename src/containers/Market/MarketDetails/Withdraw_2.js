@@ -262,16 +262,7 @@ const WithdrawTab = ({
 
         <Row>
           <Col sm="12" className="mx-auto card-bottom-details">
-            <Row className="mt-2">
-              <Col>
-                <AssetStats
-                  assetId={selectedAssetId}
-                  pool={pool}
-                  parent="lend"
-                />
-              </Col>
-            </Row>
-            <Row className="mt-1">
+            <Row className="mt-3">
               <Col sm="12">
                 <Slider
                   marks={marks}
@@ -281,6 +272,15 @@ const WithdrawTab = ({
                   onChange={handleSliderChange}
                   max={amountConversion(availableBalance)}
                   className="commodo-slider market-slider-1"
+                />
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col>
+                <AssetStats
+                  assetId={selectedAssetId}
+                  pool={pool}
+                  parent="lend"
                 />
               </Col>
             </Row>
