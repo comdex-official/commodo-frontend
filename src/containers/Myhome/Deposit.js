@@ -34,10 +34,16 @@ const Deposit = ({
 
   const columns = [
     {
+      title: "cPool",
+      dataIndex: "cpool",
+      key: "cpool",
+      width: 200,
+    },
+    {
       title: "Asset",
       dataIndex: "asset",
       key: "asset",
-      width: 130,
+      width: 150,
     },
     {
       title: (
@@ -50,16 +56,10 @@ const Deposit = ({
       width: 250,
     },
     {
-      title: "cPool",
-      dataIndex: "cpool",
-      key: "cpool",
-      width: 200,
-    },
-    {
       title: "Lend APY",
       dataIndex: "apy",
       key: "apy",
-      width: 150,
+      width: 180,
       render: (lend) => (
         <AssetApy poolId={lend?.poolId} assetId={lend?.assetId} parent="lend" />
       ),
