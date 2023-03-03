@@ -1,4 +1,4 @@
-import { message, Tabs } from "antd";
+import { message, Tabs, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -29,7 +29,6 @@ const MarketDetails = ({
 }) => {
   const [inProgress, setInProgress] = useState(false);
   const [userBorrowPositions, setUserBorrowPositions] = useState([]);
-  const [userBorrowsMap, setUserBorrowsMap] = useState({});
 
   let { id } = useParams();
 
@@ -64,12 +63,13 @@ const MarketDetails = ({
 
   useEffect(() => {
     if (address) {
-      queryUserPoolLends(address, (error, result) => {
+      queryUserPoolLends(address, id, (error, result) => {
         setInProgress(false);
         if (error) {
           message.error(error);
           return;
         }
+        
         setPoolLends(result?.lends);
       });
     }
@@ -88,13 +88,7 @@ const MarketDetails = ({
         return;
       }
 
-      const userBorrowsMap = result?.borrows?.reduce((map, obj) => {
-        map[obj?.amountOut?.denom] = obj;
-        return map;
-      }, {});
-
       setUserBorrowPositions(result?.borrows);
-      setUserBorrowsMap(userBorrowsMap);
     });
   };
 
@@ -105,19 +99,58 @@ const MarketDetails = ({
       children: <SupplyDetails />,
     },
     {
-      label: "Borrow",
+      label: (
+        <>
+          <Tooltip
+            overlayClassName="commodo-tooltip"
+            title={
+              !poolLendPositions?.length
+                ? "Lend assets to open borrow position"
+                : ""
+            }
+          >
+            Borrow
+          </Tooltip>
+        </>
+      ),
       key: "2",
       children: <BorrowDetails />,
       disabled: !poolLendPositions?.length,
     },
     {
-      label: "Withdraw",
+      label: (
+        <>
+          <Tooltip
+            overlayClassName="commodo-tooltip"
+            title={
+              !poolLendPositions?.length
+                ? "No assets lent in this market to withdraw"
+                : ""
+            }
+          >
+            Withdraw
+          </Tooltip>
+        </>
+      ),
       key: "3",
       children: <Withdraw_2 />,
       disabled: !poolLendPositions?.length,
     },
     {
-      label: "Repay",
+      label: (
+        <>
+          <Tooltip
+            overlayClassName="commodo-tooltip"
+            title={
+              !userBorrowPositions?.length
+                ? "No debt to repay in this market"
+                : ""
+            }
+          >
+            Repay
+          </Tooltip>
+        </>
+      ),
       key: "4",
       children: <Repay_2 />,
       disabled: !userBorrowPositions?.length,

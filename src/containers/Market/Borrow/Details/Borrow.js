@@ -78,7 +78,7 @@ const BorrowTab = ({
   const [assetOutPool, setAssetOutPool] = useState();
   const [selectedCollateralLendingId, setSelectedCollateralLendingId] =
     useState();
-    
+
   const { state } = useLocation();
   const lendingIdFromRoute = state?.lendingIdFromRoute;
   const pairIdFromRoute = state?.pairIdFromRoute;
@@ -178,7 +178,11 @@ const BorrowTab = ({
   }, [poolLendPositions, lendingIdFromRoute]);
 
   useEffect(() => {
-    if (borrowAssetMinimalDenomFromRoute && extendedPairs &&  Object.values(extendedPairs)?.length) {
+    if (
+      borrowAssetMinimalDenomFromRoute &&
+      extendedPairs &&
+      Object.values(extendedPairs)?.length
+    ) {
       handleBorrowAssetChange(borrowAssetMinimalDenomFromRoute);
     }
   }, [borrowAssetMinimalDenomFromRoute, extendedPairs]);
@@ -225,7 +229,7 @@ const BorrowTab = ({
             }
           }
 
-          if(fromRoute && borrowAssetMinimalDenomFromRoute)
+          if (fromRoute && borrowAssetMinimalDenomFromRoute)
             handleBorrowAssetChange(borrowAssetMinimalDenomFromRoute);
         }
       );
@@ -599,7 +603,7 @@ const BorrowTab = ({
                     className="assets-select"
                     popupClassName="asset-select-dropdown"
                     onChange={handleBorrowAssetChange}
-                    value={borrowList?.length ? selectedBorrowValue: null}
+                    value={borrowList?.length ? selectedBorrowValue : null}
                     placeholder={
                       <div className="select-placeholder">
                         <div className="circle-icon">
@@ -783,7 +787,7 @@ const BorrowTab = ({
             </div>
           </div>
           <div className="details-right">
-          <div className="commodo-card">
+            <div className="commodo-card">
               <Details
                 asset={
                   assetMap[

@@ -187,16 +187,16 @@ export const queryModuleBalance = (poolId, callback) => {
   });
 };
 
-export const queryUserPoolLends = (address, callback) => {
+export const queryUserPoolLends = (address, id, callback) => {
   getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
-
     queryService
-      .QueryAllLendByOwner({
+      .QueryAllLendByOwnerAndPool({
         owner: address,
+        poolId: Long.fromNumber(id),
       })
       .then((result) => {
         callback(null, result);
