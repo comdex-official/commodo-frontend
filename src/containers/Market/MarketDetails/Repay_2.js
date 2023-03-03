@@ -227,14 +227,24 @@ const RepayTab_2 = ({
           </div>
           <div className="assets-right">
             <div className="label-right">
-              Available
-              <span className="ml-1">
-                {amountConversionWithComma(
-                  availableBalance,
-                  assetMap[selectedAssetId]?.decimals
-                )}{" "}
-                {denomConversion(assetMap[selectedAssetId]?.denom)}
-              </span>
+              <div className="available-balance">
+                Remaining to Repay
+                <span className="ml-1">
+                  {amountConversionWithComma(
+                    updatedAmountOut,
+                    assetDenomMap[selectedBorrowPosition?.amountOut?.denom]
+                      ?.decimals
+                  )}{" "}
+                  {denomConversion(selectedBorrowPosition?.amountOut?.denom)}
+                </span>
+                <span className="assets-max-half">
+                  <Button
+                    className=" active"
+                  >
+                    Max
+                  </Button>
+                </span>
+              </div>
             </div>
             <div>
               <div className="input-select">
@@ -262,50 +272,6 @@ const RepayTab_2 = ({
         </div>
         <Row>
           <Col sm="12" className="mt-2 mx-auto card-bottom-details">
-            <Row>
-              <Col>
-                <label>Remaining to Repay</label>
-              </Col>
-              <Col className="text-right repay-remain-right">
-                <div className="d-flex justify-content-end">
-                  <div className="cursor-pointer" onClick={handleMaxRepay}>
-                    {amountConversionWithComma(
-                      updatedAmountOut,
-                      assetDenomMap[selectedBorrowPosition?.amountOut?.denom]
-                        ?.decimals
-                    )}{" "}
-                    {denomConversion(selectedBorrowPosition?.amountOut?.denom)}
-                  </div>
-                  <div className="max-half ml-1">
-                    <Button
-                      className="active"
-                      size="small"
-                      type="primary"
-                      onClick={handleMaxRepay}
-                    >
-                      Max
-                    </Button>
-                  </div>
-                </div>
-                <small className="font-weight-light">
-                  $
-                  {commaSeparator(
-                    Number(
-                      amountConversion(
-                        updatedAmountOut,
-                        assetMap[selectedAssetId]?.decimals
-                      ) *
-                        marketPrice(
-                          markets,
-                          assetMap[selectedAssetId]?.denom,
-                          selectedAssetId
-                        ) || 0
-                    ).toFixed(DOLLAR_DECIMALS)
-                  )}
-                </small>
-              </Col>
-            </Row>
-
             <Row className="mt-1">
               <Col sm="12">
                 <Slider
@@ -321,6 +287,17 @@ const RepayTab_2 = ({
                   )}
                   className="commodo-slider market-slider-1 repay-slider"
                 />
+              </Col>
+            </Row>
+
+            <Row className='mt-2'>
+              <Col>
+                <label>Available in wallet</label>
+              </Col>
+              <Col className="text-right repay-remain-right">
+                <small className="font-weight-light">
+                  142 CMST
+                </small>
               </Col>
             </Row>
 

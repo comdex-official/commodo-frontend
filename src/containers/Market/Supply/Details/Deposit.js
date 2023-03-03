@@ -304,17 +304,7 @@ const DepositTab = ({
 
             <Row className="card-bottom-details">
               <Col>
-                <Row>
-                  <Col sm="12" className="mt-2">
-                    <AssetStats
-                      assetId={selectedAssetId}
-                      pool={pool}
-                      parent="lend"
-                    />
-                  </Col>
-                </Row>
-
-                <Row className="mt-1">
+                <Row className="mt-3">
                   <Col sm="12">
                     <Slider
                       marks={marks}
@@ -324,6 +314,15 @@ const DepositTab = ({
                       max={amountConversion(availableBalance)}
                       onChange={handleSliderChange}
                       className="commodo-slider market-slider-1"
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm="12" className="mt-2">
+                    <AssetStats
+                      assetId={selectedAssetId}
+                      pool={pool}
+                      parent="lend"
                     />
                   </Col>
                 </Row>

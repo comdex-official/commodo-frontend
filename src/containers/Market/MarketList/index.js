@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { setPools } from "../../../actions/lend";
 import { SvgIcon } from "../../../components/common";
+import DistributionAPY from "../../../components/common/DistributionAPY";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE
@@ -150,6 +151,15 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
                                         assetId={item?.transitAssetIds[key]}
                                         parent="borrow"
                                       />
+                                      <Tooltip
+                                        placement="topLeft"
+                                        className="distribution-apy-button"
+                                        title={"Boosted rewards for Borrowing"}
+                                      >
+                                        <Button type="primary">
+                                          200.98%
+                                        </Button>
+                                      </Tooltip>
                                     </td>
                                   </tr>
                                 </React.Fragment>

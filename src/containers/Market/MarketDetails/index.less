@@ -35,6 +35,60 @@
                 font-size: @font-size-base - 2;
             }
         }
+        .available-balance {
+            display: flex;
+            align-items: center;
+            right: 15px;
+            font-size: @font-size-base - 1;
+            font-weight: 400;
+            .dark-mode & {
+                color: @white;
+            }
+            span {
+                font-weight: 700;
+                color: @success-color;
+            }
+        }
+        .assets-max-half {
+            display: flex;
+            align-items: center;
+            margin-left: 4px;
+  
+            .ant-btn {
+              font-size: @font-size-sm - 1;
+              padding: 1px 0;
+              margin-left: 4px;
+              line-height: 1;
+              text-align: center;
+              width: 30px;
+              height: 15px;
+              border: 0;
+              cursor: pointer;
+              border-radius: 2px;
+              background: @dark-color;
+              .dark-mode & {
+                background: #132239;
+                color: @white;
+              }
+  
+              span {
+                font-weight: 600;
+              }
+  
+              &.active {
+                .dark-mode & {
+                  background: @white;
+                }
+  
+                span {
+                  color: @white;
+                  .dark-mode & {
+                    color: @dark-color;
+                  }
+                }
+              }
+            }
+          }
     }
     .ant-slider {
         &.market-slider-1 {
@@ -121,7 +175,6 @@
                 }
             }
             .ant-slider-track{
-                background: linear-gradient(90deg, #52B788 67.35%, #FE777F 100%);
                 height: 16px;
                 border-radius: 16px;
                 @media screen and (max-width:1560px) {
@@ -168,6 +221,7 @@
                     &:nth-child(2) {
                         transform: translateY(-42px) !important;
                         font-size: @font-size-sm - 1;
+                        left: 85%;
                         &::after {
                             content: ' ';
                             background: @white;
@@ -181,16 +235,22 @@
                             margin: auto;
                         }
                     }
+                    &:nth-child(3) {
+                        right: 0;
+                        text-align: right;
+                        transform: translateX(11px) !important;
+                    }
                 }
             }
             .ant-slider-track{
-                background: none;
-                &:hover {
-                    background: none !important;
-                }
+                // background: none;
+                // &:hover {
+                //     background: none !important;
+                // }
             }
             .ant-slider-rail{
                 background: linear-gradient(90deg, #52B788 67.35%, #FE777F 100%);
+                opacity: 0.3;
             }
         }
         &.repay-slider {
