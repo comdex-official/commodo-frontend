@@ -17,7 +17,10 @@ import CustomInput from "../../../components/CustomInput";
 import HealthFactor from "../../../components/HealthFactor";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { queryAllBorrowByOwnerAndPool, queryLendPair } from "../../../services/lend/query";
+import {
+  queryAllBorrowByOwnerAndPool,
+  queryLendPair
+} from "../../../services/lend/query";
 import {
   amountConversion,
   amountConversionWithComma,
@@ -25,7 +28,11 @@ import {
   getAmount,
   getDenomBalance
 } from "../../../utils/coin";
-import { commaSeparator, decimalConversion, marketPrice } from "../../../utils/number";
+import {
+  commaSeparator,
+  decimalConversion,
+  marketPrice
+} from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "../../Myhome/BorrowRepay/ActionButton";
 import "./index.less";
@@ -107,13 +114,16 @@ const RepayTab_2 = ({
     setAmount(value);
     setValidationError(
       ValidateInputNumber(
-        getAmount(
-          value,
-          assetDenomMap[borrowPosition?.amountOut?.denom]?.decimals
+        value,
+        amountConversion(
+          availableBalance,
+          assetDenomMap[selectedBorrowPosition?.amountOut?.denom]?.decimals
         ),
-        availableBalance,
         "repay",
-        updatedAmountOut
+        amountConversion(
+          updatedAmountOut,
+          assetDenomMap[borrowPosition?.amountOut?.denom]?.decimals
+        )
       )
     );
   };
@@ -238,9 +248,7 @@ const RepayTab_2 = ({
                   {denomConversion(selectedBorrowPosition?.amountOut?.denom)}
                 </span>
                 <span className="assets-max-half">
-                  <Button
-                    className=" active"
-                  >
+                  <Button className=" active" onClick={handleMaxRepay}>
                     Max
                   </Button>
                 </span>
@@ -290,13 +298,18 @@ const RepayTab_2 = ({
               </Col>
             </Row>
 
-            <Row className='mt-2'>
+            <Row className="mt-2">
               <Col>
                 <label>Available in wallet</label>
               </Col>
               <Col className="text-right repay-remain-right">
                 <small className="font-weight-light">
-                  142 CMST
+                  {amountConversionWithComma(
+                    availableBalance,
+                    assetDenomMap[selectedBorrowPosition?.amountOut?.denom]
+                      ?.decimals
+                  )}{" "}
+                  {denomConversion(selectedBorrowPosition?.amountOut?.denom)}
                 </small>
               </Col>
             </Row>
