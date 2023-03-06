@@ -228,7 +228,7 @@ const RepayTab_2 = ({
           <div className="assets-right">
             <div className="label-right">
               <div className="available-balance">
-                Remaining to Repay
+                Remaining Debt
                 <span className="ml-1">
                   {amountConversionWithComma(
                     updatedAmountOut,
