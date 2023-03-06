@@ -156,9 +156,10 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
                                         className="distribution-apy-button"
                                         title={"Boosted rewards for Borrowing"}
                                       >
-                                        <Button type="primary">
-                                          200.98%
-                                        </Button>
+                                        <DistributionAPY
+                                          poolId={item?.poolId}
+                                          assetId={item?.transitAssetIds[key]}
+                                        />
                                       </Tooltip>
                                     </td>
                                   </tr>
