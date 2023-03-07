@@ -63,8 +63,10 @@ const ConnectButton = ({
   }, []);
 
   useEffect(() => {
+    let walletType = localStorage.getItem("loginType");
+
     if (addressFromLocal) {
-      initializeChain((error, account) => {
+      initializeChain(walletType, (error, account) => {
         if (error) {
           message.error(error);
           return;
@@ -74,7 +76,7 @@ const ConnectButton = ({
           setAccountName(name);
         });
         localStorage.setItem("ac", encode(account.address));
-        localStorage.setItem("loginType", "keplr");
+        localStorage.setItem("loginType", walletType || "keplr");
       });
     }
   }, [addressFromLocal]);
