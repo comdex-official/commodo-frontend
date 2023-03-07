@@ -12845,10 +12845,10 @@ strict-uri-encode@^1.0.0:
   resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
   integrity sha512-R3f198pcvnB+5IpnBlRkphuE9n46WyVl8I39W/ZUTZLz4nqSP/oLYUrcnJrw462Ds8he4YKMov2efsTIw1BDGQ==
 
-stridejs@^0.4.2:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/stridejs/-/stridejs-0.4.4.tgz#b90914fcab3aaef9c44b62db32a61a820b7caa58"
-  integrity sha512-nC137/qbItPAPLrPnvUuIEvPysTe5EhNZ1qCo7TETU9vNd/shZv2U9MJbW07DD6Jrhj/usMsxqxDEpAOuiQ6rA==
+stridejs@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/stridejs/-/stridejs-0.5.0.tgz#0048ca35bae32f36a0aa41be8e8ec0ff08d11cd2"
+  integrity sha512-I7h95RDULROQGL7YSSMESDo1QERWrPuZEVHytXRMn0wh4EcRunmPAj4d3H9xe9cBlCiDYce9VaTaL8sscQ7a9w==
   dependencies:
     "@babel/runtime" "^7.18.9"
     "@cosmjs/amino" "0.29.0"
