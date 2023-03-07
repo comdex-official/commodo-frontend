@@ -54,7 +54,7 @@ const ConnectModal = ({
             <span>{variables[lang].keplr_wallet}</span>{" "}
           </div>
         </div>
-        <div className="mb-2 mt-3">
+        <div className="mb-2">
           <div className="wallet-links" onClick={()=>handleConnectToWallet('leap')}>
             <span>{variables[lang].leap_wallet}</span>{" "}
           </div>
