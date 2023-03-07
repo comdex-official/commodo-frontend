@@ -258,8 +258,11 @@ const BorrowTab = ({
     checkMaxBorrow(value);
     setBorrowValidationError(
       ValidateInputNumber(
-        getAmount(value, assetDenomMap[borrowAssetDenom]?.decimals),
-        borrowableBalance,
+        value,
+        amountConversion(
+          borrowableBalance,
+          assetDenomMap[borrowAssetDenom]?.decimals
+        ),
         "dollar",
         Number(
           value *
@@ -276,7 +279,12 @@ const BorrowTab = ({
   const checkMaxBorrow = (value) => {
     setMaxBorrowValidationError(
       ValidateMaxBorrow(
-        value,
+        value *
+          marketPrice(
+            markets,
+            borrowAssetDenom,
+            assetDenomMap[borrowAssetDenom]?.id
+          ),
         Number(
           amountConversion(
             marketPrice(
@@ -941,7 +949,7 @@ const BorrowTab = ({
             </div>
           </div>
           <div className="details-right">
-          <div className="commodo-card">
+            <div className="commodo-card">
               <Details
                 asset={assetMap[outPool?.transitAssetIds?.main?.toNumber()]}
                 poolId={outPool?.poolId}
