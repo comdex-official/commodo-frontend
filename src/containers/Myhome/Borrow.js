@@ -11,7 +11,7 @@ import {
   TooltipIcon
 } from "../../components/common";
 import HealthFactor from "../../components/HealthFactor";
-import { queryLendPair, queryLendPool } from "../../services/lend/query";
+import { queryLendPair, queryLendPosition } from "../../services/lend/query";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { decimalConversion } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
@@ -41,21 +41,34 @@ const Borrow = ({
 
       const lendPair = pairResult?.ExtendedPair;
 
-      queryLendPool(lendPair?.assetOutPoolId, (error, result) => {
-        setNavigateInProgress(false);
-        if (error) {
-          return;
-        }
-
-        navigate(`/market-details/${result?.pool?.poolId}/#repay`, {
+      if (!lendPair?.isInterPool) {
+        navigate(`/market-details/${lendPair?.assetOutPoolId}/#repay`, {
           state: {
             lendingIdFromRoute: borrow?.lendingId?.toNumber(),
             borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
             pairIdFromRoute: borrow?.pairId,
-            collateralAssetIdFromRoute: lendPair?.assetIn?.toNumber()
+            collateralAssetIdFromRoute: lendPair?.assetIn?.toNumber(),
           },
         });
-      });
+      } else {
+        queryLendPosition(borrow?.lendingId, (error, result) => {
+          if (error) {
+            message.error(error);
+            return;
+          }
+          
+          if (result?.lend?.poolId) {
+            navigate(`/market-details/${result?.lend?.poolId}/#repay`, {
+              state: {
+                lendingIdFromRoute: borrow?.lendingId?.toNumber(),
+                borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
+                pairIdFromRoute: borrow?.pairId,
+                collateralAssetIdFromRoute: lendPair?.assetIn?.toNumber(),
+              },
+            });
+          }
+        });
+      }
     });
   };
   const columns = [
@@ -78,7 +91,8 @@ const Borrow = ({
     {
       title: (
         <>
-          Collateral <TooltipIcon text="cTokens are the collateral tokens locked in the debt" />
+          Collateral{" "}
+          <TooltipIcon text="cTokens are the collateral tokens locked in the debt" />
         </>
       ),
       dataIndex: "collateral",
