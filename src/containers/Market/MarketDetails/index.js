@@ -8,7 +8,7 @@ import { BackButton } from "../../../components/common";
 import {
   queryAllBorrowByOwnerAndPool,
   queryLendPool,
-  queryUserPoolLends
+  queryUserLends
 } from "../../../services/lend/query";
 import { decode } from "../../../utils/string";
 import BorrowDetails from "../../Market/Borrow/Details";
@@ -63,7 +63,7 @@ const MarketDetails = ({
 
   useEffect(() => {
     if (address) {
-      queryUserPoolLends(address, id, (error, result) => {
+      queryUserLends(address, (error, result) => {
         setInProgress(false);
         if (error) {
           message.error(error);

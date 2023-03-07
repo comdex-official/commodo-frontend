@@ -304,8 +304,11 @@ const BorrowTab = ({
     checkMaxBorrow(value);
     setBorrowValidationError(
       ValidateInputNumber(
-        getAmount(value, assetDenomMap[borrowAssetDenom]?.decimals),
-        borrowableBalance,
+        value,
+        amountConversion(
+          borrowableBalance,
+          assetDenomMap[borrowAssetDenom]?.decimals
+        ),
         "dollar",
         Number(
           value *
@@ -322,7 +325,12 @@ const BorrowTab = ({
   const checkMaxBorrow = (value) => {
     setMaxBorrowValidationError(
       ValidateMaxBorrow(
-        value,
+        value *
+          marketPrice(
+            markets,
+            borrowAssetDenom,
+            assetDenomMap[borrowAssetDenom]?.id
+          ),
         Number(
           amountConversion(
             marketPrice(
@@ -484,6 +492,7 @@ const BorrowTab = ({
       .trim();
 
     setOutAmount(borrowValue || 0);
+    checkMaxBorrow(borrowValue || 0);
   };
 
   const marks = {
@@ -701,7 +710,6 @@ const BorrowTab = ({
             </div>
             <Row>
               <Col sm="12" className="mx-auto card-bottom-details">
-
                 <Row className="mt-2">
                   <Col sm="12">
                     <Slider
@@ -715,10 +723,14 @@ const BorrowTab = ({
                     />
                   </Col>
                 </Row>
-                
-                <Row className='mt-1'>
+
+                <Row className="mt-1">
                   <Col>
-                      <AssetStats assetId={lend?.assetId} pool={pool} pair={pair} />
+                    <AssetStats
+                      assetId={lend?.assetId}
+                      pool={pool}
+                      pair={pair}
+                    />
                   </Col>
                 </Row>
 
