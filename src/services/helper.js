@@ -3,7 +3,7 @@ import {
   AminoTypes,
   createProtobufRpcClient,
   QueryClient,
-  SigningStargateClient,
+  SigningStargateClient
 } from "@cosmjs/stargate";
 import { HttpBatchClient, Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
@@ -46,8 +46,8 @@ export const KeplrWallet = async (chainID = comdex.chainId) => {
 
   const offlineSigner =
     walletType === "keplr"
-      ? window.getOfflineSigner(chainID)
-      : window?.leap?.getOfflineSigner(chainID);
+      ? await window.getOfflineSignerAuto(chainID)
+      : await window?.leap?.getOfflineSignerAuto(chainID);
   const accounts = await offlineSigner.getAccounts();
   return [offlineSigner, accounts];
 };
