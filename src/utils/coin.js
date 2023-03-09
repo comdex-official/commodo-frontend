@@ -29,7 +29,7 @@ export const amountConversionWithComma = (amount, decimals) => {
   const result = Number(finiteAmount) / (decimals || 10 ** comdex.coinDecimals);
 
   return commaSeparator(
-    result.toFixed(DOLLAR_DECIMALS)
+    result.toFixed(getExponent(decimals) || comdex.coinDecimals)
   );
 };
 
@@ -42,7 +42,7 @@ export const amountConversion = (amount, decimals) => {
 
   const result = Number(finiteAmount) / (decimals || 10 ** comdex.coinDecimals);
 
-  return result.toFixed(DOLLAR_DECIMALS);
+  return result.toFixed(getExponent(decimals) || comdex.coinDecimals);
 };
 
 export const orderPriceConversion = (amount) => {
