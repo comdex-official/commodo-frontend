@@ -286,6 +286,7 @@ const BorrowTab = ({
 
     setInAmount(value);
     setOutAmount(0);
+    setMaxBorrowValidationError();
     setValidationError(
       ValidateInputNumber(
         getAmount(value),
