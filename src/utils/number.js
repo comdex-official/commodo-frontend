@@ -34,9 +34,9 @@ export const decimalConversion = (data) => {
 export const marketPrice = (marketsMap, denom, assetId) => {
   const value = marketsMap?.map && marketsMap?.map[assetId]
 
-  if (denom === "ucmst") {
-    return 1;
-  }
+  // if (denom === "ucmst") {
+  //   return 1;
+  // }
 
   if (value && value?.twa && value?.isPriceActive) {
     return value?.twa?.toNumber() / 1000000;
