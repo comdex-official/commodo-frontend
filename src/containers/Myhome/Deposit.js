@@ -34,12 +34,6 @@ const Deposit = ({
 
   const columns = [
     {
-      title: "cPool",
-      dataIndex: "cpool",
-      key: "cpool",
-      width: 200,
-    },
-    {
       title: "Asset",
       dataIndex: "asset",
       key: "asset",
@@ -54,6 +48,12 @@ const Deposit = ({
       dataIndex: "available",
       key: "available",
       width: 250,
+    },
+    {
+      title: "cPool",
+      dataIndex: "cpool",
+      key: "cpool",
+      width: 200,
     },
     {
       title: "Lend APY",
