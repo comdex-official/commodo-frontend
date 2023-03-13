@@ -280,7 +280,7 @@ const RepayTab_2 = ({
         </div>
         <Row>
           <Col sm="12" className="mt-2 mx-auto card-bottom-details">
-            <Row className="mt-1">
+            <Row className="mt-3">
               <Col sm="12">
                 <Slider
                   marks={marks}
