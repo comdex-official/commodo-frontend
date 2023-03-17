@@ -1,8 +1,8 @@
-import { Button, List, message, Select, Spin, Tooltip } from "antd";
+import { Button, message, Select, Slider, Spin } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import {
   Col,
   NoDataIcon,
@@ -46,6 +46,7 @@ import {
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
+import AssetApy from "../../AssetApy";
 import "./index.less";
 
 const { Option } = Select;
@@ -77,6 +78,12 @@ const BorrowTab = ({
   const [assetOutPool, setAssetOutPool] = useState();
   const [selectedCollateralLendingId, setSelectedCollateralLendingId] =
     useState();
+
+  const { state } = useLocation();
+  const lendingIdFromRoute = state?.lendingIdFromRoute;
+  const pairIdFromRoute = state?.pairIdFromRoute;
+  const borrowAssetMinimalDenomFromRoute =
+    state?.borrowAssetMinimalDenomFromRoute;
 
   const navigate = useNavigate();
 
@@ -162,14 +169,35 @@ const BorrowTab = ({
   }, [pair]);
 
   useEffect(() => {
-    if (poolLendPositions[0]?.lendingId?.toNumber()) {
-      handleCollateralAssetChange(poolLendPositions[0]?.lendingId?.toNumber());
-    }
-  }, [poolLendPositions]);
+    let lendId =
+      lendingIdFromRoute || poolLendPositions[0]?.lendingId?.toNumber();
 
-  const handleCollateralAssetChange = (lendingId) => {
+    if (lendId) {
+      handleCollateralAssetChange(lendId, true);
+    }
+  }, [poolLendPositions, lendingIdFromRoute]);
+
+  useEffect(() => {
+    if (
+      borrowAssetMinimalDenomFromRoute &&
+      extendedPairs &&
+      Object.values(extendedPairs)?.length
+    ) {
+      handleBorrowAssetChange(borrowAssetMinimalDenomFromRoute);
+    }
+  }, [borrowAssetMinimalDenomFromRoute, extendedPairs]);
+
+  useEffect(() => {
+    if (pairIdFromRoute) {
+      fetchPair(pairIdFromRoute);
+    }
+  }, [pairIdFromRoute]);
+
+  const handleCollateralAssetChange = (lendingId, fromRoute) => {
     setSelectedCollateralLendingId(lendingId);
-    setSelectedBorrowValue();
+    if (!fromRoute) {
+      setSelectedBorrowValue();
+    }
     setPair();
     setAssetToPool({});
     setAssetOutPool();
@@ -200,6 +228,9 @@ const BorrowTab = ({
               fetchPair(pairMapping?.pairId[i]);
             }
           }
+
+          if (fromRoute && borrowAssetMinimalDenomFromRoute)
+            handleBorrowAssetChange(borrowAssetMinimalDenomFromRoute);
         }
       );
     }
@@ -255,6 +286,7 @@ const BorrowTab = ({
 
     setInAmount(value);
     setOutAmount(0);
+    setMaxBorrowValidationError();
     setValidationError(
       ValidateInputNumber(
         getAmount(value),
@@ -273,8 +305,11 @@ const BorrowTab = ({
     checkMaxBorrow(value);
     setBorrowValidationError(
       ValidateInputNumber(
-        getAmount(value, assetDenomMap[borrowAssetDenom]?.decimals),
-        borrowableBalance,
+        value,
+        amountConversion(
+          borrowableBalance,
+          assetDenomMap[borrowAssetDenom]?.decimals
+        ),
         "dollar",
         Number(
           value *
@@ -291,7 +326,12 @@ const BorrowTab = ({
   const checkMaxBorrow = (value) => {
     setMaxBorrowValidationError(
       ValidateMaxBorrow(
-        value,
+        value *
+          marketPrice(
+            markets,
+            borrowAssetDenom,
+            assetDenomMap[borrowAssetDenom]?.id
+          ),
         Number(
           amountConversion(
             marketPrice(
@@ -409,147 +449,61 @@ const BorrowTab = ({
       100
   );
 
-  let data = [
-    {
-      title: "Threshold",
-      counts: `${
-        pair?.isInterPool
-          ? Number(
-              Number(
-                decimalConversion(
-                  assetRatesStatsMap[lend?.assetId]?.liquidationThreshold
-                )
-              ) *
-                Number(
-                  decimalConversion(
-                    assetRatesStatsMap[pool?.transitAssetIds?.first]
-                      ?.liquidationThreshold
-                  )
-                ) *
-                100
-            ).toFixed(DOLLAR_DECIMALS)
-          : Number(
-              decimalConversion(
-                assetRatesStatsMap[lend?.assetId]?.liquidationThreshold
-              ) * 100
-            ).toFixed(DOLLAR_DECIMALS)
-      }
-      %
-`,
-      tooltipText:
-        "The threshold at which a loan is defined as undercollateralised and subject to liquidation of collateral",
-    },
-    {
-      title: "Penalty",
-      counts: `${Number(
-        decimalConversion(
-          assetRatesStatsMap[lend?.assetId]?.liquidationPenalty
-        ) * 100
-      ).toFixed(DOLLAR_DECIMALS)}
-      %`,
-      tooltipText: "Fee paid by vault owners on liquidation",
-    },
-    {
-      title: "Bonus",
-      counts: `${Number(
-        decimalConversion(assetRatesStatsMap[lend?.assetId]?.liquidationBonus) *
+  let maxLTV = pair?.isInterPool
+    ? Number(
+        Number(decimalConversion(assetRatesStatsMap[pair?.assetIn]?.ltv)) *
+          Number(
+            decimalConversion(
+              assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv
+            )
+          ) *
           100
-      ).toFixed(DOLLAR_DECIMALS)}
-      %
-`,
-      tooltipText: "Discount on the collateral unlocked to liquidators",
-    },
-  ];
+      ).toFixed(DOLLAR_DECIMALS)
+    : Number(
+        decimalConversion(assetRatesStatsMap[pair?.assetIn]?.ltv) * 100
+      ).toFixed(DOLLAR_DECIMALS);
 
-  const TooltipContent = (
-    <div className="token-details">
-      <div className="tokencard-col">
-        <div className="tokencard">
-          <div className="tokencard-icon">
-            <SvgIcon name={iconNameFromDenom(collateralAssetDenom)} />
-          </div>
-          <p>Deposit {denomConversion(collateralAssetDenom)}</p>
-        </div>
-        <SvgIcon
-          className="token-down-arrow"
-          name="tokenarrow-down"
-          viewbox="0 0 9.774 45.02"
-        />
-        <div className="tokencard with-shadow">
-          <div className="tokencard-icon">
-            <SvgIcon
-              name={iconNameFromDenom(
-                assetMap[pool?.transitAssetIds?.first]?.denom
-              )}
-            />
-          </div>
-          <p>
-            Borrow{" "}
-            {denomConversion(assetMap[pool?.transitAssetIds?.first]?.denom)}
-          </p>
-        </div>
-        <label>#{lend?.poolId?.toNumber()}</label>
-      </div>
-      <div className="middle-arrow">
-        <SvgIcon name="token-arrow" viewbox="0 0 159 80.387" />
-      </div>
-      <div className="tokencard-col">
-        <div className="tokencard with-shadow">
-          <div className="tokencard-icon">
-            <SvgIcon
-              name={iconNameFromDenom(
-                assetMap[pool?.transitAssetIds?.first]?.denom
-              )}
-            />
-          </div>
-          <p>
-            Deposit{" "}
-            {denomConversion(assetMap[pool?.transitAssetIds?.first]?.denom)}{" "}
-          </p>
-        </div>
-        <SvgIcon
-          className="token-down-arrow"
-          name="tokenarrow-down"
-          viewbox="0 0 9.774 45.02"
-        />
-        <div className="tokencard">
-          <div className="tokencard-icon">
-            <SvgIcon name={iconNameFromDenom(borrowAssetDenom)} />
-          </div>
-          <p>Borrow {denomConversion(borrowAssetDenom)}</p>
-        </div>
-        <label>#{pair?.assetOutPoolId?.toNumber()}</label>
-      </div>
-    </div>
-  );
+  const handleSliderChange = (value) => {
+    if (value >= maxLTV) {
+      return handleBorrowMaxClick();
+    }
 
-  const TooltipContent2 = (
-    <div className="token-details token-details-small">
-      <div className="tokencard-col">
-        <div className="tokencard">
-          <div className="tokencard-icon">
-            <SvgIcon name={iconNameFromDenom(collateralAssetDenom)} />
-          </div>
-          <p>Deposit {denomConversion(collateralAssetDenom)}</p>
-        </div>
-        <SvgIcon
-          className="token-down-arrow"
-          name="tokenarrow-down"
-          viewbox="0 0 9.774 45.02"
-        />
-        <div className="tokencard with-shadow">
-          <div className="tokencard-icon">
-            <SvgIcon name={iconNameFromDenom(borrowAssetDenom)} />
-          </div>
-          <p>Borrow {denomConversion(borrowAssetDenom)}</p>
-        </div>
-        <label>#{lend?.poolId?.toNumber()}</label>
-      </div>
-    </div>
-  );
+    let outValue =
+      (value *
+        Number(
+          inAmount *
+            marketPrice(
+              markets,
+              collateralAssetDenom,
+              assetDenomMap[collateralAssetDenom]?.id
+            )
+        )) /
+      marketPrice(
+        markets,
+        borrowAssetDenom,
+        assetDenomMap[borrowAssetDenom]?.id
+      ) /
+      100;
+
+    let borrowValue = toDecimals(
+      String(outValue),
+      assetDenomMap[borrowAssetDenom]?.decimals
+    )
+      .toString()
+      .trim();
+
+    setOutAmount(borrowValue || 0);
+    checkMaxBorrow(borrowValue || 0);
+  };
+
+  const marks = {
+    0: " ",
+    80: "Safe",
+    100: "Riskier",
+  };
 
   return (
-    <div className="details-wrapper">
+    <div className="details-wrapper market-details-wrapper">
       {!dataInProgress ? (
         <>
           <div className="details-left commodo-card commodo-borrow-page">
@@ -659,7 +613,7 @@ const BorrowTab = ({
                     className="assets-select"
                     popupClassName="asset-select-dropdown"
                     onChange={handleBorrowAssetChange}
-                    value={selectedBorrowValue}
+                    value={borrowList?.length ? selectedBorrowValue : null}
                     placeholder={
                       <div className="select-placeholder">
                         <div className="circle-icon">
@@ -687,10 +641,18 @@ const BorrowTab = ({
                                 </div>
                               </div>
                               <div className="name">
-                                {denomConversion(item)} (
-                                {"cPool-" +
-                                  assetToPool[item]?.cpoolName?.split("-")?.[0]}
-                                )
+                                {iconNameFromDenom(item) ? (
+                                  <>
+                                    {denomConversion(item)} (
+                                    {"cPool-" +
+                                      assetToPool[item]?.cpoolName?.split(
+                                        "-"
+                                      )?.[0]}
+                                    )
+                                  </>
+                                ) : (
+                                  ""
+                                )}
                               </div>
                             </div>
                           </Option>
@@ -747,133 +709,32 @@ const BorrowTab = ({
                 </div>
               </div>
             </div>
-            {pair?.isInterPool ? (
-              <Row>
-                <Col>
-                  <div className="borrowbottom-cards">
-                    <div className="cards">
-                      <div className="cards-inner">
-                        <div className="cards-colum">
-                          <div className="inner-icon">
-                            <SvgIcon
-                              name={iconNameFromDenom(collateralAssetDenom)}
-                            />
-                          </div>
-                          <p>{denomConversion(collateralAssetDenom)}</p>
-                        </div>
-                        <SvgIcon
-                          className="longarrow-icon"
-                          name="long-arrow"
-                          viewbox="0 0 64 5.774"
-                        />
-                        <div className="cards-colum">
-                          <div className="inner-icon">
-                            <SvgIcon
-                              name={iconNameFromDenom(
-                                assetMap[pool?.transitAssetIds?.first]?.denom
-                              )}
-                            />
-                          </div>
-                          <p>
-                            {denomConversion(
-                              assetMap[pool?.transitAssetIds?.first]?.denom
-                            )}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <SvgIcon
-                      className="longarrow-icon-middle"
-                      name="long-arrow"
-                      viewbox="0 0 64 5.774"
-                    />
-                    <div className="cards">
-                      <Tooltip
-                        className="commodo-tooltip tooltip-icon"
-                        placement="right"
-                        color="#173629"
-                        title={TooltipContent}
-                        overlayClassName="token-overlay"
-                      >
-                        <SvgIcon className="tooltip-icon" name="info-icon" />
-                      </Tooltip>
-                      <div className="cards-inner">
-                        <div className="cards-colum">
-                          <div className="inner-icon">
-                            <SvgIcon
-                              name={iconNameFromDenom(
-                                assetMap[pool?.transitAssetIds?.first]?.denom
-                              )}
-                            />
-                          </div>
-                          <p>
-                            {denomConversion(
-                              assetMap[pool?.transitAssetIds?.first]?.denom
-                            )}
-                          </p>
-                        </div>
-                        <SvgIcon
-                          className="longarrow-icon"
-                          name="long-arrow"
-                          viewbox="0 0 64 5.774"
-                        />
-                        <div className="cards-colum">
-                          <div className="inner-icon">
-                            <SvgIcon
-                              name={iconNameFromDenom(borrowAssetDenom)}
-                            />
-                          </div>
-                          <p>{denomConversion(borrowAssetDenom)}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Col>
-              </Row>
-            ) : (
-              <Row>
-                <Col>
-                  <div className="borrowbottom-cards justify-content-center">
-                    <div className="cards">
-                      <Tooltip
-                        className="commodo-tooltip tooltip-icon"
-                        placement="right"
-                        color="#173629"
-                        title={TooltipContent2}
-                        overlayClassName="token-overlay token-overlay-small"
-                      >
-                        <SvgIcon className="tooltip-icon" name="info-icon" />
-                      </Tooltip>
-                      <div className="cards-inner">
-                        <div className="cards-colum">
-                          <div className="inner-icon">
-                            <SvgIcon
-                              name={iconNameFromDenom(collateralAssetDenom)}
-                            />{" "}
-                          </div>
-                          <p>{denomConversion(collateralAssetDenom)}</p>
-                        </div>
-                        <SvgIcon
-                          className="longarrow-icon"
-                          name="long-arrow"
-                          viewbox="0 0 64 5.774"
-                        />
-                        <div className="cards-colum">
-                          <div className="inner-icon">
-                            <SvgIcon
-                              name={iconNameFromDenom(borrowAssetDenom)}
-                            />
-                          </div>
-                          <p>{denomConversion(borrowAssetDenom)}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Col>
-              </Row>
-            )}
             <Row>
-              <Col sm="12" className="mt-3 mx-auto card-bottom-details">
+              <Col sm="12" className="mx-auto card-bottom-details">
+                <Row className="mt-2">
+                  <Col sm="12">
+                    <Slider
+                      marks={marks}
+                      max={maxLTV}
+                      value={currentLTV}
+                      onChange={handleSliderChange}
+                      defaultValue={37}
+                      tooltip={{ open: false }}
+                      className="commodo-slider market-slider borrow-slider"
+                    />
+                  </Col>
+                </Row>
+
+                <Row className="mt-1">
+                  <Col>
+                    <AssetStats
+                      assetId={lend?.assetId}
+                      pool={pool}
+                      pair={pair}
+                    />
+                  </Col>
+                </Row>
+
                 <Row className="mt-2">
                   <Col>
                     <label>Health Factor</label>
@@ -891,16 +752,34 @@ const BorrowTab = ({
                 </Row>
                 <Row className="mt-2">
                   <Col>
-                    <label>Current LTV</label>
+                    <label>Borrow APY</label>
+                    <TooltipIcon text={"Borrow APY of Asset"} />
                   </Col>
                   <Col className="text-right">
-                    {(isFinite(currentLTV) ? currentLTV : 0).toFixed(
-                      DOLLAR_DECIMALS
-                    )}
+                    <AssetApy poolId={pool?.poolId} assetId={pair?.assetOut} />
+                  </Col>
+                </Row>
+                <Row className="mt-2">
+                  <Col>
+                    <label>Liquidation Fee</label>
+                    <TooltipIcon text="Liquidation fee charged upon liquidation of position" />
+                  </Col>
+                  <Col className="text-right">
+                    {(
+                      Number(
+                        decimalConversion(
+                          assetRatesStatsMap[lend?.assetId]?.liquidationPenalty
+                        ) * 100
+                      ) +
+                      Number(
+                        decimalConversion(
+                          assetRatesStatsMap[lend?.assetId]?.liquidationBonus
+                        ) * 100
+                      )
+                    ).toFixed(DOLLAR_DECIMALS)}
                     %
                   </Col>
                 </Row>
-                <AssetStats assetId={lend?.assetId} pool={pool} pair={pair} />
               </Col>
             </Row>
             <div className="assets-form-btn">
@@ -930,6 +809,18 @@ const BorrowTab = ({
               <Details
                 asset={
                   assetMap[
+                    assetOutPool?.transitAssetIds?.main?.toNumber() ||
+                      pool?.transitAssetIds?.main?.toNumber()
+                  ]
+                }
+                poolId={assetOutPool?.poolId || pool?.poolId}
+                parent="borrow"
+              />
+            </div>
+            <div className="commodo-card">
+              <Details
+                asset={
+                  assetMap[
                     assetOutPool?.transitAssetIds?.first?.toNumber() ||
                       pool?.transitAssetIds?.first?.toNumber()
                   ]
@@ -937,7 +828,9 @@ const BorrowTab = ({
                 poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
               />
-              <div className="mt-5">
+            </div>
+            <div className="commodo-card">
+              <div className="">
                 <Details
                   asset={
                     assetMap[
@@ -949,52 +842,6 @@ const BorrowTab = ({
                   parent="borrow"
                 />
               </div>
-            </div>
-            <div className="commodo-card">
-              <Details
-                asset={
-                  assetMap[
-                    assetOutPool?.transitAssetIds?.main?.toNumber() ||
-                      pool?.transitAssetIds?.main?.toNumber()
-                  ]
-                }
-                poolId={assetOutPool?.poolId || pool?.poolId}
-                parent="borrow"
-              />
-            </div>
-            <div className="commodo-card">
-              <div className="card-head">
-                <div className="head-left">
-                  <div className="assets-col">
-                    <div className="assets-icon">
-                      <SvgIcon name={iconNameFromDenom(collateralAssetDenom)} />
-                    </div>
-                    Collateral Asset Liquidation Params
-                  </div>
-                </div>
-              </div>
-              <List
-                grid={{
-                  gutter: 16,
-                  xs: 2,
-                  sm: 2,
-                  md: 2,
-                  lg: 3,
-                  xl: 3,
-                  xxl: 3,
-                }}
-                dataSource={data}
-                renderItem={(item) => (
-                  <List.Item>
-                    <div>
-                      <p>
-                        {item.title} <TooltipIcon text={item.tooltipText} />
-                      </p>
-                      <h3>{item.counts}</h3>
-                    </div>
-                  </List.Item>
-                )}
-              />
             </div>
           </div>
         </>

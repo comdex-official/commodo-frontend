@@ -9,7 +9,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../../../components/common";
 import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
@@ -18,18 +18,18 @@ import CustomInput from "../../../../components/CustomInput";
 import HealthFactor from "../../../../components/HealthFactor";
 import {
   ValidateInputNumber,
-  ValidateMaxBorrow
+  ValidateMaxBorrow,
 } from "../../../../config/_validation";
 import {
   APP_ID,
   DOLLAR_DECIMALS,
-  MAX_LTV_DEDUCTION
+  MAX_LTV_DEDUCTION,
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
   queryAssetPairs,
   queryLendPair,
-  queryLendPool
+  queryLendPool,
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
@@ -37,12 +37,12 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
@@ -241,6 +241,7 @@ const BorrowTab = ({
 
     setInAmount(value);
     setOutAmount(0);
+    setMaxBorrowValidationError();
     setValidationError(
       ValidateInputNumber(
         getAmount(value, assetDenomMap[collateralAssetDenom]?.decimals),
@@ -258,8 +259,11 @@ const BorrowTab = ({
     checkMaxBorrow(value);
     setBorrowValidationError(
       ValidateInputNumber(
-        getAmount(value, assetDenomMap[borrowAssetDenom]?.decimals),
-        borrowableBalance,
+        value,
+        amountConversion(
+          borrowableBalance,
+          assetDenomMap[borrowAssetDenom]?.decimals
+        ),
         "dollar",
         Number(
           value *
@@ -276,7 +280,12 @@ const BorrowTab = ({
   const checkMaxBorrow = (value) => {
     setMaxBorrowValidationError(
       ValidateMaxBorrow(
-        value,
+        value *
+          marketPrice(
+            markets,
+            borrowAssetDenom,
+            assetDenomMap[borrowAssetDenom]?.id
+          ),
         Number(
           amountConversion(
             marketPrice(
@@ -943,6 +952,13 @@ const BorrowTab = ({
           <div className="details-right">
             <div className="commodo-card">
               <Details
+                asset={assetMap[outPool?.transitAssetIds?.main?.toNumber()]}
+                poolId={outPool?.poolId}
+                parent="borrow"
+              />
+            </div>
+            <div className="commodo-card">
+              <Details
                 asset={assetMap[outPool?.transitAssetIds?.first?.toNumber()]}
                 poolId={outPool?.poolId}
                 parent="borrow"
@@ -954,13 +970,6 @@ const BorrowTab = ({
                   parent="borrow"
                 />
               </div>
-            </div>
-            <div className="commodo-card">
-              <Details
-                asset={assetMap[outPool?.transitAssetIds?.main?.toNumber()]}
-                poolId={outPool?.poolId}
-                parent="borrow"
-              />
             </div>
             <div className="commodo-card">
               <div className="card-head">

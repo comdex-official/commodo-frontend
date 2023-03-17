@@ -1,5 +1,6 @@
 import { Button, Table, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
+import { useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import {
@@ -10,6 +11,7 @@ import {
   TooltipIcon
 } from "../../components/common";
 import HealthFactor from "../../components/HealthFactor";
+import { queryLendPair, queryLendPosition } from "../../services/lend/query";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import { decimalConversion } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
@@ -26,6 +28,49 @@ const Borrow = ({
   assetDenomMap,
 }) => {
   const navigate = useNavigate();
+  const [navigateInProgress, setNavigateInProgress] = useState(false);
+
+  const handleNavigate = (borrow) => {
+    setNavigateInProgress(true);
+
+    queryLendPair(borrow?.pairId, (error, pairResult) => {
+      if (error) {
+        setNavigateInProgress(false);
+        return;
+      }
+
+      const lendPair = pairResult?.ExtendedPair;
+
+      if (!lendPair?.isInterPool) {
+        navigate(`/market-details/${lendPair?.assetOutPoolId}/#repay`, {
+          state: {
+            lendingIdFromRoute: borrow?.lendingId?.toNumber(),
+            borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
+            pairIdFromRoute: borrow?.pairId,
+            collateralAssetIdFromRoute: lendPair?.assetIn?.toNumber(),
+          },
+        });
+      } else {
+        queryLendPosition(borrow?.lendingId, (error, result) => {
+          if (error) {
+            message.error(error);
+            return;
+          }
+          
+          if (result?.lend?.poolId) {
+            navigate(`/market-details/${result?.lend?.poolId}/#repay`, {
+              state: {
+                lendingIdFromRoute: borrow?.lendingId?.toNumber(),
+                borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
+                pairIdFromRoute: borrow?.pairId,
+                collateralAssetIdFromRoute: lendPair?.assetIn?.toNumber(),
+              },
+            });
+          }
+        });
+      }
+    });
+  };
   const columns = [
     {
       title: "Asset",
@@ -36,7 +81,7 @@ const Borrow = ({
     {
       title: (
         <>
-          Debt <TooltipIcon text="Current Outstanding Debt" />
+          Debt <TooltipIcon text="Current outstanding debt" />
         </>
       ),
       dataIndex: "debt",
@@ -44,7 +89,12 @@ const Borrow = ({
       width: 300,
     },
     {
-      title: "Collateral",
+      title: (
+        <>
+          Collateral{" "}
+          <TooltipIcon text="cTokens are the collateral tokens locked in the debt" />
+        </>
+      ),
       dataIndex: "collateral",
       key: "collateral",
       width: 300,
@@ -94,10 +144,8 @@ const Borrow = ({
             }
           >
             <Button
-              disabled={item?.isLiquidated}
-              onClick={() =>
-                navigate(`/myhome/borrow/${item?.borrowingId?.toNumber()}`)
-              }
+              disabled={item?.isLiquidated || navigateInProgress}
+              onClick={() => handleNavigate(item)}
               type="primary"
               className="btn-filled"
               size="small"

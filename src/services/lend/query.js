@@ -187,16 +187,16 @@ export const queryModuleBalance = (poolId, callback) => {
   });
 };
 
-export const queryUserPoolLends = (address, callback) => {
+export const queryUserPoolLends = (address, id, callback) => {
   getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
-
     queryService
-      .QueryAllLendByOwner({
+      .QueryAllLendByOwnerAndPool({
         owner: address,
+        poolId: Long.fromNumber(id),
       })
       .then((result) => {
         callback(null, result);
@@ -294,6 +294,43 @@ export const queryAssetPoolFundBalance = (assetId, poolId, callback) => {
     queryService
       .QueryFundModBalByAssetPool({
         assetId: Long.fromNumber(assetId),
+        poolId: Long.fromNumber(poolId),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+export const queryAllLendByOwnerAndPool = (address, poolId, callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryAllLendByOwnerAndPool({
+        owner: address,
+        poolId: Long.fromNumber(poolId),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+
+export const queryAllBorrowByOwnerAndPool = (address, poolId, callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryAllBorrowByOwnerAndPool({
+        owner: address,
         poolId: Long.fromNumber(poolId),
       })
       .then((result) => {
