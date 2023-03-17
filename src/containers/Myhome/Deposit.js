@@ -37,7 +37,7 @@ const Deposit = ({
       title: "Asset",
       dataIndex: "asset",
       key: "asset",
-      width: 130,
+      width: 150,
     },
     {
       title: (
@@ -59,7 +59,7 @@ const Deposit = ({
       title: "Lend APY",
       dataIndex: "apy",
       key: "apy",
-      width: 150,
+      width: 180,
       render: (lend) => (
         <AssetApy poolId={lend?.poolId} assetId={lend?.assetId} parent="lend" />
       ),
@@ -90,7 +90,15 @@ const Deposit = ({
           >
             <Button
               onClick={() =>
-                navigate(`/myhome/deposit/${item?.lendingId?.toNumber()}`)
+                navigate(
+                  `/market-details/${item?.poolId?.toNumber()}/#withdraw`,
+                  {
+                    state: {
+                      collateralAssetIdFromRoute: item?.assetId?.toNumber(),
+                      lendingIdFromRoute: item?.lendingId?.toNumber(),
+                    },
+                  }
+                )
               }
               type="primary"
               className="btn-filled"

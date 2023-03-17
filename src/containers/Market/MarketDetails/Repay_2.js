@@ -1,66 +1,97 @@
-import { Button, Select } from "antd";
+import { Button, message, Select, Slider } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { useLocation } from "react-router";
 import { setBalanceRefresh } from "../../../actions/account";
 import {
-    Col,
-    NoDataIcon,
-    Row,
-    SvgIcon,
-    TooltipIcon
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon
 } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
-import AssetStats from "../../../components/common/Asset/Stats";
 import CustomInput from "../../../components/CustomInput";
 import HealthFactor from "../../../components/HealthFactor";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
-    amountConversion,
-    amountConversionWithComma,
-    denomConversion,
-    getAmount,
-    getDenomBalance
+  queryAllBorrowByOwnerAndPool,
+  queryLendPair
+} from "../../../services/lend/query";
+import {
+  amountConversion,
+  amountConversionWithComma,
+  denomConversion,
+  getAmount,
+  getDenomBalance
 } from "../../../utils/coin";
 import {
-    commaSeparator,
-    decimalConversion,
-    marketPrice
+  commaSeparator,
+  decimalConversion,
+  marketPrice
 } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
-import ActionButton from "./ActionButton";
+import ActionButton from "../../Myhome/BorrowRepay/ActionButton";
 import "./index.less";
 
 const { Option } = Select;
 
-const RepayTab = ({
+const RepayTab_2 = ({
   lang,
   dataInProgress,
-  borrowPosition,
   pool,
   assetMap,
   balances,
   address,
   refreshBalance,
-  refreshBorrowPosition,
   setBalanceRefresh,
   markets,
-  pair,
   assetDenomMap,
 }) => {
   const [amount, setAmount] = useState();
   const [validationError, setValidationError] = useState();
   const [assetList, setAssetList] = useState();
+  const [borrowPosition, setBorrowPosition] = useState([]);
+  const [userBorrowsMap, setUserBorrowsMap] = useState({});
+  const [selectedAssetId, setSelectedAssetId] = useState(0);
+  const [availableBalance, setAvailableBalance] = useState(0);
+  const [updatedAmountOut, setUpdatedAmountOut] = useState(0);
+  const [selectedBorrowPosition, setSelectedBorrowPosition] = useState([]);
+  const [pair, setPair] = useState();
 
-  const selectedAssetId = pair?.assetOut?.toNumber();
-  const availableBalance =
-    getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
+  const { state } = useLocation();
+  const borrowAssetMinimalDenomFromRoute =
+    state?.borrowAssetMinimalDenomFromRoute;
 
-  let updatedAmountOut =
-    Number(borrowPosition?.amountOut?.amount) +
-    Number(decimalConversion(borrowPosition?.interestAccumulated));
+  const fetchAllBorrowByOwnerAndPool = (address, poolId) => {
+    queryAllBorrowByOwnerAndPool(address, poolId, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      const userBorrowsMap = result?.borrows?.reduce((map, obj) => {
+        map[obj?.amountOut?.denom] = obj;
+        return map;
+      }, {});
+
+      setBorrowPosition(result?.borrows);
+      setUserBorrowsMap(userBorrowsMap);
+    });
+  };
+
+  useEffect(() => {
+    fetchAllBorrowByOwnerAndPool(address, pool?.poolId);
+  }, [address, pool]);
+
+  useEffect(() => {
+    if (borrowAssetMinimalDenomFromRoute && borrowPosition?.length) {
+      handleAssetChange(borrowAssetMinimalDenomFromRoute);
+    }
+  }, [borrowAssetMinimalDenomFromRoute, borrowPosition]);
 
   useEffect(() => {
     if (pool?.poolId) {
@@ -83,19 +114,21 @@ const RepayTab = ({
     setAmount(value);
     setValidationError(
       ValidateInputNumber(
-        getAmount(
-          value,
-          assetDenomMap[borrowPosition?.amountOut?.denom]?.decimals
+        value,
+        amountConversion(
+          availableBalance,
+          assetDenomMap[selectedBorrowPosition?.amountOut?.denom]?.decimals
         ),
-        availableBalance,
         "repay",
-        updatedAmountOut
+        amountConversion(
+          updatedAmountOut,
+          assetDenomMap[borrowPosition?.amountOut?.denom]?.decimals
+        )
       )
     );
   };
 
   const handleRefresh = () => {
-    refreshBorrowPosition();
     setBalanceRefresh(refreshBalance + 1);
     setAmount();
   };
@@ -109,11 +142,45 @@ const RepayTab = ({
     );
   };
 
+  const handleAssetChange = (value) => {
+    setAvailableBalance(
+      getDenomBalance(balances, userBorrowsMap[value]?.amountOut?.denom) || 0
+    );
+    setUpdatedAmountOut(
+      Number(userBorrowsMap[value]?.amountOut?.amount) +
+        Number(decimalConversion(userBorrowsMap[value]?.interestAccumulated))
+    );
+
+    setSelectedBorrowPosition(userBorrowsMap[value]);
+
+    queryLendPair(userBorrowsMap[value]?.pairId, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setSelectedAssetId(result?.ExtendedPair?.assetOut?.toNumber());
+      setPair(result?.ExtendedPair);
+    });
+  };
+
+  const handleSliderChange = (value) => {
+    handleInputChange(String(value));
+  };
+
+  const marks = {
+    0: "0%",
+    [amountConversionWithComma(
+      updatedAmountOut,
+      assetDenomMap[selectedBorrowPosition?.amountOut?.denom]?.decimals
+    )]: "100%",
+  };
+
   return (
-    <div className="details-wrapper">
+    <div className="details-wrapper market-details-wrapper">
       <div className="details-left commodo-card">
         <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
-        <div className="assets-select-card mb-3">
+        <div className="assets-select-card mb-2">
           <div className="assets-left">
             <label className="left-label">Repay Asset</label>
             <div className="assets-select-wrapper">
@@ -121,7 +188,7 @@ const RepayTab = ({
                 <Select
                   className="assets-select"
                   popupClassName="asset-select-dropdown"
-                  defaultValue="1"
+                  onChange={handleAssetChange}
                   placeholder={
                     <div className="select-placeholder">
                       <div className="circle-icon">
@@ -131,40 +198,61 @@ const RepayTab = ({
                     </div>
                   }
                   defaultActiveFirstOption={true}
-                  showArrow={false}
-                  disabled
+                  showArrow={true}
+                  value={
+                    borrowPosition?.length && selectedAssetId
+                      ? assetMap[selectedAssetId]?.denom
+                      : null
+                  }
+                  // disabled
                   notFoundContent={<NoDataIcon />}
                 >
-                  <Option key="1">
-                    <div className="select-inner">
-                      <div className="svg-icon">
-                        <div className="svg-icon-inner">
-                          <SvgIcon
-                            name={iconNameFromDenom(
-                              assetMap[selectedAssetId]?.denom
-                            )}
-                          />
-                        </div>
-                      </div>
-                      <div className="name">
-                        {denomConversion(assetMap[selectedAssetId]?.denom)}
-                      </div>
-                    </div>
-                  </Option>
+                  {borrowPosition?.length > 0 &&
+                    borrowPosition?.map((item) => {
+                      return (
+                        <Option
+                          key={item?.amountOut?.denom}
+                          value={item?.amountOut?.denom}
+                        >
+                          <div className="select-inner">
+                            <div className="svg-icon">
+                              <div className="svg-icon-inner">
+                                <SvgIcon
+                                  name={iconNameFromDenom(
+                                    item?.amountOut?.denom
+                                  )}
+                                />
+                              </div>
+                            </div>
+                            <div className="name">
+                              {denomConversion(item?.amountOut?.denom)}
+                            </div>
+                          </div>
+                        </Option>
+                      );
+                    })}
                 </Select>
               </div>
             </div>
           </div>
           <div className="assets-right">
             <div className="label-right">
-              Available
-              <span className="ml-1">
-                {amountConversionWithComma(
-                  availableBalance,
-                  assetMap[selectedAssetId]?.decimals
-                )}{" "}
-                {denomConversion(assetMap[selectedAssetId]?.denom)}
-              </span>
+              <div className="available-balance">
+                Remaining Debt
+                <span className="ml-1">
+                  {amountConversionWithComma(
+                    updatedAmountOut,
+                    assetDenomMap[selectedBorrowPosition?.amountOut?.denom]
+                      ?.decimals
+                  )}{" "}
+                  {denomConversion(selectedBorrowPosition?.amountOut?.denom)}
+                </span>
+                <span className="assets-max-half">
+                  <Button className=" active" onClick={handleMaxRepay}>
+                    Max
+                  </Button>
+                </span>
+              </div>
             </div>
             <div>
               <div className="input-select">
@@ -192,67 +280,60 @@ const RepayTab = ({
         </div>
         <Row>
           <Col sm="12" className="mt-2 mx-auto card-bottom-details">
-            <Row>
-              <Col>
-                <label>Remaining Debt</label>
-              </Col>
-              <Col className="text-right">
-                <div className="d-flex justify-content-end">
-                  <div className="cursor-pointer" onClick={handleMaxRepay}>
-                    {amountConversionWithComma(
-                      updatedAmountOut,
-                      assetDenomMap[borrowPosition?.amountOut?.denom]?.decimals
-                    )}{" "}
-                    {denomConversion(borrowPosition?.amountOut?.denom)}
-                  </div>
-                  <div className="max-half ml-1">
-                    <Button
-                      className="active"
-                      size="small"
-                      type="primary"
-                      onClick={handleMaxRepay}
-                    >
-                      Max
-                    </Button>
-                  </div>
-                </div>
-                <small className="font-weight-light">
-                  $
-                  {commaSeparator(
-                    Number(
-                      amountConversion(
-                        updatedAmountOut,
-                        assetMap[selectedAssetId]?.decimals
-                      ) *
-                        marketPrice(
-                          markets,
-                          assetMap[selectedAssetId]?.denom,
-                          selectedAssetId
-                        ) || 0
-                    ).toFixed(DOLLAR_DECIMALS)
+            <Row className="mt-3">
+              <Col sm="12">
+                <Slider
+                  marks={marks}
+                  defaultValue={amount}
+                  value={amount}
+                  tooltip={{ open: false }}
+                  onChange={handleSliderChange}
+                  max={amountConversionWithComma(
+                    updatedAmountOut,
+                    assetDenomMap[selectedBorrowPosition?.amountOut?.denom]
+                      ?.decimals
                   )}
+                  className="commodo-slider market-slider-1 repay-slider"
+                />
+              </Col>
+            </Row>
+
+            <Row className="mt-2">
+              <Col>
+                <label>Available in wallet</label>
+              </Col>
+              <Col className="text-right repay-remain-right">
+                <small className="font-weight-light">
+                  {amountConversionWithComma(
+                    availableBalance,
+                    assetDenomMap[selectedBorrowPosition?.amountOut?.denom]
+                      ?.decimals
+                  )}{" "}
+                  {denomConversion(selectedBorrowPosition?.amountOut?.denom)}
                 </small>
               </Col>
             </Row>
-            <Row className="mt-2">
+
+            <Row className="mt-2 lastrow-market-dtl">
               <Col>
                 <label>Health Factor</label>
                 <TooltipIcon text="Numeric representation of your position's safety" />
               </Col>
-              <Col className="text-right">
+              <Col className="text-right health-right-repay">
                 <HealthFactor
-                  borrow={borrowPosition}
+                  borrow={selectedBorrowPosition}
                   pair={pair}
                   pool={pool}
-                  inAmount={borrowPosition?.amountIn?.amount}
+                  inAmount={selectedBorrowPosition?.amountIn?.amount}
                   outAmount={
                     amount
                       ? Number(updatedAmountOut)?.toFixed(0) -
                         Number(
                           getAmount(
                             amount,
-                            assetDenomMap[borrowPosition?.amountOut?.denom]
-                              ?.decimals
+                            assetDenomMap[
+                              selectedBorrowPosition?.amountOut?.denom
+                            ]?.decimals
                           )
                         )
                       : Number(updatedAmountOut)?.toFixed(0)
@@ -260,7 +341,6 @@ const RepayTab = ({
                 />{" "}
               </Col>
             </Row>
-            <AssetStats pair={pair} pool={pool} />
           </Col>
         </Row>
         <div className="assets-form-btn">
@@ -275,8 +355,8 @@ const RepayTab = ({
             }
             amount={amount}
             address={address}
-            borrowId={borrowPosition?.borrowingId}
-            denom={borrowPosition?.amountOut?.denom}
+            borrowId={selectedBorrowPosition?.borrowingId}
+            denom={selectedBorrowPosition?.amountOut?.denom}
             refreshData={handleRefresh}
             assetDenomMap={assetDenomMap}
           />
@@ -285,21 +365,21 @@ const RepayTab = ({
       <div className="details-right">
         <div className="commodo-card">
           <Details
+            asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
+            poolId={pool?.poolId}
+            parent="borrow"
+          />
+        </div>
+        <div className="commodo-card">
+          <Details
             asset={assetMap[pool?.transitAssetIds?.first?.toNumber()]}
             poolId={pool?.poolId}
             parent="borrow"
           />
-          <div className="mt-5">
-            <Details
-              asset={assetMap[pool?.transitAssetIds?.second?.toNumber()]}
-              poolId={pool?.poolId}
-              parent="borrow"
-            />
-          </div>
         </div>
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
+            asset={assetMap[pool?.transitAssetIds?.second?.toNumber()]}
             poolId={pool?.poolId}
             parent="borrow"
           />
@@ -309,10 +389,9 @@ const RepayTab = ({
   );
 };
 
-RepayTab.propTypes = {
+RepayTab_2.propTypes = {
   dataInProgress: PropTypes.bool.isRequired,
   lang: PropTypes.string.isRequired,
-  refreshBorrowPosition: PropTypes.func.isRequired,
   setBalanceRefresh: PropTypes.func.isRequired,
   address: PropTypes.string,
   assetDenomMap: PropTypes.object,
@@ -375,4 +454,4 @@ const actionsToProps = {
   setBalanceRefresh,
 };
 
-export default connect(stateToProps, actionsToProps)(RepayTab);
+export default connect(stateToProps, actionsToProps)(RepayTab_2);

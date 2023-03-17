@@ -367,7 +367,6 @@ const Assets = ({
                   dataSource={tableData}
                   columns={columns}
                   pagination={false}
-                  scroll={{ x: "100%", y: "calc(100vh - 280px)" }}
                   locale={{ emptyText: <NoDataIcon /> }}
                 />
               </div>

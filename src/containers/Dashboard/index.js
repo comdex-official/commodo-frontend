@@ -198,7 +198,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
       categories:
         graphData && graphData.length > 0
           ? graphData.map((item) =>
-              moment(item?.timestamp).format("MMM DD, HH:mm")
+              moment(item?.timestamp).format("MMM DD")
             )
           : [],
     },
@@ -211,7 +211,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
           Number(this.y)?.toFixed(DOLLAR_DECIMALS) +
           "<br />" +
           '<small style="font-size: 10px;">' +
-          moment(this.x).format("MMM DD, HH:mm") +
+          moment(this.x).format("MMM DD") +
           "</small>" +
           "</div>"
         );
@@ -390,7 +390,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                             Provide liquidity on ATOM-CMDX pool on CSWAP to earn
                             external incentives on COMMODO
                           </p>
-                          <div className="mt-auto">
+                          <div className="mt-3">
                             <div className="small-icons mb-2">
                               <div className="icon-col mr-2">
                                 <SvgIcon name="cmdx-icon" /> CMDX
@@ -418,7 +418,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                           />
                           <Button
                             type="primary"
-                            className="btn-filled"
+                            className="btn-filled mt-3"
                             onClick={() =>
                               window.open(
                                 `${CSWAP_URL}/farm/${ATOM_CMDX_POOL_ID}`

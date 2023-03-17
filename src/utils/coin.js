@@ -1,5 +1,6 @@
 import AssetList from "../config/ibc_assets.json";
 import { comdex } from "../config/network";
+import { DOLLAR_DECIMALS } from "../constants/common";
 import { commaSeparator, getExponent } from "./number";
 import { lowercaseFirstLetter } from "./string";
 
