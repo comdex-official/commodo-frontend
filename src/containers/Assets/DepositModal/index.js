@@ -1,4 +1,12 @@
+import { createTxRaw } from "@tharsis/proto";
+import { generateEndpointAccount } from "@tharsis/provider";
+import {
+  generateEndpointBroadcast,
+  generatePostBodyBroadcast
+} from "@tharsis/provider/dist/rest/broadcast";
+import { createTxIBCMsgTransfer } from "@tharsis/transactions";
 import { Button, Form, message, Modal, Spin } from "antd";
+import Long from "long";
 import * as PropTypes from "prop-types";
 import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -16,7 +24,7 @@ import { fetchTxHash } from "../../../services/transaction";
 import {
   amountConversion,
   denomConversion,
-  getAmount,
+  getAmount
 } from "../../../utils/coin";
 import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
@@ -30,7 +38,7 @@ const Deposit = ({
   balances,
   assetDenomMap,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOpen, setIsModalOpen] = useState(false);
   const [sourceAddress, setSourceAddress] = useState("");
   const [inProgress, setInProgress] = useState(false);
   const [amount, setAmount] = useState();
@@ -40,22 +48,19 @@ const Deposit = ({
   const [balanceInProgress, setBalanceInProgress] = useState(false);
 
   const onChange = (value) => {
-    value = toDecimals(value, assetDenomMap[chain?.coinMinimalDenom]?.decimals);
+    value = toDecimals(value, assetDenomMap[chain?.coinMinimalDenom]?.decimals)
+      .toString()
+      .trim();
 
     setAmount(value);
     setValidationError(
-      ValidateInputNumber(
-        getAmount(value),
-        availableBalance?.amount,
-        assetDenomMap[chain?.coinMinimalDenom]?.decimals
-      )
+      ValidateInputNumber(getAmount(value), availableBalance?.amount)
     );
   };
 
   const initialize = useCallback(() => {
     initializeIBCChain(chain.chainInfo, (error, account) => {
       if (error) {
-        message.error(error);
         setInProgress(false);
         return;
       }
@@ -85,24 +90,134 @@ const Deposit = ({
   }, [chain?.chainInfo, chain?.coinMinimalDenom, chain?.sourceChannelId]);
 
   useEffect(() => {
-    if (isModalOpen) {
+    if (isOpen) {
       initialize();
     }
-  }, [address, initialize, isModalOpen]);
+  }, [address, initialize, isOpen]);
 
   const showModal = () => {
+    if (!address) {
+      message.info("Please connect your wallet");
+      return;
+    }
+    
     initialize();
     setIsModalOpen(true);
   };
 
-  const signIBCTx = () => {
+  const handleEvmIBC = async () => {
     setInProgress(true);
 
-    if (!proofHeight?.revision_height) {
-      message.error("Unable to get the latest block height");
-      setInProgress(false);
+    try {
+      const timeout = Math.floor(new Date().getTime() / 1000) + 600;
+      const timeoutTimestampNanoseconds =
+        Long.fromNumber(timeout).multiply(1_000_000_000);
+
+      const ibcMsg = {
+        receiver: address,
+        sender: sourceAddress,
+        sourceChannel: chain.destChannelId,
+        sourcePort: "transfer",
+        timeoutTimestamp: String(timeoutTimestampNanoseconds),
+        amount: getAmount(amount, assetDenomMap[chain?.ibcDenomHash]?.decimals),
+        denom: chain?.coinMinimalDenom,
+        revisionNumber: Number(proofHeight.revision_number),
+        revisionHeight: Number(proofHeight.revision_height) + 100,
+      };
+      const chainInfoForMsg = {
+        chainId: comdex.chainId || 0,
+        cosmosChainId: chain.chainInfo?.chainId,
+      };
+
+      let accountResponse = await fetch(
+        `${chain.chainInfo?.rest}${generateEndpointAccount(sourceAddress)}`
+      );
+      let accountResult = await accountResponse.json();
+
+      const sender = {
+        accountAddress: accountResult.account.base_account.address,
+        sequence: accountResult.account.base_account.sequence,
+        accountNumber: accountResult.account.base_account.account_number,
+        pubkey: accountResult.account.base_account.pub_key?.key || "",
+      };
+
+      const fee = {
+        amount: "20",
+        denom: chain.chainInfo?.coinMinimalDenom,
+        gas: "200000",
+      };
+
+      const transferMsg = createTxIBCMsgTransfer(
+        chainInfoForMsg,
+        sender,
+        fee,
+        "ibc_transfer",
+        ibcMsg
+      );
+
+      const sign = await window?.keplr?.signDirect(
+        chain.chainInfo?.chainId,
+        sourceAddress,
+        {
+          bodyBytes: transferMsg.signDirect.body.serializeBinary(),
+          authInfoBytes: transferMsg.signDirect.authInfo.serializeBinary(),
+          chainId: chainInfoForMsg.cosmosChainId,
+          accountNumber: new Long(sender.accountNumber),
+        },
+        { isEthereum: true }
+      );
+
+      if (sign !== undefined) {
+        let rawTx = createTxRaw(
+          sign.signed.bodyBytes,
+          sign.signed.authInfoBytes,
+          [new Uint8Array(Buffer.from(sign.signature.signature, "base64"))]
+        );
+
+        // Broadcast it
+        const postOptions = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: generatePostBodyBroadcast(rawTx),
+        };
+        try {
+          let broadcastPost = await fetch(
+            `${chain.chainInfo?.rest}/${generateEndpointBroadcast()}`,
+            postOptions
+          );
+          let response = await broadcastPost.json();
+
+          if (response.tx_response?.txhash) {
+            message.loading(
+              "Transaction Broadcasting, Waiting for transaction to be included in the block"
+            );
+
+            handleHash(response.tx_response?.txhash);
+          }
+        } catch (e) {
+          resetValues();
+          return;
+        }
+      }
+    } catch (e) {
+      resetValues();
       return;
     }
+  };
+
+  const signIBCTx = () => {
+    if (!proofHeight?.revision_height) {
+      message.error("Unable to get the latest block height");
+      return;
+    }
+
+    if (chain?.chainInfo?.features?.includes("eth-address-gen")) {
+      // handle evm based token deposits
+      return handleEvmIBC();
+    }
+
+    setInProgress(true);
+
     const data = {
       msg: {
         typeUrl: "/ibc.applications.transfer.v1.MsgTransfer",
@@ -269,7 +384,7 @@ const Deposit = ({
         centered={true}
         closable={true}
         footer={null}
-        open={isModalOpen}
+        open={isOpen}
         width={480}
         onCancel={handleCancel}
         onOk={handleOk}
@@ -307,7 +422,7 @@ const Deposit = ({
                   <>
                     {variables[lang].available}
                     <span className="ml-1">
-                      {(availableBalance &&
+                      {(address && availableBalance &&
                         availableBalance.amount &&
                         amountConversion(
                           availableBalance.amount,
@@ -321,15 +436,17 @@ const Deposit = ({
                         className=" active"
                         onClick={() => {
                           setAmount(
-                            availableBalance?.amount > DEFAULT_FEE
-                              ? amountConversion(
+                            address ?
+                              availableBalance?.amount > DEFAULT_FEE
+                                ? amountConversion(
                                   availableBalance?.amount - DEFAULT_FEE,
                                   assetDenomMap[chain?.ibcDenomHash]?.decimals
                                 )
-                              : amountConversion(
+                                : amountConversion(
                                   availableBalance?.amount,
                                   assetDenomMap[chain?.ibcDenomHash]?.decimals
                                 )
+                              : 0
                           );
                         }}
                       >
