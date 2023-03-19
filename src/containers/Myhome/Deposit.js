@@ -47,13 +47,13 @@ const Deposit = ({
       ),
       dataIndex: "available",
       key: "available",
-      width: 250,
+      width: 280,
     },
     {
       title: "cPool",
       dataIndex: "cpool",
       key: "cpool",
-      width: 200,
+      width: 250,
     },
     {
       title: "Lend APY",
