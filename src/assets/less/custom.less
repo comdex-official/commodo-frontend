@@ -1882,7 +1882,7 @@ button.ant-switch {
             align-items: flex-start;
 
             @media screen and (max-width:1380px) {
-              font-size: @font-size-sm;
+              font-size: @font-size-sm - 2;
             }
 
             @media screen and (max-width:1280px) {
@@ -1911,6 +1911,11 @@ button.ant-switch {
             color: @text-color-dark;
             display: flex;
             align-items: center;
+
+            @media screen and (max-width:1400px) {
+              font-size: 0.85rem;
+              margin-top: 4px;
+            }
 
             .dark-mode & {
               color: @white;
