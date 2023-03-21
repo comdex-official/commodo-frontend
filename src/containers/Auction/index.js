@@ -166,63 +166,63 @@ const Auction = ({
   ];
 
   const tableData =
-    auctions && auctions?.length > 0
-      ? auctions?.map((item, index) => {
-          return {
-            key: index,
-            auctioned_asset: (
-              <>
-                <div className="assets-with-icon">
-                  <div className="assets-icon">
-                    <SvgIcon
-                      name={iconNameFromDenom(
-                        item?.outflowTokenInitAmount?.denom
-                      )}
-                    />
-                  </div>
-                  {denomConversion(item?.outflowTokenInitAmount?.denom)}
+    auctions && auctions?.list?.length > 0
+      ? auctions?.list?.map((item, index) => {
+        return {
+          key: index,
+          auctioned_asset: (
+            <>
+              <div className="assets-with-icon">
+                <div className="assets-icon">
+                  <SvgIcon
+                    name={iconNameFromDenom(
+                      item?.outflowTokenInitAmount?.denom
+                    )}
+                  />
                 </div>
-              </>
-            ),
-            bidding_asset: (
-              <>
-                <div className="assets-with-icon">
-                  <div className="assets-icon">
-                    <SvgIcon
-                      name={iconNameFromDenom(
-                        item?.inflowTokenCurrentAmount?.denom
-                      )}
-                    />
-                  </div>
-                  {denomConversion(item?.inflowTokenCurrentAmount?.denom)}
+                {denomConversion(item?.outflowTokenInitAmount?.denom)}
+              </div>
+            </>
+          ),
+          bidding_asset: (
+            <>
+              <div className="assets-with-icon">
+                <div className="assets-icon">
+                  <SvgIcon
+                    name={iconNameFromDenom(
+                      item?.inflowTokenCurrentAmount?.denom
+                    )}
+                  />
                 </div>
-              </>
+                {denomConversion(item?.inflowTokenCurrentAmount?.denom)}
+              </div>
+            </>
+          ),
+          quantity: (
+            <>
+              {item?.outflowTokenCurrentAmount?.amount &&
+                amountConversionWithComma(
+                  item?.outflowTokenCurrentAmount?.amount,
+                  assetDenomMap[item?.outflowTokenCurrentAmount?.denom]
+                    ?.decimals
+                )}{" "}
+              {denomConversion(item?.outflowTokenCurrentAmount?.denom)}
+            </>
+          ),
+          end_time: moment(item && item.endTime).format("MMM DD, YYYY HH:mm"),
+          oracle_price:
+            "$" +
+            Number(
+              marketPrice(
+                markets,
+                item?.outflowTokenCurrentAmount?.denom,
+                assetDenomMap[item?.outflowTokenCurrentAmount?.denom]?.id
+              ) || 0
             ),
-            quantity: (
-              <>
-                {item?.outflowTokenCurrentAmount?.amount &&
-                  amountConversionWithComma(
-                    item?.outflowTokenCurrentAmount?.amount,
-                    assetDenomMap[item?.outflowTokenCurrentAmount?.denom]
-                      ?.decimals
-                  )}{" "}
-                {denomConversion(item?.outflowTokenCurrentAmount?.denom)}
-              </>
-            ),
-            end_time: moment(item && item.endTime).format("MMM DD, YYYY HH:mm"),
-            oracle_price:
-              "$" +
-              Number(
-                marketPrice(
-                  markets,
-                  item?.outflowTokenCurrentAmount?.denom,
-                  assetDenomMap[item?.outflowTokenCurrentAmount?.denom]?.id
-                ) || 0
-              ),
-            current_price: item,
-            action: item,
-          };
-        })
+          current_price: item,
+          action: item,
+        };
+      })
       : [];
 
   useEffect(() => {
@@ -259,11 +259,12 @@ const Auction = ({
           return;
         }
         if (result?.auctions?.length > 0) {
-          setAuctions(result?.auctions);
+          setAuctions(result && result?.auctions, result?.pagination?.total?.toNumber());
         }
       }
     );
   };
+
 
   const fetchLatestPrice = () => {
     setdisableFetchButton(true);
@@ -325,8 +326,7 @@ const Auction = ({
                 pagination={{
                   total:
                     auctions &&
-                    auctions.pagination &&
-                    auctions.pagination?.total?.toNumber(),
+                    auctions.pagination,
                   pageSize,
                 }}
                 scroll={{ x: "100%" }}
@@ -371,7 +371,7 @@ const stateToProps = (state) => {
   return {
     lang: state.language,
     address: state.account.address,
-    auctions: state.auction.data.list,
+    auctions: state.auction.data,
     refreshBalance: state.account.refreshBalance,
     assetDenomMap: state.asset._.assetDenomMap,
     markets: state.oracle.market,

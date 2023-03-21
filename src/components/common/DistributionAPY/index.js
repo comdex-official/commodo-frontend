@@ -25,7 +25,7 @@ const DistributionAPY = ({ value, margin, assetId, poolId }) => {
   return (
     <Tooltip
       placement="topLeft"
-      title={"Projected Distribution Reward APY for Borrowing"}
+      title={"Projected Boosted Reward APR for borrowing"}
     >
       <Button
         type="primary"
