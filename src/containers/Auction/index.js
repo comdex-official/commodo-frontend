@@ -265,6 +265,7 @@ const Auction = ({
     );
   };
 
+
   const fetchLatestPrice = () => {
     setdisableFetchButton(true);
     fetchAuctions((pageNumber - 1) * pageSize, pageSize, true, true);
