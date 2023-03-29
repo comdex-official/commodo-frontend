@@ -159,7 +159,7 @@ const Deposit = ({
         <Col>
           <div className="commodo-card bg-none">
             <div className="d-flex align-items-center justify-content-between">
-              <div className="card-header text-left">MY Deposited Assets</div>
+              <div className="card-header text-left">MY Lend Assets</div>
               <InterestAndReward
                 lang={lang}
                 address={address}
