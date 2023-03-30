@@ -167,7 +167,7 @@ const Auction = ({
 
   const tableData =
     auctions && auctions?.list?.length > 0
-      ? auctions?.map((item, index) => {
+      ? auctions?.list?.map((item, index) => {
         return {
           key: index,
           auctioned_asset: (
