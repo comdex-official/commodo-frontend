@@ -615,7 +615,11 @@ const BorrowTab = ({
                     className="assets-select"
                     popupClassName="asset-select-dropdown"
                     onChange={handleBorrowAssetChange}
-                    value={borrowList?.length ? selectedBorrowValue : null}
+                    value={
+                      borrowList?.length && borrowAssetDenom
+                        ? selectedBorrowValue
+                        : null
+                    }
                     placeholder={
                       <div className="select-placeholder">
                         <div className="circle-icon">
