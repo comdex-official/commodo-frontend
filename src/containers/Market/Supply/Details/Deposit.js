@@ -16,7 +16,7 @@ import { ValidateInputNumber } from "../../../../config/_validation";
 import {
   APP_ID,
   DEFAULT_FEE,
-  DOLLAR_DECIMALS
+  DOLLAR_DECIMALS,
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { QueryPoolAssetLBMapping } from "../../../../services/lend/query";
@@ -26,12 +26,12 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
@@ -59,6 +59,7 @@ const DepositTab = ({
   const [inProgress, setInProgress] = useState(false);
   const [lendApy, setLendApy] = useState(0);
   const navigate = useNavigate();
+  const [sliderValue, setSliderValue] = useState(0);
 
   const { state } = useLocation();
   const collateralAssetIdFromRoute = state?.collateralAssetIdFromRoute;
@@ -121,6 +122,7 @@ const DepositTab = ({
       .trim();
 
     setAmount(value);
+    setSliderValue((value / amountConversion(availableBalance)) * 100);
     setValidationError(
       ValidateInputNumber(
         getAmount(value, assetMap[selectedAssetId]?.decimals),
@@ -198,13 +200,13 @@ const DepositTab = ({
   };
 
   const handleSliderChange = (value) => {
-    handleInputChange(String(value));
+    let percentageValue = (value / 100) * amountConversion(availableBalance);
+    handleInputChange(String(percentageValue));
   };
 
   const marks = {
     0: "0%",
     100: "100%",
-    // [amountConversion(availableBalance)]: "100%",
   };
 
   return (
@@ -309,10 +311,8 @@ const DepositTab = ({
                   <Col sm="12">
                     <Slider
                       marks={marks}
-                      defaultValue={amount}
-                      value={amount}
+                      value={sliderValue}
                       tooltip={{ open: false }}
-                      max={amountConversion(availableBalance)}
                       onChange={handleSliderChange}
                       className="commodo-slider market-slider-1"
                     />

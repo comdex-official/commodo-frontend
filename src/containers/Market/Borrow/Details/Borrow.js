@@ -463,7 +463,9 @@ const BorrowTab = ({
         decimalConversion(assetRatesStatsMap[pair?.assetIn]?.ltv) * 100
       ).toFixed(DOLLAR_DECIMALS);
 
-  const handleSliderChange = (value) => {
+  const handleSliderChange = (sliderValue) => {
+    let value = (sliderValue / 100) * maxLTV;
+
     if (value >= maxLTV) {
       return handleBorrowMaxClick();
     }
@@ -715,10 +717,8 @@ const BorrowTab = ({
                   <Col sm="12">
                     <Slider
                       marks={marks}
-                      max={maxLTV}
-                      value={currentLTV}
+                      value={(currentLTV * 100) / maxLTV}
                       onChange={handleSliderChange}
-                      defaultValue={37}
                       tooltip={{ open: false }}
                       className="commodo-slider market-slider borrow-slider"
                     />
