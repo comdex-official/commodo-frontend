@@ -4,7 +4,13 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useLocation } from "react-router";
 import { setBalanceRefresh } from "../../../actions/account";
-import { Col, NoDataIcon, Row, SvgIcon, TooltipIcon } from "../../../components/common";
+import {
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon,
+} from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import AssetStats from "../../../components/common/Asset/Stats";
@@ -13,18 +19,18 @@ import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   queryAllLendByOwnerAndPool,
-  QueryPoolAssetLBMapping
+  QueryPoolAssetLBMapping,
 } from "../../../services/lend/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "../../Myhome/DepositWithdraw/ActionButton";
@@ -51,12 +57,12 @@ const WithdrawTab = ({
   const [selectedAssetId, setSelectedAssetId] = useState(0);
   const [lendPosition, setLendPosition] = useState();
   const [lendApy, setLendApy] = useState(0);
+  const [sliderValue, setSliderValue] = useState(0);
 
   const { state } = useLocation();
   const collateralAssetIdFromRoute = state?.collateralAssetIdFromRoute;
 
   const availableBalance = lendPosition?.availableToBorrow || 0;
-
 
   useEffect(() => {
     if (pool?.poolId) {
@@ -103,6 +109,15 @@ const WithdrawTab = ({
       .trim();
 
     setAmount(value);
+    setSliderValue(
+      (value /
+        amountConversion(
+          availableBalance,
+          assetMap[selectedAssetId]?.decimals
+        )) *
+        100
+    );
+
     setValidationError(
       ValidateInputNumber(
         getAmount(value, assetMap[selectedAssetId]?.decimals),
@@ -141,7 +156,11 @@ const WithdrawTab = ({
   };
 
   const handleSliderChange = (value) => {
-    handleInputChange(String(value));
+    let percentageValue =
+      (value / 100) *
+      amountConversion(availableBalance, assetMap[selectedAssetId]?.decimals);
+
+    handleInputChange(String(percentageValue));
   };
 
   useEffect(() => {
@@ -150,12 +169,7 @@ const WithdrawTab = ({
 
   const marks = {
     0: "0%",
-    [(selectedAssetId &&
-      amountConversion(
-        availableBalance,
-        assetMap[selectedAssetId]?.decimals
-      )) ||
-    100]: "100%",
+    100: "100%",
   };
 
   return (
@@ -266,11 +280,9 @@ const WithdrawTab = ({
               <Col sm="12">
                 <Slider
                   marks={marks}
-                  defaultValue={amount}
-                  value={amount}
+                  value={sliderValue}
                   tooltip={{ open: false }}
                   onChange={handleSliderChange}
-                  max={amountConversion(availableBalance)}
                   className="commodo-slider market-slider-1"
                 />
               </Col>

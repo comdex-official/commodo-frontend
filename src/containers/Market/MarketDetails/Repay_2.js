@@ -61,6 +61,7 @@ const RepayTab_2 = ({
   const [updatedAmountOut, setUpdatedAmountOut] = useState(0);
   const [selectedBorrowPosition, setSelectedBorrowPosition] = useState([]);
   const [pair, setPair] = useState();
+  const [sliderValue, setSliderValue] = useState(0);
 
   const { state } = useLocation();
   const borrowAssetMinimalDenomFromRoute =
@@ -112,6 +113,14 @@ const RepayTab_2 = ({
       .trim();
 
     setAmount(value);
+    setSliderValue(
+      (value /
+        amountConversion(
+          updatedAmountOut,
+          assetDenomMap[selectedBorrowPosition?.amountOut?.denom]?.decimals
+        )) *
+        100
+    );
     setValidationError(
       ValidateInputNumber(
         value,
@@ -165,15 +174,20 @@ const RepayTab_2 = ({
   };
 
   const handleSliderChange = (value) => {
-    handleInputChange(String(value));
+    // percentage =  value/100 * total
+    let percentageValue =
+      (value / 100) *
+      amountConversion(
+        updatedAmountOut,
+        assetDenomMap[selectedBorrowPosition?.amountOut?.denom]?.decimals
+      );
+
+    handleInputChange(String(percentageValue));
   };
 
   const marks = {
     0: "0%",
-    [amountConversionWithComma(
-      updatedAmountOut,
-      assetDenomMap[selectedBorrowPosition?.amountOut?.denom]?.decimals
-    )]: "100%",
+    100: "100%",
   };
 
   return (
@@ -284,15 +298,9 @@ const RepayTab_2 = ({
               <Col sm="12">
                 <Slider
                   marks={marks}
-                  defaultValue={amount}
-                  value={amount}
+                  value={sliderValue}
                   tooltip={{ open: false }}
                   onChange={handleSliderChange}
-                  max={amountConversionWithComma(
-                    updatedAmountOut,
-                    assetDenomMap[selectedBorrowPosition?.amountOut?.denom]
-                      ?.decimals
-                  )}
                   className="commodo-slider market-slider-1 repay-slider"
                 />
               </Col>
