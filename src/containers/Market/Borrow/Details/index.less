@@ -10,3 +10,35 @@
     }
   }
 }
+
+.borrowslider-wrapper{
+  position: relative;
+  margin-bottom: 8px;
+  margin-bottom: 20px;
+  .safe-marker {
+    position: absolute;
+    top: -18px;
+    right: 13%;
+    font-size: @font-size-sm - 1;
+    font-weight: 400;
+    &::after {
+      width: 1px;
+      content: ' ';
+      height: 8px;
+      display: inline-block;
+      margin: auto;
+      position: relative;
+      top: 9px;
+      margin: auto;
+      left: -44%;
+      background: @white;
+    }
+  }
+  .riskier-marker {
+    position: absolute;
+    bottom: -27px;
+    right: 0;
+    font-size: @font-size-sm + 1;
+    font-weight: 400;
+  }
+}

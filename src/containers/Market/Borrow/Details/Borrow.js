@@ -496,11 +496,11 @@ const BorrowTab = ({
     checkMaxBorrow(borrowValue || 0);
   };
 
-  const marks = {
-    0: " ",
-    80: "Safe",
-    100: "Riskier",
-  };
+  // const marks = {
+  //   0: " ",
+  //   80: "Safe",
+  //   100: "Riskier",
+  // };
 
   return (
     <div className="details-wrapper market-details-wrapper">
@@ -713,15 +713,19 @@ const BorrowTab = ({
               <Col sm="12" className="mx-auto card-bottom-details">
                 <Row className="mt-2">
                   <Col sm="12">
-                    <Slider
-                      marks={marks}
-                      max={maxLTV}
-                      value={currentLTV}
-                      onChange={handleSliderChange}
-                      defaultValue={37}
-                      tooltip={{ open: false }}
-                      className="commodo-slider market-slider borrow-slider"
-                    />
+                    <div className="borrowslider-wrapper">
+                      <div className="safe-marker">Safe</div>
+                      <Slider
+                        marks={null}
+                        max={maxLTV}
+                        value={currentLTV}
+                        onChange={handleSliderChange}
+                        defaultValue={37}
+                        tooltip={{ open: false }}
+                        className="commodo-slider market-slider borrow-slider"
+                      />
+                      <div className="riskier-marker">Riskier</div>
+                    </div>
                   </Col>
                 </Row>
 
