@@ -56,7 +56,7 @@ const HealthFactor = ({
               marketPrice(
                 markets,
                 ucDenomToDenom(borrow?.amountIn?.denom),
-                assetDenomMap[ucDenomToDenom(borrow?.amountIn?.denom)]?.id
+                lendPair?.assetIn
               ) *
               (lendPair?.isInterPool
                 ? Number(
@@ -81,7 +81,7 @@ const HealthFactor = ({
               marketPrice(
                 markets,
                 borrow?.amountOut?.denom,
-                assetDenomMap[borrow?.amountOut?.denom]?.id
+                lendPair?.assetOut
               ));
 
           if (isFinite(percentage)) {
