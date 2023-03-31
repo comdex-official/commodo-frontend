@@ -32,7 +32,7 @@ const MarketDetails = ({
 
   let { id } = useParams();
 
-  const [activeKey, setActiveKey] = useState("2");
+  const [activeKey, setActiveKey] = useState("1");
 
   const location = useLocation();
   const type = decode(location.hash);

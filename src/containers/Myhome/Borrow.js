@@ -56,7 +56,7 @@ const Borrow = ({
             message.error(error);
             return;
           }
-          
+
           if (result?.lend?.poolId) {
             navigate(`/market-details/${result?.lend?.poolId}/#repay`, {
               state: {

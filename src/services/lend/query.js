@@ -274,7 +274,7 @@ export const queryAuctionMippingIdParams = (callback) => {
     }
 
     queryService
-      .QueryAuctionParams({
+      .QueryGenericAuctionParams({
         appId: Long.fromNumber(APP_ID),
       })
       .then((result) => {

@@ -2,6 +2,7 @@ import { message } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { assetTransitTypeId } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { queryLendPair, queryLendPool } from "../../services/lend/query";
 import { decimalConversion, marketPrice } from "../../utils/number";
@@ -36,12 +37,26 @@ const HealthFactor = ({
             return;
           }
 
+          let myPool = result?.pool;
+          const assetTransitMap = myPool?.assetData?.reduce((map, obj) => {
+            map[obj?.assetTransitType] = obj;
+            return map;
+          }, {});
+
+          let transitAssetIds = {
+            main: assetTransitMap[assetTransitTypeId["main"]]?.assetId,
+            first: assetTransitMap[assetTransitTypeId["first"]]?.assetId,
+            second: assetTransitMap[assetTransitTypeId["second"]]?.assetId,
+          };
+
+          myPool["transitAssetIds"] = transitAssetIds;
+
           let percentage =
             (borrow?.amountIn?.amount *
               marketPrice(
                 markets,
                 ucDenomToDenom(borrow?.amountIn?.denom),
-                assetDenomMap[ucDenomToDenom(borrow?.amountIn?.denom)]?.id
+                lendPair?.assetIn
               ) *
               (lendPair?.isInterPool
                 ? Number(
@@ -52,7 +67,7 @@ const HealthFactor = ({
                   ) *
                   Number(
                     decimalConversion(
-                      assetRatesStatsMap[result?.pool?.transitAssetIds?.first]
+                      assetRatesStatsMap[myPool?.transitAssetIds?.first]
                         ?.liquidationThreshold
                     )
                   )
@@ -66,7 +81,7 @@ const HealthFactor = ({
               marketPrice(
                 markets,
                 borrow?.amountOut?.denom,
-                assetDenomMap[borrow?.amountOut?.denom]?.id
+                lendPair?.assetOut
               ));
 
           if (isFinite(percentage)) {

@@ -15,11 +15,13 @@ import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import CustomInput from "../../../components/CustomInput";
 import HealthFactor from "../../../components/HealthFactor";
+import { assetTransitTypeId } from "../../../config/network";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   queryAllBorrowByOwnerAndPool,
-  queryLendPair
+  queryLendPair,
+  queryLendPool
 } from "../../../services/lend/query";
 import {
   amountConversion,
@@ -61,6 +63,8 @@ const RepayTab_2 = ({
   const [updatedAmountOut, setUpdatedAmountOut] = useState(0);
   const [selectedBorrowPosition, setSelectedBorrowPosition] = useState([]);
   const [pair, setPair] = useState();
+  const [sliderValue, setSliderValue] = useState(0);
+  const [assetOutPool, setAssetOutPool] = useState();
 
   const { state } = useLocation();
   const borrowAssetMinimalDenomFromRoute =
@@ -94,14 +98,52 @@ const RepayTab_2 = ({
   }, [borrowAssetMinimalDenomFromRoute, borrowPosition]);
 
   useEffect(() => {
-    if (pool?.poolId) {
+    if (assetOutPool?.poolId) {
+      setAssetList([
+        assetMap[assetOutPool?.transitAssetIds?.main?.toNumber()],
+        assetMap[assetOutPool?.transitAssetIds?.first?.toNumber()],
+        assetMap[assetOutPool?.transitAssetIds?.second?.toNumber()],
+      ]);
+    } else if (pool?.poolId && !assetOutPool?.poolId) {
       setAssetList([
         assetMap[pool?.transitAssetIds?.main?.toNumber()],
         assetMap[pool?.transitAssetIds?.first?.toNumber()],
         assetMap[pool?.transitAssetIds?.second?.toNumber()],
       ]);
     }
-  }, [pool]);
+  }, [pool, assetOutPool]);
+
+  useEffect(() => {
+    if (
+      pair?.assetOutPoolId &&
+      pair?.assetOutPoolId?.toNumber() !== pool?.poolId?.toNumber()
+    ) {
+      queryLendPool(pair?.assetOutPoolId, (error, poolResult) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        let myPool = poolResult?.pool;
+        const assetTransitMap = myPool?.assetData?.reduce((map, obj) => {
+          map[obj?.assetTransitType] = obj;
+          return map;
+        }, {});
+
+        let transitAssetIds = {
+          main: assetTransitMap[assetTransitTypeId["main"]]?.assetId,
+          first: assetTransitMap[assetTransitTypeId["first"]]?.assetId,
+          second: assetTransitMap[assetTransitTypeId["second"]]?.assetId,
+        };
+
+        myPool["transitAssetIds"] = transitAssetIds;
+
+        setAssetOutPool(myPool);
+      });
+    } else {
+      setAssetOutPool();
+    }
+  }, [pair]);
 
   const handleInputChange = (value) => {
     value = toDecimals(
@@ -112,6 +154,14 @@ const RepayTab_2 = ({
       .trim();
 
     setAmount(value);
+    setSliderValue(
+      (value /
+        amountConversion(
+          updatedAmountOut,
+          assetDenomMap[selectedBorrowPosition?.amountOut?.denom]?.decimals
+        )) *
+        100
+    );
     setValidationError(
       ValidateInputNumber(
         value,
@@ -165,21 +215,29 @@ const RepayTab_2 = ({
   };
 
   const handleSliderChange = (value) => {
-    handleInputChange(String(value));
+    // percentage =  value/100 * total
+    let percentageValue =
+      (value / 100) *
+      amountConversion(
+        updatedAmountOut,
+        assetDenomMap[selectedBorrowPosition?.amountOut?.denom]?.decimals
+      );
+
+    handleInputChange(String(percentageValue));
   };
 
   const marks = {
     0: "0%",
-    [amountConversionWithComma(
-      updatedAmountOut,
-      assetDenomMap[selectedBorrowPosition?.amountOut?.denom]?.decimals
-    )]: "100%",
+    100: "100%",
   };
 
   return (
     <div className="details-wrapper market-details-wrapper">
       <div className="details-left commodo-card">
-        <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
+        <CustomRow
+          assetList={assetList}
+          poolId={assetOutPool?.poolId?.low || pool?.poolId?.low}
+        />
         <div className="assets-select-card mb-2">
           <div className="assets-left">
             <label className="left-label">Repay Asset</label>
@@ -284,15 +342,9 @@ const RepayTab_2 = ({
               <Col sm="12">
                 <Slider
                   marks={marks}
-                  defaultValue={amount}
-                  value={amount}
+                  value={sliderValue}
                   tooltip={{ open: false }}
                   onChange={handleSliderChange}
-                  max={amountConversionWithComma(
-                    updatedAmountOut,
-                    assetDenomMap[selectedBorrowPosition?.amountOut?.denom]
-                      ?.decimals
-                  )}
                   className="commodo-slider market-slider-1 repay-slider"
                 />
               </Col>
@@ -365,22 +417,37 @@ const RepayTab_2 = ({
       <div className="details-right">
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
-            poolId={pool?.poolId}
+            asset={
+              assetMap[
+                assetOutPool?.transitAssetIds?.main?.toNumber() ||
+                  pool?.transitAssetIds?.main?.toNumber()
+              ]
+            }
+            poolId={assetOutPool?.poolId || pool?.poolId}
             parent="borrow"
           />
         </div>
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.transitAssetIds?.first?.toNumber()]}
-            poolId={pool?.poolId}
+            asset={
+              assetMap[
+                assetOutPool?.transitAssetIds?.first?.toNumber() ||
+                  pool?.transitAssetIds?.first?.toNumber()
+              ]
+            }
+            poolId={assetOutPool?.poolId || pool?.poolId}
             parent="borrow"
           />
         </div>
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.transitAssetIds?.second?.toNumber()]}
-            poolId={pool?.poolId}
+            asset={
+              assetMap[
+                assetOutPool?.transitAssetIds?.second?.toNumber() ||
+                  pool?.transitAssetIds?.second?.toNumber()
+              ]
+            }
+            poolId={assetOutPool?.poolId || pool?.poolId}
             parent="borrow"
           />
         </div>
