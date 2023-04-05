@@ -44,7 +44,7 @@ import {
   decimalConversion,
   marketPrice
 } from "../../../../utils/number";
-import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
+import {errorMessageMappingParser, iconNameFromDenom, toDecimals} from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import AssetApy from "../../AssetApy";
 import "./index.less";
@@ -388,7 +388,7 @@ const BorrowTab = ({
         }
 
         if (result?.code) {
-          message.info(result?.rawLog);
+          message.info(errorMessageMappingParser(result?.rawLog));
           return;
         }
 
