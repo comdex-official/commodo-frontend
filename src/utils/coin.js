@@ -1,6 +1,5 @@
 import AssetList from "../config/ibc_assets.json";
 import { comdex } from "../config/network";
-import { DOLLAR_DECIMALS } from "../constants/common";
 import { commaSeparator, getExponent } from "./number";
 import { lowercaseFirstLetter } from "./string";
 
@@ -29,7 +28,8 @@ export const amountConversionWithComma = (amount, decimals) => {
   const result = Number(finiteAmount) / (decimals || 10 ** comdex.coinDecimals);
 
   return commaSeparator(
-    result.toFixed(getExponent(decimals) || comdex.coinDecimals)
+    Math.floor(result * Math.pow(10, comdex.coinDecimals)) /
+      Math.pow(10, comdex.coinDecimals)
   );
 };
 
@@ -42,7 +42,10 @@ export const amountConversion = (amount, decimals) => {
 
   const result = Number(finiteAmount) / (decimals || 10 ** comdex.coinDecimals);
 
-  return result.toFixed(getExponent(decimals) || comdex.coinDecimals);
+  return String(
+    Math.floor(result * Math.pow(10, comdex.coinDecimals)) /
+      Math.pow(10, comdex.coinDecimals)
+  );
 };
 
 export const orderPriceConversion = (amount) => {
