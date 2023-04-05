@@ -6,6 +6,7 @@ import { signAndBroadcastTransaction } from "../../../services/helper";
 import { defaultFee } from "../../../services/transaction";
 import { getAmount } from "../../../utils/coin";
 import variables from "../../../utils/variables";
+import {errorMessageMappingParser} from "../../../utils/string";
 
 export const ActionButton = ({
   lang,
@@ -57,7 +58,7 @@ export const ActionButton = ({
         }
 
         if (result?.code) {
-          message.info(result?.rawLog);
+          message.info(errorMessageMappingParser(result?.rawLog));
           return;
         }
 
