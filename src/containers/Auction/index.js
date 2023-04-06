@@ -236,7 +236,6 @@ const Auction = ({
   const queryParams = () => {
     queryAuctionParams((error, result) => {
       if (error) {
-        console.log("the error", error);
         return;
       }
 

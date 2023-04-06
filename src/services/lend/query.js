@@ -272,8 +272,7 @@ export const queryAuctionParams = (callback) => {
       callback(error);
       return;
     }
-
-    console.log('the service', queryService)
+    
     queryService
       .QueryAuctionParams({
         appId: Long.fromNumber(APP_ID)
