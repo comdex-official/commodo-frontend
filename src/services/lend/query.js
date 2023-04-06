@@ -266,6 +266,25 @@ export const queryUserBorrows = (address, callback) => {
   });
 };
 
+export const queryAuctionParams = (callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    console.log('the service', queryService)
+    queryService
+      .QueryAuctionParams({
+        appId: Long.fromNumber(APP_ID)
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+
 export const queryAuctionMippingIdParams = (callback) => {
   getQueryService((error, queryService) => {
     if (error) {
