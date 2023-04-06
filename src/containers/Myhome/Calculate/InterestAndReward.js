@@ -5,6 +5,7 @@ import Snack from "../../../components/common/Snack";
 import { signAndBroadcastTransaction } from "../../../services/helper";
 import { defaultFee } from "../../../services/transaction";
 import variables from "../../../utils/variables";
+import {errorMessageMappingParser} from "../../../utils/string";
 
 const InterestAndReward = ({ lang, address, updateDetails }) => {
   const [inProgress, setInProgress] = useState(false);
@@ -32,7 +33,7 @@ const InterestAndReward = ({ lang, address, updateDetails }) => {
         }
 
         if (result?.code) {
-          message.info(result?.rawLog);
+          message.info(errorMessageMappingParser(result?.rawLog));
           return;
         }
 
