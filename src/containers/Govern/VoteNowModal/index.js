@@ -9,6 +9,7 @@ import { signAndBroadcastTransaction } from "../../../services/helper";
 import { defaultFee } from "../../../services/transaction";
 import variables from "../../../utils/variables";
 import "./index.less";
+import {errorMessageMappingParser} from "../../../utils/string";
 
 const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,7 +46,7 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
         }
 
         if (result?.code) {
-          message.info(result?.rawLog);
+          message.info(errorMessageMappingParser(result?.rawLog));
           return;
         }
 
