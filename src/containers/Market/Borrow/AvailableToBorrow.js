@@ -49,7 +49,7 @@ export const AvailableToBorrow = ({ lendPool, markets, assetDenomMap }) => {
                   <div className="assets-icon">
                     <SvgIcon name={iconNameFromDenom(item?.balance?.denom)} />
                   </div>
-                  {formatNumber(
+                  ${formatNumber(
                     Number(
                       amountConversion(
                         marketPrice(
