@@ -87,6 +87,12 @@ const Borrow = ({
       dataIndex: "debt",
       key: "debt",
       width: 300,
+      render: (text) => (
+        <div className="myhome-avaliablevalues">
+          <div>{text}</div>
+          <div className="doller-values">$1316.84</div>
+        </div>
+      )
     },
     {
       title: (
@@ -98,6 +104,12 @@ const Borrow = ({
       dataIndex: "collateral",
       key: "collateral",
       width: 300,
+      render: (text) => (
+        <div className="myhome-avaliablevalues">
+          <div>{text}</div>
+          <div className="doller-values">$1316.84</div>
+        </div>
+      )
     },
     {
       title: (
