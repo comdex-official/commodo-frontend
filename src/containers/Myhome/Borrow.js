@@ -11,10 +11,16 @@ import {
   TooltipIcon
 } from "../../components/common";
 import HealthFactor from "../../components/HealthFactor";
+import { DOLLAR_DECIMALS } from "../../constants/common";
 import { queryLendPair, queryLendPosition } from "../../services/lend/query";
-import { amountConversionWithComma, denomConversion } from "../../utils/coin";
-import { decimalConversion } from "../../utils/number";
-import { iconNameFromDenom } from "../../utils/string";
+import {
+  amountConversion,
+  amountConversionWithComma,
+  commaSeparatorWithRounding,
+  denomConversion
+} from "../../utils/coin";
+import { decimalConversion, marketPrice } from "../../utils/number";
+import { iconNameFromDenom, ucDenomToDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
 import InterestAndReward from "./Calculate/InterestAndReward";
 import "./index.less";
@@ -26,6 +32,8 @@ const Borrow = ({
   address,
   fetchUserBorrows,
   assetDenomMap,
+  assetNameMap,
+  markets,
 }) => {
   const navigate = useNavigate();
   const [navigateInProgress, setNavigateInProgress] = useState(false);
@@ -87,6 +95,7 @@ const Borrow = ({
       dataIndex: "debt",
       key: "debt",
       width: 300,
+      render: (text) => <div className="myhome-avaliablevalues">{text}</div>,
     },
     {
       title: (
@@ -98,6 +107,7 @@ const Borrow = ({
       dataIndex: "collateral",
       key: "collateral",
       width: 300,
+      render: (text) => <div className="myhome-avaliablevalues">{text}</div>,
     },
     {
       title: (
@@ -161,6 +171,11 @@ const Borrow = ({
   const tableData =
     userBorrowList?.length > 0
       ? userBorrowList?.map((item, index) => {
+          let collateralAsset =
+            assetNameMap[
+              ucDenomToDenom(item?.amountIn?.denom)?.substring(1)?.toUpperCase()
+            ];
+
           return {
             key: index,
             asset: (
@@ -175,22 +190,58 @@ const Borrow = ({
             ),
             debt: (
               <>
-                {" "}
-                {amountConversionWithComma(
-                  item?.amountOut?.amount,
-                  assetDenomMap[item?.amountOut?.denom]?.decimals
-                )}{" "}
-                {denomConversion(item?.amountOut?.denom)}
+                <div>
+                  {amountConversionWithComma(
+                    item?.amountOut?.amount,
+                    assetDenomMap[item?.amountOut?.denom]?.decimals
+                  )}{" "}
+                  {denomConversion(item?.amountOut?.denom)}
+                </div>
+                <div className="doller-values">
+                  $
+                  {commaSeparatorWithRounding(
+                    Number(
+                      amountConversion(
+                        item?.amountOut?.amount,
+                        assetDenomMap[item?.amountOut?.denom]?.decimals
+                      ) || 0
+                    ) *
+                      marketPrice(
+                        markets,
+                        item?.amountOut?.denom,
+                        assetDenomMap[item?.amountOut?.denom]?.id
+                      ) || 0,
+                    DOLLAR_DECIMALS
+                  )}
+                </div>
               </>
             ),
             collateral: (
               <>
-                {" "}
-                {amountConversionWithComma(
-                  item?.amountIn?.amount,
-                  assetDenomMap[item?.amountIn?.denom]?.decimals
-                )}{" "}
-                {denomConversion(item?.amountIn?.denom)}
+                <div>
+                  {amountConversionWithComma(
+                    item?.amountIn?.amount,
+                    collateralAsset?.decimals
+                  )}{" "}
+                  {denomConversion(item?.amountIn?.denom)}
+                </div>
+                <div className="doller-values">
+                  $
+                  {commaSeparatorWithRounding(
+                    Number(
+                      amountConversion(
+                        item?.amountIn?.amount,
+                        collateralAsset?.decimals
+                      ) || 0
+                    ) *
+                      marketPrice(
+                        markets,
+                        ucDenomToDenom(item?.amountIn?.denom),
+                        collateralAsset?.id
+                      ) || 0,
+                    DOLLAR_DECIMALS
+                  )}
+                </div>
               </>
             ),
             apy: item,
@@ -247,7 +298,9 @@ Borrow.propTypes = {
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
   assetDenomMap: PropTypes.object,
+  assetNameMap: PropTypes.object,
   inProgress: PropTypes.bool,
+  markets: PropTypes.object,
   userBorrowList: PropTypes.arrayOf(
     PropTypes.shape({
       amountOut: PropTypes.shape({
@@ -275,6 +328,8 @@ const stateToProps = (state) => {
     userBorrowList: state.lend.userBorrows,
     address: state.account.address,
     assetDenomMap: state.asset._.assetDenomMap,
+    assetNameMap: state.asset._.assetNameMap,
+    markets: state.oracle.market,
   };
 };
 
