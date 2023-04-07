@@ -1,7 +1,10 @@
 import { combineReducers } from "redux";
 import {
-  ASSETS_SET, ASSET_STAT_MAP_SET, PAIRS_SET,
-  PAIR_ID_SET, PAIR_SET
+  ASSETS_SET,
+  ASSET_STAT_MAP_SET,
+  PAIRS_SET,
+  PAIR_ID_SET,
+  PAIR_SET,
 } from "../constants/asset";
 
 const pairs = (
@@ -28,6 +31,7 @@ const _ = (
     inProgress: false,
     map: {},
     assetDenomMap: {},
+    assetNameMap: {},
   },
   action
 ) => {
@@ -38,6 +42,7 @@ const _ = (
       pagination: action.pagination,
       map: action.map,
       assetDenomMap: action.assetDenomMap,
+      assetNameMap: action.assetNameMap,
     };
   }
 
