@@ -17,7 +17,7 @@ import {
   DOLLAR_DECIMALS
 } from "../../constants/common";
 import { queryDutchAuctionList } from "../../services/auction";
-import { queryAuctionMippingIdParams } from "../../services/lend/query";
+import { queryAuctionParams } from "../../services/lend/query";
 import { amountConversionWithComma, denomConversion } from "../../utils/coin";
 import {
   commaSeparator,
@@ -168,61 +168,61 @@ const Auction = ({
   const tableData =
     auctions && auctions?.list?.length > 0
       ? auctions?.list?.map((item, index) => {
-        return {
-          key: index,
-          auctioned_asset: (
-            <>
-              <div className="assets-with-icon">
-                <div className="assets-icon">
-                  <SvgIcon
-                    name={iconNameFromDenom(
-                      item?.outflowTokenInitAmount?.denom
-                    )}
-                  />
+          return {
+            key: index,
+            auctioned_asset: (
+              <>
+                <div className="assets-with-icon">
+                  <div className="assets-icon">
+                    <SvgIcon
+                      name={iconNameFromDenom(
+                        item?.outflowTokenInitAmount?.denom
+                      )}
+                    />
+                  </div>
+                  {denomConversion(item?.outflowTokenInitAmount?.denom)}
                 </div>
-                {denomConversion(item?.outflowTokenInitAmount?.denom)}
-              </div>
-            </>
-          ),
-          bidding_asset: (
-            <>
-              <div className="assets-with-icon">
-                <div className="assets-icon">
-                  <SvgIcon
-                    name={iconNameFromDenom(
-                      item?.inflowTokenCurrentAmount?.denom
-                    )}
-                  />
-                </div>
-                {denomConversion(item?.inflowTokenCurrentAmount?.denom)}
-              </div>
-            </>
-          ),
-          quantity: (
-            <>
-              {item?.outflowTokenCurrentAmount?.amount &&
-                amountConversionWithComma(
-                  item?.outflowTokenCurrentAmount?.amount,
-                  assetDenomMap[item?.outflowTokenCurrentAmount?.denom]
-                    ?.decimals
-                )}{" "}
-              {denomConversion(item?.outflowTokenCurrentAmount?.denom)}
-            </>
-          ),
-          end_time: moment(item && item.endTime).format("MMM DD, YYYY HH:mm"),
-          oracle_price:
-            "$" +
-            Number(
-              marketPrice(
-                markets,
-                item?.outflowTokenCurrentAmount?.denom,
-                assetDenomMap[item?.outflowTokenCurrentAmount?.denom]?.id
-              ) || 0
+              </>
             ),
-          current_price: item,
-          action: item,
-        };
-      })
+            bidding_asset: (
+              <>
+                <div className="assets-with-icon">
+                  <div className="assets-icon">
+                    <SvgIcon
+                      name={iconNameFromDenom(
+                        item?.inflowTokenCurrentAmount?.denom
+                      )}
+                    />
+                  </div>
+                  {denomConversion(item?.inflowTokenCurrentAmount?.denom)}
+                </div>
+              </>
+            ),
+            quantity: (
+              <>
+                {item?.outflowTokenCurrentAmount?.amount &&
+                  amountConversionWithComma(
+                    item?.outflowTokenCurrentAmount?.amount,
+                    assetDenomMap[item?.outflowTokenCurrentAmount?.denom]
+                      ?.decimals
+                  )}{" "}
+                {denomConversion(item?.outflowTokenCurrentAmount?.denom)}
+              </>
+            ),
+            end_time: moment(item && item.endTime).format("MMM DD, YYYY HH:mm"),
+            oracle_price:
+              "$" +
+              Number(
+                marketPrice(
+                  markets,
+                  item?.outflowTokenCurrentAmount?.denom,
+                  assetDenomMap[item?.outflowTokenCurrentAmount?.denom]?.id
+                ) || 0
+              ),
+            current_price: item,
+            action: item,
+          };
+        })
       : [];
 
   useEffect(() => {
@@ -234,7 +234,7 @@ const Auction = ({
   }, [address]);
 
   const queryParams = () => {
-    queryAuctionMippingIdParams((error, result) => {
+    queryAuctionParams((error, result) => {
       if (error) {
         return;
       }
@@ -259,12 +259,14 @@ const Auction = ({
           return;
         }
         if (result?.auctions?.length > 0) {
-          setAuctions(result && result?.auctions, result?.pagination?.total?.toNumber());
+          setAuctions(
+            result && result?.auctions,
+            result?.pagination?.total?.toNumber()
+          );
         }
       }
     );
   };
-
 
   const fetchLatestPrice = () => {
     setdisableFetchButton(true);
@@ -324,9 +326,7 @@ const Auction = ({
                 columns={columns}
                 onChange={(event) => handleChange(event)}
                 pagination={{
-                  total:
-                    auctions &&
-                    auctions.pagination,
+                  total: auctions && auctions.pagination,
                   pageSize,
                 }}
                 scroll={{ x: "100%" }}

@@ -24,22 +24,6 @@ const getQueryService = (callback) => {
   }
 };
 
-export const queryAuctionParams = (callback) => {
-  getQueryService((error, queryService) => {
-    if (error) {
-      callback(error);
-      return;
-    }
-
-    queryService
-      .QueryParams()
-      .then((result) => {
-        callback(null, result);
-      })
-      .catch((error) => callback(error?.message));
-  });
-};
-
 export const queryDutchAuctionList = (
   offset,
   limit,
