@@ -9,7 +9,14 @@ import {
   SvgIcon,
   TooltipIcon
 } from "../../components/common";
-import { amountConversionWithComma, denomConversion } from "../../utils/coin";
+import { DOLLAR_DECIMALS } from "../../constants/common";
+import {
+  amountConversion,
+  amountConversionWithComma,
+  commaSeparatorWithRounding,
+  denomConversion
+} from "../../utils/coin";
+import { marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
 import InterestAndReward from "./Calculate/InterestAndReward";
@@ -29,6 +36,7 @@ const Deposit = ({
   address,
   fetchUserLends,
   assetDenomMap,
+  markets,
 }) => {
   const navigate = useNavigate();
 
@@ -48,12 +56,7 @@ const Deposit = ({
       dataIndex: "available",
       key: "available",
       width: 280,
-      render: (text) => (
-        <div className="myhome-avaliablevalues">
-          <div>{text}</div>
-          <div className="doller-values">$1316.84</div>
-        </div>
-      )
+      render: (text) => <div className="myhome-avaliablevalues">{text}</div>,
     },
     {
       title: "cPool",
@@ -135,12 +138,30 @@ const Deposit = ({
             ),
             available: (
               <>
-                {" "}
-                {amountConversionWithComma(
-                  item?.amountIn?.amount,
-                  assetDenomMap[item?.amountIn?.denom]?.decimals
-                )}{" "}
-                {denomConversion(item?.amountIn?.denom)}
+                <div>
+                  {amountConversionWithComma(
+                    item?.amountIn?.amount,
+                    assetDenomMap[item?.amountIn?.denom]?.decimals
+                  )}{" "}
+                  {denomConversion(item?.amountIn?.denom)}
+                </div>
+                <div className="doller-values">
+                  $
+                  {commaSeparatorWithRounding(
+                    Number(
+                      amountConversion(
+                        item?.amountIn?.amount,
+                        assetDenomMap[item?.amountIn?.denom]?.decimals
+                      ) || 0
+                    ) *
+                      marketPrice(
+                        markets,
+                        item?.amountIn?.denom,
+                        assetDenomMap[item?.amountIn?.denom]?.id
+                      ) || 0,
+                    DOLLAR_DECIMALS
+                  )}
+                </div>
               </>
             ),
             cpool: item?.cpoolName,
@@ -195,6 +216,7 @@ Deposit.propTypes = {
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
   assetDenomMap: PropTypes.object,
+  markets: PropTypes.object,
   userLendList: PropTypes.arrayOf(
     PropTypes.shape({
       amountIn: PropTypes.shape({
@@ -219,6 +241,7 @@ const stateToProps = (state) => {
     userLendList: state.lend.userLends,
     address: state.account.address,
     assetDenomMap: state.asset._.assetDenomMap,
+    markets: state.oracle.market,
   };
 };
 
