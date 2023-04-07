@@ -32,6 +32,7 @@ const Borrow = ({
   address,
   fetchUserBorrows,
   assetDenomMap,
+  assetNameMap,
   markets,
 }) => {
   const navigate = useNavigate();
@@ -170,6 +171,11 @@ const Borrow = ({
   const tableData =
     userBorrowList?.length > 0
       ? userBorrowList?.map((item, index) => {
+          let collateralAsset =
+            assetNameMap[
+              ucDenomToDenom(item?.amountIn?.denom)?.substring(1)?.toUpperCase()
+            ];
+
           return {
             key: index,
             asset: (
@@ -215,7 +221,7 @@ const Borrow = ({
                 <div>
                   {amountConversionWithComma(
                     item?.amountIn?.amount,
-                    assetDenomMap[item?.amountIn?.denom]?.decimals
+                    collateralAsset?.decimals
                   )}{" "}
                   {denomConversion(item?.amountIn?.denom)}
                 </div>
@@ -225,13 +231,13 @@ const Borrow = ({
                     Number(
                       amountConversion(
                         item?.amountIn?.amount,
-                        assetDenomMap[item?.amountIn?.denom]?.decimals
+                        collateralAsset?.decimals
                       ) || 0
                     ) *
                       marketPrice(
                         markets,
                         ucDenomToDenom(item?.amountIn?.denom),
-                        assetDenomMap[ucDenomToDenom(item?.amountIn?.denom)]?.id
+                        collateralAsset?.id
                       ) || 0,
                     DOLLAR_DECIMALS
                   )}
@@ -292,6 +298,7 @@ Borrow.propTypes = {
   lang: PropTypes.string.isRequired,
   address: PropTypes.string,
   assetDenomMap: PropTypes.object,
+  assetNameMap: PropTypes.object,
   inProgress: PropTypes.bool,
   markets: PropTypes.object,
   userBorrowList: PropTypes.arrayOf(
@@ -321,6 +328,7 @@ const stateToProps = (state) => {
     userBorrowList: state.lend.userBorrows,
     address: state.account.address,
     assetDenomMap: state.asset._.assetDenomMap,
+    assetNameMap: state.asset._.assetNameMap,
     markets: state.oracle.market,
   };
 };
