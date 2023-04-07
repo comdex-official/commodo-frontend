@@ -48,6 +48,12 @@ const Deposit = ({
       dataIndex: "available",
       key: "available",
       width: 280,
+      render: (text) => (
+        <div className="myhome-avaliablevalues">
+          <div>{text}</div>
+          <div className="doller-values">$1316.84</div>
+        </div>
+      )
     },
     {
       title: "cPool",
