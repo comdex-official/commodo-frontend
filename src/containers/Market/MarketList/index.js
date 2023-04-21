@@ -146,6 +146,7 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
                                       />
                                     </td>
                                     <td>
+                                    <div className="d-flex"> 
                                       <AssetApy
                                         poolId={item?.poolId}
                                         assetId={item?.transitAssetIds[key]}
@@ -161,6 +162,7 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
                                           assetId={item?.transitAssetIds[key]}
                                         />
                                       </Tooltip>
+                                      </div>
                                     </td>
                                   </tr>
                                 </React.Fragment>
