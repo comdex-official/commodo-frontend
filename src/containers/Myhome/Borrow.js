@@ -54,6 +54,7 @@ const Borrow = ({
           state: {
             lendingIdFromRoute: borrow?.lendingId?.toNumber(),
             borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
+            collateralAssetMinimalDenomFromRoute: borrow?.amountIn?.denom,
             pairIdFromRoute: borrow?.pairId,
             collateralAssetIdFromRoute: lendPair?.assetIn?.toNumber(),
           },
@@ -70,6 +71,7 @@ const Borrow = ({
               state: {
                 lendingIdFromRoute: borrow?.lendingId?.toNumber(),
                 borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
+                collateralAssetMinimalDenomFromRoute: borrow?.amountIn?.denom,
                 pairIdFromRoute: borrow?.pairId,
                 collateralAssetIdFromRoute: lendPair?.assetIn?.toNumber(),
               },
