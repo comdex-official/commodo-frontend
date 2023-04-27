@@ -35,7 +35,10 @@ import {
   decimalConversion,
   marketPrice
 } from "../../../utils/number";
-import { iconNameFromDenom, toDecimals } from "../../../utils/string";
+import {
+  iconNameFromDenom,
+  toDecimals
+} from "../../../utils/string";
 import ActionButton from "../../Myhome/BorrowRepay/ActionButton";
 import "./index.less";
 
@@ -65,10 +68,13 @@ const RepayTab_2 = ({
   const [pair, setPair] = useState();
   const [sliderValue, setSliderValue] = useState(0);
   const [assetOutPool, setAssetOutPool] = useState();
+  const [selectedBorrowDenom, setSelectedBorrowDenom] = useState();
 
   const { state } = useLocation();
   const borrowAssetMinimalDenomFromRoute =
     state?.borrowAssetMinimalDenomFromRoute;
+  const collateralAssetMinimalDenomFromRoute =
+    state.collateralAssetMinimalDenomFromRoute;
 
   const fetchAllBorrowByOwnerAndPool = (address, poolId) => {
     queryAllBorrowByOwnerAndPool(address, poolId, (error, result) => {
@@ -78,7 +84,7 @@ const RepayTab_2 = ({
       }
 
       const userBorrowsMap = result?.borrows?.reduce((map, obj) => {
-        map[obj?.amountOut?.denom] = obj;
+        map[obj?.amountOut?.denom + obj?.amountIn?.denom] = obj;
         return map;
       }, {});
 
@@ -92,8 +98,14 @@ const RepayTab_2 = ({
   }, [address, pool]);
 
   useEffect(() => {
-    if (borrowAssetMinimalDenomFromRoute && borrowPosition?.length) {
-      handleAssetChange(borrowAssetMinimalDenomFromRoute);
+    if (
+      borrowAssetMinimalDenomFromRoute &&
+      collateralAssetMinimalDenomFromRoute &&
+      borrowPosition?.length
+    ) {
+      handleAssetChange(
+        borrowAssetMinimalDenomFromRoute + collateralAssetMinimalDenomFromRoute
+      );
     }
   }, [borrowAssetMinimalDenomFromRoute, borrowPosition]);
 
@@ -193,6 +205,7 @@ const RepayTab_2 = ({
   };
 
   const handleAssetChange = (value) => {
+    setSelectedBorrowDenom(value);
     setAvailableBalance(
       getDenomBalance(balances, userBorrowsMap[value]?.amountOut?.denom) || 0
     );
@@ -202,7 +215,6 @@ const RepayTab_2 = ({
     );
 
     setSelectedBorrowPosition(userBorrowsMap[value]);
-
     queryLendPair(userBorrowsMap[value]?.pairId, (error, result) => {
       if (error) {
         message.error(error);
@@ -255,22 +267,19 @@ const RepayTab_2 = ({
                       Select
                     </div>
                   }
+                  value={
+                    selectedBorrowDenom ? String(selectedBorrowDenom) : null
+                  }
                   defaultActiveFirstOption={true}
                   showArrow={true}
-                  value={
-                    borrowPosition?.length && selectedAssetId
-                      ? assetMap[selectedAssetId]?.denom
-                      : null
-                  }
-                  // disabled
                   notFoundContent={<NoDataIcon />}
                 >
                   {borrowPosition?.length > 0 &&
                     borrowPosition?.map((item) => {
                       return (
                         <Option
-                          key={item?.amountOut?.denom}
-                          value={item?.amountOut?.denom}
+                          key={item?.borrowingId?.toNumber()}
+                          value={item?.amountOut?.denom + item?.amountIn?.denom}
                         >
                           <div className="select-inner">
                             <div className="svg-icon">

@@ -11,7 +11,7 @@ import {
   queryLendPair,
   queryLendPool,
   queryUserBorrows,
-  queryUserLends,
+  queryUserLends
 } from "../../services/lend/query";
 import { amountConversion, commaSeparatorWithRounding } from "../../utils/coin";
 import { decimalConversion, marketPrice } from "../../utils/number";
@@ -287,7 +287,7 @@ const Myhome = ({
 
   const tabItems = [
     {
-      label: "Lend",
+      label: "Lent",
       key: "1",
       children: (
         <Deposit fetchUserLends={fetchUserLends} inProgress={lendsInProgress} />
