@@ -35,10 +35,7 @@ import {
   decimalConversion,
   marketPrice
 } from "../../../utils/number";
-import {
-  iconNameFromDenom,
-  toDecimals
-} from "../../../utils/string";
+import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "../../Myhome/BorrowRepay/ActionButton";
 import "./index.less";
 
@@ -74,7 +71,7 @@ const RepayTab_2 = ({
   const borrowAssetMinimalDenomFromRoute =
     state?.borrowAssetMinimalDenomFromRoute;
   const collateralAssetMinimalDenomFromRoute =
-    state.collateralAssetMinimalDenomFromRoute;
+    state?.collateralAssetMinimalDenomFromRoute;
 
   const fetchAllBorrowByOwnerAndPool = (address, poolId) => {
     queryAllBorrowByOwnerAndPool(address, poolId, (error, result) => {
@@ -280,6 +277,7 @@ const RepayTab_2 = ({
                         <Option
                           key={item?.borrowingId?.toNumber()}
                           value={item?.amountOut?.denom + item?.amountIn?.denom}
+                          disabled={item?.isLiquidated}
                         >
                           <div className="select-inner">
                             <div className="svg-icon">
