@@ -125,6 +125,14 @@ const userLends = (state = [], action) => {
   return state;
 };
 
+const assetIdToLendMap = (state = {}, action) => {
+  if (action.type === USER_LENDS_SET) {
+    return action.assetIdToLendMap || {};
+  }
+
+  return state;
+};
+
 const poolLends = (state = [], action) => {
   if (action.type === POOL_LENDS_SET) {
     return action.list;
@@ -169,5 +177,6 @@ export default combineReducers({
   poolLends,
   userBorrows,
   pair,
-  borrowToLendMap
+  borrowToLendMap,
+  assetIdToLendMap,
 });

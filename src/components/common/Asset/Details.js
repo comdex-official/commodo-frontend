@@ -32,6 +32,8 @@ const Details = ({
   parent,
   assetDenomMap,
   setAssetStatMap,
+  currentBalance,
+  newBalance,
 }) => {
   const [stats, setStats] = useState();
   const [moduleBalanceStats, setModuleBalanceStats] = useState([]);
@@ -169,6 +171,14 @@ const Details = ({
       tooltipText:
         parent === "lend" ? "Lend APY of Asset" : "Borrow APY of Asset",
     },
+    {
+      title: "Current Balance",
+      counts: commaSeparatorWithRounding(currentBalance, DOLLAR_DECIMALS),
+    },
+    {
+      title: "New Balance",
+      counts: commaSeparatorWithRounding(newBalance, DOLLAR_DECIMALS),
+    },
   ];
 
   return (
@@ -222,7 +232,9 @@ Details.propTypes = {
     denom: PropTypes.string,
   }),
   assetDenomMap: PropTypes.object,
+  currentBalance: PropTypes.number,
   markets: PropTypes.object,
+  newBalance: PropTypes.number,
   parent: PropTypes.string,
   poolId: PropTypes.shape({
     low: PropTypes.number,
