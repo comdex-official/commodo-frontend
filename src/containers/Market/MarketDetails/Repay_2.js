@@ -1,4 +1,4 @@
-import { Button, message, Select, Slider } from "antd";
+import { Button, message, Select, Slider, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -290,7 +290,16 @@ const RepayTab_2 = ({
                               </div>
                             </div>
                             <div className="name">
-                              {denomConversion(item?.amountOut?.denom)}
+                              <Tooltip
+                                placement="topLeft"
+                                title={
+                                  item?.isLiquidated
+                                    ? "Position has been sent for Auction."
+                                    : ""
+                                }
+                              >
+                                {denomConversion(item?.amountOut?.denom)}
+                              </Tooltip>
                             </div>
                           </div>
                         </Option>
