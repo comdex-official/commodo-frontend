@@ -104,8 +104,10 @@ const DepositTab = ({
           amountConversion(assetIdToLendMap[selectedAssetId]?.amountIn?.amount)
         ) || 0
       );
+      setNewBalance(0);
     } else {
       setCurrentBalance(0);
+      setNewBalance(0);
     }
   }, [assetIdToLendMap, selectedAssetId]);
 
