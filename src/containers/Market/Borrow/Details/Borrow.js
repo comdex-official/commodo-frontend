@@ -44,7 +44,11 @@ import {
   decimalConversion,
   marketPrice
 } from "../../../../utils/number";
-import {errorMessageMappingParser, iconNameFromDenom, toDecimals} from "../../../../utils/string";
+import { errorMessageMappingParser, iconNameFromDenom, toDecimals } from "../../../../utils/string";
+import variables from "../../../../utils/variables";
+import AssetApy from "../../AssetApy";
+import "./index.less";
+} from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import AssetApy from "../../AssetApy";
 import "./index.less";
@@ -62,12 +66,15 @@ const BorrowTab = ({
   assetRatesStatsMap,
   assetDenomMap,
   assetStatMap,
+  pairIdToBorrowMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [lend, setLend] = useState();
   const [pair, setPair] = useState();
   const [inAmount, setInAmount] = useState();
   const [outAmount, setOutAmount] = useState();
+  const [currentBalance, setCurrentBalance] = useState(0);
+  const [newBalance, setNewBalance] = useState(0);
   const [validationError, setValidationError] = useState();
   const [borrowValidationError, setBorrowValidationError] = useState();
   const [maxBorrowValidationError, setMaxBorrowValidationError] = useState();
@@ -193,6 +200,20 @@ const BorrowTab = ({
     }
   }, [pairIdFromRoute]);
 
+  useEffect(() => {
+    if (pair?.id && Number(pairIdToBorrowMap[pair?.id]?.amountOut.amount)) {
+      setCurrentBalance(
+        Number(
+          amountConversion(pairIdToBorrowMap[pair?.id]?.amountOut.amount)
+        ) || 0
+      );
+      setNewBalance(0);
+    } else {
+      setCurrentBalance(0);
+      setNewBalance(0);
+    }
+  }, [pair, pairIdToBorrowMap]);
+
   const handleCollateralAssetChange = (lendingId, fromRoute) => {
     setSelectedCollateralLendingId(lendingId);
     if (!fromRoute) {
@@ -302,6 +323,10 @@ const BorrowTab = ({
       .trim();
 
     setOutAmount(value);
+    setNewBalance(
+      Number(value) +
+        Number(amountConversion(pairIdToBorrowMap[pair?.id]?.amountOut.amount))
+    );
     checkMaxBorrow(value);
     setBorrowValidationError(
       ValidateInputNumber(
@@ -495,6 +520,10 @@ const BorrowTab = ({
       .trim();
 
     setOutAmount(borrowValue || 0);
+    setNewBalance(
+      Number(borrowValue || 0) +
+        Number(amountConversion(pairIdToBorrowMap[pair?.id]?.amountOut.amount))
+    );
     checkMaxBorrow(borrowValue || 0);
   };
 
@@ -819,6 +848,8 @@ const BorrowTab = ({
                 }
                 poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
+                newBalance={newBalance}
+                currentBalance={currentBalance}
               />
             </div>
             <div className="commodo-card">
@@ -864,6 +895,7 @@ BorrowTab.propTypes = {
   address: PropTypes.string,
   assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
+  pairIdToBorrowMap: PropTypes.object,
   assetStatMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
   markets: PropTypes.object,
@@ -908,6 +940,7 @@ const stateToProps = (state) => {
     assetRatesStatsMap: state.lend.assetRatesStats.map,
     assetDenomMap: state.asset._.assetDenomMap,
     assetStatMap: state.asset.assetStatMap,
+    pairIdToBorrowMap: state.lend.pairIdToBorrowMap,
   };
 };
 

@@ -132,10 +132,16 @@ export const setUserBorrows = (list) => {
     return map;
   }, {});
 
+  const pairIdToBorrowMap = list.reduce((map, obj) => {
+    map[obj?.pairId] = obj;
+    return map;
+  }, {});
+
   return {
     type: USER_BORROWS_SET,
     list,
     borrowToLendMap,
+    pairIdToBorrowMap,
   };
 };
 
