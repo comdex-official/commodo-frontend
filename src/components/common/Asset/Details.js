@@ -173,11 +173,11 @@ const Details = ({
     },
     {
       title: "Current Balance",
-      counts: commaSeparatorWithRounding(currentBalance, DOLLAR_DECIMALS),
+      counts: commaSeparatorWithRounding(currentBalance || 0, DOLLAR_DECIMALS),
     },
     {
       title: "New Balance",
-      counts: commaSeparatorWithRounding(newBalance, DOLLAR_DECIMALS),
+      counts: commaSeparatorWithRounding(newBalance || 0, DOLLAR_DECIMALS),
     },
   ];
 

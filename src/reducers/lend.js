@@ -157,6 +157,14 @@ const borrowToLendMap = (state = {}, action) => {
   return state;
 };
 
+const pairIdToBorrowMap = (state = {}, action) => {
+  if (action.type === USER_BORROWS_SET) {
+    return action.pairIdToBorrowMap || {};
+  }
+
+  return state;
+};
+
 const pair = (state = {}, action) => {
   if (action.type === PAIR_SET) {
     return action?.value;
@@ -179,4 +187,5 @@ export default combineReducers({
   pair,
   borrowToLendMap,
   assetIdToLendMap,
+  pairIdToBorrowMap,
 });

@@ -3,12 +3,12 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useLocation, useParams } from "react-router";
-import { setPool, setPoolLends } from "../../../actions/lend";
+import {setPool, setPoolLends, setUserBorrows} from "../../../actions/lend";
 import { BackButton } from "../../../components/common";
 import {
   queryAllBorrowByOwnerAndPool,
-  queryLendPool,
-  queryUserLends
+  queryLendPool, queryUserBorrows,
+  queryUserLends,
 } from "../../../services/lend/query";
 import { decode } from "../../../utils/string";
 import BorrowDetails from "../../Market/Borrow/Details";
@@ -25,6 +25,7 @@ const MarketDetails = ({
   address,
   setPool,
   setPoolLends,
+                         setUserBorrows,
   poolLendPositions,
 }) => {
   const [inProgress, setInProgress] = useState(false);
@@ -71,6 +72,15 @@ const MarketDetails = ({
         }
         
         setPoolLends(result?.lends);
+      });
+
+      queryUserBorrows(address, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setUserBorrows(result?.borrows || []);
       });
     }
   }, [address]);
@@ -173,6 +183,7 @@ const MarketDetails = ({
 MarketDetails.propTypes = {
   setPool: PropTypes.func.isRequired,
   setPoolLends: PropTypes.func.isRequired,
+  setUserBorrows: PropTypes.func.isRequired,
   address: PropTypes.string,
   poolLendPositions: PropTypes.arrayOf(
     PropTypes.shape({
@@ -200,6 +211,7 @@ const stateToProps = (state) => {
 const actionsToProps = {
   setPool,
   setPoolLends,
+  setUserBorrows,
 };
 
 export default connect(stateToProps, actionsToProps)(MarketDetails);
