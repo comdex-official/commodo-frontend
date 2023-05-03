@@ -54,6 +54,8 @@ const RepayTab_2 = ({
   assetDenomMap,
 }) => {
   const [amount, setAmount] = useState();
+  const [currentBalance, setCurrentBalance] = useState(0);
+  const [newBalance, setNewBalance] = useState(0);
   const [validationError, setValidationError] = useState();
   const [assetList, setAssetList] = useState();
   const [borrowPosition, setBorrowPosition] = useState([]);
@@ -163,6 +165,7 @@ const RepayTab_2 = ({
       .trim();
 
     setAmount(value);
+    setNewBalance(currentBalance - Number(value));
     setSliderValue(
       (value /
         amountConversion(
@@ -200,6 +203,25 @@ const RepayTab_2 = ({
       )
     );
   };
+
+  useEffect(() => {
+    if (
+      selectedBorrowDenom &&
+      Number(userBorrowsMap[selectedBorrowDenom]?.amountOut?.amount)
+    ) {
+      setCurrentBalance(
+        Number(
+          amountConversion(
+            userBorrowsMap[selectedBorrowDenom]?.amountOut?.amount
+          )
+        )
+      );
+      setNewBalance(0);
+    } else {
+      setCurrentBalance(0);
+      setNewBalance(0);
+    }
+  }, [selectedBorrowDenom, userBorrowsMap]);
 
   const handleAssetChange = (value) => {
     setSelectedBorrowDenom(value);
@@ -441,6 +463,8 @@ const RepayTab_2 = ({
             }
             poolId={assetOutPool?.poolId || pool?.poolId}
             parent="borrow"
+            newBalance={newBalance}
+            currentBalance={currentBalance}
           />
         </div>
         <div className="commodo-card">

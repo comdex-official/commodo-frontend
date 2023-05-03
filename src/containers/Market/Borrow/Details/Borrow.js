@@ -44,10 +44,10 @@ import {
   decimalConversion,
   marketPrice
 } from "../../../../utils/number";
-import { errorMessageMappingParser, iconNameFromDenom, toDecimals } from "../../../../utils/string";
-import variables from "../../../../utils/variables";
-import AssetApy from "../../AssetApy";
-import "./index.less";
+import {
+  errorMessageMappingParser,
+  iconNameFromDenom,
+  toDecimals
 } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import AssetApy from "../../AssetApy";
@@ -520,10 +520,7 @@ const BorrowTab = ({
       .trim();
 
     setOutAmount(borrowValue || 0);
-    setNewBalance(
-      Number(borrowValue || 0) +
-        Number(amountConversion(pairIdToBorrowMap[pair?.id]?.amountOut.amount))
-    );
+    setNewBalance(Number(borrowValue || 0) + currentBalance);
     checkMaxBorrow(borrowValue || 0);
   };
 

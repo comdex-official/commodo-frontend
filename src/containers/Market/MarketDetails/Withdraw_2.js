@@ -9,7 +9,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
@@ -19,18 +19,18 @@ import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   queryAllLendByOwnerAndPool,
-  QueryPoolAssetLBMapping
+  QueryPoolAssetLBMapping,
 } from "../../../services/lend/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "../../Myhome/DepositWithdraw/ActionButton";
@@ -51,6 +51,8 @@ const WithdrawTab = ({
 }) => {
   const [assetList, setAssetList] = useState();
   const [amount, setAmount] = useState();
+  const [currentBalance, setCurrentBalance] = useState(0);
+  const [newBalance, setNewBalance] = useState(0);
   const [validationError, setValidationError] = useState();
   const [allLendByOwner, setAllLendByOwner] = useState([]);
   const [userLendsMap, setUserLendsMap] = useState({});
@@ -73,6 +75,17 @@ const WithdrawTab = ({
       ]);
     }
   }, [pool]);
+
+  useEffect(() => {
+    if (lendPosition?.amountIn?.amount) {
+      setCurrentBalance(
+        Number(amountConversion(lendPosition?.amountIn?.amount)) || 0
+      );
+    } else {
+      setCurrentBalance(0);
+      setNewBalance(0);
+    }
+  }, [lendPosition]);
 
   const fetchAllLendByOwnerAndPool = (address, poolId) => {
     queryAllLendByOwnerAndPool(address, poolId, (error, result) => {
@@ -109,6 +122,7 @@ const WithdrawTab = ({
       .trim();
 
     setAmount(value);
+    setNewBalance(currentBalance - Number(value));
     setSliderValue(
       (value /
         amountConversion(
@@ -330,6 +344,8 @@ const WithdrawTab = ({
             asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
             poolId={pool?.poolId}
             parent="lend"
+            newBalance={newBalance}
+            currentBalance={currentBalance}
           />
         </div>
         <div className="commodo-card">
