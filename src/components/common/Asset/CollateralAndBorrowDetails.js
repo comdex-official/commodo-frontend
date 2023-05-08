@@ -1,4 +1,4 @@
-import { Button, List } from "antd";
+import { List } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setAssetStatMap } from "../../../actions/asset";
@@ -8,19 +8,30 @@ import { decimalConversion } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
 import { SvgIcon, TooltipIcon } from "../index";
 
-const CollateralDetails = ({
-  assetId,
+const CollateralAndBorrowDetails = ({
+  lendAssetId,
   parent,
-  assetDenom,
+  collateralAssetDenom,
+  borrowAssetDenom,
   currentBalance,
   newBalance,
   assetRatesStatsMap,
 }) => {
   let data = [
     {
-      title: parent === "lend" ? "Liq. Threshold" : "Borrowed",
+      title: "Max LTV",
       counts: `${Number(
-        decimalConversion(assetRatesStatsMap[assetId]?.liquidationThreshold) *
+        decimalConversion(
+          assetRatesStatsMap[lendAssetId]?.liquidationThreshold
+        ) * 100
+      ).toFixed(DOLLAR_DECIMALS)}%`,
+      tooltipText:
+        parent === "lend" ? "Total funds Deposited" : "Total funds Borrowed",
+    },
+    {
+      title: "Liq. Threshold",
+      counts: `${Number(
+        decimalConversion(assetRatesStatsMap[lendAssetId]?.liquidationPenalty) *
           100
       ).toFixed(DOLLAR_DECIMALS)}%`,
       tooltipText:
@@ -29,7 +40,8 @@ const CollateralDetails = ({
     {
       title: "Liq. Penalty",
       counts: `${Number(
-        decimalConversion(assetRatesStatsMap[assetId]?.liquidationPenalty) * 100
+        decimalConversion(assetRatesStatsMap[lendAssetId]?.liquidationPenalty) *
+          100
       ).toFixed(DOLLAR_DECIMALS)}%`,
       tooltipText: "Fee paid by vault owners on liquidation",
     },
@@ -38,60 +50,81 @@ const CollateralDetails = ({
       counts: "Normal",
       tooltipText: "Type of the collateral selected",
     },
+  ];
+
+  let borrowData = [
     {
-      title: "Current Lend Position",
+      title: "Current borrow balance",
       counts: commaSeparatorWithRounding(currentBalance || 0, DOLLAR_DECIMALS),
-      tooltipText: "Your current lend balance",
+      tooltipText: "Your current borrow balance",
     },
     {
-      title: "New Lend Position",
+      title: "New Borrow balance",
       counts: commaSeparatorWithRounding(newBalance || 0, DOLLAR_DECIMALS),
-      tooltipText: "Your new lend balance",
+      tooltipText: "Your new borrow balance",
     },
   ];
 
   return (
     <>
-      <div className="card-head">
+      <div className="card-head no-border">
         <div className="head-left">
           <div className="assets-col">
             <div className="assets-icon">
-              <SvgIcon name={iconNameFromDenom(assetDenom)} />
+              <SvgIcon name={iconNameFromDenom(collateralAssetDenom)} />
             </div>
             Collateral Details
           </div>
-        </div>
-        <div className="head-right">
-          <Button type="primary" size="small" className="external-btn">
-            <a href={""} target="_blank" rel="noreferrer">
-              Buy{" "}
-              <span className="hyperlink-icon">
-                {" "}
-                <SvgIcon name="hyperlink" />
-              </span>
-            </a>
-          </Button>
         </div>
       </div>
       <List
         grid={{
           gutter: 16,
-          xs: 3,
-          sm: 3,
-          md: 3,
-          lg: 3,
-          xl: 3,
-          xxl: 3,
+          xs: 2,
+          sm: 2,
+          md: 2,
+          lg: 2,
+          xl: 2,
+          xxl: 2,
         }}
         dataSource={data}
         renderItem={(item) => (
           <List.Item>
             <div>
               <p>
-                {item.title}{" "}
-                {item.tooltipText ? (
-                  <TooltipIcon text={item.tooltipText} />
-                ) : null}
+                {item.title} <TooltipIcon text={item.tooltipText} />
+              </p>
+              <h3>{item.counts}</h3>
+            </div>
+          </List.Item>
+        )}
+      />
+      <div className="card-head no-border">
+        <div className="head-left">
+          <div className="assets-col">
+            <div className="assets-icon">
+              <SvgIcon name={iconNameFromDenom(borrowAssetDenom)} />
+            </div>
+            Borrow Details
+          </div>
+        </div>
+      </div>
+      <List
+        grid={{
+          gutter: 16,
+          xs: 2,
+          sm: 2,
+          md: 2,
+          lg: 2,
+          xl: 2,
+          xxl: 2,
+        }}
+        dataSource={borrowData}
+        renderItem={(item) => (
+          <List.Item>
+            <div>
+              <p>
+                {item.title} <TooltipIcon text={item.tooltipText} />
               </p>
               <h3>{item.counts}</h3>
             </div>
@@ -102,8 +135,10 @@ const CollateralDetails = ({
   );
 };
 
-CollateralDetails.propTypes = {
-  assetDenom: PropTypes.string,
+CollateralAndBorrowDetails.propTypes = {
+  borrowAssetDenom: PropTypes.string,
+  collateralAssetDenom: PropTypes.string,
+  lendAssetId: PropTypes.number,
   assetRatesStatsMap: PropTypes.object,
   currentBalance: PropTypes.number,
   newBalance: PropTypes.number,
@@ -123,4 +158,7 @@ const actionsToProps = {
   setAssetStatMap,
 };
 
-export default connect(stateToProps, actionsToProps)(CollateralDetails);
+export default connect(
+  stateToProps,
+  actionsToProps
+)(CollateralAndBorrowDetails);
