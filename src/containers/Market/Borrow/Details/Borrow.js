@@ -10,6 +10,7 @@ import {
   SvgIcon,
   TooltipIcon
 } from "../../../../components/common";
+import CollateralAndBorrowDetails from "../../../../components/common/Asset/CollateralAndBorrowDetails";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
 import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
@@ -837,43 +838,22 @@ const BorrowTab = ({
           <div className="details-right">
             <div className="commodo-card">
               <Details
-                asset={
-                  assetMap[
-                    assetOutPool?.transitAssetIds?.main?.toNumber() ||
-                      pool?.transitAssetIds?.main?.toNumber()
-                  ]
-                }
+                assetId={pair?.assetOut}
+                assetDenom={borrowAssetDenom}
+                poolId={assetOutPool?.poolId || pool?.poolId}
+                parent="borrow"
+              />
+            </div>
+            <div className="commodo-card">
+              <CollateralAndBorrowDetails
+                lendAssetId={pair?.assetIn}
+                collateralAssetDenom={collateralAssetDenom}
+                borrowAssetDenom={borrowAssetDenom}
                 poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
                 newBalance={newBalance}
                 currentBalance={currentBalance}
               />
-            </div>
-            <div className="commodo-card">
-              <Details
-                asset={
-                  assetMap[
-                    assetOutPool?.transitAssetIds?.first?.toNumber() ||
-                      pool?.transitAssetIds?.first?.toNumber()
-                  ]
-                }
-                poolId={assetOutPool?.poolId || pool?.poolId}
-                parent="borrow"
-              />
-            </div>
-            <div className="commodo-card">
-              <div className="">
-                <Details
-                  asset={
-                    assetMap[
-                      assetOutPool?.transitAssetIds?.second?.toNumber() ||
-                        pool?.transitAssetIds?.second?.toNumber()
-                    ]
-                  }
-                  poolId={assetOutPool?.poolId || pool?.poolId}
-                  parent="borrow"
-                />
-              </div>
             </div>
           </div>
         </>
