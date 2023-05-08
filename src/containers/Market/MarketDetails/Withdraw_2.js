@@ -9,8 +9,9 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon,
+  TooltipIcon
 } from "../../../components/common";
+import CollateralDetails from "../../../components/common/Asset/CollateralDetails";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import AssetStats from "../../../components/common/Asset/Stats";
@@ -19,18 +20,18 @@ import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   queryAllLendByOwnerAndPool,
-  QueryPoolAssetLBMapping,
+  QueryPoolAssetLBMapping
 } from "../../../services/lend/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount,
+  getAmount
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice,
+  marketPrice
 } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "../../Myhome/DepositWithdraw/ActionButton";
@@ -341,25 +342,20 @@ const WithdrawTab = ({
       <div className="details-right">
         <div className="commodo-card">
           <Details
-            asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
+            assetId={selectedAssetId}
+            assetDenom={assetMap[selectedAssetId]?.denom}
+            poolId={pool?.poolId}
+            parent="lend"
+          />
+        </div>
+        <div className="commodo-card">
+          <CollateralDetails
+            assetId={selectedAssetId}
+            assetDenom={assetMap[selectedAssetId]?.denom}
             poolId={pool?.poolId}
             parent="lend"
             newBalance={newBalance}
             currentBalance={currentBalance}
-          />
-        </div>
-        <div className="commodo-card">
-          <Details
-            asset={assetMap[pool?.transitAssetIds?.first?.toNumber()]}
-            poolId={pool?.poolId}
-            parent="lend"
-          />
-        </div>
-        <div className="commodo-card">
-          <Details
-            asset={assetMap[pool?.transitAssetIds?.second?.toNumber()]}
-            poolId={pool?.poolId}
-            parent="lend"
           />
         </div>
       </div>
