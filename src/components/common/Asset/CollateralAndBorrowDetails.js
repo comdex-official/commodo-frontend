@@ -16,7 +16,27 @@ const CollateralAndBorrowDetails = ({
   currentBalance,
   newBalance,
   assetRatesStatsMap,
+  tabName,
 }) => {
+  const liquidationThreshold = {
+    title: "Liq. Threshold",
+    counts: `${Number(
+      decimalConversion(assetRatesStatsMap[lendAssetId]?.liquidationPenalty) *
+        100
+    ).toFixed(DOLLAR_DECIMALS)}%`,
+    tooltipText:
+      "The threshold at which a loan is defined as under collateralized and subject to liquidation of collateral",
+  };
+
+  const liquidationPenalty = {
+    title: "Liq. Penalty",
+    counts: `${Number(
+      decimalConversion(assetRatesStatsMap[lendAssetId]?.liquidationPenalty) *
+        100
+    ).toFixed(DOLLAR_DECIMALS)}%`,
+    tooltipText: "Fee paid by vault owners on liquidation",
+  };
+
   let data = [
     {
       title: "Max LTV",
@@ -28,23 +48,8 @@ const CollateralAndBorrowDetails = ({
       tooltipText:
         parent === "lend" ? "Total funds Deposited" : "Total funds Borrowed",
     },
-    {
-      title: "Liq. Threshold",
-      counts: `${Number(
-        decimalConversion(assetRatesStatsMap[lendAssetId]?.liquidationPenalty) *
-          100
-      ).toFixed(DOLLAR_DECIMALS)}%`,
-      tooltipText:
-        "The threshold at which a loan is defined as under collateralized and subject to liquidation of collateral",
-    },
-    {
-      title: "Liq. Penalty",
-      counts: `${Number(
-        decimalConversion(assetRatesStatsMap[lendAssetId]?.liquidationPenalty) *
-          100
-      ).toFixed(DOLLAR_DECIMALS)}%`,
-      tooltipText: "Fee paid by vault owners on liquidation",
-    },
+    liquidationThreshold,
+    liquidationPenalty,
     {
       title: "Collateral Type",
       counts: "Normal",
@@ -65,9 +70,11 @@ const CollateralAndBorrowDetails = ({
     },
   ];
 
+  let repayData = [liquidationThreshold, liquidationPenalty];
+
   return (
     <>
-      <div className="card-head no-border">
+      <div className="card-head no-border pt-3">
         <div className="head-left">
           <div className="assets-col">
             <div className="assets-icon">
@@ -87,7 +94,7 @@ const CollateralAndBorrowDetails = ({
           xl: 2,
           xxl: 2,
         }}
-        dataSource={data}
+        dataSource={tabName === "repay" ? repayData : data}
         renderItem={(item) => (
           <List.Item>
             <div>
@@ -143,6 +150,7 @@ CollateralAndBorrowDetails.propTypes = {
   currentBalance: PropTypes.number,
   newBalance: PropTypes.number,
   parent: PropTypes.string,
+  tabName: PropTypes.string,
 };
 
 const stateToProps = (state) => {

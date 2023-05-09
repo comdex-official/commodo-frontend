@@ -11,6 +11,7 @@ import {
   SvgIcon,
   TooltipIcon
 } from "../../../components/common";
+import CollateralAndBorrowDetails from "../../../components/common/Asset/CollateralAndBorrowDetails";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import CustomInput from "../../../components/CustomInput";
@@ -35,7 +36,11 @@ import {
   decimalConversion,
   marketPrice
 } from "../../../utils/number";
-import { iconNameFromDenom, toDecimals } from "../../../utils/string";
+import {
+  iconNameFromDenom,
+  toDecimals,
+  ucDenomToDenom
+} from "../../../utils/string";
 import ActionButton from "../../Myhome/BorrowRepay/ActionButton";
 import "./index.less";
 
@@ -376,7 +381,7 @@ const RepayTab_2 = ({
         </div>
         <Row>
           <Col sm="12" className="mt-2 mx-auto card-bottom-details">
-            <Row className="mt-3">
+            <Row className="mt-4">
               <Col sm="12">
                 <Slider
                   marks={marks}
@@ -388,7 +393,7 @@ const RepayTab_2 = ({
               </Col>
             </Row>
 
-            <Row className="mt-2">
+            <Row className="mt-4">
               <Col>
                 <label>Available in wallet</label>
               </Col>
@@ -404,7 +409,7 @@ const RepayTab_2 = ({
               </Col>
             </Row>
 
-            <Row className="mt-2 lastrow-market-dtl">
+            <Row className="mt-4 lastrow-market-dtl">
               <Col>
                 <label>Health Factor</label>
                 <TooltipIcon text="Numeric representation of your position's safety" />
@@ -433,7 +438,7 @@ const RepayTab_2 = ({
             </Row>
           </Col>
         </Row>
-        <div className="assets-form-btn">
+        <div className="assets-form-btn mt-5">
           <ActionButton
             name="Repay"
             lang={lang}
@@ -455,40 +460,24 @@ const RepayTab_2 = ({
       <div className="details-right">
         <div className="commodo-card">
           <Details
-            asset={
-              assetMap[
-                assetOutPool?.transitAssetIds?.main?.toNumber() ||
-                  pool?.transitAssetIds?.main?.toNumber()
-              ]
-            }
+            assetId={pair?.assetOut}
+            assetDenom={selectedBorrowPosition?.amountOut?.denom}
             poolId={assetOutPool?.poolId || pool?.poolId}
             parent="borrow"
+          />
+        </div>
+        <div className="commodo-card">
+          <CollateralAndBorrowDetails
+            lendAssetId={pair?.assetIn}
+            collateralAssetDenom={ucDenomToDenom(
+              selectedBorrowPosition?.amountIn?.denom
+            )}
+            borrowAssetDenom={selectedBorrowPosition?.amountOut?.denom}
+            poolId={assetOutPool?.poolId || pool?.poolId}
+            parent="borrow"
+            tabName="repay"
             newBalance={newBalance}
             currentBalance={currentBalance}
-          />
-        </div>
-        <div className="commodo-card">
-          <Details
-            asset={
-              assetMap[
-                assetOutPool?.transitAssetIds?.first?.toNumber() ||
-                  pool?.transitAssetIds?.first?.toNumber()
-              ]
-            }
-            poolId={assetOutPool?.poolId || pool?.poolId}
-            parent="borrow"
-          />
-        </div>
-        <div className="commodo-card">
-          <Details
-            asset={
-              assetMap[
-                assetOutPool?.transitAssetIds?.second?.toNumber() ||
-                  pool?.transitAssetIds?.second?.toNumber()
-              ]
-            }
-            poolId={assetOutPool?.poolId || pool?.poolId}
-            parent="borrow"
           />
         </div>
       </div>
