@@ -35,6 +35,58 @@ const getCurrencies = (chain) => {
   }
 };
 
+export const getFeeCurrencies = (chain = comdex) => {
+  if (chain?.rpc === comdex?.rpc) {
+    return [
+      {
+        coinDenom: chain?.coinDenom,
+        coinMinimalDenom: chain?.coinMinimalDenom,
+        coinDecimals: chain?.coinDecimals,
+        coinGeckoId: chain?.coinGeckoId,
+        // Adding separate gas steps for eth accounts.
+        gasPriceStep: {
+          low: 0.01,
+          average: 0.025,
+          high: 0.04,
+        },
+      },
+      {
+        coinDenom: cmst?.coinDenom,
+        coinMinimalDenom: cmst?.coinMinimalDenom,
+        coinDecimals: cmst?.coinDecimals,
+        coinGeckoId: chain?.coinGeckoId,
+        // Adding separate gas steps for eth accounts.
+        gasPriceStep: {
+          low: 0.01,
+          average: 0.025,
+          high: 0.04,
+        },
+      },
+    ];
+  } else {
+    return [
+      {
+        coinDenom: chain?.coinDenom,
+        coinMinimalDenom: chain?.coinMinimalDenom,
+        coinDecimals: chain?.coinDecimals,
+        coinGeckoId: chain?.coinGeckoId,
+        // Adding separate gas steps for eth accounts.
+        gasPriceStep: chain?.features?.includes("eth-address-gen")
+          ? {
+              low: 1000000000000,
+              average: 1500000000000,
+              high: 2000000000000,
+            }
+          : {
+              low: 0.01,
+              average: 0.025,
+              high: 0.04,
+            },
+      },
+    ];
+  }
+};
+
 export const getChainConfig = (chain = comdex) => {
   return {
     chainId: chain?.chainId,
@@ -59,26 +111,7 @@ export const getChainConfig = (chain = comdex) => {
       bech32PrefixConsPub: `${chain?.prefix}valconspub`,
     },
     currencies: getCurrencies(chain),
-    feeCurrencies: [
-      {
-        coinDenom: chain?.coinDenom,
-        coinMinimalDenom: chain?.coinMinimalDenom,
-        coinDecimals: chain?.coinDecimals,
-        coinGeckoId: chain?.coinGeckoId,
-        // Adding separate gas steps for eth accounts.
-        gasPriceStep: chain?.features?.includes("eth-address-gen")
-          ? {
-              low: 1000000000000,
-              average: 1500000000000,
-              high: 2000000000000,
-            }
-          : {
-              low: 0.01,
-              average: 0.025,
-              high: 0.04,
-            },
-      },
-    ],
+    feeCurrencies: getFeeCurrencies(chain),
     coinType: chain?.coinType,
     features: chain?.features,
   };
