@@ -43,7 +43,6 @@ export const getFeeCurrencies = (chain = comdex) => {
         coinMinimalDenom: chain?.coinMinimalDenom,
         coinDecimals: chain?.coinDecimals,
         coinGeckoId: chain?.coinGeckoId,
-        // Adding separate gas steps for eth accounts.
         gasPriceStep: {
           low: 0.01,
           average: 0.025,
@@ -55,7 +54,6 @@ export const getFeeCurrencies = (chain = comdex) => {
         coinMinimalDenom: cmst?.coinMinimalDenom,
         coinDecimals: cmst?.coinDecimals,
         coinGeckoId: chain?.coinGeckoId,
-        // Adding separate gas steps for eth accounts.
         gasPriceStep: {
           low: 0.01,
           average: 0.025,
