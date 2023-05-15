@@ -816,13 +816,27 @@ const BorrowTab = ({
             </div>
             <div className="commodo-card">
               <CollateralAndBorrowDetails
-                lendAssetId={pair?.assetIn}
+                lendAssetId={lend?.assetId || pair?.assetIn}
                 collateralAssetDenom={collateralAssetDenom}
                 borrowAssetDenom={borrowAssetDenom}
                 poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
-                newBalance={newBalance}
-                currentBalance={currentBalance}
+                newBalance={
+                  newBalance *
+                  marketPrice(
+                    markets,
+                    borrowAssetDenom,
+                    assetDenomMap[borrowAssetDenom]?.id
+                  )
+                }
+                currentBalance={
+                  currentBalance *
+                  marketPrice(
+                    markets,
+                    borrowAssetDenom,
+                    assetDenomMap[borrowAssetDenom]?.id
+                  )
+                }
               />
             </div>
           </div>

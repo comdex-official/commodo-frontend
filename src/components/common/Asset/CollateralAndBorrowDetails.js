@@ -2,9 +2,11 @@ import { List } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setAssetStatMap } from "../../../actions/asset";
-import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { commaSeparatorWithRounding } from "../../../utils/coin";
-import { decimalConversion } from "../../../utils/number";
+import {
+  DOLLAR_DECIMALS,
+  ZERO_DOLLAR_DECIMALS
+} from "../../../constants/common";
+import { decimalConversion, formatNumber } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
 import { SvgIcon, TooltipIcon } from "../index";
 
@@ -60,12 +62,16 @@ const CollateralAndBorrowDetails = ({
   let borrowData = [
     {
       title: "Current borrow balance",
-      counts: commaSeparatorWithRounding(currentBalance || 0, DOLLAR_DECIMALS),
+      counts: `${formatNumber(
+        Number(currentBalance || 0).toFixed(ZERO_DOLLAR_DECIMALS)
+      )}`,
       tooltipText: "Your current borrow balance",
     },
     {
       title: "New Borrow balance",
-      counts: commaSeparatorWithRounding(newBalance || 0, DOLLAR_DECIMALS),
+      counts: `${formatNumber(
+        Number(newBalance || 0).toFixed(ZERO_DOLLAR_DECIMALS)
+      )}`,
       tooltipText: "Your new borrow balance",
     },
   ];
