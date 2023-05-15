@@ -20,6 +20,9 @@
   .details-left {
     padding-top: 22px;
     padding-bottom: 22px;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
     @media screen and (max-width: 1441px) {
       margin-right: 10px;
       padding: 20px 30px;
@@ -271,8 +274,9 @@
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     width: calc(100% + 80px);
     margin-left: -40px;
-    padding-top: 30px;
-    margin-top: 15px;
+    padding-top: 20px;
+    // margin-top: 15px;
+    margin-top: auto;
     @media screen and (max-width: 1560px) {
       padding-top: 22px;
     }
@@ -319,16 +323,18 @@
         padding: 1px 20px;
       }
       .ant-list {
-        padding: 18px 20px;
+        padding: 16px 20px;
         min-height: 105px;
         @media screen and (max-width: 1560px) {
-          padding: 15px 20px;
+          padding: 12px 20px;
         }
         @media screen and (max-width: 1367px) {
           padding: 10px 18px;
           min-height: 90px;
         }
         .ant-list-item {
+          padding-top: 3px;
+          padding-bottom: 4px;
           h3 {
             display: block;
             margin-top: 6px;
