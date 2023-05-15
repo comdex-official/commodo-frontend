@@ -8,7 +8,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../../../components/common";
 import CollateralAndBorrowDetails from "../../../../components/common/Asset/CollateralAndBorrowDetails";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
@@ -19,35 +19,35 @@ import HealthFactor from "../../../../components/HealthFactor";
 import { assetTransitTypeId } from "../../../../config/network";
 import {
   ValidateInputNumber,
-  ValidateMaxBorrow
+  ValidateMaxBorrow,
 } from "../../../../config/_validation";
 import {
   DOLLAR_DECIMALS,
   MAX_LTV_DEDUCTION,
-  UC_DENOM
+  UC_DENOM,
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
   queryAssetPairs,
   queryLendPair,
-  queryLendPool
+  queryLendPool,
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../../utils/number";
 import {
   errorMessageMappingParser,
   iconNameFromDenom,
-  toDecimals
+  toDecimals,
 } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import AssetApy from "../../AssetApy";
@@ -808,7 +808,7 @@ const BorrowTab = ({
           <div className="details-right">
             <div className="commodo-card">
               <Details
-                assetId={pair?.assetOut}
+                assetId={pair?.assetOut?.toNumber()}
                 assetDenom={borrowAssetDenom}
                 poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
