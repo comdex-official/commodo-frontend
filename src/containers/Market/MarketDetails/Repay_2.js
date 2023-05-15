@@ -241,8 +241,8 @@ const RepayTab_2 = ({
   };
 
   return (
-    <div className="details-wrapper market-details-wrapper">
-      <div className="details-left commodo-card">
+    <div className="details-wrapper market-details-wrapper details-wrapper-repay">
+      <div className="details-left commodo-card mh-100">
         <CustomRow
           assetList={assetList}
           poolId={assetOutPool?.poolId?.low || pool?.poolId?.low}
