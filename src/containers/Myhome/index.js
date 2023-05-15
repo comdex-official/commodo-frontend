@@ -6,12 +6,13 @@ import { useLocation } from "react-router";
 import { setBalanceRefresh } from "../../actions/account";
 import { setUserBorrows, setUserLends } from "../../actions/lend";
 import { Col, Row, TooltipIcon } from "../../components/common";
+import { assetTransitTypeId } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import {
   queryLendPair,
   queryLendPool,
   queryUserBorrows,
-  queryUserLends
+  queryUserLends,
 } from "../../services/lend/query";
 import { amountConversion, commaSeparatorWithRounding } from "../../utils/coin";
 import { decimalConversion, marketPrice } from "../../utils/number";
@@ -123,8 +124,22 @@ const Myhome = ({
             return;
           }
 
+          let myPool = poolResult?.pool;
+          const assetTransitMap = myPool?.assetData?.reduce((map, obj) => {
+            map[obj?.assetTransitType] = obj;
+            return map;
+          }, {});
+
+          let transitAssetIds = {
+            main: assetTransitMap[assetTransitTypeId["main"]]?.assetId,
+            first: assetTransitMap[assetTransitTypeId["first"]]?.assetId,
+            second: assetTransitMap[assetTransitTypeId["second"]]?.assetId,
+          };
+
+          myPool["transitAssetIds"] = transitAssetIds;
+
           setBorrowToPool((prevState) => ({
-            [borrow?.borrowingId]: poolResult?.pool,
+            [borrow?.borrowingId]: myPool,
             ...prevState,
           }));
         }
@@ -180,6 +195,27 @@ const Myhome = ({
     const borrowValues =
       userBorrowList?.length > 0
         ? userBorrowList.map((item) => {
+            console.log(
+              "this is",
+              Number(
+                decimalConversion(
+                  assetRatesStatsMap[borrowToPair[item?.borrowingId]?.assetIn]
+                    ?.ltv
+                )
+              ),
+              Number(
+                decimalConversion(
+                  assetRatesStatsMap[
+                    borrowToPool[item?.borrowingId]?.transitAssetIds?.first
+                  ]?.ltv
+                )
+              ),
+              borrowToPool[item?.borrowingId]?.transitAssetIds?.first,
+              assetRatesStatsMap,
+              borrowToPool,
+              item
+            );
+
             return (
               marketPrice(
                 markets,
