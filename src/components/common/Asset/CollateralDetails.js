@@ -2,9 +2,11 @@ import { Button, List } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setAssetStatMap } from "../../../actions/asset";
-import { DOLLAR_DECIMALS } from "../../../constants/common";
-import { commaSeparatorWithRounding } from "../../../utils/coin";
-import { decimalConversion } from "../../../utils/number";
+import {
+  DOLLAR_DECIMALS,
+  ZERO_DOLLAR_DECIMALS
+} from "../../../constants/common";
+import { decimalConversion, formatNumber } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
 import { SvgIcon, TooltipIcon } from "../index";
 
@@ -40,12 +42,16 @@ const CollateralDetails = ({
     },
     {
       title: "Current Lend Position",
-      counts: commaSeparatorWithRounding(currentBalance || 0, DOLLAR_DECIMALS),
+      counts: `${formatNumber(
+        Number(currentBalance || 0).toFixed(ZERO_DOLLAR_DECIMALS)
+      )}`,
       tooltipText: "Your current lend balance",
     },
     {
       title: "New Lend Position",
-      counts: commaSeparatorWithRounding(newBalance || 0, DOLLAR_DECIMALS),
+      counts: `${formatNumber(
+        Number(newBalance || 0).toFixed(ZERO_DOLLAR_DECIMALS)
+      )}`,
       tooltipText: "Your new lend balance",
     },
   ];
@@ -63,7 +69,7 @@ const CollateralDetails = ({
         </div>
         <div className="head-right">
           <Button type="primary" size="small" className="external-btn">
-            <a href={""} target="_blank" rel="noreferrer">
+            <a href={"https://app.cswap.one"} target="_blank" rel="noreferrer">
               Buy{" "}
               <span className="hyperlink-icon">
                 {" "}
