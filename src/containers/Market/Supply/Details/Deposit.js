@@ -129,6 +129,7 @@ const DepositTab = ({
   const handleAssetChange = (value) => {
     setSelectedAssetId(value);
     setAmount(0);
+    setSliderValue(0);
     setValidationError();
     fetchPoolAssetLBMapping(value, pool?.poolId);
   };
