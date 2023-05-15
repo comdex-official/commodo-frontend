@@ -62,14 +62,14 @@ const CollateralAndBorrowDetails = ({
   let borrowData = [
     {
       title: "Current borrow balance",
-      counts: `${formatNumber(
+      counts: `$${formatNumber(
         Number(currentBalance || 0).toFixed(ZERO_DOLLAR_DECIMALS)
       )}`,
       tooltipText: "Your current borrow balance",
     },
     {
       title: "New Borrow balance",
-      counts: `${formatNumber(
+      counts: `$${formatNumber(
         Number(newBalance || 0).toFixed(ZERO_DOLLAR_DECIMALS)
       )}`,
       tooltipText: "Your new borrow balance",

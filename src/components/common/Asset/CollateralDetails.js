@@ -42,14 +42,14 @@ const CollateralDetails = ({
     },
     {
       title: "Current Lend Position",
-      counts: `${formatNumber(
+      counts: `$${formatNumber(
         Number(currentBalance || 0).toFixed(ZERO_DOLLAR_DECIMALS)
       )}`,
       tooltipText: "Your current lend balance",
     },
     {
       title: "New Lend Position",
-      counts: `${formatNumber(
+      counts: `$${formatNumber(
         Number(newBalance || 0).toFixed(ZERO_DOLLAR_DECIMALS)
       )}`,
       tooltipText: "Your new lend balance",
