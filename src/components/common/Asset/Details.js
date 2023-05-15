@@ -25,7 +25,8 @@ import DistributionAPY from "../DistributionAPY";
 import { SvgIcon, TooltipIcon } from "../index";
 
 const Details = ({
-  asset,
+  assetId,
+    assetDenom,
   poolId,
   markets,
   refreshBalance,
@@ -38,8 +39,8 @@ const Details = ({
   const [assetPoolFunds, setAssetPoolFunds] = useState({});
 
   useEffect(() => {
-    if (asset?.id && poolId) {
-      QueryPoolAssetLBMapping(asset?.id, poolId, (error, result) => {
+    if (assetId && poolId) {
+      QueryPoolAssetLBMapping(assetId, poolId, (error, result) => {
         if (error) {
           message.error(error);
           return;
@@ -48,7 +49,7 @@ const Details = ({
         setStats(result?.PoolAssetLBMapping);
       });
 
-      queryAssetPoolFundBalance(asset?.id, poolId, (error, result) => {
+      queryAssetPoolFundBalance(assetId, poolId, (error, result) => {
         if (error) {
           message.error(error);
           return;
@@ -59,7 +60,7 @@ const Details = ({
     } else if (stats?.poolId) {
       setStats();
     }
-  }, [asset, poolId, refreshBalance]);
+  }, [assetId, poolId, refreshBalance]);
 
   useEffect(() => {
     if (poolId) {
@@ -75,11 +76,11 @@ const Details = ({
   }, [poolId, refreshBalance]);
 
   let assetStats = moduleBalanceStats?.filter(
-    (item) => item?.assetId?.toNumber() === asset?.id?.toNumber()
+    (item) => item?.assetId?.toNumber() === assetId
   )[0];
 
   useEffect(() => {
-    setAssetStatMap(asset?.id, assetStats?.balance);
+    setAssetStatMap(assetId, assetStats?.balance);
   }, [assetStats]);
 
   let data = [
@@ -90,8 +91,8 @@ const Details = ({
           amountConversion(
             (parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0
           ) *
-            marketPrice(markets, asset?.denom, assetDenomMap[asset?.denom]?.id),
-          assetDenomMap[asset?.denom]?.decimals
+            marketPrice(markets, assetDenom, assetDenomMap[assetDenom]?.id),
+          assetDenomMap[assetDenom]?.decimals
         ) +
           (parent === "lend"
             ? Number(
@@ -155,11 +156,11 @@ const Details = ({
             %
           </>
           {/* TODO: take the condition dynamically */}
-          {parent === "lend" ? null : asset?.denom === "uatom" ||
-            asset?.denom === ibcDenoms["uatom"] ||
-            asset?.denom === "ucmst" ? (
+          {parent === "lend" ? null : assetDenom === "uatom" ||
+            assetDenom === ibcDenoms["uatom"] ||
+            assetDenom === "ucmst" ? (
             <DistributionAPY
-              assetId={asset?.id}
+              assetId={assetId}
               poolId={poolId}
               margin={"top"}
             />
@@ -177,9 +178,9 @@ const Details = ({
         <div className="head-left">
           <div className="assets-col">
             <div className="assets-icon">
-              <SvgIcon name={iconNameFromDenom(asset?.denom)} />
+              <SvgIcon name={iconNameFromDenom(assetDenom)} />
             </div>
-            {denomConversion(asset?.denom)}
+            {denomConversion(assetDenom)}
           </div>
         </div>
         <div className="head-right">
@@ -188,8 +189,8 @@ const Details = ({
             Number(
               marketPrice(
                 markets,
-                asset?.denom,
-                assetDenomMap[asset?.denom]?.id
+                assetDenom,
+                assetDenomMap[assetDenom]?.id
               )
             ).toFixed(DOLLAR_DECIMALS)
           )}
@@ -218,11 +219,11 @@ const Details = ({
 Details.propTypes = {
   refreshBalance: PropTypes.number.isRequired,
   setAssetStatMap: PropTypes.func.isRequired,
-  asset: PropTypes.shape({
-    denom: PropTypes.string,
-  }),
+  assetId: PropTypes.number,
+  assetDenom: PropTypes.string,
   assetDenomMap: PropTypes.object,
   markets: PropTypes.object,
+  newBalance: PropTypes.number,
   parent: PropTypes.string,
   poolId: PropTypes.shape({
     low: PropTypes.number,

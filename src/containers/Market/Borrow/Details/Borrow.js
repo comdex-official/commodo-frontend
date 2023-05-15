@@ -10,9 +10,9 @@ import {
   SvgIcon,
   TooltipIcon
 } from "../../../../components/common";
+import CollateralAndBorrowDetails from "../../../../components/common/Asset/CollateralAndBorrowDetails";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
 import Details from "../../../../components/common/Asset/Details";
-import AssetStats from "../../../../components/common/Asset/Stats";
 import Snack from "../../../../components/common/Snack";
 import CustomInput from "../../../../components/CustomInput";
 import HealthFactor from "../../../../components/HealthFactor";
@@ -44,7 +44,11 @@ import {
   decimalConversion,
   marketPrice
 } from "../../../../utils/number";
-import {errorMessageMappingParser, iconNameFromDenom, toDecimals} from "../../../../utils/string";
+import {
+  errorMessageMappingParser,
+  iconNameFromDenom,
+  toDecimals
+} from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import AssetApy from "../../AssetApy";
 import "./index.less";
@@ -62,12 +66,15 @@ const BorrowTab = ({
   assetRatesStatsMap,
   assetDenomMap,
   assetStatMap,
+  pairIdToBorrowMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [lend, setLend] = useState();
   const [pair, setPair] = useState();
   const [inAmount, setInAmount] = useState();
   const [outAmount, setOutAmount] = useState();
+  const [currentBalance, setCurrentBalance] = useState(0);
+  const [newBalance, setNewBalance] = useState(0);
   const [validationError, setValidationError] = useState();
   const [borrowValidationError, setBorrowValidationError] = useState();
   const [maxBorrowValidationError, setMaxBorrowValidationError] = useState();
@@ -193,6 +200,20 @@ const BorrowTab = ({
     }
   }, [pairIdFromRoute]);
 
+  useEffect(() => {
+    if (pair?.id && Number(pairIdToBorrowMap[pair?.id]?.amountOut.amount)) {
+      setCurrentBalance(
+        Number(
+          amountConversion(pairIdToBorrowMap[pair?.id]?.amountOut.amount)
+        ) || 0
+      );
+      setNewBalance(0);
+    } else {
+      setCurrentBalance(0);
+      setNewBalance(0);
+    }
+  }, [pair, pairIdToBorrowMap]);
+
   const handleCollateralAssetChange = (lendingId, fromRoute) => {
     setSelectedCollateralLendingId(lendingId);
     if (!fromRoute) {
@@ -302,6 +323,10 @@ const BorrowTab = ({
       .trim();
 
     setOutAmount(value);
+    setNewBalance(
+      Number(value) +
+        Number(amountConversion(pairIdToBorrowMap[pair?.id]?.amountOut.amount))
+    );
     checkMaxBorrow(value);
     setBorrowValidationError(
       ValidateInputNumber(
@@ -495,6 +520,7 @@ const BorrowTab = ({
       .trim();
 
     setOutAmount(borrowValue || 0);
+    setNewBalance(Number(borrowValue || 0) + currentBalance);
     checkMaxBorrow(borrowValue || 0);
   };
 
@@ -728,23 +754,15 @@ const BorrowTab = ({
                     />
                   </Col>
                 </Row>
-
-                <Row className="mt-1">
-                  <Col>
-                    <AssetStats
-                      assetId={lend?.assetId}
-                      pool={pool}
-                      pair={pair}
-                    />
-                  </Col>
+                <Row className="mt-2">
+                  <Col></Col>
                 </Row>
-
                 <Row className="mt-2">
                   <Col>
                     <label>Health Factor</label>
                     <TooltipIcon text="Numeric representation of your position's safety" />
                   </Col>
-                  <Col className="text-right">
+                  <Col className="text-right mt-2">
                     <HealthFactor
                       name="Health Factor"
                       pair={pair}
@@ -761,27 +779,6 @@ const BorrowTab = ({
                   </Col>
                   <Col className="text-right">
                     <AssetApy poolId={pool?.poolId} assetId={pair?.assetOut} />
-                  </Col>
-                </Row>
-                <Row className="mt-2">
-                  <Col>
-                    <label>Liquidation Fee</label>
-                    <TooltipIcon text="Liquidation fee charged upon liquidation of position" />
-                  </Col>
-                  <Col className="text-right">
-                    {(
-                      Number(
-                        decimalConversion(
-                          assetRatesStatsMap[lend?.assetId]?.liquidationPenalty
-                        ) * 100
-                      ) +
-                      Number(
-                        decimalConversion(
-                          assetRatesStatsMap[lend?.assetId]?.liquidationBonus
-                        ) * 100
-                      )
-                    ).toFixed(DOLLAR_DECIMALS)}
-                    %
                   </Col>
                 </Row>
               </Col>
@@ -811,41 +808,22 @@ const BorrowTab = ({
           <div className="details-right">
             <div className="commodo-card">
               <Details
-                asset={
-                  assetMap[
-                    assetOutPool?.transitAssetIds?.main?.toNumber() ||
-                      pool?.transitAssetIds?.main?.toNumber()
-                  ]
-                }
+                assetId={pair?.assetOut}
+                assetDenom={borrowAssetDenom}
                 poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
               />
             </div>
             <div className="commodo-card">
-              <Details
-                asset={
-                  assetMap[
-                    assetOutPool?.transitAssetIds?.first?.toNumber() ||
-                      pool?.transitAssetIds?.first?.toNumber()
-                  ]
-                }
+              <CollateralAndBorrowDetails
+                lendAssetId={pair?.assetIn}
+                collateralAssetDenom={collateralAssetDenom}
+                borrowAssetDenom={borrowAssetDenom}
                 poolId={assetOutPool?.poolId || pool?.poolId}
                 parent="borrow"
+                newBalance={newBalance}
+                currentBalance={currentBalance}
               />
-            </div>
-            <div className="commodo-card">
-              <div className="">
-                <Details
-                  asset={
-                    assetMap[
-                      assetOutPool?.transitAssetIds?.second?.toNumber() ||
-                        pool?.transitAssetIds?.second?.toNumber()
-                    ]
-                  }
-                  poolId={assetOutPool?.poolId || pool?.poolId}
-                  parent="borrow"
-                />
-              </div>
             </div>
           </div>
         </>
@@ -864,6 +842,7 @@ BorrowTab.propTypes = {
   address: PropTypes.string,
   assetMap: PropTypes.object,
   assetDenomMap: PropTypes.object,
+  pairIdToBorrowMap: PropTypes.object,
   assetStatMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
   markets: PropTypes.object,
@@ -908,6 +887,7 @@ const stateToProps = (state) => {
     assetRatesStatsMap: state.lend.assetRatesStats.map,
     assetDenomMap: state.asset._.assetDenomMap,
     assetStatMap: state.asset.assetStatMap,
+    pairIdToBorrowMap: state.lend.pairIdToBorrowMap,
   };
 };
 

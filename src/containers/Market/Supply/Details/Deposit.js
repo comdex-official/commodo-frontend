@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { useLocation, useNavigate } from "react-router";
 import { setBalanceRefresh } from "../../../../actions/account";
 import { Col, NoDataIcon, Row, SvgIcon } from "../../../../components/common";
+import CollateralDetails from "../../../../components/common/Asset/CollateralDetails";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
 import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
@@ -16,7 +17,7 @@ import { ValidateInputNumber } from "../../../../config/_validation";
 import {
   APP_ID,
   DEFAULT_FEE,
-  DOLLAR_DECIMALS,
+  DOLLAR_DECIMALS
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { QueryPoolAssetLBMapping } from "../../../../services/lend/query";
@@ -26,14 +27,18 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance,
+  getDenomBalance
 } from "../../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice,
+  marketPrice
 } from "../../../../utils/number";
-import {errorMessageMappingParser, iconNameFromDenom, toDecimals} from "../../../../utils/string";
+import {
+  errorMessageMappingParser,
+  iconNameFromDenom,
+  toDecimals
+} from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import "./index.less";
 
@@ -50,11 +55,13 @@ const DepositTab = ({
   setBalanceRefresh,
   refreshBalance,
   assetDenomMap,
-  userLendList,
+  assetIdToLendMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [selectedAssetId, setSelectedAssetId] = useState();
   const [amount, setAmount] = useState();
+  const [currentBalance, setCurrentBalance] = useState(0);
+  const [newBalance, setNewBalance] = useState(0);
   const [validationError, setValidationError] = useState();
   const [inProgress, setInProgress] = useState(false);
   const [lendApy, setLendApy] = useState(0);
@@ -91,6 +98,20 @@ const DepositTab = ({
     }
   }, [collateralAssetIdFromRoute]);
 
+  useEffect(() => {
+    if (Number(assetIdToLendMap[selectedAssetId]?.amountIn?.amount)) {
+      setCurrentBalance(
+        Number(
+          amountConversion(assetIdToLendMap[selectedAssetId]?.amountIn?.amount)
+        ) || 0
+      );
+      setNewBalance(0);
+    } else {
+      setCurrentBalance(0);
+      setNewBalance(0);
+    }
+  }, [assetIdToLendMap, selectedAssetId]);
+
   const fetchPoolAssetLBMapping = (assetId, poolId) => {
     QueryPoolAssetLBMapping(assetId, poolId, (error, result) => {
       if (error) {
@@ -122,6 +143,11 @@ const DepositTab = ({
       .trim();
 
     setAmount(value);
+    setNewBalance(
+      Number(
+        amountConversion(assetIdToLendMap[selectedAssetId]?.amountIn?.amount)
+      ) + Number(value) || 0
+    );
     setSliderValue((value / amountConversion(availableBalance)) * 100);
     setValidationError(
       ValidateInputNumber(
@@ -356,26 +382,21 @@ const DepositTab = ({
           <div className="details-right">
             <div className="commodo-card">
               <Details
-                asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
+                assetId={selectedAssetId}
+                assetDenom={assetMap[selectedAssetId]?.denom}
                 poolId={pool?.poolId}
                 parent="lend"
               />
             </div>
             <div className="commodo-card">
-              <Details
-                asset={assetMap[pool?.transitAssetIds?.first?.toNumber()]}
+              <CollateralDetails
+                assetId={selectedAssetId}
+                assetDenom={assetMap[selectedAssetId]?.denom}
                 poolId={pool?.poolId}
                 parent="lend"
+                newBalance={newBalance}
+                currentBalance={currentBalance}
               />
-            </div>
-            <div className="commodo-card">
-              <div>
-                <Details
-                  asset={assetMap[pool?.transitAssetIds?.second?.toNumber()]}
-                  poolId={pool?.poolId}
-                  parent="lend"
-                />
-              </div>
             </div>
           </div>
         </>
@@ -444,7 +465,7 @@ const stateToProps = (state) => {
     markets: state.oracle.market,
     refreshBalance: state.account.refreshBalance,
     assetDenomMap: state.asset._.assetDenomMap,
-    userLendList: state.lend.userLends,
+    assetIdToLendMap: state.lend.assetIdToLendMap,
   };
 };
 
