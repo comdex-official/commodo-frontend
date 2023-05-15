@@ -129,6 +129,7 @@ const DepositTab = ({
   const handleAssetChange = (value) => {
     setSelectedAssetId(value);
     setAmount(0);
+    setSliderValue(0);
     setValidationError();
     fetchPoolAssetLBMapping(value, pool?.poolId);
   };
@@ -394,8 +395,22 @@ const DepositTab = ({
                 assetDenom={assetMap[selectedAssetId]?.denom}
                 poolId={pool?.poolId}
                 parent="lend"
-                newBalance={newBalance}
-                currentBalance={currentBalance}
+                newBalance={
+                  newBalance *
+                  marketPrice(
+                    markets,
+                    assetMap[selectedAssetId]?.denom,
+                    selectedAssetId
+                  )
+                }
+                currentBalance={
+                  currentBalance *
+                  marketPrice(
+                    markets,
+                    assetMap[selectedAssetId]?.denom,
+                    selectedAssetId
+                  )
+                }
               />
             </div>
           </div>
