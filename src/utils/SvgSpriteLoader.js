@@ -7,7 +7,7 @@ const SvgSprite = (props) => {
   const [isErrored, setIsErrored] = useState(false);
 
   useEffect(() => {
-    const svgVersion = "0.2.7";
+    const svgVersion = "0.2.9";
     const isLocalStorage =
       "localStorage" in window && window.localStorage !== null;
     let data;
@@ -39,9 +39,8 @@ const SvgSprite = (props) => {
   return (
     <div
       dangerouslySetInnerHTML={{ __html: svg }}
-      className={`svgInline svgInline--${isLoaded ? "loaded" : "loading"} ${
-        isErrored ? "svgInline--errored" : ""
-      }`}
+      className={`svgInline svgInline--${isLoaded ? "loaded" : "loading"} ${isErrored ? "svgInline--errored" : ""
+        }`}
     />
   );
 };

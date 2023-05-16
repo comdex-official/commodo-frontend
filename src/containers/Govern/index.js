@@ -9,15 +9,37 @@ import { formatTime } from "../../utils/date";
 import { proposalStatusMap } from "../../utils/string";
 import { setAllProposals, setProposals } from "../../actions/govern";
 import "./index.less";
+import { comdex } from "../../config/network";
 
 const { Option } = Select;
 
-const Govern = ({setAllProposals, allProposals, setProposals, proposals}) => {
+const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
   const navigate = useNavigate();
   const [inProgress, setInProgress] = useState(false);
 
+  // useEffect(() => {
+  //   fetchAllProposals();
+  // }, []);
+
   useEffect(() => {
-    fetchAllProposals();
+    const fetchData = async () => {
+      let nextPage = '';
+      let allProposals = [];
+
+      do {
+        const url = `${comdex?.rest}/cosmos/gov/v1beta1/proposals${nextPage}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        allProposals = [...allProposals, ...data.proposals];
+        nextPage = data.pagination.next_key ? `?pagination.key=${data.pagination.next_key}` : null;
+      } while (nextPage !== null);
+
+      setProposals(allProposals?.reverse());
+      setAllProposals(allProposals?.proposals);
+    };
+
+    fetchData();
   }, []);
 
   const fetchAllProposals = () => {
@@ -49,7 +71,7 @@ const Govern = ({setAllProposals, allProposals, setProposals, proposals}) => {
   return (
     <div className="app-content-wrapper">
       {inProgress && !proposals?.length ? (
-                <div className="loader">
+        <div className="loader">
           <Spin />
         </div>
       ) : (
@@ -104,16 +126,16 @@ const Govern = ({setAllProposals, allProposals, setProposals, proposals}) => {
                           <div className="left-section">
                             <h3>
                               #{item?.proposal_id}
-                              <Button type="primary" 
+                              <Button type="primary"
                                 className={
                                   proposalStatusMap[item?.status] ===
                                     "Rejected" ||
-                                  proposalStatusMap[item?.status] === "Failed"
+                                    proposalStatusMap[item?.status] === "Failed"
                                     ? "failed-btn govern-status-btn"
                                     : proposalStatusMap[item?.status] ===
                                       "Passed"
-                                    ? "passed-btn govern-status-btn"
-                                    : "warning-btn govern-status-btn"
+                                      ? "passed-btn govern-status-btn"
+                                      : "warning-btn govern-status-btn"
                                 }
                               >
                                 {proposalStatusMap[item?.status]}
