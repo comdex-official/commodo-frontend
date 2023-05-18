@@ -324,13 +324,12 @@
       }
       .ant-list {
         padding: 16px 20px;
-        min-height: 105px;
         @media screen and (max-width: 1560px) {
           padding: 12px 20px;
         }
         @media screen and (max-width: 1367px) {
           padding: 10px 18px;
-          min-height: 90px;
+          // min-height: 90px;
         }
         .ant-list-item {
           padding-top: 3px;
@@ -391,6 +390,16 @@
   .assets-form-btn {
     .ant-btn {
       min-width: 200px;
+    }
+  }
+}
+
+.repy-dtl-bottom{
+  .ant-list {
+    min-height: auto;
+    .ant-list-item {
+      margin-top: 5px !important;
+      margin-bottom: 5px !important;
     }
   }
 }
