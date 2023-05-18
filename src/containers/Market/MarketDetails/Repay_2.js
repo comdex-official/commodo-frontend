@@ -297,6 +297,9 @@ const RepayTab_2 = ({
                   defaultActiveFirstOption={true}
                   showArrow={true}
                   notFoundContent={<NoDataIcon />}
+                  suffixIcon={
+                    <SvgIcon name="arrow-down" viewbox="0 0 19.244 10.483" />
+                  }
                 >
                   {borrowPosition?.length > 0 &&
                     borrowPosition?.map((item) => {
@@ -409,7 +412,7 @@ const RepayTab_2 = ({
               </Col>
             </Row>
 
-            <Row className="mt-4 lastrow-market-dtl">
+            <Row className="mt-3 lastrow-market-dtl">
               <Col>
                 <label>Health Factor</label>
                 <TooltipIcon text="Numeric representation of your position's safety" />
@@ -438,7 +441,7 @@ const RepayTab_2 = ({
             </Row>
           </Col>
         </Row>
-        <div className="assets-form-btn mt-5">
+        <div className="assets-form-btn">
           <ActionButton
             name="Repay"
             lang={lang}
@@ -466,7 +469,7 @@ const RepayTab_2 = ({
             parent="borrow"
           />
         </div>
-        <div className="commodo-card">
+        <div className="commodo-card repy-dtl-bottom">
           <CollateralAndBorrowDetails
             lendAssetId={pair?.assetIn}
             collateralAssetDenom={ucDenomToDenom(
