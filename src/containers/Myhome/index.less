@@ -154,6 +154,14 @@
         padding-right: 15px;
         text-align: right;
 
+        @media screen and (max-width:767px) {
+          text-align: left;
+          border-left: 1px solid @success-color;
+          border-right: 0;
+          padding-left: 15px;
+          padding-right: 0;
+        }
+
         .dark-mode & {
           color: @white;
         }
