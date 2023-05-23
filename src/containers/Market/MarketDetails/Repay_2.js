@@ -274,7 +274,7 @@ const RepayTab_2 = ({
           assetList={assetList}
           poolId={assetOutPool?.poolId?.low || pool?.poolId?.low}
         />
-        <div className="assets-select-card mb-2">
+        <div className="assets-select-card mb-0">
           <div className="assets-left">
             <label className="left-label">Repay Asset</label>
             <div className="assets-select-wrapper">
@@ -383,8 +383,8 @@ const RepayTab_2 = ({
           </div>
         </div>
         <Row>
-          <Col sm="12" className="mt-2 mx-auto card-bottom-details">
-            <Row className="mt-4">
+          <Col sm="12" className="mx-auto card-bottom-details">
+            <Row className="mt-3">
               <Col sm="12">
                 <Slider
                   marks={marks}
@@ -396,7 +396,7 @@ const RepayTab_2 = ({
               </Col>
             </Row>
 
-            <Row className="mt-4">
+            <Row className="mt-3">
               <Col>
                 <label>Available in wallet</label>
               </Col>

@@ -762,7 +762,7 @@ const BorrowTab = ({
                     <label>Health Factor</label>
                     <TooltipIcon text="Numeric representation of your position's safety" />
                   </Col>
-                  <Col className="text-right mt-2">
+                  <Col className="text-right mt-2 health-factor-right">
                     <HealthFactor
                       name="Health Factor"
                       pair={pair}
