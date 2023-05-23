@@ -286,6 +286,9 @@ const Myhome = ({
       ),
       counts: calculateTotalDeposit(),
     },
+  ];
+
+  const data2 = [
     {
       title: (
         <>
@@ -331,11 +334,11 @@ const Myhome = ({
                 grid={{
                   gutter: 16,
                   xs: 1,
-                  sm: 2,
-                  md: 2,
-                  lg: 2,
-                  xl: 2,
-                  xxl: 2,
+                  sm: 1,
+                  md: 1,
+                  lg: 1,
+                  xl: 1,
+                  xxl: 1,
                 }}
                 dataSource={data}
                 renderItem={(item) => (
@@ -349,7 +352,7 @@ const Myhome = ({
               />
             </div>
             <div className="myhome-upper-right">
-              <div className="mb-3">
+              <div className="mb-2">
                 Your Borrow Limit
                 <TooltipIcon
                   text="Borrowing limit of user, range 0-105%.
@@ -373,6 +376,28 @@ const Myhome = ({
                   <Progress percent={currentLimit} size="small" />
                 </div>
               </div>
+            </div>
+            <div className="myhome-upper-end">
+              <List
+                grid={{
+                  gutter: 16,
+                  xs: 1,
+                  sm: 1,
+                  md: 1,
+                  lg: 1,
+                  xl: 1,
+                  xxl: 1,
+                }}
+                dataSource={data2}
+                renderItem={(item) => (
+                  <List.Item>
+                    <div>
+                      <p>{item.title}</p>
+                      <h3>{item.counts}</h3>
+                    </div>
+                  </List.Item>
+                )}
+              />
             </div>
           </div>
         </Col>

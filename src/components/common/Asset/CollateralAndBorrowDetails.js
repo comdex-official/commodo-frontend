@@ -81,6 +81,38 @@ const CollateralAndBorrowDetails = ({
   return (
     <>
       <div className="card-head no-border pt-3">
+          <div className="head-left">
+            <div className="assets-col">
+              <div className="assets-icon">
+                <SvgIcon name={iconNameFromDenom(borrowAssetDenom)} />
+              </div>
+              Borrow Details
+            </div>
+          </div>
+        </div>
+        <List
+          grid={{
+            gutter: 16,
+            xs: 2,
+            sm: 2,
+            md: 2,
+            lg: 2,
+            xl: 2,
+            xxl: 2,
+          }}
+          dataSource={borrowData}
+          renderItem={(item) => (
+            <List.Item>
+              <div>
+                <p>
+                  {item.title} <TooltipIcon text={item.tooltipText} />
+                </p>
+                <h3>{item.counts}</h3>
+              </div>
+            </List.Item>
+          )}
+        />
+      <div className="card-head no-border">
         <div className="head-left">
           <div className="assets-col">
             <div className="assets-icon">
@@ -101,38 +133,6 @@ const CollateralAndBorrowDetails = ({
           xxl: 2,
         }}
         dataSource={tabName === "repay" ? repayData : data}
-        renderItem={(item) => (
-          <List.Item>
-            <div>
-              <p>
-                {item.title} <TooltipIcon text={item.tooltipText} />
-              </p>
-              <h3>{item.counts}</h3>
-            </div>
-          </List.Item>
-        )}
-      />
-      <div className="card-head no-border">
-        <div className="head-left">
-          <div className="assets-col">
-            <div className="assets-icon">
-              <SvgIcon name={iconNameFromDenom(borrowAssetDenom)} />
-            </div>
-            Borrow Details
-          </div>
-        </div>
-      </div>
-      <List
-        grid={{
-          gutter: 16,
-          xs: 2,
-          sm: 2,
-          md: 2,
-          lg: 2,
-          xl: 2,
-          xxl: 2,
-        }}
-        dataSource={borrowData}
         renderItem={(item) => (
           <List.Item>
             <div>
