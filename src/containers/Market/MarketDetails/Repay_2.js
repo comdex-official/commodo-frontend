@@ -469,7 +469,7 @@ const RepayTab_2 = ({
             parent="borrow"
           />
         </div>
-        <div className="commodo-card repy-dtl-bottom">
+        <div className="commodo-card repy-dtl-bottom replay-right-details">
           <CollateralAndBorrowDetails
             lendAssetId={pair?.assetIn}
             collateralAssetDenom={ucDenomToDenom(
