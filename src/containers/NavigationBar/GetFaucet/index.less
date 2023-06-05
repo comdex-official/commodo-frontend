@@ -1,0 +1,50 @@
+@import "../../../assets/less/variables.less";
+
+.faucet-modal {
+  text-align: center;
+  .ant-modal-content {
+    border: 1px solid #34483D;
+    padding: 0;
+    .ant-modal-body {
+      padding: 2rem 3.2rem;
+    }
+    .ant-modal-footer{
+      border-top: 1px solid rgba(48, 57, 80, 0.6);
+      padding: 1.5rem;
+      text-align: center;
+      .ant-btn {
+        padding: 0 36px;
+        height: 48px;
+        border-radius: 48px;
+        &[disabled] {
+          background: #475E51;
+          color: rgba(@white, 0.5);
+        }
+      }
+    }
+  }
+  h1{
+    color: @white;
+    font-size: 2.8rem;
+    font-weight: 700;
+    text-align: center;
+  }
+  p {
+    color: @white;
+    font-size: 1.5rem;
+    font-weight: 300;
+    text-align: center;
+  }
+  .ant-input {
+    height: 65px;
+    font-size: 18px;
+    border: 2px solid @bg-light;
+    background: none;
+    border-radius: 10px;
+    margin-top: 1.8rem;
+    padding: 0 22px;
+    &::placeholder {
+      color: @white;
+    }
+  }
+}
