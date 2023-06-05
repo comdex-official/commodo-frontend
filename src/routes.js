@@ -15,6 +15,9 @@ import SupplyDetails from "./containers/Market/Supply/Details";
 import MyHome from "./containers/Myhome";
 import BorrowRepay from "./containers/Myhome/BorrowRepay";
 import Deposit from "./containers/Myhome/DepositWithdraw";
+import EmodeList from "./containers/Market/Emode";
+import EmodeDetails from "./containers/Market/EmodeDetails";
+import DeprecatedcPool from "./containers/Market/DeprecatedcPool";
 
 const routes = [
   {
@@ -84,6 +87,18 @@ const routes = [
   {
     path: "/market",
     element: <MarketList />,
+  },
+  {
+    path: "/e-mode",
+    element: <EmodeList />,
+  },
+  {
+    path: "/e-mode-details",
+    element: <EmodeDetails />,
+  },
+  {
+    path: "/deprecated-cpool",
+    element: <DeprecatedcPool />,
   },
 ];
 

@@ -56,23 +56,10 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
     <div className="commodo-card bg-none">
       <div className="card-header d-flex align-items-center justify-content-between mb-3 ">
         <div>Markets</div>
-        <div>
-          <Link to="/borrow/direct">
-            <Tooltip
-              overlayClassName="commodo-tooltip"
-              title="Lend and Borrow in one click"
-            >
-              <Button
-                className="back-btn ml-auto"
-                icon={
-                  <SvgIcon name="direct-borrow" viewbox="0 0 57.25 54.685" />
-                }
-                type="primary"
-              >
-                <span className="pl-1">Direct Borrow</span>
-              </Button>
-            </Tooltip>
-          </Link>
+        <div className="market-header-right">
+          <Link to="/e-mode"><Button>E-Mode</Button></Link>
+          <Link to="/borrow/direct"><Button>Direct Borrow</Button></Link>
+          <Link to="/deprecated-cpool"><Button>Deprecated cPool</Button></Link>
         </div>
       </div>
       <div className="card-content">
