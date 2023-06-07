@@ -341,22 +341,20 @@ const RepayTab_2 = ({
           </div>
           <div className="assets-right">
             <div className="label-right">
-              <div className="available-balance">
-                Remaining Debt
-                <span className="ml-1">
-                  {amountConversionWithComma(
-                    updatedAmountOut,
-                    assetDenomMap[selectedBorrowPosition?.amountOut?.denom]
-                      ?.decimals
-                  )}{" "}
-                  {denomConversion(selectedBorrowPosition?.amountOut?.denom)}
-                </span>
-                <span className="assets-max-half">
-                  <Button className=" active" onClick={handleMaxRepay}>
-                    Max
-                  </Button>
-                </span>
-              </div>
+              Remaining Debt
+              <span className="ml-1">
+                {amountConversionWithComma(
+                  updatedAmountOut,
+                  assetDenomMap[selectedBorrowPosition?.amountOut?.denom]
+                    ?.decimals
+                )}{" "}
+                {denomConversion(selectedBorrowPosition?.amountOut?.denom)}
+              </span>
+              <span className="max-half">
+                <Button className=" active" onClick={handleMaxRepay}>
+                  Max
+                </Button>
+              </span>
             </div>
             <div>
               <div className="input-select">
