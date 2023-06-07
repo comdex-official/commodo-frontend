@@ -125,7 +125,7 @@ const MarketDetails = ({
       ),
       key: "2",
       children: <BorrowDetails />,
-      disabled: !poolLendPositions?.length,
+      // disabled: !poolLendPositions?.length,
     },
     {
       label: (
@@ -144,7 +144,7 @@ const MarketDetails = ({
       ),
       key: "3",
       children: <Withdraw_2 />,
-      disabled: !poolLendPositions?.length,
+      // disabled: !poolLendPositions?.length,
     },
     {
       label: (
@@ -163,7 +163,7 @@ const MarketDetails = ({
       ),
       key: "4",
       children: <Repay_2 />,
-      disabled: !userBorrowPositions?.length,
+      // disabled: !userBorrowPositions?.length,
     },
   ];
   return (
