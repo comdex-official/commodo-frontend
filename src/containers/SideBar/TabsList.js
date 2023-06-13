@@ -6,9 +6,9 @@ export const tabsList = [
     index: 0,
   },
   {
-    name: "My home",
+    name: "My Home",
     value: "myhome",
-    langKey: "myhome",
+    langKey: "mypositions",
     index: 1,
   },
   {

@@ -3,6 +3,7 @@ const variables = {
     // Sidebar menu
     dashboard: "Dashboard",
     myhome: "My Home",
+    mypositions: "My Positions",
     asset: "Asset",
     market: "Market",
     lend: "Lend",
