@@ -42,10 +42,24 @@
                         height: 38px;
                         border-radius: 38px;
                         margin-right: 10px;
+                        overflow: hidden;
 
                         .icon {
                             width: 100%;
                             height: 38px;
+                        }
+                    }
+                }
+
+                &.emode-header {
+                    .assets-col {
+                        .assets-icon {
+                            &:nth-child(1) {
+                                margin-right: 0;
+                            }
+                            &:nth-child(2) {
+                                margin-left: -8px;
+                            }
                         }
                     }
                 }
@@ -121,6 +135,10 @@
                         }
                     }
                 }
+                .tvl-col {
+                    font-size: 20px;
+                    font-weight: 500;
+                }
             }
             .details {
                 table {
@@ -169,6 +187,25 @@
                     }
                 }
             }
+        }
+    }
+}
+
+.market-header-right {
+    text-align: right;
+    .ant-btn {
+        background: linear-gradient(272.17deg, #00FC85 -17.16%, #17A68C 97.26%);
+        border-radius: 10px;
+        color: @text-color-dark;
+        font-size: 16px;
+        font-weight: 700;
+        margin-left: 12px;
+        height: 40px;
+        transition: all ease-in 0.1s;
+        min-width: 180px;
+        &:hover {
+            color:  @text-color-dark !important;
+            background: linear-gradient(272.17deg, #17A68C -17.16%, #00FC85 97.26%);
         }
     }
 }

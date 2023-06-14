@@ -37,6 +37,33 @@
     }
   }
 
+  .faucet-btn {
+    font-weight: 600;
+    .icon {
+      fill:@white;
+      width: 13px;
+      margin-right: 6px;
+      margin-bottom: -2px;
+    }
+  }
+
+  .commodo-btn {
+    font-size: 10px;
+    font-family: @font-family;
+    line-height: 100%;
+    padding: 0 15px;
+    img {
+      margin-right: 5px;
+      margin-left: 0;
+      width: 70px;
+    }
+    .dropicon {
+      fill: @primary-color;
+      width: 13px;
+      margin: 0 0 0 6px;
+    }
+  }
+
   .theme-toogle {
     display: flex;
     align-items: center;
@@ -174,6 +201,26 @@
           background: @success-color;;
         }
 
+      }
+    }
+  }
+}
+
+
+.ant-dropdown {
+  &.commodobtn-drop {
+    .ant-dropdown-menu {
+      background: @background-dark1;
+      .ant-dropdown-menu-item {
+        padding: 8px 10px;
+        text-align: center;
+        img {
+          width: 70px;
+          margin: auto;
+        }
+        .ant-dropdown-menu-title-content {
+          display: none;
+        }
       }
     }
   }
