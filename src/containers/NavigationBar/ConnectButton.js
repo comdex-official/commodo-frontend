@@ -34,6 +34,7 @@ import { marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
 import ConnectModal from "../Modal";
+import { SvgIcon } from "../../components/common";
 
 const ConnectButton = ({
   setAccountAddress,
@@ -231,8 +232,8 @@ const ConnectButton = ({
             overlayClassName="dropconnect-overlay"
             getPopupContainer={() => document.getElementById('topRightToogle')}
           >
-            <Button shape="round" type="primary" className="btn-filled">
-              {variables[lang].connect_wallet}
+            <Button shape="round" type="primary" className="btn-filled connect-btn">
+              {variables[lang].connect} <SvgIcon name='wallet-alt' viewbox='0 0 17.5 15.625' />
             </Button>
           </Dropdown>
         </div>

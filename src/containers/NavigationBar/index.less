@@ -64,52 +64,73 @@
   .connect-button {
     display: flex;
     justify-content: flex-end;
+    font-family: @font-family;
+
+    .ant-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: @font-family;
+      font-weight: 600;
+      height: 40px;
+      line-height: 40px;
+      .icon {
+        fill: @bg-dark;
+        margin-bottom: 0;
+      }
+      &.ant-dropdown-open {
+        .icon {
+          fill: @white;
+        }
+      }
+      &.connect-btn {
+        display: flex;
+        align-items: center;
+        .icon {
+          margin-left: 6px;
+        }
+      }
+      &.connected-btn {
+        height: 40px;
+        line-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .icon {
+          fill: @white;
+        }
+      }
+      &.circle-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 40px;
+        padding: 0;
+        text-align: center;
+        margin-right: 18px;
+        .icon {
+          margin: auto;
+        }
+        &:focus {
+          .icon {
+            fill: @white;
+          }
+        }
+      }
+    }
 
     .connected_div {
       display: flex;
       justify-content: center;
       align-items: center;
 
-      .ant-btn {
+      .disconnect-btn {
         height: 35px;
         line-height: 35px;
-        border-radius: 35px;
       }
 
       .connected_left {
         padding-right: 20px;
         text-align: right;
-
-        .testnet-top {
-          color: #001E11;
-          text-transform: uppercase;
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          line-height: 20px;
-          font-size: @font-size-base + 1;
-          border: 1px solid @background-dark1;
-          padding: 5px 12px 5px 8px;
-          border-radius: 20px;
-          font-weight: 600;
-
-          .dark-mode & {
-            color: @white;
-            border-color: @bg-light;
-          }
-
-          .icon {
-            fill: @text-color-light2;
-            margin-right: 5px;
-            width: 20px;
-            height: 20px;
-            border-radius: 20px;
-
-            .dark-mode & {
-              fill: @white;
-            }
-          }
-        }
 
         .comos-address {
           display: flex;
@@ -143,14 +164,10 @@
         border-radius: 20px;
         cursor: pointer;
         transition: all ease-in 0.1s;
+        color: @primary-color;
 
         @media screen and (max-width:1367px) {
           font-size: @font-size-sm;
-        }
-
-        .dark-mode & {
-          color: @white;
-          border-color: @bg-light;
         }
 
         .icon {
@@ -164,9 +181,6 @@
             width: 17px;
           }
 
-          .dark-mode & {
-            fill: @white;
-          }
         }
 
         &:hover{
