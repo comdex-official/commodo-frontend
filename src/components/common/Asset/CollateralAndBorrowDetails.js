@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { setAssetStatMap } from "../../../actions/asset";
 import {
   DOLLAR_DECIMALS,
-  ZERO_DOLLAR_DECIMALS
+  ZERO_DOLLAR_DECIMALS,
 } from "../../../constants/common";
 import { decimalConversion, formatNumber } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
@@ -23,19 +23,26 @@ const CollateralAndBorrowDetails = ({
   const liquidationThreshold = {
     title: "Liq. Threshold",
     counts: `${Number(
-      decimalConversion(assetRatesStatsMap[lendAssetId]?.liquidationPenalty) *
+      decimalConversion(assetRatesStatsMap[lendAssetId]?.liquidationThreshold) *
         100
     ).toFixed(DOLLAR_DECIMALS)}%`,
     tooltipText:
       "The threshold at which a loan is defined as under collateralized and subject to liquidation of collateral",
   };
 
+  const liquidationPenaltyBonus =
+    Number(
+      decimalConversion(assetRatesStatsMap[lendAssetId]?.liquidationPenalty)
+    ) *
+      100 +
+    Number(
+      decimalConversion(assetRatesStatsMap[lendAssetId]?.liquidationBonus)
+    ) *
+      100;
+
   const liquidationPenalty = {
     title: "Liq. Penalty",
-    counts: `${Number(
-      decimalConversion(assetRatesStatsMap[lendAssetId]?.liquidationPenalty) *
-        100
-    ).toFixed(DOLLAR_DECIMALS)}%`,
+    counts: `${Number(liquidationPenaltyBonus).toFixed(DOLLAR_DECIMALS)}%`,
     tooltipText: "Fee paid by vault owners on liquidation",
   };
 
@@ -43,9 +50,7 @@ const CollateralAndBorrowDetails = ({
     {
       title: "Max LTV",
       counts: `${Number(
-        decimalConversion(
-          assetRatesStatsMap[lendAssetId]?.liquidationThreshold
-        ) * 100
+        decimalConversion(assetRatesStatsMap[lendAssetId]?.ltv) * 100
       ).toFixed(DOLLAR_DECIMALS)}%`,
       tooltipText:
         parent === "lend" ? "Total funds Deposited" : "Total funds Borrowed",
@@ -81,37 +86,37 @@ const CollateralAndBorrowDetails = ({
   return (
     <>
       <div className="card-head no-border pt-3">
-          <div className="head-left">
-            <div className="assets-col">
-              <div className="assets-icon">
-                <SvgIcon name={iconNameFromDenom(borrowAssetDenom)} />
-              </div>
-              Borrow Details
+        <div className="head-left">
+          <div className="assets-col">
+            <div className="assets-icon">
+              <SvgIcon name={iconNameFromDenom(borrowAssetDenom)} />
             </div>
+            Borrow Details
           </div>
         </div>
-        <List
-          grid={{
-            gutter: 16,
-            xs: 2,
-            sm: 2,
-            md: 2,
-            lg: 2,
-            xl: 2,
-            xxl: 2,
-          }}
-          dataSource={borrowData}
-          renderItem={(item) => (
-            <List.Item>
-              <div>
-                <p>
-                  {item.title} <TooltipIcon text={item.tooltipText} />
-                </p>
-                <h3>{item.counts}</h3>
-              </div>
-            </List.Item>
-          )}
-        />
+      </div>
+      <List
+        grid={{
+          gutter: 16,
+          xs: 2,
+          sm: 2,
+          md: 2,
+          lg: 2,
+          xl: 2,
+          xxl: 2,
+        }}
+        dataSource={borrowData}
+        renderItem={(item) => (
+          <List.Item>
+            <div>
+              <p>
+                {item.title} <TooltipIcon text={item.tooltipText} />
+              </p>
+              <h3>{item.counts}</h3>
+            </div>
+          </List.Item>
+        )}
+      />
       <div className="card-head no-border">
         <div className="head-left">
           <div className="assets-col">

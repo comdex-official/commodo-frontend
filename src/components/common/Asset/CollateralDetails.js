@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { setAssetStatMap } from "../../../actions/asset";
 import {
   DOLLAR_DECIMALS,
-  ZERO_DOLLAR_DECIMALS
+  ZERO_DOLLAR_DECIMALS,
 } from "../../../constants/common";
 import { decimalConversion, formatNumber } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
@@ -18,6 +18,13 @@ const CollateralDetails = ({
   newBalance,
   assetRatesStatsMap,
 }) => {
+  const liquidationPenaltyBonus =
+    Number(
+      decimalConversion(assetRatesStatsMap[assetId]?.liquidationPenalty) * 100
+    ) +
+    Number(decimalConversion(assetRatesStatsMap[assetId]?.liquidationBonus)) *
+      100;
+
   let data = [
     {
       title: parent === "lend" ? "Liq. Threshold" : "Borrowed",
@@ -30,9 +37,7 @@ const CollateralDetails = ({
     },
     {
       title: "Liq. Penalty",
-      counts: `${Number(
-        decimalConversion(assetRatesStatsMap[assetId]?.liquidationPenalty) * 100
-      ).toFixed(DOLLAR_DECIMALS)}%`,
+      counts: `${Number(liquidationPenaltyBonus).toFixed(DOLLAR_DECIMALS)}%`,
       tooltipText: "Fee paid by vault owners on liquidation",
     },
     {
