@@ -19,8 +19,16 @@ const NavigationBar = () => {
     <nav className={isSetOnScroll ? "top_bar fixedHeaderOnScroll" : "top_bar"}>
       <ThemeToggle />
       <div className="connect-button">
-        <Button type="primary" className="btn-filled circle-btn"><SvgIcon name='squares' viewbox='0 0 15.48 15.48' /></Button>
-        <Button type="primary" className="btn-filled circle-btn"><SvgIcon name='faucet-icon' viewbox='0 0 14.495 18.92' /></Button>
+        <Button type="primary" className="btn-filled circle-btn">
+          <SvgIcon name="squares" viewbox="0 0 15.48 15.48" />
+        </Button>
+        <Button
+          type="primary"
+          className="btn-filled circle-btn"
+          onClick={() => window.open("https://faucet.comdex.one/", "_blank")}
+        >
+          <SvgIcon name="faucet-icon" viewbox="0 0 14.495 18.92" />
+        </Button>
         <ConnectButton />
       </div>
     </nav>
