@@ -97,7 +97,7 @@ const routes = [
     element: <EmodeDetails />,
   },
   {
-    path: "/deprecated-cpool",
+    path: "/deprecated-cpool/:id",
     element: <DeprecatedcPool />,
   },
 ];

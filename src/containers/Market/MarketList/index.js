@@ -9,7 +9,7 @@ import { SvgIcon } from "../../../components/common";
 import DistributionAPY from "../../../components/common/DistributionAPY";
 import {
   DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE
+  DEFAULT_PAGE_SIZE,
 } from "../../../constants/common";
 import { queryLendPools } from "../../../services/lend/query";
 import { denomConversion } from "../../../utils/coin";
@@ -57,9 +57,21 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
       <div className="card-header d-flex align-items-center justify-content-between mb-3 ">
         <div>Markets</div>
         <div className="market-header-right">
-          <Link to="/e-mode"><Button>E-Mode</Button></Link>
-          <Link to="/borrow/direct"><Button>Direct Borrow</Button></Link>
-          <Link to="/deprecated-cpool"><Button>Deprecated cPool</Button></Link>
+          <Link to="/e-mode">
+            <Button>E-Mode</Button>
+          </Link>
+          <Link to="/borrow/direct">
+            <Button>Direct Borrow</Button>
+          </Link>
+          <Button
+            onClick={() =>
+              navigate({
+                pathname: `/deprecated-cpool/${1}`,
+              })
+            }
+          >
+            Deprecated cPool
+          </Button>
         </div>
       </div>
       <div className="card-content">
@@ -133,22 +145,24 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
                                       />
                                     </td>
                                     <td>
-                                    <div className="d-flex"> 
-                                      <AssetApy
-                                        poolId={item?.poolId}
-                                        assetId={item?.transitAssetIds[key]}
-                                        parent="borrow"
-                                      />
-                                      <Tooltip
-                                        placement="topLeft"
-                                        className="distribution-apy-button"
-                                        title={"Boosted rewards for Borrowing"}
-                                      >
-                                        <DistributionAPY
+                                      <div className="d-flex">
+                                        <AssetApy
                                           poolId={item?.poolId}
                                           assetId={item?.transitAssetIds[key]}
+                                          parent="borrow"
                                         />
-                                      </Tooltip>
+                                        <Tooltip
+                                          placement="topLeft"
+                                          className="distribution-apy-button"
+                                          title={
+                                            "Boosted rewards for Borrowing"
+                                          }
+                                        >
+                                          <DistributionAPY
+                                            poolId={item?.poolId}
+                                            assetId={item?.transitAssetIds[key]}
+                                          />
+                                        </Tooltip>
                                       </div>
                                     </td>
                                   </tr>

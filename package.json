@@ -23,7 +23,7 @@
     "babel-plugin-import": "^1.13.0",
     "classnames": "^2.3.2",
     "coingecko-api": "^1.0.10",
-    "comdex-codec": "comdex-official/proto-codecs#development",
+    "comdex-codec": "comdex-official/proto-codecs#lend_tmp",
     "cosmjs-types": "^0.5.2",
     "craco-less": "^2.0.0",
     "highcharts": "^10.0.0",
@@ -53,7 +53,7 @@
     "start-old": "react-scripts start",
     "build-old": "react-scripts build",
     "test-old": "react-scripts test --env=jsdom",
-    "start": "react-app-rewired start",
+    "start": "react-app-rewired --openssl-legacy-provider start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"

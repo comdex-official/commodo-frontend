@@ -386,24 +386,27 @@ const BorrowTab = ({
       )
     );
   };
+
   const handleClick = () => {
     setInProgress(true);
 
     signAndBroadcastTransaction(
       {
         message: {
-          typeUrl: "/comdex.lend.v1beta1.MsgBorrow",
+          typeUrl: "/comdex.lend.v1beta1.MsgBorrowAlternate",
           value: {
-            borrower: address,
-            lendId: lend?.lendingId,
+            lender: address,
+            assetId: pair?.assetIn,
             pairId: pair?.id,
+            poolId: pool?.poolId,
             isStableBorrow: false,
+            appId: Long.fromNumber(APP_ID),
             amountIn: {
-              amount: getAmount(inAmount, assetMap[lend?.assetId]?.decimals),
-              // Sending uc + denom as per message
-              denom: UC_DENOM.concat(
-                String(assetMap[lend?.assetId]?.name).toLocaleLowerCase()
+              amount: getAmount(
+                inAmount,
+                assetDenomMap[collateralAssetDenom]?.decimals
               ),
+              denom: collateralAssetDenom,
             },
             amountOut: {
               amount: getAmount(
