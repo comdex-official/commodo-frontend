@@ -1,16 +1,39 @@
 import { Tabs, Tooltip } from "antd";
-import { useState } from "react";
+import * as PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import { BackButton } from "../../../components/common";
 import BorrowTab from "./Borrow";
 import RepayTab from "./Repay";
 import Withdraw from "./Withdraw";
 import "./index.less";
+import { queryLendPool } from "../../../services/lend/query";
+import { setPool } from "../../../actions/lend";
+import { useParams } from "react-router";
 
 const PageBackButton = {
   right: <BackButton />,
 };
 
-const DeprecatedcPool = () => {
+const DeprecatedcPool = ({ address, setPool }) => {
+  let { id } = useParams();
+
+  const [inProgress, setInProgress] = useState(false);
+
+  useEffect(() => {
+    if (address && id) {
+      setInProgress(true);
+
+      queryLendPool(id, (error, result) => {
+        setInProgress(false);
+        if (error) {
+          message.error(error);
+          return;
+        }
+        setPool(result?.pool);
+      });
+    }
+  }, [address, id]);
 
   const [activeKey, setActiveKey] = useState("1");
 
@@ -20,7 +43,8 @@ const DeprecatedcPool = () => {
         <>
           <Tooltip
             overlayClassName="commodo-tooltip"
-            title="No assets lent in this market to withdraw">
+            title="No assets lent in this market to withdraw"
+          >
             Withdraw
           </Tooltip>
         </>
@@ -33,7 +57,8 @@ const DeprecatedcPool = () => {
         <>
           <Tooltip
             overlayClassName="commodo-tooltip"
-            title="No debt to repay in this market">
+            title="No debt to repay in this market"
+          >
             Repay
           </Tooltip>
         </>
@@ -56,4 +81,20 @@ const DeprecatedcPool = () => {
   );
 };
 
-export default DeprecatedcPool;
+DeprecatedcPool.propTypes = {
+  setPool: PropTypes.func.isRequired,
+
+  address: PropTypes.string,
+};
+
+const stateToProps = (state) => {
+  return {
+    address: state.account.address,
+  };
+};
+
+const actionsToProps = {
+  setPool,
+};
+
+export default connect(stateToProps, actionsToProps)(DeprecatedcPool);

@@ -3,11 +3,12 @@ import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useLocation, useParams } from "react-router";
-import {setPool, setPoolLends, setUserBorrows} from "../../../actions/lend";
+import { setPool, setPoolLends, setUserBorrows } from "../../../actions/lend";
 import { BackButton } from "../../../components/common";
 import {
   queryAllBorrowByOwnerAndPool,
-  queryLendPool, queryUserBorrows,
+  queryLendPool,
+  queryUserBorrows,
   queryUserLends,
 } from "../../../services/lend/query";
 import { decode } from "../../../utils/string";
@@ -25,7 +26,7 @@ const MarketDetails = ({
   address,
   setPool,
   setPoolLends,
-                         setUserBorrows,
+  setUserBorrows,
   poolLendPositions,
 }) => {
   const [inProgress, setInProgress] = useState(false);
@@ -70,7 +71,7 @@ const MarketDetails = ({
           message.error(error);
           return;
         }
-        
+
         setPoolLends(result?.lends);
       });
 

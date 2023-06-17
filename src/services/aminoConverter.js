@@ -93,13 +93,7 @@ export const customAminoTypes = {
   },
   "/comdex.lend.v1beta1.MsgBorrow": {
     aminoType: "comdex/lend/MsgBorrow",
-    toAmino: ({
-      borrower,
-      lendId,
-      pairId,
-      amountIn,
-      amountOut,
-    }) => {
+    toAmino: ({ borrower, lendId, pairId, amountIn, amountOut }) => {
       return {
         borrower: borrower,
         lend_id: String(lendId),
@@ -108,13 +102,7 @@ export const customAminoTypes = {
         amount_out: amountOut,
       };
     },
-    fromAmino: ({
-      borrower,
-      lend_id,
-      pair_id,
-      amount_in,
-      amount_out,
-    }) => {
+    fromAmino: ({ borrower, lend_id, pair_id, amount_in, amount_out }) => {
       return {
         borrower: borrower,
         lendId: Number(lend_id),
@@ -138,6 +126,21 @@ export const customAminoTypes = {
         borrower: borrower,
         borrowId: Number(borrow_id),
         amount: amount,
+      };
+    },
+  },
+  "/comdex.lend.v1beta1.MsgRepayWithdraw": {
+    aminoType: "comdex/lend/MsgRepayWithdraw",
+    toAmino: ({ borrower, borrowId }) => {
+      return {
+        borrower: borrower,
+        borrow_id: String(borrowId),
+      };
+    },
+    fromAmino: ({ borrower, borrow_id }) => {
+      return {
+        borrower: borrower,
+        borrowId: Number(borrow_id),
       };
     },
   },
