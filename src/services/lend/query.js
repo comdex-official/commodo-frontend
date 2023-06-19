@@ -272,10 +272,10 @@ export const queryAuctionParams = (callback) => {
       callback(error);
       return;
     }
-    
+
     queryService
       .QueryAuctionParams({
-        appId: Long.fromNumber(APP_ID)
+        appId: Long.fromNumber(APP_ID),
       })
       .then((result) => {
         callback(null, result);
@@ -394,6 +394,17 @@ export const queryTotalBorrowAndDeposit = (callback) => {
 export const queryBorrowDepositHistory = (range, callback) => {
   axios
     .get(`${API_URL}/api/v2/commodo/lb/history/${range}`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
+
+export const queryEMode = (callback) => {
+  axios
+    .get(`${API_URL}/api/v2/commodo/emod_enable`)
     .then((result) => {
       callback(null, result?.data);
     })

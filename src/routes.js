@@ -93,7 +93,7 @@ const routes = [
     element: <EmodeList />,
   },
   {
-    path: "/e-mode-details",
+    path: "/e-mode-details/:id/:id2/:id3",
     element: <EmodeDetails />,
   },
   {
