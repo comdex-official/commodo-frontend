@@ -52,6 +52,8 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
     return <Spin />;
   }
 
+  console.log(pools);
+
   return (
     <div className="commodo-card bg-none">
       <div className="card-header d-flex align-items-center justify-content-between mb-3 ">

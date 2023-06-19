@@ -2,7 +2,7 @@ import { Button, Select, Slider, List, Spin, message } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import {
   Col,
   NoDataIcon,
@@ -21,6 +21,7 @@ import {
   commaSeparatorWithRounding,
   denomConversion,
   getAmount,
+  getDenomBalance,
 } from "../../../utils/coin";
 import {
   commaSeparator,
@@ -48,6 +49,7 @@ import {
 import { signAndBroadcastTransaction } from "../../../services/helper";
 import Snack from "../../../components/common/Snack";
 import {
+  APP_ID,
   DOLLAR_DECIMALS,
   MAX_LTV_DEDUCTION,
   UC_DENOM,
@@ -57,6 +59,7 @@ import CustomRow from "../../../components/common/Asset/CustomRow";
 import { assetTransitTypeId, ibcDenoms } from "../../../config/network";
 import { defaultFee } from "../../../services/transaction";
 import variables from "../../../utils/variables";
+import Long from "long";
 
 const { Option } = Select;
 
@@ -67,6 +70,7 @@ const BorrowTab = ({
   assetMap,
   address,
   markets,
+  balances,
   poolLendPositions,
   assetRatesStatsMap,
   assetDenomMap,
@@ -80,7 +84,7 @@ const BorrowTab = ({
     80: "Safe",
     100: "Riskier",
   };
-
+  let { id, id2, id3 } = useParams();
   const parent = "borrow";
 
   const [assetList, setAssetList] = useState();
@@ -109,12 +113,19 @@ const BorrowTab = ({
 
   const navigate = useNavigate();
 
-  let collateralAssetDenom = assetMap[lend?.assetId]?.denom;
+  let collateralAssetDenom = assetMap[Number(id2)]?.denom;
   let borrowAssetDenom = selectedBorrowValue
-    ? assetMap[pair?.assetOut]?.denom
+    ? assetMap[Number(id3)]?.denom
     : "";
 
-  const availableBalance = lend?.availableToBorrow || 0;
+  const availableBalance =
+    getDenomBalance(
+      balances,
+      collateralAssetDenom,
+      assetDenomMap[collateralAssetDenom]?.id
+    ) || 0;
+
+  // const availableBalance = lend?.availableToBorrow || 0;
 
   const borrowable = getAmount(
     (Number(inAmount) *
@@ -230,6 +241,7 @@ const BorrowTab = ({
   }, [pair, pairIdToBorrowMap]);
 
   const handleCollateralAssetChange = (lendingId, fromRoute) => {
+    console.log(lendingId);
     setSelectedCollateralLendingId(lendingId);
     if (!fromRoute) {
       setSelectedBorrowValue();
@@ -398,7 +410,7 @@ const BorrowTab = ({
             lender: address,
             assetId: pair?.assetIn,
             pairId: pair?.id,
-            poolId: pool?.poolId,
+            poolId: Number(id),
             isStableBorrow: false,
             appId: Long.fromNumber(APP_ID),
             amountIn: {
@@ -469,28 +481,59 @@ const BorrowTab = ({
       );
     }
   };
-
+  let collateralAssetDenom2 = assetMap[Number(id2)]?.denom;
   const borrowList =
     extendedPairs &&
-    Object.values(extendedPairs)?.map(
-      (item) => assetMap[item?.assetOut]?.denom
-    );
+    Object.values(extendedPairs)
+      ?.map((item) => assetMap[item?.assetOut]?.denom)
+      .filter((item) => item === collateralAssetDenom2);
 
-  let currentLTV = Number(
-    ((outAmount *
-      marketPrice(
-        markets,
-        borrowAssetDenom,
-        assetDenomMap[borrowAssetDenom]?.id
-      )) /
-      (inAmount *
+  let collateralAssetDenom3 = assetMap[Number(id3)]?.denom;
+  const borrowList2 =
+    extendedPairs &&
+    Object.values(extendedPairs)
+      ?.map((item) => assetMap[item?.assetOut]?.denom)
+      .filter((item) => item === collateralAssetDenom3);
+
+  let currentLTV =
+    Number(outAmount) *
+      Number(
+        marketPrice(
+          markets,
+          borrowAssetDenom,
+          assetDenomMap[borrowAssetDenom]?.id
+        )
+      ) ===
+      0 &&
+    Number(inAmount) *
+      Number(
         marketPrice(
           markets,
           collateralAssetDenom,
           assetDenomMap[collateralAssetDenom]?.id
-        ))) *
-      100
-  );
+        )
+      ) ===
+      0
+      ? 0
+      : Number(
+          ((Number(outAmount) *
+            Number(
+              marketPrice(
+                markets,
+                borrowAssetDenom,
+                assetDenomMap[borrowAssetDenom]?.id
+              )
+            )) /
+            (Number(inAmount) *
+              Number(
+                marketPrice(
+                  markets,
+                  collateralAssetDenom,
+                  assetDenomMap[collateralAssetDenom]?.id
+                )
+              ))) *
+            100
+        );
 
   let maxLTV = pair?.isInterPool
     ? Number(
@@ -541,7 +584,7 @@ const BorrowTab = ({
     setNewBalance(Number(borrowValue || 0) + currentBalance);
     checkMaxBorrow(borrowValue || 0);
   };
-
+  console.log({ borrowableBalance });
   const [stats, setStats] = useState();
   const [moduleBalanceStats, setModuleBalanceStats] = useState([]);
   const [assetPoolFunds, setAssetPoolFunds] = useState({});
@@ -813,7 +856,7 @@ const BorrowTab = ({
                   <Select
                     className="assets-select"
                     popupClassName="asset-select-dropdown"
-                    value={selectedCollateralLendingId}
+                    // value={selectedCollateralLendingId}
                     onChange={handleCollateralAssetChange}
                     placeholder={
                       <div className="select-placeholder">
@@ -829,17 +872,12 @@ const BorrowTab = ({
                     }
                     notFoundContent={<NoDataIcon />}
                   >
-                    {poolLendPositions?.length > 0 &&
-                      poolLendPositions?.map((record) => {
-                        const item = record?.amountIn?.denom
-                          ? record?.amountIn.denom
-                          : record;
+                    {borrowList?.length > 0 &&
+                      borrowList?.map((record) => {
+                        const item = record?.denom ? record?.denom : record;
 
                         return (
-                          <Option
-                            key={record?.lendingId?.toNumber()}
-                            value={record?.lendingId?.toNumber()}
-                          >
+                          <Option key={item} value={record?.id?.toNumber()}>
                             <div className="select-inner">
                               <div className="svg-icon">
                                 <div className="svg-icon-inner">
@@ -847,8 +885,19 @@ const BorrowTab = ({
                                 </div>
                               </div>
                               <div className="name">
-                                {denomConversion(item)} (
-                                {"cPool-" + record?.cpoolName?.split("-")?.[0]})
+                                {iconNameFromDenom(item) ? (
+                                  <>
+                                    {denomConversion(item)}
+                                    {/* ( */}
+                                    {/* {"cPool-" +
+                                      assetToPool[item]?.cpoolName?.split(
+                                        "-"
+                                      )?.[0]} */}
+                                    {/* ) */}
+                                  </>
+                                ) : (
+                                  ""
+                                )}
                               </div>
                             </div>
                           </Option>
@@ -955,8 +1004,8 @@ const BorrowTab = ({
                       }
                       notFoundContent={<NoDataIcon />}
                     >
-                      {borrowList?.length > 0 &&
-                        borrowList?.map((record) => {
+                      {borrowList2?.length > 0 &&
+                        borrowList2?.map((record) => {
                           const item = record?.denom ? record?.denom : record;
 
                           return (
@@ -970,12 +1019,13 @@ const BorrowTab = ({
                                 <div className="name">
                                   {iconNameFromDenom(item) ? (
                                     <>
-                                      {denomConversion(item)} (
-                                      {"cPool-" +
+                                      {denomConversion(item)}
+                                      {/* ( */}
+                                      {/* {"cPool-" +
                                         assetToPool[item]?.cpoolName?.split(
                                           "-"
-                                        )?.[0]}
-                                      )
+                                        )?.[0]} */}
+                                      {/* ) */}
                                     </>
                                   ) : (
                                     ""
@@ -1055,7 +1105,11 @@ const BorrowTab = ({
 
                     <Slider
                       marks={marks}
-                      value={(currentLTV * 100) / maxLTV}
+                      value={
+                        Number(currentLTV) * 100 === 0 && Number(maxLTV) === 0
+                          ? 0
+                          : (Number(currentLTV) * 100) / Number(maxLTV)
+                      }
                       onChange={handleSliderChange}
                       tooltip={{ open: false }}
                       className="commodo-slider market-slider-1 borrow-slider"
@@ -1101,11 +1155,9 @@ const BorrowTab = ({
                   !Number(inAmount) ||
                   !Number(outAmount) ||
                   validationError?.message ||
-                  collateralAssetDenom === borrowAssetDenom ||
                   borrowValidationError?.message ||
                   maxBorrowValidationError?.message ||
                   inProgress ||
-                  !lend?.lendingId ||
                   !pair?.id
                 }
                 onClick={handleClick}
@@ -1255,6 +1307,12 @@ BorrowTab.propTypes = {
   assetStatMap: PropTypes.object,
   assetRatesStatsMap: PropTypes.object,
   markets: PropTypes.object,
+  balances: PropTypes.arrayOf(
+    PropTypes.shape({
+      denom: PropTypes.string.isRequired,
+      amount: PropTypes.string,
+    })
+  ),
   pool: PropTypes.shape({
     poolId: PropTypes.shape({
       low: PropTypes.number,
@@ -1291,6 +1349,7 @@ const stateToProps = (state) => {
     pool: state.lend.pool._,
     assetMap: state.asset._.map,
     lang: state.language,
+    balances: state.account.balances.list,
     markets: state.oracle.market,
     poolLendPositions: state.lend.poolLends,
     assetRatesStatsMap: state.lend.assetRatesStats.map,
