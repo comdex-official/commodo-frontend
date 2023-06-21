@@ -829,6 +829,37 @@ const BorrowTab = ({
     },
   ];
 
+  const hf = () => {
+    const data =
+      Number(
+        Number(
+          inAmount *
+            marketPrice(
+              markets,
+              collateralAssetDenom,
+              assetDenomMap[collateralAssetDenom]?.id
+            ) || 0
+        ) *
+          Number(
+            decimalConversion(
+              assetRatesStatsMap[Number(id2)]?.liquidationThreshold
+            ) * 100
+          )
+      ) /
+      Number(
+        outAmount *
+          marketPrice(
+            markets,
+            borrowAssetDenom,
+            assetDenomMap[borrowAssetDenom]?.id
+          ) || 0
+      );
+
+    return data === Number.NaN || data === Number.POSITIVE_INFINITY
+      ? Number(0).toFixed(DOLLAR_DECIMALS)
+      : Number(data || 0).toFixed(DOLLAR_DECIMALS);
+  };
+
   return (
     <div className="details-wrapper emode-details-wrapper">
       {!dataInProgress ? (
@@ -1159,7 +1190,7 @@ const BorrowTab = ({
                     /> */}
                     <div>
                       {/* {Number(percentage || 0).toFixed(DOLLAR_DECIMALS)} */}
-                      ""
+                      {hf() || 0.0}
                     </div>
                     <small className="font-weight-light">
                       {"Liquidation at H.F<1.0"}
