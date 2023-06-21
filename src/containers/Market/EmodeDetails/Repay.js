@@ -383,7 +383,6 @@ const RepayTab = ({
               <div className="available-balance">
                 Available
                 <span className="ml-1">
-                  10{" "}
                   {amountConversionWithComma(
                     updatedAmountOut,
                     assetDenomMap[selectedBorrowPosition?.amountOut?.denom]
