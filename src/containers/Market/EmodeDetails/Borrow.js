@@ -84,7 +84,7 @@ const BorrowTab = ({
     80: "Safe",
     100: "Riskier",
   };
-  let { id, id2, id3 } = useParams();
+  let { id, id2, id3, id4 } = useParams();
   const parent = "borrow";
 
   const [assetList, setAssetList] = useState();
@@ -399,6 +399,14 @@ const BorrowTab = ({
     );
   };
 
+  console.log(
+    {
+      amount: getAmount(inAmount, assetMap[collateralAssetDenom]?.decimals),
+      denom: collateralAssetDenom,
+    },
+    pair
+  );
+
   const handleClick = () => {
     setInProgress(true);
 
@@ -408,11 +416,18 @@ const BorrowTab = ({
           typeUrl: "/comdex.lend.v1beta1.MsgBorrowAlternate",
           value: {
             lender: address,
-            assetId: pair?.assetIn,
-            pairId: pair?.id,
-            poolId: Number(id),
+            assetId: Long.fromNumber(Number(id2)),
+            pairId: Long.fromNumber(Number(id4)),
+            poolId: Long.fromNumber(Number(id)),
             isStableBorrow: false,
             appId: Long.fromNumber(APP_ID),
+            // amountIn: {
+            //   amount: getAmount(
+            //     inAmount,
+            //     assetMap[collateralAssetDenom]?.decimals
+            //   ),
+            //   denom: collateralAssetDenom,
+            // },
             amountIn: {
               amount: getAmount(
                 inAmount,

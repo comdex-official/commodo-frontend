@@ -85,7 +85,9 @@ const EmodeList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
                   navigate({
                     pathname: `/e-mode-details/${Number(
                       item.asset_in_pool_id
-                    )}/${Number(item.asset_in)}/${Number(item.asset_out)}`,
+                    )}/${Number(item.asset_in)}/${Number(
+                      item.asset_out
+                    )}/${Number(item.id)}`,
                   })
                 }
               >
