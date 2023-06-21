@@ -4,21 +4,25 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setAssetStatMap } from "../../../actions/asset";
 import { ibcDenoms } from "../../../config/network";
-import { DOLLAR_DECIMALS } from "../../../constants/common";
+import {
+  DOLLAR_DECIMALS,
+  ZERO_DOLLAR_DECIMALS,
+} from "../../../constants/common";
 import {
   queryAssetPoolFundBalance,
   queryModuleBalance,
-  QueryPoolAssetLBMapping
+  QueryPoolAssetLBMapping,
 } from "../../../services/lend/query";
 import {
   amountConversion,
   commaSeparatorWithRounding,
-  denomConversion
+  denomConversion,
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  formatNumber,
+  marketPrice,
 } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
 import DistributionAPY from "../DistributionAPY";
@@ -26,7 +30,7 @@ import { SvgIcon, TooltipIcon } from "../index";
 
 const Details = ({
   assetId,
-    assetDenom,
+  assetDenom,
   poolId,
   markets,
   refreshBalance,
@@ -38,6 +42,7 @@ const Details = ({
   const [moduleBalanceStats, setModuleBalanceStats] = useState([]);
   const [assetPoolFunds, setAssetPoolFunds] = useState({});
 
+  console.log(stats);
   useEffect(() => {
     if (assetId && poolId) {
       QueryPoolAssetLBMapping(assetId, poolId, (error, result) => {
@@ -45,7 +50,7 @@ const Details = ({
           message.error(error);
           return;
         }
-
+        console.log(result?.PoolAssetLBMapping);
         setStats(result?.PoolAssetLBMapping);
       });
 
@@ -54,7 +59,7 @@ const Details = ({
           message.error(error);
           return;
         }
-
+        console.log(result?.amount);
         setAssetPoolFunds(result?.amount);
       });
     } else if (stats?.poolId) {
@@ -76,8 +81,10 @@ const Details = ({
   }, [poolId, refreshBalance]);
 
   let assetStats = moduleBalanceStats?.filter(
-    (item) => item?.assetId?.toNumber() === assetId
+    (item) => item?.assetId?.toNumber() === Number(assetId)
   )[0];
+
+  console.log(moduleBalanceStats);
 
   useEffect(() => {
     setAssetStatMap(assetId, assetStats?.balance);
@@ -90,8 +97,7 @@ const Details = ({
         Number(
           amountConversion(
             (parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0
-          ) *
-            marketPrice(markets, assetDenom, assetDenomMap[assetDenom]?.id),
+          ) * marketPrice(markets, assetDenom, assetDenomMap[assetDenom]?.id),
           assetDenomMap[assetDenom]?.decimals
         ) +
           (parent === "lend"
@@ -114,7 +120,7 @@ const Details = ({
     },
     {
       title: "Available",
-      counts: `$${commaSeparatorWithRounding(
+      counts: `$${formatNumber(
         Number(
           amountConversion(
             marketPrice(
@@ -125,8 +131,9 @@ const Details = ({
             assetDenomMap[assetStats?.balance?.denom]?.decimals
           )
         ),
-        DOLLAR_DECIMALS
+        ZERO_DOLLAR_DECIMALS
       )}`,
+
       tooltipText:
         parent === "lend" ? "Total funds Available" : "Total funds Available",
     },
@@ -159,11 +166,7 @@ const Details = ({
           {parent === "lend" ? null : assetDenom === "uatom" ||
             assetDenom === ibcDenoms["uatom"] ||
             assetDenom === "ucmst" ? (
-            <DistributionAPY
-              assetId={assetId}
-              poolId={poolId}
-              margin={"top"}
-            />
+            <DistributionAPY assetId={assetId} poolId={poolId} margin={"top"} />
           ) : null}
         </>
       ),
@@ -187,11 +190,7 @@ const Details = ({
           <span>Oracle Price</span> : $
           {commaSeparator(
             Number(
-              marketPrice(
-                markets,
-                assetDenom,
-                assetDenomMap[assetDenom]?.id
-              )
+              marketPrice(markets, assetDenom, assetDenomMap[assetDenom]?.id)
             ).toFixed(DOLLAR_DECIMALS)
           )}
         </div>

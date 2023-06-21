@@ -19,13 +19,30 @@ const CollateralAndBorrowDetails = ({
   newBalance,
   assetRatesStatsMap,
   tabName,
+  isInterPool,
+  interAssetID,
 }) => {
+  const threeSold =
+    Number(
+      decimalConversion(assetRatesStatsMap[lendAssetId]?.liquidationThreshold)
+    ) *
+    Number(
+      decimalConversion(assetRatesStatsMap[interAssetID]?.liquidationThreshold)
+    );
+
+  const maxLTV =
+    Number(decimalConversion(assetRatesStatsMap[lendAssetId]?.ltv)) *
+    Number(decimalConversion(assetRatesStatsMap[interAssetID]?.ltv));
+
   const liquidationThreshold = {
     title: "Liq. Threshold",
-    counts: `${Number(
-      decimalConversion(assetRatesStatsMap[lendAssetId]?.liquidationThreshold) *
-        100
-    ).toFixed(DOLLAR_DECIMALS)}%`,
+    counts: isInterPool
+      ? `${Number(Number(threeSold) * 100).toFixed(DOLLAR_DECIMALS)}%`
+      : `${Number(
+          decimalConversion(
+            assetRatesStatsMap[lendAssetId]?.liquidationThreshold
+          ) * 100
+        ).toFixed(DOLLAR_DECIMALS)}%`,
     tooltipText:
       "The threshold at which a loan is defined as under collateralized and subject to liquidation of collateral",
   };
@@ -40,6 +57,8 @@ const CollateralAndBorrowDetails = ({
     ) *
       100;
 
+  console.log(assetRatesStatsMap[lendAssetId]);
+
   const liquidationPenalty = {
     title: "Liq. Penalty",
     counts: `${Number(liquidationPenaltyBonus).toFixed(DOLLAR_DECIMALS)}%`,
@@ -49,9 +68,11 @@ const CollateralAndBorrowDetails = ({
   let data = [
     {
       title: "Max LTV",
-      counts: `${Number(
-        decimalConversion(assetRatesStatsMap[lendAssetId]?.ltv) * 100
-      ).toFixed(DOLLAR_DECIMALS)}%`,
+      counts: isInterPool
+        ? `${Number(Number(maxLTV) * 100).toFixed(DOLLAR_DECIMALS)}%`
+        : `${Number(
+            decimalConversion(assetRatesStatsMap[lendAssetId]?.ltv) * 100
+          ).toFixed(DOLLAR_DECIMALS)}%`,
       tooltipText:
         parent === "lend" ? "Total funds Deposited" : "Total funds Borrowed",
     },
