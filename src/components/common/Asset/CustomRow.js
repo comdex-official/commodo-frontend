@@ -19,7 +19,12 @@ const CustomRow = ({ assetList, poolId }) => {
             </div>
           ))}
       </div>
-      {poolId && <div className="deposit-poolId">#{poolId}<TooltipIcon text="cPool Id" /></div>}
+      {poolId && (
+        <div className="deposit-poolId">
+          #{poolId}
+          <TooltipIcon text="cPool Id" />
+        </div>
+      )}
     </div>
   );
 };

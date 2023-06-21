@@ -12,7 +12,13 @@ import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
 } from "../../../constants/common";
-import { queryEMode, queryLendPools } from "../../../services/lend/query";
+import {
+  queryEMode,
+  queryLendPools,
+  QueryPoolAssetLBMapping,
+  queryModuleBalance,
+  queryAssetPoolFundBalance,
+} from "../../../services/lend/query";
 import { denomConversion } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
 import AvailableToBorrow from "../Borrow/AvailableToBorrow";
@@ -121,18 +127,42 @@ const EmodeList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
                       {/* <div className="header2-inner">
                         <div className="assets-col mr-3">
                           <div className="assets-icon">
-                            <SvgIcon name="atom-icon" />
+                            <SvgIcon
+                              name={iconNameFromDenom(
+                                assetMap[Number(item?.asset_in)]?.denom
+                              )}
+                            />
                           </div>
                           2.7M
+                          {`$${commaSeparatorWithRounding(
+        Number(
+          amountConversion(
+            marketPrice(
+              markets,
+              assetStats?.balance?.denom,
+              assetDenomMap[assetStats?.balance?.denom]?.id
+            ) * assetStats?.balance.amount || 0,
+            assetDenomMap[assetStats?.balance?.denom]?.decimals
+          )
+        ),
+        DOLLAR_DECIMALS
+      )}`}
                         </div>
                         <div className="assets-col mr-3">
                           <div className="assets-icon">
-                            <SvgIcon name="atom-icon" />
+                            <SvgIcon
+                              name={iconNameFromDenom(
+                                assetMap[Number(item?.asset_out)]?.denom
+                              )}
+                            />
                           </div>
                           1.8M
                         </div>
                       </div> */}
                       <AvailableToBorrow
+                        eMode={true}
+                        assetInn={Number(item?.asset_in)}
+                        assetOut={Number(item?.asset_out)}
                         lendPool={{
                           poolId: Number(item?.asset_out_pool_id),
                         }}
