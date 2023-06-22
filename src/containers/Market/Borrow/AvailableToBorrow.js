@@ -9,7 +9,14 @@ import { amountConversion } from "../../../utils/coin";
 import { formatNumber, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
 
-export const AvailableToBorrow = ({ lendPool, markets, assetDenomMap }) => {
+export const AvailableToBorrow = ({
+  lendPool,
+  markets,
+  assetDenomMap,
+  eMode,
+  assetInn,
+  assetOut,
+}) => {
   const [moduleBalanceStats, setModuleBalanceStats] = useState({});
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -39,17 +46,28 @@ export const AvailableToBorrow = ({ lendPool, markets, assetDenomMap }) => {
     );
   }
 
+  let assetStats = eMode
+    ? moduleBalanceStats?.length > 0
+      ? moduleBalanceStats?.filter(
+          (item) =>
+            item?.assetId?.toNumber() === assetInn ||
+            item?.assetId?.toNumber() === assetOut
+        )
+      : []
+    : moduleBalanceStats;
+
   return (
     <div className="header2-inner w-100">
-      {moduleBalanceStats?.length > 0
-        ? moduleBalanceStats.map((item) => {
+      {assetStats?.length > 0
+        ? assetStats.map((item) => {
             return (
               <>
                 <div className="assets-col mr-3" key={item?.balance?.denom}>
                   <div className="assets-icon">
                     <SvgIcon name={iconNameFromDenom(item?.balance?.denom)} />
                   </div>
-                  ${formatNumber(
+                  $
+                  {formatNumber(
                     Number(
                       amountConversion(
                         marketPrice(

@@ -12,29 +12,28 @@ import {
   queryUserLends,
 } from "../../../services/lend/query";
 import { decode } from "../../../utils/string";
-import BorrowDetails from "../../Market/Borrow/Details";
-import SupplyDetails from "../Supply/Details";
+import BorrowTab from "./Borrow";
+import RepayTab from "./Repay";
+import Withdraw from "./Withdraw";
 import "./index.less";
-import Repay_2 from "./Repay_2";
-import Withdraw_2 from "./Withdraw_2";
 
 const PageBackButton = {
   right: <BackButton />,
 };
 
-const MarketDetails = ({
+const EmodeDetails = ({
   address,
   setPool,
   setPoolLends,
   setUserBorrows,
   poolLendPositions,
 }) => {
+  const [activeKey, setActiveKey] = useState("1");
+
   const [inProgress, setInProgress] = useState(false);
   const [userBorrowPositions, setUserBorrowPositions] = useState([]);
 
   let { id } = useParams();
-
-  const [activeKey, setActiveKey] = useState("1");
 
   const location = useLocation();
   const type = decode(location.hash);
@@ -105,66 +104,46 @@ const MarketDetails = ({
 
   const tabItems = [
     {
-      label: "Lend",
-      key: "1",
-      children: <SupplyDetails />,
-    },
-    {
       label: (
         <>
           <Tooltip
             overlayClassName="commodo-tooltip"
-            title={
-              !poolLendPositions?.length
-                ? "Lend assets to open borrow position"
-                : ""
-            }
+            title="Lend assets to open borrow position"
           >
             Borrow
           </Tooltip>
         </>
       ),
-      key: "2",
-      children: <BorrowDetails />,
-      // disabled: !poolLendPositions?.length,
+      key: "1",
+      children: <BorrowTab />,
     },
     {
       label: (
         <>
           <Tooltip
             overlayClassName="commodo-tooltip"
-            title={
-              !poolLendPositions?.length
-                ? "No assets lent in this market to withdraw"
-                : ""
-            }
+            title="No assets lent in this market to withdraw"
           >
             Withdraw
           </Tooltip>
         </>
       ),
-      key: "3",
-      children: <Withdraw_2 />,
-      // disabled: !poolLendPositions?.length,
+      key: "2",
+      children: <Withdraw />,
     },
     {
       label: (
         <>
           <Tooltip
             overlayClassName="commodo-tooltip"
-            title={
-              !userBorrowPositions?.length
-                ? "No debt to repay in this market"
-                : ""
-            }
+            title="No debt to repay in this market"
           >
             Repay
           </Tooltip>
         </>
       ),
-      key: "4",
-      children: <Repay_2 />,
-      // disabled: !userBorrowPositions?.length,
+      key: "3",
+      children: <RepayTab />,
     },
   ];
   return (
@@ -181,7 +160,7 @@ const MarketDetails = ({
   );
 };
 
-MarketDetails.propTypes = {
+EmodeDetails.propTypes = {
   setPool: PropTypes.func.isRequired,
   setPoolLends: PropTypes.func.isRequired,
   setUserBorrows: PropTypes.func.isRequired,
@@ -215,4 +194,4 @@ const actionsToProps = {
   setUserBorrows,
 };
 
-export default connect(stateToProps, actionsToProps)(MarketDetails);
+export default connect(stateToProps, actionsToProps)(EmodeDetails);
