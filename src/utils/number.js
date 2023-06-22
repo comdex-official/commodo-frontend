@@ -32,17 +32,19 @@ export const decimalConversion = (data) => {
 };
 
 export const marketPrice = (marketsMap, denom, assetId) => {
-  const value = marketsMap?.map && marketsMap?.map[assetId]
+  const value = marketsMap?.map && marketsMap?.map[assetId];
 
   // if (denom === "ucmst") {
   //   return 1;
   // }
 
+  // if (denom === "ucgold") {
+  //   return 1234;
+  // }
+
   if (value && value?.twa && value?.isPriceActive) {
     return value?.twa?.toNumber() / 1000000;
-  }
-
-  else if (marketsMap?.coingekoPrice) {
+  } else if (marketsMap?.coingekoPrice) {
     let price = marketsMap?.coingekoPrice[denomToCoingeckoTokenId(denom)];
     if (price) {
       return price?.usd;

@@ -785,38 +785,52 @@ const BorrowTab = ({
 
   const lendAssetId = lend?.assetId || pair?.assetIn;
 
+  console.log(assetRatesStatsMap);
+
+  let dataAsset =
+    assetMap[Number(id2)]?.denom === collateralAssetDenom
+      ? Number(id2)
+      : Number(id3);
+
+  console.log(assetRatesStatsMap[Number(id2)], assetRatesStatsMap[Number(id3)]);
+
   const liquidationThreshold = {
     title: "Liq. Threshold",
-    counts: `${Number(
-      decimalConversion(assetRatesStatsMap[Number(id2)]?.liquidationThreshold) *
-        100
-    ).toFixed(DOLLAR_DECIMALS)}%`,
+    counts: !selectedCollateralValue
+      ? `${Number(0).toFixed(DOLLAR_DECIMALS)}%`
+      : `${Number(
+          decimalConversion(
+            assetRatesStatsMap[dataAsset]?.eLiquidationThreshold
+          ) * 100
+        ).toFixed(DOLLAR_DECIMALS)}%`,
     tooltipText:
       "The threshold at which a loan is defined as under collateralized and subject to liquidation of collateral",
   };
 
   const liquidationPenaltyBonus =
     Number(
-      decimalConversion(assetRatesStatsMap[Number(id2)]?.liquidationPenalty)
-    ) *
-      100 +
-    Number(
-      decimalConversion(assetRatesStatsMap[Number(id2)]?.liquidationBonus)
-    ) *
-      100;
+      decimalConversion(assetRatesStatsMap[dataAsset]?.eLiquidationPenalty)
+    ) * 100;
+  //   +
+  // Number(decimalConversion(assetRatesStatsMap[dataAsset]?.liquidationBonus)) *
+  //   100;
 
   const liquidationPenalty = {
     title: "Liq. Penalty",
-    counts: `${Number(liquidationPenaltyBonus).toFixed(DOLLAR_DECIMALS)}%`,
+    counts: !selectedCollateralValue
+      ? `${Number(0).toFixed(DOLLAR_DECIMALS)}%`
+      : `${Number(liquidationPenaltyBonus).toFixed(DOLLAR_DECIMALS)}%`,
     tooltipText: "Fee paid by vault owners on liquidation",
   };
 
   let data2 = [
     {
       title: "Max LTV",
-      counts: `${Number(
-        decimalConversion(assetRatesStatsMap[Number(id2)]?.ltv) * 100
-      ).toFixed(DOLLAR_DECIMALS)}%`,
+      counts: !selectedCollateralValue
+        ? `${Number(0).toFixed(DOLLAR_DECIMALS)}%`
+        : `${Number(
+            decimalConversion(assetRatesStatsMap[dataAsset]?.eLtv) * 100
+          ).toFixed(DOLLAR_DECIMALS)}%`,
       tooltipText:
         parent === "lend" ? "Total funds Deposited" : "Total funds Borrowed",
     },

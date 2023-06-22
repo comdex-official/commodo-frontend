@@ -473,6 +473,7 @@ const Withdraw = ({
           /> */}
 
           <CollateralDetails
+            eMod={true}
             assetId={selectedAssetId}
             assetDenom={assetMap[selectedAssetId]?.denom}
             poolId={pool?.poolId}

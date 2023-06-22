@@ -13,7 +13,7 @@ export const envConfig = {
   chainName: "Comdex Test Chain",
   explorerUrlToTx: "https://test2-explorer.comdex.one/transactions/{txHash}",
   // apiUrl: "https://testnet-stat.comdex.one",
-  apiUrl: "http://95.217.185.27:8000",
+  apiUrl: "https://local-api.zenscape.one",
   comdexStakingUrl: "https://comdex.omniflix.co/stake",
   webSocketApiUrl: "wss://testnet2rpc.comdex.one/websocket",
   symbol: "CMDX",
