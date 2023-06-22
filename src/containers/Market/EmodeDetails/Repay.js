@@ -617,6 +617,7 @@ const RepayTab = ({
             )}
           /> */}
           <CollateralAndBorrowDetails
+            eMod={true}
             lendAssetId={pair?.assetIn}
             collateralAssetDenom={ucDenomToDenom(
               selectedBorrowPosition?.amountIn?.denom

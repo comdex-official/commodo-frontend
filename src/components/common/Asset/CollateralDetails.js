@@ -17,6 +17,7 @@ const CollateralDetails = ({
   currentBalance,
   newBalance,
   assetRatesStatsMap,
+  eMod,
 }) => {
   const liquidationPenaltyBonus =
     Number(
@@ -25,19 +26,32 @@ const CollateralDetails = ({
     Number(decimalConversion(assetRatesStatsMap[assetId]?.liquidationBonus)) *
       100;
 
+  const liquidationPenaltyBonus2 = Number(
+    decimalConversion(assetRatesStatsMap[assetId]?.eLiquidationPenalty) * 100
+  );
+
   let data = [
     {
       title: parent === "lend" ? "Liq. Threshold" : "Borrowed",
-      counts: `${Number(
-        decimalConversion(assetRatesStatsMap[assetId]?.liquidationThreshold) *
-          100
-      ).toFixed(DOLLAR_DECIMALS)}%`,
+      counts: eMod
+        ? `${Number(
+            decimalConversion(
+              assetRatesStatsMap[assetId]?.eLiquidationThreshold
+            ) * 100
+          ).toFixed(DOLLAR_DECIMALS)}%`
+        : `${Number(
+            decimalConversion(
+              assetRatesStatsMap[assetId]?.liquidationThreshold
+            ) * 100
+          ).toFixed(DOLLAR_DECIMALS)}%`,
       tooltipText:
         "The threshold at which a loan is defined as under collateralized and subject to liquidation of collateral",
     },
     {
       title: "Liq. Penalty",
-      counts: `${Number(liquidationPenaltyBonus).toFixed(DOLLAR_DECIMALS)}%`,
+      counts: eMod
+        ? `${Number(liquidationPenaltyBonus2).toFixed(DOLLAR_DECIMALS)}%`
+        : `${Number(liquidationPenaltyBonus).toFixed(DOLLAR_DECIMALS)}%`,
       tooltipText: "Fee paid by vault owners on liquidation",
     },
     {
