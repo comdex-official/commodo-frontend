@@ -42,6 +42,22 @@ export const marketPrice = (marketsMap, denom, assetId) => {
   //   return 1234;
   // }
 
+  if (denom === "uatom") {
+    return 9200000;
+  }
+  //  if (denom === "ucgold"){
+  //     return 32000
+  //  }
+  //  if (denom === "ucgold") {
+  //     return 1000000
+  //  }
+  //  if(denom === "ucgold"){
+  //     return 600000
+  //  }
+  if (denom === "ustatom") {
+    return 10000000;
+  }
+
   if (value && value?.twa && value?.isPriceActive) {
     return value?.twa?.toNumber() / 1000000;
   } else if (marketsMap?.coingekoPrice) {

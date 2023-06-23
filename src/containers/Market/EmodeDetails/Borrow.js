@@ -128,6 +128,10 @@ const BorrowTab = ({
     ) || 0;
 
   // const availableBalance = lend?.availableToBorrow || 0;
+  let dataAssets =
+    assetMap[Number(id2)]?.denom === collateralAssetDenom
+      ? Number(id2)
+      : Number(id3);
 
   const borrowable = getAmount(
     (Number(inAmount) *
@@ -137,7 +141,7 @@ const BorrowTab = ({
         assetDenomMap[collateralAssetDenom]?.id
       ) *
       (pair?.isInterPool
-        ? (Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv)) -
+        ? (Number(decimalConversion(assetRatesStatsMap[dataAssets]?.ltv)) -
             MAX_LTV_DEDUCTION) *
           Number(
             decimalConversion(
@@ -145,7 +149,7 @@ const BorrowTab = ({
             )
           )
         : Number(
-            decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv) -
+            decimalConversion(assetRatesStatsMap[dataAssets]?.ltv) -
               MAX_LTV_DEDUCTION
           )) || 0) /
       marketPrice(
@@ -208,7 +212,7 @@ const BorrowTab = ({
       lendingIdFromRoute || poolLendPositions[0]?.lendingId?.toNumber();
 
     if (lendId) {
-      handleCollateralAssetChange(lendId, true);
+      handleCollateralAssetChange(2, true);
     }
   }, [poolLendPositions, lendingIdFromRoute]);
 
@@ -243,7 +247,6 @@ const BorrowTab = ({
   }, [pair, pairIdToBorrowMap]);
 
   const handleCollateralAssetChange = (lendingId, fromRoute) => {
-    // console.log(lendingId);
     setSelectedCollateralLendingId(lendingId);
     // setSelectedCollateralValue(lendId);
     if (!fromRoute) {
@@ -263,27 +266,27 @@ const BorrowTab = ({
       setValidationError();
       setExtendedPairs();
 
-      queryAssetPairs(
-        selectedLend?.assetId,
-        selectedLend?.poolId,
-        (error, result) => {
-          if (error) {
-            message.error(error);
-            return;
-          }
+      // queryAssetPairs(
+      //   selectedLend?.assetId,
+      //   selectedLend?.poolId,
+      //   (error, result) => {
+      //     if (error) {
+      //       message.error(error);
+      //       return;
+      //     }
 
-          let pairMapping = result?.AssetToPairMapping;
+      //     let pairMapping = result?.AssetToPairMapping;
 
-          if (pairMapping?.assetId) {
-            for (let i = 0; i < pairMapping?.pairId?.length; i++) {
-              fetchPair(pairMapping?.pairId[i]);
-            }
-          }
+      //     if (pairMapping?.assetId) {
+      //       for (let i = 0; i < pairMapping?.pairId?.length; i++) {
+      //         fetchPair(pairMapping?.pairId[i]);
+      //       }
+      //     }
 
-          if (fromRoute && borrowAssetMinimalDenomFromRoute)
-            handleBorrowAssetChange(borrowAssetMinimalDenomFromRoute);
-        }
-      );
+      //     if (fromRoute && borrowAssetMinimalDenomFromRoute)
+      //       handleBorrowAssetChange(borrowAssetMinimalDenomFromRoute);
+      //   }
+      // );
     }
   };
 
@@ -322,6 +325,27 @@ const BorrowTab = ({
     setOutAmount(0);
     setBorrowValidationError();
     setMaxBorrowValidationError();
+    let assetId =
+      assetMap[Number(id2)]?.denom === collateralAssetDenom
+        ? Number(id3)
+        : Number(id2);
+    queryAssetPairs(assetId, Number(id), (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      let pairMapping = result?.AssetToPairMapping;
+      console.log(pairMapping, "pairMapping");
+      if (pairMapping?.assetId) {
+        for (let i = 0; i < pairMapping?.pairId?.length; i++) {
+          fetchPair(pairMapping?.pairId[i]);
+        }
+      }
+
+      // if (fromRoute && borrowAssetMinimalDenomFromRoute)
+      // handleBorrowAssetChange(borrowAssetMinimalDenomFromRoute);
+    });
   };
 
   const handleBorrowAssetChange = (value) => {
@@ -494,27 +518,31 @@ const BorrowTab = ({
   };
   let collateralAssetDenom2 = assetMap[Number(id2)]?.denom;
   let collateralAssetDenom3 = assetMap[Number(id3)]?.denom;
-  const borrowList =
-    extendedPairs &&
-    Object.values(extendedPairs)
-      ?.map((item) => assetMap[item?.assetOut]?.denom)
-      .filter(
-        (item) =>
-          item === collateralAssetDenom2 || item === collateralAssetDenom3
-      );
+  const borrowList = [collateralAssetDenom2, collateralAssetDenom3];
+  // extendedPairs &&
+  // Object.values(extendedPairs)
+  //   ?.map((item) => assetMap[item?.assetOut]?.denom)
+  //   .filter(
+  //     (item) =>
+  //       item === collateralAssetDenom2 || item === collateralAssetDenom3
+  //   );
 
-  const borrowList2 =
-    extendedPairs &&
-    Object.values(extendedPairs)
-      ?.map((item) => assetMap[item?.assetOut]?.denom)
-      .filter(
-        (item) =>
-          item === assetMap[Number(id2)]?.denom ||
-          item === assetMap[Number(id3)]?.denom
-      )
-      .filter((item) => item !== selectedCollateralValue);
+  let assetBorrow =
+    selectedCollateralValue === collateralAssetDenom2
+      ? collateralAssetDenom3
+      : collateralAssetDenom2;
 
-  console.log(borrowList2);
+  const borrowList2 = [assetBorrow];
+
+  // extendedPairs &&
+  // Object.values(extendedPairs)
+  //   ?.map((item) => assetMap[item?.assetOut]?.denom)
+  //   .filter(
+  //     (item) =>
+  //       item === assetMap[Number(id2)]?.denom ||
+  //       item === assetMap[Number(id3)]?.denom
+  //   )
+  //   .filter((item) => item !== selectedCollateralValue);
 
   let currentLTV =
     Number(outAmount) *
@@ -785,14 +813,10 @@ const BorrowTab = ({
 
   const lendAssetId = lend?.assetId || pair?.assetIn;
 
-  console.log(assetRatesStatsMap);
-
   let dataAsset =
     assetMap[Number(id2)]?.denom === collateralAssetDenom
       ? Number(id2)
       : Number(id3);
-
-  console.log(assetRatesStatsMap[Number(id2)], assetRatesStatsMap[Number(id3)]);
 
   const liquidationThreshold = {
     title: "Liq. Threshold",
