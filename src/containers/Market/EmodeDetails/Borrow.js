@@ -141,15 +141,15 @@ const BorrowTab = ({
         assetDenomMap[collateralAssetDenom]?.id
       ) *
       (pair?.isInterPool
-        ? (Number(decimalConversion(assetRatesStatsMap[dataAssets]?.ltv)) -
+        ? (Number(decimalConversion(assetRatesStatsMap[dataAssets]?.eLtv)) -
             MAX_LTV_DEDUCTION) *
           Number(
             decimalConversion(
-              assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv
+              assetRatesStatsMap[pool?.transitAssetIds?.first]?.eLtv
             )
           )
         : Number(
-            decimalConversion(assetRatesStatsMap[dataAssets]?.ltv) -
+            decimalConversion(assetRatesStatsMap[dataAssets]?.eLtv) -
               MAX_LTV_DEDUCTION
           )) || 0) /
       marketPrice(
@@ -586,16 +586,16 @@ const BorrowTab = ({
 
   let maxLTV = pair?.isInterPool
     ? Number(
-        Number(decimalConversion(assetRatesStatsMap[pair?.assetIn]?.ltv)) *
+        Number(decimalConversion(assetRatesStatsMap[pair?.assetIn]?.eLtv)) *
           Number(
             decimalConversion(
-              assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv
+              assetRatesStatsMap[pool?.transitAssetIds?.first]?.eLtv
             )
           ) *
           100
       ).toFixed(DOLLAR_DECIMALS)
     : Number(
-        decimalConversion(assetRatesStatsMap[pair?.assetIn]?.ltv) * 100
+        decimalConversion(assetRatesStatsMap[pair?.assetIn]?.eLtv) * 100
       ).toFixed(DOLLAR_DECIMALS);
 
   const handleSliderChange = (sliderValue) => {
@@ -878,11 +878,12 @@ const BorrowTab = ({
               assetDenomMap[collateralAssetDenom]?.id
             ) || 0
         ) *
-          Number(
+          (Number(
             decimalConversion(
-              assetRatesStatsMap[Number(id2)]?.liquidationThreshold
+              assetRatesStatsMap[Number(id2)]?.eLiquidationThreshold
             ) * 100
-          )
+          ) /
+            100)
       ) /
       Number(
         outAmount *
@@ -892,7 +893,14 @@ const BorrowTab = ({
             assetDenomMap[borrowAssetDenom]?.id
           ) || 0
       );
-
+    console.log(
+      Number(
+        decimalConversion(
+          assetRatesStatsMap[Number(id2)]?.eLiquidationThreshold
+        ) * 100
+      ),
+      "data"
+    );
     return data === Number.NaN || data === Number.POSITIVE_INFINITY
       ? Number(0).toFixed(DOLLAR_DECIMALS)
       : Number(data || 0).toFixed(DOLLAR_DECIMALS);
