@@ -1,6 +1,6 @@
 import { Button, Table, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
 import {
@@ -8,16 +8,20 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../components/common";
 import HealthFactor from "../../components/HealthFactor";
 import { DOLLAR_DECIMALS } from "../../constants/common";
-import { queryLendPair, queryLendPosition } from "../../services/lend/query";
+import {
+  queryEMode,
+  queryLendPair,
+  queryLendPosition,
+} from "../../services/lend/query";
 import {
   amountConversion,
   amountConversionWithComma,
   commaSeparatorWithRounding,
-  denomConversion
+  denomConversion,
 } from "../../utils/coin";
 import { decimalConversion, marketPrice } from "../../utils/number";
 import { iconNameFromDenom, ucDenomToDenom } from "../../utils/string";
@@ -34,6 +38,7 @@ const Borrow = ({
   assetDenomMap,
   assetNameMap,
   markets,
+  assetRatesStatsMap,
 }) => {
   const navigate = useNavigate();
   const [navigateInProgress, setNavigateInProgress] = useState(false);
@@ -122,7 +127,12 @@ const Borrow = ({
       key: "health",
       width: 250,
       align: "center",
-      render: (item) => <HealthFactor parent="table" borrow={item} />,
+      render: (item, row) =>
+        row?.knowEmode ? (
+          row?.hf
+        ) : (
+          <HealthFactor parent="table" borrow={item} />
+        ),
     },
     {
       title: "Borrow APY",
@@ -147,7 +157,7 @@ const Borrow = ({
       key: "action",
       align: "right",
       width: 120,
-      render: (item) => (
+      render: (item, row) => (
         <>
           <Tooltip
             overlayClassName="commodo-tooltip"
@@ -155,20 +165,119 @@ const Borrow = ({
               item?.isLiquidated ? "Position has been sent for Auction." : ""
             }
           >
-            <Button
-              disabled={item?.isLiquidated || navigateInProgress}
-              onClick={() => handleNavigate(item)}
-              type="primary"
-              className="btn-filled"
-              size="small"
-            >
-              Edit
-            </Button>
+            {row?.knowEmode ? (
+              <Button
+                disabled={item?.isLiquidated || navigateInProgress}
+                onClick={() =>
+                  navigate(
+                    `/e-mode-details/${row?.getEmodeData[0]?.asset_in_pool_id}/${row?.getEmodeData[0]?.asset_in}/${row?.getEmodeData[0]?.asset_out}/${row?.getEmodeData[0]?.id}/#withdraw`
+                  )
+                }
+                type="primary"
+                className="btn-filled"
+                size="small"
+              >
+                Edit
+              </Button>
+            ) : (
+              <Button
+                disabled={item?.isLiquidated || navigateInProgress}
+                onClick={() => handleNavigate(item)}
+                type="primary"
+                className="btn-filled"
+                size="small"
+              >
+                Edit
+              </Button>
+            )}
           </Tooltip>
         </>
       ),
     },
   ];
+
+  const [eModData, setEModData] = useState([]);
+
+  const fetchLendPools = () => {
+    queryEMode((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setEModData(result?.data);
+    });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    fetchLendPools();
+  };
+
+  const knowEmode = (item) => {
+    const results = eModData.filter(
+      (item2) => Number(item2?.id) === Number(item?.pairId)
+    );
+    if (results.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const getEmodeData = (item) => {
+    const results = eModData.filter(
+      (item2) => Number(item2?.id) === Number(item?.pairId)
+    );
+    return results;
+  };
+
+  const hf = (item, collateralAsset) => {
+    const results = eModData.filter(
+      (item2) => Number(item2?.id) === Number(item?.pairId)
+    );
+    console.log(results, item, "sssss");
+    const threeSold =
+      Number(
+        decimalConversion(
+          assetRatesStatsMap[Number(results[0]?.asset_in)]
+            ?.eLiquidationThreshold
+        ) * 100
+      ) / 100;
+
+    const factor =
+      (Number(
+        Number(
+          amountConversion(item?.amountIn?.amount, collateralAsset?.decimals) ||
+            0
+        ) *
+          marketPrice(
+            markets,
+            ucDenomToDenom(item?.amountIn?.denom),
+            collateralAsset?.id
+          ) || 0,
+        DOLLAR_DECIMALS
+      ) *
+        threeSold) /
+      Number(
+        Number(
+          amountConversion(
+            item?.amountOut?.amount,
+            assetDenomMap[item?.amountOut?.denom]?.decimals
+          ) || 0
+        ) *
+          marketPrice(
+            markets,
+            item?.amountOut?.denom,
+            assetDenomMap[item?.amountOut?.denom]?.id
+          ) || 0,
+        DOLLAR_DECIMALS
+      );
+    return (factor || 0).toFixed(DOLLAR_DECIMALS);
+  };
 
   const tableData =
     userBorrowList?.length > 0
@@ -260,6 +369,9 @@ const Borrow = ({
             ),
             health: item,
             action: item,
+            hf: hf(item, collateralAsset),
+            knowEmode: knowEmode(item),
+            getEmodeData: getEmodeData(item),
           };
         })
       : [];
@@ -303,6 +415,8 @@ Borrow.propTypes = {
   assetNameMap: PropTypes.object,
   inProgress: PropTypes.bool,
   markets: PropTypes.object,
+  assetRatesStatsMap: PropTypes.object,
+
   userBorrowList: PropTypes.arrayOf(
     PropTypes.shape({
       amountOut: PropTypes.shape({
@@ -329,6 +443,7 @@ const stateToProps = (state) => {
     lang: state.language,
     userBorrowList: state.lend.userBorrows,
     address: state.account.address,
+    assetRatesStatsMap: state.lend.assetRatesStats.map,
     assetDenomMap: state.asset._.assetDenomMap,
     assetNameMap: state.asset._.assetNameMap,
     markets: state.oracle.market,
