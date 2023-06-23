@@ -103,7 +103,13 @@ const Deposit = ({
               <Button
                 onClick={() =>
                   navigate(
-                    `/e-mode-details/${row?.getEmodeData[0]?.asset_in_pool_id}/${row?.getEmodeData[0]?.asset_in}/${row?.getEmodeData[0]?.asset_out}/${row?.getEmodeData[0]?.id}/#withdraw`
+                    `/e-mode-details/${row?.getEmodeData[0]?.asset_in_pool_id}/${row?.getEmodeData[0]?.asset_in}/${row?.getEmodeData[0]?.asset_out}/${row?.getEmodeData[0]?.id}/#withdraw`,
+                    {
+                      state: {
+                        collateralAssetIdFromRoute: item?.assetId?.toNumber(),
+                        lendingIdFromRoute: item?.lendingId?.toNumber(),
+                      },
+                    }
                   )
                 }
                 type="primary"
