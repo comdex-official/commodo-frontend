@@ -121,16 +121,16 @@ const RepayTab = ({
 
   useEffect(() => {
     if (assetOutPool?.poolId) {
-      setAssetList([
-        assetMap[assetOutPool?.transitAssetIds?.main?.toNumber()],
-        assetMap[assetOutPool?.transitAssetIds?.first?.toNumber()],
-        assetMap[assetOutPool?.transitAssetIds?.second?.toNumber()],
-      ]);
+      // setAssetList([
+      //   assetMap[assetOutPool?.transitAssetIds?.main?.toNumber()],
+      //   assetMap[assetOutPool?.transitAssetIds?.first?.toNumber()],
+      //   assetMap[assetOutPool?.transitAssetIds?.second?.toNumber()],
+      // ]);
     } else if (pool?.poolId && !assetOutPool?.poolId) {
       setAssetList([
         assetMap[pool?.transitAssetIds?.main?.toNumber()],
         assetMap[pool?.transitAssetIds?.first?.toNumber()],
-        assetMap[pool?.transitAssetIds?.second?.toNumber()],
+        // assetMap[pool?.transitAssetIds?.second?.toNumber()],
       ]);
     }
   }, [pool, assetOutPool]);
