@@ -57,6 +57,7 @@ const RepayTab = ({
   setBalanceRefresh,
   markets,
   assetDenomMap,
+  assetRatesStatsMap,
 }) => {
   const marks = {
     0: "0%",
@@ -268,6 +269,46 @@ const RepayTab = ({
     handleInputChange(String(percentageValue));
   };
 
+  console.log(ucDenomToDenom(selectedBorrowPosition?.amountIn?.denom));
+
+  const hf = () => {
+    const data =
+      (Number(
+        Number(
+          amountConversion(
+            selectedBorrowPosition?.amountIn?.amount,
+            ucDenomToDenom(selectedBorrowPosition?.amountIn?.denom)?.decimals
+          ) || 0
+        ) *
+          marketPrice(
+            markets,
+            ucDenomToDenom(selectedBorrowPosition?.amountIn?.denom),
+            assetDenomMap[
+              ucDenomToDenom(selectedBorrowPosition?.amountIn?.denom)
+            ]?.id
+          ) || 0,
+        DOLLAR_DECIMALS
+      ) *
+        (Number(
+          decimalConversion(
+            assetRatesStatsMap[Number(pair?.assetIn)]?.eLiquidationThreshold
+          ) * 100
+        ) /
+          100)) /
+      Number(
+        amount *
+          marketPrice(
+            markets,
+            assetMap[selectedAssetId]?.denom,
+            selectedAssetId
+          ) || 0
+      ).toFixed(DOLLAR_DECIMALS);
+
+    return data === Number.NaN || data === Number.POSITIVE_INFINITY
+      ? Number(0).toFixed(DOLLAR_DECIMALS)
+      : Number(data || 0).toFixed(DOLLAR_DECIMALS);
+  };
+
   return (
     <div className="details-wrapper emode-details-wrapper">
       <div className="details-left commodo-card mh-100">
@@ -471,7 +512,7 @@ const RepayTab = ({
                 <TooltipIcon text="Numeric representation of your position's safety" />
               </Col>
               <Col className="text-right health-right-repay">
-                <HealthFactor
+                {/* <HealthFactor
                   borrow={selectedBorrowPosition}
                   pair={pair}
                   pool={pool}
@@ -489,7 +530,8 @@ const RepayTab = ({
                         )
                       : Number(updatedAmountOut)?.toFixed(0)
                   }
-                />
+                /> */}
+                {hf() || 0.0}
               </Col>
             </Row>
           </Col>
@@ -682,6 +724,7 @@ RepayTab.propTypes = {
       low: PropTypes.number,
     }),
   }),
+  assetRatesStatsMap: PropTypes.object,
   pool: PropTypes.shape({
     poolId: PropTypes.shape({
       low: PropTypes.number,
@@ -705,6 +748,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
+    assetRatesStatsMap: state.lend.assetRatesStats.map,
     markets: state.oracle.market,
     assetDenomMap: state.asset._.assetDenomMap,
   };

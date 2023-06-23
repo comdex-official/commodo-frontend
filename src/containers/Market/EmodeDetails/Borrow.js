@@ -80,10 +80,11 @@ const BorrowTab = ({
   setAssetStatMap,
 }) => {
   const marks = {
-    0: "",
+    0: " ",
     80: "Safe",
     100: "Riskier",
   };
+
   let { id, id2, id3, id4 } = useParams();
   const parent = "borrow";
 
@@ -132,6 +133,8 @@ const BorrowTab = ({
     assetMap[Number(id2)]?.denom === collateralAssetDenom
       ? Number(id2)
       : Number(id3);
+
+  console.log({ pair });
 
   const borrowable = getAmount(
     (Number(inAmount) *
@@ -436,6 +439,10 @@ const BorrowTab = ({
 
   const handleClick = () => {
     setInProgress(true);
+    let dataAsset =
+      assetMap[Number(id2)]?.denom === collateralAssetDenom
+        ? Number(id2)
+        : Number(id3);
 
     signAndBroadcastTransaction(
       {
@@ -443,8 +450,8 @@ const BorrowTab = ({
           typeUrl: "/comdex.lend.v1beta1.MsgBorrowAlternate",
           value: {
             lender: address,
-            assetId: Long.fromNumber(Number(id2)),
-            pairId: Long.fromNumber(Number(id4)),
+            assetId: Long.fromNumber(dataAsset),
+            pairId: pair?.id,
             poolId: Long.fromNumber(Number(id)),
             isStableBorrow: false,
             appId: Long.fromNumber(APP_ID),
@@ -906,6 +913,8 @@ const BorrowTab = ({
       : Number(data || 0).toFixed(DOLLAR_DECIMALS);
   };
 
+  console.log(assetRatesStatsMap[1], assetRatesStatsMap[10]);
+
   return (
     <div className="details-wrapper emode-details-wrapper">
       {!dataInProgress ? (
@@ -1216,7 +1225,7 @@ const BorrowTab = ({
                       }
                       onChange={handleSliderChange}
                       tooltip={{ open: false }}
-                      className="commodo-slider market-slider-1 borrow-slider"
+                      className="commodo-slider market-slider borrow-slider"
                     />
                   </Col>
                 </Row>

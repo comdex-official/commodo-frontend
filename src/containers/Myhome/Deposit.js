@@ -7,20 +7,22 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../components/common";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import {
   amountConversion,
   amountConversionWithComma,
   commaSeparatorWithRounding,
-  denomConversion
+  denomConversion,
 } from "../../utils/coin";
 import { marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
 import InterestAndReward from "./Calculate/InterestAndReward";
 import "./index.less";
+import { queryEMode } from "../../services/lend/query";
+import { useEffect, useState } from "react";
 
 const editItems = (
   <Menu>
@@ -90,36 +92,90 @@ const Deposit = ({
       key: "action",
       align: "right",
       width: 200,
-      render: (item) => (
+      render: (item, row) => (
         <>
           <Dropdown
             overlayClassName="edit-btn-dorp"
             trigger={["click"]}
             overlay={editItems}
           >
-            <Button
-              onClick={() =>
-                navigate(
-                  `/market-details/${item?.poolId?.toNumber()}/#withdraw`,
-                  {
-                    state: {
-                      collateralAssetIdFromRoute: item?.assetId?.toNumber(),
-                      lendingIdFromRoute: item?.lendingId?.toNumber(),
-                    },
-                  }
-                )
-              }
-              type="primary"
-              className="btn-filled"
-              size="small"
-            >
-              Edit
-            </Button>
+            {row?.knowEmode ? (
+              <Button
+                onClick={() =>
+                  navigate(
+                    `/e-mode-details/${row?.getEmodeData[0]?.asset_in_pool_id}/${row?.getEmodeData[0]?.asset_in}/${row?.getEmodeData[0]?.asset_out}/${row?.getEmodeData[0]?.id}/#withdraw`
+                  )
+                }
+                type="primary"
+                className="btn-filled"
+                size="small"
+              >
+                Edit
+              </Button>
+            ) : (
+              <Button
+                onClick={() =>
+                  navigate(
+                    `/market-details/${item?.poolId?.toNumber()}/#withdraw`,
+                    {
+                      state: {
+                        collateralAssetIdFromRoute: item?.assetId?.toNumber(),
+                        lendingIdFromRoute: item?.lendingId?.toNumber(),
+                      },
+                    }
+                  )
+                }
+                type="primary"
+                className="btn-filled"
+                size="small"
+              >
+                Edit
+              </Button>
+            )}
           </Dropdown>
         </>
       ),
     },
   ];
+
+  const [eModData, setEModData] = useState([]);
+
+  const fetchLendPools = () => {
+    queryEMode((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setEModData(result?.data);
+    });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    fetchLendPools();
+  };
+
+  const knowEmode = (item) => {
+    const results = eModData.filter(
+      (item2) => Number(item2?.id) === Number(item?.pairId)
+    );
+    if (results.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const getEmodeData = (item) => {
+    const results = eModData.filter(
+      (item2) => Number(item2?.id) === Number(item?.pairId)
+    );
+    return results;
+  };
 
   const tableData =
     userLendList?.length > 0
@@ -176,6 +232,8 @@ const Deposit = ({
               </>
             ),
             action: item,
+            knowEmode: knowEmode(item),
+            getEmodeData: getEmodeData(item),
           };
         })
       : [];
