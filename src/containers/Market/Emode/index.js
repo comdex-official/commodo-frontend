@@ -25,7 +25,7 @@ import AvailableToBorrow from "../Borrow/AvailableToBorrow";
 
 const EmodeList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
   const [inProgress, setInProgress] = useState(false);
-  const [eModData, setEModData] = useState(false);
+  const [eModData, setEModData] = useState([]);
 
   const fetchLendPools = () => {
     setInProgress(true);
@@ -57,6 +57,18 @@ const EmodeList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
     return <Spin />;
   }
 
+  const uniqueEnvironments = {}; // Temporary object to store unique environments
+
+  const result = eModData.filter((obj) => {
+    if (!uniqueEnvironments[obj?.asset_in_pool_id]) {
+      uniqueEnvironments[obj?.asset_in_pool_id] = true; // Mark environment as encountered
+      return true; // Include the object in the filtered result
+    }
+    return false; // Exclude duplicate objects
+  });
+
+  console.log(result);
+
   return (
     <div className="commodo-card bg-none">
       <div className="card-header d-flex align-items-center justify-content-between mb-3 ">
@@ -82,8 +94,8 @@ const EmodeList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
       </div>
       <div className="card-content">
         <div className="market-list">
-          {eModData &&
-            eModData.map((item, i) => (
+          {result &&
+            result.map((item, i) => (
               <div
                 key={i}
                 className="market-list-item"
