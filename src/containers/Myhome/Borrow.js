@@ -86,6 +86,57 @@ const Borrow = ({
       }
     });
   };
+
+  const handleNavigate2 = (borrow, getEmodeData) => {
+    setNavigateInProgress(true);
+
+    queryLendPair(borrow?.pairId, (error, pairResult) => {
+      if (error) {
+        setNavigateInProgress(false);
+        return;
+      }
+
+      const lendPair = pairResult?.ExtendedPair;
+
+      if (!lendPair?.isInterPool) {
+        navigate(
+          `/e-mode-details/${getEmodeData?.asset_in_pool_id}/${getEmodeData?.asset_in}/${getEmodeData?.asset_out}/${getEmodeData?.id}/#withdraw`,
+          {
+            state: {
+              lendingIdFromRoute: borrow?.lendingId?.toNumber(),
+              borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
+              collateralAssetMinimalDenomFromRoute: borrow?.amountIn?.denom,
+              pairIdFromRoute: borrow?.pairId,
+              collateralAssetIdFromRoute: lendPair?.assetIn?.toNumber(),
+            },
+          }
+        );
+      } else {
+        queryLendPosition(borrow?.lendingId, (error, result) => {
+          if (error) {
+            message.error(error);
+            return;
+          }
+
+          if (result?.lend?.poolId) {
+            navigate(
+              `/e-mode-details/${getEmodeData?.asset_in_pool_id}/${getEmodeData?.asset_in}/${getEmodeData?.asset_out}/${getEmodeData?.id}/#withdraw`,
+              {
+                state: {
+                  lendingIdFromRoute: borrow?.lendingId?.toNumber(),
+                  borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
+                  collateralAssetMinimalDenomFromRoute: borrow?.amountIn?.denom,
+                  pairIdFromRoute: borrow?.pairId,
+                  collateralAssetIdFromRoute: lendPair?.assetIn?.toNumber(),
+                },
+              }
+            );
+          }
+        });
+      }
+    });
+  };
+
   const columns = [
     {
       title: "Asset",
@@ -168,11 +219,7 @@ const Borrow = ({
             {row?.knowEmode ? (
               <Button
                 disabled={item?.isLiquidated || navigateInProgress}
-                onClick={() =>
-                  navigate(
-                    `/e-mode-details/${row?.getEmodeData[0]?.asset_in_pool_id}/${row?.getEmodeData[0]?.asset_in}/${row?.getEmodeData[0]?.asset_out}/${row?.getEmodeData[0]?.id}/#withdraw`
-                  )
-                }
+                onClick={() => handleNavigate2(item, row?.getEmodeData[0])}
                 type="primary"
                 className="btn-filled"
                 size="small"
