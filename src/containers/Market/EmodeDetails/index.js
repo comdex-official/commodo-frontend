@@ -71,6 +71,8 @@ const EmodeDetails = ({
           return;
         }
 
+        console.log(result?.lends, "rrrrrr");
+
         setPoolLends(result?.lends);
       });
 
