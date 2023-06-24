@@ -2,7 +2,7 @@ import { createTxRaw } from "@tharsis/proto";
 import { generateEndpointAccount } from "@tharsis/provider";
 import {
   generateEndpointBroadcast,
-  generatePostBodyBroadcast
+  generatePostBodyBroadcast,
 } from "@tharsis/provider/dist/rest/broadcast";
 import { createTxIBCMsgTransfer } from "@tharsis/transactions";
 import { Button, Form, message, Modal, Spin } from "antd";
@@ -18,13 +18,13 @@ import { comdex } from "../../../config/network";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DEFAULT_FEE } from "../../../constants/common";
 import { queryBalance } from "../../../services/bank/query";
-import { aminoSignIBCTx } from "../../../services/helper";
+import { aminoDirectSignIBCTx, aminoSignIBCTx } from "../../../services/helper";
 import { initializeIBCChain } from "../../../services/keplr";
 import { fetchTxHash } from "../../../services/transaction";
 import {
   amountConversion,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../utils/coin";
 import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
@@ -37,6 +37,7 @@ const Deposit = ({
   handleRefresh,
   balances,
   assetDenomMap,
+  assetMap,
 }) => {
   const [isOpen, setIsModalOpen] = useState(false);
   const [sourceAddress, setSourceAddress] = useState("");
@@ -100,7 +101,7 @@ const Deposit = ({
       message.info("Please connect your wallet");
       return;
     }
-    
+
     initialize();
     setIsModalOpen(true);
   };
@@ -205,6 +206,68 @@ const Deposit = ({
     }
   };
 
+  const handleStrideIBC = () => {
+    console.log("DDDD");
+    setInProgress(true);
+    const data = {
+      message: {
+        typeUrl: "/ibc.applications.transfer.v1.MsgTransfer",
+        value: {
+          sourcePort: "transfer",
+          sourceChannel: chain.destChannelId,
+          token: {
+            denom: chain?.coinMinimalDenom,
+            amount: getAmount(
+              amount,
+              assetMap[chain?.coinMinimalDenom]?.decimals
+            ),
+          },
+          sender: sourceAddress,
+          receiver: address,
+          timeoutHeight: {
+            revisionNumber: Number(proofHeight.revision_number),
+            revisionHeight: Number(proofHeight.revision_height) + 100,
+          },
+          timeout_timestamp: undefined,
+        },
+      },
+      fee: { amount: [{ denom: chain.denom, amount: "25000" }], gas: "200000" },
+      memo: "",
+    };
+
+    aminoDirectSignIBCTx(
+      data,
+      sourceAddress,
+      chain.chainInfo,
+      (error, result) => {
+        if (error) {
+          if (result?.transactionHash) {
+            message.error(
+              <Snack
+                message={variables[lang].tx_failed}
+                explorerUrlToTx={chain?.explorerUrlToTx}
+                hash={result?.transactionHash}
+              />
+            );
+          } else {
+            message.error(error);
+          }
+
+          resetValues();
+          return;
+        }
+
+        if (result?.transactionHash) {
+          message.loading(
+            "Transaction Broadcasting, Waiting for transaction to be included in the block"
+          );
+
+          handleHash(result?.transactionHash);
+        }
+      }
+    );
+  };
+
   const signIBCTx = () => {
     if (!proofHeight?.revision_height) {
       message.error("Unable to get the latest block height");
@@ -214,6 +277,13 @@ const Deposit = ({
     if (chain?.chainInfo?.features?.includes("eth-address-gen")) {
       // handle evm based token deposits
       return handleEvmIBC();
+    }
+
+    console.log("TTTTTTT", chain?.chainInfo?.features);
+    if (chain?.chainInfo?.features?.includes("stride-hot-fix")) {
+      // handle Stride based token deposits
+      console.log("DFFFFFF");
+      return handleStrideIBC();
     }
 
     setInProgress(true);
@@ -422,7 +492,8 @@ const Deposit = ({
                   <>
                     {variables[lang].available}
                     <span className="ml-1">
-                      {(address && availableBalance &&
+                      {(address &&
+                        availableBalance &&
                         availableBalance.amount &&
                         amountConversion(
                           availableBalance.amount,
@@ -436,16 +507,16 @@ const Deposit = ({
                         className=" active"
                         onClick={() => {
                           setAmount(
-                            address ?
-                              availableBalance?.amount > DEFAULT_FEE
+                            address
+                              ? availableBalance?.amount > DEFAULT_FEE
                                 ? amountConversion(
-                                  availableBalance?.amount - DEFAULT_FEE,
-                                  assetDenomMap[chain?.ibcDenomHash]?.decimals
-                                )
+                                    availableBalance?.amount - DEFAULT_FEE,
+                                    assetDenomMap[chain?.ibcDenomHash]?.decimals
+                                  )
                                 : amountConversion(
-                                  availableBalance?.amount,
-                                  assetDenomMap[chain?.ibcDenomHash]?.decimals
-                                )
+                                    availableBalance?.amount,
+                                    assetDenomMap[chain?.ibcDenomHash]?.decimals
+                                  )
                               : 0
                           );
                         }}
@@ -499,6 +570,7 @@ const stateToProps = (state) => {
     lang: state.language,
     address: state.account.address,
     assetDenomMap: state.asset._.assetDenomMap,
+    assetMap: state.asset._.map,
   };
 };
 
