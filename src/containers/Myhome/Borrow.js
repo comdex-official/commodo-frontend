@@ -341,7 +341,12 @@ const Borrow = ({
               <>
                 <div className="assets-with-icon">
                   {knowEmode(item) ? (
-                    <img alt={"E-Mod"} src={EMod} className="e-mod-img" />
+                    <Tooltip
+                      overlayClassName="commodo-tooltip"
+                      title={"E-mode position"}
+                    >
+                      <img alt={"E-Mod"} src={EMod} className="e-mod-img" />
+                    </Tooltip>
                   ) : (
                     ""
                   )}

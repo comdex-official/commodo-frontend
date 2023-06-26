@@ -70,7 +70,17 @@ const CollateralDetails = ({
           </a>
         </>
       ) : (
-        "Type of the collateral selected"
+        <>
+          Type of the collateral selected.
+          <a
+            href="#"
+            onClick={() =>
+              window.open("https://docs.commodo.one/collateral-type", "_blank")
+            }
+          >
+            Learn more.
+          </a>
+        </>
       ),
     },
     {

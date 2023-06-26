@@ -380,7 +380,7 @@ const Myhome = ({
 
   const tabItems = [
     {
-      label: "Lent",
+      label: "Lend",
       key: "1",
       children: (
         <Deposit fetchUserLends={fetchUserLends} inProgress={lendsInProgress} />
