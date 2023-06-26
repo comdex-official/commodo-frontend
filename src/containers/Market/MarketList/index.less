@@ -194,9 +194,9 @@
 .market-header-right {
     text-align: right;
     .ant-btn {
-        background: linear-gradient(272.17deg, #00FC85 -17.16%, #17A68C 97.26%);
+        background: linear-gradient(272.57deg, rgba(0, 119, 69, 0.2) -39.35%, rgba(12, 204, 89, 0.2) 108.59%);
         border-radius: 10px;
-        color: @text-color-dark;
+        color: #FFFFFF;
         font-size: 16px;
         font-weight: 700;
         margin-left: 12px;
@@ -204,8 +204,23 @@
         transition: all ease-in 0.1s;
         min-width: 180px;
         &:hover {
-            color:  @text-color-dark !important;
-            background: linear-gradient(272.17deg, #17A68C -17.16%, #00FC85 97.26%);
+            color:  #FFFFFF !important;
+            // background: linear-gradient(272.17deg, #17A68C -17.16%, #00FC85 97.26%);
         }
     }
+
+    .ant-btn::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 10px;
+        padding: 2px; /* control the border thickness */
+        background: linear-gradient(to right, #0CCC59, #007745);
+        -webkit-mask: 
+          linear-gradient(#fff 0 0) content-box, 
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+                mask-composite: exclude;
+        pointer-events: none;
+      }
 }

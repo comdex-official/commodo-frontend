@@ -57,7 +57,21 @@ const CollateralDetails = ({
     {
       title: "Collateral Type",
       counts: "Normal",
-      tooltipText: "Type of the collateral selected",
+      tooltipText: eMod ? (
+        <>
+          Type of the collateral selected.
+          <a
+            href="#"
+            onClick={() =>
+              window.open("https://docs.commodo.one/collateral-type", "_blank")
+            }
+          >
+            Learn more.
+          </a>
+        </>
+      ) : (
+        "Type of the collateral selected"
+      ),
     },
     {
       title: "Current Lend Position",

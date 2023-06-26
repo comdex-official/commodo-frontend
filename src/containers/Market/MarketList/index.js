@@ -59,21 +59,56 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
       <div className="card-header d-flex align-items-center justify-content-between mb-3 ">
         <div>Markets</div>
         <div className="market-header-right">
-          <Link to="/e-mode">
-            <Button>E-Mode</Button>
-          </Link>
-          <Link to="/borrow/direct">
-            <Button>Direct Borrow</Button>
-          </Link>
-          <Button
-            onClick={() =>
-              navigate({
-                pathname: `/deprecated-cpool/${1}`,
-              })
+          <Tooltip
+            overlayClassName="commodo-tooltip"
+            title={
+              <>
+                E-mode or Efficiency mode, borrow correlated asset with higher
+                efficiency.
+                <a
+                  href="#"
+                  onClick={() =>
+                    window.open("https://docs.commodo.one/e-mode", "_blank")
+                  }
+                >
+                  Learn more.
+                </a>
+              </>
             }
           >
-            Deprecated cPool
-          </Button>
+            <Button
+              onClick={() =>
+                navigate({
+                  pathname: `/e-mode`,
+                })
+              }
+            >
+              E-Mode
+            </Button>
+          </Tooltip>
+
+          <Link to="/borrow/direct">
+            <Tooltip
+              overlayClassName="commodo-tooltip"
+              title={"Lend and Borrow in one click!"}
+            >
+              <Button>Direct Borrow</Button>
+            </Tooltip>
+          </Link>
+          <Tooltip
+            overlayClassName="commodo-tooltip"
+            title={"Deprecating cPool, Repay debt and Withdraw your funds asap"}
+          >
+            <Button
+              onClick={() =>
+                navigate({
+                  pathname: `/deprecated-cpool/${1}`,
+                })
+              }
+            >
+              Deprecated cPool
+            </Button>
+          </Tooltip>
         </div>
       </div>
       <div className="card-content">
