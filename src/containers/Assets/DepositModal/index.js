@@ -38,6 +38,7 @@ const Deposit = ({
   balances,
   assetDenomMap,
   assetMap,
+  disable = false,
 }) => {
   const [isOpen, setIsModalOpen] = useState(false);
   const [sourceAddress, setSourceAddress] = useState("");
@@ -446,6 +447,7 @@ const Deposit = ({
         size="small"
         className="asset-ibc-btn-container"
         onClick={showModal}
+        disabled={disable}
       >
         {variables[lang].deposit} <span className="asset-ibc-btn"> &#62;</span>
       </Button>
