@@ -219,6 +219,8 @@ export const aminoDirectSignIBCTx = async (
   SigningStargateClient.connectWithSigner(config.rpc, offlineSigner, {
     registry: myRegistry,
     aminoTypes: aminoTypes,
+    accountParser: strideAccountParser,
+    preferNoSetFee: true,
   })
     .then((client) => {
       client
