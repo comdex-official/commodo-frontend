@@ -71,8 +71,6 @@ const EmodeDetails = ({
           return;
         }
 
-        console.log(result?.lends, "rrrrrr");
-
         setPoolLends(result?.lends);
       });
 
@@ -124,7 +122,11 @@ const EmodeDetails = ({
         <>
           <Tooltip
             overlayClassName="commodo-tooltip"
-            title="No assets lent in this market to withdraw"
+            title={
+              poolLendPositions?.length <= 0
+                ? "No assets first to Withdraw in this market"
+                : ""
+            }
           >
             Withdraw
           </Tooltip>
@@ -132,13 +134,18 @@ const EmodeDetails = ({
       ),
       key: "2",
       children: <Withdraw />,
+      disabled: !poolLendPositions?.length,
     },
     {
       label: (
         <>
           <Tooltip
             overlayClassName="commodo-tooltip"
-            title="No debt to repay in this market"
+            title={
+              poolLendPositions?.length <= 0
+                ? "No debt to Repay in this market"
+                : ""
+            }
           >
             Repay
           </Tooltip>
@@ -146,6 +153,7 @@ const EmodeDetails = ({
       ),
       key: "3",
       children: <RepayTab />,
+      disabled: !poolLendPositions?.length,
     },
   ];
   return (

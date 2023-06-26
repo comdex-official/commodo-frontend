@@ -863,14 +863,28 @@ const BorrowTab = ({
             decimalConversion(assetRatesStatsMap[dataAsset]?.eLtv) * 100
           ).toFixed(DOLLAR_DECIMALS)}%`,
       tooltipText:
-        parent === "lend" ? "Total funds Deposited" : "Total funds Borrowed",
+        parent === "lend"
+          ? "Total funds Deposited"
+          : "The maximum borrowing power of the collateral",
     },
     liquidationThreshold,
     liquidationPenalty,
     {
       title: "Collateral Type",
       counts: "Normal",
-      tooltipText: "Type of the collateral selected",
+      tooltipText: (
+        <>
+          Type of the collateral selected.
+          <a
+            href="#"
+            onClick={() =>
+              window.open("https://docs.commodo.one/collateral-type", "_blank")
+            }
+          >
+            Learn more.
+          </a>
+        </>
+      ),
     },
   ];
 

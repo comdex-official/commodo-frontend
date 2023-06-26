@@ -9,7 +9,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../../components/common";
 import CollateralDetails from "../../../components/common/Asset/CollateralDetails";
 import CustomRow from "../../../components/common/Asset/CustomRow";
@@ -20,18 +20,18 @@ import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   queryAllLendByOwnerAndPool,
-  QueryPoolAssetLBMapping
+  QueryPoolAssetLBMapping,
 } from "../../../services/lend/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "../../Myhome/DepositWithdraw/ActionButton";
@@ -186,6 +186,8 @@ const WithdrawTab = ({
     0: "0%",
     100: "100%",
   };
+
+  console.log(assetMap[selectedAssetId], selectedAssetId);
 
   return (
     <div className="details-wrapper market-details-wrapper">

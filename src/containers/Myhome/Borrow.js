@@ -28,6 +28,7 @@ import { iconNameFromDenom, ucDenomToDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
 import InterestAndReward from "./Calculate/InterestAndReward";
 import "./index.less";
+import EMod from "../../assets/images/emod.png";
 
 const Borrow = ({
   lang,
@@ -339,6 +340,11 @@ const Borrow = ({
             asset: (
               <>
                 <div className="assets-with-icon">
+                  {knowEmode(item) ? (
+                    <img alt={"E-Mod"} src={EMod} className="e-mod-img" />
+                  ) : (
+                    ""
+                  )}
                   <div className="assets-icon">
                     <SvgIcon name={iconNameFromDenom(item?.amountOut?.denom)} />
                   </div>

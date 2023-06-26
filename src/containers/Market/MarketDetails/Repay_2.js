@@ -9,7 +9,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../../components/common";
 import CollateralAndBorrowDetails from "../../../components/common/Asset/CollateralAndBorrowDetails";
 import CustomRow from "../../../components/common/Asset/CustomRow";
@@ -22,24 +22,24 @@ import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   queryAllBorrowByOwnerAndPool,
   queryLendPair,
-  queryLendPool
+  queryLendPool,
 } from "../../../services/lend/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../utils/number";
 import {
   iconNameFromDenom,
   toDecimals,
-  ucDenomToDenom
+  ucDenomToDenom,
 } from "../../../utils/string";
 import ActionButton from "../../Myhome/BorrowRepay/ActionButton";
 import "./index.less";
@@ -73,12 +73,27 @@ const RepayTab_2 = ({
   const [sliderValue, setSliderValue] = useState(0);
   const [assetOutPool, setAssetOutPool] = useState();
   const [selectedBorrowDenom, setSelectedBorrowDenom] = useState();
+  const [extendedPairs, setExtendedPairs] = useState({});
 
   const { state } = useLocation();
   const borrowAssetMinimalDenomFromRoute =
     state?.borrowAssetMinimalDenomFromRoute;
   const collateralAssetMinimalDenomFromRoute =
     state?.collateralAssetMinimalDenomFromRoute;
+
+  const fetchPair = (id) => {
+    queryLendPair(id, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setExtendedPairs((prevState) => ({
+        [result?.ExtendedPair?.id]: result?.ExtendedPair,
+        ...prevState,
+      }));
+    });
+  };
 
   const fetchAllBorrowByOwnerAndPool = (address, poolId) => {
     queryAllBorrowByOwnerAndPool(address, poolId, (error, result) => {
@@ -92,7 +107,25 @@ const RepayTab_2 = ({
         return map;
       }, {});
 
-      setBorrowPosition(result?.borrows);
+      if (result?.borrows) {
+        for (let i = 0; i < result?.borrows?.length; i++) {
+          fetchPair(result?.borrows[i]?.pairId);
+        }
+      }
+
+      if (extendedPairs) {
+        const filteredByValue = Object.fromEntries(
+          Object.entries(extendedPairs).filter(
+            ([key, value]) => value?.isEModeEnabled !== true
+          )
+        );
+        const filteredByValueResult = Object.entries(filteredByValue).map(
+          (e) => ({ [e[0]]: e[1] })
+        );
+
+        setBorrowPosition(filteredByValueResult);
+      }
+
       setUserBorrowsMap(userBorrowsMap);
     });
   };
