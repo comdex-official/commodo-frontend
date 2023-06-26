@@ -95,7 +95,19 @@ const CollateralAndBorrowDetails = ({
     {
       title: "Collateral Type",
       counts: "Normal",
-      tooltipText: "Type of the collateral selected",
+      tooltipText: (
+        <>
+          Type of the collateral selected.
+          <a
+            href="#"
+            onClick={() =>
+              window.open("https://docs.commodo.one/collateral-type", "_blank")
+            }
+          >
+            Learn more.
+          </a>
+        </>
+      ),
     },
   ];
 
