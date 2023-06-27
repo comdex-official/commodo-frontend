@@ -8,18 +8,14 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon,
+  TooltipIcon
 } from "../../components/common";
 import AssetList from "../../config/ibc_assets.json";
 import { cmst, comdex, harbor } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import { getChainConfig } from "../../services/keplr";
 import { amountConversion, denomConversion } from "../../utils/coin";
-import {
-  commaSeparator,
-  formateNumberDecimalsAuto,
-  marketPrice,
-} from "../../utils/number";
+import { commaSeparator, formateNumberDecimalsAuto, marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import Deposit from "./DepositModal";
 import "./index.less";
@@ -34,43 +30,8 @@ const Assets = ({
 }) => {
   const [isHideToggleOn, setHideToggle] = useState(false);
   const [searchKey, setSearchKey] = useState();
-  const [isLedgerAccount, setIsLedgerAccount] = useState(false);
-  const [walletType, setWalletType] = useState("");
 
   const dispatch = useDispatch();
-
-  window.addEventListener("keplr_keystorechange", () => {
-    checkAccountType();
-  });
-
-  useEffect(() => {
-    let wallet = localStorage.getItem("loginType");
-    setWalletType(wallet);
-  });
-
-  const checkAccountType = async () => {
-    const chainId = comdex?.chainId;
-
-    const walletWindowName = walletType;
-    const key = window[walletWindowName]?.getKey;
-
-    if (walletType === "keplr") {
-      if (key) {
-        const account = await key(chainId);
-        setIsLedgerAccount(account?.isNanoLedger || false);
-      } else {
-        setIsLedgerAccount(false);
-      }
-    } else {
-      if (walletType === "ledger") {
-        setIsLedgerAccount(true);
-      }
-    }
-  };
-
-  useEffect(() => {
-    checkAccountType();
-  }, [walletType]);
 
   const handleBalanceRefresh = () => {
     dispatch({
@@ -169,12 +130,6 @@ const Assets = ({
               chain={value}
               balances={balances}
               handleRefresh={handleBalanceRefresh}
-              disable={
-                isLedgerAccount === true &&
-                value?.chainInfo?.chainName === "stride"
-                  ? true
-                  : false
-              }
             />
           );
         }
