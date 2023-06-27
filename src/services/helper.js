@@ -3,7 +3,7 @@ import {
   AminoTypes,
   createProtobufRpcClient,
   QueryClient,
-  SigningStargateClient,
+  SigningStargateClient
 } from "@cosmjs/stargate";
 import { HttpBatchClient, Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
@@ -206,38 +206,4 @@ export const aminoSignIBCTx = (config, transaction, callback) => {
         callback(error?.message);
       });
   })();
-};
-
-export const aminoDirectSignIBCTx = async (
-  transaction,
-  address,
-  config,
-  callback
-) => {
-  const [offlineSigner, accounts] = await KeplrWallet(config.chainId);
-
-  SigningStargateClient.connectWithSigner(config.rpc, offlineSigner, {
-    registry: myRegistry,
-    aminoTypes: aminoTypes,
-    accountParser: strideAccountParser,
-    preferNoSetFee: true,
-  })
-    .then((client) => {
-      client
-        .signAndBroadcast(
-          address,
-          [transaction.message],
-          transaction.fee,
-          transaction.memo
-        )
-        .then((result) => {
-          callback(null, result);
-        })
-        .catch((error) => {
-          callback(error?.message);
-        });
-    })
-    .catch((error) => {
-      callback(error && error.message);
-    });
 };
