@@ -29,6 +29,7 @@ import AssetApy from "../Market/AssetApy";
 import InterestAndReward from "./Calculate/InterestAndReward";
 import "./index.less";
 import EMod from "../../assets/images/emod.png";
+import DPool from "../../assets/images/d-pool.png";
 
 const Borrow = ({
   lang,
@@ -347,6 +348,8 @@ const Borrow = ({
                     >
                       <img alt={"E-Mod"} src={EMod} className="e-mod-img" />
                     </Tooltip>
+                  ) : Number(item?.poolId) === 1 ? (
+                    <img alt={"D-Pool"} src={DPool} className="e-mod-img" />
                   ) : (
                     ""
                   )}
