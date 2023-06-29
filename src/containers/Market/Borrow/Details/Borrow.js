@@ -818,6 +818,7 @@ const BorrowTab = ({
             </div>
             <div className="commodo-card">
               <CollateralAndBorrowDetails
+                eMod={true}
                 interAssetID={pool?.transitAssetIds?.second}
                 isInterPool={pair?.isInterPool}
                 lendAssetId={lend?.assetId || pair?.assetIn}
