@@ -84,6 +84,10 @@ const CollateralAndBorrowDetails = ({
       title: "Max LTV",
       counts: isInterPool
         ? `${Number(Number(maxLTV) * 100).toFixed(DOLLAR_DECIMALS)}%`
+        : eMod
+        ? `${Number(
+            decimalConversion(assetRatesStatsMap[lendAssetId]?.eLtv) * 100
+          ).toFixed(DOLLAR_DECIMALS)}%`
         : `${Number(
             decimalConversion(assetRatesStatsMap[lendAssetId]?.ltv) * 100
           ).toFixed(DOLLAR_DECIMALS)}%`,

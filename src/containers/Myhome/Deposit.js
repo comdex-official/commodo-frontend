@@ -1,4 +1,4 @@
-import { Button, Dropdown, Menu, Table } from "antd";
+import { Button, Dropdown, Menu, Table, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
@@ -193,7 +193,14 @@ const Deposit = ({
               <>
                 <div className="assets-with-icon">
                   {Number(item?.poolId) === 1 ? (
-                    <img alt={"D-Pool"} src={DPool} className="e-mod-img" />
+                    <Tooltip
+                      overlayClassName="commodo-tooltip"
+                      title={
+                        "Position is from a deprecating cPool, Repay debt and Withdraw funds asap. Click Edit button."
+                      }
+                    >
+                      <img alt={"D-Pool"} src={DPool} className="e-mod-img" />
+                    </Tooltip>
                   ) : (
                     ""
                   )}
