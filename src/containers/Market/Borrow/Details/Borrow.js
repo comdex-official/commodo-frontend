@@ -530,7 +530,7 @@ const BorrowTab = ({
     100: "Riskier",
   };
 
-  console.log({ pool });
+  console.log({ pair });
 
   return (
     <div className="details-wrapper market-details-wrapper">
@@ -818,7 +818,7 @@ const BorrowTab = ({
             </div>
             <div className="commodo-card">
               <CollateralAndBorrowDetails
-                eMod={true}
+                eMod={pair?.isEModeEnabled}
                 interAssetID={pool?.transitAssetIds?.second}
                 isInterPool={pair?.isInterPool}
                 lendAssetId={lend?.assetId || pair?.assetIn}

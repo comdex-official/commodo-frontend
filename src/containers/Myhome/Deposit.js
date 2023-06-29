@@ -119,6 +119,22 @@ const Deposit = ({
               >
                 Edit
               </Button>
+            ) : row?.poolId ? (
+              <Button
+                onClick={() =>
+                  navigate(`/deprecated-cpool/${1}/#withdraw`, {
+                    state: {
+                      collateralAssetIdFromRoute: item?.assetId?.toNumber(),
+                      lendingIdFromRoute: item?.lendingId?.toNumber(),
+                    },
+                  })
+                }
+                type="primary"
+                className="btn-filled"
+                size="small"
+              >
+                Edit
+              </Button>
             ) : (
               <Button
                 onClick={() =>
@@ -254,6 +270,7 @@ const Deposit = ({
             action: item,
             knowEmode: knowEmode(item),
             getEmodeData: getEmodeData(item),
+            poolId: Number(item?.poolId),
           };
         })
       : [];
