@@ -116,6 +116,7 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
           {pools?.length > 0 ? (
             pools &&
             pools?.map((item) => {
+              // if (Number(item.poolId) === 1) return;
               return (
                 <div
                   className="market-list-item"
