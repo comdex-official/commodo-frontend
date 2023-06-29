@@ -23,6 +23,7 @@ import InterestAndReward from "./Calculate/InterestAndReward";
 import "./index.less";
 import { queryEMode } from "../../services/lend/query";
 import { useEffect, useState } from "react";
+import DPool from "../../assets/images/d-pool.png";
 
 const editItems = (
   <Menu>
@@ -191,6 +192,12 @@ const Deposit = ({
             asset: (
               <>
                 <div className="assets-with-icon">
+                  {Number(item?.poolId) === 1 ? (
+                    <img alt={"D-Pool"} src={DPool} className="e-mod-img" />
+                  ) : (
+                    ""
+                  )}
+
                   <div className="assets-icon">
                     <SvgIcon name={iconNameFromDenom(item?.amountIn?.denom)} />
                   </div>
