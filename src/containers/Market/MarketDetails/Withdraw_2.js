@@ -95,12 +95,14 @@ const WithdrawTab = ({
         return;
       }
 
-      const userLendsMap = result?.lends?.reduce((map, obj) => {
+      const rs1 = result?.lends.filter((item) => Number(item?.poolId) !== 1);
+
+      const userLendsMap = rs1?.reduce((map, obj) => {
         map[obj?.assetId] = obj;
         return map;
       }, {});
 
-      setAllLendByOwner(result?.lends);
+      setAllLendByOwner(rs1);
       setUserLendsMap(userLendsMap);
     });
   };
