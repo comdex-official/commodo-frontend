@@ -90,7 +90,9 @@ const MarketDetails = ({
           return;
         }
 
-        setPoolLends(result?.lends);
+        const rs = result?.lends.filter((item) => Number(item?.poolId) !== 1);
+
+        setPoolLends(rs);
       });
 
       queryUserBorrows(address, (error, result) => {

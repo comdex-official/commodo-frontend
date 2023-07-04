@@ -113,6 +113,8 @@ const RepayTab_2 = ({
         }
       }
 
+      console.log(extendedPairs);
+
       if (extendedPairs) {
         const filteredByValue = Object.fromEntries(
           Object.entries(extendedPairs).filter(
@@ -122,6 +124,8 @@ const RepayTab_2 = ({
         const filteredByValueResult = Object.entries(filteredByValue).map(
           (e) => ({ [e[0]]: e[1] })
         );
+
+        console.log(filteredByValueResult);
 
         setBorrowPosition(filteredByValueResult);
       }
@@ -336,6 +340,7 @@ const RepayTab_2 = ({
                 >
                   {borrowPosition?.length > 0 &&
                     borrowPosition?.map((item) => {
+                      if (Number(item?.poolId) === 1) return;
                       return (
                         <Option
                           key={item?.borrowingId?.toNumber()}

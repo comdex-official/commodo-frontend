@@ -93,7 +93,7 @@ const Details = ({
   let data = [
     {
       title: parent === "lend" ? "Deposited" : "Borrowed",
-      counts: `$${commaSeparatorWithRounding(
+      counts: `$${formatNumber(
         Number(
           amountConversion(
             (parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0

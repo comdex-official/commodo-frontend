@@ -98,7 +98,7 @@ const BorrowTab = ({
   let borrowAssetDenom = selectedBorrowValue
     ? assetMap[pair?.assetOut]?.denom
     : "";
-
+  console.log(extendedPairs);
   const availableBalance = lend?.availableToBorrow || 0;
 
   const borrowable = getAmount(
@@ -244,6 +244,8 @@ const BorrowTab = ({
 
           let pairMapping = result?.AssetToPairMapping;
 
+          console.log(pairMapping);
+
           if (pairMapping?.assetId) {
             for (let i = 0; i < pairMapping?.pairId?.length; i++) {
               fetchPair(pairMapping?.pairId[i]);
@@ -278,6 +280,8 @@ const BorrowTab = ({
           }));
         }
       );
+
+      console.log(result?.ExtendedPai, "result?.ExtendedPai");
 
       setExtendedPairs((prevState) => ({
         [result?.ExtendedPair?.id]: result?.ExtendedPair,
@@ -452,11 +456,17 @@ const BorrowTab = ({
     }
   };
 
-  const borrowList =
+  const filtered =
     extendedPairs &&
-    Object.values(extendedPairs)?.map(
-      (item) => assetMap[item?.assetOut]?.denom
+    Object.fromEntries(
+      Object.entries(extendedPairs).filter(([key, value]) => {
+        return Number(value?.assetOutPoolId) !== 1;
+      })
     );
+
+  const borrowList =
+    filtered &&
+    Object.values(filtered)?.map((item) => assetMap[item?.assetOut]?.denom);
 
   let currentLTV = Number(
     ((outAmount *
