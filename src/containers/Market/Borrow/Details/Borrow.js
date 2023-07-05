@@ -776,6 +776,7 @@ const BorrowTab = ({
                   </Col>
                   <Col className="text-right mt-2 health-factor-right">
                     <HealthFactor
+                      eMod={pair?.isEModeEnabled}
                       name="Health Factor"
                       pair={pair}
                       inAmount={inAmount}
