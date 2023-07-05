@@ -19,7 +19,31 @@ const HealthFactor = ({
   outAmount,
   pool,
   assetDenomMap,
+  eMod,
 }) => {
+  console.log(
+    (Number(inAmount) *
+      marketPrice(markets, assetMap[pair?.assetIn]?.denom, pair?.assetIn) *
+      (pair?.isInterPool
+        ? Number(
+            decimalConversion(
+              assetRatesStatsMap[pair?.assetIn]?.liquidationThreshold
+            )
+          ) *
+          Number(
+            decimalConversion(
+              assetRatesStatsMap[pool?.transitAssetIds?.first]
+                ?.liquidationThreshold
+            )
+          )
+        : Number(
+            decimalConversion(
+              assetRatesStatsMap[pair?.assetIn]?.liquidationThreshold
+            )
+          ))) /
+      (Number(outAmount) *
+        marketPrice(markets, assetMap[pair?.assetOut]?.denom, pair?.assetOut))
+  );
   const [percentage, setPercentage] = useState(0);
   useEffect(() => {
     if (borrow?.borrowingId && !pair?.id) {
@@ -51,38 +75,69 @@ const HealthFactor = ({
 
           myPool["transitAssetIds"] = transitAssetIds;
 
-          let percentage =
-            (borrow?.amountIn?.amount *
-              marketPrice(
-                markets,
-                ucDenomToDenom(borrow?.amountIn?.denom),
-                lendPair?.assetIn
-              ) *
-              (lendPair?.isInterPool
-                ? Number(
-                    decimalConversion(
-                      assetRatesStatsMap[lendPair?.assetIn]
-                        ?.liquidationThreshold
+          let percentage = eMod
+            ? (borrow?.amountIn?.amount *
+                marketPrice(
+                  markets,
+                  ucDenomToDenom(borrow?.amountIn?.denom),
+                  lendPair?.assetIn
+                ) *
+                (lendPair?.isInterPool
+                  ? Number(
+                      decimalConversion(
+                        assetRatesStatsMap[lendPair?.assetIn]
+                          ?.eLiquidationThreshold
+                      )
+                    ) *
+                    Number(
+                      decimalConversion(
+                        assetRatesStatsMap[myPool?.transitAssetIds?.first]
+                          ?.eLiquidationThreshold
+                      )
                     )
-                  ) *
-                  Number(
-                    decimalConversion(
-                      assetRatesStatsMap[myPool?.transitAssetIds?.first]
-                        ?.liquidationThreshold
+                  : Number(
+                      decimalConversion(
+                        assetRatesStatsMap[lendPair?.assetIn]
+                          ?.eLiquidationThreshold
+                      )
+                    ))) /
+              (borrow?.amountOut?.amount *
+                marketPrice(
+                  markets,
+                  borrow?.amountOut?.denom,
+                  lendPair?.assetOut
+                ))
+            : (borrow?.amountIn?.amount *
+                marketPrice(
+                  markets,
+                  ucDenomToDenom(borrow?.amountIn?.denom),
+                  lendPair?.assetIn
+                ) *
+                (lendPair?.isInterPool
+                  ? Number(
+                      decimalConversion(
+                        assetRatesStatsMap[lendPair?.assetIn]
+                          ?.liquidationThreshold
+                      )
+                    ) *
+                    Number(
+                      decimalConversion(
+                        assetRatesStatsMap[myPool?.transitAssetIds?.first]
+                          ?.liquidationThreshold
+                      )
                     )
-                  )
-                : Number(
-                    decimalConversion(
-                      assetRatesStatsMap[lendPair?.assetIn]
-                        ?.liquidationThreshold
-                    )
-                  ))) /
-            (borrow?.amountOut?.amount *
-              marketPrice(
-                markets,
-                borrow?.amountOut?.denom,
-                lendPair?.assetOut
-              ));
+                  : Number(
+                      decimalConversion(
+                        assetRatesStatsMap[lendPair?.assetIn]
+                          ?.liquidationThreshold
+                      )
+                    ))) /
+              (borrow?.amountOut?.amount *
+                marketPrice(
+                  markets,
+                  borrow?.amountOut?.denom,
+                  lendPair?.assetOut
+                ));
 
           if (isFinite(percentage)) {
             setPercentage(percentage);
@@ -90,41 +145,74 @@ const HealthFactor = ({
         });
       });
     }
-  }, [markets, borrow, assetRatesStatsMap, assetDenomMap]);
+  }, [markets, borrow, assetRatesStatsMap, assetDenomMap, eMod]);
 
   useEffect(() => {
     if (pair?.id && Number(inAmount) && Number(outAmount)) {
-      let percentage =
-        (Number(inAmount) *
-          marketPrice(markets, assetMap[pair?.assetIn]?.denom, pair?.assetIn) *
-          (pair?.isInterPool
-            ? Number(
-                decimalConversion(
-                  assetRatesStatsMap[pair?.assetIn]?.liquidationThreshold
+      let percentage = eMod
+        ? (Number(inAmount) *
+            marketPrice(
+              markets,
+              assetMap[pair?.assetIn]?.denom,
+              pair?.assetIn
+            ) *
+            (pair?.isInterPool
+              ? Number(
+                  decimalConversion(
+                    assetRatesStatsMap[pair?.assetIn]?.eLiquidationThreshold
+                  )
+                ) *
+                Number(
+                  decimalConversion(
+                    assetRatesStatsMap[pool?.transitAssetIds?.first]
+                      ?.eLiquidationThreshold
+                  )
                 )
-              ) *
-              Number(
-                decimalConversion(
-                  assetRatesStatsMap[pool?.transitAssetIds?.first]
-                    ?.liquidationThreshold
+              : Number(
+                  decimalConversion(
+                    assetRatesStatsMap[pair?.assetIn]?.eLiquidationThreshold
+                  )
+                ))) /
+          (Number(outAmount) *
+            marketPrice(
+              markets,
+              assetMap[pair?.assetOut]?.denom,
+              pair?.assetOut
+            ))
+        : (Number(inAmount) *
+            marketPrice(
+              markets,
+              assetMap[pair?.assetIn]?.denom,
+              pair?.assetIn
+            ) *
+            (pair?.isInterPool
+              ? Number(
+                  decimalConversion(
+                    assetRatesStatsMap[pair?.assetIn]?.liquidationThreshold
+                  )
+                ) *
+                Number(
+                  decimalConversion(
+                    assetRatesStatsMap[pool?.transitAssetIds?.first]
+                      ?.liquidationThreshold
+                  )
                 )
-              )
-            : Number(
-                decimalConversion(
-                  assetRatesStatsMap[pair?.assetIn]?.liquidationThreshold
-                )
-              ))) /
-        (Number(outAmount) *
-          marketPrice(
-            markets,
-            assetMap[pair?.assetOut]?.denom,
-            pair?.assetOut
-          ));
+              : Number(
+                  decimalConversion(
+                    assetRatesStatsMap[pair?.assetIn]?.liquidationThreshold
+                  )
+                ))) /
+          (Number(outAmount) *
+            marketPrice(
+              markets,
+              assetMap[pair?.assetOut]?.denom,
+              pair?.assetOut
+            ));
       if (isFinite(percentage)) {
         setPercentage(percentage);
       }
     }
-  }, [markets, pair, inAmount, outAmount, pool]);
+  }, [markets, pair, inAmount, outAmount, pool, eMod]);
 
   return (
     <>

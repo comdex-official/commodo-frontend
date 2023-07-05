@@ -1967,17 +1967,21 @@ button.ant-switch {
   }
 }
 
-.ant-dropdown-menu {
-  background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%) !important;
-  border: 2px solid #303950 !important;
-  border-radius: 8px !important;
-  margin-top: 4px;
-  width: 111px;
-  padding: 5px !important;
+.wallet-connect-dropdown2 {
+  padding: 10px 15px;
+  font-size: @font-size-base;
+  max-width: 130px;
+  min-width: 130px;
+  width: 100%;
+  background: @background-light;
+  border-radius: @base-border-radius - 5;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 
-  .ant-dropdown-menu-item {
-    background: linear-gradient(180deg, #030b1e 0%, #030b1e 100%) !important;
-    // padding: 5px;
+  .dark-mode & {
+    background: @background-dark1;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-color: @border-dark;
+    color: @white;
   }
 }
 

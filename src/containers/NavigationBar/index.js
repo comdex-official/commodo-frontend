@@ -24,19 +24,21 @@ const NavigationBar = () => {
     {
       key: "item-2",
       label: (
-        <div className="drp-down">
-          <button
-            onClick={() =>
-              window.open("https://app.harborprotocol.one/", "_blank")
-            }
-          >
-            <img src={Harbor} alt="sla" />
-          </button>
-          <button
-            onClick={() => window.open("https://app.cswap.one/", "_blank")}
-          >
-            <img src={Cswap} alt="sla" />
-          </button>
+        <div className="wallet-connect-dropdown2">
+          <div className="drp-down">
+            <button
+              onClick={() =>
+                window.open("https://app.harborprotocol.one/", "_blank")
+              }
+            >
+              <img src={Harbor} alt="sla" />
+            </button>
+            <button
+              onClick={() => window.open("https://app.cswap.one/", "_blank")}
+            >
+              <img src={Cswap} alt="sla" />
+            </button>
+          </div>
         </div>
       ),
     },
