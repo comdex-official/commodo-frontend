@@ -102,7 +102,7 @@ const Borrow = ({
 
       if (!lendPair?.isInterPool) {
         navigate(
-          `/e-mode-details/${getEmodeData?.asset_in_pool_id}/${getEmodeData?.asset_in}/${getEmodeData?.asset_out}/${getEmodeData?.id}/#withdraw`,
+          `/e-mode-details/${getEmodeData?.asset_in_pool_id}/${getEmodeData?.asset_in}/${getEmodeData?.asset_out}/${getEmodeData?.id}/#repay`,
           {
             state: {
               lendingIdFromRoute: borrow?.lendingId?.toNumber(),
@@ -122,7 +122,7 @@ const Borrow = ({
 
           if (result?.lend?.poolId) {
             navigate(
-              `/e-mode-details/${getEmodeData?.asset_in_pool_id}/${getEmodeData?.asset_in}/${getEmodeData?.asset_out}/${getEmodeData?.id}/#withdraw`,
+              `/e-mode-details/${getEmodeData?.asset_in_pool_id}/${getEmodeData?.asset_in}/${getEmodeData?.asset_out}/${getEmodeData?.id}/#repay`,
               {
                 state: {
                   lendingIdFromRoute: borrow?.lendingId?.toNumber(),
@@ -133,6 +133,50 @@ const Borrow = ({
                 },
               }
             );
+          }
+        });
+      }
+    });
+  };
+
+  const handleNavigate3 = (borrow) => {
+    setNavigateInProgress(true);
+
+    queryLendPair(borrow?.pairId, (error, pairResult) => {
+      if (error) {
+        setNavigateInProgress(false);
+        return;
+      }
+
+      const lendPair = pairResult?.ExtendedPair;
+
+      if (!lendPair?.isInterPool) {
+        navigate(`/deprecated-cpool/${1}/#repay`, {
+          state: {
+            lendingIdFromRoute: borrow?.lendingId?.toNumber(),
+            borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
+            collateralAssetMinimalDenomFromRoute: borrow?.amountIn?.denom,
+            pairIdFromRoute: borrow?.pairId,
+            collateralAssetIdFromRoute: lendPair?.assetIn?.toNumber(),
+          },
+        });
+      } else {
+        queryLendPosition(borrow?.lendingId, (error, result) => {
+          if (error) {
+            message.error(error);
+            return;
+          }
+
+          if (result?.lend?.poolId) {
+            navigate(`/deprecated-cpool/${1}/#repay`, {
+              state: {
+                lendingIdFromRoute: borrow?.lendingId?.toNumber(),
+                borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
+                collateralAssetMinimalDenomFromRoute: borrow?.amountIn?.denom,
+                pairIdFromRoute: borrow?.pairId,
+                collateralAssetIdFromRoute: lendPair?.assetIn?.toNumber(),
+              },
+            });
           }
         });
       }
@@ -222,6 +266,16 @@ const Borrow = ({
               <Button
                 disabled={item?.isLiquidated || navigateInProgress}
                 onClick={() => handleNavigate2(item, row?.getEmodeData[0])}
+                type="primary"
+                className="btn-filled"
+                size="small"
+              >
+                Edit
+              </Button>
+            ) : row?.poolId === 1 ? (
+              <Button
+                disabled={item?.isLiquidated || navigateInProgress}
+                onClick={() => handleNavigate3(item)}
                 type="primary"
                 className="btn-filled"
                 size="small"
@@ -433,6 +487,7 @@ const Borrow = ({
             hf: hf(item, collateralAsset),
             knowEmode: knowEmode(item),
             getEmodeData: getEmodeData(item),
+            poolId: Number(item?.poolId),
           };
         })
       : [];
