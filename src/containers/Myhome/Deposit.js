@@ -119,7 +119,7 @@ const Deposit = ({
               >
                 Edit
               </Button>
-            ) : row?.poolId ? (
+            ) : row?.poolId === 1 ? (
               <Button
                 onClick={() =>
                   navigate(`/deprecated-cpool/${1}/#withdraw`, {
