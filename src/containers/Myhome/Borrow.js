@@ -102,7 +102,7 @@ const Borrow = ({
 
       if (!lendPair?.isInterPool) {
         navigate(
-          `/e-mode-details/${getEmodeData?.asset_in_pool_id}/${getEmodeData?.asset_in}/${getEmodeData?.asset_out}/${getEmodeData?.id}/#repay`,
+          `/e-mode-details/${getEmodeData?.asset_in_pool_id}/${getEmodeData?.asset_in}/${getEmodeData?.asset_out}/${getEmodeData?.id}/#withdraw`,
           {
             state: {
               lendingIdFromRoute: borrow?.lendingId?.toNumber(),
@@ -122,7 +122,7 @@ const Borrow = ({
 
           if (result?.lend?.poolId) {
             navigate(
-              `/e-mode-details/${getEmodeData?.asset_in_pool_id}/${getEmodeData?.asset_in}/${getEmodeData?.asset_out}/${getEmodeData?.id}/#repay`,
+              `/e-mode-details/${getEmodeData?.asset_in_pool_id}/${getEmodeData?.asset_in}/${getEmodeData?.asset_out}/${getEmodeData?.id}/#withdraw`,
               {
                 state: {
                   lendingIdFromRoute: borrow?.lendingId?.toNumber(),
@@ -151,7 +151,7 @@ const Borrow = ({
       const lendPair = pairResult?.ExtendedPair;
 
       if (!lendPair?.isInterPool) {
-        navigate(`/deprecated-cpool/${1}/#repay`, {
+        navigate(`/deprecated-cpool/${1}/#withdraw`, {
           state: {
             lendingIdFromRoute: borrow?.lendingId?.toNumber(),
             borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
@@ -168,7 +168,7 @@ const Borrow = ({
           }
 
           if (result?.lend?.poolId) {
-            navigate(`/deprecated-cpool/${1}/#repay`, {
+            navigate(`/deprecated-cpool/${1}/#withdraw`, {
               state: {
                 lendingIdFromRoute: borrow?.lendingId?.toNumber(),
                 borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
