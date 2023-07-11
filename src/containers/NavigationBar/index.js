@@ -2,7 +2,7 @@ import "./index.less";
 import ConnectButton from "./ConnectButton";
 import React, { useState, useEffect } from "react";
 import ThemeToggle from "../../components/Theme/themeToggle";
-import { Button, Dropdown } from "antd";
+import { Button, Dropdown, Tooltip } from "antd";
 import { SvgIcon } from "../../components/common";
 import Cswap from "../../assets/images/c-swap.svg";
 import Bridge from "../../assets/images/bridgeDark.svg";
@@ -48,39 +48,44 @@ const NavigationBar = () => {
     <nav className={isSetOnScroll ? "top_bar fixedHeaderOnScroll" : "top_bar"}>
       <ThemeToggle />
       <div className="connect-button" id="topRightToogle2">
-        <Button
-          type="primary"
-          className="btn-filled circle-btn"
-          onClick={() => window.open("https://transit.comdex.one/", "_blank")}
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-        >
-          {hover ? (
-            <img src={Bridge2} alt="sla" />
-          ) : (
-            <img src={Bridge} alt="sla" />
-          )}
-        </Button>
-        <Dropdown
-          menu={{ items }}
-          placement="bottomLeft"
-          trigger={["click"]}
-          overlayClassName="dropconnect-overlay"
-          getPopupContainer={() => document.getElementById("topRightToogle2")}
-          autoAdjustOverflow={false}
-        >
-          <Button type="primary" className="btn-filled circle-btn">
-            <SvgIcon name="squares" viewbox="0 0 15.48 15.48" />
+        <Tooltip overlayClassName="commodo-tooltip" title={"Bridge assets"}>
+          <Button
+            type="primary"
+            className="btn-filled circle-btn"
+            onClick={() => window.open("https://transit.comdex.one/", "_blank")}
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+          >
+            {hover ? (
+              <img src={Bridge2} alt="sla" />
+            ) : (
+              <img src={Bridge} alt="sla" />
+            )}
           </Button>
-        </Dropdown>
-        <Button
-          type="primary"
-          className="btn-filled circle-btn"
-          onClick={() => window.open("https://faucet.comdex.one/", "_blank")}
-        >
-          <SvgIcon name="faucet-icon" viewbox="0 0 14.495 18.92" />
-        </Button>
-
+        </Tooltip>
+        <Tooltip overlayClassName="commodo-tooltip" title={"Switch dapps"}>
+          <Dropdown
+            menu={{ items }}
+            placement="bottomLeft"
+            trigger={["click"]}
+            overlayClassName="dropconnect-overlay"
+            getPopupContainer={() => document.getElementById("topRightToogle2")}
+            autoAdjustOverflow={false}
+          >
+            <Button type="primary" className="btn-filled circle-btn">
+              <SvgIcon name="squares" viewbox="0 0 15.48 15.48" />
+            </Button>
+          </Dropdown>
+        </Tooltip>
+        <Tooltip overlayClassName="commodo-tooltip" title={"Faucet"}>
+          <Button
+            type="primary"
+            className="btn-filled circle-btn"
+            onClick={() => window.open("https://faucet.comdex.one/", "_blank")}
+          >
+            <SvgIcon name="faucet-icon" viewbox="0 0 14.495 18.92" />
+          </Button>
+        </Tooltip>
         <ConnectButton />
       </div>
     </nav>
