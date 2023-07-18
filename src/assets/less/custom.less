@@ -1717,7 +1717,10 @@ button.ant-switch {
   .details-right {
     width: 50%;
     padding-left: 15px;
-
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
     @media screen and (max-width: 1400px) {
       padding-left: 15px;
     }
@@ -1814,6 +1817,7 @@ button.ant-switch {
           }
         }
 
+        
         .head-right {
           font-weight: 500;
           font-size: 16px;
@@ -1959,6 +1963,60 @@ button.ant-switch {
           }
         }
       }
+    }
+  }
+}
+
+.wallet-connect-dropdown2 {
+  padding: 10px 15px;
+  font-size: @font-size-base;
+  max-width: 130px;
+  min-width: 130px;
+  width: 100%;
+  background: @background-light;
+  border-radius: @base-border-radius - 5;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+
+  .dark-mode & {
+    background: @background-dark1;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-color: @border-dark;
+    color: @white;
+  }
+}
+
+.drp-down {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 10px;
+
+  button {
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    padding: 5px 0px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25px;
+
+    img {
+      height: 15px;
+      width: 90px;
+    }
+
+    &:first-child {
+      background: linear-gradient(82.97deg, #665aa6 -2.08%, #8c81c7 120.82%);
+      color: #FFFFFF;
+    }
+
+    &:last-child {
+      background: rgb(254, 43, 86);
+      color: #FFFFFF;
     }
   }
 }

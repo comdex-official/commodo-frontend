@@ -9,10 +9,11 @@ import { Col, Row, TooltipIcon } from "../../components/common";
 import { assetTransitTypeId } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import {
+  queryEMode,
   queryLendPair,
   queryLendPool,
   queryUserBorrows,
-  queryUserLends
+  queryUserLends,
 } from "../../services/lend/query";
 import { amountConversion, commaSeparatorWithRounding } from "../../utils/coin";
 import { decimalConversion, marketPrice } from "../../utils/number";
@@ -190,11 +191,42 @@ const Myhome = ({
     return values.reduce((a, b) => a + b, 0);
   };
 
+  const [eModData, setEModData] = useState([]);
+
+  const fetchLendPools = () => {
+    queryEMode((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setEModData(result?.data);
+    });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    fetchLendPools();
+  };
+
   const calculateTotalBorrowLimit = () => {
     // calculate borrow limit of all borrow positions.
-    const borrowValues =
-      userBorrowList?.length > 0
-        ? userBorrowList.map((item) => {
+
+    let userData = userBorrowList.filter(({ pairId: id1 }) =>
+      eModData.some(({ id: id2 }) => id2 === id1)
+    );
+
+    let userEmodData = userBorrowList.filter(
+      ({ pairId: id1 }) => !eModData.some(({ id: id2 }) => id2 === id1)
+    );
+
+    console.log(userData, userEmodData);
+    const borrowValues1 =
+      userData?.length > 0
+        ? userData.map((item) => {
             return (
               marketPrice(
                 markets,
@@ -232,6 +264,49 @@ const Myhome = ({
             );
           })
         : [];
+
+    const borrowValues2 =
+      userEmodData?.length > 0
+        ? userEmodData.map((item) => {
+            return (
+              marketPrice(
+                markets,
+                assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.denom,
+                borrowToPair[item?.borrowingId]?.assetIn
+              ) *
+              Number(
+                amountConversion(
+                  item?.amountIn.amount,
+                  assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.decimals
+                )
+              ) *
+              (borrowToPair[item?.borrowingId]?.isInterPool
+                ? Number(
+                    decimalConversion(
+                      assetRatesStatsMap[
+                        borrowToPair[item?.borrowingId]?.assetIn
+                      ]?.eLtv
+                    )
+                  ) *
+                  Number(
+                    decimalConversion(
+                      assetRatesStatsMap[
+                        borrowToPool[item?.borrowingId]?.transitAssetIds?.first
+                      ]?.eLtv
+                    )
+                  )
+                : Number(
+                    decimalConversion(
+                      assetRatesStatsMap[
+                        borrowToPair[item?.borrowingId]?.assetIn
+                      ]?.eLtv
+                    ) || 0
+                  ))
+            );
+          })
+        : [];
+
+    let borrowValues = [...borrowValues1, ...borrowValues2];
 
     let borrowValue = borrowValues.reduce((a, b) => a + b, 0);
 
@@ -305,7 +380,7 @@ const Myhome = ({
 
   const tabItems = [
     {
-      label: "Lent",
+      label: "Lend",
       key: "1",
       children: (
         <Deposit fetchUserLends={fetchUserLends} inProgress={lendsInProgress} />

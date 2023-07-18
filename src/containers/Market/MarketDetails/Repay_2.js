@@ -9,7 +9,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../../components/common";
 import CollateralAndBorrowDetails from "../../../components/common/Asset/CollateralAndBorrowDetails";
 import CustomRow from "../../../components/common/Asset/CustomRow";
@@ -22,24 +22,24 @@ import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
   queryAllBorrowByOwnerAndPool,
   queryLendPair,
-  queryLendPool
+  queryLendPool,
 } from "../../../services/lend/query";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../utils/number";
 import {
   iconNameFromDenom,
   toDecimals,
-  ucDenomToDenom
+  ucDenomToDenom,
 } from "../../../utils/string";
 import ActionButton from "../../Myhome/BorrowRepay/ActionButton";
 import "./index.less";
@@ -73,6 +73,8 @@ const RepayTab_2 = ({
   const [sliderValue, setSliderValue] = useState(0);
   const [assetOutPool, setAssetOutPool] = useState();
   const [selectedBorrowDenom, setSelectedBorrowDenom] = useState();
+  const [extendedPairs, setExtendedPairs] = useState({});
+  const [userBorrow, setUserBorrow] = useState([]);
 
   const { state } = useLocation();
   const borrowAssetMinimalDenomFromRoute =
@@ -80,22 +82,70 @@ const RepayTab_2 = ({
   const collateralAssetMinimalDenomFromRoute =
     state?.collateralAssetMinimalDenomFromRoute;
 
-  const fetchAllBorrowByOwnerAndPool = (address, poolId) => {
-    queryAllBorrowByOwnerAndPool(address, poolId, (error, result) => {
+  const fetchPair = async (id) => {
+    await queryLendPair(id, (error, result) => {
       if (error) {
         message.error(error);
         return;
       }
 
-      const userBorrowsMap = result?.borrows?.reduce((map, obj) => {
-        map[obj?.amountOut?.denom + obj?.amountIn?.denom] = obj;
-        return map;
-      }, {});
-
-      setBorrowPosition(result?.borrows);
-      setUserBorrowsMap(userBorrowsMap);
+      setExtendedPairs((prevState) => ({
+        [result?.ExtendedPair?.id]: result?.ExtendedPair,
+        ...prevState,
+      }));
     });
   };
+
+  const fetchAllBorrowByOwnerAndPool = async (address, poolId) => {
+    await queryAllBorrowByOwnerAndPool(
+      address,
+      poolId,
+      async (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        const userBorrowsMap = result?.borrows?.reduce((map, obj) => {
+          map[obj?.amountOut?.denom + obj?.amountIn?.denom] = obj;
+          return map;
+        }, {});
+
+        if (result?.borrows) {
+          for (let i = 0; i < result?.borrows?.length; i++) {
+            await fetchPair(result?.borrows[i]?.pairId);
+          }
+        }
+
+        setUserBorrow(result?.borrows);
+        setUserBorrowsMap(userBorrowsMap);
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (extendedPairs && userBorrow) {
+      const filteredByValue = Object.fromEntries(
+        Object.entries(extendedPairs).filter(
+          ([key, value]) => Number(value?.assetOutPoolId) !== 1
+          // ||
+          // value?.isEModeEnabled === true
+        )
+      );
+
+      const filteredByValueResult = Object.entries(filteredByValue).map(
+        (e) => e[1]
+      );
+
+      const filteredArray = userBorrow.filter((item1) =>
+        filteredByValueResult.some(
+          (item2) => Number(item2?.id) === Number(item1?.pairId)
+        )
+      );
+
+      setBorrowPosition(filteredArray);
+    }
+  }, [extendedPairs, userBorrow]);
 
   useEffect(() => {
     fetchAllBorrowByOwnerAndPool(address, pool?.poolId);
@@ -303,6 +353,7 @@ const RepayTab_2 = ({
                 >
                   {borrowPosition?.length > 0 &&
                     borrowPosition?.map((item) => {
+                      if (Number(item?.poolId) === 1) return;
                       return (
                         <Option
                           key={item?.borrowingId?.toNumber()}
@@ -417,6 +468,7 @@ const RepayTab_2 = ({
               </Col>
               <Col className="text-right health-right-repay">
                 <HealthFactor
+                  eMod={pair?.isEModeEnabled === false ? false : true}
                   borrow={selectedBorrowPosition}
                   pair={pair}
                   pool={pool}
@@ -469,6 +521,7 @@ const RepayTab_2 = ({
         </div>
         <div className="commodo-card repy-dtl-bottom replay-right-details">
           <CollateralAndBorrowDetails
+            eMod={pair?.isEModeEnabled}
             lendAssetId={pair?.assetIn}
             collateralAssetDenom={ucDenomToDenom(
               selectedBorrowPosition?.amountIn?.denom

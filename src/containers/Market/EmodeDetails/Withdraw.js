@@ -78,7 +78,7 @@ const Withdraw = ({
       setAssetList([
         assetMap[pool?.transitAssetIds?.main?.toNumber()],
         assetMap[pool?.transitAssetIds?.first?.toNumber()],
-        assetMap[pool?.transitAssetIds?.second?.toNumber()],
+        // assetMap[pool?.transitAssetIds?.second?.toNumber()],
       ]);
     }
   }, [pool]);
@@ -473,6 +473,7 @@ const Withdraw = ({
           /> */}
 
           <CollateralDetails
+            eMod={true}
             assetId={selectedAssetId}
             assetDenom={assetMap[selectedAssetId]?.denom}
             poolId={pool?.poolId}

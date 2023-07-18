@@ -7,6 +7,7 @@ import { setPool, setPoolLends, setUserBorrows } from "../../../actions/lend";
 import { BackButton } from "../../../components/common";
 import {
   queryAllBorrowByOwnerAndPool,
+  queryEMode,
   queryLendPool,
   queryUserBorrows,
   queryUserLends,
@@ -48,6 +49,23 @@ const MarketDetails = ({
     }
   }, []);
 
+  const [eModData, setEModData] = useState([]);
+
+  const fetchLendPools = () => {
+    queryEMode((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setEModData(result?.data);
+    });
+  };
+
+  useEffect(() => {
+    fetchLendPools();
+  }, []);
+
   useEffect(() => {
     if (address && id) {
       setInProgress(true);
@@ -64,7 +82,7 @@ const MarketDetails = ({
   }, [address, id]);
 
   useEffect(() => {
-    if (address) {
+    if (address && eModData) {
       queryUserLends(address, (error, result) => {
         setInProgress(false);
         if (error) {
@@ -72,7 +90,9 @@ const MarketDetails = ({
           return;
         }
 
-        setPoolLends(result?.lends);
+        const rs = result?.lends.filter((item) => Number(item?.poolId) !== 1);
+
+        setPoolLends(rs);
       });
 
       queryUserBorrows(address, (error, result) => {
@@ -84,7 +104,7 @@ const MarketDetails = ({
         setUserBorrows(result?.borrows || []);
       });
     }
-  }, [address]);
+  }, [address, eModData]);
 
   useEffect(() => {
     if (address && id) {
@@ -115,9 +135,7 @@ const MarketDetails = ({
           <Tooltip
             overlayClassName="commodo-tooltip"
             title={
-              !poolLendPositions?.length
-                ? "Lend assets to open borrow position"
-                : ""
+              !poolLendPositions?.length ? "Lend assets first to Borrow" : ""
             }
           >
             Borrow
@@ -126,7 +144,7 @@ const MarketDetails = ({
       ),
       key: "2",
       children: <BorrowDetails />,
-      // disabled: !poolLendPositions?.length,
+      disabled: !poolLendPositions?.length,
     },
     {
       label: (
@@ -134,9 +152,7 @@ const MarketDetails = ({
           <Tooltip
             overlayClassName="commodo-tooltip"
             title={
-              !poolLendPositions?.length
-                ? "No assets lent in this market to withdraw"
-                : ""
+              !poolLendPositions?.length ? "Lend assets first to Withdraw" : ""
             }
           >
             Withdraw
@@ -145,7 +161,7 @@ const MarketDetails = ({
       ),
       key: "3",
       children: <Withdraw_2 />,
-      // disabled: !poolLendPositions?.length,
+      disabled: !poolLendPositions?.length,
     },
     {
       label: (
@@ -154,7 +170,7 @@ const MarketDetails = ({
             overlayClassName="commodo-tooltip"
             title={
               !userBorrowPositions?.length
-                ? "No debt to repay in this market"
+                ? "No debt to Repay in this market"
                 : ""
             }
           >
@@ -164,7 +180,7 @@ const MarketDetails = ({
       ),
       key: "4",
       children: <Repay_2 />,
-      // disabled: !userBorrowPositions?.length,
+      disabled: !userBorrowPositions?.length,
     },
   ];
   return (

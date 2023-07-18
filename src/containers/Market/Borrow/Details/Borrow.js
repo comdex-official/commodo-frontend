@@ -98,7 +98,7 @@ const BorrowTab = ({
   let borrowAssetDenom = selectedBorrowValue
     ? assetMap[pair?.assetOut]?.denom
     : "";
-
+  console.log(extendedPairs);
   const availableBalance = lend?.availableToBorrow || 0;
 
   const borrowable = getAmount(
@@ -244,6 +244,8 @@ const BorrowTab = ({
 
           let pairMapping = result?.AssetToPairMapping;
 
+          console.log(pairMapping);
+
           if (pairMapping?.assetId) {
             for (let i = 0; i < pairMapping?.pairId?.length; i++) {
               fetchPair(pairMapping?.pairId[i]);
@@ -278,6 +280,8 @@ const BorrowTab = ({
           }));
         }
       );
+
+      console.log(result?.ExtendedPai, "result?.ExtendedPai");
 
       setExtendedPairs((prevState) => ({
         [result?.ExtendedPair?.id]: result?.ExtendedPair,
@@ -452,11 +456,17 @@ const BorrowTab = ({
     }
   };
 
-  const borrowList =
+  const filtered =
     extendedPairs &&
-    Object.values(extendedPairs)?.map(
-      (item) => assetMap[item?.assetOut]?.denom
+    Object.fromEntries(
+      Object.entries(extendedPairs).filter(([key, value]) => {
+        return Number(value?.assetOutPoolId) !== 1;
+      })
     );
+
+  const borrowList =
+    filtered &&
+    Object.values(filtered)?.map((item) => assetMap[item?.assetOut]?.denom);
 
   let currentLTV = Number(
     ((outAmount *
@@ -530,7 +540,7 @@ const BorrowTab = ({
     100: "Riskier",
   };
 
-  console.log({ pool });
+  console.log({ pair });
 
   return (
     <div className="details-wrapper market-details-wrapper">
@@ -766,6 +776,7 @@ const BorrowTab = ({
                   </Col>
                   <Col className="text-right mt-2 health-factor-right">
                     <HealthFactor
+                      eMod={pair?.isEModeEnabled}
                       name="Health Factor"
                       pair={pair}
                       inAmount={inAmount}
@@ -818,7 +829,8 @@ const BorrowTab = ({
             </div>
             <div className="commodo-card">
               <CollateralAndBorrowDetails
-                interAssetID={pool?.transitAssetIds?.first}
+                eMod={pair?.isEModeEnabled}
+                interAssetID={pool?.transitAssetIds?.second}
                 isInterPool={pair?.isInterPool}
                 lendAssetId={lend?.assetId || pair?.assetIn}
                 collateralAssetDenom={collateralAssetDenom}

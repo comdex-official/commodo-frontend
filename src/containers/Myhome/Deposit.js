@@ -1,4 +1,4 @@
-import { Button, Dropdown, Menu, Table } from "antd";
+import { Button, Dropdown, Menu, Table, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
@@ -7,20 +7,23 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../components/common";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import {
   amountConversion,
   amountConversionWithComma,
   commaSeparatorWithRounding,
-  denomConversion
+  denomConversion,
 } from "../../utils/coin";
 import { marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
 import InterestAndReward from "./Calculate/InterestAndReward";
 import "./index.less";
+import { queryEMode } from "../../services/lend/query";
+import { useEffect, useState } from "react";
+import DPool from "../../assets/images/d-pool.png";
 
 const editItems = (
   <Menu>
@@ -90,36 +93,112 @@ const Deposit = ({
       key: "action",
       align: "right",
       width: 200,
-      render: (item) => (
+      render: (item, row) => (
         <>
           <Dropdown
             overlayClassName="edit-btn-dorp"
             trigger={["click"]}
             overlay={editItems}
           >
-            <Button
-              onClick={() =>
-                navigate(
-                  `/market-details/${item?.poolId?.toNumber()}/#withdraw`,
-                  {
+            {row?.knowEmode ? (
+              <Button
+                onClick={() =>
+                  navigate(
+                    `/e-mode-details/${row?.getEmodeData[0]?.asset_in_pool_id}/${row?.getEmodeData[0]?.asset_in}/${row?.getEmodeData[0]?.asset_out}/${row?.getEmodeData[0]?.id}/#withdraw`,
+                    {
+                      state: {
+                        collateralAssetIdFromRoute: item?.assetId?.toNumber(),
+                        lendingIdFromRoute: item?.lendingId?.toNumber(),
+                      },
+                    }
+                  )
+                }
+                type="primary"
+                className="btn-filled"
+                size="small"
+              >
+                Edit
+              </Button>
+            ) : row?.poolId === 1 ? (
+              <Button
+                onClick={() =>
+                  navigate(`/deprecated-cpool/${1}/#withdraw`, {
                     state: {
                       collateralAssetIdFromRoute: item?.assetId?.toNumber(),
                       lendingIdFromRoute: item?.lendingId?.toNumber(),
                     },
-                  }
-                )
-              }
-              type="primary"
-              className="btn-filled"
-              size="small"
-            >
-              Edit
-            </Button>
+                  })
+                }
+                type="primary"
+                className="btn-filled"
+                size="small"
+              >
+                Edit
+              </Button>
+            ) : (
+              <Button
+                onClick={() =>
+                  navigate(
+                    `/market-details/${item?.poolId?.toNumber()}/#withdraw`,
+                    {
+                      state: {
+                        collateralAssetIdFromRoute: item?.assetId?.toNumber(),
+                        lendingIdFromRoute: item?.lendingId?.toNumber(),
+                      },
+                    }
+                  )
+                }
+                type="primary"
+                className="btn-filled"
+                size="small"
+              >
+                Edit
+              </Button>
+            )}
           </Dropdown>
         </>
       ),
     },
   ];
+
+  const [eModData, setEModData] = useState([]);
+
+  const fetchLendPools = () => {
+    queryEMode((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setEModData(result?.data);
+    });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    fetchLendPools();
+  };
+
+  const knowEmode = (item) => {
+    const results = eModData.filter(
+      (item2) => Number(item2?.id) === Number(item?.pairId)
+    );
+    if (results.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const getEmodeData = (item) => {
+    const results = eModData.filter(
+      (item2) => Number(item2?.id) === Number(item?.pairId)
+    );
+    return results;
+  };
 
   const tableData =
     userLendList?.length > 0
@@ -129,6 +208,19 @@ const Deposit = ({
             asset: (
               <>
                 <div className="assets-with-icon">
+                  {Number(item?.poolId) === 1 ? (
+                    <Tooltip
+                      overlayClassName="commodo-tooltip"
+                      title={
+                        "Position is from a deprecating cPool, Repay debt and Withdraw funds asap. Click Edit button."
+                      }
+                    >
+                      <img alt={"D-Pool"} src={DPool} className="e-mod-img" />
+                    </Tooltip>
+                  ) : (
+                    ""
+                  )}
+
                   <div className="assets-icon">
                     <SvgIcon name={iconNameFromDenom(item?.amountIn?.denom)} />
                   </div>
@@ -176,6 +268,9 @@ const Deposit = ({
               </>
             ),
             action: item,
+            knowEmode: knowEmode(item),
+            getEmodeData: getEmodeData(item),
+            poolId: Number(item?.poolId),
           };
         })
       : [];
@@ -186,7 +281,7 @@ const Deposit = ({
         <Col>
           <div className="commodo-card bg-none">
             <div className="d-flex align-items-center justify-content-between">
-              <div className="card-header text-left">My Lent Assets</div>
+              <div className="card-header text-left">My Lend Assets</div>
               <InterestAndReward
                 lang={lang}
                 address={address}

@@ -57,6 +57,7 @@ const RepayTab = ({
   setBalanceRefresh,
   markets,
   assetDenomMap,
+  assetRatesStatsMap,
 }) => {
   const marks = {
     0: "0%",
@@ -121,16 +122,16 @@ const RepayTab = ({
 
   useEffect(() => {
     if (assetOutPool?.poolId) {
-      setAssetList([
-        assetMap[assetOutPool?.transitAssetIds?.main?.toNumber()],
-        assetMap[assetOutPool?.transitAssetIds?.first?.toNumber()],
-        assetMap[assetOutPool?.transitAssetIds?.second?.toNumber()],
-      ]);
+      // setAssetList([
+      //   assetMap[assetOutPool?.transitAssetIds?.main?.toNumber()],
+      //   assetMap[assetOutPool?.transitAssetIds?.first?.toNumber()],
+      //   assetMap[assetOutPool?.transitAssetIds?.second?.toNumber()],
+      // ]);
     } else if (pool?.poolId && !assetOutPool?.poolId) {
       setAssetList([
         assetMap[pool?.transitAssetIds?.main?.toNumber()],
         assetMap[pool?.transitAssetIds?.first?.toNumber()],
-        assetMap[pool?.transitAssetIds?.second?.toNumber()],
+        // assetMap[pool?.transitAssetIds?.second?.toNumber()],
       ]);
     }
   }, [pool, assetOutPool]);
@@ -266,6 +267,46 @@ const RepayTab = ({
       );
 
     handleInputChange(String(percentageValue));
+  };
+
+  console.log(ucDenomToDenom(selectedBorrowPosition?.amountIn?.denom));
+
+  const hf = () => {
+    const data =
+      (Number(
+        Number(
+          amountConversion(
+            selectedBorrowPosition?.amountIn?.amount,
+            ucDenomToDenom(selectedBorrowPosition?.amountIn?.denom)?.decimals
+          ) || 0
+        ) *
+          marketPrice(
+            markets,
+            ucDenomToDenom(selectedBorrowPosition?.amountIn?.denom),
+            assetDenomMap[
+              ucDenomToDenom(selectedBorrowPosition?.amountIn?.denom)
+            ]?.id
+          ) || 0,
+        DOLLAR_DECIMALS
+      ) *
+        (Number(
+          decimalConversion(
+            assetRatesStatsMap[Number(pair?.assetIn)]?.eLiquidationThreshold
+          ) * 100
+        ) /
+          100)) /
+      Number(
+        amount *
+          marketPrice(
+            markets,
+            assetMap[selectedAssetId]?.denom,
+            selectedAssetId
+          ) || 0
+      ).toFixed(DOLLAR_DECIMALS);
+
+    return data === Number.NaN || data === Number.POSITIVE_INFINITY
+      ? Number(0).toFixed(DOLLAR_DECIMALS)
+      : Number(data || 0).toFixed(DOLLAR_DECIMALS);
   };
 
   return (
@@ -471,7 +512,7 @@ const RepayTab = ({
                 <TooltipIcon text="Numeric representation of your position's safety" />
               </Col>
               <Col className="text-right health-right-repay">
-                <HealthFactor
+                {/* <HealthFactor
                   borrow={selectedBorrowPosition}
                   pair={pair}
                   pool={pool}
@@ -489,7 +530,8 @@ const RepayTab = ({
                         )
                       : Number(updatedAmountOut)?.toFixed(0)
                   }
-                />
+                /> */}
+                {hf() || 0.0}
               </Col>
             </Row>
           </Col>
@@ -617,6 +659,7 @@ const RepayTab = ({
             )}
           /> */}
           <CollateralAndBorrowDetails
+            eMod={true}
             lendAssetId={pair?.assetIn}
             collateralAssetDenom={ucDenomToDenom(
               selectedBorrowPosition?.amountIn?.denom
@@ -681,6 +724,7 @@ RepayTab.propTypes = {
       low: PropTypes.number,
     }),
   }),
+  assetRatesStatsMap: PropTypes.object,
   pool: PropTypes.shape({
     poolId: PropTypes.shape({
       low: PropTypes.number,
@@ -704,6 +748,7 @@ const stateToProps = (state) => {
     balances: state.account.balances.list,
     lang: state.language,
     refreshBalance: state.account.refreshBalance,
+    assetRatesStatsMap: state.lend.assetRatesStats.map,
     markets: state.oracle.market,
     assetDenomMap: state.asset._.assetDenomMap,
   };

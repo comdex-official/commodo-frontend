@@ -21,6 +21,7 @@ const CollateralAndBorrowDetails = ({
   tabName,
   isInterPool,
   interAssetID,
+  eMod,
 }) => {
   const threeSold =
     Number(
@@ -38,6 +39,12 @@ const CollateralAndBorrowDetails = ({
     title: "Liq. Threshold",
     counts: isInterPool
       ? `${Number(Number(threeSold) * 100).toFixed(DOLLAR_DECIMALS)}%`
+      : eMod
+      ? `${Number(
+          decimalConversion(
+            assetRatesStatsMap[lendAssetId]?.eLiquidationThreshold
+          ) * 100
+        ).toFixed(DOLLAR_DECIMALS)}%`
       : `${Number(
           decimalConversion(
             assetRatesStatsMap[lendAssetId]?.liquidationThreshold
@@ -57,11 +64,18 @@ const CollateralAndBorrowDetails = ({
     ) *
       100;
 
+  const liquidationPenaltyBonus2 = Number(
+    decimalConversion(assetRatesStatsMap[lendAssetId]?.eLiquidationPenalty) *
+      100
+  );
+
   console.log(assetRatesStatsMap[lendAssetId]);
 
   const liquidationPenalty = {
     title: "Liq. Penalty",
-    counts: `${Number(liquidationPenaltyBonus).toFixed(DOLLAR_DECIMALS)}%`,
+    counts: eMod
+      ? `${Number(liquidationPenaltyBonus2).toFixed(DOLLAR_DECIMALS)}%`
+      : `${Number(liquidationPenaltyBonus).toFixed(DOLLAR_DECIMALS)}%`,
     tooltipText: "Fee paid by vault owners on liquidation",
   };
 
@@ -70,6 +84,10 @@ const CollateralAndBorrowDetails = ({
       title: "Max LTV",
       counts: isInterPool
         ? `${Number(Number(maxLTV) * 100).toFixed(DOLLAR_DECIMALS)}%`
+        : eMod
+        ? `${Number(
+            decimalConversion(assetRatesStatsMap[lendAssetId]?.eLtv) * 100
+          ).toFixed(DOLLAR_DECIMALS)}%`
         : `${Number(
             decimalConversion(assetRatesStatsMap[lendAssetId]?.ltv) * 100
           ).toFixed(DOLLAR_DECIMALS)}%`,
@@ -81,7 +99,19 @@ const CollateralAndBorrowDetails = ({
     {
       title: "Collateral Type",
       counts: "Normal",
-      tooltipText: "Type of the collateral selected",
+      tooltipText: (
+        <>
+          Type of the collateral selected.
+          <a
+            href="#"
+            onClick={() =>
+              window.open("https://docs.commodo.one/collateral-type", "_blank")
+            }
+          >
+            Learn more.
+          </a>
+        </>
+      ),
     },
   ];
 
