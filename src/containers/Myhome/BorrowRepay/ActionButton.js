@@ -27,7 +27,7 @@ export const ActionButton = ({
     Borrow: "/comdex.lend.v1beta1.MsgDraw",
     Repay: "/comdex.lend.v1beta1.MsgRepay",
     Close: "/comdex.lend.v1beta1.MsgCloseBorrow",
-    RepayWithDraw: "/comdex.lend.v1beta1.MsgRepay",
+    RepayWithDraw: "/comdex.lend.v1beta1.MsgRepayWithdraw",
   };
 
   const handleClick = () => {
