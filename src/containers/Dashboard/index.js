@@ -13,19 +13,20 @@ import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import {
   ATOM_CMDX_POOL_ID,
   DOLLAR_DECIMALS,
-  NUMBER_OF_TOP_ASSETS
+  NUMBER_OF_TOP_ASSETS,
 } from "../../constants/common";
 import { CSWAP_URL, REWARDS_URL } from "../../constants/url";
 import {
   queryBorrowDepositHistory,
   queryTopAssets,
   queryTotalBorrowAndDeposit,
-  queryTotalValueLocked
+  queryTotalValueLocked,
 } from "../../services/lend/query";
 import { denomConversion } from "../../utils/coin";
 import { commaSeparator } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import "./index.less";
+import DashboardNavBar from "./navBar/DashboardNavBar.js";
 
 const Dashboard = ({ isDarkMode, assetMap }) => {
   const [topAssetsInProgress, setTopAssetsInProgress] = useState(false);
@@ -197,9 +198,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
       gridLineColor: isDarkMode ? "#E2F7E5" : "#999",
       categories:
         graphData && graphData.length > 0
-          ? graphData.map((item) =>
-              moment(item?.timestamp).format("MMM DD")
-            )
+          ? graphData.map((item) => moment(item?.timestamp).format("MMM DD"))
           : [],
     },
     tooltip: {
@@ -283,7 +282,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
             </div>
             {denomConversion(assetMap[item?.asset_id]?.denom)}
           </div>
-          <b>{((Number(item?.apr) || 0) * 100).toFixed(DOLLAR_DECIMALS)}%</b>
+          <b>{((Number(item?.total) || 0) * 100).toFixed(DOLLAR_DECIMALS)}%</b>
         </li>
       );
     });
@@ -291,6 +290,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
 
   return (
     <div className="app-content-wrapper">
+      <DashboardNavBar />
       <Row>
         <Col className="dashboard-upper">
           <div className="dashboard-upper-left">
@@ -440,7 +440,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                 <div className="deposited-list">
                   <div className="d-flex justify-content-between">
                     <div>Deposited</div>
-                    <div>Lend APY</div>
+                    <div>Amount</div>
                   </div>
                   <ul>
                     {topDeposits && topDeposits?.length > 0
@@ -453,7 +453,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                 <div className="deposited-list">
                   <div className="d-flex justify-content-between">
                     <div>Borrowed</div>
-                    <div>Borrow APY</div>
+                    <div>Amount</div>
                   </div>
                   <ul>
                     {topBorrows && topBorrows?.length > 0

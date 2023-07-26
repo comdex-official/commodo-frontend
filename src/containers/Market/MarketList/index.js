@@ -1,4 +1,4 @@
-import { Button, message, Spin, Tooltip } from "antd";
+import { Button, Input, message, Spin, Tooltip } from "antd";
 import * as PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -17,12 +17,31 @@ import { iconNameFromDenom } from "../../../utils/string";
 import AssetApy from "../AssetApy";
 import AvailableToBorrow from "../Borrow/AvailableToBorrow";
 import "./index.less";
+import DPool from "../../../assets/images/d-pool.svg";
+import EMode from "../../../assets/images/emode.svg";
+import DBorrow from "../../../assets/images/d-borrow.svg";
 
 const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
   const [pageNumber, setPageNumber] = useState(DEFAULT_PAGE_NUMBER);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [inProgress, setInProgress] = useState(false);
   const [isLended, setIsLended] = useState(false);
+  const [searchKey, setSearchKey] = useState("");
+  const [filterPool, setFilterPool] = useState();
+
+  const onSearchChange = (searchKey) => {
+    setSearchKey(searchKey.trim().toLowerCase());
+  };
+
+  useEffect(() => {
+    if (searchKey.length > 0) {
+      const filterPool = pools.filter((item) => Number(item.poolId) !== 1);
+      const res = filterPool.filter((obj) =>
+        (obj?.cpoolName).trim().toLowerCase().includes(searchKey)
+      );
+      setFilterPool(res);
+    }
+  }, [searchKey]);
 
   const fetchLendPools = (offset, limit, isTotal, isReverse) => {
     setInProgress(true);
@@ -51,8 +70,6 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
   if (inProgress) {
     return <Spin />;
   }
-
-  console.log(pools);
 
   return (
     <div className="commodo-card bg-none">
@@ -83,7 +100,9 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
                 })
               }
             >
-              E-Mode
+              <div className="title-wrap">
+                <img src={EMode} alt="EMode" /> E-Mode
+              </div>
             </Button>
           </Tooltip>
 
@@ -92,7 +111,11 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
               overlayClassName="commodo-tooltip"
               title={"Lend and Borrow in one click!"}
             >
-              <Button>Direct Borrow</Button>
+              <Button>
+                <div className="title-wrap">
+                  <img src={DBorrow} alt="DBorrow" /> Direct Borrow
+                </div>
+              </Button>
             </Tooltip>
           </Link>
           <Tooltip
@@ -106,14 +129,133 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
                 })
               }
             >
-              Deprecated cPool
+              <div className="title-wrap">
+                <img src={DPool} alt="DPool" /> Deprecated cPool
+              </div>
             </Button>
           </Tooltip>
         </div>
       </div>
+      <div className="assets-search-section">
+        <Input
+          placeholder="Search Asset.."
+          onChange={(event) => onSearchChange(event.target.value)}
+          suffix={<SvgIcon name="search" viewbox="0 0 18 18" />}
+        />
+      </div>
       <div className="card-content">
         <div className="market-list">
-          {pools?.length > 0 ? (
+          {searchKey?.length > 0 ? (
+            filterPool?.length > 0 ? (
+              filterPool?.map((item) => {
+                if (Number(item.poolId) === 1) return;
+                return (
+                  <div
+                    className="market-list-item"
+                    onClick={() =>
+                      navigate({
+                        pathname: `/market-details/${item.poolId?.toNumber()}`,
+                      })
+                    }
+                    key={item.poolId?.toNumber()}
+                  >
+                    <div className="commodo-card">
+                      <div className="header1">
+                        <div className="assets-col mr-3">
+                          <div className="assets-icon">
+                            <SvgIcon
+                              name={iconNameFromDenom(
+                                assetMap[
+                                  item?.transitAssetIds?.main?.toNumber()
+                                ]?.denom
+                              )}
+                            />
+                          </div>
+                          {denomConversion(
+                            assetMap[item?.transitAssetIds?.main?.toNumber()]
+                              ?.denom
+                          )}
+                        </div>
+                        <div className="right-col">
+                          #{item.poolId?.toNumber()}
+                        </div>
+                      </div>
+                      <div className="header2">
+                        <div className="upper-label">Available to borrow</div>
+                        <div className="header2-inner">
+                          <AvailableToBorrow lendPool={item} />
+                        </div>
+                      </div>
+                      <div className="details">
+                        <table cellSpacing={0}>
+                          <thead>
+                            <tr>
+                              <th></th>
+                              <th>Lend APY</th>
+                              <th>Borrow APY</th>
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            {Object.keys(item?.transitAssetIds).map(
+                              (key, objectIndex) => {
+                                return (
+                                  <React.Fragment key={objectIndex}>
+                                    <tr>
+                                      <th>
+                                        {denomConversion(
+                                          assetMap?.[item?.transitAssetIds[key]]
+                                            ?.denom
+                                        )}
+                                      </th>
+                                      <td>
+                                        <AssetApy
+                                          poolId={item?.poolId}
+                                          assetId={item?.transitAssetIds[key]}
+                                          parent="lend"
+                                        />
+                                      </td>
+                                      <td>
+                                        <div className="d-flex">
+                                          <AssetApy
+                                            poolId={item?.poolId}
+                                            assetId={item?.transitAssetIds[key]}
+                                            parent="borrow"
+                                          />
+                                          <Tooltip
+                                            placement="topLeft"
+                                            className="distribution-apy-button"
+                                            title={
+                                              "Boosted rewards for Borrowing"
+                                            }
+                                          >
+                                            <DistributionAPY
+                                              poolId={item?.poolId}
+                                              assetId={
+                                                item?.transitAssetIds[key]
+                                              }
+                                            />
+                                          </Tooltip>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  </React.Fragment>
+                                );
+                              }
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="text-center w-100">
+                <h1>Sorry, No Data Found</h1>{" "}
+              </div>
+            )
+          ) : pools?.length > 0 ? (
             pools &&
             pools?.map((item) => {
               if (Number(item.poolId) === 1) return;
