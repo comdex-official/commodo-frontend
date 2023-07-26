@@ -23,7 +23,8 @@ import InterestAndReward from "./Calculate/InterestAndReward";
 import "./index.less";
 import { queryEMode } from "../../services/lend/query";
 import { useEffect, useState } from "react";
-import DPool from "../../assets/images/d-pool.png";
+import EMod from "../../assets/images/emode.svg";
+import DPool from "../../assets/images/d-pool.svg";
 
 const editItems = (
   <Menu>
