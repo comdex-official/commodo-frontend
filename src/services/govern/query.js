@@ -106,3 +106,36 @@ export const fetchRestProposalTally = (id, callback) => {
       callback(error?.message);
     });
 };
+
+export const fetchRestTallyParamsProposer = (callback) => {
+  axios
+    .get(`${comdex?.rest}/cosmos/gov/v1beta1/params/tallying`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
+
+export const fetchRestBondexTokens = (callback) => {
+  axios
+    .get(`${comdex?.rest}/cosmos/staking/v1beta1/pool`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
+
+export const fetchRestVotingPower = (address, callback) => {
+  axios
+    .get(`${comdex?.rest}/cosmos/staking/v1beta1/delegations/${address}`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};

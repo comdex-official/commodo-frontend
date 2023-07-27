@@ -1,5 +1,6 @@
 import AssetList from "../config/ibc_assets.json";
 import { comdex } from "../config/network";
+import { DOLLAR_DECIMALS } from "../constants/common";
 import { commaSeparator, getExponent } from "./number";
 import { lowercaseFirstLetter } from "./string";
 
@@ -81,3 +82,9 @@ export const getDenomBalance = (balances, denom) =>
   balances.length > 0 &&
   balances.find((item) => item.denom === denom) &&
   balances.find((item) => item.denom === denom).amount;
+
+export const fixedDecimal = (_number = 0, _decimal = DOLLAR_DECIMALS) => {
+  return Number(
+    Math.floor(_number * Math.pow(10, _decimal)) / Math.pow(10, _decimal)
+  );
+};
