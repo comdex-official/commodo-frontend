@@ -9,7 +9,7 @@ import { signAndBroadcastTransaction } from "../../../services/helper";
 import { defaultFee } from "../../../services/transaction";
 import variables from "../../../utils/variables";
 import "./index.less";
-import {errorMessageMappingParser} from "../../../utils/string";
+import { errorMessageMappingParser } from "../../../utils/string";
 
 const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);

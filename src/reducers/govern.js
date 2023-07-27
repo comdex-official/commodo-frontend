@@ -1,10 +1,11 @@
 import { combineReducers } from "redux";
 import {
-    ALL_PROPOSALS_SET,
-    PROPOSALS_SET,
-    PROPOSAL_SET,
-    PROPOSER_SET,
-    PROPOSAL_TALLY_SET
+  ALL_PROPOSALS_SET,
+  PROPOSALS_SET,
+  PROPOSAL_SET,
+  PROPOSER_SET,
+  PROPOSAL_TALLY_SET,
+  ACTIVE_TAB_SET,
 } from "../constants/govern";
 
 const allProposals = (state = [], action) => {
@@ -26,38 +27,49 @@ const proposals = (state = [], action) => {
 const proposalMap = (state = {}, action) => {
   if (action.type === PROPOSAL_SET) {
     return {
-        ...state,
-        [action?.value?.proposal_id]: action?.value || {},
-      };  }
+      ...state,
+      [action?.value?.proposal_id]: action?.value || {},
+    };
+  }
 
   return state;
 };
 
 const proposerMap = (state = {}, action) => {
-    if (action.type === PROPOSER_SET) {
-      return {
-          ...state,
-          [action?.proposalId]: action?.value || {},
-        };  }
+  if (action.type === PROPOSER_SET) {
+    return {
+      ...state,
+      [action?.proposalId]: action?.value || {},
+    };
+  }
 
-    return state;
-  };
+  return state;
+};
 
-  const proposalTallyMap = (state = {}, action) => {
-    if (action.type === PROPOSAL_TALLY_SET) {
-      return {
-        ...state,
-        [action?.proposalId]: action.value || {},
-      };
-    }
-  
-    return state;
-  };
+const proposalTallyMap = (state = {}, action) => {
+  if (action.type === PROPOSAL_TALLY_SET) {
+    return {
+      ...state,
+      [action?.proposalId]: action.value || {},
+    };
+  }
+
+  return state;
+};
+
+const getTab = (state = "", action) => {
+  if (action.type === ACTIVE_TAB_SET) {
+    return action.value || "";
+  }
+
+  return state;
+};
 
 export default combineReducers({
   proposals,
   allProposals,
   proposalMap,
   proposerMap,
-  proposalTallyMap
+  proposalTallyMap,
+  getTab,
 });
