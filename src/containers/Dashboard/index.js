@@ -23,7 +23,7 @@ import {
   queryTotalValueLocked,
 } from "../../services/lend/query";
 import { denomConversion } from "../../utils/coin";
-import { commaSeparator } from "../../utils/number";
+import { commaSeparator, formatNumber } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import "./index.less";
 import DashboardNavBar from "./navBar/DashboardNavBar.js";
@@ -282,7 +282,9 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
             </div>
             {denomConversion(assetMap[item?.asset_id]?.denom)}
           </div>
-          <b>{((Number(item?.total) || 0) * 100).toFixed(DOLLAR_DECIMALS)}%</b>
+          <b>
+            {formatNumber((Number(item?.total) || 0).toFixed(DOLLAR_DECIMALS))}
+          </b>
         </li>
       );
     });
@@ -295,7 +297,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
         <Col className="dashboard-upper">
           <div className="dashboard-upper-left">
             <div className="commodo-card h-100">
-              <div className="dashboard-statics ml-4">
+              <div className="dashboard-statics">
                 <p>
                   Total Value Locked{" "}
                   <TooltipIcon text="Value of Assets Locked" />
@@ -317,9 +319,6 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                 )}
               </div>
               <div className="total-values">
-                <div className="total-values-chart">
-                  <HighchartsReact highcharts={Highcharts} options={Options} />
-                </div>
                 <div className="total-values-right">
                   <div
                     className="dashboard-statics mb-5"
@@ -370,69 +369,44 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                     )}
                   </div>
                 </div>
+                <div className="total-values-chart">
+                  <HighchartsReact highcharts={Highcharts} options={Options} />
+                </div>
               </div>
             </div>
           </div>
           <div className="dashboard-upper-right">
             <div className="commodo-card commodo-launch-card">
-              <Slider {...settings}>
-                <div>
-                  <div className="commodo-launch-card-inner">
-                    <img
-                      className="launch-bg"
-                      alt="CMDX Token Launch"
-                      src={LaunchImage}
-                    />
-                    <div className="assets-section">
-                      <div className="assets-section-inner">
-                        <div className="assets-left">
-                          <p>
-                            Provide liquidity on ATOM-CMDX pool on CSWAP to earn
-                            external incentives on COMMODO
-                          </p>
-                          <div className="mt-3">
-                            <div className="small-icons mb-2">
-                              <div className="icon-col mr-2">
-                                <SvgIcon name="cmdx-icon" /> CMDX
-                              </div>{" "}
-                              -
-                              <div className="icon-col ml-2">
-                                <SvgIcon name="atom-icon" /> ATOM
-                              </div>
-                            </div>
-                            <h3 className="h3-botttom">
-                              <Button
-                                type="primary"
-                                onClick={() => window.open(REWARDS_URL)}
-                              >
-                                Learn more
-                              </Button>
-                            </h3>
-                          </div>
-                        </div>
-                        <div className="assets-right">
-                          <img
-                            alt={"atom"}
-                            src={ComdexAtomIcon}
-                            className="overlap-icon-1"
-                          />
-                          <Button
-                            type="primary"
-                            className="btn-filled mt-3"
-                            onClick={() =>
-                              window.open(
-                                `${CSWAP_URL}/farm/${ATOM_CMDX_POOL_ID}`
-                              )
-                            }
-                          >
-                            Take me there!
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              <div className="bottom-chart-right">
+                <div
+                  className="dashboard-statics"
+                  style={{ borderColor: "#52B788" }}
+                >
+                  <p>Total Deposited</p>
+                  <h3>
+                    $
+                    {commaSeparator(
+                      Number(totalDeposited || 0).toFixed(DOLLAR_DECIMALS)
+                    )}
+                  </h3>{" "}
                 </div>
-              </Slider>
+                <div
+                  className="dashboard-statics"
+                  style={{ borderColor: "#E2F7E5" }}
+                >
+                  <p>Total Borrowed</p>
+                  <h3>
+                    $
+                    {commaSeparator(
+                      Number(totalBorrowed || 0).toFixed(DOLLAR_DECIMALS)
+                    )}
+                  </h3>{" "}
+                </div>
+              </div>
+              <HighchartsReact
+                highcharts={Highcharts}
+                options={DepositBorrowChart}
+              />
             </div>
             <div className="commodo-card top-three-assets">
               <div className="card-head">Top {NUMBER_OF_TOP_ASSETS} Assets</div>
@@ -470,7 +444,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
       </Row>
       <Row>
         <Col className="dashboard-bottom">
-          <div className="commodo-card">
+          {/* <div className="commodo-card">
             <div className="bottom-chart">
               <div className="bottom-chart-left">
                 <div className="legend-custom">
@@ -481,10 +455,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                     <SvgIcon name="rectangle" /> Borrowed
                   </div>
                 </div>
-                <HighchartsReact
-                  highcharts={Highcharts}
-                  options={DepositBorrowChart}
-                />
+               
               </div>
               <div className="bottom-chart-right">
                 <div
@@ -513,7 +484,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </Col>
       </Row>
     </div>

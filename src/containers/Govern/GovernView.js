@@ -51,7 +51,6 @@ const GovernViewPage = ({
 
   const [tallyParams, setTallyParams] = useState();
   const [bondedTokens, setBondedTokens] = useState();
-  const [votingPower, setVotingPower] = useState();
   const [inProgress, setInProgress] = useState(false);
   const [votedOption, setVotedOption] = useState();
   const [getVotes, setGetVotes] = useState({
@@ -76,19 +75,6 @@ const GovernViewPage = ({
       setTallyParams(result);
     });
   }, []);
-
-  const fetchVotingPower = useCallback(
-    (address) => {
-      fetchRestVotingPower(address, (error, result) => {
-        if (error) {
-          message.error(error);
-          return;
-        }
-        setVotingPower(result);
-      });
-    },
-    [address]
-  );
 
   const fetchBondexTokens = useCallback(() => {
     setInProgress(true);
@@ -145,10 +131,6 @@ const GovernViewPage = ({
     fetchTallyParamsProposer();
     fetchBondexTokens();
   }, []);
-
-  useEffect(() => {
-    fetchVotingPower(address);
-  }, [address]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -257,15 +239,6 @@ const GovernViewPage = ({
     setTab("2");
   };
 
-  const totalAmount = votingPower?.delegation_responses?.reduce(
-    (sum, response) => {
-      const amount = parseInt(response?.balance?.amount);
-
-      return Number(sum + amount).toFixed(2);
-    },
-    Number(0).toFixed(2)
-  );
-
   return (
     <>
       <div className="proposal_view_back_button_container">
@@ -306,6 +279,17 @@ const GovernViewPage = ({
                       : "--/--/--"}
                   </div>
                 </div>
+                <div className="proposal_stats_container">
+                  <div className="title">Duration</div>
+                  <div className="value">
+                    {proposal?.voting_start_time
+                      ? `${moment(proposal?.voting_start_time).diff(
+                          moment(proposal?.voting_end_time),
+                          "days"
+                        )} Days`
+                      : "0 Days"}
+                  </div>
+                </div>
                 <div className="proposal_stats_container ">
                   <div className="title">Proposer</div>
                   <div className="value active">
@@ -325,10 +309,6 @@ const GovernViewPage = ({
                       "-"
                     )}
                   </div>
-                </div>
-                <div className="proposal_stats_container">
-                  <div className="title">My Voting power</div>
-                  <div className="value">{totalAmount}</div>
                 </div>
               </div>
             </div>
