@@ -71,11 +71,11 @@ const Govern = ({
     fetchData();
   }, []);
 
-  const getCurrentData = () => {
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    return filteredProposal?.slice(indexOfFirstItem, indexOfLastItem);
-  };
+  // const getCurrentData = () => {
+  //   const indexOfLastItem = currentPage * itemsPerPage;
+  //   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  //   return filteredProposal?.slice(indexOfFirstItem, indexOfLastItem);
+  // };
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -228,7 +228,7 @@ const Govern = ({
                     <Spin />
                   </div>
                 ) : filteredProposal?.length > 0 ? (
-                  <GovernOpenProposal proposals={getCurrentData()} />
+                  <GovernOpenProposal proposals={filteredProposal} />
                 ) : (
                   <div className={"table__empty__data__wrap"}>
                     <div className={"table__empty__data"}>
@@ -241,7 +241,7 @@ const Govern = ({
                   <Spin />
                 </div>
               ) : filteredProposal?.length > 0 ? (
-                <GovernPastProposal proposals={getCurrentData()} />
+                <GovernPastProposal proposals={filteredProposal} />
               ) : (
                 <div className={"table__empty__data__wrap"}>
                   <div className={"table__empty__data"}>
@@ -250,7 +250,7 @@ const Govern = ({
                 </div>
               )}
 
-              <div className="pagination">
+              {/* <div className="pagination">
                 <Pagination
                   current={currentPage}
                   total={filteredProposal?.length}
@@ -258,7 +258,7 @@ const Govern = ({
                   onChange={handlePageChange}
                   showSizeChanger={false}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
