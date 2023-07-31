@@ -18,7 +18,7 @@ const DashboardNavBar = () => {
               <div className="title">E-mode - Efficiency mode</div>
               <div className="description">
                 Discover more about increasing capital efficiency and maximizing
-                LTVs for co-relatedted assets.
+                LTVs for co-related assets.
               </div>
               <div className="learn-more">
                 <a href="https://docs.commodo.one/e-mode" target="_blank">
