@@ -28,8 +28,8 @@ import { iconNameFromDenom, ucDenomToDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
 import InterestAndReward from "./Calculate/InterestAndReward";
 import "./index.less";
-import EMod from "../../assets/images/emod.png";
-import DPool from "../../assets/images/d-pool.png";
+import EMod from "../../assets/images/emode.svg";
+import DPool from "../../assets/images/d-pool.svg";
 
 const Borrow = ({
   lang,

@@ -155,6 +155,26 @@
       padding: 0;
       position: relative;
       overflow: hidden;
+
+      .bottom-chart-right {
+        width: 85%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10%;
+
+        @media screen and (max-width: 576px) {
+          width: 100%;
+        }
+
+        .dashboard-statics {
+          margin: 15px 0 15px;
+          h2 {
+            font-size: 1.6rem;
+          }
+        }
+      }
+
       filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
       .commodo-launch-card-inner {
         height: 100%;
@@ -252,7 +272,7 @@
             .h3-botttom {
               line-height: 1;
               text-transform: inherit;
-              .ant-btn{
+              .ant-btn {
                 font-weight: 600;
               }
             }
@@ -445,23 +465,145 @@
           }
         }
       }
+    }
+  }
+}
 
-      .bottom-chart-right {
-        width: 40%;
+.dashboard-banner {
+  margin-bottom: 25px;
+  .carousel-item {
+    border-radius: 20px;
+    background: linear-gradient(89deg, #041c12 13.54%, rgba(4, 28, 18, 0) 100%);
+    margin-bottom: 20px;
+    position: relative;
+
+    .back-img {
+      border-radius: 20px;
+      position: absolute;
+      height: 264px;
+      width: 100%;
+      z-index: -1;
+      top: 0;
+      right: 0;
+      object-fit: cover;
+      margin-left: auto;
+    }
+
+    .carousel-element {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 264px;
+
+      .reward-section {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        padding-left: 10%;
+        gap: 10px;
+        padding-left: 20px;
+        padding-top: 30px;
 
-        @media screen and (max-width: 576px) {
-          width: 100%;
+        .title {
+          color: #fff;
+          font-size: 42px;
+          font-style: normal;
+          font-weight: 800;
+          line-height: normal;
+          padding: 0;
         }
 
-        .dashboard-statics {
-          margin: 15px 0 15px;
-          h2 {
-            font-size: 1.6rem;
+        .description {
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 24px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+        }
+
+        .learn-more {
+          a {
+            color: #fff;
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            letter-spacing: 0.24px;
+            text-decoration-line: underline;
           }
+        }
+      }
+
+      .logo-section {
+        padding-right: 20px;
+
+        .logo-wrap {
+          display: flex;
+          align-items: center;
+
+          .logo {
+            padding: 5px;
+            border-radius: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+
+            &.active {
+              margin-left: -25px;
+            }
+
+            .icon-Logo {
+              border-radius: 20px;
+              position: absolute;
+              height: 150px;
+              width: 125px;
+              z-index: -1;
+              object-fit: cover;
+              margin-left: auto;
+            }
+
+            .icon {
+              height: 100px;
+              width: 100px;
+            }
+          }
+        }
+      }
+
+      .coming-soon {
+        position: absolute;
+        border-radius: 0px 5px 5px 0px;
+        background: linear-gradient(
+          321deg,
+          rgba(0, 119, 69, 0.8) 0%,
+          rgba(12, 204, 89, 0.8) 100%
+        );
+        box-shadow: 0px 4px 4px 0px rgba(4, 29, 14, 0.4);
+        width: 221px;
+        padding: 10px 20px;
+        top: 20px;
+
+        .coming-soon-title {
+          color: #fff;
+          text-align: center;
+          font-size: 24px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: normal;
+        }
+      }
+    }
+  }
+}
+
+.banner-carousel {
+  .slick-dots {
+    li,
+    .slick-active {
+      button {
+        background: none !important;
+        &::after {
+          display: none;
         }
       }
     }

@@ -1356,7 +1356,7 @@ const BorrowTab = ({
                 )}
               />
               <List
-                className="pt-0"
+                className="pt-4"
                 grid={{
                   gutter: 16,
                   xs: 2,
