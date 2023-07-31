@@ -27,6 +27,14 @@
     line-height: 1;
     margin-top: 8px;
 
+    &.active {
+      font-size: 2.125rem;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+      text-transform: uppercase;
+    }
+
     @media screen and (max-width: 420px) {
       font-size: 1.2rem;
     }
@@ -168,9 +176,18 @@
         }
 
         .dashboard-statics {
-          margin: 15px 0 15px;
+          margin: 10px 0 10px;
           h2 {
             font-size: 1.6rem;
+          }
+
+          h3 {
+            font-size: 1.275rem;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            text-transform: uppercase;
+            margin-top: 5px;
           }
         }
       }
@@ -480,7 +497,7 @@
     .back-img {
       border-radius: 20px;
       position: absolute;
-      height: 264px;
+      height: 200px;
       width: 100%;
       z-index: -1;
       top: 0;
@@ -494,7 +511,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 264px;
+      height: 200px;
 
       .reward-section {
         display: flex;
@@ -505,36 +522,68 @@
 
         .title {
           color: #fff;
-          font-size: 42px;
+          font-size: 1.8rem;
           font-style: normal;
           font-weight: 800;
           line-height: normal;
           padding: 0;
+
+          @media screen and (max-width: 1100px) {
+            font-size: 1.5rem;
+          }
+
+          @media screen and (max-width: 550px) {
+            font-size: 1.2rem;
+          }
         }
 
         .description {
           color: rgba(255, 255, 255, 0.7);
-          font-size: 24px;
+          font-size: 1.275rem;
           font-style: normal;
           font-weight: 400;
           line-height: normal;
+
+          @media screen and (max-width: 1100px) {
+            font-size: 0.9rem;
+          }
+
+          @media screen and (max-width: 550px) {
+            font-size: 0.7rem;
+          }
         }
 
         .learn-more {
           a {
             color: #fff;
-            font-size: 24px;
+            font-size: 1.275rem;
             font-style: normal;
             font-weight: 700;
             line-height: normal;
             letter-spacing: 0.24px;
             text-decoration-line: underline;
+
+            @media screen and (max-width: 1100px) {
+              font-size: 0.9rem;
+            }
+
+            @media screen and (max-width: 550px) {
+              font-size: 0.7rem;
+            }
           }
         }
       }
 
       .logo-section {
         padding-right: 20px;
+
+        img {
+          height: 170px;
+
+          @media screen and (max-width: 550px) {
+            height: 110px;
+          }
+        }
 
         .logo-wrap {
           display: flex;
@@ -580,8 +629,8 @@
         );
         box-shadow: 0px 4px 4px 0px rgba(4, 29, 14, 0.4);
         width: 221px;
-        padding: 10px 20px;
-        top: 20px;
+        padding: 8px 20px;
+        top: 10px;
 
         .coming-soon-title {
           color: #fff;

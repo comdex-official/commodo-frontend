@@ -96,7 +96,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
     chart: {
       type: "pie",
       backgroundColor: null,
-      height: 210,
+      height: 220,
       margin: 5,
     },
     credits: {
@@ -164,7 +164,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
     chart: {
       type: "spline",
       backgroundColor: null,
-      height: 200,
+      height: 140,
       marginBottom: 60,
     },
     credits: {
@@ -310,7 +310,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                     className="mt-1"
                   />
                 ) : (
-                  <h3>
+                  <h3 className="active">
                     $
                     {commaSeparator(
                       Number(totalValueLocked || 0).toFixed(DOLLAR_DECIMALS)
