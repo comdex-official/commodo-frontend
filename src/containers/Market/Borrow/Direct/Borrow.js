@@ -122,10 +122,16 @@ const BorrowTab = ({
     assetDenomMap[borrowAssetDenom]?.decimals
   );
 
+  const borrowListFiltered =
+  extendedPairs &&
+  Object.values(extendedPairs)?.map(
+    (item) => assetMap[item?.assetOut]?.denom
+  );
+
   const borrowList =
-    extendedPairs &&
-    Object.values(extendedPairs)?.map(
-      (item) => assetMap[item?.assetOut]?.denom
+    extendedPairs && borrowListFiltered && 
+    borrowListFiltered?.filter(
+      (item) => Number(assetToPool[item]?.poolId) !== 1
     );
 
   useEffect(() => {
