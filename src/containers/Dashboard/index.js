@@ -164,7 +164,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
     chart: {
       type: "spline",
       backgroundColor: null,
-      height: 140,
+      height: 150,
       marginBottom: 60,
     },
     credits: {
@@ -283,7 +283,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
             {denomConversion(assetMap[item?.asset_id]?.denom)}
           </div>
           <b>
-            {formatNumber((Number(item?.total) || 0).toFixed(DOLLAR_DECIMALS))}
+            {`$${formatNumber((Number(item?.total) || 0).toFixed(DOLLAR_DECIMALS))}`}
           </b>
         </li>
       );
@@ -377,8 +377,16 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
           </div>
           <div className="dashboard-upper-right">
             <div className="commodo-card commodo-launch-card">
-              <div className="bottom-chart-right">
-                <div
+              {/* <div className="bottom-chart-right"> */}
+              <div className="legend-custom">
+                  <div className="legend-deposit">
+                    <SvgIcon name="rectangle" /> Deposited
+                  </div>
+                  <div className="legend-borrow">
+                    <SvgIcon name="rectangle" /> Borrowed
+                  </div>
+                </div>
+                {/* <div
                   className="dashboard-statics"
                   style={{ borderColor: "#52B788" }}
                 >
@@ -401,8 +409,11 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                       Number(totalBorrowed || 0).toFixed(DOLLAR_DECIMALS)
                     )}
                   </h3>{" "}
-                </div>
-              </div>
+                </div> */}
+              {/* </div> */}
+
+
+              
               <HighchartsReact
                 highcharts={Highcharts}
                 options={DepositBorrowChart}
