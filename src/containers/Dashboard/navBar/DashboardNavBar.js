@@ -15,7 +15,7 @@ const DashboardNavBar = () => {
               <div className="coming-soon-title">Coming Soon!</div>
             </div>
             <div className="reward-section">
-              <div className="title">E-mode - Efficiency mode</div>
+              <div className="title">E-mode or Efficiency mode</div>
               <div className="description">
                 Discover more about increasing capital efficiency and maximizing
                 LTVs for co-related assets.

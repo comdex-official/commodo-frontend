@@ -35,7 +35,10 @@ const Direct = ({ setPools }) => {
           message.error(error);
           return;
         }
-        setPools(result?.pools);
+     
+        const filterData = result?.pools.filter((item)=> Number(item?.poolId) !== 1)
+
+        setPools(filterData);
       }
     );
   }, []);

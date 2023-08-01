@@ -81,7 +81,7 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
             title={
               <>
                 E-mode or Efficiency mode, borrow correlated asset with higher
-                efficiency.
+                efficiency.{" "}
                 <a
                   href="#"
                   onClick={() =>

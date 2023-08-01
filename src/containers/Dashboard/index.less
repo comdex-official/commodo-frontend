@@ -114,6 +114,50 @@
       margin-top: 15px;
     }
 
+    .legend-custom {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      margin-top: 8px;
+
+      .legend-deposit {
+        display: flex;
+        align-items: center;
+        font-weight: lighter;
+        margin-right: 20px;
+        color: @text-color-dark;
+        .dark-mode & {
+          color: @bg-light;
+        }
+        .icon {
+          fill: @success-color;
+          width: 10px;
+          height: 10px;
+          margin-right: 5px;
+        }
+      }
+
+      .legend-borrow {
+        display: flex;
+        align-items: center;
+        color: @text-color-dark;
+
+        .icon {
+          fill: @text-color-dark;
+          width: 10px;
+          height: 10px;
+          margin-right: 5px;
+          .dark-mode & {
+            fill: @bg-light;
+          }
+        }
+
+        .dark-mode & {
+          color: @bg-light;
+        }
+      }
+    }
+
     .dashboardupper-chart {
       padding: 12px 20px;
       margin-bottom: 16px;
@@ -159,7 +203,7 @@
     }
 
     .commodo-launch-card {
-      margin-bottom: 15px;
+      margin-bottom: 25px;
       padding: 0;
       position: relative;
       overflow: hidden;
@@ -491,7 +535,6 @@
   .carousel-item {
     border-radius: 20px;
     background: linear-gradient(89deg, #041c12 13.54%, rgba(4, 28, 18, 0) 100%);
-    margin-bottom: 20px;
     position: relative;
 
     .back-img {
@@ -647,8 +690,13 @@
 
 .banner-carousel {
   .slick-dots {
+    bottom: 20px !important;
+
     li,
     .slick-active {
+      width: 12px !important;
+      margin-inline: 0 !important;
+    
       button {
         background: none !important;
         &::after {
