@@ -35,7 +35,10 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
 
   useEffect(() => {
     if (searchKey.length > 0) {
-      const filterPool = pools.filter((item) => Number(item.poolId) !== 1);
+      const filterPool =
+        process.env.REACT_APP_D_POOL === "open"
+          ? pools.filter((item) => Number(item.poolId) !== 1)
+          : pools;
       const res = filterPool.filter((obj) =>
         (obj?.cpoolName).trim().toLowerCase().includes(searchKey)
       );
@@ -148,7 +151,11 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
           {searchKey?.length > 0 ? (
             filterPool?.length > 0 ? (
               filterPool?.map((item) => {
-                if (Number(item.poolId) === 1) return;
+                if (
+                  process.env.REACT_APP_D_POOL === "open" &&
+                  Number(item.poolId) === 1
+                )
+                  return;
                 return (
                   <div
                     className="market-list-item"
@@ -258,7 +265,11 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
           ) : pools?.length > 0 ? (
             pools &&
             pools?.map((item) => {
-              if (Number(item.poolId) === 1) return;
+              if (
+                process.env.REACT_APP_D_POOL === "open" &&
+                Number(item.poolId) === 1
+              )
+                return;
               return (
                 <div
                   className="market-list-item"

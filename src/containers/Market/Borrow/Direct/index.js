@@ -8,11 +8,11 @@ import {
   Col,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE
+  DEFAULT_PAGE_SIZE,
 } from "../../../../constants/common";
 import { queryLendPools } from "../../../../services/lend/query";
 import Borrow from "./Borrow";
@@ -35,8 +35,11 @@ const Direct = ({ setPools }) => {
           message.error(error);
           return;
         }
-     
-        const filterData = result?.pools.filter((item)=> Number(item?.poolId) !== 1)
+
+        const filterData =
+          process.env.REACT_APP_D_POOL === "open"
+            ? result?.pools.filter((item) => Number(item?.poolId) !== 1)
+            : result?.pools;
 
         setPools(filterData);
       }

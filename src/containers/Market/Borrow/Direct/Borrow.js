@@ -44,7 +44,11 @@ import {
   decimalConversion,
   marketPrice,
 } from "../../../../utils/number";
-import {errorMessageMappingParser, iconNameFromDenom, toDecimals} from "../../../../utils/string";
+import {
+  errorMessageMappingParser,
+  iconNameFromDenom,
+  toDecimals,
+} from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import "./index.less";
 
@@ -123,16 +127,19 @@ const BorrowTab = ({
   );
 
   const borrowListFiltered =
-  extendedPairs &&
-  Object.values(extendedPairs)?.map(
-    (item) => assetMap[item?.assetOut]?.denom
-  );
+    extendedPairs &&
+    Object.values(extendedPairs)?.map(
+      (item) => assetMap[item?.assetOut]?.denom
+    );
 
   const borrowList =
-    extendedPairs && borrowListFiltered && 
-    borrowListFiltered?.filter(
-      (item) => Number(assetToPool[item]?.poolId) !== 1
-    );
+    extendedPairs &&
+    borrowListFiltered &&
+    (process.env.REACT_APP_D_POOL === "open"
+      ? borrowListFiltered?.filter(
+          (item) => Number(assetToPool[item]?.poolId) !== 1
+        )
+      : borrowListFiltered);
 
   useEffect(() => {
     if (pool?.poolId) {
