@@ -458,11 +458,13 @@ const BorrowTab = ({
 
   const filtered =
     extendedPairs &&
-    Object.fromEntries(
-      Object.entries(extendedPairs).filter(([key, value]) => {
-        return Number(value?.assetOutPoolId) !== 1;
-      })
-    );
+    (process.env.REACT_APP_D_POOL === "open"
+      ? Object.fromEntries(
+          Object.entries(extendedPairs).filter(([key, value]) => {
+            return Number(value?.assetOutPoolId) !== 1;
+          })
+        )
+      : extendedPairs);
 
   const borrowList =
     filtered &&

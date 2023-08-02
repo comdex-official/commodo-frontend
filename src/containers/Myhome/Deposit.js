@@ -120,7 +120,7 @@ const Deposit = ({
               >
                 Edit
               </Button>
-            ) : row?.poolId === 1 ? (
+            ) : process.env.REACT_APP_D_POOL === "open" && row?.poolId === 1 ? (
               <Button
                 onClick={() =>
                   navigate(`/deprecated-cpool/${1}/#withdraw`, {
@@ -209,7 +209,8 @@ const Deposit = ({
             asset: (
               <>
                 <div className="assets-with-icon">
-                  {Number(item?.poolId) === 1 ? (
+                  {process.env.REACT_APP_D_POOL === "open" &&
+                  Number(item?.poolId) === 1 ? (
                     <Tooltip
                       overlayClassName="commodo-tooltip"
                       title={
