@@ -272,7 +272,7 @@ const Borrow = ({
               >
                 Edit
               </Button>
-            ) : row?.poolId === 1 ? (
+            ) : process.env.REACT_APP_D_POOL === "open" && row?.poolId === 1 ? (
               <Button
                 disabled={item?.isLiquidated || navigateInProgress}
                 onClick={() => handleNavigate3(item)}
@@ -402,7 +402,8 @@ const Borrow = ({
                     >
                       <img alt={"E-Mod"} src={EMod} className="e-mod-img" />
                     </Tooltip>
-                  ) : Number(item?.poolId) === 1 ? (
+                  ) : process.env.REACT_APP_D_POOL === "open" &&
+                    Number(item?.poolId) === 1 ? (
                     <img alt={"D-Pool"} src={DPool} className="e-mod-img" />
                   ) : (
                     ""

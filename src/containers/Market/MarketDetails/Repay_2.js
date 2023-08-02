@@ -125,13 +125,16 @@ const RepayTab_2 = ({
 
   useEffect(() => {
     if (extendedPairs && userBorrow) {
-      const filteredByValue = Object.fromEntries(
-        Object.entries(extendedPairs).filter(
-          ([key, value]) => Number(value?.assetOutPoolId) !== 1
-          // ||
-          // value?.isEModeEnabled === true
-        )
-      );
+      const filteredByValue =
+        process.env.REACT_APP_D_POOL === "open"
+          ? Object.fromEntries(
+              Object.entries(extendedPairs).filter(
+                ([key, value]) => Number(value?.assetOutPoolId) !== 1
+                // ||
+                // value?.isEModeEnabled === true
+              )
+            )
+          : extendedPairs;
 
       const filteredByValueResult = Object.entries(filteredByValue).map(
         (e) => e[1]
@@ -353,7 +356,11 @@ const RepayTab_2 = ({
                 >
                   {borrowPosition?.length > 0 &&
                     borrowPosition?.map((item) => {
-                      if (Number(item?.poolId) === 1) return;
+                      if (
+                        process.env.REACT_APP_D_POOL === "open" &&
+                        Number(item?.poolId) === 1
+                      )
+                        return;
                       return (
                         <Option
                           key={item?.borrowingId?.toNumber()}

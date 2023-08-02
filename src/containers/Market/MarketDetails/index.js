@@ -90,7 +90,10 @@ const MarketDetails = ({
           return;
         }
 
-        const rs = result?.lends.filter((item) => Number(item?.poolId) !== 1);
+        const rs =
+          process.env.REACT_APP_D_POOL === "open"
+            ? result?.lends.filter((item) => Number(item?.poolId) !== 1)
+            : result?.lends;
 
         setPoolLends(rs);
       });

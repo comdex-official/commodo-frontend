@@ -95,7 +95,10 @@ const WithdrawTab = ({
         return;
       }
 
-      const rs1 = result?.lends.filter((item) => Number(item?.poolId) !== 1);
+      const rs1 =
+        process.env.REACT_APP_D_POOL === "open"
+          ? result?.lends.filter((item) => Number(item?.poolId) !== 1)
+          : result?.lends;
 
       const userLendsMap = rs1?.reduce((map, obj) => {
         map[obj?.assetId] = obj;
