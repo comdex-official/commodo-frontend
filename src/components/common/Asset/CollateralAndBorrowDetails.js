@@ -69,8 +69,6 @@ const CollateralAndBorrowDetails = ({
       100
   );
 
-  console.log(assetRatesStatsMap[lendAssetId]);
-
   const liquidationPenalty = {
     title: "Liq. Penalty",
     counts: eMod
@@ -78,8 +76,6 @@ const CollateralAndBorrowDetails = ({
       : `${Number(liquidationPenaltyBonus).toFixed(DOLLAR_DECIMALS)}%`,
     tooltipText: "Fee paid by vault owners on liquidation",
   };
-
-  console.log(isInterPool, eMod, assetRatesStatsMap[lendAssetId], "eeeeee");
 
   let data = [
     {

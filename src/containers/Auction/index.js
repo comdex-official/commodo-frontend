@@ -383,7 +383,6 @@ const Auction = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handelClickAuctionTable = (e, rowIndex) => {
-    console.log(e, rowIndex, "e");
     setSelectedRow(e?.action);
     showModal();
   };

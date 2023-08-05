@@ -42,7 +42,6 @@ const Details = ({
   const [moduleBalanceStats, setModuleBalanceStats] = useState([]);
   const [assetPoolFunds, setAssetPoolFunds] = useState({});
 
-  console.log(stats);
   useEffect(() => {
     if (assetId && poolId) {
       QueryPoolAssetLBMapping(assetId, poolId, (error, result) => {
@@ -50,7 +49,7 @@ const Details = ({
           message.error(error);
           return;
         }
-        console.log(result?.PoolAssetLBMapping);
+
         setStats(result?.PoolAssetLBMapping);
       });
 
@@ -59,7 +58,7 @@ const Details = ({
           message.error(error);
           return;
         }
-        console.log(result?.amount);
+
         setAssetPoolFunds(result?.amount);
       });
     } else if (stats?.poolId) {
@@ -83,8 +82,6 @@ const Details = ({
   let assetStats = moduleBalanceStats?.filter(
     (item) => item?.assetId?.toNumber() === Number(assetId)
   )[0];
-
-  console.log(moduleBalanceStats);
 
   useEffect(() => {
     setAssetStatMap(assetId, assetStats?.balance);

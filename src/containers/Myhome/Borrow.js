@@ -302,9 +302,7 @@ const Borrow = ({
 
   const [eModData, setEModData] = useState([]);
   const [extendedPairs, setExtendedPairs] = useState({});
-  console.log({ extendedPairs });
 
-  console.log(assetDenomMap[2]);
   const fetchLendPools = () => {
     queryEMode((error, result) => {
       if (error) {
@@ -382,7 +380,7 @@ const Borrow = ({
     const results = eModData.filter(
       (item2) => Number(item2?.id) === Number(item?.pairId)
     );
-    console.log(results, item, "sssss");
+
     const threeSold =
       Number(
         decimalConversion(
@@ -539,8 +537,6 @@ const Borrow = ({
           };
         })
       : [];
-
-  console.log(userBorrowList);
 
   return (
     <div className="app-content-wrapper">

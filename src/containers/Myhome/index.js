@@ -223,7 +223,6 @@ const Myhome = ({
       ({ pairId: id1 }) => !eModData.some(({ id: id2 }) => id2 === id1)
     );
 
-    console.log(userData, userEmodData);
     const borrowValues1 =
       userData?.length > 0
         ? userData.map((item) => {
