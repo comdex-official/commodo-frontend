@@ -9,7 +9,8 @@ import Withdraw from "./Withdraw";
 import "./index.less";
 import { queryLendPool } from "../../../services/lend/query";
 import { setPool } from "../../../actions/lend";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
+import { decode } from "../../../utils/string";
 
 const PageBackButton = {
   right: <BackButton />,
@@ -36,6 +37,17 @@ const DeprecatedcPool = ({ address, setPool }) => {
   }, [address, id]);
 
   const [activeKey, setActiveKey] = useState("1");
+  const location = useLocation();
+  const type = decode(location.hash);
+
+  useEffect(() => {
+    if (type && type === "withdraw") {
+      setActiveKey("1");
+    }
+    if (type && type === "repay") {
+      setActiveKey("2");
+    }
+  }, []);
 
   const tabItems = [
     {

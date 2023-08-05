@@ -94,12 +94,13 @@ const Details = ({
     {
       title: parent === "lend" ? "Deposited" : "Borrowed",
       counts: `$${formatNumber(
-        Number(
-          amountConversion(
-            (parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0
-          ) * marketPrice(markets, assetDenom, assetDenomMap[assetDenom]?.id),
-          assetDenomMap[assetDenom]?.decimals
-        ) +
+        (
+          Number(
+            amountConversion(
+              (parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0
+            ) * marketPrice(markets, assetDenom, assetDenomMap[assetDenom]?.id),
+            assetDenomMap[assetDenom]?.decimals
+          ) +
           (parent === "lend"
             ? Number(
                 amountConversion(
@@ -112,8 +113,8 @@ const Details = ({
                     assetDenomMap[assetPoolFunds?.denom]?.id
                   )
               )
-            : 0),
-        DOLLAR_DECIMALS
+            : 0)
+        ).toFixed(DOLLAR_DECIMALS)
       )}`,
       tooltipText:
         parent === "lend" ? "Total funds Deposited" : "Total funds Borrowed",
@@ -130,8 +131,7 @@ const Details = ({
             ) * assetStats?.balance.amount || 0,
             assetDenomMap[assetStats?.balance?.denom]?.decimals
           )
-        ),
-        ZERO_DOLLAR_DECIMALS
+        ).toFixed(ZERO_DOLLAR_DECIMALS)
       )}`,
 
       tooltipText:

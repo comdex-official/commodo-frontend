@@ -290,7 +290,7 @@ const RepayTab_2 = ({
       Number(userBorrowsMap[value]?.amountOut?.amount) +
         Number(decimalConversion(userBorrowsMap[value]?.interestAccumulated))
     );
-
+    handleSliderChange(0);
     setSelectedBorrowPosition(userBorrowsMap[value]);
     queryLendPair(userBorrowsMap[value]?.pairId, (error, result) => {
       if (error) {

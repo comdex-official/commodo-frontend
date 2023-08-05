@@ -151,7 +151,7 @@ const Borrow = ({
       const lendPair = pairResult?.ExtendedPair;
 
       if (!lendPair?.isInterPool) {
-        navigate(`/deprecated-cpool/${1}/#withdraw`, {
+        navigate(`/deprecated-cpool/${1}/#repay`, {
           state: {
             lendingIdFromRoute: borrow?.lendingId?.toNumber(),
             borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
@@ -168,7 +168,7 @@ const Borrow = ({
           }
 
           if (result?.lend?.poolId) {
-            navigate(`/deprecated-cpool/${1}/#withdraw`, {
+            navigate(`/deprecated-cpool/${1}/#repay`, {
               state: {
                 lendingIdFromRoute: borrow?.lendingId?.toNumber(),
                 borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
@@ -272,7 +272,8 @@ const Borrow = ({
               >
                 Edit
               </Button>
-            ) : process.env.REACT_APP_D_POOL === "open" && row?.poolId === 1 ? (
+            ) : process.env.REACT_APP_D_POOL === "open" &&
+              Number(knowPoolId(item?.pairId)) === 1 ? (
               <Button
                 disabled={item?.isLiquidated || navigateInProgress}
                 onClick={() => handleNavigate3(item)}
@@ -300,7 +301,10 @@ const Borrow = ({
   ];
 
   const [eModData, setEModData] = useState([]);
+  const [extendedPairs, setExtendedPairs] = useState({});
+  console.log({ extendedPairs });
 
+  console.log(assetDenomMap[2]);
   const fetchLendPools = () => {
     queryEMode((error, result) => {
       if (error) {
@@ -316,8 +320,30 @@ const Borrow = ({
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (userBorrowList) {
+      for (let i = 0; i < userBorrowList?.length; i++) {
+        fetchPair(userBorrowList?.[i]?.pairId);
+      }
+    }
+  }, [userBorrowList]);
+
   const fetchData = () => {
     fetchLendPools();
+  };
+
+  const fetchPair = (id) => {
+    queryLendPair(id, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setExtendedPairs((prevState) => ({
+        [result?.ExtendedPair?.id]: result?.ExtendedPair,
+        ...prevState,
+      }));
+    });
   };
 
   const knowEmode = (item) => {
@@ -329,6 +355,20 @@ const Borrow = ({
     } else {
       return false;
     }
+  };
+
+  const knowPoolId = (item) => {
+    const filteredByValue = Object.fromEntries(
+      Object.entries(extendedPairs).filter(
+        ([key, value]) => Number(value?.id) === Number(item)
+      )
+    );
+
+    const filteredByValueResult = Object.entries(filteredByValue).map(
+      (e) => e[1]
+    );
+
+    return filteredByValueResult[0]?.assetOutPoolId;
   };
 
   const getEmodeData = (item) => {
@@ -403,8 +443,15 @@ const Borrow = ({
                       <img alt={"E-Mod"} src={EMod} className="e-mod-img" />
                     </Tooltip>
                   ) : process.env.REACT_APP_D_POOL === "open" &&
-                    Number(item?.poolId) === 1 ? (
-                    <img alt={"D-Pool"} src={DPool} className="e-mod-img" />
+                    Number(knowPoolId(item?.pairId)) === 1 ? (
+                    <Tooltip
+                      overlayClassName="commodo-tooltip"
+                      title={
+                        "Position is from a deprecating cPool, Repay debt and Withdraw funds asap. Click Edit button."
+                      }
+                    >
+                      <img alt={"D-Pool"} src={DPool} className="e-mod-img" />
+                    </Tooltip>
                   ) : (
                     ""
                   )}
@@ -492,6 +539,8 @@ const Borrow = ({
           };
         })
       : [];
+
+  console.log(userBorrowList);
 
   return (
     <div className="app-content-wrapper">
