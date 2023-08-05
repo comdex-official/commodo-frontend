@@ -21,30 +21,7 @@ const HealthFactor = ({
   assetDenomMap,
   eMod,
 }) => {
-  console.log(
-    (Number(inAmount) *
-      marketPrice(markets, assetMap[pair?.assetIn]?.denom, pair?.assetIn) *
-      (pair?.isInterPool
-        ? Number(
-            decimalConversion(
-              assetRatesStatsMap[pair?.assetIn]?.liquidationThreshold
-            )
-          ) *
-          Number(
-            decimalConversion(
-              assetRatesStatsMap[pool?.transitAssetIds?.first]
-                ?.liquidationThreshold
-            )
-          )
-        : Number(
-            decimalConversion(
-              assetRatesStatsMap[pair?.assetIn]?.liquidationThreshold
-            )
-          ))) /
-      (Number(outAmount) *
-        marketPrice(markets, assetMap[pair?.assetOut]?.denom, pair?.assetOut))
-  );
-  const [percentage, setPercentage] = useState(0);
+  const [percentage, setPercentage] = useState("");
   useEffect(() => {
     if (borrow?.borrowingId && !pair?.id) {
       queryLendPair(borrow?.pairId, (error, pairResult) => {
@@ -75,7 +52,7 @@ const HealthFactor = ({
 
           myPool["transitAssetIds"] = transitAssetIds;
 
-          let percentage = eMod
+          let percentage = pair?.isEModeEnabled
             ? (borrow?.amountIn?.amount *
                 marketPrice(
                   markets,
@@ -145,12 +122,14 @@ const HealthFactor = ({
         });
       });
     }
-  }, [markets, borrow, assetRatesStatsMap, assetDenomMap, eMod]);
+  }, [markets, borrow, assetRatesStatsMap, assetDenomMap]);
 
   useEffect(() => {
-    if (pair?.id && Number(inAmount) && Number(outAmount)) {
-      let percentage = eMod
-        ? (Number(inAmount) *
+    if (pair) {
+      let percentage = "";
+      if (pair?.isEModeEnabled) {
+        percentage =
+          (Number(inAmount) *
             marketPrice(
               markets,
               assetMap[pair?.assetIn]?.denom,
@@ -178,8 +157,10 @@ const HealthFactor = ({
               markets,
               assetMap[pair?.assetOut]?.denom,
               pair?.assetOut
-            ))
-        : (Number(inAmount) *
+            ));
+      } else {
+        percentage =
+          (Number(inAmount) *
             marketPrice(
               markets,
               assetMap[pair?.assetIn]?.denom,
@@ -208,11 +189,13 @@ const HealthFactor = ({
               assetMap[pair?.assetOut]?.denom,
               pair?.assetOut
             ));
-      if (isFinite(percentage)) {
-        setPercentage(percentage);
       }
+
+      // if (isFinite(percentage)) {
+      setPercentage(percentage);
+      // }
     }
-  }, [markets, pair, inAmount, outAmount, pool, eMod]);
+  }, [markets, pair, inAmount, outAmount, pool]);
 
   return (
     <>

@@ -118,7 +118,7 @@ const BorrowTab = ({
   let collateralAssetDenom = selectedCollateralValue
     ? selectedCollateralValue
     : "";
-  // console.log(assetMap[Number(id3)]?.denom);
+
   let borrowAssetDenom = selectedBorrowValue ? selectedBorrowValue : "";
 
   const availableBalance =
@@ -133,8 +133,6 @@ const BorrowTab = ({
     assetMap[Number(id2)]?.denom === collateralAssetDenom
       ? Number(id2)
       : Number(id3);
-
-  console.log({ pair });
 
   const borrowable = getAmount(
     (Number(inAmount) *
@@ -339,7 +337,7 @@ const BorrowTab = ({
       }
 
       let pairMapping = result?.AssetToPairMapping;
-      console.log(pairMapping, "pairMapping");
+
       if (pairMapping?.assetId) {
         for (let i = 0; i < pairMapping?.pairId?.length; i++) {
           fetchPair(pairMapping?.pairId[i]);
@@ -914,20 +912,11 @@ const BorrowTab = ({
             assetDenomMap[borrowAssetDenom]?.id
           ) || 0
       );
-    console.log(
-      Number(
-        decimalConversion(
-          assetRatesStatsMap[Number(id2)]?.eLiquidationThreshold
-        ) * 100
-      ),
-      "data"
-    );
+
     return data === Number.NaN || data === Number.POSITIVE_INFINITY
       ? Number(0).toFixed(DOLLAR_DECIMALS)
       : Number(data || 0).toFixed(DOLLAR_DECIMALS);
   };
-
-  console.log(assetRatesStatsMap[1], assetRatesStatsMap[10]);
 
   return (
     <div className="details-wrapper emode-details-wrapper">

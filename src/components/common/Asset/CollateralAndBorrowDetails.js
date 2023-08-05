@@ -69,8 +69,6 @@ const CollateralAndBorrowDetails = ({
       100
   );
 
-  console.log(assetRatesStatsMap[lendAssetId]);
-
   const liquidationPenalty = {
     title: "Liq. Penalty",
     counts: eMod

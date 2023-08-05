@@ -31,6 +31,7 @@ import {
   queryAssetPairs,
   queryLendPair,
   queryLendPool,
+  queryModuleBalance,
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
@@ -83,6 +84,8 @@ const BorrowTab = ({
   const [assetToPool, setAssetToPool] = useState({});
   const [selectedBorrowValue, setSelectedBorrowValue] = useState();
   const [assetOutPool, setAssetOutPool] = useState();
+  const [moduleBalanceStats, setModuleBalanceStats] = useState([]);
+  const [available, setAvailable] = useState([]);
   const [selectedCollateralLendingId, setSelectedCollateralLendingId] =
     useState();
 
@@ -98,7 +101,7 @@ const BorrowTab = ({
   let borrowAssetDenom = selectedBorrowValue
     ? assetMap[pair?.assetOut]?.denom
     : "";
-  console.log(extendedPairs);
+
   const availableBalance = lend?.availableToBorrow || 0;
 
   const borrowable = getAmount(
@@ -126,6 +129,35 @@ const BorrowTab = ({
         assetDenomMap[borrowAssetDenom]?.id
       )
   );
+
+  useEffect(() => {
+    if (assetOutPool?.poolId || pool?.poolId) {
+      let poolId = assetOutPool?.poolId || pool?.poolId;
+      queryModuleBalance(poolId, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setModuleBalanceStats(result?.ModuleBalance?.moduleBalanceStats);
+      });
+    }
+  }, [assetOutPool?.poolId || pool?.poolId]);
+
+  useEffect(() => {
+    let assetStats = moduleBalanceStats?.filter(
+      (item) => Number(item?.assetId) === Number(pair?.assetOut)
+    )[0];
+
+    const available = Number(
+      amountConversion(
+        assetStats?.balance.amount || 0,
+        assetDenomMap[assetStats?.balance?.denom]?.decimals
+      )
+    );
+
+    setAvailable(available - Number((available * 0.5) / 100));
+  }, [moduleBalanceStats, pair?.assetOut]);
 
   const borrowableBalance = Number(borrowable) - 1000;
 
@@ -244,8 +276,6 @@ const BorrowTab = ({
 
           let pairMapping = result?.AssetToPairMapping;
 
-          console.log(pairMapping);
-
           if (pairMapping?.assetId) {
             for (let i = 0; i < pairMapping?.pairId?.length; i++) {
               fetchPair(pairMapping?.pairId[i]);
@@ -280,8 +310,6 @@ const BorrowTab = ({
           }));
         }
       );
-
-      console.log(result?.ExtendedPai, "result?.ExtendedPai");
 
       setExtendedPairs((prevState) => ({
         [result?.ExtendedPair?.id]: result?.ExtendedPair,
@@ -322,7 +350,7 @@ const BorrowTab = ({
   };
 
   const handleOutAmountChange = (value) => {
-    value = toDecimals(value, assetDenomMap[borrowAssetDenom]?.decimals)
+    value = toDecimals(String(value), assetDenomMap[borrowAssetDenom]?.decimals)
       .toString()
       .trim();
 
@@ -335,10 +363,17 @@ const BorrowTab = ({
     setBorrowValidationError(
       ValidateInputNumber(
         value,
-        amountConversion(
-          borrowableBalance,
-          assetDenomMap[borrowAssetDenom]?.decimals
-        ),
+        Number(
+          amountConversion(
+            borrowableBalance,
+            assetDenomMap[borrowAssetDenom]?.decimals
+          )
+        ) > Number(available)
+          ? available
+          : amountConversion(
+              borrowableBalance,
+              assetDenomMap[borrowAssetDenom]?.decimals
+            ),
         "dollar",
         Number(
           value *
@@ -448,10 +483,17 @@ const BorrowTab = ({
   const handleBorrowMaxClick = () => {
     if (borrowableBalance > 0) {
       return handleOutAmountChange(
-        amountConversion(
-          borrowableBalance,
-          assetDenomMap[borrowAssetDenom]?.decimals
-        )
+        Number(
+          amountConversion(
+            borrowableBalance,
+            assetDenomMap[borrowAssetDenom]?.decimals
+          )
+        ) > Number(available)
+          ? available
+          : amountConversion(
+              borrowableBalance,
+              assetDenomMap[borrowAssetDenom]?.decimals
+            )
       );
     }
   };
@@ -503,7 +545,7 @@ const BorrowTab = ({
   const handleSliderChange = (sliderValue) => {
     let value = (sliderValue / 100) * maxLTV;
 
-    if (value >= maxLTV) {
+    if (value >= Number(maxLTV)) {
       return handleBorrowMaxClick();
     }
 
@@ -541,8 +583,6 @@ const BorrowTab = ({
     80: "Safe",
     100: "Riskier",
   };
-
-  console.log({ pair });
 
   return (
     <div className="details-wrapper market-details-wrapper">
@@ -712,10 +752,17 @@ const BorrowTab = ({
                   <div className="label-right">
                     Borrowable
                     <span className="ml-1">
-                      {amountConversionWithComma(
-                        borrowableBalance >= 0 ? borrowableBalance : 0,
-                        assetDenomMap[borrowAssetDenom]?.decimals
-                      )}{" "}
+                      {Number(
+                        amountConversion(
+                          borrowableBalance >= 0 ? borrowableBalance : 0,
+                          assetDenomMap[borrowAssetDenom]?.decimals
+                        )
+                      ) > Number(available)
+                        ? available
+                        : amountConversionWithComma(
+                            borrowableBalance >= 0 ? borrowableBalance : 0,
+                            assetDenomMap[borrowAssetDenom]?.decimals
+                          )}{" "}
                       {denomConversion(borrowAssetDenom)}
                     </span>
                     <div className="max-half">
@@ -832,7 +879,7 @@ const BorrowTab = ({
             <div className="commodo-card">
               <CollateralAndBorrowDetails
                 eMod={pair?.isEModeEnabled}
-                interAssetID={pool?.transitAssetIds?.second}
+                interAssetID={pool?.transitAssetIds?.first}
                 isInterPool={pair?.isInterPool}
                 lendAssetId={lend?.assetId || pair?.assetIn}
                 collateralAssetDenom={collateralAssetDenom}
