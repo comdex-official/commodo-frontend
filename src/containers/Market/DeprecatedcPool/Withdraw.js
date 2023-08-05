@@ -56,8 +56,6 @@ const Withdraw = ({
     100: "100%",
   };
 
-  console.log({ pool });
-
   const [assetList, setAssetList] = useState();
   const [amount, setAmount] = useState();
   const [currentBalance, setCurrentBalance] = useState(0);

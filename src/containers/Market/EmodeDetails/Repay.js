@@ -269,8 +269,6 @@ const RepayTab = ({
     handleInputChange(String(percentageValue));
   };
 
-  console.log(ucDenomToDenom(selectedBorrowPosition?.amountIn?.denom));
-
   const hf = () => {
     const data =
       (Number(

@@ -45,7 +45,7 @@ const EmodeList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
         message.error(error);
         return;
       }
-      console.log(result?.data);
+
       setEModData(result?.data);
     });
   };

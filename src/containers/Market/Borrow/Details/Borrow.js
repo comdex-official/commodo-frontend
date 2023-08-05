@@ -101,7 +101,7 @@ const BorrowTab = ({
   let borrowAssetDenom = selectedBorrowValue
     ? assetMap[pair?.assetOut]?.denom
     : "";
-  console.log(extendedPairs);
+
   const availableBalance = lend?.availableToBorrow || 0;
 
   const borrowable = getAmount(
@@ -145,7 +145,6 @@ const BorrowTab = ({
   }, [assetOutPool?.poolId || pool?.poolId]);
 
   useEffect(() => {
-    console.log("moduleBalanceStats1", moduleBalanceStats);
     let assetStats = moduleBalanceStats?.filter(
       (item) => Number(item?.assetId) === Number(pair?.assetOut)
     )[0];
@@ -156,7 +155,7 @@ const BorrowTab = ({
         assetDenomMap[assetStats?.balance?.denom]?.decimals
       )
     );
-    console.log(available, "available");
+
     setAvailable(available - Number((available * 0.5) / 100));
   }, [moduleBalanceStats, pair?.assetOut]);
 
@@ -276,8 +275,6 @@ const BorrowTab = ({
           }
 
           let pairMapping = result?.AssetToPairMapping;
-
-          console.log(pairMapping);
 
           if (pairMapping?.assetId) {
             for (let i = 0; i < pairMapping?.pairId?.length; i++) {
@@ -545,8 +542,6 @@ const BorrowTab = ({
         decimalConversion(assetRatesStatsMap[pair?.assetIn]?.ltv) * 100
       ).toFixed(DOLLAR_DECIMALS);
 
-  console.log(poolLendPositions);
-
   const handleSliderChange = (sliderValue) => {
     let value = (sliderValue / 100) * maxLTV;
 
@@ -570,7 +565,6 @@ const BorrowTab = ({
         assetDenomMap[borrowAssetDenom]?.id
       ) /
       100;
-    console.log("sssss", outValue);
 
     let borrowValue = toDecimals(
       String(outValue),
@@ -579,7 +573,6 @@ const BorrowTab = ({
       .toString()
       .trim();
 
-    console.log({ borrowValue });
     setOutAmount(borrowValue || 0);
     setNewBalance(Number(borrowValue || 0) + currentBalance);
     checkMaxBorrow(borrowValue || 0);
@@ -590,8 +583,6 @@ const BorrowTab = ({
     80: "Safe",
     100: "Riskier",
   };
-
-  console.log({ pair });
 
   return (
     <div className="details-wrapper market-details-wrapper">

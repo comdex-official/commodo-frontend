@@ -192,8 +192,6 @@ const WithdrawTab = ({
     100: "100%",
   };
 
-  console.log(assetMap[selectedAssetId], selectedAssetId);
-
   return (
     <div className="details-wrapper market-details-wrapper">
       <div className="details-left commodo-card">
