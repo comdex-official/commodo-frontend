@@ -83,7 +83,7 @@ const MarketList = ({ assetMap, setPools, pools, lendPools, userLendList }) => {
             overlayClassName="commodo-tooltip"
             title={
               <>
-                E-mode or Efficiency mode, borrow correlated asset with higher
+                E-mode or Efficiency mode, borrow correlated assets with higher
                 efficiency.{" "}
                 <a
                   href="#"

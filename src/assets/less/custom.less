@@ -571,7 +571,6 @@ button.ant-switch {
             .ant-table-cell {
               background: none !important;
               border: 0 !important;
-            
             }
 
             td {
@@ -579,7 +578,9 @@ button.ant-switch {
               border: 0 !important;
             }
 
-            th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
+            th:not(:last-child):not(.ant-table-selection-column):not(
+                .ant-table-row-expand-icon-cell
+              ):not([colspan])::before {
               display: none;
             }
           }
@@ -639,7 +640,6 @@ button.ant-switch {
 
               &:last-child {
                 border-radius: 0 15px 15px 0;
-               
               }
 
               color: @text-color-dark;
@@ -656,8 +656,7 @@ button.ant-switch {
                 border-color: rgba(@white, 0.5);
               }
             }
-            .ant-table-tbody
-            p {
+            .ant-table-tbody p {
               margin-bottom: 0;
               line-height: 1;
               font-size: @font-size-base + 3;
@@ -675,7 +674,6 @@ button.ant-switch {
             &:last-child {
               td {
                 border: 0;
-               
               }
             }
           }
@@ -1089,6 +1087,7 @@ button.ant-switch {
             .icon {
               width: 32px;
               height: 32px;
+              border-radius: 100%;
             }
           }
         }
@@ -1678,7 +1677,7 @@ button.ant-switch {
 
           .assets-icon {
             width: 32px;
-            height: 32px;
+            height: 28px;
             border-radius: 32px;
             margin-right: 10px;
             overflow: hidden;
@@ -1697,7 +1696,7 @@ button.ant-switch {
 
             .icon {
               width: 100%;
-              height: 32px;
+              height: 28px;
               @media screen and (max-width: 1367px) {
                 height: 22px;
               }
@@ -1726,7 +1725,7 @@ button.ant-switch {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    
+
     @media screen and (max-width: 1400px) {
       padding-left: 15px;
     }
@@ -1823,7 +1822,6 @@ button.ant-switch {
           }
         }
 
-        
         .head-right {
           font-weight: 500;
           font-size: 16px;
@@ -2017,12 +2015,12 @@ button.ant-switch {
 
     &:first-child {
       background: linear-gradient(82.97deg, #665aa6 -2.08%, #8c81c7 120.82%);
-      color: #FFFFFF;
+      color: #ffffff;
     }
 
     &:last-child {
       background: rgb(254, 43, 86);
-      color: #FFFFFF;
+      color: #ffffff;
     }
   }
 }
@@ -2271,4 +2269,3 @@ button.ant-switch {
     }
   }
 }
-

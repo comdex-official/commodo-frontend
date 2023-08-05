@@ -79,6 +79,8 @@ const CollateralAndBorrowDetails = ({
     tooltipText: "Fee paid by vault owners on liquidation",
   };
 
+  console.log(isInterPool, eMod, assetRatesStatsMap[lendAssetId], "eeeeee");
+
   let data = [
     {
       title: "Max LTV",
