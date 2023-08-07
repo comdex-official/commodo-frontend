@@ -260,11 +260,17 @@ const Deposit = ({
                 </div>
               </>
             ),
-            cpool: item?.cpoolName?.includes("STATOM")
-              ? item?.cpoolName?.replace("STATOM", "stATOM")
-              : item?.cpoolName?.includes("AXLUSDC")
-              ? item?.cpoolName?.replace("AXLUSDC", "USDC.axl")
-              : item?.cpoolName,
+            cpool:
+              item?.cpoolName?.includes("AXLUSDC") &&
+              item?.cpoolName?.includes("STATOM")
+                ? item?.cpoolName
+                    ?.replace("STATOM", "stATOM")
+                    ?.replace("AXLUSDC", "USDC.axl")
+                : item?.cpoolName?.includes("STATOM")
+                ? item?.cpoolName?.replace("STATOM", "stATOM")
+                : item?.cpoolName?.includes("AXLUSDC")
+                ? item?.cpoolName?.replace("AXLUSDC", "USDC.axl")
+                : item?.cpoolName,
             apy: item,
             interest: (
               <>
