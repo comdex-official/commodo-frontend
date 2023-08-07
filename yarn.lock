@@ -5319,9 +5319,9 @@ combined-stream@^1.0.8:
   dependencies:
     delayed-stream "~1.0.0"
 
-comdex-codec@comdex-official/proto-codecs#development:
+"comdex-codec@https://github.com/comdex-official/proto-codecs#development":
   version "0.1.0"
-  resolved "https://codeload.github.com/comdex-official/proto-codecs/tar.gz/1e106d22a9ea673cdaf2070c376292d874a5a43f"
+  resolved "https://github.com/comdex-official/proto-codecs#1e106d22a9ea673cdaf2070c376292d874a5a43f"
   dependencies:
     "@vercel/ncc" "^0.29.1"
     protobufjs "^6.11.3"
