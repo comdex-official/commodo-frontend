@@ -583,7 +583,24 @@ const BorrowTab = ({
                             value={record?.poolId?.toNumber()}
                           >
                             <div className="select-inner">
-                              <div className="name">{record?.cpoolName}</div>
+                              <div className="name">
+                                {record?.cpoolName?.includes("AXLUSDC") &&
+                                record?.cpoolName?.includes("STATOM")
+                                  ? record?.cpoolName
+                                      ?.replace("STATOM", "stATOM")
+                                      ?.replace("AXLUSDC", "USDC.axl")
+                                  : record?.cpoolName?.includes("STATOM")
+                                  ? record?.cpoolName?.replace(
+                                      "STATOM",
+                                      "stATOM"
+                                    )
+                                  : record?.cpoolName?.includes("AXLUSDC")
+                                  ? record?.cpoolName?.replace(
+                                      "AXLUSDC",
+                                      "USDC.axl"
+                                    )
+                                  : record?.cpoolName}
+                              </div>
                             </div>
                           </Option>
                         );
