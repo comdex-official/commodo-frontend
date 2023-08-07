@@ -4,24 +4,28 @@ export const tabsList = [
     value: "dashboard",
     langKey: "dashboard",
     index: 0,
+    tooltipText: "Overview of the platform",
   },
   {
     name: "My Home",
     value: "myhome",
     langKey: "mypositions",
     index: 1,
+    tooltipText: "View and edit your positions on Commodo",
   },
   {
     name: "Asset",
     value: "asset",
     langKey: "asset",
     index: 2,
+    tooltipText: "Deposit and withdraw assets to platform",
   },
   {
     name: "Market",
     value: "market",
     langKey: "market",
     index: 3,
+    tooltipText: "Explore the available lending-borrowing markets",
   },
   // {
   //   name: "Lend",
@@ -40,11 +44,13 @@ export const tabsList = [
     value: "auction",
     langKey: "auction",
     index: 4,
+    tooltipText: "View and bid on auctions",
   },
   {
     name: "Govern",
     value: "govern",
     langKey: "govern",
     index: 5,
+    tooltipText: "Vote and explore the proposals",
   },
 ];

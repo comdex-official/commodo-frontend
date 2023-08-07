@@ -294,7 +294,11 @@ const RepayTab = ({
         ) /
           100)) /
       Number(
-        amount *
+        (amountConversion(
+          updatedAmountOut,
+          assetDenomMap[selectedBorrowPosition?.amountOut?.denom]?.decimals
+        ) -
+          Number(amount | 0)) *
           marketPrice(
             markets,
             assetMap[selectedAssetId]?.denom,
@@ -302,7 +306,7 @@ const RepayTab = ({
           ) || 0
       ).toFixed(DOLLAR_DECIMALS);
 
-    return data === Number.NaN || data === Number.POSITIVE_INFINITY
+    return data === Number.NaN
       ? Number(0).toFixed(DOLLAR_DECIMALS)
       : Number(data || 0).toFixed(DOLLAR_DECIMALS);
   };

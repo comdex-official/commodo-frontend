@@ -111,7 +111,12 @@ const BorrowTab = ({
         collateralAssetDenom,
         assetDenomMap[collateralAssetDenom]?.id
       ) *
-      (pair?.isInterPool
+      (pair?.isEModeEnabled
+        ? Number(
+            decimalConversion(assetRatesStatsMap[lend?.assetId]?.eLtv) -
+              MAX_LTV_DEDUCTION
+          )
+        : pair?.isInterPool
         ? (Number(decimalConversion(assetRatesStatsMap[lend?.assetId]?.ltv)) -
             MAX_LTV_DEDUCTION) *
           Number(
@@ -635,7 +640,15 @@ const BorrowTab = ({
                               </div>
                               <div className="name">
                                 {denomConversion(item)} (
-                                {"cPool-" + record?.cpoolName?.split("-")?.[0]})
+                                {"cPool-" +
+                                  (record?.cpoolName?.split("-")?.[0] ===
+                                  "STATOM"
+                                    ? "stATOM"
+                                    : record?.cpoolName?.split("-")?.[0] ===
+                                      "AXLUSDC"
+                                    ? "USDC.axl"
+                                    : record?.cpoolName?.split("-")?.[0])}
+                                )
                               </div>
                             </div>
                           </Option>
@@ -731,9 +744,17 @@ const BorrowTab = ({
                                   <>
                                     {denomConversion(item)} (
                                     {"cPool-" +
-                                      assetToPool[item]?.cpoolName?.split(
+                                      (assetToPool[item]?.cpoolName?.split(
                                         "-"
-                                      )?.[0]}
+                                      )?.[0] === "STATOM"
+                                        ? "stATOM"
+                                        : assetToPool[item]?.cpoolName?.split(
+                                            "-"
+                                          )?.[0] === "AXLUSDC"
+                                        ? "USDC.axl"
+                                        : assetToPool[item]?.cpoolName?.split(
+                                            "-"
+                                          )?.[0])}
                                     )
                                   </>
                                 ) : (
