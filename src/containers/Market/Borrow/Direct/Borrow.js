@@ -722,7 +722,17 @@ const BorrowTab = ({
                               <div className="name">
                                 {denomConversion(item)} (
                                 {"cPool-" +
-                                  assetToPool[item]?.cpoolName?.split("-")?.[0]}
+                                  (assetToPool[item]?.cpoolName?.split(
+                                    "-"
+                                  )?.[0] === "STATOM"
+                                    ? "stATOM"
+                                    : assetToPool[item]?.cpoolName?.split(
+                                        "-"
+                                      )?.[0] === "AXLUSDC"
+                                    ? "USDC.axl"
+                                    : assetToPool[item]?.cpoolName?.split(
+                                        "-"
+                                      )?.[0])}
                                 )
                               </div>
                             </div>

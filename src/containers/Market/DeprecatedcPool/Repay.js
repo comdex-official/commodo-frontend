@@ -511,7 +511,7 @@ const RepayTab = ({
             name="Repay"
           /> */}
           <ActionButton
-            name="RepayWithDraw"
+            name="Repay"
             lang={lang}
             disabled={
               !Number(amount) ||

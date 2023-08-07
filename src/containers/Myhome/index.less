@@ -23,8 +23,8 @@
     }
   }
 
-  .e-mod-img{
-    height: 30px;
+  .e-mod-img {
+    height: 20px;
     width: 25px;
   }
 }
@@ -100,15 +100,15 @@
   align-items: center;
   padding: 20px 25px 20px 25px;
   margin-bottom: 1.5rem;
-  @media screen and (max-width:767px) {
+  @media screen and (max-width: 767px) {
     flex-direction: column;
   }
   .myhome-upper-left {
     width: 20%;
-    @media screen and (max-width:991px) {
+    @media screen and (max-width: 991px) {
       width: 33.33%;
     }
-    @media screen and (max-width:767px) {
+    @media screen and (max-width: 767px) {
       width: 100%;
     }
     .ant-list {
@@ -144,10 +144,10 @@
   .myhome-upper-end {
     width: 30%;
     padding-left: 5%;
-    @media screen and (max-width:991px) {
+    @media screen and (max-width: 991px) {
       width: 33.33%;
     }
-    @media screen and (max-width:767px) {
+    @media screen and (max-width: 767px) {
       width: 100%;
       padding-left: 0;
     }
@@ -159,7 +159,7 @@
         padding-right: 15px;
         text-align: right;
 
-        @media screen and (max-width:767px) {
+        @media screen and (max-width: 767px) {
           text-align: left;
           border-left: 1px solid @success-color;
           border-right: 0;
@@ -192,7 +192,7 @@
   }
   .myhome-upper-right {
     width: 33.33%;
-    @media screen and (max-width:767px) {
+    @media screen and (max-width: 767px) {
       width: 100%;
       margin: 1.5rem 0;
     }
@@ -218,7 +218,7 @@
       }
       .borrow-limit-middle {
         .ant-progress {
-          .ant-progress-text{
+          .ant-progress-text {
             display: none;
           }
           .ant-progress-outer {
@@ -259,12 +259,12 @@
   }
 }
 
-.readonlyswitch{
+.readonlyswitch {
   pointer-events: none;
 }
 
-.edit-btn-dorp{
-  .ant-dropdown-menu{
+.edit-btn-dorp {
+  .ant-dropdown-menu {
     .dark-mode & {
       background: #0a2f1f;
     }
@@ -279,8 +279,8 @@
   }
 }
 
-.ant-btn{
-  &.caclulate-btn{
+.ant-btn {
+  &.caclulate-btn {
     margin-left: auto;
     margin-right: 0;
     padding: 0 15px;
@@ -299,4 +299,10 @@
       color: rgba(@white, 0.5);
     }
   }
+}
+
+.myhome-cPoolnName {
+  clear: both;
+  display: inline-block;
+  white-space: nowrap;
 }

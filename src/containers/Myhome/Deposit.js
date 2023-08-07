@@ -60,6 +60,7 @@ const Deposit = ({
       dataIndex: "available",
       key: "available",
       width: 280,
+      align: "center",
       render: (text) => <div className="myhome-avaliablevalues">{text}</div>,
     },
     {
@@ -67,6 +68,7 @@ const Deposit = ({
       dataIndex: "cpool",
       key: "cpool",
       width: 250,
+      render: (item) => <div className="myhome-cPoolnName">{item}</div>,
     },
     {
       title: "Lend APY",
@@ -258,7 +260,11 @@ const Deposit = ({
                 </div>
               </>
             ),
-            cpool: item?.cpoolName,
+            cpool: item?.cpoolName?.includes("STATOM")
+              ? item?.cpoolName?.replace("STATOM", "stATOM")
+              : item?.cpoolName?.includes("AXLUSDC")
+              ? item?.cpoolName?.replace("AXLUSDC", "USDC.axl")
+              : item?.cpoolName,
             apy: item,
             interest: (
               <>
