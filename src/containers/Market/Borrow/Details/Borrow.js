@@ -601,7 +601,7 @@ const BorrowTab = ({
             <div className="assets-select-card mb-3">
               <div className="assets-left">
                 <label className="left-label">Collateral Asset</label>
-                <div className="assets-select-wrapper">
+                <div className="assets-select-wrapper width">
                   <Select
                     className="assets-select"
                     popupClassName="asset-select-dropdown"
@@ -702,7 +702,7 @@ const BorrowTab = ({
             <div className="assets-select-card mb-2">
               <div className="assets-left">
                 <label className="left-label">Borrow Asset</label>
-                <div className="assets-select-wrapper">
+                <div className="assets-select-wrapper width">
                   <Select
                     disabled={!collateralAssetDenom}
                     className="assets-select"
