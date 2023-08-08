@@ -703,30 +703,31 @@ const BorrowTab = ({
       title: parent === "lend" ? "Deposited" : "Borrowed",
       counts: `$${formatNumber(
         Number(
-          amountConversion(
-            (parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0
-          ) *
-            marketPrice(
-              markets,
-              borrowAssetDenom,
-              assetDenomMap[borrowAssetDenom]?.id
-            ),
-          assetDenomMap[borrowAssetDenom]?.decimals
-        ) +
-          (parent === "lend"
-            ? Number(
-                amountConversion(
-                  assetPoolFunds?.amount,
-                  assetDenomMap[assetPoolFunds?.denom]?.decimals
-                ) *
-                  marketPrice(
-                    markets,
-                    assetPoolFunds?.denom,
-                    assetDenomMap[assetPoolFunds?.denom]?.id
-                  )
-              )
-            : 0),
-        DOLLAR_DECIMALS
+          Number(
+            amountConversion(
+              (parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0
+            ) *
+              marketPrice(
+                markets,
+                borrowAssetDenom,
+                assetDenomMap[borrowAssetDenom]?.id
+              ),
+            assetDenomMap[borrowAssetDenom]?.decimals
+          ) +
+            (parent === "lend"
+              ? Number(
+                  amountConversion(
+                    assetPoolFunds?.amount,
+                    assetDenomMap[assetPoolFunds?.denom]?.decimals
+                  ) *
+                    marketPrice(
+                      markets,
+                      assetPoolFunds?.denom,
+                      assetDenomMap[assetPoolFunds?.denom]?.id
+                    )
+                )
+              : 0)
+        ).toFixed(DOLLAR_DECIMALS)
       )}`,
       tooltipText:
         parent === "lend" ? "Total funds Deposited" : "Total funds Borrowed",
@@ -743,8 +744,7 @@ const BorrowTab = ({
             ) * assetStats?.balance.amount || 0,
             assetDenomMap[assetStats?.balance?.denom]?.decimals
           )
-        ),
-        DOLLAR_DECIMALS
+        ).toFixed(DOLLAR_DECIMALS)
       )}`,
       tooltipText:
         parent === "lend" ? "Total funds Available" : "Total funds Available",
