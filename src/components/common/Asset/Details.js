@@ -132,7 +132,9 @@ const Details = ({
       )}`,
 
       tooltipText:
-        parent === "lend" ? "Total funds Available" : "Total funds Available",
+        parent === "lend"
+          ? "Funds available to Borrow"
+          : "Funds available to Borrow",
     },
     {
       title: "Utilization",

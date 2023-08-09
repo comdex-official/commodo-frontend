@@ -703,8 +703,6 @@ const BorrowTab = ({
     </div>
   );
 
-  console.log(outPool, pair);
-
   return (
     <div className="details-wrapper">
       {!dataInProgress ? (
@@ -1158,7 +1156,7 @@ const BorrowTab = ({
               <Details
                 assetId={pair?.assetIn?.toNumber()}
                 assetDenom={collateralAssetDenom}
-                poolId={outPool?.poolId || pool?.poolId}
+                poolId={pool?.poolId}
                 parent="lend"
               />
             </div>
@@ -1171,7 +1169,7 @@ const BorrowTab = ({
               <Details
                 assetId={pair?.assetOut?.toNumber()}
                 assetDenom={borrowAssetDenom}
-                poolId={outPool?.poolId || pool?.poolId}
+                poolId={pair?.assetOutPoolId}
                 parent="borrow"
               />
               {/* <div className="mt-5">
