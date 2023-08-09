@@ -417,7 +417,7 @@ const BorrowTab = ({
   };
   const handleClick = () => {
     setInProgress(true);
-
+    console.log(pair?.id, lend?.lendingId);
     signAndBroadcastTransaction(
       {
         message: {
