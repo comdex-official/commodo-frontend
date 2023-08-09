@@ -67,24 +67,24 @@ const Borrow = ({
           },
         });
       } else {
-        queryLendPosition(borrow?.lendingId, (error, result) => {
-          if (error) {
-            message.error(error);
-            return;
-          }
+        // queryLendPosition(borrow?.lendingId, (error, result) => {
+        //   if (error) {
+        //     message.error(error);
+        //     return;
+        //   }
 
-          if (result?.lend?.poolId) {
-            navigate(`/market-details/${result?.lend?.poolId}/#repay`, {
-              state: {
-                lendingIdFromRoute: borrow?.lendingId?.toNumber(),
-                borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
-                collateralAssetMinimalDenomFromRoute: borrow?.amountIn?.denom,
-                pairIdFromRoute: borrow?.pairId,
-                collateralAssetIdFromRoute: lendPair?.assetIn?.toNumber(),
-              },
-            });
-          }
+        // if (result?.lend?.poolId) {
+        navigate(`/market-details/${lendPair?.assetOutPoolId}/#repay`, {
+          state: {
+            lendingIdFromRoute: borrow?.lendingId?.toNumber(),
+            borrowAssetMinimalDenomFromRoute: borrow?.amountOut?.denom,
+            collateralAssetMinimalDenomFromRoute: borrow?.amountIn?.denom,
+            pairIdFromRoute: borrow?.pairId,
+            collateralAssetIdFromRoute: lendPair?.assetIn?.toNumber(),
+          },
         });
+        // }
+        // });
       }
     });
   };
@@ -537,6 +537,8 @@ const Borrow = ({
           };
         })
       : [];
+
+  console.log(tableData);
 
   return (
     <div className="app-content-wrapper">
