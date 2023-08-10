@@ -417,7 +417,7 @@ const BorrowTab = ({
   };
   const handleClick = () => {
     setInProgress(true);
-    console.log(pair?.id, lend?.lendingId);
+
     signAndBroadcastTransaction(
       {
         message: {
@@ -431,7 +431,11 @@ const BorrowTab = ({
               amount: getAmount(inAmount, assetMap[lend?.assetId]?.decimals),
               // Sending uc + denom as per message
               denom: UC_DENOM.concat(
-                String(assetMap[lend?.assetId]?.name).toLocaleLowerCase()
+                String(
+                  assetMap[lend?.assetId]?.denom === "usdc"
+                    ? "usdcaxl"
+                    : assetMap[lend?.assetId]?.name
+                ).toLocaleLowerCase()
               ),
             },
             amountOut: {
