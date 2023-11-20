@@ -6,8 +6,7 @@ import { useLocation, useParams } from "react-router";
 import { setPool, setPoolLends, setUserBorrows } from "../../../actions/lend";
 import { BackButton } from "../../../components/common";
 import {
-  queryAllBorrowByOwnerAndDebtPool,
-  queryAllBorrowByOwnerAndPool,
+  queryBorrowByOwnerAndDebtPool,
   queryEMode,
   queryLendPool,
   queryUserBorrows,
@@ -117,7 +116,7 @@ const MarketDetails = ({
   }, [address, id]);
 
   const fetchAllBorrowByOwnerAndPool = (address, poolId) => {
-    queryAllBorrowByOwnerAndDebtPool(address, poolId, (error, result) => {
+    queryBorrowByOwnerAndDebtPool(address, poolId, (error, result) => {
       if (error) {
         message.error(error);
         return;
