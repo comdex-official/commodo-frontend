@@ -20,8 +20,7 @@ import { assetTransitTypeId } from "../../../config/network";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
-  queryAllBorrowByOwnerAndDebtPool,
-  queryAllBorrowByOwnerAndPool,
+  queryBorrowByOwnerAndDebtPool,
   queryLendPair,
   queryLendPool,
 } from "../../../services/lend/query";
@@ -98,7 +97,7 @@ const RepayTab_2 = ({
   };
 
   const fetchAllBorrowByOwnerAndPool = async (address, poolId) => {
-    await queryAllBorrowByOwnerAndDebtPool(
+    await queryBorrowByOwnerAndDebtPool(
       address,
       poolId,
       async (error, result) => {

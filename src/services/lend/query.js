@@ -358,7 +358,7 @@ export const queryAllBorrowByOwnerAndPool = (address, poolId, callback) => {
   });
 };
 
-export const queryAllBorrowByOwnerAndDebtPool = (address, poolId, callback) => {
+export const queryBorrowByOwnerAndDebtPool = (address, poolId, callback) => {
   getQueryService((error, queryService) => {
     if (error) {
       callback(error);
