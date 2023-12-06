@@ -224,8 +224,8 @@ const Myhome = ({
     );
 
     const borrowValues1 =
-      userData?.length > 0
-        ? userData.map((item) => {
+      userBorrowList?.length > 0
+        ? userBorrowList.map((item) => {
             return (
               marketPrice(
                 markets,
@@ -264,59 +264,65 @@ const Myhome = ({
           })
         : [];
 
-    const borrowValues2 =
-      userEmodData?.length > 0
-        ? userEmodData.map((item) => {
-            return (
-              marketPrice(
-                markets,
-                assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.denom,
-                borrowToPair[item?.borrowingId]?.assetIn
-              ) *
-              Number(
-                amountConversion(
-                  item?.amountIn.amount,
-                  assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.decimals
-                )
-              ) *
-              (borrowToPair[item?.borrowingId]?.isInterPool
-                ? Number(
-                    decimalConversion(
-                      assetRatesStatsMap[
-                        borrowToPair[item?.borrowingId]?.assetIn
-                      ]?.eLtv
-                    )
-                  ) *
-                  Number(
-                    decimalConversion(
-                      assetRatesStatsMap[
-                        borrowToPool[item?.borrowingId]?.transitAssetIds?.first
-                      ]?.eLtv
-                    )
-                  )
-                : Number(
-                    decimalConversion(
-                      assetRatesStatsMap[
-                        borrowToPair[item?.borrowingId]?.assetIn
-                      ]?.eLtv
-                    ) || 0
-                  ))
-            );
-          })
-        : [];
+    // const borrowValues2 =
+    //   userEmodData?.length > 0
+    //     ? userEmodData.map((item) => {
+    //         return (
+    //           marketPrice(
+    //             markets,
+    //             assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.denom,
+    //             borrowToPair[item?.borrowingId]?.assetIn
+    //           ) *
+    //           Number(
+    //             amountConversion(
+    //               item?.amountIn.amount,
+    //               assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.decimals
+    //             )
+    //           ) *
+    //           (borrowToPair[item?.borrowingId]?.isInterPool
+    //             ? Number(
+    //                 decimalConversion(
+    //                   assetRatesStatsMap[
+    //                     borrowToPair[item?.borrowingId]?.assetIn
+    //                   ]?.eLtv
+    //                 )
+    //               ) *
+    //               Number(
+    //                 decimalConversion(
+    //                   assetRatesStatsMap[
+    //                     borrowToPool[item?.borrowingId]?.transitAssetIds?.first
+    //                   ]?.eLtv
+    //                 )
+    //               )
+    //             : Number(
+    //                 decimalConversion(
+    //                   assetRatesStatsMap[
+    //                     borrowToPair[item?.borrowingId]?.assetIn
+    //                   ]?.eLtv
+    //                 ) || 0
+    //               ))
+    //         );
+    //       })
+    //     : [];
 
-    let borrowValues = [...borrowValues1, ...borrowValues2];
+    // let borrowValues = [...borrowValues1, ...borrowValues2];
+    let borrowValues = [...borrowValues1];
 
     let borrowValue = borrowValues.reduce((a, b) => a + b, 0);
 
     // calculate borrow limit value only lend positions which don't have borrow position.
     let borrowsWithLend = Object?.values(borrowToLend);
-
+    console.log(userLendList, borrowsWithLend);
     const lendValues =
       userLendList?.length > 0 && borrowsWithLend?.length
         ? userLendList.map((item) => {
-            if (!borrowsWithLend.includes(item?.lendingId?.toNumber()))
+            if (borrowsWithLend.includes(item?.lendingId?.toNumber())) {
               // considering lend positions which don;t have borrow position opend.
+              console.log(
+                markets,
+                item?.amountIn?.denom,
+                assetDenomMap[item?.amountIn?.denom]?.id
+              );
               return (
                 marketPrice(
                   markets,
@@ -324,24 +330,26 @@ const Myhome = ({
                   assetDenomMap[item?.amountIn?.denom]?.id
                 ) *
                 amountConversion(
-                  item?.amountIn.amount,
+                  item?.amountIn?.amount,
                   assetDenomMap[item?.amountIn?.denom]?.decimals
                 ) *
                 Number(
                   decimalConversion(assetRatesStatsMap[item?.assetId]?.ltv)
                 )
               );
-            else {
+            } else {
               return 0;
             }
           })
         : [];
 
     let lendValue = lendValues.reduce((a, b) => a + b, 0);
+    console.log(borrowValue, lendValue);
 
     // borrow limit = sum of all collateral deposited * its LTV of all borrow positions and lends positions without borrow postion
 
-    return Number(borrowValue || 0) + Number(lendValue || 0);
+    // return Number(borrowValue || 0) + Number(lendValue || 0);
+    return Number(lendValue || 0);
   };
 
   const totalBorrow = Number(calculateTotalBorrow());
@@ -349,6 +357,8 @@ const Myhome = ({
   const currentLimit = (
     (borrowLimit ? totalBorrow / borrowLimit : 0) * 100
   ).toFixed(DOLLAR_DECIMALS);
+
+  console.log(borrowLimit, totalBorrow);
 
   const data = [
     {

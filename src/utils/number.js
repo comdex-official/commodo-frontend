@@ -38,7 +38,7 @@ export const marketPrice = (marketsMap, denom, assetId) => {
   //   return 1;
   // }
 
-  if (value && value?.twa && value?.isPriceActive) {
+  if (value && value?.twa) {
     return value?.twa?.toNumber() / 1000000;
   } else if (marketsMap?.coingekoPrice) {
     let price = marketsMap?.coingekoPrice[denomToCoingeckoTokenId(denom)];
