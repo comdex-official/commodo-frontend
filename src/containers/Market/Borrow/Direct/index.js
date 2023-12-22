@@ -16,7 +16,7 @@ import {
 } from "../../../../constants/common";
 import { queryLendPools } from "../../../../services/lend/query";
 import Borrow from "./Borrow";
-import "./index.less";
+import "./index.scss";
 
 const Direct = ({ setPools }) => {
   const [inProgress, setInProgress] = useState(false);

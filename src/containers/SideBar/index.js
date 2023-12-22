@@ -1,4 +1,4 @@
-import "./index.less";
+import "./index.scss";
 import { Layout } from "antd";
 import { SvgIcon } from "../../components/common";
 import { useMediaQuery } from "react-responsive";
@@ -6,7 +6,7 @@ import Footer from "../Footer";
 import React, { useState } from "react";
 import Tabs from "./Tabs";
 import { Scrollbars } from "react-custom-scrollbars";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 import LogoIcon from "../../assets/images/logo-icon.svg";
 
@@ -76,7 +76,9 @@ const SideBar = () => {
           </div>
         </Sider>
       </Layout>
-      <div onClick={toggle}>{isMobile && !isOpen && <div className="sidebar-overlay" />}</div>
+      <div onClick={toggle}>
+        {isMobile && !isOpen && <div className="sidebar-overlay" />}
+      </div>
     </>
   );
 };

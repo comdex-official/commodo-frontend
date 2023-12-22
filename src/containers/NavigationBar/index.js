@@ -1,4 +1,4 @@
-import "./index.less";
+import "./index.scss";
 import ConnectButton from "./ConnectButton";
 import React, { useState, useEffect } from "react";
 import ThemeToggle from "../../components/Theme/themeToggle";

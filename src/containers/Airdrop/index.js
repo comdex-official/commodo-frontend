@@ -2,7 +2,7 @@ import { List } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Col, Row, SvgIcon } from "../../components/common";
-import "./index.less";
+import "./index.scss";
 
 const data = [
   {

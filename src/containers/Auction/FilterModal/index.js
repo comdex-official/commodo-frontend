@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import {
   setAuctionedAsset,
-  setSelectedAuctionedAsset
+  setSelectedAuctionedAsset,
 } from "../../../actions/auction";
 import { Col, Row, SvgIcon } from "../../../components/common";
-import "./index.less";
+import "./index.scss";
 
 const marks = {
   0: "00:00hrs",

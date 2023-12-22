@@ -1,0 +1,26 @@
+@import "../../../../assets/less/variables.scss";
+.commodo-borrow-page {
+  .assets-select-wrapper {
+    .ant-select {
+      min-width: 230px;
+      max-width: 100%;
+      @media screen and (max-width: 1400px) {
+        min-width: 100%;
+      }
+    }
+
+    &.width {
+      .ant-select {
+        min-width: 280px;
+        max-width: 100%;
+        @media screen and (max-width: 1200px) {
+          min-width: 232px;
+        }
+      }
+    }
+  }
+}
+
+.health-factor-right {
+  line-height: 1.2;
+}

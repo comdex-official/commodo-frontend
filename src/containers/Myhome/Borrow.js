@@ -1,4 +1,4 @@
-import { Button, Table, Tooltip } from "antd";
+import { Button, Table, Tooltip, message } from "antd";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -27,7 +27,7 @@ import { decimalConversion, marketPrice } from "../../utils/number";
 import { iconNameFromDenom, ucDenomToDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
 import InterestAndReward from "./Calculate/InterestAndReward";
-import "./index.less";
+import "./index.scss";
 import EMod from "../../assets/images/emode.svg";
 import DPool from "../../assets/images/d-pool.svg";
 

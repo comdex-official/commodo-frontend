@@ -6,13 +6,12 @@ import { connect } from "react-redux";
 import {
   setAccountAddress,
   setAccountName,
-  showAccountConnectModal
+  showAccountConnectModal,
 } from "../../actions/account";
 import { fetchKeplrAccountName, initializeChain } from "../../services/keplr";
 import variables from "../../utils/variables";
 import ButtonSubmit from "../NavigationBar/Ledger";
-import "./index.less";
-
+import "./index.scss";
 
 const ConnectModal = ({
   setAccountAddress,
@@ -50,12 +49,18 @@ const ConnectModal = ({
           <h3 className="text-center">{variables[lang].connect_wallet}</h3>
         </div>
         <div className="mb-2 mt-3">
-          <div className="wallet-links" onClick={()=>handleConnectToWallet('keplr')}>
+          <div
+            className="wallet-links"
+            onClick={() => handleConnectToWallet("keplr")}
+          >
             <span>{variables[lang].keplr_wallet}</span>{" "}
           </div>
         </div>
         <div className="mb-2">
-          <div className="wallet-links" onClick={()=>handleConnectToWallet('leap')}>
+          <div
+            className="wallet-links"
+            onClick={() => handleConnectToWallet("leap")}
+          >
             <span>{variables[lang].leap_wallet}</span>{" "}
           </div>
         </div>

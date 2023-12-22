@@ -16,7 +16,7 @@ import { denomConversion } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
 import AssetApy from "../AssetApy";
 import AvailableToBorrow from "../Borrow/AvailableToBorrow";
-import "./index.less";
+import "./index.scss";
 import DPool from "../../../assets/images/d-pool.svg";
 import EMode from "../../../assets/images/emode.svg";
 import DBorrow from "../../../assets/images/d-borrow.svg";

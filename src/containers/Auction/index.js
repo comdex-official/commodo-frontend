@@ -27,7 +27,7 @@ import {
 import { iconNameFromDenom } from "../../utils/string";
 import Bidding from "./Bidding";
 import { InActiveBidding } from "./inActiveBidding";
-import "./index.less";
+import "./index.scss";
 import PlaceBidModal from "./PlaceBidModal";
 import CustomInput from "../../components/CustomInput";
 

@@ -10,13 +10,13 @@ import {
   queryBorrowPosition,
   queryLendPair,
   queryLendPool,
-  queryLendPosition
+  queryLendPosition,
 } from "../../../services/lend/query";
 import { decode } from "../../../utils/string";
 import BorrowTab from "./Borrow";
 import CloseTab from "./Close";
 import DepositTab from "./Deposit";
-import "./index.less";
+import "./index.scss";
 import RepayTab from "./Repay";
 
 const PageBackButton = {

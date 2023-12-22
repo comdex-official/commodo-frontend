@@ -1,0 +1,158 @@
+@import "../../assets/less/variables.scss";
+
+
+.asset-wrapper{
+  margin: auto;
+  .assets-upper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 25px;
+    font-size: 24px;
+    font-weight: 400;
+    color: #D8F3DC;
+    @media screen and (max-width:767px) {
+      font-size: 0.98rem;
+    }
+    .assets-upper-right{
+      display: flex;
+      align-items: center;
+    }
+  }
+  .balance-column{
+    p{
+      font-weight: normal;
+      margin-bottom: 2px !important;
+      display: block;
+    }
+    small{
+      font-weight: lighter;
+      color: $success-color !important;
+    }
+  }
+  .assetcard-head{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 25px;
+    h2{
+      margin-bottom: 0;
+      font-size: 1.6rem;
+      font-weight: 400;
+      .dark-mode & {
+        color: $white;
+      }
+    }
+    p{
+      margin: 0;
+      span{
+        margin-right: 10px;
+        .dark-mode & {
+          color: $text-color-light;
+        }
+      }
+    }
+  }
+  .external-btn {
+    a {
+      color: white !important;
+      display: flex;
+      align-items: center;
+      line-height: 100%;
+      height: 100%;
+      width: 100%;
+    }
+  }
+  .hyperlink-icon {
+    display: flex;
+    align-items: center;
+    .icon {
+      height: 10px;
+      margin-left: 4px;
+    }
+  }
+  .asset-ibc-btn-container {
+    display: flex !important;
+    align-items: center !important;
+    height: 28px !important;
+    line-height: 100% !important;
+    font-size: 11px !important;
+    letter-spacing: 0.2px;
+    .asset-ibc-btn {
+      margin-left: 6px;
+      margin-right: 1px;
+      display: flex;
+      align-items: center;
+      height: 12px;
+    }
+    .icon {
+      height: 10px;
+      margin-top: -2px;
+    }
+  }
+}
+
+.assets-search-section {
+  text-align: right;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+    .text {
+      .dark-mode & {
+        color: white;
+      }
+    }
+
+  @media screen and (max-width: 576px) {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .ant-switch {
+    margin-left: 6px;
+  }
+
+  .ant-input-affix-wrapper {
+    border: 1px solid $text-color-light;
+    background: none;
+    border-radius: 30px;
+    margin-left: 25px;
+    height: 39px;
+    padding: 4px 18px;
+    max-width: 260px;
+
+    @media screen and (max-width: 576px) {
+      margin-top: 1.2rem;
+      max-width: 100%;
+      margin-left: 0;
+    }
+
+    &:hover {
+      border-color: $border-light;
+    }
+
+    input {
+      background: none;
+      font-weight: normal;
+
+      .dark-mode & {
+        color: $white;
+      }
+
+      &::placeholder {
+        color: $text-color-label-dark;
+        opacity: 1;
+        font-weight: 500;
+      }
+    }
+
+    .ant-input-suffix {
+      .icon {
+        fill: $border-dark;
+      }
+    }
+  }
+
+}

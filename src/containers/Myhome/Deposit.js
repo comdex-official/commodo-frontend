@@ -1,4 +1,4 @@
-import { Button, Dropdown, Menu, Table, Tooltip } from "antd";
+import { Button, Dropdown, Menu, Table, Tooltip, message } from "antd";
 import * as PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router";
@@ -20,7 +20,7 @@ import { marketPrice } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
 import AssetApy from "../Market/AssetApy";
 import InterestAndReward from "./Calculate/InterestAndReward";
-import "./index.less";
+import "./index.scss";
 import { queryEMode } from "../../services/lend/query";
 import { useEffect, useState } from "react";
 import EMod from "../../assets/images/emode.svg";

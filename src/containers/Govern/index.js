@@ -8,11 +8,11 @@ import { fetchRestProposals } from "../../services/govern/query";
 import { formatTime } from "../../utils/date";
 import { proposalStatusMap } from "../../utils/string";
 import { setAllProposals, setProposals } from "../../actions/govern";
-import "./index.less";
+import "./index.scss";
 
 const { Option } = Select;
 
-const Govern = ({setAllProposals, allProposals, setProposals, proposals}) => {
+const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
   const navigate = useNavigate();
   const [inProgress, setInProgress] = useState(false);
 
@@ -49,7 +49,7 @@ const Govern = ({setAllProposals, allProposals, setProposals, proposals}) => {
   return (
     <div className="app-content-wrapper">
       {inProgress && !proposals?.length ? (
-                <div className="loader">
+        <div className="loader">
           <Spin />
         </div>
       ) : (
@@ -104,7 +104,8 @@ const Govern = ({setAllProposals, allProposals, setProposals, proposals}) => {
                           <div className="left-section">
                             <h3>
                               #{item?.proposal_id}
-                              <Button type="primary" 
+                              <Button
+                                type="primary"
                                 className={
                                   proposalStatusMap[item?.status] ===
                                     "Rejected" ||

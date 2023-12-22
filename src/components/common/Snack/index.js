@@ -1,5 +1,5 @@
 import { comdex } from "../../../config/network";
-import "./index.less";
+import "./index.scss";
 
 const Snack = ({ message, explorerUrlToTx = comdex.explorerUrlToTx, hash }) => {
   return (
