@@ -15,7 +15,7 @@ import {
 import { decode } from "../../../utils/string";
 import BorrowDetails from "../../Market/Borrow/Details";
 import SupplyDetails from "../Supply/Details";
-import "./index.less";
+import "./index.scss";
 import Repay_2 from "./Repay_2";
 import Withdraw_2 from "./Withdraw_2";
 

@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setBalanceRefresh } from "../../../actions/account";
 import {
-    Col,
-    NoDataIcon,
-    Row,
-    SvgIcon,
-    TooltipIcon
+  Col,
+  NoDataIcon,
+  Row,
+  SvgIcon,
+  TooltipIcon,
 } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
@@ -18,20 +18,20 @@ import HealthFactor from "../../../components/HealthFactor";
 import { ValidateInputNumber } from "../../../config/_validation";
 import { DOLLAR_DECIMALS } from "../../../constants/common";
 import {
-    amountConversion,
-    amountConversionWithComma,
-    denomConversion,
-    getAmount,
-    getDenomBalance
+  amountConversion,
+  amountConversionWithComma,
+  denomConversion,
+  getAmount,
+  getDenomBalance,
 } from "../../../utils/coin";
 import {
-    commaSeparator,
-    decimalConversion,
-    marketPrice
+  commaSeparator,
+  decimalConversion,
+  marketPrice,
 } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "./ActionButton";
-import "./index.less";
+import "./index.scss";
 
 const { Option } = Select;
 

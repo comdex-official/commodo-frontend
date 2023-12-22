@@ -16,12 +16,12 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "./ActionButton";
-import "./index.less";
+import "./index.scss";
 
 const { Option } = Select;
 

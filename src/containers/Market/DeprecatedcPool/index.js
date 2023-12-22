@@ -6,7 +6,7 @@ import { BackButton } from "../../../components/common";
 import BorrowTab from "./Borrow";
 import RepayTab from "./Repay";
 import Withdraw from "./Withdraw";
-import "./index.less";
+import "./index.scss";
 import { queryLendPool } from "../../../services/lend/query";
 import { setPool } from "../../../actions/lend";
 import { useLocation, useParams } from "react-router";

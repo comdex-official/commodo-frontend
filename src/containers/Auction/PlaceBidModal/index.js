@@ -17,17 +17,17 @@ import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
   getExponent,
-  marketPrice
+  marketPrice,
 } from "../../../utils/number";
-import {errorMessageMappingParser, toDecimals} from "../../../utils/string";
+import { errorMessageMappingParser, toDecimals } from "../../../utils/string";
 import variables from "../../../utils/variables";
-import "./index.less";
+import "./index.scss";
 
 const PlaceBidModal = ({
   lang,

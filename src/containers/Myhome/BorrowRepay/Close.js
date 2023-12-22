@@ -7,7 +7,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../../components/common";
 import Details from "../../../components/common/Asset/Details";
 import HealthFactor from "../../../components/HealthFactor";
@@ -16,16 +16,16 @@ import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
 import ActionButton from "./ActionButton";
-import "./index.less";
+import "./index.scss";
 
 const { Option } = Select;
 

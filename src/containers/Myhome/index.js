@@ -21,7 +21,7 @@ import { decode } from "../../utils/string";
 import Borrow from "./Borrow";
 import Deposit from "./Deposit";
 import History from "./History";
-import "./index.less";
+import "./index.scss";
 
 const Myhome = ({
   address,
