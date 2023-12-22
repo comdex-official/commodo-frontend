@@ -1,6 +1,6 @@
 import React from "react";
 import { SvgIcon } from "../../components/common";
-import "./index.less";
+import "./index.scss";
 import { Tooltip } from "antd";
 
 const Footer = () => {

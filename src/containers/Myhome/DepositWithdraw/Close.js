@@ -7,11 +7,11 @@ import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
 import {
   amountConversionWithComma,
-  denomConversion
+  denomConversion,
 } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
 import ActionButton from "./ActionButton";
-import "./index.less";
+import "./index.scss";
 
 const { Option } = Select;
 

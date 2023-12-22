@@ -10,8 +10,7 @@ import { comdex } from "../../config/network";
 import { abbreviateMessage, fetchTxHistory } from "../../services/transaction";
 import { generateHash, truncateString } from "../../utils/string";
 import Date from "./Date";
-import "./index.less";
-
+import "./index.scss";
 
 const History = ({ address, setTransactionHistory, history }) => {
   const [inProgress, setInProgress] = useState(false);
@@ -45,9 +44,7 @@ const History = ({ address, setTransactionHistory, history }) => {
       return {
         key: index,
         tx_hash: hash,
-        type: abbreviateMessage(
-          decodedTransaction.body.messages
-        ),
+        type: abbreviateMessage(decodedTransaction.body.messages),
         block_height: item.height,
         date: item.height,
       };
@@ -129,7 +126,7 @@ const History = ({ address, setTransactionHistory, history }) => {
                 }}
                 total={history && history.count}
                 onChange={(event) => handleChange(event)}
-                locale={{emptyText: <NoDataIcon />}}
+                locale={{ emptyText: <NoDataIcon /> }}
               />
             </div>
           </div>

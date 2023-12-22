@@ -4,10 +4,9 @@ import CustomInput from "../../../components/CustomInput";
 import HealthFactor from "../../../components/HealthFactor";
 import ActionButton from "../../Myhome/BorrowRepay/ActionButton";
 import DistributionAPY from "../../../components/common/DistributionAPY";
-import "./index.less";
+import "./index.scss";
 
 const BorrowTab = () => {
-
   const marks = {
     0: "",
     80: "Safe",
@@ -16,73 +15,73 @@ const BorrowTab = () => {
 
   const borrowData = [
     {
-      key: '1',
-      title: 'Borrowed',
-      counts: '$1.2 M',
-      tooltipText: 'test'
+      key: "1",
+      title: "Borrowed",
+      counts: "$1.2 M",
+      tooltipText: "test",
     },
     {
-      key: '2',
-      title: 'Available',
-      counts: '$3.2 M',
-      tooltipText: 'test'
+      key: "2",
+      title: "Available",
+      counts: "$3.2 M",
+      tooltipText: "test",
     },
     {
-      key: '3',
-      title: 'Utilization',
-      counts: '6%',
-      tooltipText: 'test'
+      key: "3",
+      title: "Utilization",
+      counts: "6%",
+      tooltipText: "test",
     },
     {
-      key: '4',
-      title: 'Borrow APY',
-      counts: '0.25%',
-      tooltipText: 'test',
-      apy: true
+      key: "4",
+      title: "Borrow APY",
+      counts: "0.25%",
+      tooltipText: "test",
+      apy: true,
     },
-  ]
+  ];
 
   const collateralData = [
     {
-      key: '1',
-      title: 'Borrowed',
-      counts: '$1.2 M',
-      tooltipText: 'test'
+      key: "1",
+      title: "Borrowed",
+      counts: "$1.2 M",
+      tooltipText: "test",
     },
     {
-      key: '2',
-      title: 'Available',
-      counts: '$3.2 M',
-      tooltipText: 'test'
+      key: "2",
+      title: "Available",
+      counts: "$3.2 M",
+      tooltipText: "test",
     },
     {
-      key: '3',
-      title: 'Utilization',
-      counts: '6%',
-      tooltipText: 'test'
+      key: "3",
+      title: "Utilization",
+      counts: "6%",
+      tooltipText: "test",
     },
     {
-      key: '4',
-      title: 'Borrow APY',
-      counts: '0.25%',
-      tooltipText: 'test'
+      key: "4",
+      title: "Borrow APY",
+      counts: "0.25%",
+      tooltipText: "test",
     },
-  ]
+  ];
 
   const borrowData2 = [
     {
-      key: '1',
-      title: 'Current Borrow Balance',
-      counts: '0.0000',
-      tooltipText: 'test'
+      key: "1",
+      title: "Current Borrow Balance",
+      counts: "0.0000",
+      tooltipText: "test",
     },
     {
-      key: '1',
-      title: 'New Borrow Balance',
-      counts: '0.0000',
-      tooltipText: 'test'
+      key: "1",
+      title: "New Borrow Balance",
+      counts: "0.0000",
+      tooltipText: "test",
     },
-  ]
+  ];
 
   return (
     <div className="details-wrapper emode-details-wrapper">
@@ -91,13 +90,13 @@ const BorrowTab = () => {
           <div className="deposit-head-left">
             <div className="assets-col mr-3">
               <div className="assets-icon">
-                <SvgIcon name='atom-icon' />
+                <SvgIcon name="atom-icon" />
               </div>
               ATOM
             </div>
             <div className="assets-col mr-3">
               <div className="assets-icon">
-                <SvgIcon name='statom-icon' />
+                <SvgIcon name="statom-icon" />
               </div>
               stATOM
             </div>
@@ -116,7 +115,7 @@ const BorrowTab = () => {
                     <div className="select-placeholder">
                       <div className="circle-icon no-border">
                         <div className="circle-icon-inner">
-                          <SvgIcon name='atom-icon' />
+                          <SvgIcon name="atom-icon" />
                         </div>
                       </div>
                       ATOM
@@ -127,8 +126,7 @@ const BorrowTab = () => {
                   suffixIcon={false}
                   options={false}
                   disabled
-                >
-                </Select>
+                ></Select>
               </div>
             </div>
           </div>
@@ -136,13 +134,9 @@ const BorrowTab = () => {
             <div className="label-right">
               <div className="available-balance">
                 Available
-                <span className="ml-1">
-                  10 ATM
-                </span>
+                <span className="ml-1">10 ATM</span>
                 <span className="assets-max-half">
-                  <Button className=" active">
-                    Max
-                  </Button>
+                  <Button className=" active">Max</Button>
                 </span>
               </div>
             </div>
@@ -150,9 +144,7 @@ const BorrowTab = () => {
               <div className="input-select">
                 <CustomInput />
               </div>
-              <small>
-                $100
-              </small>
+              <small>$100</small>
             </div>
           </div>
         </div>
@@ -169,7 +161,7 @@ const BorrowTab = () => {
                     <div className="select-placeholder">
                       <div className="circle-icon no-border">
                         <div className="circle-icon-inner">
-                          <SvgIcon name='statom-icon' />
+                          <SvgIcon name="statom-icon" />
                         </div>
                       </div>
                       ATOM
@@ -180,8 +172,7 @@ const BorrowTab = () => {
                   suffixIcon={false}
                   options={false}
                   disabled
-                >
-                </Select>
+                ></Select>
               </div>
             </div>
           </div>
@@ -189,13 +180,9 @@ const BorrowTab = () => {
             <div className="label-right">
               <div className="available-balance">
                 Available
-                <span className="ml-1">
-                  10 ATM
-                </span>
+                <span className="ml-1">10 ATM</span>
                 <span className="assets-max-half">
-                  <Button className=" active">
-                    Max
-                  </Button>
+                  <Button className=" active">Max</Button>
                 </span>
               </div>
             </div>
@@ -203,9 +190,7 @@ const BorrowTab = () => {
               <div className="input-select">
                 <CustomInput />
               </div>
-              <small>
-                $100
-              </small>
+              <small>$100</small>
             </div>
           </div>
         </div>
@@ -241,9 +226,7 @@ const BorrowTab = () => {
           </Col>
         </Row>
         <div className="assets-form-btn mt-4">
-          <ActionButton
-            name="Borrow"
-          />
+          <ActionButton name="Borrow" />
         </div>
       </div>
       <div className="details-right">
@@ -252,7 +235,7 @@ const BorrowTab = () => {
             <div className="head-left">
               <div className="assets-col">
                 <div className="assets-icon">
-                  <SvgIcon name='atom-icon' />
+                  <SvgIcon name="atom-icon" />
                 </div>
                 Borrow Details
               </div>
@@ -280,7 +263,11 @@ const BorrowTab = () => {
                     {item.title} <TooltipIcon text={item.tooltipText} />
                   </p>
                   <h3>{item.counts}</h3>
-                  {item.apy && <div className="pt-1"><DistributionAPY /></div>}
+                  {item.apy && (
+                    <div className="pt-1">
+                      <DistributionAPY />
+                    </div>
+                  )}
                 </div>
               </List.Item>
             )}
@@ -304,7 +291,11 @@ const BorrowTab = () => {
                     {item.title} <TooltipIcon text={item.tooltipText} />
                   </p>
                   <h3>{item.counts}</h3>
-                  {item.apy && <div className="pt-1"><DistributionAPY /></div>}
+                  {item.apy && (
+                    <div className="pt-1">
+                      <DistributionAPY />
+                    </div>
+                  )}
                 </div>
               </List.Item>
             )}
@@ -315,7 +306,7 @@ const BorrowTab = () => {
             <div className="head-left">
               <div className="assets-col">
                 <div className="assets-icon">
-                  <SvgIcon name='atom-icon' />
+                  <SvgIcon name="atom-icon" />
                 </div>
                 Collateral Details
               </div>
@@ -339,7 +330,11 @@ const BorrowTab = () => {
                     {item.title} <TooltipIcon text={item.tooltipText} />
                   </p>
                   <h3>{item.counts}</h3>
-                  {item.apy && <div className="pt-1"><DistributionAPY /></div>}
+                  {item.apy && (
+                    <div className="pt-1">
+                      <DistributionAPY />
+                    </div>
+                  )}
                 </div>
               </List.Item>
             )}

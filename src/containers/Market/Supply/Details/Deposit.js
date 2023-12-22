@@ -17,7 +17,7 @@ import { ValidateInputNumber } from "../../../../config/_validation";
 import {
   APP_ID,
   DEFAULT_FEE,
-  DOLLAR_DECIMALS
+  DOLLAR_DECIMALS,
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import { QueryPoolAssetLBMapping } from "../../../../services/lend/query";
@@ -27,20 +27,20 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../../utils/number";
 import {
   errorMessageMappingParser,
   iconNameFromDenom,
-  toDecimals
+  toDecimals,
 } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
-import "./index.less";
+import "./index.scss";
 
 const { Option } = Select;
 

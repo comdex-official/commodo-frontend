@@ -8,7 +8,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
@@ -21,16 +21,16 @@ import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../utils/coin";
 import { commaSeparator, marketPrice } from "../../../utils/number";
 import {
   iconNameFromDenom,
   toDecimals,
-  ucDenomToDenom
+  ucDenomToDenom,
 } from "../../../utils/string";
 import ActionButton from "./ActionButton";
-import "./index.less";
+import "./index.scss";
 
 const { Option } = Select;
 

@@ -52,7 +52,7 @@ import {
 } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
 import AssetApy from "../../AssetApy";
-import "./index.less";
+import "./index.scss";
 
 const { Option } = Select;
 

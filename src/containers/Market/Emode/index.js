@@ -7,7 +7,7 @@ import { setPools } from "../../../actions/lend";
 import { SvgIcon } from "../../../components/common";
 import DistributionAPY from "../../../components/common/DistributionAPY";
 import AssetApy from "../AssetApy";
-import "./index.less";
+import "./index.scss";
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,

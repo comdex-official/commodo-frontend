@@ -35,7 +35,7 @@ import {
 } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "../../Myhome/DepositWithdraw/ActionButton";
-import "./index.less";
+import "./index.scss";
 
 const { Option } = Select;
 

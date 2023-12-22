@@ -8,12 +8,12 @@ import { BackButton, Col, Row } from "../../../components/common";
 import {
   queryLendPool,
   queryLendPosition,
-  queryUserBorrows
+  queryUserBorrows,
 } from "../../../services/lend/query";
 import { decode } from "../../../utils/string";
 import CloseTab from "./Close";
 import DepositTab from "./Deposit";
-import "./index.less";
+import "./index.scss";
 import WithdrawTab from "./Withdraw";
 
 const PageBackButton = {
