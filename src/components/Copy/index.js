@@ -3,7 +3,7 @@ import * as PropTypes from "prop-types";
 import React, { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { SvgIcon } from "../common";
-import "./index.less";
+import "./index.scss";
 
 const Copy = ({ text }) => {
   const [open, setOpen] = useState(false);

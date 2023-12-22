@@ -42,7 +42,7 @@ import {
   ucDenomToDenom,
 } from "../../../utils/string";
 import ActionButton from "../../Myhome/BorrowRepay/ActionButton";
-import "./index.less";
+import "./index.scss";
 
 const { Option } = Select;
 

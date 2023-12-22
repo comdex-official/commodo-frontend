@@ -2,7 +2,7 @@ import { createTxRaw } from "@tharsis/proto";
 import { generateEndpointAccount } from "@tharsis/provider";
 import {
   generateEndpointBroadcast,
-  generatePostBodyBroadcast
+  generatePostBodyBroadcast,
 } from "@tharsis/provider/dist/rest/broadcast";
 import { createTxIBCMsgTransfer } from "@tharsis/transactions";
 import { Button, Form, message, Modal, Spin } from "antd";
@@ -24,11 +24,11 @@ import { fetchTxHash } from "../../../services/transaction";
 import {
   amountConversion,
   denomConversion,
-  getAmount
+  getAmount,
 } from "../../../utils/coin";
 import { toDecimals, truncateString } from "../../../utils/string";
 import variables from "../../../utils/variables";
-import "./index.less";
+import "./index.scss";
 
 const Deposit = ({
   lang,
@@ -100,7 +100,7 @@ const Deposit = ({
       message.info("Please connect your wallet");
       return;
     }
-    
+
     initialize();
     setIsModalOpen(true);
   };
@@ -377,7 +377,10 @@ const Deposit = ({
         className="asset-ibc-btn-container"
         onClick={showModal}
       >
-        {variables[lang].deposit}<span className="asset-ibc-btn"><SvgIcon name='chevron-right' viewbox='0 0 2.558 4.473' /></span>
+        {variables[lang].deposit}
+        <span className="asset-ibc-btn">
+          <SvgIcon name="chevron-right" viewbox="0 0 2.558 4.473" />
+        </span>
       </Button>
       <Modal
         className="assets-modal"
@@ -422,7 +425,8 @@ const Deposit = ({
                   <>
                     {variables[lang].available}
                     <span className="ml-1">
-                      {(address && availableBalance &&
+                      {(address &&
+                        availableBalance &&
                         availableBalance.amount &&
                         amountConversion(
                           availableBalance.amount,
@@ -436,16 +440,16 @@ const Deposit = ({
                         className=" active"
                         onClick={() => {
                           setAmount(
-                            address ?
-                              availableBalance?.amount > DEFAULT_FEE
+                            address
+                              ? availableBalance?.amount > DEFAULT_FEE
                                 ? amountConversion(
-                                  availableBalance?.amount - DEFAULT_FEE,
-                                  assetDenomMap[chain?.ibcDenomHash]?.decimals
-                                )
+                                    availableBalance?.amount - DEFAULT_FEE,
+                                    assetDenomMap[chain?.ibcDenomHash]?.decimals
+                                  )
                                 : amountConversion(
-                                  availableBalance?.amount,
-                                  assetDenomMap[chain?.ibcDenomHash]?.decimals
-                                )
+                                    availableBalance?.amount,
+                                    assetDenomMap[chain?.ibcDenomHash]?.decimals
+                                  )
                               : 0
                           );
                         }}

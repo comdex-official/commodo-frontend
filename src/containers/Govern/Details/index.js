@@ -8,7 +8,7 @@ import { useParams } from "react-router";
 import {
   setProposal,
   setProposalTally,
-  setProposer
+  setProposer,
 } from "../../../actions/govern";
 import { BackButton, Col, Row, SvgIcon } from "../../../components/common";
 import Copy from "../../../components/Copy";
@@ -18,7 +18,7 @@ import {
   fetchRestProposal,
   fetchRestProposalTally,
   fetchRestProposer,
-  queryUserVote
+  queryUserVote,
 } from "../../../services/govern/query";
 import { denomConversion } from "../../../utils/coin";
 import { formatTime } from "../../../utils/date";
@@ -27,10 +27,10 @@ import {
   proposalOptionMap,
   proposalStatusMap,
   stringTagParser,
-  truncateString
+  truncateString,
 } from "../../../utils/string";
 import VoteNowModal from "../VoteNowModal";
-import "./index.less";
+import "./index.scss";
 
 const GovernDetails = ({
   address,

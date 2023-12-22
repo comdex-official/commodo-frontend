@@ -15,7 +15,7 @@ import { decode } from "../../../utils/string";
 import BorrowTab from "./Borrow";
 import RepayTab from "./Repay";
 import Withdraw from "./Withdraw";
-import "./index.less";
+import "./index.scss";
 
 const PageBackButton = {
   right: <BackButton />,

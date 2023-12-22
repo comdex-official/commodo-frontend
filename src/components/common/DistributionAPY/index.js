@@ -5,7 +5,7 @@ import { DOLLAR_DECIMALS } from "../../../constants/common";
 import { queryExternalLendRewardsAPR } from "../../../services/rewards/query";
 import { decimalConversion } from "../../../utils/number";
 import SvgIcon from "../svg-icon/svg-icon";
-import "./index.less";
+import "./index.scss";
 
 const DistributionAPY = ({ value, margin, assetId, poolId }) => {
   const [apr, setAPR] = useState();
@@ -35,7 +35,11 @@ const DistributionAPY = ({ value, margin, assetId, poolId }) => {
             : "ml-1 distribution-apy-button"
         }
       >
-        <SvgIcon name='cmdx-icon' className='apr-icon' viewbox='0 0 32.001 32.001' />
+        <SvgIcon
+          name="cmdx-icon"
+          className="apr-icon"
+          viewbox="0 0 32.001 32.001"
+        />
         {Number(decimalConversion(apr || 0) * 100).toFixed(DOLLAR_DECIMALS)}%
       </Button>
     </Tooltip>

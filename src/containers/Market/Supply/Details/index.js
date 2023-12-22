@@ -6,7 +6,7 @@ import { useParams } from "react-router";
 import { setPool } from "../../../../actions/lend";
 import { queryLendPool } from "../../../../services/lend/query";
 import Deposit from "./Deposit";
-import "./index.less";
+import "./index.scss";
 
 const SupplyDetails = ({ setPool }) => {
   const [inProgress, setInProgress] = useState(false);

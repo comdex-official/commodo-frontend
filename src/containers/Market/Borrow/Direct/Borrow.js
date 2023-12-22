@@ -51,7 +51,7 @@ import {
   toDecimals,
 } from "../../../../utils/string";
 import variables from "../../../../utils/variables";
-import "./index.less";
+import "./index.scss";
 
 const { Option } = Select;
 

@@ -14,7 +14,7 @@ import { setAssetStatMap } from "../../../actions/asset";
 import CustomInput from "../../../components/CustomInput";
 import HealthFactor from "../../../components/HealthFactor";
 import DistributionAPY from "../../../components/common/DistributionAPY";
-import "./index.less";
+import "./index.scss";
 import {
   amountConversion,
   amountConversionWithComma,

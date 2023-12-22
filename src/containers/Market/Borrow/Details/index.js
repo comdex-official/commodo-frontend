@@ -1,5 +1,5 @@
 import Borrow from "./Borrow";
-import "./index.less";
+import "./index.scss";
 
 const BorrowDetails = () => {
   return (

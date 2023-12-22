@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import Slider from "react-slick";
 import ComdexAtomIcon from "../../assets/images/cmdx_atom.png";
 import LaunchImage from "../../assets/images/launch-bg.jpg";
-import "../../assets/less/plugins/slick-slider/slick.less";
+import "../../assets/less/plugins/slick-slider/slick.scss";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import {
   ATOM_CMDX_POOL_ID,
@@ -25,7 +25,7 @@ import {
 import { denomConversion } from "../../utils/coin";
 import { commaSeparator, formatNumber } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
-import "./index.less";
+import "./index.scss";
 import DashboardNavBar from "./navBar/DashboardNavBar.js";
 
 const Dashboard = ({ isDarkMode, assetMap }) => {

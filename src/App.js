@@ -1,6 +1,6 @@
-import { message } from 'antd';
+import { message } from "antd";
 import React from "react";
-import "./app.less";
+import "./app.scss";
 import BodyBg from "./assets/images/body-bg.jpg";
 import svgFile from "./assets/images/svg/svg-sprite.svg";
 import NavigationBar from "./containers/NavigationBar";
@@ -17,7 +17,7 @@ const App = () => {
     <>
       <SvgSprite url={svgFile} />
       <div className="main_wrapper">
-        <img className="body-bg" src={BodyBg} alt="background image"/>
+        <img className="body-bg" src={BodyBg} alt="background image" />
         <SideBar />
         <div className="main-container">
           <NavigationBar />

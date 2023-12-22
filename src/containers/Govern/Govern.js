@@ -7,7 +7,7 @@ import GovernOpenProposal from "./openProposal/index";
 import GovernPastProposal from "./pastProposal/index";
 import { comdex } from "../../config/network";
 import { NoDataIcon, SvgIcon } from "../../components/common";
-import "./index.less";
+import "./index.scss";
 import Range from "../../assets/images/range.svg";
 
 const { Option } = Select;

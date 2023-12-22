@@ -2,7 +2,7 @@ import * as PropTypes from "prop-types";
 import { Col, Row, SvgIcon } from "../../components/common";
 import { connect } from "react-redux";
 import { Modal, Button } from "antd";
-import "./index.less";
+import "./index.scss";
 
 const { confirm } = Modal;
 

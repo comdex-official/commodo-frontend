@@ -6,12 +6,12 @@ import { setPools } from "../../../actions/lend";
 import { NoDataIcon, SvgIcon } from "../../../components/common";
 import {
   DEFAULT_PAGE_NUMBER,
-  DEFAULT_PAGE_SIZE
+  DEFAULT_PAGE_SIZE,
 } from "../../../constants/common";
 import { queryLendPools } from "../../../services/lend/query";
 import { denomConversion } from "../../../utils/coin";
 import { iconNameFromDenom } from "../../../utils/string";
-import "../index.less";
+import "../index.scss";
 import { columns } from "./data";
 
 const Supply = ({ assetMap, setPools, lendPools }) => {
