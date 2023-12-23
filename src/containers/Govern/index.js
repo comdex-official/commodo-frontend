@@ -16,8 +16,31 @@ const Govern = ({ setAllProposals, allProposals, setProposals, proposals }) => {
   const navigate = useNavigate();
   const [inProgress, setInProgress] = useState(false);
 
+  // useEffect(() => {
+  //   fetchAllProposals();
+  // }, []);
+
   useEffect(() => {
-    fetchAllProposals();
+    const fetchData = async () => {
+      let nextPage = "";
+      let allProposals = [];
+
+      do {
+        const url = `${comdex?.rest}/cosmos/gov/v1beta1/proposals${nextPage}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        allProposals = [...allProposals, ...data.proposals];
+        nextPage = data.pagination.next_key
+          ? `?pagination.key=${data.pagination.next_key}`
+          : null;
+      } while (nextPage !== null);
+
+      setProposals(allProposals?.reverse());
+      setAllProposals(allProposals?.proposals);
+    };
+
+    fetchData();
   }, []);
 
   const fetchAllProposals = () => {
