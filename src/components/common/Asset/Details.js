@@ -4,28 +4,33 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setAssetStatMap } from "../../../actions/asset";
 import { ibcDenoms } from "../../../config/network";
-import { DOLLAR_DECIMALS } from "../../../constants/common";
+import {
+  DOLLAR_DECIMALS,
+  ZERO_DOLLAR_DECIMALS,
+} from "../../../constants/common";
 import {
   queryAssetPoolFundBalance,
   queryModuleBalance,
-  QueryPoolAssetLBMapping
+  QueryPoolAssetLBMapping,
 } from "../../../services/lend/query";
 import {
   amountConversion,
   commaSeparatorWithRounding,
-  denomConversion
+  denomConversion,
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  formatNumber,
+  marketPrice,
 } from "../../../utils/number";
 import { iconNameFromDenom } from "../../../utils/string";
 import DistributionAPY from "../DistributionAPY";
 import { SvgIcon, TooltipIcon } from "../index";
 
 const Details = ({
-  asset,
+  assetId,
+  assetDenom,
   poolId,
   markets,
   refreshBalance,
@@ -38,8 +43,8 @@ const Details = ({
   const [assetPoolFunds, setAssetPoolFunds] = useState({});
 
   useEffect(() => {
-    if (asset?.id && poolId) {
-      QueryPoolAssetLBMapping(asset?.id, poolId, (error, result) => {
+    if (assetId && poolId) {
+      QueryPoolAssetLBMapping(assetId, poolId, (error, result) => {
         if (error) {
           message.error(error);
           return;
@@ -48,7 +53,7 @@ const Details = ({
         setStats(result?.PoolAssetLBMapping);
       });
 
-      queryAssetPoolFundBalance(asset?.id, poolId, (error, result) => {
+      queryAssetPoolFundBalance(assetId, poolId, (error, result) => {
         if (error) {
           message.error(error);
           return;
@@ -59,7 +64,7 @@ const Details = ({
     } else if (stats?.poolId) {
       setStats();
     }
-  }, [asset, poolId, refreshBalance]);
+  }, [assetId, poolId, refreshBalance]);
 
   useEffect(() => {
     if (poolId) {
@@ -75,24 +80,24 @@ const Details = ({
   }, [poolId, refreshBalance]);
 
   let assetStats = moduleBalanceStats?.filter(
-    (item) => item?.assetId?.toNumber() === asset?.id?.toNumber()
+    (item) => item?.assetId?.toNumber() === Number(assetId)
   )[0];
 
   useEffect(() => {
-    setAssetStatMap(asset?.id, assetStats?.balance);
+    setAssetStatMap(assetId, assetStats?.balance);
   }, [assetStats]);
 
   let data = [
     {
       title: parent === "lend" ? "Deposited" : "Borrowed",
-      counts: `$${commaSeparatorWithRounding(
-        Number(
-          amountConversion(
-            (parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0
-          ) *
-            marketPrice(markets, asset?.denom, assetDenomMap[asset?.denom]?.id),
-          assetDenomMap[asset?.denom]?.decimals
-        ) +
+      counts: `$${formatNumber(
+        (
+          Number(
+            amountConversion(
+              (parent === "lend" ? stats?.totalLend : stats?.totalBorrowed) || 0
+            ) * marketPrice(markets, assetDenom, assetDenomMap[assetDenom]?.id),
+            assetDenomMap[assetDenom]?.decimals
+          ) +
           (parent === "lend"
             ? Number(
                 amountConversion(
@@ -105,15 +110,15 @@ const Details = ({
                     assetDenomMap[assetPoolFunds?.denom]?.id
                   )
               )
-            : 0),
-        DOLLAR_DECIMALS
+            : 0)
+        ).toFixed(DOLLAR_DECIMALS)
       )}`,
       tooltipText:
         parent === "lend" ? "Total funds Deposited" : "Total funds Borrowed",
     },
     {
       title: "Available",
-      counts: `$${commaSeparatorWithRounding(
+      counts: `$${formatNumber(
         Number(
           amountConversion(
             marketPrice(
@@ -123,11 +128,13 @@ const Details = ({
             ) * assetStats?.balance.amount || 0,
             assetDenomMap[assetStats?.balance?.denom]?.decimals
           )
-        ),
-        DOLLAR_DECIMALS
+        ).toFixed(ZERO_DOLLAR_DECIMALS)
       )}`,
+
       tooltipText:
-        parent === "lend" ? "Total funds Available" : "Total funds Available",
+        parent === "lend"
+          ? "Funds available to Borrow"
+          : "Funds available to Borrow",
     },
     {
       title: "Utilization",
@@ -155,14 +162,10 @@ const Details = ({
             %
           </>
           {/* TODO: take the condition dynamically */}
-          {parent === "lend" ? null : asset?.denom === "uatom" ||
-            asset?.denom === ibcDenoms["uatom"] ||
-            asset?.denom === "ucmst" ? (
-            <DistributionAPY
-              assetId={asset?.id}
-              poolId={poolId}
-              margin={"top"}
-            />
+          {parent === "lend" ? null : assetDenom === "uatom" ||
+            assetDenom === ibcDenoms["uatom"] ||
+            assetDenom === "ucmst" ? (
+            <DistributionAPY assetId={assetId} poolId={poolId} margin={"top"} />
           ) : null}
         </>
       ),
@@ -177,20 +180,16 @@ const Details = ({
         <div className="head-left">
           <div className="assets-col">
             <div className="assets-icon">
-              <SvgIcon name={iconNameFromDenom(asset?.denom)} />
+              <SvgIcon name={iconNameFromDenom(assetDenom)} />
             </div>
-            {denomConversion(asset?.denom)}
+            {denomConversion(assetDenom)}
           </div>
         </div>
         <div className="head-right">
           <span>Oracle Price</span> : $
           {commaSeparator(
             Number(
-              marketPrice(
-                markets,
-                asset?.denom,
-                assetDenomMap[asset?.denom]?.id
-              )
+              marketPrice(markets, assetDenom, assetDenomMap[assetDenom]?.id)
             ).toFixed(DOLLAR_DECIMALS)
           )}
         </div>
@@ -218,11 +217,11 @@ const Details = ({
 Details.propTypes = {
   refreshBalance: PropTypes.number.isRequired,
   setAssetStatMap: PropTypes.func.isRequired,
-  asset: PropTypes.shape({
-    denom: PropTypes.string,
-  }),
+  assetId: PropTypes.number,
+  assetDenom: PropTypes.string,
   assetDenomMap: PropTypes.object,
   markets: PropTypes.object,
+  newBalance: PropTypes.number,
   parent: PropTypes.string,
   poolId: PropTypes.shape({
     low: PropTypes.number,

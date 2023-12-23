@@ -187,16 +187,16 @@ export const queryModuleBalance = (poolId, callback) => {
   });
 };
 
-export const queryUserPoolLends = (address, callback) => {
+export const queryUserPoolLends = (address, id, callback) => {
   getQueryService((error, queryService) => {
     if (error) {
       callback(error);
       return;
     }
-
     queryService
-      .QueryAllLendByOwner({
+      .QueryAllLendByOwnerAndPool({
         owner: address,
+        poolId: Long.fromNumber(id),
       })
       .then((result) => {
         callback(null, result);
@@ -266,7 +266,7 @@ export const queryUserBorrows = (address, callback) => {
   });
 };
 
-export const queryAuctionMippingIdParams = (callback) => {
+export const queryAuctionParams = (callback) => {
   getQueryService((error, queryService) => {
     if (error) {
       callback(error);
@@ -275,6 +275,24 @@ export const queryAuctionMippingIdParams = (callback) => {
 
     queryService
       .QueryAuctionParams({
+        appId: Long.fromNumber(APP_ID),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+
+export const queryAuctionMippingIdParams = (callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryGenericAuctionParams({
         appId: Long.fromNumber(APP_ID),
       })
       .then((result) => {
@@ -294,6 +312,62 @@ export const queryAssetPoolFundBalance = (assetId, poolId, callback) => {
     queryService
       .QueryFundModBalByAssetPool({
         assetId: Long.fromNumber(assetId),
+        poolId: Long.fromNumber(poolId),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+export const queryAllLendByOwnerAndPool = (address, poolId, callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryAllLendByOwnerAndPool({
+        owner: address,
+        poolId: Long.fromNumber(poolId),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+
+export const queryAllBorrowByOwnerAndPool = (address, poolId, callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryAllBorrowByOwnerAndPool({
+        owner: address,
+        poolId: Long.fromNumber(poolId),
+      })
+      .then((result) => {
+        callback(null, result);
+      })
+      .catch((error) => callback(error?.message));
+  });
+};
+
+export const queryBorrowByOwnerAndDebtPool = (address, poolId, callback) => {
+  getQueryService((error, queryService) => {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    queryService
+      .QueryAllBorrowByOwnerAndDebtPool({
+        owner: address,
         poolId: Long.fromNumber(poolId),
       })
       .then((result) => {
@@ -339,6 +413,17 @@ export const queryTotalBorrowAndDeposit = (callback) => {
 export const queryBorrowDepositHistory = (range, callback) => {
   axios
     .get(`${API_URL}/api/v2/commodo/lb/history/${range}`)
+    .then((result) => {
+      callback(null, result?.data);
+    })
+    .catch((error) => {
+      callback(error?.message);
+    });
+};
+
+export const queryEMode = (callback) => {
+  axios
+    .get(`${API_URL}/api/v2/commodo/emod_enable`)
     .then((result) => {
       callback(null, result?.data);
     })

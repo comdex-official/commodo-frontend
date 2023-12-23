@@ -77,8 +77,6 @@ const iconMap = {
   [ibcDenoms["stujuno"]]: "stujuno-icon",
   [ibcDenoms["stuluna"]]: "stuluna-icon",
   [ibcDenoms["stevmos"]]: "stevmos-icon",
-  [ibcDenoms["arb-wei"]]: "arb-icon",
-  [ibcDenoms["stucmdx"]]: "stCmdx-icon",
 };
 
 export const iconNameFromDenom = (denom) => {
@@ -106,12 +104,12 @@ export const lowercaseFirstLetter = (string) => {
 export const toDecimals = (value, decimal) =>
   value.indexOf(".") >= 0
     ? value.substr(0, value.indexOf(".")) +
-    value.substr(
-      value.indexOf("."),
-      Number(decimal)
-        ? Number(getExponent(decimal)) + 1
-        : comdex?.coinDecimals + 1 // characters from start to end (exclusive) that's why we add 1 here.
-    )
+      value.substr(
+        value.indexOf("."),
+        Number(decimal)
+          ? Number(getExponent(decimal)) + 1
+          : comdex?.coinDecimals + 1 // characters from start to end (exclusive) that's why we add 1 here.
+      )
     : value;
 
 export const uniqueDenoms = (list, type) => {
@@ -165,3 +163,14 @@ export const stringTagParser = (input) => {
   });
   return output;
 };
+
+export const errorMessageMappingParser = (message) => {
+  var str = message;
+
+  var truncatedString = str?.match(/ibc\/\w{64}/g);
+
+  for (var i = 0; i < truncatedString?.length; i++) {
+    str = str.replace(truncatedString[i], " " + `${ibcDenomToDenom(truncatedString[i])}`);
+  }
+  return str;
+}

@@ -9,7 +9,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../../../components/common";
 import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
@@ -18,18 +18,19 @@ import CustomInput from "../../../../components/CustomInput";
 import HealthFactor from "../../../../components/HealthFactor";
 import {
   ValidateInputNumber,
-  ValidateMaxBorrow
+  ValidateMaxBorrow,
 } from "../../../../config/_validation";
 import {
   APP_ID,
   DOLLAR_DECIMALS,
-  MAX_LTV_DEDUCTION
+  MAX_LTV_DEDUCTION,
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
 import {
   queryAssetPairs,
   queryLendPair,
-  queryLendPool
+  queryLendPool,
+  queryModuleBalance,
 } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
@@ -37,16 +38,20 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../../utils/number";
-import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
+import {
+  errorMessageMappingParser,
+  iconNameFromDenom,
+  toDecimals,
+} from "../../../../utils/string";
 import variables from "../../../../utils/variables";
-import "./index.less";
+import "./index.scss";
 
 const { Option } = Select;
 
@@ -77,6 +82,8 @@ const BorrowTab = ({
   const [outPool, setOutPool] = useState();
   const [selectedCollateralValue, setSelectedCollateralValue] = useState();
   const [selectedBorrowValue, setSelectedBorrowValue] = useState();
+  const [available, setAvailable] = useState([]);
+  const [moduleBalanceStats, setModuleBalanceStats] = useState([]);
 
   const navigate = useNavigate();
 
@@ -101,7 +108,12 @@ const BorrowTab = ({
         collateralAssetDenom,
         assetDenomMap[collateralAssetDenom]?.id
       ) *
-      (pair?.isInterPool
+      (pair?.isEModeEnabled
+        ? Number(
+            decimalConversion(assetRatesStatsMap[collateralAssetId]?.eLtv) -
+              MAX_LTV_DEDUCTION
+          )
+        : pair?.isInterPool
         ? (Number(
             decimalConversion(assetRatesStatsMap[collateralAssetId]?.ltv)
           ) -
@@ -122,11 +134,49 @@ const BorrowTab = ({
     assetDenomMap[borrowAssetDenom]?.decimals
   );
 
-  const borrowList =
+  useEffect(() => {
+    if (outPool?.poolId || pool?.poolId) {
+      let poolId = outPool?.poolId || pool?.poolId;
+      queryModuleBalance(poolId, (error, result) => {
+        if (error) {
+          message.error(error);
+          return;
+        }
+
+        setModuleBalanceStats(result?.ModuleBalance?.moduleBalanceStats);
+      });
+    }
+  }, [outPool?.poolId || pool?.poolId]);
+
+  useEffect(() => {
+    let assetStats = moduleBalanceStats?.filter(
+      (item) => Number(item?.assetId) === Number(pair?.assetOut)
+    )[0];
+
+    const available = Number(
+      amountConversion(
+        assetStats?.balance.amount || 0,
+        assetDenomMap[assetStats?.balance?.denom]?.decimals
+      )
+    );
+
+    setAvailable(available - Number((available * 0.5) / 100));
+  }, [moduleBalanceStats, pair?.assetOut]);
+
+  const borrowListFiltered =
     extendedPairs &&
     Object.values(extendedPairs)?.map(
       (item) => assetMap[item?.assetOut]?.denom
     );
+
+  const borrowList =
+    extendedPairs &&
+    borrowListFiltered &&
+    (process.env.REACT_APP_D_POOL === "open"
+      ? borrowListFiltered?.filter(
+          (item) => Number(assetToPool[item]?.poolId) !== 1
+        )
+      : borrowListFiltered);
 
   useEffect(() => {
     if (pool?.poolId) {
@@ -241,6 +291,7 @@ const BorrowTab = ({
 
     setInAmount(value);
     setOutAmount(0);
+    setMaxBorrowValidationError();
     setValidationError(
       ValidateInputNumber(
         getAmount(value, assetDenomMap[collateralAssetDenom]?.decimals),
@@ -250,7 +301,7 @@ const BorrowTab = ({
   };
 
   const handleOutAmountChange = (value) => {
-    value = toDecimals(value, assetDenomMap[borrowAssetDenom]?.decimals)
+    value = toDecimals(String(value), assetDenomMap[borrowAssetDenom]?.decimals)
       .toString()
       .trim();
 
@@ -258,8 +309,18 @@ const BorrowTab = ({
     checkMaxBorrow(value);
     setBorrowValidationError(
       ValidateInputNumber(
-        getAmount(value, assetDenomMap[borrowAssetDenom]?.decimals),
-        borrowableBalance,
+        value,
+        Number(
+          amountConversion(
+            borrowableBalance,
+            assetDenomMap[borrowAssetDenom]?.decimals
+          )
+        ) > Number(available)
+          ? available
+          : amountConversion(
+              borrowableBalance,
+              assetDenomMap[borrowAssetDenom]?.decimals
+            ),
         "dollar",
         Number(
           value *
@@ -276,7 +337,12 @@ const BorrowTab = ({
   const checkMaxBorrow = (value) => {
     setMaxBorrowValidationError(
       ValidateMaxBorrow(
-        value,
+        value *
+          marketPrice(
+            markets,
+            borrowAssetDenom,
+            assetDenomMap[borrowAssetDenom]?.id
+          ),
         Number(
           amountConversion(
             marketPrice(
@@ -336,7 +402,7 @@ const BorrowTab = ({
         }
 
         if (result?.code) {
-          message.info(result?.rawLog);
+          message.info(errorMessageMappingParser(result?.rawLog));
           return;
         }
 
@@ -367,10 +433,17 @@ const BorrowTab = ({
   const handleBorrowMaxClick = () => {
     if (borrowableBalance > 0) {
       return handleOutAmountChange(
-        amountConversion(
-          borrowableBalance,
-          assetDenomMap[borrowAssetDenom]?.decimals
-        )
+        Number(
+          amountConversion(
+            borrowableBalance,
+            assetDenomMap[borrowAssetDenom]?.decimals
+          )
+        ) > Number(available)
+          ? available
+          : amountConversion(
+              borrowableBalance,
+              assetDenomMap[borrowAssetDenom]?.decimals
+            )
       );
     }
   };
@@ -391,56 +464,155 @@ const BorrowTab = ({
       100
   );
 
+  //   let data = [
+  //     {
+  //       title: "Threshold",
+  //       counts: `${
+  //         pair?.isInterPool
+  //           ? Number(
+  //               Number(
+  //                 decimalConversion(
+  //                   assetRatesStatsMap[collateralAssetId]?.liquidationThreshold
+  //                 )
+  //               ) *
+  //                 Number(
+  //                   decimalConversion(
+  //                     assetRatesStatsMap[pool?.transitAssetIds?.first]
+  //                       ?.liquidationThreshold
+  //                   )
+  //                 ) *
+  //                 100
+  //             ).toFixed(DOLLAR_DECIMALS)
+  //           : Number(
+  //               decimalConversion(
+  //                 assetRatesStatsMap[collateralAssetId]?.liquidationThreshold
+  //               ) * 100
+  //             ).toFixed(DOLLAR_DECIMALS)
+  //       }
+  //       %
+  // `,
+  //       tooltipText:
+  //         "The threshold at which a loan is defined as undercollateralised and subject to liquidation of collateral",
+  //     },
+  //     {
+  //       title: "Penalty",
+  //       counts: `${Number(
+  //         decimalConversion(
+  //           assetRatesStatsMap[collateralAssetId]?.liquidationPenalty
+  //         ) * 100
+  //       ).toFixed(DOLLAR_DECIMALS)}
+  //       %`,
+  //       tooltipText: "Fee paid by vault owners on liquidation",
+  //     },
+  //     {
+  //       title: "Bonus",
+  //       counts: `${Number(
+  //         decimalConversion(
+  //           assetRatesStatsMap[collateralAssetId]?.liquidationBonus
+  //         ) * 100
+  //       ).toFixed(DOLLAR_DECIMALS)}
+  //       %
+  // `,
+  //       tooltipText: "Discount on the collateral unlocked to liquidators",
+  //     },
+  //   ];
+
+  const threeSold =
+    Number(
+      decimalConversion(
+        assetRatesStatsMap[collateralAssetId]?.liquidationThreshold
+      )
+    ) *
+    Number(
+      decimalConversion(
+        assetRatesStatsMap[pool?.transitAssetIds?.first]?.liquidationThreshold
+      )
+    );
+
+  const maxLTV =
+    Number(decimalConversion(assetRatesStatsMap[collateralAssetId]?.ltv)) *
+    Number(
+      decimalConversion(assetRatesStatsMap[pool?.transitAssetIds?.first]?.ltv)
+    );
+
+  const liquidationThreshold = {
+    title: "Liq. Threshold",
+    counts: pair?.isInterPool
+      ? `${Number(Number(threeSold) * 100).toFixed(DOLLAR_DECIMALS)}%`
+      : pair?.isEModeEnabled
+      ? `${Number(
+          decimalConversion(
+            assetRatesStatsMap[collateralAssetId]?.eLiquidationThreshold
+          ) * 100
+        ).toFixed(DOLLAR_DECIMALS)}%`
+      : `${Number(
+          decimalConversion(
+            assetRatesStatsMap[collateralAssetId]?.liquidationThreshold
+          ) * 100
+        ).toFixed(DOLLAR_DECIMALS)}%`,
+    tooltipText:
+      "The threshold at which a loan is defined as under collateralized and subject to liquidation of collateral",
+  };
+
+  const liquidationPenaltyBonus =
+    Number(
+      decimalConversion(
+        assetRatesStatsMap[collateralAssetId]?.liquidationPenalty
+      )
+    ) *
+      100 +
+    Number(
+      decimalConversion(assetRatesStatsMap[collateralAssetId]?.liquidationBonus)
+    ) *
+      100;
+
+  const liquidationPenaltyBonus2 = Number(
+    decimalConversion(
+      assetRatesStatsMap[collateralAssetId]?.eLiquidationPenalty
+    ) * 100
+  );
+
+  const liquidationPenalty = {
+    title: "Liq. Penalty",
+    counts: pair?.isEModeEnabled
+      ? `${Number(liquidationPenaltyBonus2).toFixed(DOLLAR_DECIMALS)}%`
+      : `${Number(liquidationPenaltyBonus).toFixed(DOLLAR_DECIMALS)}%`,
+    tooltipText: "Fee paid by vault owners on liquidation",
+  };
+
   let data = [
     {
-      title: "Threshold",
-      counts: `${
-        pair?.isInterPool
-          ? Number(
-              Number(
-                decimalConversion(
-                  assetRatesStatsMap[collateralAssetId]?.liquidationThreshold
-                )
-              ) *
-                Number(
-                  decimalConversion(
-                    assetRatesStatsMap[pool?.transitAssetIds?.first]
-                      ?.liquidationThreshold
-                  )
-                ) *
-                100
-            ).toFixed(DOLLAR_DECIMALS)
-          : Number(
-              decimalConversion(
-                assetRatesStatsMap[collateralAssetId]?.liquidationThreshold
-              ) * 100
-            ).toFixed(DOLLAR_DECIMALS)
-      }
-      %
-`,
+      title: "Max LTV",
+      counts: pair?.isInterPool
+        ? `${Number(Number(maxLTV) * 100).toFixed(DOLLAR_DECIMALS)}%`
+        : pair?.isEModeEnabled
+        ? `${Number(
+            decimalConversion(assetRatesStatsMap[collateralAssetId]?.eLtv) * 100
+          ).toFixed(DOLLAR_DECIMALS)}%`
+        : `${Number(
+            decimalConversion(assetRatesStatsMap[collateralAssetId]?.ltv) * 100
+          ).toFixed(DOLLAR_DECIMALS)}%`,
       tooltipText:
-        "The threshold at which a loan is defined as undercollateralised and subject to liquidation of collateral",
+        parent === "lend" ? "Total funds Deposited" : "Total funds Borrowed",
     },
+    liquidationThreshold,
+    liquidationPenalty,
     {
-      title: "Penalty",
-      counts: `${Number(
-        decimalConversion(
-          assetRatesStatsMap[collateralAssetId]?.liquidationPenalty
-        ) * 100
-      ).toFixed(DOLLAR_DECIMALS)}
-      %`,
-      tooltipText: "Fee paid by vault owners on liquidation",
-    },
-    {
-      title: "Bonus",
-      counts: `${Number(
-        decimalConversion(
-          assetRatesStatsMap[collateralAssetId]?.liquidationBonus
-        ) * 100
-      ).toFixed(DOLLAR_DECIMALS)}
-      %
-`,
-      tooltipText: "Discount on the collateral unlocked to liquidators",
+      title: "Collateral Type",
+      counts: "Normal",
+      tooltipText: (
+        <>
+          Type of the collateral selected.
+          <a
+            href="#"
+            onClick={() =>
+              window.open("https://docs.commodo.one/collateral-type", "_blank")
+            }
+          >
+            Learn more.
+          </a>
+        </>
+      ),
     },
   ];
 
@@ -561,7 +733,24 @@ const BorrowTab = ({
                             value={record?.poolId?.toNumber()}
                           >
                             <div className="select-inner">
-                              <div className="name">{record?.cpoolName}</div>
+                              <div className="name">
+                                {record?.cpoolName?.includes("AXLUSDC") &&
+                                record?.cpoolName?.includes("STATOM")
+                                  ? record?.cpoolName
+                                      ?.replace("STATOM", "stATOM")
+                                      ?.replace("AXLUSDC", "USDC.axl")
+                                  : record?.cpoolName?.includes("STATOM")
+                                  ? record?.cpoolName?.replace(
+                                      "STATOM",
+                                      "stATOM"
+                                    )
+                                  : record?.cpoolName?.includes("AXLUSDC")
+                                  ? record?.cpoolName?.replace(
+                                      "AXLUSDC",
+                                      "USDC.axl"
+                                    )
+                                  : record?.cpoolName}
+                              </div>
                             </div>
                           </Option>
                         );
@@ -664,7 +853,7 @@ const BorrowTab = ({
             <div className="assets-select-card mb-2 align-items-center">
               <div className="assets-left">
                 <label className="left-label">Borrow Asset</label>
-                <div className="assets-select-wrapper">
+                <div className="assets-select-wrapper width">
                   <Select
                     disabled={!Number(availableBalance)}
                     className="assets-select"
@@ -700,7 +889,17 @@ const BorrowTab = ({
                               <div className="name">
                                 {denomConversion(item)} (
                                 {"cPool-" +
-                                  assetToPool[item]?.cpoolName?.split("-")?.[0]}
+                                  (assetToPool[item]?.cpoolName?.split(
+                                    "-"
+                                  )?.[0] === "STATOM"
+                                    ? "stATOM"
+                                    : assetToPool[item]?.cpoolName?.split(
+                                        "-"
+                                      )?.[0] === "AXLUSDC"
+                                    ? "USDC.axl"
+                                    : assetToPool[item]?.cpoolName?.split(
+                                        "-"
+                                      )?.[0])}
                                 )
                               </div>
                             </div>
@@ -715,10 +914,17 @@ const BorrowTab = ({
                   <div className="label-right">
                     Borrowable
                     <span className="ml-1">
-                      {amountConversionWithComma(
-                        borrowableBalance >= 0 ? borrowableBalance : 0,
-                        assetDenomMap[borrowAssetDenom]?.decimals
-                      )}{" "}
+                      {Number(
+                        amountConversion(
+                          borrowableBalance >= 0 ? borrowableBalance : 0,
+                          assetDenomMap[borrowAssetDenom]?.decimals
+                        )
+                      ) > Number(available)
+                        ? available
+                        : amountConversionWithComma(
+                            borrowableBalance >= 0 ? borrowableBalance : 0,
+                            assetDenomMap[borrowAssetDenom]?.decimals
+                          )}{" "}
                       {denomConversion(borrowAssetDenom)}
                     </span>
                     <div className="max-half">
@@ -911,11 +1117,11 @@ const BorrowTab = ({
                     %
                   </Col>
                 </Row>
-                <AssetStats
+                {/* <AssetStats
                   assetId={collateralAssetId}
                   pool={pool}
                   pair={pair}
-                />
+                /> */}
               </Col>
             </Row>
             <div className="assets-form-btn">
@@ -942,25 +1148,37 @@ const BorrowTab = ({
           </div>
           <div className="details-right">
             <div className="commodo-card">
+              <div className="card-head">
+                <div className="head-left">
+                  <div className="assets-col">Collateral Asset Details</div>
+                </div>
+              </div>
               <Details
-                asset={assetMap[outPool?.transitAssetIds?.first?.toNumber()]}
-                poolId={outPool?.poolId}
+                assetId={pair?.assetIn?.toNumber()}
+                assetDenom={collateralAssetDenom}
+                poolId={pool?.poolId}
+                parent="lend"
+              />
+            </div>
+            <div className="commodo-card">
+              <div className="card-head">
+                <div className="head-left">
+                  <div className="assets-col">Borrow Asset Details</div>
+                </div>
+              </div>
+              <Details
+                assetId={pair?.assetOut?.toNumber()}
+                assetDenom={borrowAssetDenom}
+                poolId={pair?.assetOutPoolId}
                 parent="borrow"
               />
-              <div className="mt-5">
+              {/* <div className="mt-5">
                 <Details
                   asset={assetMap[outPool?.transitAssetIds?.second?.toNumber()]}
                   poolId={outPool?.poolId}
                   parent="borrow"
                 />
-              </div>
-            </div>
-            <div className="commodo-card">
-              <Details
-                asset={assetMap[outPool?.transitAssetIds?.main?.toNumber()]}
-                poolId={outPool?.poolId}
-                parent="borrow"
-              />
+              </div> */}
             </div>
             <div className="commodo-card">
               <div className="card-head">
@@ -979,9 +1197,9 @@ const BorrowTab = ({
                   xs: 2,
                   sm: 2,
                   md: 2,
-                  lg: 3,
-                  xl: 3,
-                  xxl: 3,
+                  lg: 2,
+                  xl: 2,
+                  xxl: 2,
                 }}
                 dataSource={data}
                 renderItem={(item) => (

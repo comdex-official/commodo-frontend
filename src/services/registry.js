@@ -1,12 +1,21 @@
 import { Registry } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes } from "@cosmjs/stargate";
-import { MsgPlaceDutchLendBidRequest } from 'comdex-codec/build/comdex/auction/v1beta1/tx';
+import { MsgPlaceDutchLendBidRequest } from "comdex-codec/build/comdex/auction/v1beta1/tx";
 import {
-  MsgBorrow, MsgBorrowAlternate, MsgCalculateInterestAndRewards, MsgCloseBorrow, MsgCloseLend, MsgDeposit, MsgDepositBorrow,
-  MsgDraw, MsgLend, MsgRepay, MsgWithdraw
+  MsgBorrow,
+  MsgBorrowAlternate,
+  MsgCalculateInterestAndRewards,
+  MsgCloseBorrow,
+  MsgCloseLend,
+  MsgDeposit,
+  MsgDepositBorrow,
+  MsgDraw,
+  MsgLend,
+  MsgRepay,
+  MsgWithdraw,
+  MsgRepayWithdraw,
 } from "comdex-codec/build/comdex/lend/v1beta1/tx";
 import { MsgVote } from "cosmjs-types/cosmos/gov/v1beta1/tx";
-
 
 export const myRegistry = new Registry([
   ...defaultRegistryTypes,
@@ -20,7 +29,14 @@ export const myRegistry = new Registry([
   ["/comdex.lend.v1beta1.MsgDraw", MsgDraw],
   ["/comdex.lend.v1beta1.MsgCloseBorrow", MsgCloseBorrow],
   ["/cosmos.gov.v1beta1.MsgVote", MsgVote],
-  ["/comdex.auction.v1beta1.MsgPlaceDutchLendBidRequest", MsgPlaceDutchLendBidRequest],
+  [
+    "/comdex.auction.v1beta1.MsgPlaceDutchLendBidRequest",
+    MsgPlaceDutchLendBidRequest,
+  ],
   ["/comdex.lend.v1beta1.MsgBorrowAlternate", MsgBorrowAlternate],
-  ["/comdex.lend.v1beta1.MsgCalculateInterestAndRewards", MsgCalculateInterestAndRewards],
+  [
+    "/comdex.lend.v1beta1.MsgCalculateInterestAndRewards",
+    MsgCalculateInterestAndRewards,
+  ],
+  ["/comdex.lend.v1beta1.MsgRepayWithdraw", MsgRepayWithdraw],
 ]);

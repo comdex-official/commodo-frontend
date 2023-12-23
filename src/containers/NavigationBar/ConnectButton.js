@@ -34,6 +34,7 @@ import { marketPrice } from "../../utils/number";
 import variables from "../../utils/variables";
 import DisConnectModal from "../DisConnectModal";
 import ConnectModal from "../Modal";
+import { SvgIcon } from "../../components/common";
 
 const ConnectButton = ({
   setAccountAddress,
@@ -219,19 +220,20 @@ const ConnectButton = ({
   return (
     <>
       {address ? (
-        <div className="connected_div">
+        <div className="connected_div" id="topRightToogle">
           <DisConnectModal />
         </div>
       ) : (
-        <div>
+        <div id="topRightToogle">
           <Dropdown
             menu={{ items }}
             placement="bottomRight"
             trigger={["click"]}
             overlayClassName="dropconnect-overlay"
+            getPopupContainer={() => document.getElementById('topRightToogle')}
           >
-            <Button shape="round" type="primary" className="btn-filled">
-              {variables[lang].connect_wallet}
+            <Button shape="round" type="primary" className="btn-filled connect-btn">
+              {variables[lang].connect} <SvgIcon name='wallet-alt' viewbox='0 0 17.5 15.625' />
             </Button>
           </Dropdown>
         </div>

@@ -1,0 +1,11 @@
+@import "../../../assets/less/variables.scss";
+
+.sucessMessages{
+  a{
+    color: $success-color;
+    &:hover{
+      color: darken($success-color, 0.1);
+    }
+  }
+}
+

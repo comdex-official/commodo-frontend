@@ -6,6 +6,7 @@ import { signAndBroadcastTransaction } from "../../../services/helper";
 import { defaultFee } from "../../../services/transaction";
 import { getAmount } from "../../../utils/coin";
 import variables from "../../../utils/variables";
+import { errorMessageMappingParser } from "../../../utils/string";
 
 export const ActionButton = ({
   lang,
@@ -26,6 +27,7 @@ export const ActionButton = ({
     Borrow: "/comdex.lend.v1beta1.MsgDraw",
     Repay: "/comdex.lend.v1beta1.MsgRepay",
     Close: "/comdex.lend.v1beta1.MsgCloseBorrow",
+    RepayWithDraw: "/comdex.lend.v1beta1.MsgRepayWithdraw",
   };
 
   const handleClick = () => {
@@ -52,12 +54,13 @@ export const ActionButton = ({
         setInProgress(false);
 
         if (error) {
+          console.log(error);
           message.error(error);
           return;
         }
 
         if (result?.code) {
-          message.info(result?.rawLog);
+          message.info(errorMessageMappingParser(result?.rawLog));
           return;
         }
 
@@ -67,11 +70,8 @@ export const ActionButton = ({
             hash={result?.transactionHash}
           />
         );
-        if (name !== "Close") {
-          refreshData();
-        } else {
-          navigate("/myhome#borrow");
-        }
+
+        navigate("/myhome#borrow");
       }
     );
   };
@@ -84,7 +84,7 @@ export const ActionButton = ({
       disabled={disabled}
       onClick={handleClick}
     >
-      {name}
+      {name === "RepayWithDraw" ? "Repay" : name}
     </Button>
   );
 };

@@ -8,7 +8,7 @@ import {
   NoDataIcon,
   Row,
   SvgIcon,
-  TooltipIcon
+  TooltipIcon,
 } from "../../../components/common";
 import CustomRow from "../../../components/common/Asset/CustomRow";
 import Details from "../../../components/common/Asset/Details";
@@ -22,16 +22,16 @@ import {
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../utils/coin";
 import {
   commaSeparator,
   decimalConversion,
-  marketPrice
+  marketPrice,
 } from "../../../utils/number";
 import { iconNameFromDenom, toDecimals } from "../../../utils/string";
 import ActionButton from "./ActionButton";
-import "./index.less";
+import "./index.scss";
 
 const { Option } = Select;
 
@@ -194,7 +194,7 @@ const RepayTab = ({
           <Col sm="12" className="mt-2 mx-auto card-bottom-details">
             <Row>
               <Col>
-                <label>Remaining to Repay</label>
+                <label>Remaining Debt</label>
               </Col>
               <Col className="text-right">
                 <div className="d-flex justify-content-end">

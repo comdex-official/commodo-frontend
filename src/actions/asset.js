@@ -38,11 +38,17 @@ export const setAssets = (list, pagination) => {
     return map;
   }, {});
 
+  const assetNameMap = list.reduce((map, obj) => {
+    map[obj?.name] = obj;
+    return map;
+  }, {});
+
   return {
     type: ASSETS_SET,
     list,
     map: assetHashMap,
     assetDenomMap: assetDenomMap,
+    assetNameMap,
     pagination,
   };
 };

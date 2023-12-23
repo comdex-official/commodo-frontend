@@ -1,4 +1,4 @@
-import { Button, List, message } from "antd";
+import { Button, List } from "antd";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import * as PropTypes from "prop-types";
@@ -8,7 +8,7 @@ import { useParams } from "react-router";
 import {
   setProposal,
   setProposalTally,
-  setProposer
+  setProposer,
 } from "../../../actions/govern";
 import { BackButton, Col, Row, SvgIcon } from "../../../components/common";
 import Copy from "../../../components/Copy";
@@ -18,7 +18,7 @@ import {
   fetchRestProposal,
   fetchRestProposalTally,
   fetchRestProposer,
-  queryUserVote
+  queryUserVote,
 } from "../../../services/govern/query";
 import { denomConversion } from "../../../utils/coin";
 import { formatTime } from "../../../utils/date";
@@ -27,10 +27,10 @@ import {
   proposalOptionMap,
   proposalStatusMap,
   stringTagParser,
-  truncateString
+  truncateString,
 } from "../../../utils/string";
 import VoteNowModal from "../VoteNowModal";
-import "./index.less";
+import "./index.scss";
 
 const GovernDetails = ({
   address,
@@ -57,11 +57,15 @@ const GovernDetails = ({
   const data = [
     {
       title: "Voting Starts",
-      counts: formatTime(proposal?.voting_start_time) || "--/--/--",
+      counts: proposal?.voting_start_time
+        ? formatTime(proposal?.voting_start_time)
+        : "--/--/-- 00:00:00",
     },
     {
       title: "Voting Ends",
-      counts: formatTime(proposal?.voting_end_time) || "--/--/--",
+      counts: proposal?.voting_end_time
+        ? formatTime(proposal?.voting_end_time)
+        : "--/--/-- 00:00:00",
     },
     {
       title: "Proposer",
@@ -72,7 +76,9 @@ const GovernDetails = ({
               <span>{truncateString(proposer, 6, 6)}</span>
               <Copy text={proposer} />
             </>
-          ) : null}
+          ) : (
+            "------"
+          )}
         </div>
       ),
     },
@@ -82,7 +88,6 @@ const GovernDetails = ({
     if (id) {
       fetchRestProposal(id, (error, result) => {
         if (error) {
-          message.error(error);
           return;
         }
 
@@ -90,7 +95,6 @@ const GovernDetails = ({
       });
       fetchRestProposalTally(id, (error, result) => {
         if (error) {
-          message.error(error);
           return;
         }
 
@@ -98,7 +102,6 @@ const GovernDetails = ({
       });
       fetchRestProposer(id, (error, result) => {
         if (error) {
-          message.error(error);
           return;
         }
 
@@ -296,27 +299,29 @@ const GovernDetails = ({
           <div className="commodo-card govern-card2 h-100">
             <Row>
               <Col>
-                <h3>#{proposal?.proposal_id || id}</h3>
+                <h3>#{proposal?.proposal_id || "-"}</h3>
               </Col>
               <Col className="text-right">
-                <Button
-                  type="primary"
-                  className={
-                    proposalStatusMap[proposal?.status] === "Rejected" ||
-                    proposalStatusMap[proposal?.status] === "Failed"
-                      ? "failed-btn govern-status-btn"
-                      : proposalStatusMap[proposal?.status] === "Passed"
-                      ? "passed-btn govern-status-btn"
-                      : "warning-btn govern-status-btn"
-                  }
-                >
-                  {proposalStatusMap[proposal?.status]}
-                </Button>
+                {proposalStatusMap[proposal?.status] ? (
+                  <Button
+                    type="primary"
+                    className={
+                      proposalStatusMap[proposal?.status] === "Rejected" ||
+                      proposalStatusMap[proposal?.status] === "Failed"
+                        ? "failed-btn govern-status-btn"
+                        : proposalStatusMap[proposal?.status] === "Passed"
+                        ? "passed-btn govern-status-btn"
+                        : "warning-btn govern-status-btn"
+                    }
+                  >
+                    {proposalStatusMap[proposal?.status]}
+                  </Button>
+                ) : null}
               </Col>
             </Row>
             <Row>
               <Col>
-                <h3>{proposal?.content?.title}</h3>
+                <h3>{proposal?.content?.title || "------"}</h3>
                 <div className="details-text">
                   <p>
                     {stringTagParser(proposal?.content?.description || " ")}{" "}

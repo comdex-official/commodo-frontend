@@ -6,8 +6,10 @@ import { useLocation } from "react-router";
 import { setBalanceRefresh } from "../../actions/account";
 import { setUserBorrows, setUserLends } from "../../actions/lend";
 import { Col, Row, TooltipIcon } from "../../components/common";
+import { assetTransitTypeId } from "../../config/network";
 import { DOLLAR_DECIMALS } from "../../constants/common";
 import {
+  queryEMode,
   queryLendPair,
   queryLendPool,
   queryUserBorrows,
@@ -19,7 +21,7 @@ import { decode } from "../../utils/string";
 import Borrow from "./Borrow";
 import Deposit from "./Deposit";
 import History from "./History";
-import "./index.less";
+import "./index.scss";
 
 const Myhome = ({
   address,
@@ -123,8 +125,22 @@ const Myhome = ({
             return;
           }
 
+          let myPool = poolResult?.pool;
+          const assetTransitMap = myPool?.assetData?.reduce((map, obj) => {
+            map[obj?.assetTransitType] = obj;
+            return map;
+          }, {});
+
+          let transitAssetIds = {
+            main: assetTransitMap[assetTransitTypeId["main"]]?.assetId,
+            first: assetTransitMap[assetTransitTypeId["first"]]?.assetId,
+            second: assetTransitMap[assetTransitTypeId["second"]]?.assetId,
+          };
+
+          myPool["transitAssetIds"] = transitAssetIds;
+
           setBorrowToPool((prevState) => ({
-            [borrow?.borrowingId]: poolResult?.pool,
+            [borrow?.borrowingId]: myPool,
             ...prevState,
           }));
         }
@@ -175,9 +191,39 @@ const Myhome = ({
     return values.reduce((a, b) => a + b, 0);
   };
 
+  const [eModData, setEModData] = useState([]);
+
+  const fetchLendPools = () => {
+    queryEMode((error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+
+      setEModData(result?.data);
+    });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    fetchLendPools();
+  };
+
   const calculateTotalBorrowLimit = () => {
     // calculate borrow limit of all borrow positions.
-    const borrowValues =
+
+    let userData = userBorrowList.filter(({ pairId: id1 }) =>
+      eModData.some(({ id: id2 }) => id2 === id1)
+    );
+
+    let userEmodData = userBorrowList.filter(
+      ({ pairId: id1 }) => !eModData.some(({ id: id2 }) => id2 === id1)
+    );
+
+    const borrowValues1 =
       userBorrowList?.length > 0
         ? userBorrowList.map((item) => {
             return (
@@ -218,16 +264,65 @@ const Myhome = ({
           })
         : [];
 
+    // const borrowValues2 =
+    //   userEmodData?.length > 0
+    //     ? userEmodData.map((item) => {
+    //         return (
+    //           marketPrice(
+    //             markets,
+    //             assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.denom,
+    //             borrowToPair[item?.borrowingId]?.assetIn
+    //           ) *
+    //           Number(
+    //             amountConversion(
+    //               item?.amountIn.amount,
+    //               assetMap[borrowToPair[item?.borrowingId]?.assetIn]?.decimals
+    //             )
+    //           ) *
+    //           (borrowToPair[item?.borrowingId]?.isInterPool
+    //             ? Number(
+    //                 decimalConversion(
+    //                   assetRatesStatsMap[
+    //                     borrowToPair[item?.borrowingId]?.assetIn
+    //                   ]?.eLtv
+    //                 )
+    //               ) *
+    //               Number(
+    //                 decimalConversion(
+    //                   assetRatesStatsMap[
+    //                     borrowToPool[item?.borrowingId]?.transitAssetIds?.first
+    //                   ]?.eLtv
+    //                 )
+    //               )
+    //             : Number(
+    //                 decimalConversion(
+    //                   assetRatesStatsMap[
+    //                     borrowToPair[item?.borrowingId]?.assetIn
+    //                   ]?.eLtv
+    //                 ) || 0
+    //               ))
+    //         );
+    //       })
+    //     : [];
+
+    // let borrowValues = [...borrowValues1, ...borrowValues2];
+    let borrowValues = [...borrowValues1];
+
     let borrowValue = borrowValues.reduce((a, b) => a + b, 0);
 
     // calculate borrow limit value only lend positions which don't have borrow position.
     let borrowsWithLend = Object?.values(borrowToLend);
-
+    console.log(userLendList, borrowsWithLend);
     const lendValues =
       userLendList?.length > 0 && borrowsWithLend?.length
         ? userLendList.map((item) => {
-            if (!borrowsWithLend.includes(item?.lendingId?.toNumber()))
+            if (borrowsWithLend.includes(item?.lendingId?.toNumber())) {
               // considering lend positions which don;t have borrow position opend.
+              console.log(
+                markets,
+                item?.amountIn?.denom,
+                assetDenomMap[item?.amountIn?.denom]?.id
+              );
               return (
                 marketPrice(
                   markets,
@@ -235,24 +330,26 @@ const Myhome = ({
                   assetDenomMap[item?.amountIn?.denom]?.id
                 ) *
                 amountConversion(
-                  item?.amountIn.amount,
+                  item?.amountIn?.amount,
                   assetDenomMap[item?.amountIn?.denom]?.decimals
                 ) *
                 Number(
                   decimalConversion(assetRatesStatsMap[item?.assetId]?.ltv)
                 )
               );
-            else {
+            } else {
               return 0;
             }
           })
         : [];
 
     let lendValue = lendValues.reduce((a, b) => a + b, 0);
+    console.log(borrowValue, lendValue);
 
     // borrow limit = sum of all collateral deposited * its LTV of all borrow positions and lends positions without borrow postion
 
-    return Number(borrowValue || 0) + Number(lendValue || 0);
+    // return Number(borrowValue || 0) + Number(lendValue || 0);
+    return Number(lendValue || 0);
   };
 
   const totalBorrow = Number(calculateTotalBorrow());
@@ -260,6 +357,8 @@ const Myhome = ({
   const currentLimit = (
     (borrowLimit ? totalBorrow / borrowLimit : 0) * 100
   ).toFixed(DOLLAR_DECIMALS);
+
+  console.log(borrowLimit, totalBorrow);
 
   const data = [
     {
@@ -271,6 +370,9 @@ const Myhome = ({
       ),
       counts: calculateTotalDeposit(),
     },
+  ];
+
+  const data2 = [
     {
       title: (
         <>
@@ -316,11 +418,11 @@ const Myhome = ({
                 grid={{
                   gutter: 16,
                   xs: 1,
-                  sm: 2,
-                  md: 2,
-                  lg: 2,
-                  xl: 2,
-                  xxl: 2,
+                  sm: 1,
+                  md: 1,
+                  lg: 1,
+                  xl: 1,
+                  xxl: 1,
                 }}
                 dataSource={data}
                 renderItem={(item) => (
@@ -334,7 +436,7 @@ const Myhome = ({
               />
             </div>
             <div className="myhome-upper-right">
-              <div className="mb-3">
+              <div className="mb-2">
                 Your Borrow Limit
                 <TooltipIcon
                   text="Borrowing limit of user, range 0-105%.
@@ -358,6 +460,28 @@ const Myhome = ({
                   <Progress percent={currentLimit} size="small" />
                 </div>
               </div>
+            </div>
+            <div className="myhome-upper-end">
+              <List
+                grid={{
+                  gutter: 16,
+                  xs: 1,
+                  sm: 1,
+                  md: 1,
+                  lg: 1,
+                  xl: 1,
+                  xxl: 1,
+                }}
+                dataSource={data2}
+                renderItem={(item) => (
+                  <List.Item>
+                    <div>
+                      <p>{item.title}</p>
+                      <h3>{item.counts}</h3>
+                    </div>
+                  </List.Item>
+                )}
+              />
             </div>
           </div>
         </Col>

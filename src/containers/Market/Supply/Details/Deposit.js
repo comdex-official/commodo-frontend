@@ -1,11 +1,12 @@
-import { Button, message, Select, Spin } from "antd";
+import { Button, message, Select, Slider, Spin } from "antd";
 import Long from "long";
 import * as PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { setBalanceRefresh } from "../../../../actions/account";
 import { Col, NoDataIcon, Row, SvgIcon } from "../../../../components/common";
+import CollateralDetails from "../../../../components/common/Asset/CollateralDetails";
 import CustomRow from "../../../../components/common/Asset/CustomRow";
 import Details from "../../../../components/common/Asset/Details";
 import AssetStats from "../../../../components/common/Asset/Stats";
@@ -16,21 +17,30 @@ import { ValidateInputNumber } from "../../../../config/_validation";
 import {
   APP_ID,
   DEFAULT_FEE,
-  DOLLAR_DECIMALS
+  DOLLAR_DECIMALS,
 } from "../../../../constants/common";
 import { signAndBroadcastTransaction } from "../../../../services/helper";
+import { QueryPoolAssetLBMapping } from "../../../../services/lend/query";
 import { defaultFee } from "../../../../services/transaction";
 import {
   amountConversion,
   amountConversionWithComma,
   denomConversion,
   getAmount,
-  getDenomBalance
+  getDenomBalance,
 } from "../../../../utils/coin";
-import { commaSeparator, marketPrice } from "../../../../utils/number";
-import { iconNameFromDenom, toDecimals } from "../../../../utils/string";
+import {
+  commaSeparator,
+  decimalConversion,
+  marketPrice,
+} from "../../../../utils/number";
+import {
+  errorMessageMappingParser,
+  iconNameFromDenom,
+  toDecimals,
+} from "../../../../utils/string";
 import variables from "../../../../utils/variables";
-import "./index.less";
+import "./index.scss";
 
 const { Option } = Select;
 
@@ -45,14 +55,21 @@ const DepositTab = ({
   setBalanceRefresh,
   refreshBalance,
   assetDenomMap,
-  userLendList,
+  assetIdToLendMap,
 }) => {
   const [assetList, setAssetList] = useState();
   const [selectedAssetId, setSelectedAssetId] = useState();
   const [amount, setAmount] = useState();
+  const [currentBalance, setCurrentBalance] = useState(0);
+  const [newBalance, setNewBalance] = useState(0);
   const [validationError, setValidationError] = useState();
   const [inProgress, setInProgress] = useState(false);
+  const [lendApy, setLendApy] = useState(0);
   const navigate = useNavigate();
+  const [sliderValue, setSliderValue] = useState(0);
+
+  const { state } = useLocation();
+  const collateralAssetIdFromRoute = state?.collateralAssetIdFromRoute;
 
   const availableBalance =
     getDenomBalance(balances, assetMap[selectedAssetId]?.denom) || 0;
@@ -65,17 +82,61 @@ const DepositTab = ({
         assetMap[pool?.transitAssetIds?.second?.toNumber()],
       ]);
 
-      if (assetMap[pool?.transitAssetIds?.main?.toNumber()]?.id?.toNumber()) {
+      // not selecting first value as default when coming from my home.
+      if (
+        assetMap[pool?.transitAssetIds?.main?.toNumber()]?.id?.toNumber() &&
+        !collateralAssetIdFromRoute
+      ) {
         handleAssetChange(pool?.transitAssetIds?.main?.toNumber());
       }
     }
   }, [pool, assetMap]);
 
+  useEffect(() => {
+    if (collateralAssetIdFromRoute) {
+      handleAssetChange(collateralAssetIdFromRoute);
+    }
+  }, [collateralAssetIdFromRoute]);
+
+  useEffect(() => {
+    if (Number(assetIdToLendMap[selectedAssetId]?.amountIn?.amount)) {
+      setCurrentBalance(
+        Number(
+          amountConversion(assetIdToLendMap[selectedAssetId]?.amountIn?.amount)
+        ) || 0
+      );
+      setNewBalance(0);
+    } else {
+      setCurrentBalance(0);
+      setNewBalance(0);
+    }
+  }, [assetIdToLendMap, selectedAssetId]);
+
+  const fetchPoolAssetLBMapping = (assetId, poolId) => {
+    QueryPoolAssetLBMapping(assetId, poolId, (error, result) => {
+      if (error) {
+        message.error(error);
+        return;
+      }
+      setLendApy(
+        Number(
+          decimalConversion(result?.PoolAssetLBMapping?.lendApr || 0) * 100
+        ).toFixed(DOLLAR_DECIMALS)
+      );
+    });
+  };
+
   const handleAssetChange = (value) => {
     setSelectedAssetId(value);
     setAmount(0);
+    setSliderValue(0);
     setValidationError();
+    fetchPoolAssetLBMapping(value, pool?.poolId);
   };
+
+  useEffect(() => {
+    fetchPoolAssetLBMapping(selectedAssetId, pool?.poolId);
+  }, [selectedAssetId, pool]);
 
   const handleInputChange = (value) => {
     value = toDecimals(value, assetMap[selectedAssetId]?.decimals)
@@ -83,6 +144,12 @@ const DepositTab = ({
       .trim();
 
     setAmount(value);
+    setNewBalance(
+      Number(
+        amountConversion(assetIdToLendMap[selectedAssetId]?.amountIn?.amount)
+      ) + Number(value) || 0
+    );
+    setSliderValue((value / amountConversion(availableBalance)) * 100);
     setValidationError(
       ValidateInputNumber(
         getAmount(value, assetMap[selectedAssetId]?.decimals),
@@ -122,7 +189,7 @@ const DepositTab = ({
         }
 
         if (result?.code) {
-          message.info(result?.rawLog);
+          message.info(errorMessageMappingParser(result?.rawLog));
           return;
         }
 
@@ -159,11 +226,21 @@ const DepositTab = ({
     }
   };
 
+  const handleSliderChange = (value) => {
+    let percentageValue = (value / 100) * amountConversion(availableBalance);
+    handleInputChange(String(percentageValue));
+  };
+
+  const marks = {
+    0: "0%",
+    100: "100%",
+  };
+
   return (
-    <div className="details-wrapper">
+    <div className="details-wrapper market-details-wrapper">
       {!dataInProgress ? (
         <>
-          <div className="details-left commodo-card">
+          <div className="details-left commodo-card commodo-borrow-page">
             <CustomRow assetList={assetList} poolId={pool?.poolId?.low} />
             <div className="assets-select-card mb-0">
               <div className="assets-left">
@@ -238,29 +315,54 @@ const DepositTab = ({
                       validationError={validationError}
                     />
                   </div>
-                  $
-                  {commaSeparator(
-                    Number(
-                      amount *
-                        marketPrice(
-                          markets,
-                          assetMap[selectedAssetId]?.denom,
-                          selectedAssetId
-                        ) || 0
-                    ).toFixed(DOLLAR_DECIMALS)
-                  )}{" "}
+                  <small>
+                    $
+                    {commaSeparator(
+                      Number(
+                        amount *
+                          marketPrice(
+                            markets,
+                            assetMap[selectedAssetId]?.denom,
+                            selectedAssetId
+                          ) || 0
+                      ).toFixed(DOLLAR_DECIMALS)
+                    )}{" "}
+                  </small>
                 </div>
               </div>
             </div>
-            <Row>
-              <Col sm="12" className="mt-3 mx-auto card-bottom-details">
-                <AssetStats
-                  assetId={selectedAssetId}
-                  pool={pool}
-                  parent="lend"
-                />
+
+            <Row className="card-bottom-details">
+              <Col>
+                <Row className="mt-3">
+                  <Col sm="12">
+                    <Slider
+                      marks={marks}
+                      value={sliderValue}
+                      tooltip={{ open: false }}
+                      onChange={handleSliderChange}
+                      className="commodo-slider market-slider-1"
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm="12" className="mt-2">
+                    <AssetStats
+                      assetId={selectedAssetId}
+                      pool={pool}
+                      parent="lend"
+                    />
+                  </Col>
+                </Row>
+                <Row className="mt-3 lastrow-market-dtl">
+                  <Col>
+                    <label>Lend APY</label>
+                  </Col>
+                  <Col className="text-right">{lendApy}%</Col>
+                </Row>
               </Col>
             </Row>
+
             <div className="assets-form-btn">
               <Button
                 type="primary"
@@ -281,23 +383,34 @@ const DepositTab = ({
           <div className="details-right">
             <div className="commodo-card">
               <Details
-                asset={assetMap[pool?.transitAssetIds?.first?.toNumber()]}
+                assetId={selectedAssetId}
+                assetDenom={assetMap[selectedAssetId]?.denom}
                 poolId={pool?.poolId}
                 parent="lend"
               />
-              <div className="mt-5">
-                <Details
-                  asset={assetMap[pool?.transitAssetIds?.second?.toNumber()]}
-                  poolId={pool?.poolId}
-                  parent="lend"
-                />
-              </div>
             </div>
             <div className="commodo-card">
-              <Details
-                asset={assetMap[pool?.transitAssetIds?.main?.toNumber()]}
+              <CollateralDetails
+                assetId={selectedAssetId}
+                assetDenom={assetMap[selectedAssetId]?.denom}
                 poolId={pool?.poolId}
                 parent="lend"
+                newBalance={
+                  newBalance *
+                  marketPrice(
+                    markets,
+                    assetMap[selectedAssetId]?.denom,
+                    selectedAssetId
+                  )
+                }
+                currentBalance={
+                  currentBalance *
+                  marketPrice(
+                    markets,
+                    assetMap[selectedAssetId]?.denom,
+                    selectedAssetId
+                  )
+                }
               />
             </div>
           </div>
@@ -367,7 +480,7 @@ const stateToProps = (state) => {
     markets: state.oracle.market,
     refreshBalance: state.account.refreshBalance,
     assetDenomMap: state.asset._.assetDenomMap,
-    userLendList: state.lend.userLends,
+    assetIdToLendMap: state.lend.assetIdToLendMap,
   };
 };
 

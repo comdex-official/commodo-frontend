@@ -8,24 +8,25 @@ import { connect } from "react-redux";
 import Slider from "react-slick";
 import ComdexAtomIcon from "../../assets/images/cmdx_atom.png";
 import LaunchImage from "../../assets/images/launch-bg.jpg";
-import "../../assets/less/plugins/slick-slider/slick.less";
+import "../../assets/less/plugins/slick-slider/slick.scss";
 import { Col, Row, SvgIcon, TooltipIcon } from "../../components/common";
 import {
   ATOM_CMDX_POOL_ID,
   DOLLAR_DECIMALS,
-  NUMBER_OF_TOP_ASSETS
+  NUMBER_OF_TOP_ASSETS,
 } from "../../constants/common";
 import { CSWAP_URL, REWARDS_URL } from "../../constants/url";
 import {
   queryBorrowDepositHistory,
   queryTopAssets,
   queryTotalBorrowAndDeposit,
-  queryTotalValueLocked
+  queryTotalValueLocked,
 } from "../../services/lend/query";
 import { denomConversion } from "../../utils/coin";
-import { commaSeparator } from "../../utils/number";
+import { commaSeparator, formatNumber } from "../../utils/number";
 import { iconNameFromDenom } from "../../utils/string";
-import "./index.less";
+import "./index.scss";
+import DashboardNavBar from "./navBar/DashboardNavBar.js";
 
 const Dashboard = ({ isDarkMode, assetMap }) => {
   const [topAssetsInProgress, setTopAssetsInProgress] = useState(false);
@@ -95,7 +96,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
     chart: {
       type: "pie",
       backgroundColor: null,
-      height: 210,
+      height: 220,
       margin: 5,
     },
     credits: {
@@ -163,7 +164,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
     chart: {
       type: "spline",
       backgroundColor: null,
-      height: 200,
+      height: 150,
       marginBottom: 60,
     },
     credits: {
@@ -197,9 +198,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
       gridLineColor: isDarkMode ? "#E2F7E5" : "#999",
       categories:
         graphData && graphData.length > 0
-          ? graphData.map((item) =>
-              moment(item?.timestamp).format("MMM DD")
-            )
+          ? graphData.map((item) => moment(item?.timestamp).format("MMM DD"))
           : [],
     },
     tooltip: {
@@ -283,7 +282,11 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
             </div>
             {denomConversion(assetMap[item?.asset_id]?.denom)}
           </div>
-          <b>{((Number(item?.apr) || 0) * 100).toFixed(DOLLAR_DECIMALS)}%</b>
+          <b>
+            {`$${formatNumber(
+              (Number(item?.total) || 0).toFixed(DOLLAR_DECIMALS)
+            )}`}
+          </b>
         </li>
       );
     });
@@ -291,11 +294,12 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
 
   return (
     <div className="app-content-wrapper">
+      <DashboardNavBar />
       <Row>
         <Col className="dashboard-upper">
           <div className="dashboard-upper-left">
             <div className="commodo-card h-100">
-              <div className="dashboard-statics ml-4">
+              <div className="dashboard-statics">
                 <p>
                   Total Value Locked{" "}
                   <TooltipIcon text="Value of Assets Locked" />
@@ -308,7 +312,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                     className="mt-1"
                   />
                 ) : (
-                  <h3>
+                  <h3 className="active">
                     $
                     {commaSeparator(
                       Number(totalValueLocked || 0).toFixed(DOLLAR_DECIMALS)
@@ -317,9 +321,6 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                 )}
               </div>
               <div className="total-values">
-                <div className="total-values-chart">
-                  <HighchartsReact highcharts={Highcharts} options={Options} />
-                </div>
                 <div className="total-values-right">
                   <div
                     className="dashboard-statics mb-5"
@@ -370,69 +371,53 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                     )}
                   </div>
                 </div>
+                <div className="total-values-chart">
+                  <HighchartsReact highcharts={Highcharts} options={Options} />
+                </div>
               </div>
             </div>
           </div>
           <div className="dashboard-upper-right">
             <div className="commodo-card commodo-launch-card">
-              <Slider {...settings}>
-                <div>
-                  <div className="commodo-launch-card-inner">
-                    <img
-                      className="launch-bg"
-                      alt="CMDX Token Launch"
-                      src={LaunchImage}
-                    />
-                    <div className="assets-section">
-                      <div className="assets-section-inner">
-                        <div className="assets-left">
-                          <p>
-                            Provide liquidity on ATOM-CMDX pool on CSWAP to earn
-                            external incentives on COMMODO
-                          </p>
-                          <div className="mt-3">
-                            <div className="small-icons mb-2">
-                              <div className="icon-col mr-2">
-                                <SvgIcon name="cmdx-icon" /> CMDX
-                              </div>{" "}
-                              -
-                              <div className="icon-col ml-2">
-                                <SvgIcon name="atom-icon" /> ATOM
-                              </div>
-                            </div>
-                            <h3 className="h3-botttom">
-                              <Button
-                                type="primary"
-                                onClick={() => window.open(REWARDS_URL)}
-                              >
-                                Learn more
-                              </Button>
-                            </h3>
-                          </div>
-                        </div>
-                        <div className="assets-right">
-                          <img
-                            alt={"atom"}
-                            src={ComdexAtomIcon}
-                            className="overlap-icon-1"
-                          />
-                          <Button
-                            type="primary"
-                            className="btn-filled mt-3"
-                            onClick={() =>
-                              window.open(
-                                `${CSWAP_URL}/farm/${ATOM_CMDX_POOL_ID}`
-                              )
-                            }
-                          >
-                            Take me there!
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              {/* <div className="bottom-chart-right"> */}
+              <div className="legend-custom">
+                <div className="legend-deposit">
+                  <SvgIcon name="rectangle" /> Deposited
                 </div>
-              </Slider>
+                <div className="legend-borrow">
+                  <SvgIcon name="rectangle" /> Borrowed
+                </div>
+              </div>
+              {/* <div
+                  className="dashboard-statics"
+                  style={{ borderColor: "#52B788" }}
+                >
+                  <p>Total Deposited</p>
+                  <h3>
+                    $
+                    {commaSeparator(
+                      Number(totalDeposited || 0).toFixed(DOLLAR_DECIMALS)
+                    )}
+                  </h3>{" "}
+                </div>
+                <div
+                  className="dashboard-statics"
+                  style={{ borderColor: "#E2F7E5" }}
+                >
+                  <p>Total Borrowed</p>
+                  <h3>
+                    $
+                    {commaSeparator(
+                      Number(totalBorrowed || 0).toFixed(DOLLAR_DECIMALS)
+                    )}
+                  </h3>{" "}
+                </div> */}
+              {/* </div> */}
+
+              <HighchartsReact
+                highcharts={Highcharts}
+                options={DepositBorrowChart}
+              />
             </div>
             <div className="commodo-card top-three-assets">
               <div className="card-head">Top {NUMBER_OF_TOP_ASSETS} Assets</div>
@@ -440,7 +425,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                 <div className="deposited-list">
                   <div className="d-flex justify-content-between">
                     <div>Deposited</div>
-                    <div>Lend APY</div>
+                    <div>Amount</div>
                   </div>
                   <ul>
                     {topDeposits && topDeposits?.length > 0
@@ -453,7 +438,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                 <div className="deposited-list">
                   <div className="d-flex justify-content-between">
                     <div>Borrowed</div>
-                    <div>Borrow APY</div>
+                    <div>Amount</div>
                   </div>
                   <ul>
                     {topBorrows && topBorrows?.length > 0
@@ -470,7 +455,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
       </Row>
       <Row>
         <Col className="dashboard-bottom">
-          <div className="commodo-card">
+          {/* <div className="commodo-card">
             <div className="bottom-chart">
               <div className="bottom-chart-left">
                 <div className="legend-custom">
@@ -481,10 +466,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                     <SvgIcon name="rectangle" /> Borrowed
                   </div>
                 </div>
-                <HighchartsReact
-                  highcharts={Highcharts}
-                  options={DepositBorrowChart}
-                />
+               
               </div>
               <div className="bottom-chart-right">
                 <div
@@ -513,7 +495,7 @@ const Dashboard = ({ isDarkMode, assetMap }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </Col>
       </Row>
     </div>

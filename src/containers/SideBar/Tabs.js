@@ -1,10 +1,9 @@
-import { message } from "antd";
+import { Tooltip, message } from "antd";
 import { encode } from "js-base64";
 import * as PropTypes from "prop-types";
 import React from "react";
 import { connect } from "react-redux";
-import { useNavigate } from "react-router";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { setAccountAddress, setAccountName } from "../../actions/account";
 import { SvgIcon } from "../../components/common";
 import { fetchKeplrAccountName, initializeChain } from "../../services/keplr";
@@ -66,15 +65,23 @@ const NavTabs = ({ setAccountAddress, lang, setAccountName, onClick }) => {
               }
               value={item.value}
               onClick={() => {
-                navigate("/" + item.value);
+                item.value === "auction"
+                  ? window.open("https://local-auctions.comdex.one/", "_blank")
+                  : navigate("/" + item.value);
                 onClick();
               }}
               {...a11yProps(0)}
             >
-              <div className="tab-inner">
-                <SvgIcon name={item.value} />
-                {variables[lang][item.langKey]}
-              </div>
+              <Tooltip
+                placement="top"
+                className="distribution-apy-button"
+                title={item?.tooltipText}
+              >
+                <div className="tab-inner">
+                  <SvgIcon name={item.value} />
+                  {variables[lang][item.langKey]}
+                </div>
+              </Tooltip>
             </li>
           );
         })}
