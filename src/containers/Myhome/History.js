@@ -26,9 +26,9 @@ const History = ({ address, setTransactionHistory, history }) => {
     fetchTxHistory(address, pageNumber, pageSize, (error, result) => {
       setInProgress(false);
       if (error) {
-        message.error(error);
         return;
       }
+
       setTransactionHistory(result.txs, result.totalCount);
     });
   };
