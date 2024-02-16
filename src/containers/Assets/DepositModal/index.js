@@ -144,7 +144,7 @@ const Deposit = ({
       const fee = {
         amount: "20",
         denom: chain.chainInfo?.coinMinimalDenom,
-        gas: "200000",
+        gas: "250000",
       };
 
       const transferMsg = createTxIBCMsgTransfer(
