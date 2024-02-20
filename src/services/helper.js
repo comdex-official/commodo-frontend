@@ -3,7 +3,7 @@ import {
   AminoTypes,
   createProtobufRpcClient,
   QueryClient,
-  SigningStargateClient
+  SigningStargateClient,
 } from "@cosmjs/stargate";
 import { HttpBatchClient, Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
@@ -13,6 +13,7 @@ import { makeHdPath } from "../utils/string";
 import { customAminoTypes } from "./aminoConverter";
 import { strideAccountParser } from "./parser";
 import { myRegistry } from "./registry";
+import { DEFAULT_FEE } from "../constants/common";
 
 const aminoTypes = new AminoTypes(customAminoTypes);
 
@@ -74,14 +75,24 @@ export const TransactionWithKeplr = async (transaction, address, callback) => {
   })
     .then((client) => {
       client
-        .signAndBroadcast(
-          address,
-          [transaction.message],
-          transaction.fee,
-          transaction.memo
-        )
-        .then((result) => {
-          callback(null, result);
+        .simulate(address, [transaction.message], "")
+        .then((gasfees) => {
+          client
+            .signAndBroadcast(
+              address,
+              [transaction.message],
+              {
+                amount: [{ denom: "ucmdx", amount: DEFAULT_FEE.toString() }],
+                gas: String(gasfees + 50000),
+              },
+              transaction.memo
+            )
+            .then((result) => {
+              callback(null, result);
+            })
+            .catch((error) => {
+              callback(error?.message);
+            });
         })
         .catch((error) => {
           callback(error?.message);
