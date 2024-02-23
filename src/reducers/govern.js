@@ -28,7 +28,7 @@ const proposalMap = (state = {}, action) => {
   if (action.type === PROPOSAL_SET) {
     return {
       ...state,
-      [action?.value?.proposal_id]: action?.value || {},
+      [action?.value?.id]: action?.value || {},
     };
   }
 

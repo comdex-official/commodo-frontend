@@ -74,7 +74,7 @@ export const fetchRestProposals = (callback) => {
 
 export const fetchRestProposal = (id, callback) => {
   axios
-    .get(`${comdex?.rest}/cosmos/gov/v1beta1/proposals/${id}`)
+    .get(`${comdex?.rest}/cosmos/gov/v1/proposals/${id}`)
     .then((result) => {
       callback(null, result?.data);
     })
