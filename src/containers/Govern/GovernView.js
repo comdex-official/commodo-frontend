@@ -28,6 +28,7 @@ import {
 } from "../../utils/coin";
 import { formatNumber } from "../../utils/number";
 import {
+  getLastWord,
   proposalOptionMap,
   stringTagParser,
   truncateString,
@@ -144,6 +145,7 @@ const GovernViewPage = ({
           return;
         }
         setInProgress(false);
+
         setProposal(result?.proposal);
       });
       fetchRestProposalTally(id, (error, result) => {
@@ -169,17 +171,19 @@ const GovernViewPage = ({
   }, [id, setProposal, setProposer, setProposalTally]);
 
   const fetchVote = useCallback(() => {
-    queryUserVote(address, proposal?.proposal_id, (error, result) => {
+    queryUserVote(address, proposal?.id, (error, result) => {
       if (error) {
         return;
       }
 
-      setVotedOption(result?.vote?.option);
+      setVotedOption(
+        result?.vote?.options[result?.vote?.options.length - 1]?.option
+      );
     });
-  }, [address, proposal?.proposal_id]);
+  }, [address, proposal?.id]);
 
   useEffect(() => {
-    if (proposal?.proposal_id) {
+    if (proposal?.id) {
       fetchVote();
     }
   }, [address, id, proposal, fetchVote]);
@@ -255,12 +259,13 @@ const GovernViewPage = ({
         <div className="govern_view_container">
           <div className="proposal_detail_main_container">
             <div className="proposal_detail_container">
-              <div className="proposal_id">
-                {" "}
-                #{proposal?.proposal_id || "-"}
-              </div>
+              <div className="proposal_id"> #{proposal?.id || "-"}</div>
               <div className="proposal_title">
-                {proposal?.content?.title || "------"}
+                {proposal?.messages[0]?.content?.title
+                  ? proposal?.messages[0]?.content?.title
+                  : proposal?.messages[0]?.["@type"]
+                  ? getLastWord(proposal?.messages[0]?.["@type"])
+                  : "------"}
               </div>
               <div className="proposal_overview_container">
                 <div className="proposal_stats_container">
@@ -283,8 +288,8 @@ const GovernViewPage = ({
                   <div className="title">Duration</div>
                   <div className="value">
                     {proposal?.voting_start_time
-                      ? `${moment(proposal?.voting_start_time).diff(
-                          moment(proposal?.voting_end_time),
+                      ? `${moment(proposal?.voting_end_time).diff(
+                          moment(proposal?.voting_start_time),
                           "days"
                         )} Days`
                       : "0 Days"}
