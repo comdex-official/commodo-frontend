@@ -473,10 +473,14 @@ const GovernViewPage = ({
           <div className="proposal_description_main_container">
             <div className="proposal_heading">Description</div>
             <div className="proposal_para">
-              {stringTagParser(proposal?.content?.description || " ")}
+              {proposal?.messages[0]?.content?.description
+                ? stringTagParser(proposal?.messages[0]?.content?.description)
+                : proposal?.messages[0]?.["@type"]
+                ? getLastWord(proposal?.messages[0]?.["@type"])
+                : " "}
             </div>
 
-            <div className="proposal_suggest_box">
+            {/* <div className="proposal_suggest_box">
               <p>No other parameters are being changed.</p>
               <p>
                 {" "}
@@ -497,7 +501,7 @@ const GovernViewPage = ({
                 Vote <span>Abstain</span> to express no interest in the
                 proposal.
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
