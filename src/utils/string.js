@@ -170,7 +170,16 @@ export const errorMessageMappingParser = (message) => {
   var truncatedString = str?.match(/ibc\/\w{64}/g);
 
   for (var i = 0; i < truncatedString?.length; i++) {
-    str = str.replace(truncatedString[i], " " + `${ibcDenomToDenom(truncatedString[i])}`);
+    str = str.replace(
+      truncatedString[i],
+      " " + `${ibcDenomToDenom(truncatedString[i])}`
+    );
   }
   return str;
-}
+};
+
+export const getLastWord = (inputString) => {
+  const parts = inputString.split(".");
+  const text = parts[parts.length - 1];
+  return text.replace(/([a-z])([A-Z])/g, "$1 $2");
+};

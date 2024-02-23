@@ -9,7 +9,7 @@ import { signAndBroadcastTransaction } from "../../../services/helper";
 import { defaultFee } from "../../../services/transaction";
 import variables from "../../../utils/variables";
 import "./index.scss";
-import { errorMessageMappingParser } from "../../../utils/string";
+import { errorMessageMappingParser, getLastWord } from "../../../utils/string";
 
 const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,7 +28,7 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
           typeUrl: "/cosmos.gov.v1beta1.MsgVote",
           value: {
             option: userVote,
-            proposalId: Long.fromNumber(proposal?.proposal_id),
+            proposalId: Long.fromNumber(proposal?.id),
             voter: address,
           },
         },
@@ -93,7 +93,12 @@ const VoteNowModal = ({ address, proposal, lang, refreshVote }) => {
             <Col sm="12">
               <h3>Your Vote</h3>
               <p>
-                #{proposal?.proposal_id} {proposal?.content?.title}
+                #{proposal?.id}{" "}
+                {proposal?.messages[0]?.content?.title
+                  ? proposal?.messages[0]?.content?.title
+                  : proposal?.messages[0]?.["@type"]
+                  ? getLastWord(proposal?.messages[0]?.["@type"])
+                  : "------"}
               </p>
               <Radio.Group
                 value={userVote}
